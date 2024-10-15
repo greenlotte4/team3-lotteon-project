@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의하기</title>
+    <style>
+       
+       
+        *{
+            margin: 0;
+            padding: 0;
+            font: normal 12px '고딕';
+        }
+
+        ul,ol{list-style: none;}
+        a{text-decoration: none; color: #111;}
+
+        #wrapper{
+            width: 100%;
+            height: 100%;
+        }
+        main {
+            position: relative;
+            width: 1200px;
+            height: auto;
+            margin: 0 auto;        
+        }
+
+
+        .info{
+            width: 1200px;
+            height: 75px;
+            background-color: antiquewhite;
+            display: flex; /* Flexbox 사용 */
+            align-items: center; /* 수직 중앙 정렬 */
+                    
+        }
+        .info-title {
+            position: relative;
+            width: 101x;
+            height: 22px;
+            font-size: 18px;
+            font-weight: 700;
+            left: 100px;
+        }
+
+        .summary-table {
+            position: relative;
+            display: flex;
+            left: 750px;
+            justify-content: space-around; /* 항목 간격 조정 */
+            width: 300px; /* 전체 폭 사용 */
+            padding: 10px 0; /* 위아래 여백 */
+            
+        }
+
+        .summary-item {
+            width: 80px;
+            text-align: center; /* 항목 중앙 정렬 */
+            border-right: 1px solid black;
+        }
+        .summary-item:last-child {
+            border-right: none; /* 마지막 항목의 오른쪽 검은 줄 제거 */
+        }
+
+        .summary-value {
+            font-size: 16px; /* 값의 크기 조정 */
+            font-weight: bold; /* 값 두껍게 */
+        }
+        #container{
+            display: flex;
+            height: auto;
+            flex-wrap: wrap;
+        }
+
+        aside {
+            float: left;
+            width: 200px;
+            height: auto;
+            display: flex; /* Flexbox 사용 */
+            justify-content: center; /* 수직 중앙 정렬 */
+            border-right:1px solid #ccc;
+        }
+
+        aside > ul {
+            padding: 0; /* ul의 기본 패딩 제거 */
+            margin: 0; /* ul의 기본 마진 제거 */
+        }
+
+        aside > ul > li {
+            font-size: 16px;
+            margin: 15px 0; /* 위아래 간격 조정 */
+        }
+        aside > ul > li:nth-child(5){
+            text-decoration: underline;
+        }
+        .center {
+            flex-grow: 1;
+            width: 994px;
+            height: auto;
+            
+        }
+
+        .ad{
+            width: 900px;
+            height: 86px;
+            margin: 10px auto;
+            border: 1px solid red;
+            background-color: beige;
+            display: flex;
+            justify-content: center; /* 수평 정렬: flex-start, flex-end, center */
+            align-items: center; /* 수직 정렬: flex-start, flex-end, center */
+            font-size: large;
+            
+        }
+        .details{
+            width: 880px;
+            height: 20px;
+            margin: 0 48px;
+            
+        }
+        .center p{
+            font-size: 14px;
+            font-weight: 700;
+            float: left;
+        }
+        .center a{
+            font-size: 12px;
+            font-weight: 400;
+            float: right;
+        }
+
+        table {
+            width: 900px;
+            height: 133px;
+            margin: 0 48px;
+            border-top: 2px solid black;
+            border-bottom: 1px solid #b4b0b0;
+            border-collapse: collapse;
+        }
+        th {
+            background-color: gray;
+            height: 42.5px;
+        }
+
+        .inquiry-table th:nth-child(1) {width: 8.97%}
+        .inquiry-table th:nth-child(2) {width: 12.82%}
+        .inquiry-table th:nth-child(3) {width: 12.82%}
+        .inquiry-table th:nth-child(4) {width: 38.46%}
+        .inquiry-table th:nth-child(5) {width: 15.38%}
+        .inquiry-table th:nth-child(6) {width: 11.54%}
+
+
+
+        .font{
+            color: white;
+        }
+
+
+        .tr1{
+            width: auto;
+            height: 170px; 
+            
+        }
+
+
+        td {
+            height: 89px;
+            font-weight: bold;
+            text-align: center;
+                
+        }
+        .tr3{
+            border-bottom: 1px solid #b4b0b0;  
+        }
+        /* 상태에 따른 색상 지정 */
+        .status-complete {
+            color: lightgreen;
+        }
+
+        .status-pending {
+            color: lightgray;
+        }
+
+
+
+    </style>
+    
+     <link rel="stylesheet" href="/css/reset.css">
+     <link rel="stylesheet" href="/css/common.css">
+
+</head>
+<body>
+    <div id="wrapper">
+        <header>
+            <div id="header"></div>
+        </header>
+        <main>
+            <div class="info">
+                <p class="info-title">나의 쇼핑정보</p>
+                <div class="summary-table">
+                    <div class="summary-item">
+                        <span>주문</span><br>
+                        <span class="summary-value">2</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>쿠폰</span><br>
+                        <span class="summary-value">1</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>포인트</span><br>
+                        <span class="summary-value">1,000</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>문의</span><br>
+                        <span class="summary-value">1</span>
+                    </div>
+                </div>
+            </div>
+
+   
+        <div id="container">
+            <aside>
+                <ul>
+                    <li><a href="">전체주문내역</a></li>
+                    <li><a href="">포인트내역</a></li>
+                    <li><a href="">쿠폰</a></li>
+                    <li><a href="">나의리뷰</a></li>
+                    <li><a href="">문의하기</a></li>
+                    <li><a href="">나의설정</a></li>
+                </ul>
+            </aside>
+
+            <div class="center">
+                <div class="ad">900x86 배너광고</div>
+                  <div>
+                    <div class="details">
+                        <p>문의하기</p>
+                    </div>
+    
+                    <table class="inquiry-table">
+                        <tbody>      
+                            <tr class="font">
+                                <th>번호</th>
+                                <th>문의채널</th>  
+                                <th>문의유형</th>  
+                                <th>제목</th>
+                                <th>작성일</th>
+                                <th>상태</th>
+    
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">1</data></td>
+                                <td><data value="">고객센터</data></td>
+                                <td><data value="">주문 /결제</data></td>
+                                <td><data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-pending"><data value="">검토중</data></td> 
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">2</data></td>
+                                <td><data value="">고객센터</data></td>
+                                <td><data value="">주문 /결제</data></td>
+                                <td><data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-complete"><data value="">답변완료</data></td> 
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">3</data></td>
+                                <td><data value="">판매자 게시판</data></td>
+                                <td><data value="">배송</data></td>
+                                <td><data value="">배송기간이 보통 얼마나 걸리나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-complete"><data value="">답변완료</data></td> 
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">1</data></td>
+                                <td><data value="">고객센터</data></td>
+                                <td><data value="">주문 /결제</data></td>
+                                <td><data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-pending"><data value="">검토중</data></td> 
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">2</data></td>
+                                <td><data value="">고객센터</data></td>
+                                <td><data value="">주문 /결제</data></td>
+                                <td><data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-complete"><data value="">답변완료</data></td> 
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">3</data></td>
+                                <td><data value="">판매자 게시판</data></td>
+                                <td><data value="">배송</data></td>
+                                <td><data value="">배송기간이 보통 얼마나 걸리나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-complete"><data value="">답변완료</data></td> 
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">1</data></td>
+                                <td><data value="">고객센터</data></td>
+                                <td><data value="">주문 /결제</data></td>
+                                <td><data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-pending"><data value="">검토중</data></td> 
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">2</data></td>
+                                <td><data value="">고객센터</data></td>
+                                <td><data value="">주문 /결제</data></td>
+                                <td><data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-complete"><data value="">답변완료</data></td> 
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">3</data></td>
+                                <td><data value="">판매자 게시판</data></td>
+                                <td><data value="">배송</data></td>
+                                <td><data value="">배송기간이 보통 얼마나 걸리나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-complete"><data value="">답변완료</data></td> 
+                            </tr>
+                            <tr class="tr3">
+                                <td><data value="">3</data></td>
+                                <td><data value="">판매자 게시판</data></td>
+                                <td><data value="">배송</data></td>
+                                <td><data value="">배송기간이 보통 얼마나 걸리나요?</data></td>    
+                                <td><data value="">2022-12-12</data></td> 
+                                <td class="status-complete"><data value="">답변완료</data></td> 
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        </main>
+        <footer>
+            <div id="footer"></div>
+        </footer>
+    </div>
+</body>
+<script>
+    fetch('/include/header.html') // 헤더 파일 경로
+   .then(response => {
+     if (!response.ok) {
+       throw new Error('Network response was not ok');
+     }
+     return response.text();
+   })
+   .then(data => {
+     document.getElementById('header').innerHTML = data;
+   })
+   .catch(error => console.error('Error loading header:', error));
+
+   fetch('/include/footer.html')
+   .then(response => {
+     if (!response.ok) {
+       throw new Error('Network response was not ok');
+     }
+     return response.text();
+   })
+   .then(data => {
+     document.getElementById('footer').innerHTML = data;
+   })
+   .catch(error => console.error('Error loading footer:', error));
+ </script>
+</html>

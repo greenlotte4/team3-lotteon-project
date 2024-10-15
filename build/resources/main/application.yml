@@ -1,0 +1,38 @@
+logging:
+    file:
+        name: /logs/lotteOn.log
+    level:
+        jdbc:
+            resultsettable: debug
+            sqlonly: debug
+            sqltiming: debug
+        root: info
+        org.springframework.web: DEBUG
+
+server:
+    port: 8080
+    servlet:
+        context-path: /
+
+
+spring:
+    application:
+        name: LotteOnProject
+
+    devtools:
+        livereload:
+            enabled: true
+    servlet:
+        multipart:
+            location: uploads/
+    web:
+        resources:
+            static-locations:
+                - classpath:/static/
+                - file:uploads/
+    thymeleaf:
+        cache: false
+        check-template-location: true
+        enabled: true
+        prefix: classpath:/templates/
+        suffix: .html

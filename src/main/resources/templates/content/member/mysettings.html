@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의설정</title>
+    <style>
+       
+       
+        *{
+            margin: 0;
+            padding: 0;
+            font: normal 12px '고딕';
+        }
+
+        ul,ol{list-style: none;}
+        a{text-decoration: none; color: #111;}
+
+        #wrapper{
+            width: 100%;
+            height: 100%;
+        }
+        main {
+            position: relative;
+            width: 1200px;
+            height: auto;
+            margin: 0 auto;        
+        }
+
+
+        .info{
+            width: 1200px;
+            height: 75px;
+            background-color: antiquewhite;
+            display: flex; /* Flexbox 사용 */
+            align-items: center; /* 수직 중앙 정렬 */
+                    
+        }
+        .info-title {
+            position: relative;
+            width: 101x;
+            height: 22px;
+            font-size: 18px;
+            font-weight: 700;
+            left: 100px;
+        }
+
+        .summary-table {
+            position: relative;
+            display: flex;
+            left: 750px;
+            justify-content: space-around; /* 항목 간격 조정 */
+            width: 300px; /* 전체 폭 사용 */
+            padding: 10px 0; /* 위아래 여백 */
+            
+        }
+
+        .summary-item {
+            width: 80px;
+            text-align: center; /* 항목 중앙 정렬 */
+            border-right: 1px solid black;
+        }
+        .summary-item:last-child {
+            border-right: none; /* 마지막 항목의 오른쪽 검은 줄 제거 */
+        }
+
+        .summary-value {
+            font-size: 16px; /* 값의 크기 조정 */
+            font-weight: bold; /* 값 두껍게 */
+        }
+        #container{
+            display: flex;
+            height: auto;
+            flex-wrap: wrap;
+        }
+
+        aside {
+            float: left;
+            width: 200px;
+            height: auto;
+            display: flex; /* Flexbox 사용 */
+            justify-content: center; /* 수직 중앙 정렬 */
+            border-right:1px solid #ccc;
+        }
+
+        aside > ul {
+            padding: 0; /* ul의 기본 패딩 제거 */
+            margin: 0; /* ul의 기본 마진 제거 */
+        }
+
+        aside > ul > li {
+            font-size: 16px;
+            margin: 15px 0; /* 위아래 간격 조정 */
+        }
+        aside > ul > li:nth-child(6) {
+            text-decoration: underline;
+        }
+        .center {
+            flex-grow: 1;
+            width: 994px;
+            height: auto;
+            
+        }
+
+        .ad{
+            width: 900px;
+            height: 86px;
+            margin: 10px auto;
+            border: 1px solid red;
+            background-color: beige;
+            display: flex;
+            justify-content: center; /* 수평 정렬: flex-start, flex-end, center */
+            align-items: center; /* 수직 정렬: flex-start, flex-end, center */
+            font-size: large;
+            
+        }
+        .details{
+            width: 880px;
+            height: 20px;
+            margin: 0 48px;
+            
+        }
+        .center p{
+            font-size: 14px;
+            font-weight: 700;
+            float: left;
+        }
+        .center a{
+            font-size: 12px;
+            font-weight: 400;
+            float: right;
+        }
+        table{
+            width: 800px;
+            height: auto;
+            margin: 0 48px;
+            border-top: 1px solid #111;
+            border-bottom: 1px solid #111;
+            border-collapse: collapse;
+        }
+        th {
+            position: relative;
+            width: 153px;
+            height: 60px;
+            background-color: #f2f2f2;
+            
+        }
+        .address{
+            height: 150px;
+        }
+
+
+        label {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 19px;
+        }
+
+
+        #uid, #change-password-btn, #name, #birth, #email-id, #email-domain, #phone-part1,#phone-part2,#phone-part3,#zipcode, #btnZip, #address1 ,#address2, #cancel{
+       
+            position: relative;
+            margin: 0 5px;
+        }
+
+        #change-password-btn{
+            width: 119px;
+            height: 30px;
+        }
+        #edit-email-btn , #save-email-btn, #edit-phone-btn, #save-phone-btn, .btnZip, #cancel{
+            width: 85px;
+            height: 30px;
+        }
+        #email-id{
+            width: 120px;
+        }
+        #email-domain{
+            width: 96px;
+        }
+        #cancel{
+            background: #C00000;
+            color: #ffffff;
+            border: none;
+
+        }
+        input , select{
+            height: 30px;
+            box-sizing: border-box;
+        }
+        #address1, #address2{
+            width: 350px;
+        }
+        #phone-part1,#phone-part2,#phone-part3{
+            width: 50px;
+            height: 30px;
+        }
+        button{
+            cursor: pointer;
+        }
+        .modifydiv{
+            width: 800px;
+            height: 200px;
+            margin: 0 48px;
+        }
+        #modify{
+            width: 210px;
+            height: 40px;
+            margin: 90px 300px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 17px;
+            background-color: #4f81bd;
+            border: none;
+            color: white;
+        }
+  
+      
+
+    </style>
+    
+     <link rel="stylesheet" href="/css/reset.css">
+     <link rel="stylesheet" href="/css/common.css">
+
+</head>
+<body>
+    <div id="wrapper">
+        <header>
+            <div id="header"></div>
+        </header>
+        <main>
+            <div class="info">
+                <p class="info-title">나의 쇼핑정보</p>
+                <div class="summary-table">
+                    <div class="summary-item">
+                        <span>주문</span><br>
+                        <span class="summary-value">2</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>쿠폰</span><br>
+                        <span class="summary-value">1</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>포인트</span><br>
+                        <span class="summary-value">1,000</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>문의</span><br>
+                        <span class="summary-value">1</span>
+                    </div>
+                </div>
+            </div>
+
+   
+        <div id="container">
+            <aside>
+                <ul>
+                    <li><a href="">전체주문내역</a></li>
+                    <li><a href="">포인트내역</a></li>
+                    <li><a href="">쿠폰</a></li>
+                    <li><a href="">나의리뷰</a></li>
+                    <li><a href="">문의하기</a></li>
+                    <li><a href="">나의설정</a></li>
+                </ul>
+            </aside>
+
+            <div class="center">
+                <div class="ad">900x86 배너광고</div>
+                  <div>
+                    <div class="details">
+                        <p>나의설정</p>
+                    </div>
+                    <table>
+                        <tr>
+                            <th><label for="uid">사용자ID</label></th>
+                            <td>
+                                <span id="uid" th:text="${maskedUid}">"${maskedUid}"</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="password">비밀번호</label></th>
+                            <td>
+                                <button id="change-password-btn" type="button" >비밀번호 수정</button>
+                            </td>                            
+                        </tr>
+                        <tr>
+                            <th><label for="name">이름</label></th>
+                            <td>  
+                                <span id="name" th:text="${maskedName}">"${maskedName}"</span>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <th><label for="birth">생년월일</label></th>
+                            <td>  
+                                <span id="birth" th:text="${birth}">1999년 99월 999일</span>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <th><label for="email">Email</label></th>
+                                <td>
+                                    <!-- 현재 이메일 입력 필드 -->
+                                    <input type="text" id="email-id" placeholder="이메일 아이디" 
+                                           th:value="${userDTO.emailId}" required readonly>
+                                    
+                                    <!-- @ 기호 -->
+                                    <span>@</span>
+                                    
+                                    <!-- 이메일 도메인 직접 입력 필드 -->
+                                    <input type="text" id="email-domain" placeholder="도메인 입력" 
+                                           th:value="${userDTO.emailDomain}" required readonly>
+                                    
+                                    <!-- 이메일 도메인 선택 -->
+                                    <select id="domain-select" onchange="updateDomain()" disabled>
+                                        <option value="">도메인 선택</option>
+                                        <option value="gmail.com">gmail.com</option>
+                                        <option value="naver.com">naver.com</option>
+                                        <option value="daum.net">daum.net</option>
+                                        <option value="직접 입력">직접 입력</option>
+                                    </select>
+                                    
+                                    <!-- 이메일 수정 버튼 -->
+                                    <button id="edit-email-btn" type="button" onclick="showEmailInput()">수정하기</button>
+                                    
+                                    <!-- 숨겨진 이메일 저장 버튼 -->
+                                    <button id="save-email-btn" type="button" onclick="saveEmail()" style="display:none;">저장</button>
+                                    
+                                </td>
+                        </tr>
+                        <tr>
+                            <th><label for="phone">휴대폰</label></th>
+                            <td>
+                                <input type="text" id="phone-part1" th:value="${phoneNumber.split('-')[0]}" maxlength="3" required readonly oninput="moveToNext(this, 'phone-part2')"> -
+                                <input type="text" id="phone-part2" th:value="${phoneNumber.split('-')[1]}" maxlength="4" required readonly oninput="moveToNext(this, 'phone-part3')"> -
+                                <input type="text" id="phone-part3" th:value="${phoneNumber.split('-')[2]}" maxlength="4" required readonly>
+                                
+                                <!-- 수정하기 버튼 -->
+                                <button id="edit-phone-btn" type="button" onclick="editPhone()">수정하기</button>
+                                
+                                <!-- 저장 버튼 (숨김) -->
+                                <button id="save-phone-btn" type="button" onclick="savePhone()" style="display:none;">저장</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="address"><label for="zipcode">주소</label></th>
+                            <td>
+                                <input type="text" id="zipcode" placeholder="우편번호" required style="margin-bottom: 10px;">
+                                <button type="button" class="btnZip" onclick="postcode()">주소검색</button><br>
+                                <input type="text" id="address1" placeholder="기본주소검색" required style="margin-bottom: 10px;"><br>
+                                <input type="text" id="address2" placeholder="상세주소입력" required style="margin-bottom: 10px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="cancel">탈퇴</label></th>
+                            <td>
+                                <button type="button" id="cancel">탈퇴 하기</button>
+                            </td>
+                        </tr>
+                        
+                    </table>      
+                    <div class="modifydiv">
+                        <button type="button" id="modify">수정하기</button> 
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+        </main>
+        <footer>
+            <div id="footer"></div>
+        </footer>
+    </div>
+</body>
+<script>
+    fetch('/include/header.html') // 헤더 파일 경로
+   .then(response => {
+     if (!response.ok) {
+       throw new Error('Network response was not ok');
+     }
+     return response.text();
+   })
+   .then(data => {
+     document.getElementById('header').innerHTML = data;
+   })
+   .catch(error => console.error('Error loading header:', error));
+
+   fetch('/include/footer.html')
+   .then(response => {
+     if (!response.ok) {
+       throw new Error('Network response was not ok');
+     }
+     return response.text();
+   })
+   .then(data => {
+     document.getElementById('footer').innerHTML = data;
+   })
+   .catch(error => console.error('Error loading footer:', error));
+   function showEmailInput() {
+        // 입력 필드를 활성화
+        document.getElementById('email-id').removeAttribute('readonly');
+        document.getElementById('email-domain').removeAttribute('readonly');
+        document.getElementById('domain-select').removeAttribute('disabled');
+        
+        // 수정 버튼 숨기기
+        document.getElementById('edit-email-btn').style.display = 'none';
+        // 저장 버튼 보이기
+        document.getElementById('save-email-btn').style.display = 'inline';
+    }
+
+   function updateDomain() {
+        var selectedDomain = document.getElementById("domain-select").value;
+        var emailDomainInput = document.getElementById("email-domain");
+        
+        // 선택된 도메인이 "직접 입력"일 경우 도메인 입력 필드를 활성화
+        if (selectedDomain === "직접 입력") {
+            emailDomainInput.value = ""; // 입력 필드 비우기
+            emailDomainInput.disabled = false; // 입력 필드 활성화
+        } else {
+            emailDomainInput.value = selectedDomain; // 입력 필드에 도메인 채우기
+            emailDomainInput.disabled = false; // 입력 필드 비활성화
+        }
+
+        updateOutputEmail(); // 이메일 출력 업데이트
+    }
+    function saveEmail() {
+        // 저장 로직을 추가하세요
+        // 예: 이메일 저장 후 다시 readonly로 설정
+        document.getElementById('email-id').setAttribute('readonly', true);
+        document.getElementById('email-domain').setAttribute('readonly', true);
+        document.getElementById('domain-select').setAttribute('disabled', true);
+        
+        // 수정 버튼 다시 보이기
+        document.getElementById('edit-email-btn').style.display = 'inline';
+        // 저장 버튼 숨기기
+        document.getElementById('save-email-btn').style.display = 'none';
+        
+        // 이메일 출력 부분 업데이트
+        const emailId = document.getElementById('email-id').value;
+        const emailDomain = document.getElementById('email-domain').value;
+        document.getElementById('output-email').textContent = emailId + '@' + emailDomain;
+    }
+
+    function moveToNext(current, nextFieldId) {
+    if (current.value.length >= current.maxLength) {
+        document.getElementById(nextFieldId).focus();
+    }
+}
+
+    function editPhone() {
+        // 입력 필드를 활성화
+        document.getElementById('phone-part1').removeAttribute('readonly');
+        document.getElementById('phone-part2').removeAttribute('readonly');
+        document.getElementById('phone-part3').removeAttribute('readonly');
+        
+        // 수정 버튼 숨기기
+        document.getElementById('edit-phone-btn').style.display = 'none';
+        // 저장 버튼 보이기
+        document.getElementById('save-phone-btn').style.display = 'inline';
+    }
+    
+    function savePhone() {
+        // 저장 로직을 추가하세요
+        // 예: 전화번호 저장 후 다시 readonly로 설정
+        document.getElementById('phone-part1').setAttribute('readonly', true);
+        document.getElementById('phone-part2').setAttribute('readonly', true);
+        document.getElementById('phone-part3').setAttribute('readonly', true);
+        
+        // 수정 버튼 다시 보이기
+        document.getElementById('edit-phone-btn').style.display = 'inline';
+        // 저장 버튼 숨기기
+        document.getElementById('save-phone-btn').style.display = 'none';
+    }
+    
+ </script>
+</html>
