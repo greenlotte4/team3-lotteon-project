@@ -300,14 +300,14 @@
                                     <!-- 현재 이메일 입력 필드 -->
                                     <input type="text" id="email-id" placeholder="이메일 아이디" 
                                            th:value="${userDTO.emailId}" required readonly>
-                                    
+
                                     <!-- @ 기호 -->
                                     <span>@</span>
                                     
                                     <!-- 이메일 도메인 직접 입력 필드 -->
                                     <input type="text" id="email-domain" placeholder="도메인 입력" 
-                                           th:value="${userDTO.emailDomain}" required readonly>
-                                    
+                                            required readonly>
+
                                     <!-- 이메일 도메인 선택 -->
                                     <select id="domain-select" onchange="updateDomain()" disabled>
                                         <option value="">도메인 선택</option>

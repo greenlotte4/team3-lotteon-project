@@ -1,24 +1,33 @@
 
-#mainArea .mainWrapper .section{
+#mainArea .mainWrapper .section.orderCompleted{
     /* Subtract the aside's width and some padding/margin */
     
     width: 100%; /* Subtract the aside's width and some padding/margin */
     box-sizing: border-box; /* Ensure proper width calculation */
-
+    margin-top: 20px;
      /* Ensure proper width calculation */
 }
 
 #mainArea .section .sectionWrapper{
 
     width: 100%;
+    padding-top: 20px;
+    border: 1px solid #ddd;
 }
 
-#mainArea .section .sectionWrapper.order{
+#mainArea .section .sectionWrapper.orderCompleted{
     border-bottom: none;
 }
+#mainArea .section .sectionWrapper .sub_tit {
+
+    margin: 0 auto;
+}
 
 
-
+.orderCompany{
+    width: 98%;
+    margin: 0 auto;
+}
 /* orderInfo-txt */
 .orderInfo-txt{
     display: flex;
@@ -193,7 +202,8 @@ input[type=number] {
 .InfoWrapper{
     display: flex;
     flex-direction: row;
-
+    width: 98%;
+    margin: 0 auto;
 }
 
 
@@ -201,8 +211,8 @@ input[type=number] {
 /* totalOrderInfo */
 
 .totalOrderInfo{
-    width: 100%;
-    margin-top: 20px;
+    width: 98%;
+    margin: 20px auto
     
 
 }
@@ -299,8 +309,8 @@ input[type=number] {
 }
 
 .Info{
-
-    width: 100%;
+    width: 98%;
+    margin: 0 auto;
 } 
 
 
