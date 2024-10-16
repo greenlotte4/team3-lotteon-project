@@ -44,7 +44,7 @@ a {
 
 }
 .article-box {
-    width: calc(100%-200px);
+    width: calc(100% - 200px);
     max-width: 1000px;
     height: auto;
     max-height: 2000px;

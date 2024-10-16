@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+
+    <!--    <link rel="stylesheet" th:href="@{/css/member/join.css}">-->
+    <!--    <link rel="stylesheet" th:href="@{/css/member/login.css}">-->
+    <!--    <link rel="stylesheet" th:href="@{/css/member/couponDetail.css}">-->
+    <!--        <link rel="stylesheet" th:href="@{/css/member/customerregister.css}">-->
+    <!--    <link rel="stylesheet" th:href="@{/css/member/mypageMain.css}">-->
+    <!--        <link rel="stylesheet" th:href="@{/css/member/mysettings.css}">-->
+    <!--        <link rel="stylesheet" th:href="@{/css/member/orderdetails.css}">-->
+    <!--        <link rel="stylesheet" th:href="@{/css/member/pointdetails.css}">-->
+    <!--        <link rel="stylesheet" th:href="@{/css/member/qnadetails.css}">-->
+    <!--        <link rel="stylesheet" th:href="@{/css/member/reviewdetails.css}">-->
+    <!--        <link rel="stylesheet" th:href="@{/css/member/term.css}">-->
+    <link rel="stylesheet" th:href="@{/css/member/userregister.css}">
+
+
+</head>
+<body>
+<div class="wrapper">
+    <div id="layout">
+        <div id="skipNav">
+            <a href="#content">본문바로가기</a>
+        </div>
+        <!--    header -->
+        <th:block th:replace="~{include/header.html}"></th:block>
+
+        <!--            <th:block th:replace="~{content/member/join}"></th:block>-->
+        <!--            <th:block th:replace="~{content/member/login}"></th:block>-->
+        <!--        <th:block th:replace="~{content/member/coupondetails}"></th:block>-->
+        <!--            <th:block th:replace="~{content/member/customerregister}"></th:block>-->
+        <!--            <th:block th:replace="~{content/member/mypageMain}"></th:block>-->
+        <!--                <th:block th:replace="~{content/member/mysettings}"></th:block>-->
+        <!--            <th:block th:replace="~{content/member/orderdetails}"></th:block>-->
+        <!--            <th:block th:replace="~{content/member/pointdetails}"></th:block>-->
+        <!--            <th:block th:replace="~{content/member/qnadetails}"></th:block>-->
+        <!--            <th:block th:replace="~{content/member/reviewdetails}"></th:block>-->
+        <!--            <th:block th:replace="~{content/member/term}"></th:block>-->
+        <th:block th:replace="~{content/member/userregister}"></th:block>
+
+
+        <th:block th:replace="~{include/footer.html}"></th:block>
+
+        <script th:src="@{/js/market.js}"></script>
+        <script th:src="@{js/marketOrder.js}"></script>
+        <!--        <script th:src="@{js/mysetting.js}"></script>-->
+        <!--        <script th:src="@{js/orderdetails.js}"></script>-->
+        <script th:src="@{js/pointdetails.js}"></script>
+
+
+    </div><!--layout end-->
+</div> <!--wrapper end-->
+</body>
+</html>
