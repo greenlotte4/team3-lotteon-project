@@ -745,7 +745,6 @@ select[readonly] {
     font-family: Arial, sans-serif;
     width: 100%;
     box-sizing: border-box;
-    height: 50px; /* 명시적으로 footer 높이를 설정 */
 }
 .footerWrapper{
     width: 1200px;
@@ -754,9 +753,17 @@ select[readonly] {
 
 .footerTopMenu {
     text-align: left;
-    margin-bottom: 20px;
+    width: 93%;
+    margin-bottom: 10px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
-
+.footerTopMenu .adminLink >a {
+    font-size: 16px;
+    text-decoration: underline;
+}
 
 
 .footerTopMenu ul {
@@ -771,6 +778,7 @@ select[readonly] {
 .footerTopMenu ul li {
     display: inline-block;
     margin-right: 20px;
+
 }
 
 .footerTopMenu ul li a {
@@ -878,6 +886,8 @@ select[readonly] {
     font-size: 12px;
     color: #999;
     margin-top: 20px;
+    padding-bottom: 20px;
+
 }
 
 .footerInfo p {
@@ -894,6 +904,7 @@ select[readonly] {
         width: 100%; /* Full width on small screens */
         margin-bottom: 20px;
     }
+
 
     .footerTopMenu ul li {
         display: block;
