@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/cs/faqList.css}">
+
+
+    <title>LotteOn::cs</title>
+</head>
+<body>
+<div id="wrapper">
+    <div id="layout">
+        <div id="skipNav">
+            <a href="#content">본문바로가기</a>
+        </div>
+        <th:block th:replace="~{include/header}"></th:block>
+
+<!--        <th:block th:replace="~{content/cs/main}"></th:block>-->
+
+        <main>
+            <div id="container">
+
+                <th:block th:replace="~{aside/faqAside}"></th:block>
+                <th:block th:replace="~{content/cs/faqList}"></th:block>
+            </div>
+        </main>
+
+        <th:block> <!---->
+
+        </th:block>
+
+        <th:block th:replace="~{include/footer}"></th:block>
+
+    </div><!--layout end-->
+</div> <!--wrapper end-->
+<script th:src="@{js/headerJs.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+html{color:#111; position:relative;}
+html, body{height:100%;}
+ol,ul {list-style: none}
+a {text-decoration: none; color: inherit;}
+
+#wrapper {
+    width: 100%;
+    height: auto;
+
+}
+main {
+    width: 1200px;
+    height: auto;
+    position: relative;
+    margin: 0 auto;
+
+}
+#navi {width: 1200px; height: 50px; border-top: 1px solid rgb(199,199,199);}
+#navi p {font-size: 15px; font-weight: bold; margin-top: 13px;}
+
+#container {
+    display: flex;
+    width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    border-top: 1px solid rgb(199,199,199);
+}
+
+
+/*어사이드*/
+#aside {
+    width: 200px;
+    border-right: 1px solid rgb(199, 199, 199);
+    box-sizing: border-box;
+
+}
+#aside h1 {font-size: large; font-weight: bold; text-align: center; margin: 20px 20px 40px;}
+.aside_list ul li {overflow: hidden; padding: 16px 0; border-bottom: 1px solid rgb(194, 194, 194); width:140px; margin-left: 10px;}
+.aside_list ul li:nth-of-type(1) a{font-weight: bold; text-decoration: underline;}
+
+.active {line-height: 24px;}
+.active:hover {text-decoration: underline; font-weight: bold;}
+
+/*메인*/
+#service {flex-grow: 1;
+    min-width: 0;
+    width: 1000px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.hidden {display: none;}
+
+
+/*회원 , 회원관련 자주 묻는 질문입니다.*/
+h2 {margin: 30px 40px 0px; font-weight: bold; font-size: large; }
+.title{
+    margin-bottom: 20px;
+}
+.title p {color: rgb(117, 117, 117); margin-top: 10px;
+    margin-bottom: 20px; margin-left: 20px;}
+
+
+.container{
+    width: 97%;
+    margin: 0 auto;
+}
+
+/*첫번째 자주 묻는 질문*/
+h2{font-weight: bold; font-size: large; margin: 30px 40px 0px}
+.first_list {border: 1px solid rgb(197, 197, 197); border-radius: 7px; margin: 20px 40px;}
+.first_li {height: 50px; border-bottom: 1px solid rgb(197, 197, 197);}
+.first_li:last-child {border-bottom: none;}
+
+.first_list li a {display: inline-block; margin: 15px 20px; font-weight: 500; font-size: 13px;}
+.first_li span {color: rgb(17, 86, 165); font-weight: bold;}
+.first_show {text-align: center;}
+
+/*hover 추가*/
+.first_li a:hover {background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);}
+
+
+/*두번째 자주 묻는 질문*/
+.second_list {border: 1px solid rgb(197, 197, 197); border-radius: 7px; margin: 20px 40px;}
+.second_li {height: 50px; border-bottom: 1px solid rgb(197, 197, 197);}
+.second_li:last-child {border-bottom: none;}
+
+.second_list li a {display: inline-block; margin: 15px 20px; font-weight: 500; font-size: 13px;}
+.second_li span {color: rgb(17, 86, 165); font-weight: bold;}
+.second_show {text-align: center;}
+
+/*hover 추가*/
+.second_li a:hover {background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);}

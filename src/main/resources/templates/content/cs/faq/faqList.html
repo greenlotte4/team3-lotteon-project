@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 리스트</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <head>
+        <div id="header"></div>
+    </head>
+    <main class="admin-articleList">
+        <div class="admin-article-in">
+            <aside id="adminAside">
+
+            </aside>
+            <div class="article-box">
+                <div class="navi-container">
+                    <h3>자주묻는질문 목록</h3>
+                    <div class="navi">
+                      <a href="">HOME</a> > <a href="">고객센터</a> > <a href="">자주묻는질문</a>
+                    </div>
+                  </div>
+                <div class="article-title">
+                    <select id="customer-service1" name="customer-service">
+                        <option value="service">고객 서비스</option>
+                        <option value="transaction">거래 관련</option>
+                        <option value="inquiry">문의하기</option>
+                        <option value="feedback">피드백</option>
+                    </select>
+                    <select id="customer-service2" name="customer-service">
+                        <option value="service">고객 서비스</option>
+                        <option value="transaction">거래 관련</option>
+                        <option value="inquiry">문의하기</option>
+                        <option value="feedback">피드백</option>
+                    </select>
+                </div>
+                <div class="article-list">
+                    <div class="article-header">
+                        <div class="checkboxes">
+                            <input type="checkbox" id="select-all">
+                        </div>
+                        <div class="number">번호</div>
+                        <div class="type">유형</div>
+                        <div class="type2">유형2</div>
+                        <div class="title">제목</div>
+                        <div class="views">조회</div>
+                        <div class="date">날짜</div>
+                        <div class="manage">관리</div>
+                    </div>
+                    <!-- 게시물 리스트 -->
+                    <div class="article-inlist">
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkbox-item">
+                        </div>
+                        <div class="number-box">1</div>
+                        <div class="type-box">회원</div>
+                        <div class="type-box type2">가입</div>
+                        <a class="article-box" href="/article/view?no=1">[롯데숏핑] 구매회원 이용약관 계정 안내 (시행일: 0000년00월00일)</a>
+                        <div class="views-box">100</div>
+                        <div class="date-box">2024.07.16</div>
+                        <div class="manage-box"><a href="/article/edit?no=1">수정</a> | <a
+                                href="/article/delete?no=1">삭제</a>
+                        </div>
+                    </div>
+                    <div class="article-inlist">
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkbox-item">
+                        </div>
+                        <div class="number-box">1</div>
+                        <div class="type-box">회원</div>
+                        <div class="type-box type2">가입</div>
+                        <a class="article-box" href="/article/view?no=1">[롯데숏핑] 구매회원 이용약관 계정 안내 (시행일: 0000년00월00일)</a>
+                        <div class="views-box">100</div>
+                        <div class="date-box">2024.07.16</div>
+                        <div class="manage-box"><a href="/article/edit?no=1">수정</a> | <a
+                                href="/article/delete?no=1">삭제</a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="pagination">
+                    <a href="#">이전</a>
+                    <a href="#">다음</a>
+                </div>
+                <div class="button-ctl">
+                    <button type="button" class="btn-delete">선택삭제</button>
+                    <button type="button" class="btn-Write">작성하기</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <footer>
+        <div id="footer"></div>
+    </footer>
+    <script>
+
+        fetch('../include/footer.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+
+
+        fetch('../include/header.html') // 헤더 파일 경로
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading header:', error));
+        fetch('../include/adminAside.html') // 헤더 파일 경로
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('adminAside').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading header:', error));
+
+
+        // 체크박스 전체 선택 기능
+        const selectAllCheckbox = document.getElementById('select-all');
+        const checkboxes = document.querySelectorAll('.checkbox-item');
+
+        selectAllCheckbox.addEventListener('change', function () {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+        document.body.addEventListener('click', function (e) {
+            if (e.target.classList.contains('menuList')) {
+                // 메뉴 클릭 시 동작
+            }
+        });
+    </script>
+    <script src="../js/admin.js"></script>
+</body>
+
+</html>
