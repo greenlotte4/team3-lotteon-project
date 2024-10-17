@@ -30,7 +30,17 @@ select:focus{outline: none;}
 table {
     table-layout: fixed;
 }
+input{
+    border: 1px solid #dddddd;
 
+}
+
+textarea{
+    border: 1px solid #dddddd;
+}
+textarea:focus{
+    outline: none;
+}
 /* Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
