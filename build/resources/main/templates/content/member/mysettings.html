@@ -1,0 +1,125 @@
+<main>
+    <div class="info">
+        <p class="info-title">나의 쇼핑정보</p>
+        <div class="summary-table">
+            <div class="summary-item">
+                <span>주문</span><br>
+                <span class="summary-value">2</span>
+            </div>
+            <div class="summary-item">
+                <span>쿠폰</span><br>
+                <span class="summary-value">1</span>
+            </div>
+            <div class="summary-item">
+                <span>포인트</span><br>
+                <span class="summary-value">1,000</span>
+            </div>
+            <div class="summary-item">
+                <span>문의</span><br>
+                <span class="summary-value">1</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="container">
+        <aside>
+            <ul>
+                <li><a href="">전체주문내역</a></li>
+                <li><a href="">포인트내역</a></li>
+                <li><a href="">쿠폰</a></li>
+                <li><a href="">나의리뷰</a></li>
+                <li><a href="">문의하기</a></li>
+                <li><a href="">나의설정</a></li>
+            </ul>
+        </aside>
+
+        <div class="center">
+            <div class="ad">900x86 배너광고</div>
+            <div>
+                <div class="details">
+                    <p>나의설정</p>
+                </div>
+                <table>
+                    <tr>
+                        <th><label for="uid">사용자ID</label></th>
+                        <td>
+                            <span id="uid">"아이디"</span>
+                            <!-- <span id="uid" th:text="${maskedUid}">"${maskedUid}"</span> -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="password">비밀번호</label></th>
+                        <td>
+                            <button id="change-password-btn" type="button">비밀번호 수정</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="name">이름</label></th>
+                        <td>
+                            <span id="name">"이름"</span>
+                            <!-- <span id="name" th:text="${maskedName}">"${maskedName}"</span> -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="birth">생년월일</label></th>
+                        <td>
+                            <span id="birth">1999년 99월 999일</span>
+                            <!-- <span id="birth" th:text="${birth}">1999년 99월 999일</span> -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="email">Email</label></th>
+                        <td>
+                            <input type="text" id="email-id" placeholder="이메일 아이디" required readonly>
+<!--                                   th:value="${userDTO.emailId}" required readonly>-->
+                            <span>@</span>
+                            <input type="text" id="email-domain" placeholder="도메인 입력"
+                                   value="${userDTO.emailDomain}" required readonly>
+                            <select id="domain-select" onchange="updateDomain()" disabled>
+                                <option value="">도메인 선택</option>
+                                <option value="gmail.com">gmail.com</option>
+                                <option value="naver.com">naver.com</option>
+                                <option value="daum.net">daum.net</option>
+                                <option value="직접 입력">직접 입력</option>
+                            </select>
+                            <button id="edit-email-btn" type="button" onclick="showEmailInput()">수정하기</button>
+                            <button id="save-email-btn" type="button" onclick="saveEmail()" style="display:none;">저장</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="phone">휴대폰</label></th>
+                        <td>
+                            <input type="text" id="phone-part1" value="${phoneNumber.split('-')[0]}" maxlength="3"
+                                   required readonly oninput="moveToNext(this, 'phone-part2')"> -
+                            <input type="text" id="phone-part2" value="${phoneNumber.split('-')[1]}" maxlength="4"
+                                   required readonly oninput="moveToNext(this, 'phone-part3')"> -
+                            <input type="text" id="phone-part3" value="${phoneNumber.split('-')[2]}" maxlength="4"
+                                   required readonly>
+                            <button id="edit-phone-btn" type="button" onclick="editPhone()">수정하기</button>
+                            <button id="save-phone-btn" type="button" onclick="savePhone()" style="display:none;">저장</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="address"><label for="zipcode">주소</label></th>
+                        <td>
+                            <input type="text" id="zipcode" placeholder="우편번호" required style="margin-bottom: 10px;">
+                            <button type="button" class="btnZip" onclick="postcode()">주소검색</button>
+                            <br>
+                            <input type="text" id="address1" placeholder="기본주소검색" required style="margin-bottom: 10px;"><br>
+                            <input type="text" id="address2" placeholder="상세주소입력" required style="margin-bottom: 10px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cancel">탈퇴</label></th>
+                        <td>
+                            <button type="button" id="cancel">탈퇴 하기</button>
+                        </td>
+                    </tr>
+                </table>
+                <div class="modifydiv">
+                    <button type="button" id="modify">수정하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
