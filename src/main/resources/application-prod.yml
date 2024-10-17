@@ -22,15 +22,14 @@ server:
 
 
 spring:
-    profiles:
-        active: prod
     application:
         name: LotteOnProject
+
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Qwe123~!
-        url: jdbc:mysql://sboard_db:3306/devProject
-        username: dev
+        url: jdbc:mysql://sboard_db:3306/lotteProject
+        username: lotte
         type: com.zaxxer.hikari.HikariDataSource
     jpa:
         database: mysql
