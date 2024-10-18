@@ -17,6 +17,11 @@ public class MainController {
     }
 
 
+    @GetMapping("/category")
+    public String category(){
+        return "category";
+    }
+
 
 
 }
