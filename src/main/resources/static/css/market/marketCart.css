@@ -1,6 +1,10 @@
 #mainArea .mainWrapper section{
 
 }
+
+#mainArea > .mainWrapper{
+    align-items: normal;
+}
 #mainArea .mainWrapper .cart{
     /* Subtract the aside's width and some padding/margin */
     
@@ -225,7 +229,6 @@
 .cartOrder_window.scroll{
     position: fixed;
     top: 0px;
-    margin-left: 13px;
 }
 
 .cartOrderAsideWrapper{

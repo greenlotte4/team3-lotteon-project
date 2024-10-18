@@ -24,21 +24,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const footerTop = footer.getBoundingClientRect().top + window.scrollY; // Footer의 상단 위치
         console.log('footerTop:'+footerTop);
         // 스크롤 위치가 헤더 아래에 있고, 푸터에 도달하기 전이면 aside에 scroll 클래스를 추가
-        if (scrollPosition <= headerHeight && (scrollPosition + asideHeight + 50) < footerTop ) {
+        if (scrollPosition <= headerHeight || (scrollPosition + asideHeight + 50) < footerTop ) {
             aside.classList.remove('scroll');
             // aside.style.position = 'fixed';
-            // aside.style.top = `${headerHeight}px`; // 헤더 아래에 고정
-            aside.style.bottom = ''; // 푸터 닿지 않음
+            aside.style.top = ''; // 헤더 아래에 고정
+            aside.style.left = ''; // 푸터 닿지 않음
         } else if ((scrollPosition + asideHeight + 50) >= footerTop) {
             // 푸터에 도달하면 aside를 푸터 상단에서 멈추게 하기
             aside.classList.add('scroll');
-            aside.style.position = 'absolute';
+            aside.style.left='1080px';
+            // aside.style.position = 'absolute';
             aside.style.top = `${footerTop - asideHeight - 50}px`;  // 푸터 상단에 고정
             // console.log('asdide top : '+`${footerTop - asideHeight - 50}px`)
         } else {
             aside.classList.add('scroll');
             aside.style.position = ''; // 초기 위치로 돌아감
-            aside.style.top = ''; // 원래 위치로 초기화
+            aside.style.top = `${headerHeight}`; // 초기 위치로 돌아감
+
         }
     }
 

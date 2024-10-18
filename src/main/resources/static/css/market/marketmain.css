@@ -5,7 +5,7 @@
 #mainArea > .mainWrapper{
     width: 100%;
     height: auto;
-    
+    display: flex;
 }
 #mainArea > .mainWrapper > *{
     display: inline-block;

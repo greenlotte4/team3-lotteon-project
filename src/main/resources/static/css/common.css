@@ -593,8 +593,8 @@ input[type=search] {
     height: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    display: flex;
-    align-items: stretch; /* 자식 요소들의 높이를 맞춰줍니다 */
+    /*display: flex;*/
+    /*align-items: stretch; !* 자식 요소들의 높이를 맞춰줍니다 *!*/
     
 }
 #mainArea > .mainWrapper > *{
