@@ -9,7 +9,7 @@
   <link  rel="stylesheet" th:href="@{/css/reset.css}">
   <link rel="stylesheet" th:href="@{/css/common.css}">
   <link rel="stylesheet" th:href="@{/css/market/marketAside.css}">
-  <link th:if="${content == 'list'}" rel="stylesheet" th:href="@{/css/market/marketList.css}">
+  <link th:if="${content == 'list' || content =='search'}" rel="stylesheet" th:href="@{/css/market/marketList.css}">
   <link th:if="${content == 'search'}"  rel="stylesheet" th:href="@{/css//market/marketsearch.css}">
 
   <link th:if="${content == 'view'}"  rel="stylesheet" th:href="@{/css/market/marketview.css}">
