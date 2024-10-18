@@ -6,6 +6,14 @@
     box-sizing: border-box;
 }
 
+#mainArea > .mainWrapper{
+    width: 100%;
+    height: auto;
+    display: flex;
+
+}
+
+
 #mainArea .section .sectionWrapper .sub_tit{
     box-sizing: border-box;
     position: relative;
