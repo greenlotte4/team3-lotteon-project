@@ -23,7 +23,7 @@ server:
 
 spring:
     profiles:
-        active: default
+        active: prod
     application:
         name: LotteOnProject
     datasource:
