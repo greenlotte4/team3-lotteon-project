@@ -1,94 +1,81 @@
 <!-- 롯데온 로그인 영역 추가 -->
     <!-- 롯데온 로그인  추가-->
-    <main id="content" role="main" class="contentArea on">
-        <div class="loginContent withAd vertical">
-            <div class="loginWrap lotteOn">
-                <h2 class="titLogin">
-                    <!---->
-                    <span class="tit">로그인</span>
-                </h2>
-                <div class="section input loginForm">
-                    <div class="inputSet login">
-                        <div>
-                            <input type="hidden" id="tempid" name="tempid">
-                            <input name="inId" type="text" placeholder="아이디 또는 이메일 아이디" id="inId" title="아이디 또는 이메일 입력">
-                            <div class="alertTxt">
+<main id="content" role="main" class="contentArea on">
+    <div class="loginContent withAd vertical">
+        <div class="loginWrap lotteOn">
+            <h2 class="titLogin">
+                <!---->
+                <span class="tit">로그인</span>
+            </h2>
+            <div class="section input loginForm">
+                <div class="inputSet login">
+                    <div>
+                        <input type="hidden" id="tempid" name="tempid">
+                        <input name="inId" type="text" placeholder="아이디 또는 이메일 아이디" id="inId" title="아이디 또는 이메일 입력">
+                        <div class="alertTxt">
 
                             <!---->
-                            </div>
-                        </div>
-                        <div class="inputSet login">
-                            <div class="passwordWrap">
-                                <input type="hidden" id="tempPwd" name="tempPwd">
-                                <input id="Password" type="password" placeholder="8~15자리 영문+숫자+특수문자 조합" name="Password" autocomplete="new-password" title="비밀번호 입력 (8~15자리 영문+숫자+특수문자 조합)">
-                                <button type="button">
-                                    <span class="blind">비밀번호 숨기기</span>
-                                </button>
-                            </div>
-                            <div class="alertTxt">
-                            <!---->
-                            </div>
                         </div>
                     </div>
-                    <div class="btnConfirmWrap">
-                        <button data-v-5e1c3199="" class="hasBgColor bgColorRed util sizeFull alignLeft">
+                    <div class="inputSet login">
+                        <div class="passwordWrap">
+                            <input type="hidden" id="tempPwd" name="tempPwd">
+                            <input id="Password" type="password" placeholder="8~15자리 영문+숫자+특수문자 조합" name="Password"
+                                   autocomplete="new-password" title="비밀번호 입력 (8~15자리 영문+숫자+특수문자 조합)">
+                            <button type="button">
+                                <span class="blind">비밀번호 숨기기</span>
+                            </button>
+                        </div>
+                        <div class="alertTxt">
+                            <!---->
+                        </div>
+                    </div>
+                </div>
+                <div class="btnConfirmWrap">
+                    <button data-v-5e1c3199="" class="hasBgColor bgColorRed util sizeFull alignLeft">
                             <span data-v-5e1c3199="" class="inner">
                                 <!---->
                                 <span data-v-5e1c3199="" class="">로그인하기</span>
-                            <!---->
+                                <!---->
                             </span>
-                        </button>
+                    </button>
+                </div>
+                <div class="autoLogin">
+                    <div class="checkboxSet">
+                        <input id="checkbox1" type="checkbox" name="checkbox1" checked="checked">
+                        <label for="checkbox1">아이디 저장</label>
                     </div>
-                    <div class="autoLogin">
-                        <div class="checkboxSet">
-                            <input id="checkbox1" type="checkbox" name="checkbox1" checked="checked">
-                            <label for="checkbox1">아이디 저장</label>
-                        </div>
-                        <input id="checkbox11" type="hidden" name="checkbox" value="N">
-                        <div class="btnFindIdPasswordWrap">
-                            <button class="findIdPassword">아이디 찾기</button>
-                            <button class="findIdPassword">비밀번호 찾기</button>
+                    <input id="checkbox11" type="hidden" name="checkbox" value="N">
+                    <div class="btnFindIdPasswordWrap">
+                        <button class="findIdPassword">아이디찾기</button>
+                        <button class="findIdPassword">비밀번호찾기</button>
+                    </div>
+                </div>
+                <div class="signupSpeed lineType">
+                    <strong class="subTitle"> 간편하게 시작하기 </strong>
+                    <div class="socialSignupWrap">
+                        <div class="btnLoginGroup">
+                            <button type="button" class="kakaoLoginBtn">카카오</button>
+                            <button type="button" class="naverLoginBtn">
+                                <a href="#" class="naver" style="display: none;"></a>네이버</button>
+                            <button type="button" class="googleLoginBtn">구글</button>
                         </div>
                     </div>
-                    <div class="signupSpeed lineType">
-                        <strong class="subTitle"> 간편하게 시작하기 </strong>
-                        <div class="socialSignupWrap">
-                            <div class="btnLoginGroup">
-                                <button type="button" class="kakaoLoginBtn">카카오</button>
-                                <button type="button" class="naverLoginBtn">
-                                    <a href="#" class="naver" style="display: none;"></a>네이버</button>
-                                    <button type="button" class="googleLoginBtn">구글</button>
-                                </div>
-                            </div>
+                </div>
+                <div class="conerWrap">
+                    <div class="cornorBox">
+                        <div class="moveJoinMember">
+                            <a class="moveJoinMemberItem">LotteON 회원 가입하기</a>
                         </div>
-                        <div class="conerWrap">
-                            
-<!-- e. 코너영역 stlye --><!-- s. 코너영역 html -->
-<div class="cornorBox">
-<div class="moveJoinMember">
-<a class="moveJoinMemberItem" href="javascript:goLpointMbSignUp()">L.POINT 통합회원 가입하기</a></div>
-</div>
-<!-- e. 코너영역 html -->
-</div>
-<div class="otherSignUpWrap">
-    <a data-v-5e1c3199="" class="otherSignUp text sizeMedium alignLeft">
-        <span data-v-5e1c3199="" class="inner">
-            <!---->
-            <span data-v-5e1c3199="" class="">다른 방법으로 회원가입</span>
-        <!---->
-        </span>
-    </a>
-</div>
-</div>
-</div>
-<div class="adWrap">
-    <a href="#">
-        <img src="https://real-lotteon-adv-image-public.s3.amazonaws.com/upload/img/81878899742.jpg">
-    </a>
-</div>
-</div>
-<div id="modals-container">
-
-</div>
-<!---->
+                    </div>
+                </div>
+                <div class="space"></div>
+            </div>
+        </div>
+        <div class="adWrap">
+            <a href="#">
+                <img src="https://real-lotteon-adv-image-public.s3.amazonaws.com/upload/img/81878899742.jpg">
+            </a>
+        </div>
+    </div>
 </main>

@@ -1,17 +1,23 @@
-a.bgColorRed[data-v-5e1c3199],button.bgColorRed[data-v-5e1c3199] {
+a.bgColorRed[data-v-5e1c3199],
+button.bgColorRed[data-v-5e1c3199] {
     background-color: #ef2a23
 }
 
-a.bgColorRed[data-v-5e1c3199]:active,button.bgColorRed[data-v-5e1c3199]:active {
+a.bgColorRed[data-v-5e1c3199]:active,
+button.bgColorRed[data-v-5e1c3199]:active {
     background-color: #d81d16
 }
 
-a.hasBgColor[data-v-5e1c3199]:not(.bgColorLightGray):not(.bgColorWhite):not(.bgColorKakao),button.hasBgColor[data-v-5e1c3199]:not(.bgColorLightGray):not(.bgColorWhite):not(.bgColorKakao) {
+a.hasBgColor[data-v-5e1c3199]:not(.bgColorLightGray):not(.bgColorWhite):not(.bgColorKakao),
+button.hasBgColor[data-v-5e1c3199]:not(.bgColorLightGray):not(.bgColorWhite):not(.bgColorKakao) {
     border: none;
-    color: #fff!important
+    color: #fff !important
 }
 
-a.util[data-v-5e1c3199],a.utilRound[data-v-5e1c3199],button.util[data-v-5e1c3199],button.utilRound[data-v-5e1c3199] {
+a.util[data-v-5e1c3199],
+a.utilRound[data-v-5e1c3199],
+button.util[data-v-5e1c3199],
+button.utilRound[data-v-5e1c3199] {
     width: auto;
     min-width: 64px;
     height: 44px;
@@ -25,12 +31,20 @@ a.util[data-v-5e1c3199],a.utilRound[data-v-5e1c3199],button.util[data-v-5e1c3199
     border-color: #ddd
 }
 
-a.util.sizeFull[data-v-5e1c3199],a.utilRound.sizeFull[data-v-5e1c3199],button.util.sizeFull[data-v-5e1c3199],button.utilRound.sizeFull[data-v-5e1c3199] {
+a.util.sizeFull[data-v-5e1c3199],
+a.utilRound.sizeFull[data-v-5e1c3199],
+button.util.sizeFull[data-v-5e1c3199],
+button.utilRound.sizeFull[data-v-5e1c3199] {
     width: 100%;
     font-size: 17px
 }
 
-a.text[data-v-5e1c3199],a.textBlack[data-v-5e1c3199],a.textLight[data-v-5e1c3199],button.text[data-v-5e1c3199],button.textBlack[data-v-5e1c3199],button.textLight[data-v-5e1c3199] {
+a.text[data-v-5e1c3199],
+a.textBlack[data-v-5e1c3199],
+a.textLight[data-v-5e1c3199],
+button.text[data-v-5e1c3199],
+button.textBlack[data-v-5e1c3199],
+button.textLight[data-v-5e1c3199] {
     width: auto;
     height: auto;
     border: none;
@@ -38,7 +52,7 @@ a.text[data-v-5e1c3199],a.textBlack[data-v-5e1c3199],a.textLight[data-v-5e1c3199
     font-weight: 400;
     line-height: 1.38;
     letter-spacing: -.3px;
-    color: rgba(0,0,0,.5)
+    color: rgba(0, 0, 0, .5)
 }
 
 .loginContent.withAd {
@@ -54,7 +68,7 @@ a.text[data-v-5e1c3199],a.textBlack[data-v-5e1c3199],a.textLight[data-v-5e1c3199
     width: 420px;
     -webkit-box-flex: 0;
     -ms-flex: 0 0 420px;
-    flex: 0 0 420px
+    flex: 0 0 360px
 }
 
 .loginContent.withAd .adWrap {
@@ -84,7 +98,9 @@ a.text[data-v-5e1c3199],a.textBlack[data-v-5e1c3199],a.textLight[data-v-5e1c3199
 
 .loginContent.withAd .adWrap a img {
     max-width: 100%;
+    height: 490px;
     display: block;
+    border-radius: 8px;
 }
 
 .loginContent.withAd.vertical {
@@ -92,23 +108,16 @@ a.text[data-v-5e1c3199],a.textBlack[data-v-5e1c3199],a.textLight[data-v-5e1c3199
 }
 
 .loginContent.withAd.vertical .adWrap {
-    width: 270px;
+    width: 320px;
     -webkit-box-flex: 0;
     -ms-flex: 0 0 270px;
-    flex: 0 0 270px;
-    height: 352px
+    flex: 0 0 320px;
+    height: 587px;
 }
 
-.otherSignUpWrap {
+.space {
     padding-top: 24px;
-    text-align: center;
-    padding-bottom: 160px;
-}
-
-.otherSignUpWrap .otherSignUp.text {
-    position: relative;
-    color: #888;
-    text-decoration: underline
+    padding-bottom: 80px;
 }
 
 .loginContent {
@@ -228,8 +237,8 @@ a.text[data-v-5e1c3199],a.textBlack[data-v-5e1c3199],a.textLight[data-v-5e1c3199
 }
 
 .signupSpeed.lineType {
-    padding-top: 50px;
-    margin-top: 100px;
+    padding-top: 30px;
+    margin-top: 30px;
     border-top: 1px solid #dfdfdf
 }
 
@@ -243,24 +252,29 @@ a.text[data-v-5e1c3199],a.textBlack[data-v-5e1c3199],a.textLight[data-v-5e1c3199
     font-weight: 400
 }
 
+
 /* 글씨체 추가 */
-    .cornorBox {
+.cornorBox {
     margin-top: 50px;
-    }
-    .cornorBox .moveJoinMember {
+}
+
+.cornorBox .moveJoinMember {
     position: relative;
     font-size: 16px;
     line-height: 19px;
     text-align: center;
-    }
-    .cornorBox .moveJoinMemberTxt {
+}
+
+.cornorBox .moveJoinMemberTxt {
     margin-bottom: 8px;
-    }
-    .cornorBox .moveJoinMemberTxt strong {
+}
+
+.cornorBox .moveJoinMemberTxt strong {
     display: block;
     font-weight: 700;
-    }
-    .cornorBox .moveJoinMember .moveJoinMemberItem {
+}
+
+.cornorBox .moveJoinMember .moveJoinMemberItem {
     display: block;
     height: 54px;
     font-size: 16px;
@@ -268,7 +282,7 @@ a.text[data-v-5e1c3199],a.textBlack[data-v-5e1c3199],a.textLight[data-v-5e1c3199
     font-weight: bold;
     text-align: center;
     border: 1px solid #ddd;
-    border-radius: 0;
+    border-radius: 10px;
 }
 
 /* pull 이후 추가 */
@@ -306,7 +320,87 @@ a.text[data-v-5e1c3199],a.textBlack[data-v-5e1c3199],a.textLight[data-v-5e1c3199
     letter-spacing: -1.1px
 }
 
-a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video {
+a,
+abbr,
+acronym,
+address,
+applet,
+article,
+aside,
+audio,
+b,
+big,
+blockquote,
+body,
+canvas,
+caption,
+center,
+cite,
+code,
+dd,
+del,
+details,
+dfn,
+div,
+dl,
+dt,
+em,
+embed,
+fieldset,
+figcaption,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+hgroup,
+html,
+i,
+iframe,
+img,
+ins,
+kbd,
+label,
+legend,
+li,
+mark,
+menu,
+nav,
+object,
+ol,
+output,
+p,
+pre,
+q,
+ruby,
+s,
+samp,
+section,
+small,
+span,
+strike,
+strong,
+sub,
+summary,
+sup,
+table,
+tbody,
+td,
+tfoot,
+th,
+thead,
+time,
+tr,
+tt,
+u,
+ul,
+var,
+video {
     margin: 0;
     padding: 0;
     border: 0;
@@ -317,8 +411,13 @@ a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,c
 }
 
 
-a,button,html,input,select,textarea {
-    font-family: NotoSansKR,Malgun Gothic,arial,sans-serif;
+a,
+button,
+html,
+input,
+select,
+textarea {
+    font-family: NotoSansKR, Malgun Gothic, arial, sans-serif;
     /* color:#333; */
     padding: 0;
 }
@@ -328,4 +427,18 @@ button {
     background: none;
     padding: 0;
     margin: 0
+}
+
+.awards-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.awards-banner img {
+    width: 180px;
+    height: 50px;
+    margin: 0 10px;
 }
