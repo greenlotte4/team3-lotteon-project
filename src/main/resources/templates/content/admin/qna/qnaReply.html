@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>qnaReply</title>
+    <script src="../../js/include.js"></script>
+    <link rel="stylesheet" href="../../css/admin.css">
+</head>
+
+<body>
+    <header id="header"></header>
+    <main>
+        <div class="reply-box">
+            <aside id="aside">sss</aside>
+            <div class="coment-box">
+                <div class="navi-container">
+                    <h3>자주묻는질문 목록</h3>
+                    <div class="navi">
+                        <a href="">HOME</a> > <a href="">고객센터</a> > <a href="">공지상황</a>
+                    </div>
+                </div>
+                <form class="reply-coment">
+                    <div class="reply-table">
+                        <div class="reply-type">
+                            <div>유형</div>
+                            <div>
+                                회원 - 가입
+                            </div>
+                        </div>
+                        <div class="reply-title">
+                            <div>제목</div>
+                            <div>
+                                개인 회원과 법인회원은 다르다.
+                            </div>
+                        </div>
+                        <div class="reply-content">
+                            <div>내용</div>
+                            <div>
+                                대충 내용 이 어쩌고 저쩌고 個人介入と法事介入何が違いますか<br>
+                                대충 내용 이 어쩌고 저쩌고 個人介入と法事介入何が違いますか<br>
+                                대충 내용 이 어쩌고 저쩌고 個人介入と法事介入何が違いますか<br>
+                                대충 내용 이 어쩌고 저쩌고 個人介入と法事介入何が違いますか<br>
+                            </div>
+                        </div>
+                        <div class="reply-answer">
+                            <div>답변</div>
+                            <div style="display: flex; justify-content: space-between; ">
+                                <textarea class="reply-contents" oninput="autoResize(this)"></textarea>
+                            </div>
+                        </div>
+                </form>
+                <div class="reoly-btn-controoler">
+                    <a class="replt-btn-delete" href="#">삭제</a>
+                    <a class="replt-btn-ok" href="#">답변등록</a>
+                    <a class="replt-btn-list" href="#">목록</a>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+    <footer id="footer"></footer>
+</body>
+<script>
+    function autoResize(textarea) {
+        textarea.style.height = 'auto'; // 현재 높이를 초기화
+        textarea.style.height = textarea.scrollHeight + 'px'; // 내용에 맞게 높이 조정
+    }
+    </script>
+
+
+</html>
