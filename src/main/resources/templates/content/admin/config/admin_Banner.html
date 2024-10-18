@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin Main</title>
+    <link rel="stylesheet" href="/css/adminaside.css">
+    <link rel="stylesheet" href="/css/adminbanner.css">
+    
+
+</head>
+<style>
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: white;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 화면 중앙에 정렬 */
+    width: 700px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content table{   
+    border-top: none;
+    width: 95%;
+    max-width: 95%;
+    margin: 0 auto;
+    margin-top: 20px;
+    box-shadow: 1px 1px 1px 2px rgb(226, 226, 226);
+ 
+}
+.modal-content .header{
+    background-color: #293042;
+}
+.modal-content .header h3{
+    padding: 10px 20px;
+    font-size: 20px;
+    color: #000000;
+    font-weight: 500;
+    color: white;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+td:first-child {
+    font-weight: bold;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="date"] {
+    cursor: pointer;
+}
+
+input[type="datetime"] {
+    cursor: pointer;
+}
+
+input[type="text"]::placeholder {
+    color: #999;
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #007bff; /* 포커스 시 테두리 색상 */
+    outline: none;
+}
+
+
+
+/* 닫기 버튼 */
+.close {
+    margin-right: 10px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+button[type="submit"] {
+    width: 130px;
+    height: 40px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 290px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+button[type="submit"]:hover {
+    background-color: #45A049;
+}
+
+</style>
+<body>
+    <div id="wrapper">
+        <main id="admin_main">
+            <div id="admin_container">
+                <div id="admin_aside">
+                    <div id="admin_aside_list">
+                        <img class="top_log" src="/images/sample/lotte로고(white).png" alt="로고사진">
+                        <div class="aside_first">
+                            <h2>관리자 메인</h2>
+                        </div>
+                        <div class="aside_second">
+                            <ul class="admin_menu">
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="share-2" class="lucide lucide-share-2 align-middle"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
+                                  환경설정</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">기본설정</a></li>
+                                        <li><a href="#" class="active">배너관리</a></li>
+                                        <li><a href="#" class="active">약관관리</a></li>
+                                        <li><a href="#" class="active">버전이력</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shopping-bag" class="lucide lucide-shopping-bag align-middle"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                                    상점관리</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">기본설정</a></li>
+                                        <li><a href="#" class="active">배너관리</a></li>
+                                        <li><a href="#" class="active">약관관리</a></li>
+                                        <li><a href="#" class="active">버전이력</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" class="lucide lucide-users align-middle"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                    회원관리</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">기본설정</a></li>
+                                        <li><a href="#" class="active">배너관리</a></li>
+                                        <li><a href="#" class="active">약관관리</a></li>
+                                        <li><a href="#" class="active">버전이력</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-square" class="lucide lucide-check-square align-middle"><path d="m9 11 3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                    상품관리</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">기본설정</a></li>
+                                        <li><a href="#" class="active">배너관리</a></li>
+                                        <li><a href="#" class="active">약관관리</a></li>
+                                        <li><a href="#" class="active">버전이력</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="files" class="lucide lucide-files align-middle"><path d="M20 7h-3a2 2 0 0 1-2-2V2"></path><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"></path><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"></path></svg>
+                                    주문관리</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">기본설정</a></li>
+                                        <li><a href="#" class="active">배너관리</a></li>
+                                        <li><a href="#" class="active">약관관리</a></li>
+                                        <li><a href="#" class="active">버전이력</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="heart" class="lucide lucide-heart align-middle"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                                    고객센터</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">기본설정</a></li>
+                                        <li><a href="#" class="active">배너관리</a></li>
+                                        <li><a href="#" class="active">약관관리</a></li>
+                                        <li><a href="#" class="active">버전이력</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <div id="admin_service">    
+                <section>
+                    <div class="admin_gate">
+                        <div class="left-icons">
+                            <a href="#" id="toggle-aside"><img src="/images/sample/menu.png" alt=""></a>
+                        </div>
+                        <div class="right-icons">
+                            <a href="#"><img src="/images/sample/home.png" alt=""></a>
+                            <a href="#"><img src="/images/sample/login.png" alt=""></a>
+                            <a href="#"><img src="/images/sample/logout.png" alt=""></a>
+                            <span>홍길동님</span>
+                        </div>
+                    </div>
+                    <section id="admin_navi">
+                            <p>관리자 메인</p>
+                            <p><a href="#">HOME</a> > 관리자 메인</p>
+                    </section>
+                    <div class="admin_banner">
+                        <ul class="banner_menu">
+                            <li>메인 상단</li>
+                            <li>메인 슬라이더</li>
+                            <li>상품 상세보기</li>
+                            <li>회원 로그인</li>
+                            <li>마이 페이지</li>
+                        </ul>
+                    </div>
+                    <article id="admin_banner_main">
+                    <div>
+                        <h2>메인 상단 배너</h2>
+                    </div>
+                    <div>
+                        <table class="admin_banner_table">
+                            <colgroup>
+                                <col style="width: 40px">
+                                <col style="width: 40px">
+                                <col style="width: 90px">
+                                <col style="width: 130px">
+                                <col style="width: 90px">
+                                <col style="width: 90px">
+                                <col style="width: 90px">
+                                <col style="width: 80px">
+                                <col style="width: 80px">
+                                <col style="width: 80px">
+                            </colgroup>
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>번호</th>
+                                <th>이미지</th>
+                                <th>배너정보</th>
+                                <th>배너위치</th>
+                                <th>시작일</th>
+                                <th>종료일</th>
+                                <th>시작시간</th>
+                                <th>종료시간</th>
+                                <th>관리</th>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1</td>
+                                <td><img src="#" alt=""></td>
+                                <td>
+                                    <p>배너명</p>
+                                    <p>크기 : 1200 x 80</p>
+                                    <p>배경색 : 빨강</p>
+                                    <p>배너링크</p>
+                                </td>
+                                <td>MANN1</td>
+                                <td>2023.01.01</td>
+                                <td>2023.01.07</td>
+                                <td>13:00</td>
+                                <td>15:00</td>
+                                <td>
+                                    <p>[활성]</p>
+                                    <p>[비활성]</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1</td>
+                                <td><img src="/images/sample/81769154288.jpg" alt=""></td>
+                                <td>
+                                    <p>배너명</p>
+                                    <p>크기 : 1200 x 80</p>
+                                    <p>배경색 : 빨강</p>
+                                    <p>배너링크</p>
+                                </td>
+                                <td>MANN1</td>
+                                <td>2023.01.01</td>
+                                <td>2023.01.07</td>
+                                <td>13:00</td>
+                                <td>15:00</td>
+                                <td>
+                                    <p>[활성]</p>
+                                    <p>[비활성]</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1</td>
+                                <td><img src="#" alt=""></td>
+                                <td>
+                                    <p>배너명</p>
+                                    <p>크기 : 1200 x 80</p>
+                                    <p>배경색 : 빨강</p>
+                                    <p>배너링크</p>
+                                </td>
+                                <td>MANN1</td>
+                                <td>2023.01.01</td>
+                                <td>2023.01.07</td>
+                                <td>13:00</td>
+                                <td>15:00</td>
+                                <td>
+                                    <p>[활성]</p>
+                                    <p>[비활성]</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1</td>
+                                <td><img src="#" alt=""></td>
+                                <td>
+                                    <p>배너명</p>
+                                    <p>크기 : 1200 x 80</p>
+                                    <p>배경색 : 빨강</p>
+                                    <p>배너링크</p>
+                                </td>
+                                <td>MANN1</td>
+                                <td>2023.01.01</td>
+                                <td>2023.01.07</td>
+                                <td>13:00</td>
+                                <td>15:00</td>
+                                <td>
+                                    <p>[활성]</p>
+                                    <p>[비활성]</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>1</td>
+                                <td><img src="#" alt=""></td>
+                                <td>
+                                    <p>배너명</p>
+                                    <p>크기 : 1200 x 80</p>
+                                    <p>배경색 : 빨강</p>
+                                    <p>배너링크</p>
+                                </td>
+                                <td>MANN1</td>
+                                <td>2023.01.01</td>
+                                <td>2023.01.07</td>
+                                <td>13:00</td>
+                                <td>15:00</td>
+                                <td>
+                                    <p>[활성]</p>
+                                    <p>[비활성]</p>
+                                </td>
+                            </tr>
+                        </table>
+                        </article>
+                            <div class="banner_button">
+                                <button>선택삭제</button>
+                                <button id="openModalBtn">배너등록</button>
+                            </div>
+                        </section>
+                        <footer id="admin_footer">
+                            <div>Copyright ©LotteON.co.kr All rights reserved. LotteON ADMINISTRATOR Version 5.4.1.2 3조 project</div>
+                        </footer>
+                    </div>
+
+            </div>
+        </div>
+
+        <div id="orderModal" class="modal">
+            <div class="modal-content">
+                <div class="header">
+                    <span class="close" style="cursor:pointer; float: right;">&times;</span>
+                    <h3>배너등록</h3>
+                </div>
+                <table>
+                    <colgroup>
+                        <col style="width: 15%;">
+                        <col style="width: 50%;">
+                    </colgroup>
+                    <tr>
+                        <td>배너이름</td>
+                        <td>
+                            <input type="text" placeholder="배너이름 입력">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>배너크기</td>
+                        <td>
+                            <input type="text" placeholder="배너크기 입력">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>배경색</td>
+                        <td>
+                            <input type="text" placeholder="배너 배경색 입력">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>배너링크</td>
+                        <td>
+                            <input type="text" placeholder="배너링크 입력">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>배너위치</td>
+                        <td>
+                            <select>
+                                <option value="1">옵션1</option>
+                                <option value="2">옵션2</option>
+                                <option value="3">옵션3</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>노출날짜</td>
+                        <td>
+                            <input type="date"> ~ <input type="date">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>노출시간</td>
+                        <td>
+                            <input type="time"> ~ <input type="time">
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <button type="submit">등록하기</button>
+                </div>
+            </div>
+        </div>
+        </main>
+
+    </div>
+</body>
+<script>
+    document.querySelectorAll('.admin_menu > li').forEach(menu => {
+        const submenu = menu.querySelector('.admin_sub_menu');
+        
+        menu.addEventListener('click', function(e) {
+            e.stopPropagation();
+
+            
+            if(submenu) {
+                submenu.classList.toggle('open');
+
+            }
+        });
+
+        // 서브 메뉴 항목 클릭 이벤트
+        if(submenu){
+            submenu.querySelectorAll('li').forEach(subLi => {
+                subLi.addEventListener('click', function(e){
+                    e.stopPropagation();       
+                })
+            })
+        }
+
+
+    })
+
+
+</script>
+<script>
+document.getElementById('toggle-aside').addEventListener('click', function(e) {
+    e.preventDefault(); // 기본 링크 동작 방지
+    
+    const aside = document.getElementById('admin_aside');
+    const main = document.getElementById('admin_service');
+    const gate = document.getElementById('admin_gate'); // admin_gate 추가
+    
+    // aside가 숨겨져 있는지 여부에 따라 클래스 조정
+    if (aside.classList.contains('hidden')) {
+        aside.classList.remove('hidden'); // aside 보이기
+        main.classList.remove('expanded'); // main 원래 너비로
+        gate.classList.remove('expanded'); // gate도 원래 너비로
+    } else {
+        aside.classList.add('hidden'); // aside 숨기기
+        main.classList.add('expanded'); // main 너비 늘리기
+        gate.classList.add('expanded'); // gate도 너비 늘리기
+    }
+});
+</script>
+<script>
+// 모달 열고 닫는 기능 구현
+var modal = document.getElementById("orderModal");
+   var btn = document.getElementById("openModalBtn");
+   var span = document.getElementsByClassName("close")[0];
+   // 버튼을 클릭하면 모달을 엽니다.
+   btn.onclick = function() {
+       modal.style.display = "block";
+   }
+   // 닫기 버튼을 클릭하면 모달을 닫습니다.
+   span.onclick = function() {
+       modal.style.display = "none";
+   }
+   // 모달 외부를 클릭하면 모달을 닫습니다.
+   window.onclick = function(event) {
+       if (event.target == modal) {
+           modal.style.display = "none";
+       }
+   }
+</script>
+</html>

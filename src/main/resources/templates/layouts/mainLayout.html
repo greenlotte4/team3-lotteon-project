@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
-    <link rel="stylesheet" th:href="@{/css/policy.css}">
+        <link rel="stylesheet" th:href="@{/css/main.css}">
 
 </head>
 <body>
@@ -20,18 +20,15 @@
 
         <th:block th:replace="~{/include/header.html}"></th:block>
 
-        <!--            <th:block th:replace="~{content/policy/buyer}"></th:block>-->
-        <!--            <th:block th:replace="~{content/policy/seller}"></th:block>-->
-        <!--            <th:block th:replace="~{content/policy/location}"></th:block>-->
-        <!--            <th:block th:replace="~{content/policy/privacy}"></th:block>-->
-                    <th:block th:replace="~{content/policy/finance}"></th:block>
+        <th:block th:replace="~{/content/index}"></th:block>
 
         <th:block th:replace="~{/include/footer.html}"></th:block>
 
 
         <script th:src="@{/js/market.js}"></script>
         <script th:src="@{js/marketOrder.js}"></script>
-        <script th:src="@{js/policy.js}"></script>
+                <script th:src="@{js/main.js}"></script>
+
 
     </div><!--layout end-->
 </div> <!--wrapper end-->

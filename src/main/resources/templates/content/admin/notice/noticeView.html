@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>글보기</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <script src="../../js/include.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+      <div id="header"></div>
+    </header>
+
+    <main class="admin-main">
+      <aside id="adminAside"></aside>
+      <div class="admin-in">
+        <div class="navi-container">
+          <h3>자주묻는질문 보기</h3>
+          <div class="navi">
+            <a href="">HOME</a> > <a href="">고객센터</a> > <a href="">공지상황</a>
+          </div>
+        </div>
+        <div class="zero"></div>
+        <div class="admin-view">
+          <div class="admin-type">
+            <div class="type-box1">유형</div>
+            <div class="type-view">회원 - 가입</div>
+          </div>
+          <div class="admin-title">
+            <div class="title-box">제목</div>
+            <div class="title-view">개인회원과 법인회원에 차이가 있나요?</div>
+          </div>
+          <div class="admin-content">
+            <div class="content-box">내용</div>
+            <div class="content-view">개인회원은 본인인증 , 법인회원은<br> 사업자 등록번호를 기준 으로 사업자인증 후 가입가능합니다.<br>
+              개인회원에서 법인회원 (사업자회원) 으로 <br>전환은 불가하므로 법인회원 (사업자회원) 전환은 신규가입으로 진행을 해야합니다.
+              개인회원에서 법인회원 (사업자회원) 으로 <br>전환은 불가하므로 법인회원 (사업자회원) 전환은 신규가입으로 진행을 해야합니다.
+              개인회원에서 법인회원 (사업자회원) 으로 <br>전환은 불가하므로 법인회원 (사업자회원) 전환은 신규가입으로 진행을 해야합니다.
+              개인회원에서 법인회원 (사업자회원) 으로 <br>전환은 불가하므로 법인회원 (사업자회원) 전환은 신규가입으로 진행을 해야합니다.
+              개인회원에서 법인회원 (사업자회원) 으로 <br>전환은 불가하므로 법인회원 (사업자회원) 전환은 신규가입으로 진행을 해야합니다.
+            </div>
+          </div>
+        </div>
+        <div class="btn-controller">
+          <a href="#" class="delete-btn">삭제</a>
+          <a href="#" class="register-btn">수정</a>
+          <a href="#" class="list-btn">목록</a>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div id="footer"></div>
+    </footer>
+  </div>
+</body>
+<script>
+  fetch('/include/footer.html')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(data => {
+      document.getElementById('footer').innerHTML = data;
+    })
+    .catch(error => console.error('Error loading footer:', error));
+
+
+  fetch('/include/header.html') // 헤더 파일 경로
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(data => {
+      document.getElementById('header').innerHTML = data;
+    })
+    .catch(error => console.error('Error loading header:', error));
+    fetch('../../include/adminAside.html') // 헤더 파일 경로
+            .then(response => {
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('adminAside').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading header:', error));
+
+</script>
+
+</html>

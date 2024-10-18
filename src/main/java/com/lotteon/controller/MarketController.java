@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Log4j2
 @RequiredArgsConstructor
 @Controller
-public class MainController {
+public class MarketController {
 
 
     @GetMapping("/")
     public String index(){
-        return "mainIndex";
+        return "marketindex";
     }
 
 
