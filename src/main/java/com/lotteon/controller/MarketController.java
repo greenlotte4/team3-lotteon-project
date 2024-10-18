@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MarketController {
 
 
-    @GetMapping("/")
+    @GetMapping("/market")
     public String index(){
         return "marketindex";
     }

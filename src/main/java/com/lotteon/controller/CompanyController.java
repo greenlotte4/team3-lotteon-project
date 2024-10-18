@@ -10,11 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CompanyController {
 
-
-    @GetMapping("/")
+    @GetMapping("/company")
     public String index(){
         return "companyIndex";
     }
-
 
 }
