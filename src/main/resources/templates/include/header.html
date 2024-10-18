@@ -7,16 +7,16 @@
             <div class="util innerContent">
                 <div class="accountArea">
                     <ul>
-                        <li><a href="#">로그인</a></li>
-                        <li><a href="#">회원가입</a></li>
-                        <li><a href="#">주문배송</a></li>
-                        <li><a href="#">고객센터</a></li>
+                        <li><a th:href="@{/member/login}">로그인</a></li>
+                        <li><a th:href="@{/member/terms}">회원가입</a></li>
+                        <li><a th:href="@{/mypage/order}">주문배송</a></li>
+                        <li><a th:href="@{/cs/main}">고객센터</a></li>
                     </ul>
                 </div>
             </div><!--util innercontent end-->
             <div class="main innerContent">
                 <h1 class="logoArea on">
-                    <a href="#"><img src="/images/common/logo_lotte-on@2x.png" alt="LOTTE ON"
+                    <a th:href="@{/}"><img src="/images/common/logo_lotte-on@2x.png" alt="LOTTE ON"
                             class="loaded"></a>
                     <p>LotteOn</p>
                 </h1><!--logo h1-->
@@ -86,21 +86,21 @@
                                 <div class="categoryMenu">
                                     <ul class="main-menu">
                                         <li class="menu-item">
-                                            <a href="#">패션</a>
+                                            <a th:href="@{/market/main}">패션</a>
                                             <ul class="sub-menu">
-                                                <li><a href="#">남성패션</a></li>
-                                                <li><a href="#">여성패션</a></li>
-                                                <li><a href="#">키즈패션</a></li>
-                                                <li><a href="#">패션잡화</a></li>
+                                                <li><a th:href="@{/market/list}">남성패션</a></li>
+                                                <li><a th:href="@{/market/list}">여성패션</a></li>
+                                                <li><a th:href="@{/market/list}">키즈패션</a></li>
+                                                <li><a th:href="@{/market/list}">패션잡화</a></li>
                                             </ul>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="#">의류</a>
+                                            <a th:href="@{/market/main}">의류</a>
                                             <ul class="sub-menu">
-                                                <li><a href="#">남성의류</a></li>
-                                                <li><a href="#">여성의류</a></li>
-                                                <li><a href="#">아동의류</a></li>
-                                                <li><a href="#">언더웨어</a></li>
+                                                <li><a th:href="@{/market/list}">남성의류</a></li>
+                                                <li><a th:href="@{/market/list}">여성의류</a></li>
+                                                <li><a th:href="@{/market/list}">아동의류</a></li>
+                                                <li><a th:href="@{/market/list}">언더웨어</a></li>
                                             </ul>
                                         </li>
                                         <li class="menu-item">
