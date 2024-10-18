@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>admin Main</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 <style>
@@ -381,14 +382,14 @@
         }
 
 
-       /*footer*/
-       #admin_footer {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        width: 100%;
-        background: #ffffff ;
-        box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.1); /* 하단 그림자 */
-        }
+/*footer*/
+#admin_footer {
+padding-top: 10px;
+padding-bottom: 10px;
+width: 100%;
+background: #ffffff ;
+box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.1); /* 하단 그림자 */
+}
 
              
 /*접고 열기*/
@@ -418,8 +419,17 @@
     padding: 0;
     overflow: hidden;
 }
+.graph {
+            display: flex; /* 플렉스박스 사용 */
+            justify-content: space-around; /* 공간을 균등하게 배치 */
+            max-width: 900px; /* 최대 너비 설정 */
+            margin: 20px auto; /* 중앙 정렬 */
+        }
 
-
+        canvas {
+            max-width: 400px; /* 각 그래프의 최대 너비 설정 */
+            flex: 1; /* 그래프가 고르게 공간을 차지하도록 설정 */
+        }
 
 </style>
 <body>
@@ -515,6 +525,11 @@
                             <p>관리자 메인</p>
                             <p><a href="#">HOME</a> > 관리자 메인</p>
                     </section>
+                    <div class="graph">
+                        <h2>집계현황</h2>
+                        <canvas id="barChart" width="450" height="200"></canvas>
+                        <canvas id="pieChart" width="450" height="200"></canvas>
+                    </div>
                     <article id="admin_status">
                         <table class="a_status">
                             <tr>
@@ -616,7 +631,7 @@
                         </table>
                     </article>
                     <article id="admin_notice_admin_inquire">
-                            <table class="admin_notice">
+                            <table class="admin_notice" style="table-layout: unset;">
                                 <colgroup>
                                     <col style="width: 750px">
                                     <col style="width: 150px">
@@ -646,7 +661,7 @@
                                     <td>22.10.31</td>
                                 </tr>
                             </table>
-                            <table class="admin_inquire">
+                            <table class="admin_inquire"  style="table-layout: unset;">
                                 <colgroup>
                                     <col style="width: 600px">
                                     <col style="width: 150px"> 
@@ -687,6 +702,7 @@
                 <footer id="admin_footer">
                     <div>Copyright ©LotteON.co.kr All rights reserved. LotteON ADMINISTRATOR Version 5.4.1.2 3조 project</div>
                 </footer>
+
             </div>
 
         </div>
@@ -742,5 +758,80 @@ document.getElementById('toggle-aside').addEventListener('click', function(e) {
         gate.classList.add('expanded'); // gate도 너비 늘리기
     }
 });
+</script>
+<script>
+    // 막대 그래프
+    const ctxBar = document.getElementById('barChart').getContext('2d');
+    const barChart = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: ['10-10', '10-11', '10-12', '10-13'], // x축 레이블
+            datasets: [
+                {
+                    label: '주문',
+                    data: [12, 19, 3, 5],
+                    backgroundColor: 'rgba(75, 192, 192, 0.8)', // 색깔 설정
+                    barPercentage: 0.3 // 막대 너비 조정
+                },
+                {
+                    label: '결제',
+                    data: [8, 12, 4, 7],
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)', // 색깔 설정
+                    barPercentage: 0.3 // 막대 너비 조정
+                },
+                {
+                    label: '취소',
+                    data: [10, 15, 6, 9],
+                    backgroundColor: 'rgba(255, 206, 86, 0.8)', // 색깔 설정
+                    barPercentage: 0.3 // 막대 너비 조정
+                }
+            ]
+        },
+        options: {
+            scales: {
+                x: {
+                    stacked: false // 막대를 쌓지 않음
+                },
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+            }
+        }
+    });
+
+    // 원형 그래프
+    const ctxPie = document.getElementById('pieChart').getContext('2d');
+    const pieChart = new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+            labels: ['가전', '식품', '의류', '기타'], // 레이블 추가
+            datasets: [{
+                label: '색상 비율',
+                data: [130, 30, 50, 180], // 데이터 값 추가
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)' // 새로운 색상 추가
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)' // 새로운 색상 추가
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {maintainAspectRatio: false}
+    });
 </script>
 </html>
