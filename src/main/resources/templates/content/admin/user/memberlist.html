@@ -1,0 +1,248 @@
+
+            <div id="admin_service">
+                <section>
+                    <div class="admin_gate">
+                        <div class="left-icons">
+                            <a href="#" id="toggle-aside"><img src="/images/sample/menu.png" alt=""></a>
+                        </div>
+                        <div class="right-icons">
+                            <a href="#"><img src="/images/sample/home.png" alt=""></a>
+                            <a href="#"><img src="/images/sample/login.png" alt=""></a>
+                            <a href="#"><img src="/images/sample/logout.png" alt=""></a>
+                            <span>홍길동님</span>
+                        </div>
+                    </div>
+                     <section id="admin_navi">
+                        <p>회원목록</p>
+                        <p><a href="#">HOME</a> > 회원관리 > 회원목록</p>
+                    </section>
+                
+              
+                <article id="admin_banner_main">
+                
+                <div>
+                    <table class="admin_banner_table">
+                        <colgroup>
+                            <col style="width: 5%">
+                            <col style="width: 5%">
+                            <col style="width: 6%">
+                            <col style="width: 10%">
+                            <col style="width: 5%">
+                            <col style="width: 11%">
+                            <col style="width: 10%">
+                            <col style="width: 11%">
+                            <col style="width: 9%">
+                            <col style="width: 10%">
+                            <col style="width: 9%">
+                            <col style="width: 9%">
+                        </colgroup>
+                        <div>
+                        <select id="shopsearch" >
+                            <option value="">아이디</option>
+                            <option value="">이름</option>
+                            <option value="">이메일</option>
+                            <option value="">휴대폰</option>
+                        </select>
+                        <input id="search" type="text" placeholder="검색어 입력">
+                        <button id="serachbtn" type="button">검색</button>
+                        </div>
+                        
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>번호</th>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>성별</th>
+                            <th>등급</th>
+                            <th>포인트</th>
+                            <th>이메일</th>
+                            <th>휴대폰</th>
+                            <th>가입일</th>
+                            <th>상태</th>
+                            <th>관리</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>5</td>
+                            <td>a101</td>
+                            <td>정우성</td>
+                            <td>M</td>
+                            <td><select id="grade">
+                                    <option value="">VVIP</option>
+                                    <option value="">VIP</option>
+                                    <option value="">GOLD</option>
+                                    <option value="">SILVER</option>
+                                    <option value="">FAMILY</option>
+                                </select>
+                            </td>
+                            <td>15,000</td>
+                            <td>a101@naver.com</td>
+                            <td id="phone">010-1111-1111</td>
+                            <td>2024-10-18 09:33</td>
+                            <td class="member_status_normal">정상</td>
+                            <td>
+                                <a href="" class="openModalBtn2">[수정]</a><br>
+                                <a href="" class="edit">[중지]</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            <td>a102</td>
+                            <td>이정재</td>
+                            <td>M</td>
+                            <td><select id="grade">
+                                    <option value="">VVIP</option>
+                                    <option value="">VIP</option>
+                                    <option value="">GOLD</option>
+                                    <option value="">SILVER</option>
+                                    <option value="">FAMILY</option>
+                                </select>
+                            </td>
+                            <td>35,000</td>
+                            <td>a102@naver.com</td>
+                            <td id="phone">010-1111-1111</td>
+                            <td>2024-10-18 09:33</td>
+                            <td class="member_status_stop">중지</td>
+                            <td>
+                                <a href="" class="delete">[수정]</a><br>
+                                <a href="" class="edit">[중지]</a>
+                            </td>
+                        </tr>
+                    </table>
+                </article>
+                    <div class="list_button">
+                        <button>선택수정</button>
+                    </div>
+                </section>
+
+
+            <div id="memberlistModal" class="modal">
+                <div class="modal-content">
+                    <div class="header">
+                    <span class="close">&times;</span>
+                    <h3>회원수정</h3>
+                    </div>
+                    <form>
+                        <table class="modaltable">
+                            <tr>
+                                <th><label for="uid">아이디</label></th>
+                                <td>
+                                    <input type="text" id="uid" name="uid" placeholder="a101" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="password">이름</label></th>
+                                <td>
+                                    <input type="password" id="password" name="password" placeholder="홍길동">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="gender">성별</label></th>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="gender" value="male"> 남
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="gender" value="female"> 여
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="status">등급</label></th>
+                                <td><input type="text" id="status" name="status" placeholder="FAMILY" readonly>
+                                    <span style="margin-left: 10px;">등급 수정은 회원 목록에서 선택수정 가능</span><br></td>
+                            </tr>
+                            <tr>
+                                <th><label for="status">상태</label></th>
+                                <td><span>정상</span><br></td>
+                            </tr>
+                            <tr>
+                                <th><label for="Email">EMAIL</label></th>
+                                <td>
+                                    <input type="text" id="EMAIL" name="EMAIL" placeholder="a101@naver.com">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="HP">휴대폰</label></th>
+                                <td>
+                                    <input type="text" id="HP" name="HP" placeholder="010-1111-1111">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="zipcode">주소</label></th>
+                                <td>
+                                    <input type="text" id="zipcode" placeholder="zip" required> <a href="">검색</a><br>
+                                    <input type="text" id="address1" placeholder="addr1" required><br>
+                                    <input type="text" id="address2" placeholder="addr2" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="Joindate">가입일</label></th>
+                                <td><span>0000-00-00 00:00:00</span><br></td>
+                            </tr>
+                            <tr>
+                                <th><label for="Lastlogindate">최근로그인날짜</label></th>
+                                <td><span>0000-00-00 00:00:00</span><br></td>
+                            </tr>
+                            <tr>
+                                <th><label for="etc">기타</label></th>
+                                <td><textarea name="etc" id="etc"></textarea><br></td>
+                            </tr>
+                         </table>
+                        <button type="submit">등록하기</button>
+                    </form>
+
+                </div>
+            </div>
+ 
+
+    <script>
+    document.querySelectorAll('.admin_menu > li').forEach(menu => {
+        const submenu = menu.querySelector('.admin_sub_menu');
+        
+        menu.addEventListener('click', function(e) {
+            e.stopPropagation();
+
+            
+            if(submenu) {
+                submenu.classList.toggle('open');
+
+            }
+        });
+
+        // 서브 메뉴 항목 클릭 이벤트
+        if(submenu){
+            submenu.querySelectorAll('li').forEach(subLi => {
+                subLi.addEventListener('click', function(e){
+                    e.stopPropagation();       
+                })
+            })
+        }
+
+
+    })
+    document.getElementById('toggle-aside').addEventListener('click', function(e) {
+    e.preventDefault(); // 기본 링크 동작 방지
+    
+    const aside = document.getElementById('admin_aside');
+    const main = document.getElementById('admin_service');
+    const gate = document.getElementById('admin_gate'); // admin_gate 추가
+    
+    // aside가 숨겨져 있는지 여부에 따라 클래스 조정
+    if (aside.classList.contains('hidden')) {
+        aside.classList.remove('hidden'); // aside 보이기
+        main.classList.remove('expanded'); // main 원래 너비로
+        gate.classList.remove('expanded'); // gate도 원래 너비로
+    } else {
+        aside.classList.add('hidden'); // aside 숨기기
+        main.classList.add('expanded'); // main 너비 늘리기
+        gate.classList.add('expanded'); // gate도 너비 늘리기
+    }
+});
+
+</script>
+</body>
+
+
+</html>

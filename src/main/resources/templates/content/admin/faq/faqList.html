@@ -1,0 +1,120 @@
+
+                <div id="admin_service">
+                    <section>
+                        <th:block th:replace="~{content/admin/admin_gate}"></th:block>
+
+                        <section id="admin_navi">
+                            <p>고객센터</p>
+                            <p>
+                                <a href="#">HOME</a>
+                                <span>></span>
+                                <a href="#">고객센터</a>
+                                <span>></span>
+                                <a href="#">자주묻는질문</a>
+                            </p>
+                        </section>
+                
+                        <article id="admin_faq_list">
+                        <div>
+                            <table class="admin_faq_list_table">
+                                <colgroup>
+                                    <col style="width: 7.5%">
+                                    <col style="width: 7.5%">
+                                    <col style="width: 10%">
+                                    <col style="width: 10%">
+                                    <col style="width: 30%">
+                                    <col style="width: 10%">
+                                    <col style="width: 15%">
+                                    <col style="width: 10%">
+                                </colgroup>
+                                <div>
+                                <select id="faqsearch" >
+                                    <option value="">주문번호</option>
+                                    <option value="">주문자</option>
+                                    <option value="">주문자명</option>
+                                </select>
+                                <input id="search" type="text" placeholder="검색어 입력">
+                                <button id="serachbtn" type="button">검색</button>
+                                </div>
+                                <tr>
+                                    <th><input type="checkbox"></th>
+                                    <th>번호</th>
+                                    <th>1차유형</th>
+                                    <th>2차유형</th>
+                                    <th>제목</th>
+                                    <th>조회</th>
+                                    <th>날짜</th>
+                                    <th>관리</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>1</td>
+                                    <td>가입문의</td>
+                                    <td>가입</td>
+                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
+                                    <td>300</td>
+                                    <td>24.12.12</td>
+                                    <td>
+                                            <a href="#">[삭제]</a><br>
+                                            <a th:href="@{/admin/faq/modify}">[수정]</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>1</td>
+                                    <td>가입문의</td>
+                                    <td>가입</td>
+                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
+                                    <td>300</td>
+                                    <td>24.12.12</td>
+                                    <td>
+                                        <a href="#">[삭제]</a><br>
+                                        <a href="#">[수정]</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>1</td>
+                                    <td>가입문의</td>
+                                    <td>가입</td>
+                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
+                                    <td>300</td>
+                                    <td>24.12.12</td>
+                                    <td>
+                                        <a href="#">[삭제]</a><br>
+                                        <a href="#">[수정]</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>1</td>
+                                    <td>가입문의</td>
+                                    <td>가입</td>
+                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
+                                    <td>300</td>
+                                    <td>24.12.12</td>
+                                    <td>
+                                        <a href="#">[삭제]</a><br>
+                                        <a href="#">[수정]</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>1</td>
+                                    <td>가입문의</td>
+                                    <td>가입</td>
+                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
+                                    <td>300</td>
+                                    <td>24.12.12</td>
+                                    <td>
+                                        <a href="#">[삭제]</a><br>
+                                        <a href="#">[수정]</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </article>
+                        <div class="list_button">
+                            <button>선택삭제</button>
+                            <button><a th:href="@{/admin/faq/write}">작성하기</a></button>
+                        </div>
+                    </section>

@@ -1,356 +1,96 @@
-<!-- 이거 수정해야함 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>customer main</title>
+    <title>admin Main</title>
+    <link rel="stylesheet" href="/css/adminaside.css">
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/common.css">
 
-    <style>
-        *{margin: 0; padding:0; font-family: '고딕', sans-serif;}
-        html{color:#111; position:relative;}
-        html, body{height:100%;}
-        ol,ul {list-style: none}
-        a {text-decoration: none; color: inherit;}
-
-        #wrapper {
-            width: 100%;
-            height: auto;
-
-        }
-        main {
-            width: 1200px;
-            height: auto;
-            position: relative;
-            margin: 0 auto;
-
-        }
-        #navi {width: 1200px; height: 50px; border-top: 1px solid rgb(199,199,199);}
-        #navi p {font-size: 15px; font-weight: bold; margin-top: 13px;}
-
-        #container {
-            display: flex;
-            width: 1200px;
-            margin: 0 auto;
-            box-sizing: border-box;
-            border-top: 1px solid rgb(199,199,199);
-        }
-
-        /*asdie*/
-        #aside {
-            width: 200px;
-            border-right: 1px solid rgb(199, 199, 199);
-            box-sizing: border-box;
-
-        }
-        #aside h1 {font-size: large; font-weight: bold; text-align: center; margin: 20px 20px 40px;}
-            .aside_list ul li {overflow: hidden; padding: 16px 0; border-bottom: 1px solid rgb(194, 194, 194); width:140px; margin-left: 10px;}
-            .aside_list ul li:nth-of-type(1) a{font-weight: bold; text-decoration: underline;}
-
-            .active {line-height: 24px;}
-            .active:hover {text-decoration: underline; font-weight: bold;}
-            
-        
-        /*메인*/
-        #service {flex-grow: 1;
-                  min-width: 0;
-                  width: 1000px;
-        }
-        .hidden {display: none;}
-
-
-        /*회원 , 회원관련 문의 내용입니다.*/
-        h2 {margin: 30px 40px 0px; font-weight: bold; font-size: large;}
-        .title p {color: rgb(117, 117, 117); margin: 10px 40px 20px;}
-
-        /*전체 테이블*/
-        table {width: 900px; height: auto; margin: 40px; border-top: 1px solid rgb(155, 155, 155); border-bottom: 1px solid rgb(155,155,155); border-collapse: collapse;}
-        td {padding: 15px;}
-        td:nth-of-type(1) {font-weight: 900; font-size: 13px;}
-
-        /*각 tr border 설정*/
-        .type {border-bottom: 1px solid rgb(155,155,155);}
-        .title {border-bottom: 1px solid rgb(155,155,155);}
-
-        /*각 tr 높이 넓이 설정*/
-        .first_choice , .second_choice {height: 30px;}
-        .texts {width: 550px; height: 20px; padding: 2px;}
-        .contents {width: 550px; height: 300px; resize: none; padding: 3px;}
-
-        /*취소하기 등록하기*/
-        .btn {width: 900px; display: flex; justify-content: center;}
-        .cansel , .insert {margin : 0 5px; width: 80px; height: 35px; border: none; cursor: pointer; color: white;}
-        .cansel {background-color: #bfbfbf;}
-        .insert {background-color: rgb(239, 42, 35);}
-
-        .cansel:hover {background-color: rgb(131, 131, 131);}
-        .insert:hover {background-color: rgb(206, 36, 30);}
-
-
-        </style>
-
-
 </head>
+
 <body>
     <div id="wrapper">
-        <div id="layout">
-            <div id="skipNav">
-                <a href="#content">본문바로가기</a>
-            </div>
-            <header id="header">
-                <div class="headerIn">
-                    <div class="util innerContent">
-                        <div class="accountArea">
-                            <ul>
-                                <li><a href="#">로그인</a></li>
-                                <li><a href="#">회원가입</a></li>
-                                <li><a href="#">주문배송</a></li>
-                                <li><a href="#">고객센터</a></li>
-                            </ul>
+        <main id="admin_main">
+            <div id="admin_container">
+                <div id="admin_aside">
+                    <div id="admin_aside_list">
+                        <img class="top_log" src="/images/sample/lotte로고(white).png" alt="로고사진">
+                        <div class="aside_first">
+                            <h2>관리자 메인</h2>
                         </div>
-                    </div><!--util innercontent end-->
-                    <div class="main innerContent">
-                        <h1 class="logoArea on">
-                            <a href="#"><img src="/images/common/logo_lotte-on@2x.png" alt="LOTTE ON"
-                                    class="loaded"></a>
-                            <p>LotteOn</p>
-                        </h1><!--logo h1-->
-        
-                        <div class="searchWideArea">
-                            <div class="searchArea on TXT">
-                                <label for="headerSearchId" class="blind">검색어</label>
-                                <input type="search" title="검색어 입력" id="headerSearchId" autocomplete="off" aria-label=""
-                                    placeholder="검색어를 입력하세요" class="TXT">
-                                <button type="button" data-cmpnt-typ="header_main" data-cmpnt-name="srch_srchbtn"
-                                    data-cmpnt-stts="" class="btnSearchInner">
-                                    <span class="blind">검색</span>
-                                </button>
-                            </div>
-                        </div>
-        
-                        <div class="buttonArea">
-                            <ul>
-                                <li>
-                                    <button type="button" title="새창" data-cmpnt-typ="header_main" data-cmpnt-name="chat"
-                                        class="chat">
-                                        <div class="lottieObject lottie_chat" dom-loaded="true">
-                                            <img src="/images/common/ico_chatbot.svg" alt="chat">
-                                        </div><!---->
-                                        문의
-                                    </button>
-                                </li>
-                                <li>
-                                    <a href="https://www.lotteon.com/p/mylotte/bmk/wish" data-cmpnt-typ="header_main"
-                                        data-cmpnt-name="wishlist" class="heart">
-                                        나의 찜
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.lotteon.com/p/mylotte/index/main" data-cmpnt-typ="header_main"
-                                        data-cmpnt-name="mylotte" class="my">
-                                        마이롯데
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.lotteon.com/p/order/cart/viewCart" data-cmpnt-typ="header_main"
-                                        data-cmpnt-name="cart" class="cart">
-                                        장바구니
-                                        <!---->
-                                    </a>
-                                </li>
-                            </ul>
-                        </div><!--buttonArea end  챗봇 , 나의찜, 마이롯데-->
-        
-        
-                    </div><!--maininner end-->
-        
-        
-                </div>
-                <hr class="header_hr">
-        
-                <div data-v-24610bba="" class="sub">
-                    <div data-v-24610bba="" class="innerContent">
-                        <div data-v-24610bba="" class="category on">
-                            <div class="moreViewWrap">
-                                <button type="button" class="moreView" id="viewAllButton">
-                                    <span class="blind">전체 카테고리
-                                        보기
-                                    </span>
-                                    <span class="bar">
-                                        <!-- Dropdown Menu -->
-                                        <div class="categoryMenu">
-                                            <ul class="main-menu">
-                                                <li class="menu-item">
-                                                    <a href="#">패션</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">남성패션</a></li>
-                                                        <li><a href="#">여성패션</a></li>
-                                                        <li><a href="#">키즈패션</a></li>
-                                                        <li><a href="#">패션잡화</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a href="#">의류</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">남성의류</a></li>
-                                                        <li><a href="#">여성의류</a></li>
-                                                        <li><a href="#">아동의류</a></li>
-                                                        <li><a href="#">언더웨어</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a href="#">뷰티</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">기초화장</a></li>
-                                                        <li><a href="#">색조화장</a></li>
-                                                        <li><a href="#">헤어제품</a></li>
-                                                        <li><a href="#">이너뷰티</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a href="#">가구/인테리어</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">소파</a></li>
-                                                        <li><a href="#">침대/매트리스</a></li>
-                                                        <li><a href="#">주방가구</a></li>
-                                                        <li><a href="#">수납장</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a href="#">가전</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">생활가전</a></li>
-                                                        <li><a href="#">주방가전</a></li>
-                                                        <li><a href="#">TV/영상가전</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a href="#">디지털</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">노트북/PC/태블릿 </a></li>
-                                                        <li><a href="#">모니터/프린터/복합기</a></li>
-                                                        <li><a href="#">휴대폰/스마트기기</a></li>
-                                                        <li><a href="#">음향기기/이어폰</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a href="#">생필품</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">생활용품 </a></li>
-                                                        <li><a href="#">건강용품</a></li>
-                                                        <li><a href="#">주방용품</a></li>
-                                                        <li><a href="#">세탁/욕실용품</a></li>
-                                                    </ul>
-                                                </li>
-        
-                                                <li class="menu-item">
-                                                    <a href="#">도서</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">국내도서 </a></li>
-                                                        <li><a href="#">외국도서</a></li>
-                                                        <li><a href="#">중고도서</a></li>
-                                                        <li><a href="#">음반/LP</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a href="#">문구</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">필기도구 </a></li>
-                                                        <li><a href="#">문구용폼</a></li>
-                                                        <li><a href="#">사무용품</a></li>
-                                                        <li><a href="#">데스크용품</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a href="#">취미</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="#">꽃/가드닝 </a></li>
-                                                        <li><a href="#">악기/음향기기</a></li>
-                                                        <li><a href="#">공예용품</a></li>
-                                                        <li><a href="#">피규어/프라모델</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-        
-                                        </div>
-                                    </span>
-                                </button>
-        
-                            </div>
-                            <div class="menu">
-                                <div id="menuInner" tabindex="0" class="menuInner"><!---->
-                                    <ul>
-                                        <li class="active">
-                                            <a href="#" data-gtm-vis-recent-on-screen11901096_1103="329"
-                                                data-gtm-vis-first-on-screen11901096_1103="329"
-                                                data-gtm-vis-total-visible-time11901096_1103="100"
-                                                data-gtm-vis-has-fired11901096_1103="1">
-                                                홈
-                                                <span class="blind">
-                                                    선택됨
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class=""><a href="">히트상품</a></li>
-                                        <li class=""><a href="">추천상품</a></li>
-                                        <li class=""><a href="">최신상품</a></li>
-                                        <li class=""><a href="">인기상품</a></li>
-                                        <li class=""><a href="">할인상품</a></li>
+                        <div class="aside_second">
+                            <ul class="admin_menu">
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="share-2" class="lucide lucide-share-2 align-middle"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
+                                  환경설정</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">기본설정</a></li>
+                                        <li><a href="#" class="active">배너관리</a></li>
+                                        <li><a href="#" class="active">약관관리</a></li>
+                                        <li><a href="#" class="active">버전이력</a></li>
                                     </ul>
-                                    <button type="button" class="btnMenuClose">
-                                        <span class="blind">전체보기 닫기</span>
-                                    </button>
-                                </div>
-                            </div><!---->
-                        </div><!---->
-        
-                        <div data-v-202b6f61="" data-v-24610bba="" class="trending">
-                            <button data-v-202b6f61="" type="button" class="moreView">
-                                <span data-v-202b6f61="" class="blind">전체 순위
-                                    보기
-                                </span>
-                            </button>
-                            <div data-v-202b6f61="" class="preview">
-                                <div data-v-202b6f61=""
-                                    class="swiper-container swiper-container-initialized swiper-container-vertical"
-                                    tabindex="0">
-                                    <div class="swiper-wrapper"
-                                        style="transition-duration: 0ms; transform: translate3d(0px, -420px, 0px);">
-                                        <div data-v-202b6f61="" class="swiper-slide swiper-slide-duplicate"
-                                            data-swiper-slide-index="29" style="height: 60px;"><a data-v-202b6f61=""
-                                                href="https://www.lotteon.com/search/search/search.ecn?render=search&amp;platform=pc&amp;q=%EC%98%AC%EB%A6%AC%EB%B8%8C%EB%8D%B0%EC%98%AC%EB%A6%AC%EB%B8%8C&amp;mallId=1"
-                                                class="linkWrap" tabindex="-1" aria-hidden="true"><span
-                                                    data-v-202b6f61="" class="rank">30</span><span data-v-202b6f61=""
-                                                    class="keyword">올리브데올리브</span><!----><span data-v-202b6f61=""
-                                                    class="rankup">
-                                                    35
-                                                    <span data-v-202b6f61="" class="flag up"></span></span></a></div>
-                                        <div data-v-202b6f61="" class="swiper-slide" data-swiper-slide-index="0"
-                                            style="height: 60px;">
-                                            <a data-v-202b6f61=""
-                                                href="https://www.lotteon.com/search/search/search.ecn?render=search&amp;platform=pc&amp;q=%EC%97%AC%EC%84%B1%ED%8A%B8%EB%A0%88%EC%9D%B4%EB%8B%9D%EB%B3%B5%EC%84%B8%ED%8A%B8&amp;mallId=1"
-                                                class="linkWrap"><span data-v-202b6f61="" class="rank">1</span><span
-                                                    data-v-202b6f61="" class="keyword">여성트레이닝복세트</span><!----><span
-                                                    data-v-202b6f61="" class="ranknone">
-        
-                                                    <span data-v-202b6f61="" class="flag none"></span></span></a>
-                                        </div>
-        
-                                    </div>
-                                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-                                </div>
-                            </div><!---->
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shopping-bag" class="lucide lucide-shopping-bag align-middle"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                                    상점관리</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">상점목록</a></li>
+                                        <li><a href="#" class="active">판매현황</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" class="lucide lucide-users align-middle"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                    회원관리</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">회원목록</a></li>
+                                        <li><a href="#" class="active">포인트관리</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-square" class="lucide lucide-check-square align-middle"><path d="m9 11 3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                                    상품관리</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">상품목록</a></li>
+                                        <li><a href="#" class="active">상품등록</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="files" class="lucide lucide-files align-middle"><path d="M20 7h-3a2 2 0 0 1-2-2V2"></path><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"></path><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"></path></svg>
+                                    주문관리</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">주문현황</a></li>
+                                        <li><a href="#" class="active">배송현황</a></li> 
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="files" class="lucide lucide-files align-middle"><path d="M20 7h-3a2 2 0 0 1-2-2V2"></path><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"></path><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"></path></svg>
+                                    쿠폰관리</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">쿠폰목록</a></li>
+                                        <li><a href="#" class="active">쿠폰발급현황</a></li> 
+                                    </ul>
+                                </li>
+                                <li><a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="heart" class="lucide lucide-heart align-middle"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                                    고객센터</a>
+                                    <ul class="admin_sub_menu">
+                                        <li><a href="#" class="active">공지사항</a></li>
+                                        <li><a href="#" class="active">자주묻는질문</a></li>
+                                        <li><a href="#" class="active">문의하기</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <hr class="headerOn">
-        
-                <!-- <button type="button" class="moreView"><span class="blind">전체 카테고리 보기</span><span
-                        class="bar"></span></button> -->
-            </header><!--Header end-->
-        <main>
-            <section id="navi"><p>홈 > 문의하기</p></section>
+
+            <div id="admin_service">    
+                <section>
+                    <div class="admin_gate">
+                        <div class="left-icons">
+                            <a href="#" id="toggle-aside"><img src="/images/sample/menu.png" alt=""></a>
+
             <div id="container">
                 <div id="aside">
                     <h1>문의하기</h1>
@@ -463,44 +203,158 @@
                             <li>호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부</li></ul> 
                             <h4>롯데쇼핑 e커머스 사업부 에스크로</h4> 
                             <p>고객님의 안전거래를 위해 현금 등으로 결제 시 결제금액 전액에 대해<br>소비자 피해 방지 서비스를 이용합니다.</p>
+
                         </div>
-                        <div class="customer">
-                            <h3>고객센터</h3>
-                            <div class="stringLine withList" style="margin-bottom: 5px;">
-                                <p>전화번호 : 1234-5678(유료)</p>
-                                <p><a href="/p/common/footerConflictProcedure">분쟁해결기준</a></p>
-                            </div> 
-                            <div class="stringLine withList">
-                                <ul class="faqListWrap">
-                                    <li><a href="/p/customer/customerCenter/customerFaqFalg/LTON">FAQ 보기</a></li> 
-                                    <li><a href="/p/customer/customerCenter/customerOneTone">1:1 문의하기</a></li> 
-                                    <li><a href="/p/customer/customerCenter/customerMain">고객센터</a></li>
-                                </ul>
-                            </div> 
-                            <h3>전자금융거래 분쟁 담당</h3> 
-                            <div class="stringLine withList">
-                                <p>Tel : 1899-7000(유료)</p> 
-                                <p>E-mail : <a href="mailto:lotteon@lotte.net">lotteon@lotte.net</a></p> 
-                                <p><a href="/p/trustsafety/main" target="_blank" title="새창">안전거래센터</a></p>
-                            </div> 
+                        <div class="right-icons">
+                            <a href="#"><img src="/images/sample/home.png" alt=""></a>
+                            <a href="#"><img src="/images/sample/login.png" alt=""></a>
+                            <a href="#"><img src="/images/sample/logout.png" alt=""></a>
+                            <span>홍길동님</span>
                         </div>
                     </div>
-                    
-                </div> 
-            </div>
-            
-                <hr> 
-            <div class="footerWrapper">
-                <div class="footerInfo">
-                    <p>롯데쇼핑(주)는 통신판매중개자이며 통신판매의 거래당사자가 아닙니다. 입점판매자가 등록한 상품정보 및 거래에 대해 롯데쇼핑(주)는 일체 책임을 지지 않습니다.</p> 
-                    <p>Copyright © LOTTESHOPPING Co., LTD. All rights reserved.</p>
-                </div>
-            </div>
-        
-        </footer>
-        </div><!--layout end-->
-        </div> <!--wrapper end-->
+                    <section id="admin_navi">
+                            <p>관리자 메인</p>
+                            <p><a href="#">HOME</a> > 관리자 메인</p>
+                    </section>
 
-        </body>
+                    <section id="navi"><p>홈 > 문의하기</p></section>
+                    <div id="container">
+                        <div id="aside">
+                            <h1>문의하기</h1>
+                            <div class="aside_list">
+                                <ul>
+                                    <li>
+                                        <a class="active" href="#">회원</a>
+                                    </li>
+                                    <li>
+                                        <a class="active" href="#">쿠폰 / 이벤트</a>
+                                    </li>
+                                    <li>
+                                        <a class="active" href="#">주문 / 결제</a>
+                                    </li>
+                                    <li>
+                                        <a class="active" href="#">배송</a>
+                                    </li>
+                                    <li>
+                                        <a class="active" href="#">취소 / 반품 / 교환</a>
+                                    </li>
+                                    <li>
+                                        <a class="active" href="#">여행 / 숙박 / 항공</a>
+                                    </li>
+                                    <li>
+                                        <a class="active" href="#">안전거래</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="service">
+                            <div class="title">
+                                <h2>회원</h2>
+                                <p>회원 관련 문의 내용입니다.</p>
+                            </div>
+                            <form class="qnawirte">
+                                <table>
+                                    <colgroup>
+                                        <col style="width: 150px">
+                                        <col style="width: 750px">
+                                    </colgroup>
+                                    <tr class="type">
+                                        <td>문의유형</td>
+                                        <td>
+                                            <select class="first_choice">
+                                                <option value="1">가입</option>
+                                                <option value="2">취소/반품/교환</option>
+                                                <option value="3">주문/결제</option>
+                                                <option value="4">쿠폰/이벤트</option>
+                                            </select>
+                                            <select class="second_choice">
+                                                <option value="1">가입</option>
+                                                <option value="2">취소/반품/교환</option>
+                                                <option value="3">주문/결제</option>
+                                                <option value="4">쿠폰/이벤트</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr class="title">
+                                        <td>제목</td>
+                                        <td>
+                                            <input type="text" class="texts" placeholder="제목을 입력하세요">
+                                        </td>
+                                    </tr>
+                                    <tr class="content">
+                                        <td>내용</td>
+                                        <td>
+                                            <textarea class="contents" placeholder="내용을 입력하세요" ></textarea>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                            <div class="btn">
+                                <button class="cansel">취소하기</button>
+                                <button class="insert">등록하기</button>
+                            </div>
+                        </div>
+
+
+                </section>
+                <footer id="admin_footer">
+                    <div>Copyright ©LotteON.co.kr All rights reserved. LotteON ADMINISTRATOR Version 5.4.1.2 3조 project</div>
+                </footer>
+
+            </div>
+
+        </div>
+
+        </main>
+
+    </div>
+</body>
+<script>
+    document.querySelectorAll('.admin_menu > li').forEach(menu => {
+        const submenu = menu.querySelector('.admin_sub_menu');
         
-        </html>
+        menu.addEventListener('click', function(e) {
+            e.stopPropagation();
+
+            
+            if(submenu) {
+                submenu.classList.toggle('open');
+
+            }
+        });
+
+        // 서브 메뉴 항목 클릭 이벤트
+        if(submenu){
+            submenu.querySelectorAll('li').forEach(subLi => {
+                subLi.addEventListener('click', function(e){
+                    e.stopPropagation();       
+                })
+            })
+        }
+
+
+    })
+
+
+</script>
+<script>
+document.getElementById('toggle-aside').addEventListener('click', function(e) {
+    e.preventDefault(); // 기본 링크 동작 방지
+    
+    const aside = document.getElementById('admin_aside');
+    const main = document.getElementById('admin_service');
+    const gate = document.getElementById('admin_gate'); // admin_gate 추가
+    
+    // aside가 숨겨져 있는지 여부에 따라 클래스 조정
+    if (aside.classList.contains('hidden')) {
+        aside.classList.remove('hidden'); // aside 보이기
+        main.classList.remove('expanded'); // main 원래 너비로
+        gate.classList.remove('expanded'); // gate도 원래 너비로
+    } else {
+        aside.classList.add('hidden'); // aside 숨기기
+        main.classList.add('expanded'); // main 너비 늘리기
+        gate.classList.add('expanded'); // gate도 너비 늘리기
+    }
+});
+</script>
+</html>

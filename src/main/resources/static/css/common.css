@@ -917,3 +917,18 @@ select[readonly] {
         margin: 5px 0;
     }
 }
+
+
+.awards-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.awards-banner img {
+    width: 180px;
+    height: 50px;
+    margin: 0 10px;
+}

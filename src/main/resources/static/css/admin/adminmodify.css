@@ -376,8 +376,7 @@
 
 /* 통합 write css */
 .write-box{
-    width: calc(100%-200px);
-    max-width: 1200px;
+    width: 900px;
     height: auto;
     margin: 0 auto;
     display: flex;
@@ -389,9 +388,7 @@
     height: auto;
     
 }
-.write-coment{
-    margin-left: 30px;
-}
+
 .write-table{
     width: 100%;
     align-items: center;
@@ -417,8 +414,8 @@
     padding: 15px 0 15px 10px  ; 
 
 }
-.first_choice{width: 100px; height: 30px; font-size: 12px; border: 1px solid #ccc}
-.second_choice{width: 100px; height: 30px; margin-left: 10px; font-size: 12px; border: 1px solid #ccc}
+.first_choice{width: 100px; height: 30px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;}
+.second_choice{width: 100px; height: 30px; margin-left: 10px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;}
 .write-type div:nth-child(1),
 .write-title div:nth-child(1),
 .write-content div:nth-child(1),
@@ -427,7 +424,7 @@
     font-weight: bold;
     width: 100px/* 원하는 너비 설정 */;
 }
-.write-title input{width: 600px; height: 40px; font-size: 12px; border: 1px solid #D9D9D9;}
+.write-title input{width: 600px; height: 40px; font-size: 12px; border: 1px solid #D9D9D9; border-radius: 4px;}
 
 
 .write-btn-controoler{
@@ -435,7 +432,7 @@
     height: auto;
     justify-content: center;
     display: flex;
-    margin: 20px ;
+    margin: 40px auto ;
 }
 .write-btn-cancel,
 .write-btn-regip,
@@ -443,14 +440,17 @@
     display: flex;              /* Flexbox로 변경 */
     justify-content: center;    /* 가로 방향 중앙 정렬 */
     align-items: center;        /* 세로 방향 중앙 정렬 */
-    width: 100px;
-    height: 40px;
+    width: 80px;
+    height: 35px;
     font-size: 12px;
-    border: 1px solid #ccc;
-    background: #ccc;
-    margin-right: 10px;
+    border: none;
+    background-color: #81a6d3;
+    color: white;
+    margin-right: 20px;
+    border-radius: 4px;
 
 }
+.write-btn-cancel {background-color: rgb(200, 200, 200);}
 
 
 /* 각 내용 입력창 */
@@ -460,6 +460,7 @@
     min-height: 250px;
     max-height: 500px;
     border: 2px solid #D9D9D9;
+    border-radius: 4px;
 }
 .notice-contents{
     resize: none;

@@ -46,7 +46,9 @@ a {text-decoration: none; color: inherit;}
 .aside_first {
     margin: 55px 0 10px 10px;
 }
-#admin_aside_list img {width: 100px; height: 23px; margin: 18px auto 0;}
+#admin_aside_list img {
+    /*width: 100px; height: 23px; */
+    margin: 18px auto 0;}
 
 .aside_first > h2 {
     margin-top: 10px;
@@ -79,6 +81,8 @@ a {text-decoration: none; color: inherit;}
 .admin_menu > li:hover {
     background-color: #e0e0e0; /* 호버 시 배경색 변경 */
 }
+
+
 
 /* 서브 메뉴 */
 .admin_sub_menu {
@@ -159,6 +163,8 @@ height: 20px;
 .right-icons span {
 margin-left: 13px; /* span과 마지막 아이콘 사이의 간격 */
 }
+
+a:hover {font-weight: bold; text-decoration: underline;}
 
 
 /* 내비게이션 */

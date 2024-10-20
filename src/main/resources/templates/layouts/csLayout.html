@@ -9,10 +9,12 @@
     <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/cs/csCommon.css}">
-<!--    <link rel="stylesheet" th:href="@{/css/cs/faqList.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/css/cs/qnaview.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/css/cs/noticeList.css}">-->
-    <link rel="stylesheet" th:href="@{/css/cs/noticeVeiw.css}">
+    <link rel="stylesheet" th:if="${cate=='main'}" th:href="@{/css/cs/csMain.css}">
+
+    <link rel="stylesheet" th:if="${content=='list'}" th:href="@{/css/cs/faqList.css}">
+    <link rel="stylesheet" th:if="${content=='view'}" th:href="@{/css/cs/qnaview.css}">
+    <link rel="stylesheet" th:if="${content=='list' && cate=='notice'}" th:href="@{/css/cs/noticeList.css}">
+    <link rel="stylesheet"  th:if="${content=='view' && cate=='notice'}" th:href="@{/css/cs/noticeVeiw.css}">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
 
     <script th:src="@{/js/include.js}"></script>
@@ -27,27 +29,57 @@
             <a href="#content">본문바로가기</a>
         </div>
         <th:block th:replace="~{include/header}"></th:block>
-
-<!--        <th:block th:replace="~{content/cs/main}"></th:block>-->
-<!--        <th:block th:replace="~{content/cs/noticeView}"></th:block>-->
-
-
-
-
+        <th:block th:if="${cate=='main'}">
+            <th:block th:replace="~{content/cs/main}"></th:block>
+        </th:block>
+        <th:block th:unless="${content=='main'}">
             <main>
                 <div id="container">
+                    <th:block th:switch="${cate}">
+                        <th:block th:case="'faq'">
+                            <th:block th:replace="~{aside/faqAside}"></th:block>
+                            <th:block th:if="${content == 'list'}">
+                                <th:block th:replace="~{content/cs/faqList}"></th:block>
+                            </th:block>
+                            <th:block th:if="${content == 'view'}">
+<!--                                <th:block th:replace="~{content/cs/faqList}"></th:block>-->
+                            </th:block>
+                        </th:block>
+                        <th:block th:case="'qna'">
+                          <th:block th:replace="~{aside/qnaAside}"></th:block>
+                            <th:block th:if="${content == 'view'}">
+                                <th:block th:replace="~{content/cs/qnaView}"></th:block>
+                            </th:block>
+                            <th:block th:if="${content == 'write'}">
+                                <th:block th:replace="~{content/cs/qnaWrite}"></th:block>
+                            </th:block>
+                        </th:block>
+                        <th:block th:case="'notice'">
+                            <th:block th:replace="~{aside/noticeAside}"></th:block>
+                            <th:block th:if="${content == 'list'}">
+                                <th:block th:replace="~{content/cs/notice/noticeList}"></th:block>
+                            </th:block>
+                            <th:block th:if="${content == 'view'}">
+                                <th:block th:replace="~{content/cs/notice/noticeView}"></th:block>
+                            </th:block>
 
-                    <!--                <th:block th:replace="~{aside/faqAside}"></th:block>-->
-                    <!--                  <th:block th:replace="~{aside/qnaAside}"></th:block>-->
-                    <th:block th:replace="~{aside/noticeAside}"></th:block>
-                    <!--                <th:block th:replace="~{content/cs/faqList}"></th:block>-->
-                    <!--                <th:block th:replace="~{content/cs/qnaView}"></th:block>-->
-                    <!--                <th:block th:replace="~{content/cs/qnaWrite}"></th:block>-->
-<!--                    <th:block th:replace="~{content/cs/notice/noticeList}"></th:block>-->
-                    <th:block th:replace="~{content/cs/notice/noticeView}"></th:block>
+                        </th:block>
+
+
+                    </th:block>
+
 
                 </div>
             </main>
+
+        </th:block>
+
+        <!--        <th:block th:replace="~{content/cs/noticeView}"></th:block>-->
+
+
+
+
+
         <th:block></th:block>
 
         <th:block th:replace="~{include/footer}"></th:block>

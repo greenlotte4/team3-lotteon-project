@@ -26,8 +26,9 @@
     color: #ddd;
 }
 
-#admin_banner_main div {margin: 10px auto; width: 900px;}
-.admin_banner_table {            width: 900px;
+#admin_banner_main div {margin: 0 auto; width: 900px;}
+.admin_banner_table {            
+    width: 900px;
     border-collapse: collapse;
     table-layout: fixed; 
     margin: 20px auto;
@@ -36,7 +37,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
 }
 .admin_banner_table td { height: 80px; text-align: center;}
-.admin_banner_table th {height: 50px; background-color:  rgb(226,232,238);;}
+.admin_banner_table th {height: 50px; background-color: rgb(226,232,238);}
 .admin_banner_table td:nth-of-type(4) {text-align: left; padding-left: 5px;}
 .admin_banner_table td:nth-of-type(1) {text-align: center;}
 .admin_banner_table td {background-color: #fbfdff;}
@@ -46,6 +47,7 @@
 .admin_banner_table img {width: 70px; height: 70px;}
 
 
-.banner_button {width: 900px; margin: 20px auto; display: flex;}
-.banner_button button:nth-of-type(1) {width: 80px; height: 35px; border: none;}
-.banner_button button:nth-of-type(2){margin-left: auto; width: 80px; height: 35px; background: #8EB4E3; color: white;  border: none;}
+
+.banner_button {width: 900px; margin: 40px auto; display: flex;}
+.banner_button button:nth-of-type(1) {width: 80px; height: 35px; border: none;  border-radius: 7px;}
+.banner_button button:nth-of-type(2){margin-left: auto; width: 80px; height: 35px; background: #8EB4E3; color: white;  border: none;  border-radius: 7px;}

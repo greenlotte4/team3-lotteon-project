@@ -1,0 +1,150 @@
+
+            <div id="admin_service">    
+                <section>
+                    <th:block th:replace="~{content/admin/admin_gate}"></th:block>
+
+                    <section id="admin_navi">
+                            <p>쿠폰발급현황</p>
+                            <p><a href="#">HOME > 쿠폰관리</a> > 쿠폰발급현황</p>
+                    </section>
+
+<!-- 작업 내용 추가 -->
+<div class="coupon-container">
+    <div class="coupon-header">
+        <input type="text" placeholder="발급번호" class="search-input">
+        <input type="text" placeholder="검색어입력" class="search-input">
+        <button class="search-btn">검색</button>
+    </div>
+    <table class="coupon-table">
+        <thead>
+            <tr>
+                <th>발급번호</th>
+                <th>쿠폰번호</th>
+                <th>쿠폰종류</th>
+                <th>쿠폰명</th>
+                <th>사용자</th>
+                <th>상태</th>
+                <th>사용일</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="#" class="order-link">6942147241</a></td>
+                <td>9042037249</td>
+                <td>상품 할인</td>
+                <td>배송비 무료 쿠폰</td>
+                <td>poooodoooo</td>
+                <td class="status-ongoing">미사용</td>
+                <td>2024.10.18 10:00:00</td>
+                <td><button class="end-button">종료</button></td>
+            </tr>
+            
+            <tr>
+                <td><a href="#" class="order-link">6942147241</a></td>
+                <td>9042037249</td>
+                <td>상품 할인</td>
+                <td>배송비 무료 쿠폰</td>
+                <td>newjeans</td>
+                <td class="status-ongoing">미사용</td>
+                <td>2024.10.18 10:00:00</td>
+                <td><button class="end-button">종료</button></td>
+            </tr>
+
+            <tr>
+                <td><a href="#" class="order-link">6942147241</a></td>
+                <td>9042037249</td>
+                <td>상품 할인</td>
+                <td>배송비 무료 쿠폰</td>
+                <td>soogooood</td>
+                <td class="status-ongoing">미사용</td>
+                <td>2024.10.18 10:00:00</td>
+                <td><button class="end-button">종료</button></td>
+            </tr>
+
+            <tr>
+                <td><a href="#" class="order-link">6942147241</a></td>
+                <td>9042037249</td>
+                <td>상품 할인</td>
+                <td>배송비 무료 쿠폰</td>
+                <td>boogi</td>
+                <td class="status-ongoing">미사용</td>
+                <td>2024.10.18 10:00:00</td>
+                <td><button class="end-button">종료</button></td>
+            </tr>
+
+            <tr>
+                <td><a href="#" class="order-link">6942147241</a></td>
+                <td>9042037249</td>
+                <td>상품 할인</td>
+                <td>배송비 무료 쿠폰</td>
+                <td>boogi</td>
+                <td class="status-ongoing">미사용</td>
+                <td>2024.10.18 10:00:00</td>
+                <td><button class="end-button">종료</button></td>
+            </tr>
+
+            <tr>
+                <td><a href="#" class="order-link">6942147241</a></td>
+                <td>9042037249</td>
+                <td>상품 할인</td>
+                <td>배송비 무료 쿠폰</td>
+                <td>boogi</td>
+                <td class="status-ending">사용</td>
+                <td>2024.10.18 10:00:00</td>
+                <td><button class="end-button">종료</button></td>
+            </tr>
+
+            <tr>
+                <td><a href="#" class="order-link">6942147241</a></td>
+                <td>9042037249</td>
+                <td>상품 할인</td>
+                <td>배송비 무료 쿠폰</td>
+                <td>qwer1212</td>
+                <td class="status-ending">사용</td>
+                <td>2024.10.18 10:00:00</td>
+                <td><button class="end-button">종료</button></td>
+            </tr>
+            
+            <tr>
+                <td><a href="#" class="order-link">6942147241</a></td>
+                <td>9042037249</td>
+                <td>상품 할인</td>
+                <td>배송비 무료 쿠폰</td>
+                <td>kikiki7</td>
+                <td class="status-ending">사용</td>
+                <td>2024.10.18 10:00:00</td>
+                <td><button class="end-button">종료</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <span class="page-btn"><</span>
+        <span class="page-btn">1</span>
+        <span class="page-btn">2</span>
+        <span class="page-btn">3</span>
+        <span class="page-btn">4</span>
+        <span class="page-btn">></span>
+    </div>
+    
+</div>
+
+
+
+
+</section>
+
+
+<script>
+    document.querySelectorAll('tr').forEach(row => {
+        const statusCell = row.querySelector('.status-ending');
+        if (statusCell) {
+            const button = row.querySelector('.end-button');
+            if (button) {
+                button.style.backgroundColor = '#888'; // 회색 배경
+                button.style.color = 'white'; // 흰색 글자
+            }
+        }
+    });
+</script>

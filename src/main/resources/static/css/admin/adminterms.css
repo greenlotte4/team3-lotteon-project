@@ -2,7 +2,7 @@
     width: 900px;
     border-collapse: collapse;
     table-layout: fixed; 
-    margin: 0px auto;
+    margin: 20px auto 0;
     border-radius: 8px;
     overflow: hidden; /* 모서리 둥글게 하기 */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
