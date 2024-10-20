@@ -13,7 +13,7 @@
         <link th:if="${content=='login'}" rel="stylesheet" th:href="@{/css/member/login.css}">
         <link th:if="${content=='couponDetail'}"  rel="stylesheet" th:href="@{/css/member/couponDetail.css}">
             <link th:if="${content=='sellerRegister'}" rel="stylesheet" th:href="@{/css/member/customerregister.css}">
-        <link th:if="${content=='mypageMain'}" rel="stylesheet" th:href="@{/css/member/mypageMain.css}">
+        <link th:if="${content=='myInfo'}" rel="stylesheet" th:href="@{/css/member/mypageMain.css}">
             <link th:if="${content=='mysettings'}" rel="stylesheet" th:href="@{/css/member/mysettings.css}">
             <link th:if="${content=='orderdetails'}" rel="stylesheet" th:href="@{/css/member/orderdetails.css}">
             <link th:if="${content=='pointdetails'}" rel="stylesheet" th:href="@{/css/member/pointdetails.css}">
@@ -50,7 +50,7 @@
                 <th:block th:replace="~{content/member/customerregister}"></th:block>
 
             </th:block>
-            <th:block th:case="'mypageMain'">
+            <th:block th:case="'myInfo'">
                 <th:block th:replace="~{content/member/mypageMain}"></th:block>
 
             </th:block>
@@ -94,9 +94,10 @@
 
 <!--        <script th:src="@{/js/market.js}"></script>-->
 <!--        <script th:src="@{js/marketOrder.js}"></script>-->
-        <!--        <script th:src="@{js/mysetting.js}"></script>-->
-        <!--        <script th:src="@{js/orderdetails.js}"></script>-->
-        <script th:src="@{js/pointdetails.js}"></script>
+                <script th:if="${content=='mysetting'}" th:src="@{js/mysetting.js}"></script>
+                <script th:if="${content=='orderdetails'}" th:src="@{js/orderdetails.js}"></script>
+        <script th:if="${content=='pointdetails'}" th:src="@{/js/pointdetails.js}"></script>
+        <script th:if="${content=='myInfo'}" th:src="@{/js/mypageMain.js}"></script>
 
 
     </div><!--layout end-->

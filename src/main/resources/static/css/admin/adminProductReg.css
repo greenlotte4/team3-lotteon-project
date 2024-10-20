@@ -1,0 +1,128 @@
+     
+        .admin_menu > li:nth-child(4) .admin_sub_menu > li:nth-child(2) > a {
+            text-decoration: underline;
+       }
+
+
+
+
+#admin_service {
+   width: 1000px; /* 기본 너비 */
+   transition: width 0.3s; /* 부드러운 전환 효과 */
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+}
+
+#admin_service.expanded {
+   width: 1200px; /* aside가 숨겨질 때의 너비 */
+}
+
+#admin_gate {
+   width: 100%; /* 기본적으로 100%로 설정 */
+   transition: width 0.3s ease; /* 너비에 대한 부드러운 전환 효과 */
+}
+
+#admin_service.expanded #admin_gate {
+   width: calc(1200px - 200px); /* aside가 숨겨질 때 gate의 너비 조정 */
+}
+
+#admin_aside.hidden {
+   width: 0;
+   padding: 0;
+   overflow: hidden;
+}
+
+       #admin_version div:nth-of-type(1) {width: 900px; margin: 0 auto; padding: 3px;}
+       #admin_version div:nth-of-type(2) {width: 900px; margin: 0 auto; padding: 3px;}
+       #admin_version div:nth-of-type(2) p {width: 900px; margin: 3px auto 0; padding: 3px;}
+       .admin_version_table {width: 900px; margin: 3px auto 40px; padding: 3px;}
+
+       #admin_site div {width: 900px; margin: 3px auto;  padding: 3px;}
+       .admin_site_table {width: 900px; margin: 0 auto; padding: 3px;}
+       #admin_site div:nth-of-type(3) {margin-bottom: 40px; padding: 3px;}
+
+       #admin_logo div {width: 900px; margin: 3px auto;  padding: 3px;}
+       .admin_logo_table {width: 900px; margin: 0 auto;  padding: 3px;}
+       #admin_logo div:nth-of-type(3) {margin-bottom: 40px; padding: 3px;}
+
+       #admin_company_info div {width: 900px; margin: 3px auto;  padding: 3px;}
+       .admin_company_info_table {width: 900px; margin: 0 auto;  padding: 3px;}
+       #admin_company_info div:nth-of-type(3) {margin-bottom: 40px; padding: 3px;}
+
+       #admin_cs_info div {width: 900px; margin: 3px auto;  padding: 3px;}
+       .admin_cs_info_table {width: 900px; margin: 0 auto;  padding: 3px;}
+       #admin_cs_info div:nth-of-type(3) {margin-bottom: 40px; padding: 3px;}
+
+       #copy_light div {width: 900px; margin: 3px auto;  padding: 3px;}
+       .copy_light_table {width: 900px; margin: 0 auto; padding: 3px;}
+       #copy_light div:nth-child(3)  {margin-bottom: 40px; padding: 3px;}
+
+       input[type="text"], input[type="file"] {width: 236px; height: 30px; border: 0.3px solid #424242; /* 경계선 색상 */ padding: 3px; margin: 2px;}
+       input[type="file"] {border: 1px solid black; }
+       input.custom-width {width: 300px; /* 원하는 너비로 조정 */}
+       
+       .top1 {font-weight: bold; font-size: 14px;}
+       .top2 {width: auto; padding: 3px; background: linear-gradient(to top, #cdd8e6 50%, transparent 50%);}
+
+
+       .admin_version_table,
+       .admin_site_table,
+       .admin_logo_table,
+       .admin_company_info_table,
+       .admin_cs_info_table,
+       .copy_light_table {
+           table-layout: fixed; 
+           border-collapse: collapse;
+           border-radius: 8px;
+           overflow: hidden; /* 모서리 둥글게 하기 */
+           box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
+       }
+       .admin_version_table td:nth-child(1),
+       .admin_site_table td:nth-child(1),
+       .admin_company_info_table td:nth-child(1){background: rgb(226,232,238);}
+
+       .admin_version_table td:nth-child(2),
+       .admin_site_table td:nth-child(2),
+       .admin_company_info_table td:nth-child(2){background: #fbfdff;}
+
+
+       .admin_version_table td,
+       .admin_site_table td,
+       .admin_logo_table td,
+       .admin_company_info_table td,
+       .admin_cs_info_table td,
+       .copy_light_table td {
+   border: 1px solid rgb(172, 172, 172); /* 셀 경계 색상 및 두께 설정 */
+   padding: 8px; /* 셀 안쪽 여백 설정 */
+   text-align: left; /* 텍스트 왼쪽 정렬 */
+   
+}
+               .admin_version_table tr,
+               .admin_site_table tr,
+               .admin_logo_table tr,
+               .admin_company_info_table tr,
+               .admin_cs_info_table tr,
+               .copy_light_table tr{border: 1px solid rgb(255, 255, 255); /* 셀 경계 색상 및 두께 설정 */
+                   padding: 8px; /* 셀 안쪽 여백 설정 */
+                   text-align: left; /* 텍스트 왼쪽 정렬 */
+                   }
+
+                   #admin_version > div:nth-of-type(2),
+                   #admin_site > div,
+                   #admin_logo > div,
+                   #admin_company_info > div,
+                   #admin_cs_info > div,
+                   #copy_light > div { border-radius: 8px;overflow: hidden; /* 모서리 둥글게 하기 */}
+
+                   .basic_modi {text-align: right;}
+
+                   #classification{
+                       width: 140px;
+                       height: 30px;
+                   }
+
+       .etcexplanation{width: 900px; height: 70px; overflow: hidden; margin: 0 auto; background: #ffffcc;}
+       .etcexplanation p{font-size: 14px; font-weight: 400; line-height: 17px; margin: 30px 30px;}
+       .regbox{width: 900px; margin: 0 auto; margin-bottom: 80px; padding: 3px; text-align: right; }
+       .regbutton{width: 80px; height: 35px; margin-top: 5px; background: #8eb4e3; color: white; border: none; cursor: pointer; }

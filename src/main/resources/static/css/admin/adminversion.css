@@ -7,7 +7,7 @@
     width: 900px;
     border-collapse: collapse;
     table-layout: fixed; 
-    margin: 3px auto 20px;
+    margin: 20px auto 20px;
     border-radius: 8px;
     padding: 3px;
     overflow: hidden; /* 모서리 둥글게 하기 */
@@ -22,7 +22,7 @@ border-top: 1px solid rgba(172, 172, 172, 0.5);
 }
 
 
-.admin_Version_table th {text-align: center; background-color: rgb(226,232,238); height: 30px;}
+.admin_Version_table th {text-align: center; background-color: rgb(226,232,238); height: 40px;}
 
 .admin_Version_table tr{
 padding: 12px; /* 셀 안쪽 여백 설정 */
@@ -32,7 +32,7 @@ text-align: center; /* 텍스트 왼쪽 정렬 */}
 #admin_Version > div:nth-of-type(2){ border-radius: 8px; overflow: hidden; /* 모서리 둥글게 하기 */}
 
 
-.btn {margin: 0 auto; width: 900px; display: flex; justify-content: space-between; margin-bottom: 10px;}
+.btn {margin: 20px auto; width: 900px; display: flex; justify-content: space-between;}
 .btn button {cursor: pointer; width: 60px; height: 35px; background-color: #81a6d3; border: none; color: white; border-radius: 6px; margin-top: 20px; margin-bottom: 20px;}
 
 .top1 {font-weight: bold; font-size: 14px;}

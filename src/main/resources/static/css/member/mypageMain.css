@@ -16,7 +16,7 @@ main {
     position: relative;
     width: 1200px;
     height: auto;
-    margin: 0 auto;        
+    margin: 0 auto;
 }
 
 
@@ -26,7 +26,7 @@ main {
     background-color: #f8f7f7;
     display: flex; /* Flexbox 사용 */
     align-items: center; /* 수직 중앙 정렬 */
-            
+
 }
 .info-title {
     position: relative;
@@ -44,7 +44,7 @@ main {
     justify-content: space-around; /* 항목 간격 조정 */
     width: 300px; /* 전체 폭 사용 */
     padding: 10px 0; /* 위아래 여백 */
-    
+
 }
 
 .summary-item {
@@ -95,7 +95,7 @@ aside > ul > li {
     flex-grow: 1;
     width: 990px;
     height: auto;
-    
+
 }
 .centerWrapper table {
     width: 91%;
@@ -111,14 +111,14 @@ aside > ul > li {
     justify-content: center; /* 수평 정렬: flex-start, flex-end, center */
     align-items: center; /* 수직 정렬: flex-start, flex-end, center */
     font-size: large;
-    
+
 }
 .details{
     height: 20px;
     margin: 0 46px;
     margin-top: 20px;
     margin-bottom: 20px;
-    
+
 }
 .center p{
     font-size: 14px;
@@ -132,9 +132,9 @@ aside > ul > li {
 }
 
 table {
-    
+
     box-sizing: border-box;
-    width: 100%;
+    width: 90%;
     height: auto;
     margin: 0 46px;
     border-top: 2px solid black;
@@ -183,8 +183,8 @@ th:nth-child(4) {width: 15%;}  /* 115px / 930px */
 
 .tr1{
     width: auto;
-    height: 170px; 
-    
+    height: 170px;
+
 }
 
 
@@ -192,8 +192,8 @@ td {
     height: 89px;
     font-weight: bold;
     text-align: center;
-            
-    
+
+
 }
 
 .eximg > img{
@@ -240,7 +240,7 @@ td {
     font-size: 12px;
     font-weight: 400;
     margin: 5px;
-        
+
 }
 td button{
     position: relative;
@@ -248,7 +248,7 @@ td button{
     height: 31px;
     margin: 0 auto;
     cursor: pointer;
-    
+
 }
 
 #custom-button {
@@ -269,7 +269,7 @@ td button{
     position: relative;
     width: auto;
     text-align: left;
-    padding: 0 20px;  
+    padding: 0 20px;
 }
 .setting-item2-1{
     width: 250px;
@@ -385,14 +385,14 @@ td button{
     position: relative;
 }
 
-.modal-content table{   
+.modal-content table{
     border-top: none;
     width: 95%;
     max-width: 95%;
     margin: 0 auto;
     margin-top: 20px;
     box-shadow: 1px 1px 1px 2px rgb(226, 226, 226); ;
- 
+
 }
 .modal-content .header{
     background-color: #e23;
@@ -503,7 +503,7 @@ td button{
 }
 
 .deleveryInfo span{
-   
+
 
 }
 .deleveryInfo div label{
@@ -525,7 +525,7 @@ td button{
 
 
 
-.modal-content.seller table{   
+.modal-content.seller table{
     border-top: none;
     width: 95%;
     max-width: 95%;
@@ -570,12 +570,12 @@ td button{
 }
 
 .qnabtn .qna-btn{
-   width: 100px;
-   height: 30px;
-   padding: 5px 7px;
-   border: 1px solid #f8f7f7;
-   background-color: #888;
-   color: #fff;
+    width: 100px;
+    height: 30px;
+    padding: 5px 7px;
+    border: 1px solid #f8f7f7;
+    background-color: #888;
+    color: #fff;
 }
 .qnabtn .qna-btn:hover{
     background-color: #e23;
@@ -584,7 +584,7 @@ td button{
 
 
 /* modal qna */
-.modal-content.qna table{   
+.modal-content.qna table{
     border-top: none;
     width: 95%;
     max-width: 95%;
@@ -618,7 +618,7 @@ td button{
 .modal-content.qna p{
     margin-left: 20px;
     margin-bottom: 20px;
-    
+
 }
 
 
@@ -668,7 +668,7 @@ td button{
     border: none;
     cursor: pointer;
     margin-left: 5px;
-   
+
 }
 
 .modal-footer .btn-primary {
@@ -707,7 +707,7 @@ td button{
 /* pReview */
 
 
-.modal-content.pReview table{   
+.modal-content.pReview table{
     border-top: none;
     width: 95%;
     max-width: 95%;
@@ -746,7 +746,7 @@ td button{
 .modal-content.qna p{
     margin-left: 20px;
     margin-bottom: 20px;
-    
+
 }
 
 .modal-content.pReview table tr:nth-child(1) td{height: 40px;}
