@@ -23,7 +23,7 @@ server:
 
 spring:
     profiles:
-        active: default
+        active: prod
         include: local
     application:
         name: LotteOnProject

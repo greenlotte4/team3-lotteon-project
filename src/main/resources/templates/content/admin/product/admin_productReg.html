@@ -20,33 +20,24 @@
                         <tr>
                             <td>1차 분류</td>
                             <td>
-                                <select class="classification" >
+                                <select class="classification" name="firstLevelCategory" >
                                     <option value="">1차분류 선택</option>
-                                    <option value="">여기</option>
-                                    <option value="">수정</option>
-                                    <option value="">바람</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>2차 분류</td>
                             <td>
-                                <select class="classification" >
+                                <select class="classification" name="secondLevelCategory" >
                                     <option value="">2차분류 선택</option>
-                                    <option value="">여기</option>
-                                    <option value="">수정</option>
-                                    <option value="">바람</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>3차 분류</td>
                             <td>
-                                <select class="classification" >
+                                <select class="classification"  name="thirdLevelCategory">
                                     <option value="">3차분류 선택</option>
-                                    <option value="">여기</option>
-                                    <option value="">수정</option>
-                                    <option value="">바람</option>
                                 </select>
                             </td>
                         </tr>
@@ -63,31 +54,38 @@
                         <tr>
                             <td>상품명</td>
                             <td>
-                                <input type="text" placeholder="">
+                                <input type="text" placeholder="" name="productName">
                             </td>
                         </tr>
                         <tr>
                             <td>기본설명</td>
                             <td>
-                                <input type="text" placeholder="">
+                                <input type="text" placeholder="" name="productDesc">
                             </td>
                         </tr>
                         <tr>
-                            <td>제조사</td>
+                            <td>옵션</td>
+                            <td class="optionTag">
+                                <input  type="text" placeholder="" name="option">
+                                <input  type="number" placeholder="해당 옵션 재고수량" name="optionStock">
+                             </td>
+                        </tr>
+                        <tr>
+                            <td>판매자</td>
                             <td>
-                                <input type="text" placeholder="">
+                                <input type="text" placeholder="" name="sellerId">
                             </td>
                         </tr>
                         <tr>
                             <td>상품금액</td>
                             <td>
-                                <input type="text" placeholder=""> 원
+                                <input type="text" placeholder="" name="price"> 원
                             </td>
                         </tr>
                         <tr>
                             <td>할인율</td>
                             <td>
-                                <input type="text" placeholder=""> %
+                                <input type="text" placeholder="" > %
                             </td>
                         </tr>
                         <tr>
