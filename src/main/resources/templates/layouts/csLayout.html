@@ -15,6 +15,8 @@
 <!--    qnawrite 추가-->
     <link rel="stylesheet" th:if="${content=='write'}" th:href="@{/css/cs/qnawrite2.css}">
     <link rel="stylesheet" th:if="${content=='view'}" th:href="@{/css/cs/qnaview.css}">
+    <link rel="stylesheet" th:if="${content=='write'}" th:href="@{/css/cs/qnawrite.css}">
+
     <link rel="stylesheet" th:if="${content=='list' && cate=='notice'}" th:href="@{/css/cs/noticeList.css}">
     <link rel="stylesheet"  th:if="${content=='view' && cate=='notice'}" th:href="@{/css/cs/noticeVeiw.css}">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
@@ -44,7 +46,6 @@
                                 <th:block th:replace="~{content/cs/faqList}"></th:block>
                             </th:block>
                             <th:block th:if="${content == 'view'}">
-<!--                                <th:block th:replace="~{content/cs/faqList}"></th:block>-->
                             </th:block>
                         </th:block>
                         <th:block th:case="'qna'">
