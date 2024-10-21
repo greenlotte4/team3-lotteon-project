@@ -49,6 +49,10 @@
                 <th:block th:replace="~{include/adminAside}"> </th:block>
 
             <!--content-->
+                <th:block th:if="${cate =='main'}">
+                    <th:block th:replace="~{content/admin/admin_index}"></th:block>
+                </th:block>
+
                 <th:block th:if="${cate =='config'}">
                     <th:block th:switch="${content}" >
                         <th:block th:case="'banner'">
