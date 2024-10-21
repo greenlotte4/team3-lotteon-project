@@ -142,12 +142,12 @@
     <button class="add-coupon-btn">쿠폰등록</button>
 
     <div class="pagination">
-        <span class="page-btn"><</span>
+        <span class="page-btn">이전</span>
         <span class="page-btn">1</span>
         <span class="page-btn">2</span>
         <span class="page-btn">3</span>
         <span class="page-btn">4</span>
-        <span class="page-btn">></span>
+        <span class="page-btn">다음</span>
     </div>
     
 </div>
@@ -155,7 +155,138 @@
 
 
 
-                </section>
+</section>
+<!--모달 추가-->
+                <!-- 쿠폰 번호 모달 -->
+                <div id="couponModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>쿠폰 정보</h3>
+                            <span class="close">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <table>
+                                <colgroup>
+                                    <col style="width: 30%;">
+                                    <col style="width: 70%;">
+                                </colgroup>
+                                <tr>
+                                    <td>쿠폰번호</td>
+                                    <td><span id="modalCouponNumber"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>발급처</td>
+                                    <td><span id="modalIssuer"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>쿠폰종류</td>
+                                    <td><span id="modalCouponType"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>쿠폰명</td>
+                                    <td><span id="modalCouponName"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>혜택</td>
+                                    <td><span id="modalBenefit"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>사용기간</td>
+                                    <td><span id="modalPeriod"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>유의사항</td>
+                                    <td><span id="modalNotes"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="modal-close-btn">닫기</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 쿠폰 등록 모달 -->
+                <div id="addCouponModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>쿠폰등록</h3>
+                            <span class="close">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <form id="couponForm">
+                                <table>
+                                    <tr>
+                                        <td><label for="issuer">발급처</label></td>
+                                        <td><input type="text" id="issuer" name="issuer"
+                                                   placeholder="(주)다있어"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="couponType">쿠폰 종류</label></td>
+                                        <td>
+                                            <select id="couponType" name="couponType">
+                                                <option value="" disabled selected>종류 선택</option>
+                                                <option value="discount">할인</option>
+                                                <option value="gift">선물</option>
+                                                <option value="free">무료</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="couponName">쿠폰명</label></td>
+                                        <td><input type="text" id="couponName" name="couponName"
+                                                   placeholder="쿠폰명 입력"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>혜택</label></td>
+                                        <td>
+                                            <div class="benefit-options">
+                                                <label><input type="radio" name="benefit" value="1000">
+                                                    1,000 할인</label>
+                                                <label><input type="radio" name="benefit" value="2000">
+                                                    2,000 할인</label>
+                                                <label><input type="radio" name="benefit" value="3000">
+                                                    3,000 할인</label>
+                                                <label><input type="radio" name="benefit" value="4000">
+                                                    4,000 할인</label>
+                                                <label><input type="radio" name="benefit" value="5000">
+                                                    5,000 할인</label>
+                                                <label><input type="radio" name="benefit" value="10%"> 10%
+                                                    할인</label>
+                                                <label><input type="radio" name="benefit" value="20%"> 20%
+                                                    할인</label>
+                                                <label><input type="radio" name="benefit" value="30%"> 30%
+                                                    할인</label>
+                                                <label><input type="radio" name="benefit" value="40%"> 40%
+                                                    할인</label>
+                                                <label><input type="radio" name="benefit" value="50%"> 50%
+                                                    할인</label>
+                                                <label><input type="radio" name="benefit"
+                                                              value="freeShipping"> 배송비 무료</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="startDate">사용 기간</label></td>
+                                        <td>
+                                            <input type="date" id="startDate" name="startDate">
+                                            <span>~</span>
+                                            <input type="date" id="endDate" name="endDate">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="notes">유의사항</label></td>
+                                        <td><textarea id="notes" name="notes"
+                                                      placeholder="유의사항 입력"></textarea></td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="modal-close-btn" id="cancelBtn">취소</button>
+                            <button class="modal-close-btn" id="submitBtn">등록</button>
+                        </div>
+                    </div>
+                </div>
 
 
 
@@ -171,3 +302,4 @@
         }
     });
 </script>
+                <script src="/js/adminCouponModal.js"></script>
