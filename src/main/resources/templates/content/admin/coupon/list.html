@@ -1,5 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/sellerLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin::Coupon</title>
+    <link rel="stylesheet"   th:href="@{/css/admin/adminCoupon.css}">
 
-    <title>쿠폰목록</title>
+</head>
+<body>
+<th:block layout:fragment="content">
 
             <div id="admin_service">    
                 <section>
@@ -302,4 +314,5 @@
         }
     });
 </script>
-                <script src="/js/adminCouponModal.js"></script>
+<script src="/js/adminCouponModal.js"></script>
+</th:block>

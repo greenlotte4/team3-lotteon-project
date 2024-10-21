@@ -15,11 +15,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/policy")
 public class PolicyController {
 
-    @GetMapping("/{content}")
-    public String policyIndex(@PathVariable String content, Model model) {
+    @GetMapping("/buyer")
+    public String buyerPolicy(Model model) {
+        model.addAttribute("content", "buyer");
+        return "content/policy/buyer"; // Points to the "content/policy/buyer" template
+    }
 
-        model.addAttribute("content", content);
-        return "policyIndex";
+    @GetMapping("/seller")
+    public String sellerPolicy(Model model) {
+        model.addAttribute("content", "seller");
+        return "content/policy/seller"; // Points to the "content/policy/seller" template
+    }
+
+    @GetMapping("/location")
+    public String locationPolicy(Model model) {
+        model.addAttribute("content", "location");
+        return "content/policy/location"; // Points to the "content/policy/location" template
+    }
+
+    @GetMapping("/privacy")
+    public String privacyPolicy(Model model) {
+        model.addAttribute("content", "privacy");
+        return "content/policy/privacy"; // Points to the "content/policy/privacy" template
+    }
+
+    @GetMapping("/finance")
+    public String financePolicy(Model model) {
+        model.addAttribute("content", "finance");
+        return "content/policy/finance"; // Points to the "content/policy/finance" template
     }
 
 }

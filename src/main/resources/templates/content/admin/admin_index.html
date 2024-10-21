@@ -1,5 +1,18 @@
-
-            <div id="admin_service">    
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin::Main</title>
+    <link rel="stylesheet" th:href="@{/css/admin/adminindex.css}">
+    <script   src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<th:block layout:fragment="content">
+            <div id="admin_service">
                 <section>
                     <th:block th:replace="~{content/admin/admin_gate}"></th:block>
 
@@ -181,4 +194,5 @@
                             </table>
                     </article>  
                 </section>
-
+                <script th:src="@{/js/adminGraph.js}"></script>
+    </th:block>

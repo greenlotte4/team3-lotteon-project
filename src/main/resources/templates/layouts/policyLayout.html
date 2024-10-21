@@ -22,23 +22,9 @@
         <th:block th:replace="~{/include/header.html}"></th:block>
 
 
-        <th:block th:switch="${content}">
-            <th:block th:case="'buyer'">
-                <th:block th:replace="~{content/policy/buyer}"></th:block>
-            </th:block>
-            <th:block th:case="'seller'">
-                <th:block th:replace="~{content/policy/seller}"></th:block>
-            </th:block>
-            <th:block th:case="'location'">
-                <th:block th:replace="~{content/policy/location}"></th:block>
-            </th:block>
-            <th:block th:case="'privacy'">
-                <th:block th:replace="~{content/policy/privacy}"></th:block>
-            </th:block>
-            <th:block th:case="'finance'">
-                <th:block th:replace="~{content/policy/finance}"></th:block>
-            </th:block>
-        </th:block>
+
+        <th:block  layout:fragment="content"></th:block>
+
 
 
         <th:block th:replace="~{/include/footer.html}"></th:block>

@@ -165,7 +165,7 @@
 }
 
 .admin-view {
-    width: auto;
+    width: 92%;
     height: auto;
     margin-top: 10px;
     display: flex;
@@ -195,7 +195,7 @@
 .title-box,
 .content-box {
     flex: 1; /* 박스가 공간을 차지하도록 설정 */
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
 
 
