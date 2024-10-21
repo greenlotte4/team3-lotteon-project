@@ -1,4 +1,18 @@
-<div class="main-background media"></div>
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/companyLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn::company</title>
+    <link rel="stylesheet"  th:href="@{/css/admin/adminbanner.css}">
+    <link rel="stylesheet"  th:href="@{/css/admin/adminBannerModal.css}">
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="main-background media"></div>
 
 <main>
     <div class="mainbackgoroud">
@@ -155,3 +169,4 @@
     </div>
     <hr>
 </main>
+</th:block>

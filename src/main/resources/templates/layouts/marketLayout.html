@@ -8,15 +8,7 @@
 
   <link  rel="stylesheet" th:href="@{/css/reset.css}">
   <link rel="stylesheet" th:href="@{/css/common.css}">
-  <link rel="stylesheet" th:href="@{/css/market/marketAside.css}">
-  <link th:if="${content == 'list' || content =='search'}" rel="stylesheet" th:href="@{/css/market/marketList.css}">
-  <link th:if="${content == 'search'}"  rel="stylesheet" th:href="@{/css//market/marketsearch.css}">
 
-  <link th:if="${content == 'view'}"  rel="stylesheet" th:href="@{/css/market/marketview.css}">
-  <link th:if="${content == 'main'}"  rel="stylesheet" th:href="@{/css/market/marketmain.css}">
-  <link th:if="${content == 'order'}"  rel="stylesheet" th:href="@{/css/market/marketOrder.css}">
-  <link th:if="${content == 'cart'}"  rel="stylesheet" th:href="@{/css//market/marketCart.css}">
-  <link th:if="${content == 'completed'}"  rel="stylesheet" th:href="@{/css//market/marketOrderComplete.css}">
 </head>
 <body>
 <div class="wrapper">
@@ -28,48 +20,15 @@
   <th:block th:replace="~{include/header.html}"></th:block>
     <main id="mainArea">
       <div class="mainWrapper">
-      <th:block th:switch="${content}">
-          <th:block th:case="'list'">
-              <th:block th:replace="~{aside/marketAside}"></th:block>
-              <th:block th:replace="~{content/market/marketList}"></th:block>
-          </th:block>
-          <th:block th:case="'view'">
-              <th:block th:replace="~{aside/marketAside}"></th:block>
-              <th:block th:replace="~{content/market/marketview}"></th:block>
-          </th:block>
-          <th:block th:case="'main'">
-              <th:block th:replace="~{aside/marketAside}"></th:block>
-              <th:block th:replace="~{content/market/marketMain}"></th:block>
-          </th:block>
-          <th:block th:case="'order'">
-              <th:block th:replace="~{content/market/marketorder}"></th:block>
-          </th:block>
-          <th:block th:case="'cart'">
-              <th:block th:replace="~{content/market/marketcart}"></th:block>
-          </th:block>
-          <th:block th:case="'completed'">
-              <th:block th:replace="~{content/market/marketorderCompleted}"></th:block>
-          </th:block>
-          <th:block th:case="'search'">
-              <th:block th:replace="~{aside/marketAside}"></th:block>
-            <th:block th:replace="~{content/market/marketSearch}"></th:block>
-          </th:block>
-      </th:block>
-
-<!--                        <th:block th:replace="~{contents/dynamicContent :: content(${cate.cateGroup},${cate.cateName},${content})}"></th:block>-->
 
 
-
-
+          <th:block  layout:fragment="content"></th:block>
 
       </div>
     </main>
 
           <th:block th:replace="~{include/footer.html}"></th:block>
           <script th:src="@{/js/market.js}"></script>
-          <script th:if="${content=='cart'}" th:src="@{/js/marketcart.js}"></script>
-          <script th:if="${content=='main'}" th:src="@{/js/marketmain.js}"></script>
-        <script th:if="${content == 'order'}" th:src="@{/js/marketOrder.js}"></script>
         <script th:src="@{js/headerJs.js}"></script>
 
     </div><!--layout end-->

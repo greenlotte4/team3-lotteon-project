@@ -8,148 +8,32 @@
 
     <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
     <link rel="stylesheet" th:href="@{/css/admin/adminaside.css}">
-    <link rel="stylesheet" th:if="${cate=='main'}" th:href="@{/css/admin/adminindex.css}">
-    <script  th:if="${cate=='main'}" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script th:src="@{/js/utils.js}"></script>
 
-    <link rel="stylesheet" th:if="${content=='banner'}" th:href="@{/css/admin/adminbanner.css}">
-    <link rel="stylesheet" th:if="${content=='banner'}" th:href="@{/css/admin/adminBannerModal.css}">
-    <link rel="stylesheet" th:if="${content=='basic'}" th:href="@{/css/admin/amdinbasic.css}">
-    <link rel="stylesheet"  th:if="${content=='terms'}" th:href="@{/css/admin/adminterms.css}" >
 
-    <th:block th:if="${content=='version'}">
-        <link rel="stylesheet" th:href="@{/css/admin/adminVersion.css}">
-        <link rel="stylesheet" th:href="@{/css/admin/adminVersionModal.css}">
-    </th:block>
-    <th:block th:if="${content=='shoplist'}">
-        <link rel="stylesheet" th:href="@{/css/admin/adminshoplist.css}">
-        <link rel="stylesheet" th:href="@{/css/admin/shoplistmodal.css}">
-    </th:block>
-    <link rel="stylesheet" th:if="${content=='sale'}" th:href="@{/css/admin/adminShopsales.css}">
-    <th:block th:if="${cate =='user'}">
-        <th:block th:if="${content =='list'}">
-            <link rel="stylesheet" th:href="@{/css/memberlist.css}">
-            <link rel="stylesheet" th:href="@{/css/memberlistmodal.css}">
-        </th:block>
-        <th:block th:if="${content =='point'}">
-        <link rel="stylesheet" th:href="@{/css/memberpoint.css}">
-        </th:block>
-    </th:block>
-
-    <link rel="stylesheet" th:if="${content=='modify'}" th:href="@{/css/admin/adminmodify.css}">
-    <link rel="stylesheet" th:if="${content=='list'}" th:href="@{/css/admin/adminfaqlist.css}">
-    <link rel="stylesheet" th:if="${cate=='faq' && content=='view'}" th:href="@{/css/admin/adminfaqview.css}">
 
 </head>
 <body>
     <div id="wrapper">
         <main id="admin_main">
             <div id="admin_container">
-            <!--aside-->
+                 <!--aside-->
                 <th:block th:replace="~{include/adminAside}"> </th:block>
 
-            <!--content-->
-                <th:block th:if="${cate =='main'}">
-                    <th:block th:replace="~{content/admin/admin_index}"></th:block>
-                </th:block>
+                <!--content-->
+                <th:block  layout:fragment="content"></th:block>
 
-                <th:block th:if="${cate =='config'}">
-                    <th:block th:switch="${content}" >
-                        <th:block th:case="'banner'">
-                            <th:block th:replace="~{content/admin/config/admin_Banner}"></th:block>
-                        </th:block>
-                        <th:block th:case="'basic'">
-                            <th:block th:replace="~{content/admin/config/admin_basic}"></th:block>
-                        </th:block>
-                        <th:block th:case="'terms'">
-                            <th:block th:replace="~{content/admin/config/admin_Terms}"></th:block>
-                        </th:block>
-                        <th:block th:case="'version'">
-                            <th:block th:replace="~{content/admin/config/admin_Version}"></th:block>
-                        </th:block>
-                    </th:block>
-                </th:block>
-                <th:block th:if="${cate=='store'}">
-                    <th:block th:switch="${content}" >
-                        <th:block th:case="'shoplist'">
-                            <th:block th:replace="~{content/admin/shop/admin_shoplist}"></th:block>
-                        </th:block>
-                        <th:block th:case="'sale'">
-                            <th:block th:replace="~{content/admin/shop/admin_shopsales}"></th:block>
-                        </th:block>
-                    </th:block>
-                </th:block>
-                <th:block th:if="${cate=='user'}">
-                    <th:block th:switch="${content}" >
-                        <th:block th:case="'list'">
-                            <th:block th:replace="~{content/admin/user/memberlist}"></th:block>
-                        </th:block>
-                        <th:block th:case="'point'">
-                            <th:block th:replace="~{content/admin/user/memberpoint}"></th:block>
-                        </th:block>
-                    </th:block>
-                </th:block>
-                <th:block th:if="${cate=='notice'}">
-                    <th:block th:switch="${content}" >
-                        <th:block th:case="'list'">
-                            <th:block th:replace="~{content/admin/notice/noticeList}"></th:block>
-                        </th:block>
-                        <th:block th:case="'modify'">
-                            <th:block th:replace="~{content/admin/notice/noticeModify}"></th:block>
-                        </th:block>
-                        <th:block th:case="'view'">
-                            <th:block th:replace="~{content/admin/notice/noticeView}"></th:block>
-                        </th:block>
-                        <th:block th:case="'write'">
-                            <th:block th:replace="~{content/admin/notice/noticeWrite}"></th:block>
-                        </th:block>
-                    </th:block>
-                </th:block>
-                <th:block th:if="${cate=='faq'}">
-                    <th:block th:switch="${content}" >
-                        <th:block th:case="'list'">
-                            <th:block th:replace="~{content/admin/faq/faqList}"></th:block>
-                        </th:block>
-                        <th:block th:case="'modify'">
-                            <th:block th:replace="~{content/admin/faq/faqModify}"></th:block>
-                        </th:block>
-                        <th:block th:case="'view'">
-                            <th:block th:replace="~{content/admin/faq/faqView}"></th:block>
-                        </th:block>
-                        <th:block th:case="'write'">
-                            <th:block th:replace="~{content/admin/faq/faqWrite}"></th:block>
-                        </th:block>
-                    </th:block>
-                </th:block>
-                <th:block th:if="${cate=='qna'}">
-                    <th:block th:switch="${content}" >
-                        <th:block th:case="'list'">
-                            <th:block th:replace="~{content/admin/qna/qnaList}"></th:block>
-                        </th:block>
-                        <th:block th:case="'reply'">
-                            <th:block th:replace="~{content/admin/qna/qnaReply}"></th:block>
-                        </th:block>
-                        <th:block th:case="'write'">
-                            <th:block th:replace="~{content/admin/qna/qnaWrite}"></th:block>
-                        </th:block>
-                    </th:block>
-                </th:block>
+                <!--footer-->
                 <th:block th:replace="~{include/adminFooter}"> </th:block>
-
-
 
             </div>
         </main>
     </div>
 
-    <th:block  th:if="${content=='shoplist'}" >
-        <th:block th:replace="~{content/admin/shop/shoplistmodal}"></th:block>
-    </th:block>
     <script th:src="@{/js/admin.js}"></script>
-    <script th:if="${cate=='main'}" th:src="@{/js/adminGraph.js}"></script>
-    <script th:if="${content=='version'}" th:src="@{/js/adminVersionModal.js}"></script>
-    <script th:if="${content=='shoplist'}" th:src="@{/js/shoplistmodal.js}"></script>
-    <script  th:if="${content=='list' && cate == 'user'}"  th:src="@{/js/memberlistmodal.js}"></script>
+
+
 <script>
 
 
