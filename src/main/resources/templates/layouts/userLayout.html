@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+
+        <link th:if="${content =='join'}" rel="stylesheet" th:href="@{/css/user/join2.css}">
+        <link th:if="${content=='login'}" rel="stylesheet" th:href="@{/css/user/login.css}">
+        <link th:if="${content=='couponDetail'}"  rel="stylesheet" th:href="@{/css/user/couponDetail.css}">
+            <link th:if="${content=='sellerregister'}" rel="stylesheet" th:href="@{/css/user/customerregister.css}">
+        <link th:if="${content=='myInfo'}" rel="stylesheet" th:href="@{/css/user/mypageMain.css}">
+            <link th:if="${content=='mysettings'}" rel="stylesheet" th:href="@{/css/user/mysettings.css}">
+            <link th:if="${content=='orderdetails'}" rel="stylesheet" th:href="@{/css/user/orderdetails.css}">
+            <link th:if="${content=='pointdetails'}" rel="stylesheet" th:href="@{/css/user/pointdetails.css}">
+            <link th:if="${content=='qnadetails'}" rel="stylesheet" th:href="@{/css/user/qnadetails.css}">
+            <link th:if="${content=='reviewdetails'}" rel="stylesheet" th:href="@{/css/user/reviewdetails.css}">
+            <link th:if="${content=='term'}" rel="stylesheet" th:href="@{/css/user/term.css}">
+            <link th:if="${content=='memberregister'}" rel="stylesheet" th:href="@{/css/user/memberregister.css}">
+
+
+</head>
+<body>
+<div class="wrapper">
+    <div id="layout">
+        <div id="skipNav">
+            <a href="#content">본문바로가기</a>
+        </div>
+        <!--    header -->
+        <th:block th:replace="~{include/header.html}"></th:block>
+
+        <th:block th:switch="${content}">
+            <th:block th:case="'join'">
+                <th:block th:replace="~{content/user/join}"></th:block>
+
+            </th:block>
+            <th:block th:case="'login'">
+                <th:block th:replace="~{content/user/login}"></th:block>
+
+            </th:block>
+            <th:block th:case="'coupondetails'">
+                <th:block th:replace="~{content/user/coupondetails}"></th:block>
+
+            </th:block>
+            <th:block th:case="'sellerregister'">
+                <th:block th:replace="~{content/user/sellerregister}"></th:block>
+
+            </th:block>
+            <th:block th:case="'myInfo'">
+                <th:block th:replace="~{content/user/mypageMain}"></th:block>
+
+            </th:block>
+            <th:block th:case="'mysettings'">
+                <th:block th:replace="~{content/user/mysettings}"></th:block>
+
+            </th:block>
+            <th:block th:case="'orderdetails'">
+                <th:block th:replace="~{content/user/orderdetails}"></th:block>
+
+            </th:block>
+            <th:block th:case="'pointdetails'">
+                <th:block th:replace="~{content/user/pointdetails}"></th:block>
+
+            </th:block>
+            <th:block th:case="'qnadetails'">
+                <th:block th:replace="~{content/user/qnadetails}"></th:block>
+
+            </th:block>
+            <th:block th:case="'reviewdetails'">
+                <th:block th:replace="~{content/user/reviewdetails}"></th:block>
+
+            </th:block>
+            <th:block th:case="'term'">
+                <th:block th:replace="~{content/user/term}"></th:block>
+
+            </th:block>
+            <th:block th:case="'memberregister'">
+                <th:block th:replace="~{content/user/memberregister}"></th:block>
+
+            </th:block>
+
+        </th:block>
+
+
+
+
+
+        <th:block th:replace="~{include/footer.html}"></th:block>
+
+<!--        <script th:src="@{/js/market.js}"></script>-->
+<!--        <script th:src="@{js/marketOrder.js}"></script>-->
+                <script th:if="${content=='mysetting'}" th:src="@{js/mysetting.js}"></script>
+                <script th:if="${content=='orderdetails'}" th:src="@{js/orderdetails.js}"></script>
+        <script th:if="${content=='pointdetails'}" th:src="@{/js/pointdetails.js}"></script>
+        <script th:if="${content=='myInfo'}" th:src="@{/js/mypageMain.js}"></script>
+
+
+    </div><!--layout end-->
+</div> <!--wrapper end-->
+</body>
+</html>
