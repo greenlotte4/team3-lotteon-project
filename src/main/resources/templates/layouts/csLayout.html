@@ -12,6 +12,8 @@
     <link rel="stylesheet" th:if="${cate=='main'}" th:href="@{/css/cs/csMain.css}">
 
     <link rel="stylesheet" th:if="${content=='list'}" th:href="@{/css/cs/faqList.css}">
+<!--    qnawrite 추가-->
+    <link rel="stylesheet" th:if="${content=='write'}" th:href="@{/css/cs/qnawrite2.css}">
     <link rel="stylesheet" th:if="${content=='view'}" th:href="@{/css/cs/qnaview.css}">
     <link rel="stylesheet" th:if="${content=='list' && cate=='notice'}" th:href="@{/css/cs/noticeList.css}">
     <link rel="stylesheet"  th:if="${content=='view' && cate=='notice'}" th:href="@{/css/cs/noticeVeiw.css}">
@@ -47,11 +49,16 @@
                         </th:block>
                         <th:block th:case="'qna'">
                           <th:block th:replace="~{aside/qnaAside}"></th:block>
+                            <th:block th:if="${content == 'list'}">
+                                <th:block th:replace="~{content/cs/qnaList}"></th:block>
+                            </th:block>
                             <th:block th:if="${content == 'view'}">
                                 <th:block th:replace="~{content/cs/qnaView}"></th:block>
                             </th:block>
                             <th:block th:if="${content == 'write'}">
-                                <th:block th:replace="~{content/cs/qnaWrite}"></th:block>
+                                <!--    qnawrite 추가-->
+<!--                                <th:block th:replace="~{content/cs/qna/qnaWrite}"></th:block>-->
+                                <th:block th:replace="~{content/cs/qna/qnaWrite2}"></th:block>
                             </th:block>
                         </th:block>
                         <th:block th:case="'notice'">

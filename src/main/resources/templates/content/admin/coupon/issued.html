@@ -134,7 +134,67 @@
 
 
 </section>
-
+<!--모달 추가-->
+                <!-- 쿠폰 정보 모달 -->
+                <div id="couponInfoModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>쿠폰 정보</h3>
+                            <span class="close">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <table>
+                                <colgroup>
+                                    <col style="width: 30%;">
+                                    <col style="width: 70%;">
+                                </colgroup>
+                                <tr>
+                                    <td>쿠폰번호</td>
+                                    <td><span id="modalCouponNumber"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>발급번호</td>
+                                    <td><span id="modalIssueNumber"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>쿠폰종류</td>
+                                    <td><span id="modalCouponType"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>발급처</td>
+                                    <td><span id="modalIssuer"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>사용여부</td>
+                                    <td><span id="modalUsageStatus"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>발급대상</td>
+                                    <td><span id="modalTarget"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>쿠폰명</td>
+                                    <td><span id="modalCouponName"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>혜택</td>
+                                    <td><span id="modalBenefit"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>사용기간</td>
+                                    <td><span id="modalPeriod"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>유의사항</td>
+                                    <td><span id="modalNotes"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="modal-close-btn">닫기</button>
+                        </div>
+                    </div>
+                </div>
 
 <script>
     document.querySelectorAll('tr').forEach(row => {
@@ -148,3 +208,4 @@
         }
     });
 </script>
+                <script src="/js/adminCouponModal.js"></script>
