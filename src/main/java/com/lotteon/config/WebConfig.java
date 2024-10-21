@@ -17,4 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/css/")
                 .setCachePeriod(0);
     }
+
+
 }

@@ -48,6 +48,8 @@ dependencies {
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
     implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.4.0'
+
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.1'
 }
 
 tasks.named('test') {

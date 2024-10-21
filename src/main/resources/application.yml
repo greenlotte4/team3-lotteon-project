@@ -23,9 +23,11 @@ server:
 
 spring:
     profiles:
-        active: prod
+        active: default
+        include: local
     application:
         name: LotteOnProject
+        version: ${version}
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Qwe123~!
