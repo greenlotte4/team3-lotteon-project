@@ -1,5 +1,6 @@
 package com.lotteon.config;
 
+
 import com.lotteon.interceptor.AppInfoInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:" + uploadPath)
                 .setCachePeriod(0);
     }
-
 
 }

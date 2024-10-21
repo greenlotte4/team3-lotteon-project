@@ -12,52 +12,91 @@
             <tr>
                 <td>배너이름</td>
                 <td>
-                    <input type="text" placeholder="배너이름 입력">
+                    <input type="text" placeholder="배너이름 입력" class="banner_name">
                 </td>
             </tr>
             <tr>
                 <td>배너크기</td>
                 <td>
-                    <input type="text" placeholder="배너크기 입력">
+                    <input type="text" placeholder="배너크기 입력" class="banner_size">
                 </td>
             </tr>
             <tr>
-                <td>배경색</td>
+                <td>배너 이미지</td>
                 <td>
-                    <input type="text" placeholder="배너 배경색 입력">
+                    <input type="file" placeholder="배너 이미지" class="banner_image"  multiple />
                 </td>
             </tr>
             <tr>
                 <td>배너링크</td>
                 <td>
-                    <input type="text" placeholder="배너링크 입력">
+                    <input type="text" placeholder="배너링크 입력" class="banner_link">
                 </td>
             </tr>
             <tr>
                 <td>배너위치</td>
                 <td>
-                    <select>
-                        <option value="1">옵션1</option>
-                        <option value="2">옵션2</option>
-                        <option value="3">옵션3</option>
+                    <select class="banner_position">
+                        <option value="mainbanner">메인 상단배너</option>
+                        <option value="slidebanner">메인 슬라이더 배너</option>
+                        <option value="productbanner">상품 상세보기 배너</option>
+                        <option value="loginbanner">회원로그인 배너</option>
+                        <option value="mypagebanner">마이페이지 배너</option>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td>노출날짜</td>
                 <td>
-                    <input type="date"> ~ <input type="date">
+                    <input type="date" class="start_date"> ~ <input type="date" class="end_date">
                 </td>
             </tr>
             <tr>
                 <td>노출시간</td>
                 <td>
-                    <input type="time"> ~ <input type="time">
+                    <input type="time" class="start_time"> ~ <input type="time" class="end_time">
                 </td>
             </tr>
         </table>
         <div>
-            <button type="submit">등록하기</button>
+            <button type="submit" id="submit_btn">등록하기</button>
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('submit_btn').addEventListener('click',function(e){
+       e.preventDefault();
+        const formData = new FormData();
+
+        formData.append('ban_name' ,document.querySelector('.banner_name').value);
+        formData.append('ban_size' ,document.querySelector('.banner_size').value);
+
+        const files = document.querySelector('.banner_image').files;
+        for (let i = 0; i < files.length; i++) {
+            formData.append('files', files[i]);
+        }
+        formData.append('ban_link' ,document.querySelector('.banner_link').value);
+        formData.append('ban_location' ,document.querySelector('.banner_position').value);
+        formData.append('ban_sdate' ,document.querySelector('.start_date').value);
+        formData.append('ban_edate' ,document.querySelector('.end_date').value);
+        formData.append('ban_stime' ,document.querySelector('.start_time').value);
+        formData.append('ban_etime' ,document.querySelector('.end_time').value);
+        formData.append('ban_type', 'banner');
+
+        fetch('/admin/banner/upload',{
+            method : 'post',
+            body : formData
+        })
+            .then(resp => resp.text())
+            .then(data => {
+                console.log("data :" + data);
+                if(data != null){
+                alert('배너 등록이 완료되었습니다.')
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                alert('배너 등록 오류 발생');
+            });
+    })
+</script>
