@@ -52,7 +52,7 @@ public class ProductCategoryService {
 
 
 //    level로 카테고리 가져오기
-    public List<ProductCategoryDTO> getCategoryiesByLevel(int level){
+    public List<ProductCategoryDTO> getCategoriesByLevel(int level){
 
         List<ProductCategory> categories = productCategoryRepository.findByLevel(level);
         return categories.stream()
@@ -60,9 +60,13 @@ public class ProductCategoryService {
                 .collect(Collectors.toList());  // Use collect for Java 8+
     }
 // parentId값을 기준으로 카테고리 가져오기
-    public List<ProductCategoryDTO> getCategoriesByParentId(int parentId){
+    public List<ProductCategoryDTO> getCategoriesByParentId(long parentId){
 
         List<ProductCategory> categories =  productCategoryRepository.findByParentId(parentId);
+
+        if(categories.isEmpty()){
+            log.warn("No categories found for parent id {}", parentId);
+        }
         return categories.stream()
                 .map(category -> modelMapper.map(category, ProductCategoryDTO.class))
                 .toList();
