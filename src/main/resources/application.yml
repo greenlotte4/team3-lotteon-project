@@ -28,3 +28,4 @@ spring:
     application:
         name: LotteOnProject
         version: ${version}
+

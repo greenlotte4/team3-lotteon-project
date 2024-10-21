@@ -1,0 +1,115 @@
+/* 기본 설정 및 레이아웃 */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: '고딕', sans-serif;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    color: #111;
+}
+
+#service {
+    width: 1000px;
+    margin: 40px auto;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+td:first-child {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+select, input[type="text"] {
+    width: 90%;
+    height: 35px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+}
+
+select:focus, input[type="text"]:focus {
+    border-color: #ff5e5e;
+    box-shadow: 0 0 5px rgba(255, 94, 94, 0.5);
+}
+
+/* 내용 입력 영역 */
+.contents {
+    width: 90%;
+    height: 200px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    outline: none;
+    resize: none;
+}
+
+textarea:focus {
+    border-color: #ff5e5e;
+    box-shadow: 0 0 5px rgba(255, 94, 94, 0.5);
+}
+/* 에디터 툴바 크기 수정 */
+.ql-toolbar.ql-snow {
+    width: 90%;
+    max-width: 1000px; /* 에디터와 동일한 너비로 설정 */
+    margin-bottom: 10px; /* 툴바와 에디터 본문 사이에 간격 추가 */
+    border-radius: 10px;
+}
+
+/* 버튼 스타일 */
+.btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn button {
+    width: 100px;
+    height: 40px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cancel {
+    background-color: #bfbfbf;
+}
+
+.insert {
+    background-color: #ff5e5e;
+}
+
+.cancel:hover {
+    background-color: #999999;
+}
+
+.insert:hover {
+    background-color: #ff4b4b;
+}
