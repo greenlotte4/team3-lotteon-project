@@ -28,5 +28,3 @@ spring:
         name: LotteOnProject
         version: ${version}
 
-
-

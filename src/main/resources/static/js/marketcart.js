@@ -50,3 +50,35 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', handleAsideScroll);
 
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const checkBoxAll = document.getElementById('checkBoxAll');
+    const itemCheckBoxes = document.querySelectorAll('input[name="select"]'); // 'checkBox' 대신 여러 체크박스를 선택
+
+    checkBoxAll.addEventListener('change', function () {
+        itemCheckBoxes.forEach(function (checkbox) {
+            checkbox.checked = checkBoxAll.checked; // 전체 체크박스의 상태에 따라 모든 체크박스를 체크 또는 해제
+        });
+    });
+
+    itemCheckBoxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            if (!checkbox.checked) {
+                checkBoxAll.checked = false; // 하나의 체크박스가 해제되면 전체 체크박스도 해제
+            } else if (Array.from(itemCheckBoxes).every(cb => cb.checked)) {
+                checkBoxAll.checked = true; // 모든 체크박스가 체크되면 전체 체크박스도 체크
+            }
+        });
+    });
+
+    const selectAllButton = document.querySelector('.selected-all');
+    selectAllButton.addEventListener('click', function (e){
+        e.preventDefault();
+        checkBoxAll.checked = !checkBoxAll.checked; //현재 상태 반전
+        itemCheckBoxes.forEach(function (checkbox){
+            checkbox.checked = checkBoxAll.checked;
+        });
+    });
+});
+
+
