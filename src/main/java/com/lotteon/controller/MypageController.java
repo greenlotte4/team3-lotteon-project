@@ -16,7 +16,7 @@ public class MypageController {
     @GetMapping("/mypage/{content}")
     public String join(@PathVariable String content, Model model){
         model.addAttribute("content", content);
-        return "memberIndex";
+        return "userIndex";
     }
 
 }
