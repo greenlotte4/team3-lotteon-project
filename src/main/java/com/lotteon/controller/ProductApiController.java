@@ -23,14 +23,14 @@ public class ProductApiController {
     @GetMapping("/api/categories/level/{level}")
     public List<ProductCategoryDTO> getCategoriesByLevel(@PathVariable int level) {
 
-        log.info("category : "+productCategoryService.getCategoryiesByLevel(level));
-        return productCategoryService.getCategoryiesByLevel(level);
+        log.info("category : "+productCategoryService.getCategoriesByLevel(level));
+        return productCategoryService.getCategoriesByLevel(level);
 
     }
 
     @GetMapping("/api/categories/parent/{parentId}")
-    public List<ProductCategoryDTO> getCategoriesByParentId(@PathVariable int parentId) {
-        log.info("ParentId : "+productCategoryService.getCategoryiesByLevel(parentId));
+    public List<ProductCategoryDTO> getCategoriesByParentId(@PathVariable long parentId) {
+        log.info("ParentId : "+productCategoryService.getCategoriesByParentId(parentId));
 
         return productCategoryService.getCategoriesByParentId(parentId);
 
