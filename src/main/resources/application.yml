@@ -19,46 +19,12 @@ server:
     port: 8085
     servlet:
         context-path: /
-
-
+        
 spring:
     profiles:
-        active: default
+        active: prod
         include: local
     application:
         name: LotteOnProject
         version: ${version}
-    datasource:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        password: Qwe123~!
-        url: jdbc:mysql://54.180.127.132:3306/devProject
-        username: dev
-        type: com.zaxxer.hikari.HikariDataSource
-    jpa:
-        database: mysql
-        hibernate:
-            ddl-auto: update
-            naming:
-                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-        properties:
-            hibernate:
-                format_sql: true
-                show_sql: true
-    devtools:
-        livereload:
-            enabled: true
-    servlet:
-        multipart:
-            location: uploads/
-            max-file-size: 10MB
-    web:
-        resources:
-            static-locations:
-                - classpath:/static/
-                - file:uploads/
-    thymeleaf:
-        cache: false
-        check-template-location: true
-        enabled: true
-        prefix: classpath:/templates/
-        suffix: .html
+  

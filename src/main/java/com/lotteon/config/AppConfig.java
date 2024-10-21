@@ -10,8 +10,14 @@ public class AppConfig {
 
 
     @Bean
+    public AppInfo getAppInfo() {
+        return  new AppInfo();
+    }
+
+
+    @Bean
     public ModelMapper getModelMapper(){
-        // DTO와 Entity간 변환을 위한 ModelMapper 설정
+        //dto entity간 변환을 위한 model mapper 설정
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
