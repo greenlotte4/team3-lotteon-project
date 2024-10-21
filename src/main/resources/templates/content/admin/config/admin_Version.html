@@ -99,6 +99,7 @@
                     <span class="close" style="cursor:pointer; float: right;">&times;</span>
                     <h3>버전확인</h3>
                 </div>
+                <form id="versionForm">
                 <table>
                     <colgroup>
                         <col style="width: 15%;">
@@ -107,22 +108,21 @@
                     <tr>
                         <td>버전</td>
                         <td>
-                            <input type="text" placeholder="버전입력하기">
+                            <input type="text" name="ver_name" placeholder="버전입력하기" >
                         </td>
                     </tr>
                     <tr>
                         <td style="height: 300px;">변경내역</td>
                         <td>
-                            <input type="text" placeholder="변경내역작성하기" style="height: 300px;">
+                            <input type="text" name="ver_content" placeholder="변경내역작성하기"  style="height: 300px;">
                         </td>
                     </tr>
 
-                    
-                    
                 </table>
                 <div>
                     <button type="submit">등록하기</button>
                 </div>
+                </form>
             </div>
         </div>
 
@@ -160,5 +160,47 @@
                 </div>
             </div>
         </div>
+<script>
+    document.getElementById('versionForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        // 폼 데이터 수집
+        const formData = {
+            ver_name: document.querySelector('input[name="ver_name"]').value,
+            ver_content: document.querySelector('input[name="ver_content"]').value
+        };
+
+        // fetch 요청
+        fetch("/admin/config/version", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                // 응답 상태 코드 체크
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || '등록 실패'); // 텍스트로 응답받기
+                    });
+                }
+                return response.text(); // 빈 응답이 올 수 있으므로 JSON이 아닌 텍스트로 받기
+            })
+            .then(data => {
+                if (data) {
+                    const jsonData = JSON.parse(data); // JSON 파싱
+                    alert(jsonData.message); // 메시지 출력
+                } else {
+                    alert('버전이 등록되었습니다.'); // 빈 응답에 대한 처리
+                }
+                document.getElementById('orderModal').style.display = 'none';
+            })
+            .catch(error => {
+                alert('등록 실패: ' + error.message);
+            });
+    });
+</script>
+
 
 
