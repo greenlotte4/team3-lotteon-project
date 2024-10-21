@@ -1,0 +1,64 @@
+.admin_menu > li:nth-child(2) .admin_sub_menu > li:nth-child(1) > a {
+    text-decoration: underline;
+}
+
+
+.admin_order {
+   width: 900px;
+   background-color: #bdbdbd;
+   height: 50px;
+
+   margin: 20px auto;
+}
+.banner_menu {
+   display: flex;
+   justify-content: left;
+}
+.banner_menu li {
+   width: 90px;
+   display: flex;
+   height: 50px;
+   margin: 0 auto;
+   color: rgb(24, 24, 24);
+   font-weight: bold;
+   cursor: pointer;
+   transition: color 0.3s;
+   align-items: center;
+   justify-content: center;
+}
+
+.banner_menu li:hover {
+   color: #ddd;
+}
+
+#admin_order_main div {font-weight: bold; margin: 10px auto; width: 900px;}
+.admin_order_table {width: 900px; border-collapse: collapse; border-top: 1px solid black;}
+.admin_order_table td, th {border-bottom: 1px solid rgb(196, 196, 196); height: 80px; text-align: center;}
+.admin_order_table th {height: 50px; background-color:rgb(226,232,238);}
+.admin_order_table td:nth-of-type(10) button {border: none; padding :5px 3px 5px 3px; background-color: #8EB4E3; color: white;}
+.admin_order_table td:nth-of-type(8) {color: #00B050;}
+.admin_order_table td {background-color: #fbfdff;}
+
+button{cursor: pointer;}
+.list_button {width: 900px; height: 250px; margin: 20px auto; display: flex; }
+.list_button button:nth-of-type(1) {width: 80px; height: 35px; margin-top: 150px;}
+.list_button button:nth-of-type(2){margin-left: auto; margin-top: 150px; width: 80px; height: 35px; background: #8EB4E3; color: white;  border: none;}
+
+
+#ordersearch {
+   width: 95px;
+   height: 33px;
+}
+#search{
+   width: 145px;
+   height: 33px;
+}
+#serachbtn{
+   width: 62px;
+   height: 33px;
+   color: #FFFFFF;
+   background: #BFBFBF;
+   border: none;
+}
+
+

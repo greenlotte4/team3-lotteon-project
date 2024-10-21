@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/adminaside.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/adminproductList.css}">
+    <link rel="stylesheet" th:if="${content=='register'}" th:href="@{/css/admin/adminProductReg.css}">
+
+
+    <link rel="stylesheet" th:if="${content=='delivery' || content=='status'}" th:href="@{/css/admin/shoplistmodal.css}">
+    <link rel="stylesheet" th:if="${content=='status'}" th:href="@{/css/admin/admin_delivery_modal.css}">
+    <link rel="stylesheet" th:if="${content=='status'}" th:href="@{/css/admin/admin-modal.css}">
+    <link rel="stylesheet" th:if="${content=='status'}" th:href="@{/css/admin/adminDelivery.css}">
+    <link rel="stylesheet"  th:if="${cate=='coupon'}"  th:href="@{/css/admin/adminCoupon.css}">
+    <link rel="stylesheet"  th:if="${content=='delivery'}" th:href="@{/css/admin/adminOrder.css}">
+</head>
+
+<body>
+<div id="wrapper">
+    <main id="admin_main">
+        <div id="admin_container">
+            <!--aside-->
+            <th:block th:replace="~{include/adminAside}"> </th:block>
+
+            <!--content-->
+            <th:block th:replace="~{content/sellerDynamic}"></th:block>
+
+
+
+
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+<script th:if="${content=='delivery'}" th:src="@{/js/delivery.js}"></script>
+</body>
+</html>

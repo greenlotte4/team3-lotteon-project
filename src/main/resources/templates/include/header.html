@@ -8,7 +8,7 @@
                 <div class="accountArea">
                     <ul>
                         <li><a th:href="@{/member/login}">로그인</a></li>
-                        <li><a th:href="@{/member/terms}">회원가입</a></li>
+                        <li><a th:href="@{/member/join}">회원가입</a></li>
                         <li><a th:href="@{/mypage/order}">주문배송</a></li>
                         <li><a th:href="@{/cs/main}">고객센터</a></li>
                     </ul>
@@ -51,13 +51,13 @@
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.lotteon.com/p/mylotte/index/main" data-cmpnt-typ="header_main"
+                            <a th:href="@{/mypage/myInfo}" data-cmpnt-typ="header_main"
                                 data-cmpnt-name="mylotte" class="my">
                                 마이롯데
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.lotteon.com/p/order/cart/viewCart" data-cmpnt-typ="header_main"
+                            <a th:href="@{/market/cart}" data-cmpnt-typ="header_main"
                                 data-cmpnt-name="cart" class="cart">
                                 장바구니
                                 <!---->
@@ -196,11 +196,11 @@
                                         </span>
                                     </a>
                                 </li>
-                                <li class=""><a href="">히트상품</a></li>
-                                <li class=""><a href="">추천상품</a></li>
-                                <li class=""><a href="">최신상품</a></li>
-                                <li class=""><a href="">인기상품</a></li>
-                                <li class=""><a href="">할인상품</a></li>
+                                <li class=""><a href="#hitProduct">히트상품</a></li>
+                                <li class=""><a href="#recommended-products">추천상품</a></li>
+                                <li class=""><a href="#latest-products">최신상품</a></li>
+                                <li class=""><a href="#Product">인기상품</a></li>
+                                <li class=""><a href="#saleProduct">할인상품</a></li>
                             </ul>
                             <button type="button" class="btnMenuClose">
                                 <span class="blind">전체보기 닫기</span>

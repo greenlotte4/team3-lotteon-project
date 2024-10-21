@@ -105,14 +105,14 @@ h4 { margin: 0 10px 40px;}
 .notice div {overflow: hidden; }
 .notice h2 {float: left; margin : 10px 10px 10px; font-size: large; font-weight: bold;}
 .notice span{float: right; margin-top: 10px;}
-.notice table {margin: 10px 10px; margin-bottom: 20px; width: 1000px;}
+.notice table {margin: 10px 10px; margin-bottom: 20px; width: 98%;}
 
 
 /*자주하는질문*/
 .qna div {overflow: hidden;}
 .qna h2 {float: left; margin : 10px 10px 10px; font-size: large; font-weight: bold;}
 .qna span{float: right; margin-top: 10px;}
-.qna table {margin: 50px 10px; text-align: center; width: 1000px;}
+.qna table {margin: 50px 10px; text-align: center; width: 98%;}
 /* .qna table td {width: 100px;} */
 .qna table img {width: 90px;}
 
@@ -122,7 +122,7 @@ h4 { margin: 0 10px 40px;}
 .question div {overflow: hidden; }
 .question h2 {float: left; margin : 10px 10px 10px; font-size: large; font-weight: bold;}
 .question span{float: right; margin-top: 10px;}
-.question table {margin: 10px 10px; margin-bottom: 20px;  width: 1000px;}
+.question table {margin: 10px 10px; margin-bottom: 20px;  width: 98%;}
 .inquiry {margin: 0 10px;}
 
 /*1:1 상담안내*/

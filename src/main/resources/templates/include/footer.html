@@ -4,21 +4,21 @@
         <div class="footerTopMenu innerContent">
             <ul class="ft_nav">
                 <li>
-                    <a href="https://story.lotteon.com/">회사소개</a>
+                    <a th:href="@{/company/home}">회사소개</a>
                 </li>
                 <li>
-                    <a href="/p/common/footerTerms">이용약관</a>
+                    <a th:href="@{/policy/}">이용약관</a>
                 </li>
 
                 <li class="bold">
-                    <a href="/p/common/footerPinfop">개인정보처리방침</a>
+                    <a th:href="@{/policy/}">개인정보처리방침</a>
                 </li>
                 <li>
-                    <a href="/p/common/footerPinfop">전자금융거래약관</a>
+                    <a th:href="@{/policy/}">전자금융거래약관</a>
                 </li>
 
             </ul>
-            <div class="adminLink"><a href="">관리자 로그인</a></div>
+            <div class="adminLink" ><a th:href="@{/seller/login}">관리자 로그인</a></div>
         </div>
     </div>
     <hr>
@@ -65,6 +65,38 @@
             </div>
 
         </div>
+        <ul class="awards-banner">
+            <li>
+                <a href="#">
+                    <img alt="제품안전 협력매장" src="/images/member/award1.png">
+                </a>
+            </li>
+            <li>
+                <a href="https://kolsa.or.kr/%ed%9a%8c%ec%9b%90%ec%82%ac-%ed%98%84%ed%99%a9/?pageid=1&amp;mod=list">
+                    <img alt="한국온라인 쇼핑협회 정회원사" src="/images/member/award2.png">
+                </a>
+            </li>
+            <li>
+                <a href="http://www.hometax.go.kr/websquare/websquare.html?w2xPath=/ui/pp/index.xml">
+                    <img alt="국제청 영수증 서비스" src="/images/member/award3.png">
+                </a>
+            </li>
+            <li>
+                <a href="http://upss.gs1kr.org/home/comm/main.gs1">
+                    <img alt="위해상품 차단시스템 운영매장" src="/images/member/award4.png">
+                </a>
+            </li>
+            <li>
+                <a href="https://107.relaycall.or.kr/user/main">
+                    <img alt="손말이음센터. 연중무휴 국번없이 107. 청각/언어 장애인 의사소통 지원" src="/images/member/award5.png">
+                </a>
+            </li>
+            <li>
+                <a href="https://www.pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS213&amp;mCode=C040050000&amp;nttId=8926">
+                    <img alt="PCR. 개인정보보호 민관협력 자율규제 참여" src="/images/member/award6.png">
+                </a>
+            </li>
+        </ul>
     </div>
 
     <hr>

@@ -18,22 +18,38 @@
             <a href="#content">본문바로가기</a>
         </div>
 
-        <th:block th:replace="~{/include/company_header}"></th:block>
+        <th:block th:replace="~{include/company_header}"></th:block>
 
-<!--        <th:block th:replace="~{/content/company/index}"></th:block>-->
-<!--                <th:block th:replace="~{/content/company/culture}"></th:block>-->
-<!--                <th:block th:replace="~{/content/company/story}"></th:block>-->
-                <th:block th:replace="~{/content/company/media}"></th:block>
-        <!--        <th:block th:replace="~{/content/company/recruit}"></th:block>-->
+        <th:block th:switch="${content}">
+            <th:block th:case="'home'">
+                <th:block th:replace="~{content/company/index}"></th:block>
+            </th:block>
+            <th:block th:case="'culture'">
+                <th:block th:replace="~{content/company/culture}"></th:block>
+            </th:block>
+            <th:block th:case="'story'">
+                <th:block th:replace="~{content/company/story}"></th:block>
+            </th:block>
+            <th:block th:case="'media'">
+                <th:block th:replace="~{content/company/media}"></th:block>
+            </th:block>
+            <th:block th:case="'recruit'">
+                <th:block th:replace="~{content/company/recruit}"></th:block>
+            </th:block>
 
-        <th:block th:replace="~{/include/company_footer}"></th:block>
+        </th:block>
 
 
-        <script th:src="@{/js/market.js}"></script>
-        <script th:src="@{js/marketOrder.js}"></script>
+
+        <th:block th:replace="~{include/company_footer}"></th:block>
+
+
 
 
     </div><!--layout end-->
 </div> <!--wrapper end-->
+
 </body>
+<script th:src="@{/js/company.js}"></script>
+
 </html>
