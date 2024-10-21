@@ -34,6 +34,8 @@ public class AdminController {
 
         model.addAttribute("cate", cate);
         model.addAttribute("content", content);
+
+
         log.info(content);
         log.info("cate"+cate);
         return "adminIndex";
