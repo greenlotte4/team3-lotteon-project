@@ -25,7 +25,7 @@
                 </colgroup>
 
                 <tr>
-                    <th><input type="checkbox" name="select" ></th>
+                    <th><input type="checkbox" id="checkBoxAll" name="select" ></th>
                     <th>상품</th>
                     <th>수량</th>
                     <th>판매가</th>
@@ -35,18 +35,20 @@
                     <th>총합</th>
                 </tr>
                 <!-- 반복부분 -->
-                <tr>
-                    <td><input type="checkbox" name="select" ></td>
+                <tr th:each="CartItemDTO : ${CartItems}">
+                    <td><input type="checkbox"  name="select" ></td>
                     <td>
-                        <div><img src="" alt=""></div>
                         <div>
-                            <span>상품명</span>
+                            <img src="" alt="">
+                        </div>
+                        <div>
+                            <span th:text="${CartItemDTO.proName}">상품명</span>
                             <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
                         </div>
                     </td>
                     <td >
                         <div class="qnt">
-                            <input type="number" name="quantity" placeholder="1" readonly>
+                            <input type="number" name="quantity" th:value="${cartItemDTO.stock}" min="2" readonly>
                             <div class="countModify">
                                 <a class="countModifyBtn" href="#">수정하기</a>
                                 <div class="number-controls" style="display: none;">
