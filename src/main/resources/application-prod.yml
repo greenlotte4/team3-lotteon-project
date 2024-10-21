@@ -26,9 +26,6 @@ spring:
         name: LotteOnProject
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-#        password: Qwe123~!
-#        url: jdbc:mysql://54.180.127.132:3306/devProject
-#        username: dev
         type: com.zaxxer.hikari.HikariDataSource
         password: Qwe123~!
         url: jdbc:mysql://54.180.127.132:3306/lotteProject
