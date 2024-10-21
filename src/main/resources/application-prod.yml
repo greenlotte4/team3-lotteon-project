@@ -24,7 +24,6 @@ server:
 spring:
     application:
         name: LotteOnProject
-
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Qwe123~!
