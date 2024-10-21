@@ -1,8 +1,7 @@
-package com.lotteon.dto.product;
+package com.lotteon.entity.product;
 
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
@@ -13,8 +12,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @ToString
 @Builder
-public class ProductDTO {
+@Entity
+@Table(name="product")
+public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
     private int categoryId;
@@ -31,7 +34,6 @@ public class ProductDTO {
     private Boolean isCoupon; // 쿠폰 사용가능 유므
     private Boolean isSaled; // 판매가능여부
     private String sellerId;
-
 
 
 }
