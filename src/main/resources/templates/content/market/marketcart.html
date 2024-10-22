@@ -50,20 +50,20 @@
                     <th>총합</th>
                 </tr>
                 <!-- 반복부분 -->
-                <tr th:each="CartItemDTO : ${CartItems}">
-                    <td><input type="checkbox"  name="select" ></td>
+                <tr th:each="item : ${CartItems}">
+                    <td><input type="checkbox" name="select"></td>
                     <td>
                         <div>
-                            <img src="" alt="">
+                            <img th:src="${item.imageUrl}" alt="">
                         </div>
                         <div>
-                            <span th:text="${CartItemDTO.proName}">상품명</span>
-                            <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
+                            <span th:text="${item.proName}">상품명</span>
+                            <p class="product_option" th:text="${item.option}">[ 옵션 ]</p>
                         </div>
                     </td>
-                    <td >
+                    <td>
                         <div class="qnt">
-                            <input type="number" name="quantity" th:value="${cartItemDTO.stock}" min="2" readonly>
+                            <input type="number" name="quantity" th:value="${item.stock}" min="1" readonly>
                             <div class="countModify">
                                 <a class="countModifyBtn" href="#">수정하기</a>
                                 <div class="number-controls" style="display: none;">
@@ -78,140 +78,14 @@
                             </div>
                         </div>
                     </td>
-                    <td>30000</td>
-                    <td>10%</td>
-                    <td>300</td>
-                    <td>2500</td>
-                    <td>29500</td>
+                    <td th:text="${item.price}">판매가</td>
+                    <td th:text="${item.discount}">할인</td>
+                    <td th:text="${item.point}">포인트</td>
+                    <td th:text="${item.deliveryFee}">배송비</td>
+                    <td th:text="${item.totalPrice}">총합</td>
                 </tr>
-                <tr>
-                    <td><input type="checkbox" name="select" ></td>
-                    <td>
-                        <div><img src="" alt=""></div>
-                        <div>
-                            <span>상품명</span>
-                            <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
-                        </div>
-                    </td>
-                    <td >
-                        <div class="qnt">
-                            <input type="number" name="quantity" placeholder="1" readonly>
-                            <div class="countModify">
-                                <a class="countModifyBtn" href="#">수정하기</a>
-                                <div class="number-controls" style="display: none;">
-                                    <button type="button" class="qnt-decrease">-</button>
-                                    <input type="number" class="quantity-input" value="1">
-                                    <button type="button" class="qnt-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="edit-buttons" style="display: none;">
-                                <button type="button" class="apply-btn">변경하기</button>
-                                <button type="button" class="cancel-btn">취소</button>
-                            </div>
-                        </div>
-                    </td>
-                    <td>30000</td>
-                    <td>10%</td>
-                    <td>300</td>
-                    <td>2500</td>
-                    <td>29500</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="select" ></td>
-                    <td>
-                        <div><img src="" alt=""></div>
-                        <div>
-                            <span>상품명</span>
-                            <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
-                        </div>
-                    </td>
-                    <td >
-                        <div class="qnt">
-                            <input type="number" name="quantity" placeholder="1" readonly>
-                            <div class="countModify">
-                                <a class="countModifyBtn" href="#">수정하기</a>
-                                <div class="number-controls" style="display: none;">
-                                    <button type="button" class="qnt-decrease">-</button>
-                                    <input type="number" class="quantity-input" value="1">
-                                    <button type="button" class="qnt-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="edit-buttons" style="display: none;">
-                                <button type="button" class="apply-btn">변경하기</button>
-                                <button type="button" class="cancel-btn">취소</button>
-                            </div>
-                        </div>
-                    </td>
-                    <td>30000</td>
-                    <td>10%</td>
-                    <td>300</td>
-                    <td>2500</td>
-                    <td>29500</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="select" ></td>
-                    <td>
-                        <div><img src="" alt=""></div>
-                        <div>
-                            <span>상품명</span>
-                            <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
-                        </div>
-                    </td>
-                    <td >
-                        <div class="qnt">
-                            <input type="number" name="quantity" placeholder="1" readonly>
-                            <div class="countModify">
-                                <a class="countModifyBtn" href="#">수정하기</a>
-                                <div class="number-controls" style="display: none;">
-                                    <button type="button" class="qnt-decrease">-</button>
-                                    <input type="number" class="quantity-input" value="1">
-                                    <button type="button" class="qnt-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="edit-buttons" style="display: none;">
-                                <button type="button" class="apply-btn">변경하기</button>
-                                <button type="button" class="cancel-btn">취소</button>
-                            </div>
-                        </div>
-                    </td>
-                    <td>30000</td>
-                    <td>10%</td>
-                    <td>300</td>
-                    <td>2500</td>
-                    <td>29500</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="select" ></td>
-                    <td>
-                        <div><img src="" alt=""></div>
-                        <div>
-                            <span>상품명</span>
-                            <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
-                        </div>
-                    </td>
-                    <td >
-                        <div class="qnt">
-                            <input type="number" name="quantity" placeholder="1" readonly>
-                            <div class="countModify">
-                                <a class="countModifyBtn" href="#">수정하기</a>
-                                <div class="number-controls" style="display: none;">
-                                    <button type="button" class="qnt-decrease">-</button>
-                                    <input type="number" class="quantity-input" value="1">
-                                    <button type="button" class="qnt-increase">+</button>
-                                </div>
-                            </div>
-                            <div class="edit-buttons" style="display: none;">
-                                <button type="button" class="apply-btn">변경하기</button>
-                                <button type="button" class="cancel-btn">취소</button>
-                            </div>
-                        </div>
-                    </td>
-                    <td>30000</td>
-                    <td>10%</td>
-                    <td>300</td>
-                    <td>2500</td>
-                    <td>29500</td>
-                </tr>
+
+
 
 
             </table>
@@ -233,15 +107,15 @@
         <h3>전체합계 </h3>
         <div class="orderQnt">
             <label for="">상품수</label>
-            <span>2</span>
+            <span>0</span>
         </div>
         <div class="orderOriginPrice">
             <label for="">상품금액</label>
-            <span class="price">270000000000</span>
+            <span class="price">0</span>
         </div>
         <div class="orderSalePrice">
             <label for="">할인금액</label>
-            <span  class="price">-1350</span>
+            <span  class="price">-0</span>
         </div>
         <div class="delivery-fee">
             <label for="">배송비</label>
@@ -249,11 +123,11 @@
         </div>
         <div class="orderTotalPrice">
             <label for="">전체 주문금액</label>
-            <span class="price">25650</span>
+            <span class="price">0</span>
         </div>
         <div class="orderPoint">
             <label for="">적립예정포인트</label>
-            <span  class="price">270</span>
+            <span  class="price">0</span>
         </div>
         <div class="orderBtn">
             <button type="submit" class="order-Btn">주문하기</button>
