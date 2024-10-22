@@ -25,6 +25,6 @@ spring:
         active: default
         include: local
     application:
-        name: LotteOnProject
+        name: LotteOnProject-3조
         version: ${version}
 

@@ -20,6 +20,7 @@ public class BannerDTO {
     private String ban_image;
     private String ban_link;
     private String ban_location;
+    private String ban_oname;
 
     private String ban_type;
 

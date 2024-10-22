@@ -1,4 +1,18 @@
-        <main>
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/userLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Banner Page</title>
+    <link  rel="stylesheet" th:href="@{/css/user/orderdetails.css}">
+
+</head>
+<body>
+<th:block layout:fragment="content">
+    <main>
             <div class="info">
                 <p class="info-title">나의 쇼핑정보</p>
                 <div class="summary-table">
@@ -340,10 +354,6 @@
             </div>
         </div>
         </main>
+    <script  th:src="@{js/orderdetails.js}"></script>
 
-<script>
-
-
-
- </script>
-</html>
+</th:block>
