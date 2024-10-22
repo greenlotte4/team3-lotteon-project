@@ -1,13 +1,12 @@
 package com.lotteon.controller;
 
 
+import com.lotteon.dto.product.ProductRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -41,6 +40,7 @@ public class SellerController {
     }
 
 
+
     @GetMapping("/coupon/list")
     public String couponList(Model model) {
         model.addAttribute("cate", "coupon");
@@ -53,5 +53,11 @@ public class SellerController {
         model.addAttribute("content", "issued");
         return "/content/admin/coupon/issued"; // Points to "content/admin/coupon/issued"
     }
+    @PostMapping("/product/register")
+    public String insertProduct(@RequestParam ProductRequestDTO productRequestDTO, Model model) {
+        log.info(productRequestDTO);
+        return "content/admin/adminRegister";
+    }
+
 
 }
