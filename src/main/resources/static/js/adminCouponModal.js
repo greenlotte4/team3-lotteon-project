@@ -74,11 +74,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // 등록 버튼 클릭 시 폼 제출 처리
     submitBtn.addEventListener('click', (event) => {
         event.preventDefault();
+
+        const benefit = document.querySelector('input[name="benefit"]:checked');
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+
+        const couponData = {
+            benefit: benefit.value,
+            startDate: startDate.value,
+            endDate: endDate.value
+        }
+
         const formData = new FormData(document.getElementById("couponForm"));
 
-        fetch('/admin/coupon/', {
+        for (const [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+        fetch('/admin/coupon/register', {
             method: 'POST',
-            body: formData
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(couponData)
 
         })
             .then(resp => {
