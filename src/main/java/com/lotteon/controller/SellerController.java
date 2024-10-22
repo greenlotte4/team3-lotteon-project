@@ -2,6 +2,7 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.product.ProductRequestDTO;
+import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/seller")
 public class SellerController {
 
+
+    private final ProductService productService;
 
     @GetMapping("/product/list")
     public String productList(Model model) {
@@ -35,10 +38,8 @@ public class SellerController {
 
         //product insert
 
+        productService.insertProduct(productRequestDTO);
         //option insert
-
-
-
 
         return "redirect:/seller/product/list";
     }
