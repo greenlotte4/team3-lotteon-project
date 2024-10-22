@@ -28,6 +28,7 @@ public class User{
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL) // Seller와의 관계
     private Seller seller; // User와 Seller의 관계
 
+
     public enum Role {
         MEMBER, SELLER
     }
