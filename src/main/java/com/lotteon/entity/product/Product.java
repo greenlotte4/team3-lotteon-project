@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -49,6 +50,9 @@ public class Product {
     @Builder.Default
     private int sold=0; //판매량
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")  // 외래키는 자식 테이블에 생성
+    private List<ProductFile> files;
 
 
     @PostPersist
