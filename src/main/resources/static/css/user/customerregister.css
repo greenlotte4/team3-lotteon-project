@@ -77,7 +77,7 @@ input[type="text"], input[type="password"], input[type="BusinessNo"], input[type
     border-radius: 4px;
 }
 #name{
-    width: 209px;
+    width: 185px;
 }
 #address1, #address2 {
     width: 380px;
