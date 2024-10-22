@@ -29,3 +29,26 @@ function populateDropdown(categories, dropdown) {
         dropdown.appendChild(option);
     });
 }
+
+
+
+// Example of collecting data (before form submission)
+function collectOptions() {
+    const optionItems = document.querySelectorAll('.optionItem');
+    options = [];
+
+    // Loop through each optionItem and collect values
+    optionItems.forEach(item => {
+        const optionName = item.querySelector('input[name="option"]').value;
+        const optionStock = item.querySelector('input[name="optionStock"]').value;
+
+        // Store each option as an object
+        options.push({
+            name: optionName,
+            stock: optionStock
+        });
+    });
+
+    console.log(options); // This will show the collected options in the console
+    // You can now send 'options' via form submission or AJAX
+}

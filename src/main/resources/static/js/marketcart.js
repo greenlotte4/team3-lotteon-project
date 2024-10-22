@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const aside = document.querySelector('aside');
     const headerHeight = 188; // 헤더 높이
     const footer = document.querySelector('footer');
-    const footerHeight = 440; // 푸터 높이
+    const footerHeight = 520; // 푸터 높이
     const asideHeight = aside.offsetHeight; // aside 높이
     console.log('asdieHeight:'+asideHeight)
     function handleAsideScroll() {
@@ -26,14 +26,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // 스크롤 위치가 헤더 아래에 있고, 푸터에 도달하기 전이면 aside에 scroll 클래스를 추가
         if (scrollPosition <= headerHeight || (scrollPosition + asideHeight + 50) < footerTop ) {
             aside.classList.remove('scroll');
-            // aside.style.position = 'fixed';
+            aside.style.position = 'fixed';
             aside.style.top = ''; // 헤더 아래에 고정
             aside.style.left = ''; // 푸터 닿지 않음
         } else if ((scrollPosition + asideHeight + 50) >= footerTop) {
             // 푸터에 도달하면 aside를 푸터 상단에서 멈추게 하기
             aside.classList.add('scroll');
-            aside.style.left='1080px';
-            // aside.style.position = 'absolute';
+            aside.style.position = 'absolute';
             aside.style.top = `${footerTop - asideHeight - 50}px`;  // 푸터 상단에 고정
             // console.log('asdide top : '+`${footerTop - asideHeight - 50}px`)
         } else {

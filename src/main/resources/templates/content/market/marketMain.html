@@ -1,3 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/marketLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn</title>
+
+    <link   rel="stylesheet" th:href="@{/css/market/marketmain.css}">
+    <link rel="stylesheet" th:href="@{/css/market/marketAside.css}">
+
+</head>
+<body>
+<th:block layout:fragment="content">
+<th:block th:replace="~{aside/marketAside}"></th:block>
 <section class="section list">
     <div class="sectionWrapper">
         <span class="subTit">
@@ -591,3 +608,6 @@
         </section>
     </div>
 </section>
+    <script  th:src="@{/js/marketmain.js}"></script>
+
+</th:block>

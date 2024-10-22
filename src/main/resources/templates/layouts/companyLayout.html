@@ -20,24 +20,8 @@
 
         <th:block th:replace="~{include/company_header}"></th:block>
 
-        <th:block th:switch="${content}">
-            <th:block th:case="'home'">
-                <th:block th:replace="~{content/company/index}"></th:block>
-            </th:block>
-            <th:block th:case="'culture'">
-                <th:block th:replace="~{content/company/culture}"></th:block>
-            </th:block>
-            <th:block th:case="'story'">
-                <th:block th:replace="~{content/company/story}"></th:block>
-            </th:block>
-            <th:block th:case="'media'">
-                <th:block th:replace="~{content/company/media}"></th:block>
-            </th:block>
-            <th:block th:case="'recruit'">
-                <th:block th:replace="~{content/company/recruit}"></th:block>
-            </th:block>
+        <th:block  layout:fragment="content"></th:block>
 
-        </th:block>
 
 
 
