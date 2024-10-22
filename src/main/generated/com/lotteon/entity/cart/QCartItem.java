@@ -26,11 +26,19 @@ public class QCartItem extends EntityPathBase<CartItem> {
 
     public final NumberPath<Integer> cartItemId = createNumber("cartItemId", Integer.class);
 
+    public final NumberPath<Integer> deliveryFee = createNumber("deliveryFee", Integer.class);
+
+    public final NumberPath<Integer> discount = createNumber("discount", Integer.class);
+
+    public final NumberPath<Integer> point = createNumber("point", Integer.class);
+
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
 
     public final com.lotteon.entity.product.QProduct product;
 
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
+
+    public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
 
     public QCartItem(String variable) {
         this(CartItem.class, forVariable(variable), INITS);
@@ -50,7 +58,7 @@ public class QCartItem extends EntityPathBase<CartItem> {
 
     public QCartItem(Class<? extends CartItem> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cart = inits.isInitialized("cart") ? new QCart(forProperty("cart")) : null;
+        this.cart = inits.isInitialized("cart") ? new QCart(forProperty("cart"), inits.get("cart")) : null;
         this.product = inits.isInitialized("product") ? new com.lotteon.entity.product.QProduct(forProperty("product")) : null;
     }
 

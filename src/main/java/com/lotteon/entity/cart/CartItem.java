@@ -14,18 +14,27 @@ import lombok.*;
 public class CartItem {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cartItemId;
-
-
-    private int stock;
-    private int price;
 
     @ManyToOne
     @JoinColumn(name = "cartId", nullable = false)
     private Cart cart;
 
-    @ManyToOne
-    @JoinColumn(name = "productId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productId", nullable = false)
     private Product product;
+
+
+    private int stock;
+    private int price;
+    private int discount;
+    private int point;
+    private int deliveryFee;
+    private int totalPrice;
+
+    public void totalPrice(){
+        int discountAmount = (price * discount) / 100;
+        this.totalPrice = (price - discountAmount) * stock + deliveryFee;
+    }
 }

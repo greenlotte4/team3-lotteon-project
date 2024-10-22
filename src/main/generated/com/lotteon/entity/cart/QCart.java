@@ -18,6 +18,8 @@ public class QCart extends EntityPathBase<Cart> {
 
     private static final long serialVersionUID = -1023968195L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QCart cart = new QCart("cart");
 
     public final NumberPath<Integer> cartId = createNumber("cartId", Integer.class);
@@ -26,18 +28,27 @@ public class QCart extends EntityPathBase<Cart> {
 
     public final DateTimePath<java.time.LocalDateTime> rdate = createDateTime("rdate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> uid = createNumber("uid", Integer.class);
+    public final com.lotteon.entity.User.QUser user;
 
     public QCart(String variable) {
-        super(Cart.class, forVariable(variable));
+        this(Cart.class, forVariable(variable), INITS);
     }
 
     public QCart(Path<? extends Cart> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QCart(PathMetadata metadata) {
-        super(Cart.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QCart(PathMetadata metadata, PathInits inits) {
+        this(Cart.class, metadata, inits);
+    }
+
+    public QCart(Class<? extends Cart> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.user = inits.isInitialized("user") ? new com.lotteon.entity.User.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }
