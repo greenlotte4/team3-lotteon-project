@@ -1,27 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko">
-
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/csLayout.html}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시판 리스트</title>
-    <link rel="stylesheet" href="/css/admin.css">
-    <style>
+    <title>LotteOn</title>
+    <link rel="stylesheet"  th:href="@{/css/cs/faqList.css}">
 
-    </style>
 </head>
-
 <body>
+<th:block layout:fragment="content">
+    <th:block th:replace="~{aside/faqAside}"></th:block>
 
-    <head>
-        <div id="header"></div>
-    </head>
-    <main class="admin-articleList">
-        <div class="admin-article-in">
-            <aside id="adminAside">
-
-            </aside>
-            <div class="article-box">
+    <div class="article-box">
                 <div class="navi-container">
                     <h3>자주묻는질문 목록</h3>
                     <div class="navi">
@@ -96,47 +89,8 @@
                     <button type="button" class="btn-Write">작성하기</button>
                 </div>
             </div>
-        </div>
 
-    </main>
-    <footer>
-        <div id="footer"></div>
-    </footer>
     <script>
-
-        fetch('../include/footer.html')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('footer').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading footer:', error));
-
-
-        fetch('../include/header.html') // 헤더 파일 경로
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('header').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading header:', error));
-        fetch('../include/adminAside.html') // 헤더 파일 경로
-            .then(response => {
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('adminAside').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading header:', error));
-
 
         // 체크박스 전체 선택 기능
         const selectAllCheckbox = document.getElementById('select-all');
@@ -154,6 +108,4 @@
         });
     </script>
     <script src="../js/admin.js"></script>
-</body>
-
-</html>
+</th:block>

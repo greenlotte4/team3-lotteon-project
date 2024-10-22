@@ -1,8 +1,20 @@
-<link rel="stylesheet" href="cscommon.css">
-<link rel="stylesheet" href="/css/cs/qnawrite2.css.css">
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/csLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn</title>
+    <link rel="stylesheet"  th:href="@{/css/cs/qnawrite2.css}">
 
+</head>
 <body>
-<div id="service">
+<th:block layout:fragment="content">
+    <th:block th:replace="~{aside/qnaAside}"></th:block>
+
+    <div id="service">
     <div class="title">
         <h2>회원</h2>
         <p>회원 관련 문의내용 입니다.</p>
@@ -51,4 +63,4 @@
         </div>
     </div>
 </div>
-</body>
+</th:block>

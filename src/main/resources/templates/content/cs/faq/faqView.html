@@ -1,33 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/csLayout.html}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cs=faq-view</title>
-    <link rel="stylesheet" href="/css/articles.css">
-    <script src="../../js/include.js"></script>
+    <title>LotteOn</title>
+    <link rel="stylesheet" th:href="@{/css/cs/qnaview.css}">
 </head>
-
 <body>
+<th:block layout:fragment="content">
+    <th:block th:replace="~{aside/faqAside}"></th:block>
 
-
-    <head>
-        <div id="header"></div>
-    </head>
-
-    <main class="article-main">
-        <div class="article-navi">
-            <div class="article-innavi">
-                <a href="#">홈</a> 〉 <a href="#">공지상황</a>
-            </div>
-        </div>
-
-        <div class="article-in">
-            <aside id="aside">
-            </aside>
-
-            <div class="view-box">
+    <div class="view-box">
                 <div class="view-coment">
                     <h3>회원</h3>
                     <p>회원돤련 자주묻는 질문 입니다.</p>
@@ -84,13 +70,4 @@
                     <a class="list-btn" href="/cs/faq/faqList.html">목록</a>
                 </div>
             </div>
-        </div>
-    </main>
-
-    <footer>
-        <div id="footer"></div>
-    </footer>
-   
-</body>
-
-</html>
+</th:block>>

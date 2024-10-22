@@ -19,15 +19,46 @@ public class CsController {
     @GetMapping("/main")
     public String main(Model model) {
         model.addAttribute("cate", "main");
-        return "csIndex";
+        return "content/cs/main";
     }
 
 
-    @GetMapping("/{cate}/{content}")
-    public String cs(@PathVariable String content, @PathVariable String cate, Model model){
-        model.addAttribute("cate", cate);
-        model.addAttribute("content", content);
-        return "csIndex";
+  @GetMapping("/faq/list")
+    public String faqList(Model model) {
+        return "content/cs/faqList";
+  }
+
+    @GetMapping("/faq/view")
+    public String faqView(Model model) {
+        return "content/cs/faq/faqView";
+    }
+
+
+    @GetMapping("/notice/list")
+    public String noticeList(Model model) {
+        return "content/cs/notice/noticeList";
+    }
+
+
+    @GetMapping("/notice/view")
+    public String noticeView(Model model) {
+        return "content/cs/notice/noticeView";
+    }
+
+
+    @GetMapping("/qna/list")
+    public String qnaList(Model model) {
+        return "content/cs/qna/qnaList";
+    }
+
+    @GetMapping("/qna/view")
+    public String qnaView(Model model) {
+        return "content/cs/qnaView";
+    }
+
+    @GetMapping("/qna/write")
+    public String qnaWrite(Model model) {
+        return "content/cs/qna/qnaWrite2";
     }
 
 

@@ -1,42 +1,56 @@
-
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/csLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn</title>
+    <link rel="stylesheet"  th:href="@{/css/cs/faqList.css}">
     <script>
         //기본 3개출력 , 더보기 버튼을 눌렀을 때 최대 10개까지 출력되도록
         window.onload = function(){
             function AllShowMore(showClass, liClass, TextClass){
-            const showMore = document.querySelector(showClass + ' .showMore');
-            const liClasses = document.querySelectorAll(liClass);
-            let showing = false;
-            
-            //index 3이상은 모두 hidden 처리
-            liClasses.forEach((liClass, index) => {
-                if (index >= 3) {
-                    liClass.classList.add("hidden");
-                }
-            });
+                const showMore = document.querySelector(showClass + ' .showMore');
+                const liClasses = document.querySelectorAll(liClass);
+                let showing = false;
 
-            //3이상 10이하
-            showMore.addEventListener('click', function(e){
-                e.preventDefault();
-                showing = !showing //showing이 true로 보여지고 있는 상태 (클릭이 되었다는 의미)
-
+                //index 3이상은 모두 hidden 처리
                 liClasses.forEach((liClass, index) => {
-                    if(index >=3 && index < 10){
-                        if(!showing){
+                    if (index >= 3) {
                         liClass.classList.add("hidden");
-                        }else {
-                            liClass.classList.remove("hidden");
-                        }   
                     }
-                })
+                });
 
-                showMore.textContent = showing ? "간단히 보기" : TextClass;
-            });
+                //3이상 10이하
+                showMore.addEventListener('click', function(e){
+                    e.preventDefault();
+                    showing = !showing //showing이 true로 보여지고 있는 상태 (클릭이 되었다는 의미)
+
+                    liClasses.forEach((liClass, index) => {
+                        if(index >=3 && index < 10){
+                            if(!showing){
+                                liClass.classList.add("hidden");
+                            }else {
+                                liClass.classList.remove("hidden");
+                            }
+                        }
+                    })
+
+                    showMore.textContent = showing ? "간단히 보기" : TextClass;
+                });
+            }
+            AllShowMore('.first_show','.first_li',"더보기");
+            AllShowMore('.second_show','.second_li',"더보기");
+
         }
-        AllShowMore('.first_show','.first_li',"더보기");
-        AllShowMore('.second_show','.second_li',"더보기");
-        
-    }
     </script>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <th:block th:replace="~{aside/faqAside}"></th:block>
+
     <div id="service">
         <div class="title">
             <h2>회원</h2>
@@ -89,3 +103,4 @@
             </ul>
         </div>
     </div>
+</th:block>
