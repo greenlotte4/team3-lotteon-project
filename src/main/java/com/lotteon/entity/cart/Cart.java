@@ -1,5 +1,6 @@
 package com.lotteon.entity.cart;
 
+import com.lotteon.entity.User.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +20,10 @@ public class Cart {
     @GeneratedValue
     private int cartId;
 
-    private int uid;
+    @OneToOne
+    @JoinColumn(name = "uid", nullable = false)
+    private User user;
+
     private LocalDateTime rdate;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
