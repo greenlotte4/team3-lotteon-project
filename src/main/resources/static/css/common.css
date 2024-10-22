@@ -96,7 +96,8 @@ body{}
 
     text-align: left;
     padding: 15px 0 16px;
-    height: 60px;
+    height: 90px;
+    box-sizing: border-box;
 }
 .headerIn .innerContent{
     max-width: 1200px;
