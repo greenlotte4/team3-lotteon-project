@@ -1,13 +1,17 @@
 package com.lotteon.service.product;
 
 import com.lotteon.dto.product.OptionDTO;
+import com.lotteon.dto.product.ProductDetailsDTO;
 import com.lotteon.dto.product.ProductRequestDTO;
+import com.lotteon.dto.product.ProductResponseDTO;
 import com.lotteon.entity.product.Option;
 import com.lotteon.entity.product.Product;
+import com.lotteon.entity.product.ProductDetails;
 import com.lotteon.repository.product.OptionRepository;
 import com.lotteon.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,39 +26,30 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final OptionRepository optionRepository;
+    private final ModelMapper modelMapper;
+    public Long insertProduct(ProductResponseDTO insertProduct) {
 
-    public Long insertProduct(ProductRequestDTO productRequestDTO) {
 
-        Product product = Product.builder()
-                .ProductDesc(productRequestDTO.getProductDesc())
-                .productName(productRequestDTO.getProductName())
-                .price(productRequestDTO.getPrice())
-                .point(productRequestDTO.getPoint())
-                .stock(productRequestDTO.getStock())
-                .discount(productRequestDTO.getDiscount())
-                .sellerId(productRequestDTO.getSellerId())
-                .shippingFee(productRequestDTO.getShippingFee())
-                .shippingTerms(productRequestDTO.getShippingTerms())
-                .build();
+        //product insert
+       Product savedProduct= productRepository.save(insertProduct.getProduct());
 
-       Product savedProduct= productRepository.save(product);
+        List<OptionDTO> options = insertProduct.getOptions();
 
-        List<Option> options = new ArrayList<>();
-        List<String> optionNames = productRequestDTO.getOptionName();
-        List<String> optionDesc = productRequestDTO.getOptionDesc();
-        List<Integer> optionStocks = productRequestDTO.getOptionStock();
 
-        for(int i=0;i<optionNames.size();i++){
-            Option savedOption =  Option.builder()
-                    .parentCode(savedProduct.getProductCode())
-                    .optionName(optionNames.get(i))
-                    .optionDesc(optionDesc.get(i))
-                    .optionStock(optionStocks.get(i))
-                    .parent_id(savedProduct.getProductId())
-                    .build();
-
-            optionRepository.save(savedOption);
+        for(OptionDTO option: options){
+            option.setParentCode(savedProduct.getProductCode());
+            option.setParent_id(savedProduct.getProductId());
         }
+
+        //option insert
+        List<Option> productOption = options.stream().map(t -> modelMapper.map(t,Option.class)).toList();
+
+        optionRepository.saveAll(productOption);
+
+        ProductDetailsDTO details = insertProduct.getProductDetails();
+        details.setProductId(savedProduct.getProductId());
+
+
 
        return savedProduct.getProductId();
     }

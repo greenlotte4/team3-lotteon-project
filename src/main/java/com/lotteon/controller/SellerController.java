@@ -2,6 +2,7 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.product.ProductRequestDTO;
+import com.lotteon.dto.product.ProductResponseDTO;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -37,8 +38,9 @@ public class SellerController {
         log.info(productRequestDTO);
 
         //product insert
+        ProductResponseDTO responseDTO = new ProductResponseDTO(productRequestDTO);
 
-        productService.insertProduct(productRequestDTO);
+        productService.insertProduct(responseDTO);
         //option insert
 
         return "redirect:/seller/product/list";

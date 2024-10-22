@@ -74,8 +74,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // 등록 버튼 클릭 시 폼 제출 처리
     submitBtn.addEventListener('click', (event) => {
         event.preventDefault();
-        alert('쿠폰이 등록되었습니다!');
-        closeModal();
+
+        const benefit = document.querySelector('input[name="benefit"]:checked');
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+
+        const couponData = {
+            benefit: benefit.value,
+            startDate: startDate.value,
+            endDate: endDate.value
+        }
+
+        const formData = new FormData(document.getElementById("couponForm"));
+
+        for (const [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+        fetch('/admin/coupon/register', {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(couponData)
+
+        })
+            .then(resp => {
+                if (resp.ok){
+                    alert("쿠폰이 등록되었습니다.")
+                    closeModal();
+                    document.getElementById("couponForm").reset();
+                }else {
+                    alert("등록에 실패했습니다.")
+                }
+            })
+            .catch(error => console.error("Error------------" + error))
     });
 
     // 모달 외부 클릭 시 모달 닫기
@@ -148,3 +180,5 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 });
+
+

@@ -55,4 +55,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener for adding a new option field
     document.getElementById('addOptionBtn').addEventListener('click', addOptionField);
 
+
+    //파일 크기 조정
+    var productImg1 = document.querySelector('input[name="file190"]');
+    var productImg2 = document.querySelector('input[name="file230"]');
+    var productImg3 = document.querySelector('input[name="file456"]');
+    var productDesc = document.querySelector('input[name="file940"]');
+
+    // // 파일 선택 시 검증 함수 호출
+    // productImg1.addEventListener('change', function(event) {
+    //     var file = this.files[0];
+    //     if (file) {
+    //         validateFile(file, 1024 * 1024, 190, 190, this); // 가로 190px, 세로 제한 없음, 1MB
+    //     }
+    // });
+    //
+    // productImg2.addEventListener('change', function(event) {
+    //     var file = this.files[0];
+    //     if (file) {
+    //         validateFile(file, 1024 * 1024, 230, 230, this); // 가로 230px, 세로 제한 없음, 1MB
+    //     }
+    // });
+    //
+    // productImg3.addEventListener('change', function(event) {
+    //     var file = this.files[0];
+    //     if (file) {
+    //         validateFile(file, 1024 * 1024, 456, 456, this); // 가로 456px, 세로 456px, 1MB
+    //     }
+    // });
+    //
+    // productDesc.addEventListener('change', function(event) {
+    //     var file = this.files[0];
+    //     if (file) {
+    //         validateFile(file, 1024 * 1024, 940, null, this); // 가로 940px, 세로 제한 없음, 1MB
+    //     }
+    // });
+
+
 });
