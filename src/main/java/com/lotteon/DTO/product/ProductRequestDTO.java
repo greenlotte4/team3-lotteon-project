@@ -4,6 +4,8 @@ package com.lotteon.dto.product;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -16,9 +18,13 @@ public class ProductRequestDTO {
 
     private String productName;
     private String productDesc; //상품설명
-    private String option;
-    private String optionId;
-    private int optionStock;
+
+
+//    private OptionDTO options;
+    private List<String> optionName;
+    private List<String> optionDesc;
+    private List<Integer> optionStock;
+
     private String madeIn;
     private String sellerId;
     private int price;

@@ -32,6 +32,14 @@ public class SellerController {
     public String insertProduct(@ModelAttribute ProductRequestDTO productRequestDTO, Model model) {
         log.info("전달은 된다.");
         log.info(productRequestDTO);
+
+
+        //product insert
+
+        //option insert
+      productService.insertProduct(productRequestDTO);
+
+
         return "redirect:/seller/product/list";
     }
 
