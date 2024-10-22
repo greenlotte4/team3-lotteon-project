@@ -26,7 +26,8 @@ public class SecurityConfig {
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/")
                 .failureUrl("/user/login?error=true")  // 로그인 실패 시 URL 수정
-                .usernameParameter("inId")  // 로그인 시 사용할 파라미터 이름
+                .usernameParameter("" +
+                        "inId")  // 로그인 시 사용할 파라미터 이름
                 .passwordParameter("Password"));  // 로그인 시 사용할 비밀번호 파라미터 이름
 
         http.sessionManagement(session -> session
