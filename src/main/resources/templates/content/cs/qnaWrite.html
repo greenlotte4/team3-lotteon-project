@@ -1,9 +1,16 @@
+<link rel="stylesheet" href="cscommon.css">
+<link rel="stylesheet" href="/css/cs/qnawrite.css">
+
+<body>
 <div id="service">
     <div class="title">
         <h2>회원</h2>
+        <p>회원 관련 자주 묻는 질문입니다.</p>
     </div>
-    <form class="qnawirte">
-        <table>
+
+    <div class="qna-table">
+
+        <table class="qna-table">
             <colgroup>
                 <col style="width: 150px">
                 <col style="width: 750px">
@@ -35,13 +42,13 @@
                 <td>내용</td>
                 <td>
                     <div id="editor" class="contents" style="height: 200px"></div>
-<!--                    <textarea class="contents" placeholder="내용을 입력하세요" ></textarea>-->
                 </td>
             </tr>
         </table>
-    </form>
-    <div class="btn">
-        <button class="cansel">취소하기</button>
-        <button class="insert">등록하기</button>
+        <div class="btn">
+            <button class="cancel">취소하기</button>
+            <button class="insert">등록하기</button>
+        </div>
     </div>
 </div>
+</body>
