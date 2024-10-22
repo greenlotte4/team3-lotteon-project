@@ -37,7 +37,7 @@ public class Member {
 
     private String addr2;
 
-    private BigDecimal point =  BigDecimal.ZERO;;
+    private BigDecimal point ;
 
     private String grade;
 
