@@ -5,10 +5,10 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-//@ToString
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class UserDTO {
 
     private String uid;
     private String pass;
