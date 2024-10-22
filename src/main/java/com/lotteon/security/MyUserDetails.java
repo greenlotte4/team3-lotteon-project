@@ -1,5 +1,6 @@
 package com.lotteon.security;
 
+import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.User.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,8 @@ public class MyUserDetails implements UserDetails
 {
     // User 엔티티 선언
     private User user;
+    private Seller seller;
+
 
 //    //Oauth 인증에 사용되는 속성
 //    private Map<String, Object> attributes;

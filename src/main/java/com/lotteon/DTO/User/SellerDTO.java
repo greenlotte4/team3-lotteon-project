@@ -1,4 +1,4 @@
-package com.lotteon.DTO.User;
+package com.lotteon.dto.User;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Seller {
+public class SellerDTO {
 
     @Id
     private Long id;

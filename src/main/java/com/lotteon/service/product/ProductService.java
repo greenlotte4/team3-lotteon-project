@@ -35,6 +35,7 @@ public class ProductService {
 
         List<OptionDTO> options = insertProduct.getOptions();
 
+
         for(OptionDTO option: options){
             option.setParentCode(savedProduct.getProductCode());
             option.setParent_id(savedProduct.getProductId());
@@ -47,6 +48,8 @@ public class ProductService {
 
         ProductDetailsDTO details = insertProduct.getProductDetails();
         details.setProductId(savedProduct.getProductId());
+
+
 
        return savedProduct.getProductId();
     }

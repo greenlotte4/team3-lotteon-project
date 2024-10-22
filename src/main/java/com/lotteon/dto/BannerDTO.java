@@ -1,4 +1,4 @@
-package com.lotteon.dto;
+package com.lotteon.DTO;
 
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,5 +29,5 @@ public class BannerDTO {
     private String ban_stime;
     private String ban_etime;
 
-    private List<MultipartFile> files;
+    private MultipartFile file;
 }
