@@ -1,4 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin::Member</title>
+    <link rel="stylesheet" th:href="@{/css/memberpoint.css}">
 
+</head>
+<body>
+<th:block layout:fragment="content">
             <div id="admin_service">
                 <section>
                     <div class="admin_gate">
@@ -18,62 +31,63 @@
                     </section>
                 
               
-                <article id="admin_banner_main">
-                
-                <div>
-                    <table class="admin_banner_table">
-                        <colgroup>
-                            <col style="width: 5%">
-                            <col style="width: 7%">
-                            <col style="width: 10%">
-                            <col style="width: 11%">
-                            <col style="width: 14%">
-                            <col style="width: 14%">
-                            <col style="width: 9%">
-                            <col style="width: 20%">
-                        </colgroup>
-                        <div>
-                        <select id="shopsearch" >
-                            <option value="">아이디</option>
-                            <option value="">이름</option>
-                            <option value="">이메일</option>
-                            <option value="">휴대폰</option>
-                        </select>
-                        <input id="search" type="text" placeholder="검색어 입력">
-                        <button id="serachbtn" type="button">검색</button>
-                        </div>
-                        
-                        <tr>
-                            <th><input type="checkbox"></th>
-                            <th>번호</th>
-                            <th>아이디</th>
-                            <th>이름</th>
-                            <th>지급포인트</th>
-                            <th>잔여포인트</th>
-                            <th>지급내용</th>
-                            <th>지급날짜</th>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>5</td>
-                            <td>a101</td>
-                            <td>정우성</td>
-                            <td>1,000</td>
-                            <td>15,000</td>
-                            <td>구매확정 포인트 지급</td>
-                            <td>2024-10-18 09:33</td>
+                    <article id="admin_banner_main">
 
-                        </tr>
-                        
-                    </table>
-                </article>
+                        <div>
+                            <table class="admin_banner_table">
+                                <colgroup>
+                                    <col style="width: 5%">
+                                    <col style="width: 7%">
+                                    <col style="width: 10%">
+                                    <col style="width: 11%">
+                                    <col style="width: 14%">
+                                    <col style="width: 14%">
+                                    <col style="width: 9%">
+                                    <col style="width: 20%">
+                                </colgroup>
+                                <div>
+                                <select id="shopsearch" >
+                                    <option value="">아이디</option>
+                                    <option value="">이름</option>
+                                    <option value="">이메일</option>
+                                    <option value="">휴대폰</option>
+                                </select>
+                                <input id="search" type="text" placeholder="검색어 입력">
+                                <button id="serachbtn" type="button">검색</button>
+                                </div>
+
+                                <tr>
+                                    <th><input type="checkbox"></th>
+                                    <th>번호</th>
+                                    <th>아이디</th>
+                                    <th>이름</th>
+                                    <th>지급포인트</th>
+                                    <th>잔여포인트</th>
+                                    <th>지급내용</th>
+                                    <th>지급날짜</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>5</td>
+                                    <td>a101</td>
+                                    <td>정우성</td>
+                                    <td>1,000</td>
+                                    <td>15,000</td>
+                                    <td>구매확정 포인트 지급</td>
+                                    <td>2024-10-18 09:33</td>
+
+                                </tr>
+                            </table>
+                        </div>
+                    </article>
                     <div class="list_button">
                         <button>선택삭제</button>
                     </div>
                 </section>
+</th:block>
 
 
-    <script>
+<script>
 
 
         // 전화번호 잘림 적용

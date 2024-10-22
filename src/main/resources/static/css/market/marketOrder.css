@@ -1,3 +1,16 @@
+#mainArea > .mainWrapper{
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+
+
+}
+
+/*#mainArea{    background-color: #f6f7f8;*/
+/*}*/
+#mainArea > .mainWrapper > .order{
+    width: 1200px;
+}
+
 #mainArea > .mainWrapper.order  .orderSection{
     display: flex;
     border-right: 1px solid #eee;
@@ -16,38 +29,44 @@
     width:100%;
 
 }
-#mainArea .mainWrapper .section{
+#mainArea .mainWrapper .section.order{
     /* Subtract the aside's width and some padding/margin */
-
-    width: 100%; /* Subtract the aside's width and some padding/margin */
+    margin-top: 20px;
+    width: 1200px; /* Subtract the aside's width and some padding/margin */
     box-sizing: border-box; /* Ensure proper width calculation */
-
     /* Ensure proper width calculation */
 }
 
-#mainArea .section .sectionWrapper{
 
+#mainArea .section.order .sectionWrapper .sub_tit {
+    box-sizing: border-box;
+    position: relative;
     width: 100%;
+    height: 30px;
+    border-bottom: 2px solid #dddddd;
 }
 
 #mainArea .section .sectionWrapper.order{
+    margin: 0 auto;
+    width: 98%;
     border-bottom: none;
+
 }
+
 
 #product_order{
     box-sizing: border-box;
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
-
+    background-color: #ffff;
 }
 #product_order table{
     border-spacing: 0px;
-    width: 1155px;
+    width: 100%;
     border-collapse: collapse;
     border-radius: 4px;
     box-shadow: 2px 1px 1px 1px #ddd;
-
     border: 1px solid #ddd;
 }
 
@@ -145,6 +164,7 @@
     position: relative;
     transition: top 0.3s ease;
     border-radius: 4px;
+    background-color: #ffff;
 }
 
 
@@ -243,20 +263,21 @@
 }
 
 .orderSection .infoWrap{
-    width:900px;
+    width: 880px;
     padding-top: 0px;
     box-sizing: border-box;
-    border-left: 1px solid #eee;
     height: auto;
     margin-bottom: 20px;
+
+
 }
 
 .orderSection .orderInfo{
-    width: 95%;
+    width: 98%;
     border: 1px solid #ddd;
-    margin-left: 20px;
+    margin-left: 12px;
     border-radius: 4px;
-
+    background-color: #ffff;
 }
 
 .orderSection .orderInfo h4{

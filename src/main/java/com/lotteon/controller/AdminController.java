@@ -38,20 +38,10 @@ public class AdminController {
     public String adminMain( Model model) {
 
         model.addAttribute("cate", "main");
-        return "adminIndex";
+        return "/content/admin/admin_index";
     }
 
-    @GetMapping("/{cate}/{content}")
-    public String admin(@PathVariable String content, @PathVariable String cate, Model model) {
 
-        model.addAttribute("cate", cate);
-        model.addAttribute("content", content);
-
-
-        log.info(content);
-        log.info("cate"+cate);
-        return "adminIndex";
-    }
     @ResponseBody
     @PostMapping("/banner/upload")
     public ResponseEntity<String> banner(@ModelAttribute BannerDTO bannerDTO) {

@@ -1,18 +1,21 @@
-
-
-            <div id="admin_service">    
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Banner Page</title>
+    <link rel="stylesheet"  th:href="@{/css/admin/adminbanner.css}">
+    <link rel="stylesheet"  th:href="@{/css/admin/adminBannerModal.css}">
+</head>
+<body>
+    <th:block layout:fragment="content">
+            <div id="admin_service">
                 <section>
-                    <div class="admin_gate">
-                        <div class="left-icons">
-                            <a href="#" id="toggle-aside"><img src="/images/sample/menu.png" alt=""></a>
-                        </div>
-                        <div class="right-icons">
-                            <a href="#"><img src="/images/sample/home.png" alt=""></a>
-                            <a href="#"><img src="/images/sample/login.png" alt=""></a>
-                            <a href="#"><img src="/images/sample/logout.png" alt=""></a>
-                            <span>홍길동님</span>
-                        </div>
-                    </div>
+                    <th:block th:replace="~{content/admin/admin_gate}"></th:block>
+
                     <section id="admin_navi">
                             <p>환경설정</p>
                             <p>
@@ -168,28 +171,10 @@
                                 <button>선택삭제</button>
                                 <button id="openModalBtn">배너등록</button>
                             </div>
-                        </section>
+            </section>
 
         <th:block th:replace="~{content/admin/config/admiinBanner_orderModal}"></th:block>
 
-<script>
 
-// 모달 열고 닫는 기능 구현
-var modal = document.getElementById("orderModal");
-   var btn = document.getElementById("openModalBtn");
-   var span = document.getElementsByClassName("close")[0];
-   // 버튼을 클릭하면 모달을 엽니다.
-   btn.onclick = function() {
-       modal.style.display = "block";
-   }
-   // 닫기 버튼을 클릭하면 모달을 닫습니다.
-   span.onclick = function() {
-       modal.style.display = "none";
-   }
-   // 모달 외부를 클릭하면 모달을 닫습니다.
-   window.onclick = function(event) {
-       if (event.target == modal) {
-           modal.style.display = "none";
-       }
-   }
-</script>
+    </th:block>
+

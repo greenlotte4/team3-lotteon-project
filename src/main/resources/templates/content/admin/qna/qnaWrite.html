@@ -1,125 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>admin Main</title>
-    <link rel="stylesheet" href="/css/adminaside.css">
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/common.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin QnA Page</title>
 
 </head>
-
 <body>
-    <div id="wrapper">
-        <main id="admin_main">
-            <div id="admin_container">
-                <div id="admin_aside">
-                    <div id="admin_aside_list">
-                        <img class="top_log" src="/images/sample/lotte로고(white).png" alt="로고사진">
-                        <div class="aside_first">
-                            <h2>관리자 메인</h2>
-                        </div>
-                        <div class="aside_second">
-                            <ul class="admin_menu">
-                                <li><a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="share-2" class="lucide lucide-share-2 align-middle"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
-                                  환경설정</a>
-                                    <ul class="admin_sub_menu">
-                                        <li><a href="#" class="active">기본설정</a></li>
-                                        <li><a href="#" class="active">배너관리</a></li>
-                                        <li><a href="#" class="active">약관관리</a></li>
-                                        <li><a href="#" class="active">버전이력</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shopping-bag" class="lucide lucide-shopping-bag align-middle"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                                    상점관리</a>
-                                    <ul class="admin_sub_menu">
-                                        <li><a href="#" class="active">상점목록</a></li>
-                                        <li><a href="#" class="active">판매현황</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" class="lucide lucide-users align-middle"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                    회원관리</a>
-                                    <ul class="admin_sub_menu">
-                                        <li><a href="#" class="active">회원목록</a></li>
-                                        <li><a href="#" class="active">포인트관리</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-square" class="lucide lucide-check-square align-middle"><path d="m9 11 3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                                    상품관리</a>
-                                    <ul class="admin_sub_menu">
-                                        <li><a href="#" class="active">상품목록</a></li>
-                                        <li><a href="#" class="active">상품등록</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="files" class="lucide lucide-files align-middle"><path d="M20 7h-3a2 2 0 0 1-2-2V2"></path><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"></path><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"></path></svg>
-                                    주문관리</a>
-                                    <ul class="admin_sub_menu">
-                                        <li><a href="#" class="active">주문현황</a></li>
-                                        <li><a href="#" class="active">배송현황</a></li> 
-                                    </ul>
-                                </li>
-                                <li><a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="files" class="lucide lucide-files align-middle"><path d="M20 7h-3a2 2 0 0 1-2-2V2"></path><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"></path><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"></path></svg>
-                                    쿠폰관리</a>
-                                    <ul class="admin_sub_menu">
-                                        <li><a href="#" class="active">쿠폰목록</a></li>
-                                        <li><a href="#" class="active">쿠폰발급현황</a></li> 
-                                    </ul>
-                                </li>
-                                <li><a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="heart" class="lucide lucide-heart align-middle"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
-                                    고객센터</a>
-                                    <ul class="admin_sub_menu">
-                                        <li><a href="#" class="active">공지사항</a></li>
-                                        <li><a href="#" class="active">자주묻는질문</a></li>
-                                        <li><a href="#" class="active">문의하기</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
+<th:block layout:fragment="content">
             <div id="admin_service">    
                 <section>
-                    <div class="admin_gate">
-                        <div class="left-icons">
-                            <a href="#" id="toggle-aside"><img src="/images/sample/menu.png" alt=""></a>
+                    <th:block th:replace="~{content/admin/admin_gate}"></th:block>
+                    <section id="admin_navi">
+                        <p>관리자 메인</p>
+                        <p><a href="#">HOME</a> > 관리자 메인</p>
+                    </section>
 
-            <div id="container">
-                <div id="aside">
-                    <h1>문의하기</h1>
-                    <div class="aside_list">
-                        <ul>
-                            <li>
-                                <a class="active" href="#">회원</a>
-                            </li>
-                            <li>
-                                <a class="active" href="#">쿠폰 / 이벤트</a>
-                            </li>
-                            <li>
-                                <a class="active" href="#">주문 / 결제</a>
-                            </li>
-                            <li>
-                                <a class="active" href="#">배송</a>
-                            </li>
-                            <li>
-                                <a class="active" href="#">취소 / 반품 / 교환</a>
-                            </li>
-                            <li>
-                                <a class="active" href="#">여행 / 숙박 / 항공</a>
-                            </li>
-                            <li>
-                                <a class="active" href="#">안전거래</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
                 <div id="service">
                     <div class="title">
                         <h2>회원</h2>
@@ -167,148 +66,11 @@
                         <button class="insert">등록하기</button>
                     </div>
                 </div>
-        </main>
-        <footer id="footer" class="wideArea withSeller on">
-            <div class="footerWrapper">
-        
-                <div class="footerTopMenu innerContent">
-                    <ul class="ft_nav">
-                        <li>
-                            <a href="https://story.lotteon.com/">회사소개</a>
-                        </li> 
-                        <li>
-                            <a href="/p/common/footerTerms">이용약관</a>
-                        </li> 
-                    
-                        <li class="bold">
-                            <a href="/p/common/footerPinfop">개인정보처리방침</a>
-                        </li> 
-                        <li>
-                            <a href="/p/common/footerPinfop">전자금융거래약관</a>
-                        </li> 
-                    
-        
-                    </ul> 
-                </div>
-            </div>
-                    <hr> 
-            <div class="footerWrapper">
-                    <div class="companyInfo innerContent">
-                        <h2 class="logoArea on">
-                            <img alt="LOTTE ON" border="0" hspace="0" src="/images/common/common-bi-lotteon.png"></h2> 
-                        <div class="infoWrapper"><div class="company"><h3>롯데쇼핑 주식회사</h3> <ul><li>대표이사 : 홍길동</li> 
-                            <li>주소 : 서울특별시 강남구 테헤란로 507 (삼성동, WeWork빌딩), 7층</li>
-                            <li>사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)</li> 
-                            <li>통신판매업 신고 : 2024-서울강남-04439&nbsp;<a href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no=5298500774" target="_blank" title="새창">사업자 정보 확인</a></li> 
-                            <li>호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부</li></ul> 
-                            <h4>롯데쇼핑 e커머스 사업부 에스크로</h4> 
-                            <p>고객님의 안전거래를 위해 현금 등으로 결제 시 결제금액 전액에 대해<br>소비자 피해 방지 서비스를 이용합니다.</p>
-
-                        </div>
-                        <div class="right-icons">
-                            <a href="#"><img src="/images/sample/home.png" alt=""></a>
-                            <a href="#"><img src="/images/sample/login.png" alt=""></a>
-                            <a href="#"><img src="/images/sample/logout.png" alt=""></a>
-                            <span>홍길동님</span>
-                        </div>
-                    </div>
-                    <section id="admin_navi">
-                            <p>관리자 메인</p>
-                            <p><a href="#">HOME</a> > 관리자 메인</p>
-                    </section>
-
-                    <section id="navi"><p>홈 > 문의하기</p></section>
-                    <div id="container">
-                        <div id="aside">
-                            <h1>문의하기</h1>
-                            <div class="aside_list">
-                                <ul>
-                                    <li>
-                                        <a class="active" href="#">회원</a>
-                                    </li>
-                                    <li>
-                                        <a class="active" href="#">쿠폰 / 이벤트</a>
-                                    </li>
-                                    <li>
-                                        <a class="active" href="#">주문 / 결제</a>
-                                    </li>
-                                    <li>
-                                        <a class="active" href="#">배송</a>
-                                    </li>
-                                    <li>
-                                        <a class="active" href="#">취소 / 반품 / 교환</a>
-                                    </li>
-                                    <li>
-                                        <a class="active" href="#">여행 / 숙박 / 항공</a>
-                                    </li>
-                                    <li>
-                                        <a class="active" href="#">안전거래</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div id="service">
-                            <div class="title">
-                                <h2>회원</h2>
-                                <p>회원 관련 문의 내용입니다.</p>
-                            </div>
-                            <form class="qnawirte">
-                                <table>
-                                    <colgroup>
-                                        <col style="width: 150px">
-                                        <col style="width: 750px">
-                                    </colgroup>
-                                    <tr class="type">
-                                        <td>문의유형</td>
-                                        <td>
-                                            <select class="first_choice">
-                                                <option value="1">가입</option>
-                                                <option value="2">취소/반품/교환</option>
-                                                <option value="3">주문/결제</option>
-                                                <option value="4">쿠폰/이벤트</option>
-                                            </select>
-                                            <select class="second_choice">
-                                                <option value="1">가입</option>
-                                                <option value="2">취소/반품/교환</option>
-                                                <option value="3">주문/결제</option>
-                                                <option value="4">쿠폰/이벤트</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr class="title">
-                                        <td>제목</td>
-                                        <td>
-                                            <input type="text" class="texts" placeholder="제목을 입력하세요">
-                                        </td>
-                                    </tr>
-                                    <tr class="content">
-                                        <td>내용</td>
-                                        <td>
-                                            <textarea class="contents" placeholder="내용을 입력하세요" ></textarea>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
-                            <div class="btn">
-                                <button class="cansel">취소하기</button>
-                                <button class="insert">등록하기</button>
-                            </div>
-                        </div>
 
 
                 </section>
-                <footer id="admin_footer">
-                    <div>Copyright ©LotteON.co.kr All rights reserved. LotteON ADMINISTRATOR Version 5.4.1.2 3조 project</div>
-                </footer>
+</th:block>
 
-            </div>
-
-        </div>
-
-        </main>
-
-    </div>
-</body>
 <script>
     document.querySelectorAll('.admin_menu > li').forEach(menu => {
         const submenu = menu.querySelector('.admin_sub_menu');

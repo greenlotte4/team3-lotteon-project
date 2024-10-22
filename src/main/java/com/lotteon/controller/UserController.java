@@ -26,10 +26,30 @@ public class UserController {
     private final AuthenticationManager authenticationManager; // AuthenticationManager로 수정
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("/{content}")
-    public String join(@PathVariable String content, Model model) {
-        model.addAttribute("content", content);
-        return "userIndex";
+    @GetMapping("/join")
+    public String userJoin(Model model) {
+        model.addAttribute("content", "join");
+        return "content/user/join"; // Points to "content/user/join"
+    }
+
+    @GetMapping("/login")
+    public String userLogin(Model model) {
+        model.addAttribute("content", "login");
+        return "content/user/login"; // Points to "content/user/login"
+    }
+
+    @GetMapping("/term")
+    public String terms(Model model) {
+        model.addAttribute("content", "term");
+        return "content/user/term"; // Points to "content/user/term"
+    }
+
+
+
+    @GetMapping("/memberregister")
+    public String memberRegister(Model model) {
+        model.addAttribute("content", "memberregister");
+        return "content/user/memberregister"; // Points to "content/user/memberregister"
     }
 
     @PostMapping("/memberregister")
@@ -43,6 +63,15 @@ public class UserController {
         userService.registerMember(user, member);
         System.out.println("user:" + user + " member:" + member);
         return "redirect:/user/login";
+    }
+
+
+
+
+    @GetMapping("/sellerregister")
+    public String sellerRegister(Model model) {
+        model.addAttribute("content", "sellerregister");
+        return "content/user/sellerregister"; // Points to "content/user/sellerregister"
     }
 
     @PostMapping("/sellerregister")
