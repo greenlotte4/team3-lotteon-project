@@ -39,22 +39,22 @@ public class ProductService {
 
        Product savedProduct= productRepository.save(product);
 
-        List<Option> options = new ArrayList<>();
-        List<String> optionNames = productRequestDTO.getOptionName();
-        List<String> optionDesc = productRequestDTO.getOptionDesc();
-        List<Integer> optionStocks = productRequestDTO.getOptionStock();
-
-        for(int i=0;i<optionNames.size();i++){
-            Option savedOption =  Option.builder()
-                    .parentCode(savedProduct.getProductCode())
-                    .optionName(optionNames.get(i))
-                    .optionDesc(optionDesc.get(i))
-                    .optionStock(optionStocks.get(i))
-                    .parent_id(savedProduct.getProductId())
-                    .build();
-
-            optionRepository.save(savedOption);
-        }
+//        List<Option> options = new ArrayList<>();
+//        List<String> optionNames = productRequestDTO.getOptionName();
+//        List<String> optionDesc = productRequestDTO.getOptionDesc();
+//        List<Integer> optionStocks = productRequestDTO.getOptionStock();
+//
+//        for(int i=0;i<optionNames.size();i++){
+//            Option savedOption =  Option.builder()
+//                    .parentCode(savedProduct.getProductCode())
+//                    .optionName(optionNames.get(i))
+//                    .optionDesc(optionDesc.get(i))
+//                    .optionStock(optionStocks.get(i))
+//                    .parent_id(savedProduct.getProductId())
+//                    .build();
+//
+//            optionRepository.save(savedOption);
+//        }
 
        return savedProduct.getProductId();
     }

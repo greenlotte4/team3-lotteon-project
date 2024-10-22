@@ -38,6 +38,8 @@ public class MarketController {
     @GetMapping("/view")
     public String marketView(Model model) {
         model.addAttribute("content", "view");
+
+
         return "content/market/marketview"; // Points to the "content/market/marketview" template
     }
 
