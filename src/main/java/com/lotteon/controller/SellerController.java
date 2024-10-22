@@ -2,6 +2,7 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.product.ProductRequestDTO;
+import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class SellerController {
 
 
+    private final ProductService productService;
+
     @GetMapping("/product/list")
     public String productList(Model model) {
         model.addAttribute("content", "list");
@@ -23,8 +26,22 @@ public class SellerController {
 
     @GetMapping("/product/register")
     public String productRegister(Model model) {
-        model.addAttribute("content", "register");
         return "/content/admin/product/admin_productReg"; // Points to the "content/sellerDynamic" template for product registration
+    }
+
+
+
+    @PostMapping("/product/register")
+    public String insertProduct(@ModelAttribute ProductRequestDTO productRequestDTO, Model model) {
+        log.info("전달은 된다.");
+        log.info(productRequestDTO);
+
+        //product insert
+
+        productService.insertProduct(productRequestDTO);
+        //option insert
+
+        return "redirect:/seller/product/list";
     }
 
     @GetMapping("/order/delivery")
@@ -53,11 +70,7 @@ public class SellerController {
         model.addAttribute("content", "issued");
         return "/content/admin/coupon/issued"; // Points to "content/admin/coupon/issued"
     }
-    @PostMapping("/product/register")
-    public String insertProduct(@RequestParam ProductRequestDTO productRequestDTO, Model model) {
-        log.info(productRequestDTO);
-        return "content/admin/adminRegister";
-    }
+
 
 
 }

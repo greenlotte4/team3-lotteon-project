@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -82,7 +81,9 @@ public class MyUserDetails implements UserDetails
         // 계정 활성화 여부(true: 활성화, false: 비활성)
         return true;
     }
-
+    public String getId(){
+        return user.getUid();
+    }
 //    @Override
 //    public String getName() {
 //        return user.getName();

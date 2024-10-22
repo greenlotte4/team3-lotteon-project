@@ -1,3 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/userLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Banner Page</title>
+    <link  rel="stylesheet" th:href="@{/css/user/login.css}">
+
+</head>
+<body>
+<th:block layout:fragment="content">
 <!-- 롯데온 로그인 영역 추가 -->
 
 <main id="content" role="main" class="contentArea on">
@@ -80,4 +94,4 @@
         </div>
     </div>
 </main>
-
+</th:block>

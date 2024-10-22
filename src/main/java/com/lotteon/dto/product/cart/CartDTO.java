@@ -1,10 +1,10 @@
-package com.lotteon.dto.product.cart;
+package com.lotteon.DTO.product.cart;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Setter
 @Getter
@@ -15,10 +15,10 @@ import java.util.List;
 public class CartDTO {
 
     private int cartId;
-    private int uid ;
+    private String uid ;
     private LocalDateTime rdate;
 
-    private List<CartItemDTO> items;
+    private List<com.lotteon.dto.product.cart.CartItemDTO> items;
 
 
 }
