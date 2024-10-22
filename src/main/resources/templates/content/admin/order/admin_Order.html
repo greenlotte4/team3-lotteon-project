@@ -1,4 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn::Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin/shoplistmodal.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/admin_delivery_modal.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/admin-modal.css}">
+    <link rel="stylesheet"  th:href="@{/css/admin/adminOrder.css}">
 
+</head>
+<body>
+<th:block layout:fragment="content">
             <div id="admin_service">
                 <section>
                     <th:block th:replace="~{content/admin/admin_gate}"></th:block>
@@ -9,7 +25,6 @@
               
                 <article id="admin_order_main">
                 
-                <div>
                     <table class="admin_order_table">
                         <colgroup>
                             <col style="width: 14%">
@@ -110,17 +125,11 @@
                         <button>선택삭제</button>
                         <button>상점등록</button>
                     </div>
-                    <footer id="admin_footer">
-                        <div>머시기저시기</div>
-                        <div>Copyright 3조</div>
-                    </footer>
-                </div>
-            </section>
- 
-                
-            </div>
 
-            <div id="order-modal-div"></div>
+
+
+
+
 
             <div id="productModal" class="modal">
                 <div class="modal-content">
@@ -174,43 +183,137 @@
                          </table>
                         <button type="submit">등록하기</button>
                     </form>
-                
-                    
-             
                 </div>
             </div>
-            
-        </main>
-        
-    </div>
-    <script src="/js/shoplistmodal.js"></script>
-    <script>
-    document.querySelectorAll('.admin_menu > li').forEach(menu => {
-        const submenu = menu.querySelector('.admin_sub_menu');
-        
-        menu.addEventListener('click', function(e) {
-            e.stopPropagation();
+            <div id="modal-section-shipping" class="modal-section-shipping">
+                <div class="order-modal-shipping">
+                    <div class="shipping-info-items">
+                        <span class="shipping-info-close" style="cursor: pointer;">&times;</span>
+                        <h3>배송상세</h3>
+                    </div>
+                    <div class="modal-main">
+                        <div class="product-table">
+                            <div class="product-info-table">
+                                <div class="product-title">
+                                    <h3>상품정보</h3>
+                                </div>
+                                <div class="pro-info-details">
+                                    <div class="pro-img"></div>
+                                    <div class="pro-num">제품번호</div>
+                                    <div class="pro-name">상품명</div>
+                                    <div class="pro-seller">판매자</div>
+                                    <div class="pro-price">가격</div>
+                                    <div class="pro-sell">할인</div>
+                                    <div class="pro-stock">재고</div>
+                                    <div class="pro-ship">배송비</div>
+                                    <div class="total-pay">결제금액</div>
+                                </div>
+                                <div class="details">
+                                    <div class="pro-img-details">
+                                        <img src="../images/sample/화면 캡처 2024-10-17 102744.png" alt="#">
+                                    </div>
+                                    <div class="pro-num-details">123456789</div>
+                                    <div class="pro-name-details">프리미엄 퀄리티 오가닉 코튼 100% 에코백 - 다용도 사용 가능, 강력한
+                                        내구성</div>
+                                    <div class="pro-seller-details">뭐지</div>
+                                    <div class="pro-price-details">뭐지</div>
+                                    <div class="pro-sell-details">뭐지</div>
+                                    <div class="pro-stock-details">뭐지</div>
+                                    <div class="pro-ship-details">5000원</div>
+                                    <div class="total-pay-details">뭐지</div>
+                                </div>
+                            </div>
+                            <div class="shipping-info-table">
+                                <div class="shipping-title">
+                                    <h3>배송증보</h3>
+                                </div>
+                                <div class="user-info-list">
+                                    <div class="shipping-order-num">
+                                        <div class="order-info-num">주문번호</div>
+                                        <div>
+                                            <td>123123123</td>
+                                        </div>
+                                    </div>
+                                    <div class="shipping-user-name">
+                                        <div class="user-info-name">수령인</div>
+                                        <div>
+                                            <td>갑찹찹</td>
+                                        </div>
+                                    </div>
+                                    <div class="shipping-addr-num">
+                                        <div class="addr-info-hp">연락처</div>
+                                        <div>
+                                            <td>31231</td>
+                                        </div>
+                                    </div>
+                                    <div class="shipping-addr1">
+                                        <div class="addr1-info">배송지주소</div>
+                                        <div>
+                                            <td>집가고싶다</td>
+                                        </div>
+                                    </div>
+                                    <div class=".shipping-addr2">
+                                        <div class="addr2-info"></div>
+                                        <div>
 
-            
-            if(submenu) {
-                submenu.classList.toggle('open');
+                                        </div>
+                                    </div>
+                                </div>
 
-            }
-        });
+                                <div class="shipping-info-list">
+                                    <div class="shipping-name">
+                                        <div class="con-info-name">택배사</div>
+                                        <div>
+                                            <td>지구택</td>
+                                        </div>
+                                    </div>
+                                    <div class="shipping-num">
+                                        <div class="num-info">운송장번호</div>
+                                        <div>
+                                            <td>12312312</td>
+                                        </div>
+                                    </div>
+                                    <div class="shipping-exc">
+                                        <div class="etc-info">기타</div>
+                                        <div>
+                                            <td>뭔가 하나가 생기겠지</td>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    <script th:src="@{/js/delivery.js}"></script>
 
-        // 서브 메뉴 항목 클릭 이벤트
-        if(submenu){
-            submenu.querySelectorAll('li').forEach(subLi => {
-                subLi.addEventListener('click', function(e){
-                    e.stopPropagation();       
-                })
-            })
-        }
+<!--                    <script>-->
+<!--                        document.addEventListener('DOMContentLoaded', function () {-->
+<!--                            const modal = document.querySelector('.modal-section-shipping');-->
+<!--                            const orderModal = document.querySelector('.order-modal-shipping');-->
+<!--                            const modalClose = document.querySelector('.shipping-info-close');-->
 
+<!--                            function openModal() {-->
+<!--                                modal.style.display = 'flex'; // 모달을 flex로 표시-->
+<!--                                orderModal.style.display = 'block'; // 내부 모달도 표시-->
+<!--                            }-->
 
-    })
-</script>
-</body>
+<!--                            function closeModal() {-->
+<!--                                modal.style.display = 'none'; // 모달을 숨김-->
+<!--                                orderModal.style.display = 'none'; // 내부 모달도 숨김-->
+<!--                            }-->
 
+<!--                            document.querySelectorAll('.shipping-info-btn').forEach(button => {-->
+<!--                                button.addEventListener('click', openModal);-->
+<!--                            });-->
 
-</html>
+<!--                            modalClose.addEventListener('click', closeModal);-->
+
+<!--                            window.addEventListener('click', function (event) {-->
+<!--                                if (event.target === modal) {-->
+<!--                                    closeModal();-->
+<!--                                }-->
+<!--                            });-->
+<!--                        });-->
+<!--                    </script>-->
+</th:block>

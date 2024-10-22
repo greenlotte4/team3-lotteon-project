@@ -17,11 +17,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/market")
 public class MarketController {
 
-    @GetMapping("/{content}")
-    public String index(@PathVariable String content, Model model) {
+    @GetMapping("/main")
+    public String marketMain(Model model) {
+        model.addAttribute("content", "main");
+        return "content/market/marketMain"; // Points to the "content/market/marketMain" template
+    }
 
-        model.addAttribute("content", content);
-        return "marketindex";
+    @GetMapping("/list")
+    public String marketList(Model model) {
+        model.addAttribute("content", "list");
+        return "content/market/marketList"; // Points to the "content/market/marketList" template
+    }
+
+    @GetMapping("/search")
+    public String marketSearch(Model model) {
+        model.addAttribute("content", "search");
+        return "content/market/marketSearch"; // Points to the "content/market/marketSearch" template
+    }
+
+    @GetMapping("/view")
+    public String marketView(Model model) {
+        model.addAttribute("content", "view");
+        return "content/market/marketview"; // Points to the "content/market/marketview" template
+    }
+
+    @GetMapping("/cart")
+    public String marketCart(Model model) {
+        model.addAttribute("content", "cart");
+        return "content/market/marketcart"; // Points to the "content/market/marketcart" template
+    }
+
+
+    @GetMapping("/order")
+    public String marketOrder(Model model) {
+        model.addAttribute("content", "order");
+        return "content/market/marketorder"; // Points to the "content/market/marketorder" template
+    }
+
+    @GetMapping("/completed")
+    public String marketOrderCompleted(Model model) {
+        model.addAttribute("content", "completed");
+        return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template
     }
 
 }

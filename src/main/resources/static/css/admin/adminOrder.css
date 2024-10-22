@@ -32,7 +32,7 @@
 }
 
 #admin_order_main div {font-weight: bold; margin: 10px auto; width: 900px;}
-.admin_order_table {width: 900px; border-collapse: collapse; border-top: 1px solid black;}
+.admin_order_table {width: 900px;     margin: 0 auto; border-collapse: collapse; border-top: 1px solid black;}
 .admin_order_table td, th {border-bottom: 1px solid rgb(196, 196, 196); height: 80px; text-align: center;}
 .admin_order_table th {height: 50px; background-color:rgb(226,232,238);}
 .admin_order_table td:nth-of-type(10) button {border: none; padding :5px 3px 5px 3px; background-color: #8EB4E3; color: white;}

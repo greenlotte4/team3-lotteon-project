@@ -1,5 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/marketLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn</title>
+    <link   rel="stylesheet" th:href="@{/css/market/marketOrderComplete.css}">
 
-                   
+
+</head>
+<body>
+<th:block layout:fragment="content">
+
                     <section class="section orderCompleted">
                         <div class="sectionWrapper">
                             <div class="sub_tit">
@@ -180,31 +194,7 @@
                                 </table>
                             </div>
 
-                            <div class="totalOrderInfo">
-                                <h4>주문 금액 정보</h4>
-                                <div class="totalPrice-bar">
-                                    <div class="originalPrice">
-                                        <span>상품금액</span>
-                                        <p class="price">69000</p>
-                                    </div>
-                                    <div class="separatorminus">-</div>
-                                    <div class="discoutnPrice">
-                                        <span>할인금액</span>
-                                        <p class="price minus">2000</p>
-                                    </div>
-                                    <div class="separatorplus">+</div>
-                                    <div class="deliveryPrice">
-                                        <span>배송비/포장비</span>
-                                        <p class="price">0</p>
-                                    </div>
-                                    <div class="separatorequal">=</div>
-                                    <div class="totalPrice">
-                                        <span>총 결제비용</span>
-                                        <p class="price red">65500</p>
-                                    </div>
 
-                                </div>
-                            </div>
 
                             <!-- <div class="btn">
                                 <button class="returnShopping">쇼핑하러가기</button>
@@ -216,3 +206,4 @@
                         </div><!--sectionWrapper-->
                     </section>
 
+</th:block>

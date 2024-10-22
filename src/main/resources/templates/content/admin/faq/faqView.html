@@ -1,4 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin::FAQ</title>
+    <link rel="stylesheet" th:href="@{/css/admin/adminfaqview.css}">
 
+</head>
+<body>
+<th:block layout:fragment="content">
       <div id="admin_service">    
           <section>
               <th:block th:replace="~{content/admin/admin_gate}"></th:block>
@@ -45,3 +58,4 @@
                 <button class="faq_view_list-btn">목록</button>
               </div>
             </section>
+</th:block>

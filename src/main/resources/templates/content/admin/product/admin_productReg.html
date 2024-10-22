@@ -1,4 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/sellerLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn::Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin/adminProductReg.css}">
 
+
+</head>
+<body>
+<th:block layout:fragment="content">
             <div id="admin_service">
                 <section>
                     <th:block th:replace="~{content/admin/admin_gate}"></th:block>
@@ -196,3 +210,5 @@
                         </div>
                     </form>
                 </section>
+                <script th:if="${content=='register'}" th:src="@{/js/CategoryLoad.js}"></script>
+</th:block>

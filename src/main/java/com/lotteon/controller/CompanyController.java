@@ -14,14 +14,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/company")
 public class CompanyController {
 
-    @GetMapping("/{content}")
-    public String content(@PathVariable String content, Model model) {
-
-        log.info(content);
-        model.addAttribute("content", content);
-        return "companyIndex";
+    @GetMapping("/home")
+    public String companyHome(Model model) {
+        model.addAttribute("content", "home");
+        return "content/company/index"; // Points to the "content/company/index" template
     }
 
 
+    @GetMapping("/culture")
+    public String companyCulture(Model model) {
+        model.addAttribute("content", "culture");
+        return "content/company/culture"; // Points to the "content/company/culture" template
+    }
+
+    @GetMapping("/story")
+    public String companyStory(Model model) {
+        model.addAttribute("content", "story");
+        return "content/company/story"; // Points to the "content/company/story" template
+    }
+
+    @GetMapping("/media")
+    public String companyMedia(Model model) {
+        model.addAttribute("content", "media");
+        return "content/company/media"; // Points to the "content/company/media" template
+    }
+
+    @GetMapping("/recruit")
+    public String companyRecruit(Model model) {
+        model.addAttribute("content", "recruit");
+        return "content/company/recruit"; // Points to the "content/company/recruit" template
+    }
 
 }

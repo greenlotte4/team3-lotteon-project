@@ -10,17 +10,10 @@
 
     <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
     <link rel="stylesheet" th:href="@{/css/admin/adminaside.css}">
-    <link rel="stylesheet" th:href="@{/css/admin/adminproductList.css}">
-    <link rel="stylesheet" th:if="${content=='register'}" th:href="@{/css/admin/adminProductReg.css}">
 
 
-    <link rel="stylesheet" th:if="${content=='delivery' || content=='status'}" th:href="@{/css/admin/shoplistmodal.css}">
-    <link rel="stylesheet" th:if="${content=='status'}" th:href="@{/css/admin/admin_delivery_modal.css}">
-    <link rel="stylesheet" th:if="${content=='status'}" th:href="@{/css/admin/admin-modal.css}">
-    <link rel="stylesheet" th:if="${content=='status'}" th:href="@{/css/admin/adminDelivery.css}">
-    <link rel="stylesheet"  th:if="${cate=='coupon'}"  th:href="@{/css/admin/adminCoupon.css}">
 
-    <link rel="stylesheet"  th:if="${content=='delivery'}" th:href="@{/css/admin/adminOrder.css}">
+
 
 </head>
 
@@ -32,18 +25,16 @@
             <th:block th:replace="~{include/adminAside}"> </th:block>
 
             <!--content-->
-            <th:block th:replace="~{content/sellerDynamic}"></th:block>
+            <th:block  layout:fragment="content"></th:block>
 
 
-
+            <th:block th:replace="~{include/adminFooter}"> </th:block>
 
         </div>
     </main>
 </div>
 
 <script th:src="@{/js/admin.js}"></script>
-<script th:if="${content=='delivery'}" th:src="@{/js/delivery.js}"></script>
-<script th:if="${content=='register'}" th:src="@{/js/CategoryLoad.js}"></script>
 
 </body>
 </html>

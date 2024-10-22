@@ -15,20 +15,44 @@ import org.springframework.web.bind.annotation.*;
 public class SellerController {
 
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        return "content/admin/adminLogin";
+    @GetMapping("/product/list")
+    public String productList(Model model) {
+        model.addAttribute("content", "list");
+        return "/content/admin/product/admin_productlist"; // Points to the "content/sellerDynamic" template for product listing
     }
 
-    @GetMapping("/{cate}/{content}")
-    public String seller(@PathVariable String content,@PathVariable String cate, Model model) {
-
-        model.addAttribute("content", content);
-        model.addAttribute("cate", cate);
-
-        return "sellerIndex";
+    @GetMapping("/product/register")
+    public String productRegister(Model model) {
+        model.addAttribute("content", "register");
+        return "/content/admin/product/admin_productReg"; // Points to the "content/sellerDynamic" template for product registration
     }
 
+    @GetMapping("/order/delivery")
+    public String deliveryStatus(Model model) {
+        model.addAttribute("content", "delivery");
+        return "/content/admin/order/admin_Delivery"; // Points to the "content/sellerDynamic" template for delivery orders
+    }
+
+    @GetMapping("/order/status")
+    public String orderStatus(Model model) {
+        model.addAttribute("content", "status");
+        return "/content/admin/order/admin_Order"; // Points to the "content/sellerDynamic" template for order status
+    }
+
+
+
+    @GetMapping("/coupon/list")
+    public String couponList(Model model) {
+        model.addAttribute("cate", "coupon");
+        return "/content/admin/coupon/list"; // Points to the "content/sellerDynamic" template for coupon management
+    }
+
+    @GetMapping("/coupon/issued")
+    public String couponIssued(Model model) {
+        model.addAttribute("cate", "coupon");
+        model.addAttribute("content", "issued");
+        return "/content/admin/coupon/issued"; // Points to "content/admin/coupon/issued"
+    }
     @PostMapping("/product/register")
     public String insertProduct(@RequestParam ProductRequestDTO productRequestDTO, Model model) {
         log.info(productRequestDTO);

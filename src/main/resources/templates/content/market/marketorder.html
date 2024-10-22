@@ -1,271 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/marketLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn</title>
+    <link   rel="stylesheet" th:href="@{/css/market/marketOrder.css}">
 
-<section class="section order">
-    <div class="sectionWrapper order">
-        <div class="sub_tit">
-            <h3 id="h3_list">주문하기</h3>
-            <div class="location">
-                <span><a href="">홈&nbsp;</a></span>
-                <span>장바구니&nbsp;</span>
-                <span><strong>주문하기&nbsp;</strong></span>
+
+
+</head>
+<body>
+<th:block layout:fragment="content">
+    <section class="section order">
+        <div class="sectionWrapper order">
+            <div class="sub_tit">
+                <h3 id="h3_list">주문하기</h3>
+                <div class="location">
+                    <span><a href="">홈&nbsp;</a></span>
+                    <span>장바구니&nbsp;</span>
+                    <span><strong>주문하기&nbsp;</strong></span>
+                </div>
             </div>
-        </div>
 
-        <!-- 장바구니 table -->
-        <form action="#" id="product_order">
+            <!-- 장바구니 table -->
+            <form action="#" id="product_order">
 
-            <table class="productOrder">
-                <colgroup style="width: 1100px; table-layout: fixed;">
-                    <col style="width: 45%;">
-                    <col style="width: 9%;">
-                    <col style="width: 10%;">
-                    <col style="width: 8%;">
-                    <col style="width: 8%;">
-                    <col style="width: 8%;">
-                    <col style="width: 22%;">
-                </colgroup>
-                <tr>
-                    <th>상품</th>
-                    <th>수량</th>
-                    <th>판매가</th>
-                    <th>할인</th>
-                    <th>포인트</th>
-                    <th>배송비</th>
-                    <th>총합</th>
-                </tr>
-                <!-- 반복부분 -->
-                <tr>
-                    <td>
-                        <div><img src="" alt=""></div>
-                        <div>
-                            <span>상품명</span>
-                            <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
-                        </div>
-                    </td>
-                    <td >
-                        <div class="qnt">
-                            <input type="number" name="quantity" placeholder="1" readonly>
-                        </div>
-                    </td>
-                    <td><span class="price">30000</span></td>
-                    <td>10%</td>
-                    <td><span class="price">300</span></td>
-                    <td><span class="price">3000</span></td>
-                    <td><span class="price">29500</span></td>
-                </tr>
-                <!-- 반복부분 -->
-                <tr>
-                    <td>
-                        <div><img src="" alt=""></div>
-                        <div>
-                            <span>상품명</span>
-                            <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
-                        </div>
-                    </td>
-                    <td >
-                        <div class="qnt">
-                            <input type="number" name="quantity" placeholder="1" readonly>
-                        </div>
-                    </td>
-                    <td><span class="price">30000</span></td>
-                    <td>10%</td>
-                    <td><span class="price">300</span></td>
-                    <td><span class="price">3000</span></td>
-                    <td><span class="price">29500</span></td>
-                </tr>
-                <!-- 반복부분 -->
-                <tr>
-                    <td>
-                        <div><img src="" alt=""></div>
-                        <div>
-                            <span>상품명</span>
-                            <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
-                        </div>
-                    </td>
-                    <td >
-                        <div class="qnt">
-                            <input type="number" name="quantity" placeholder="1" readonly>
-                        </div>
-                    </td>
-                    <td><span class="price">30000</span></td>
-                    <td>10%</td>
-                    <td><span class="price">300</span></td>
-                    <td><span class="price">3000</span></td>
-                    <td><span class="price">29500</span></td>
-                </tr>
-                <!-- 반복부분 -->
-                <tr>
-                    <td>
-                        <div><img src="" alt=""></div>
-                        <div>
-                            <span>상품명</span>
-                            <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
-                        </div>
-                    </td>
-                    <td >
-                        <div class="qnt">
-                            <input type="number" name="quantity" placeholder="1" readonly>
-                        </div>
-                    </td>
-                    <td><span class="price">30000</span></td>
-                    <td>10%</td>
-                    <td><span class="price">300</span></td>
-                    <td><span class="price">3000</span></td>
-                    <td><span class="price">29500</span></td>
-                </tr>
-            </table>
-            <!-- <div class="btn-group">
-                <button class="returnCart" >장바구니로 돌아가기</button>
-            </div> -->
+                <table class="productOrder">
+                    <colgroup style="width: 1100px; table-layout: fixed;">
+                        <col style="width: 45%;">
+                        <col style="width: 9%;">
+                        <col style="width: 10%;">
+                        <col style="width: 8%;">
+                        <col style="width: 8%;">
+                        <col style="width: 8%;">
+                        <col style="width: 22%;">
+                    </colgroup>
+                    <tr>
+                        <th>상품</th>
+                        <th>수량</th>
+                        <th>판매가</th>
+                        <th>할인</th>
+                        <th>포인트</th>
+                        <th>배송비</th>
+                        <th>총합</th>
+                    </tr>
+                    <!-- 반복부분 -->
+                    <tr>
+                        <td>
+                            <div><img src="" alt=""></div>
+                            <div>
+                                <span>상품명</span>
+                                <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
+                            </div>
+                        </td>
+                        <td >
+                            <div class="qnt">
+                                <input type="number" name="quantity" placeholder="1" readonly>
+                            </div>
+                        </td>
+                        <td><span class="price">30000</span></td>
+                        <td>10%</td>
+                        <td><span class="price">300</span></td>
+                        <td><span class="price">3000</span></td>
+                        <td><span class="price">29500</span></td>
+                    </tr>
+                    <!-- 반복부분 -->
+                    <tr>
+                        <td>
+                            <div><img src="" alt=""></div>
+                            <div>
+                                <span>상품명</span>
+                                <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
+                            </div>
+                        </td>
+                        <td >
+                            <div class="qnt">
+                                <input type="number" name="quantity" placeholder="1" readonly>
+                            </div>
+                        </td>
+                        <td><span class="price">30000</span></td>
+                        <td>10%</td>
+                        <td><span class="price">300</span></td>
+                        <td><span class="price">3000</span></td>
+                        <td><span class="price">29500</span></td>
+                    </tr>
+                    <!-- 반복부분 -->
+                    <tr>
+                        <td>
+                            <div><img src="" alt=""></div>
+                            <div>
+                                <span>상품명</span>
+                                <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
+                            </div>
+                        </td>
+                        <td >
+                            <div class="qnt">
+                                <input type="number" name="quantity" placeholder="1" readonly>
+                            </div>
+                        </td>
+                        <td><span class="price">30000</span></td>
+                        <td>10%</td>
+                        <td><span class="price">300</span></td>
+                        <td><span class="price">3000</span></td>
+                        <td><span class="price">29500</span></td>
+                    </tr>
+                    <!-- 반복부분 -->
+                    <tr>
+                        <td>
+                            <div><img src="" alt=""></div>
+                            <div>
+                                <span>상품명</span>
+                                <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
+                            </div>
+                        </td>
+                        <td >
+                            <div class="qnt">
+                                <input type="number" name="quantity" placeholder="1" readonly>
+                            </div>
+                        </td>
+                        <td><span class="price">30000</span></td>
+                        <td>10%</td>
+                        <td><span class="price">300</span></td>
+                        <td><span class="price">3000</span></td>
+                        <td><span class="price">29500</span></td>
+                    </tr>
+                </table>
+                <!-- <div class="btn-group">
+                    <button class="returnCart" >장바구니로 돌아가기</button>
+                </div> -->
 
-        </form>
-    </div><!--sectionWrapper-->
-</section>
+            </form>
+        </div><!--sectionWrapper-->
+    </section>
 
-<section class="orderSection">
-    <form action="" style="display: flex; flex-direction: row; justify-content: space-around;
+    <section class="orderSection">
+        <form action="" style="display: flex; flex-direction: row; justify-content: space-around;
     align-items: flex-start;
     flex-wrap: nowrap;">
-        <!--결제정보-->
-        <div class="infoWrap">
-            <article class="orderInfo">
-                <h4 calss="info_tit">배송정보</h4>
-                <div class="Delivery_address">
-                    <table>
-                        <colgroup>
-                            <col style="width: 20%;">
-                            <col style="width: 80%;">
-                        </colgroup>
-                        <tr>
-                            <th>수령자</th>
-                            <td><input type="text" name="name" id="name" readonly placeholder="하진희"></td>
-                        </tr>
-                        <tr>
-                            <th>휴대폰</th>
-                            <td><input type="text" name="hp" id="hp" placeholder="010-5555-5555" readonly></td>
-                        </tr>
-                        <tr  class="address_info">
-                            <th>배송지</th>
-                            <td>
+            <!--결제정보-->
+            <div class="infoWrap">
+                <article class="orderInfo">
+                    <h4 calss="info_tit">배송정보</h4>
+                    <div class="Delivery_address">
+                        <table>
+                            <colgroup>
+                                <col style="width: 20%;">
+                                <col style="width: 80%;">
+                            </colgroup>
+                            <tr>
+                                <th>수령자</th>
+                                <td><input type="text" name="name" id="name" readonly placeholder="하진희"></td>
+                            </tr>
+                            <tr>
+                                <th>휴대폰</th>
+                                <td><input type="text" name="hp" id="hp" placeholder="010-5555-5555" readonly></td>
+                            </tr>
+                            <tr  class="address_info">
+                                <th>배송지</th>
+                                <td>
                                                 <span>
                                                 [ 123456 ] <input type="button" class="address_change" value="주소지 변경">
                                                 </span><br>
-                                <span> 부산 연제구 address1 , address2  부산 연제구 address1 , address2  부산 연제구 address1 , address2</span>
+                                    <span> 부산 연제구 address1 , address2  부산 연제구 address1 , address2  부산 연제구 address1 , address2</span>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
 
-                    </table>
-                </div>
-
-
-                <h4 calss="info_tit">할인정보</h4>
-                <div class="discountWrapper">
-                    <div class="point_wrap">
-                        <div class="point_info">
-                            <span class="price">현재 포인트 : [point]</span>
-                            <p>
-                                포인트 : 2,000점이상이면
-                                현금처럼 사용가능
-                            </p>
-
-                        </div>
-                        <div class="point_use">
-                            <input type="number" name="used_point" id="used_point" value="0">
-                            <input type="button" value="사용하기" id="pointuseBtn" >
-                            <span>적용포인트 : <p class="usedPoint price"></p></span>
-                        </div>
-
-
-
+                        </table>
                     </div>
 
-                    <div class="coupon_Info">
-                        <div class="coupon">
-                            <span>사용가능 쿠폰</span>
-                            <select name="coupons" id="">
-                                <option value="" selected disabled>사용하실 쿠폰을 선택하세요</option>
-                                <option value="1">생일축하쿠폰 3%</option>
-                            </select>
+
+                    <h4 calss="info_tit">할인정보</h4>
+                    <div class="discountWrapper">
+                        <div class="point_wrap">
+                            <div class="point_info">
+                                <span class="price">현재 포인트 : [point]</span>
+                                <p>
+                                    포인트 : 2,000점이상이면
+                                    현금처럼 사용가능
+                                </p>
+
+                            </div>
+                            <div class="point_use">
+                                <input type="number" name="used_point" id="used_point" value="0">
+                                <input type="button" value="사용하기" id="pointuseBtn" >
+                                <span>적용포인트 : <p class="usedPoint price"></p></span>
+                            </div>
+
+
+
                         </div>
 
-                    </div>
-                    <div class="totalSalePrice">
-                        <div>
-                            <p>포인트 할인금액 : </p><span class="usedPointResult price">2000</span>
-                        </div>
-                        <div>
-                            <p>쿠폰 할인금액 : </p><span class="usedCouponResult price">2000</span>
-                        </div>
-                        <div class="totalDiscount">
-                            <p >총 할인금액 : </p><span class="DiscountResult price">4000</span>
-                        </div>
-                    </div>
-                </div>
-                <h4 calss="info_tit">결제방법</h4>
+                        <div class="coupon_Info">
+                            <div class="coupon">
+                                <span>사용가능 쿠폰</span>
+                                <select name="coupons" id="">
+                                    <option value="" selected disabled>사용하실 쿠폰을 선택하세요</option>
+                                    <option value="1">생일축하쿠폰 3%</option>
+                                </select>
+                            </div>
 
-                <div class="payment-options">
-                    <label class="payment-option">
-                        <input type="radio" name="payment" value="credit-card"> 신용카드
-                    </label>
-                    <label class="payment-option">
-                        <input type="radio" name="payment" value="check-card"> 체크카드
-                    </label>
-                    <label class="payment-option">
-                        <input type="radio" name="payment" value="bank-transfer"> 계좌이체
-                    </label>
-                    <label class="payment-option">
-                        <input type="radio" name="payment" value="no-bankbook"> 무통장입금
-                    </label>
-                    <label class="payment-option">
-                        <input type="radio" name="payment" value="mobile-payment"> 휴대폰결제
-                    </label>
-                    <label class="payment-option">
-                        <input type="radio" name="payment" value="kakaopay"> 카카오페이
-                        <span class="kakao-icon">
+                        </div>
+                        <div class="totalSalePrice">
+                            <div>
+                                <p>포인트 할인금액 : </p><span class="usedPointResult price">2000</span>
+                            </div>
+                            <div>
+                                <p>쿠폰 할인금액 : </p><span class="usedCouponResult price">2000</span>
+                            </div>
+                            <div class="totalDiscount">
+                                <p >총 할인금액 : </p><span class="DiscountResult price">4000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h4 calss="info_tit">결제방법</h4>
+
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="credit-card"> 신용카드
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="check-card"> 체크카드
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="bank-transfer"> 계좌이체
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="no-bankbook"> 무통장입금
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="mobile-payment"> 휴대폰결제
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="kakaopay"> 카카오페이
+                            <span class="kakao-icon">
                                             <img src="https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/500_20210714141750154.png" alt="카카오페이">
                                         </span>
-                    </label>
-                </div>
-            </article>
-        </div>
+                        </label>
+                    </div>
+                </article>
+            </div>
 
 
-        <!-- aside -->
-        <aside class="finalOrder_window scroll">
-            <section class="finalOrderAsideWrapper">
-                <h3>최종결제정보 </h3>
-                <div class="orderQnt">
-                    <label for="">상품수</label>
-                    <span>2</span>
-                </div>
-                <div class="orderOriginPrice">
-                    <label for="">상품금액</label>
-                    <span class="price">270000000000</span>
-                </div>
-                <div class="orderSalePrice">
-                    <label for="">할인금액</label>
-                    <span  class="price">-1350</span>
-                </div>
-                <div class="delivery-fee">
-                    <label for="">배송비</label>
-                    <span  class="price">0</span>
-                </div>
-                <div class="orderTotalPrice">
-                    <label for="">전체 주문금액</label>
-                    <span class="price">25650</span>
-                </div>
-                <div class="orderPoint">
-                    <label for="">적립예정포인트</label>
-                    <span  class="price">270</span>
-                </div>
-                <div class="orderBtn">
-                    <button type="submit" class="order-Btn">결제하기</button>
-                </div>
-            </section>
-        </aside>
-    </form>
-</section>
-                   
+            <!-- aside -->
+            <aside class="finalOrder_window scroll">
+                <section class="finalOrderAsideWrapper">
+                    <h3>최종결제정보 </h3>
+                    <div class="orderQnt">
+                        <label for="">상품수</label>
+                        <span>2</span>
+                    </div>
+                    <div class="orderOriginPrice">
+                        <label for="">상품금액</label>
+                        <span class="price">270000000000</span>
+                    </div>
+                    <div class="orderSalePrice">
+                        <label for="">할인금액</label>
+                        <span  class="price">-1350</span>
+                    </div>
+                    <div class="delivery-fee">
+                        <label for="">배송비</label>
+                        <span  class="price">0</span>
+                    </div>
+                    <div class="orderTotalPrice">
+                        <label for="">전체 주문금액</label>
+                        <span class="price">25650</span>
+                    </div>
+                    <div class="orderPoint">
+                        <label for="">적립예정포인트</label>
+                        <span  class="price">270</span>
+                    </div>
+                    <div class="orderBtn">
+                        <button type="submit" class="order-Btn">결제하기</button>
+                    </div>
+                </section>
+            </aside>
+        </form>
+    </section>
+
 
     <!-- 배송지 선택 모달 -->
     <div id="addressSelectModal" class="modal">
@@ -280,12 +295,12 @@
                         <p>[47566]<br> 부산 연제구 온천천남로 110</p>
                         <p>010-5595-8375</p>
                     </div>
-                    
+
                     <div class="address-btn">
                         <button class="edit-btn">수정</button>
                         <button class="delete-btn">삭제</button>
                     </div>
-                    
+
                 </div>
                 <div class="address-item">
                     <div class="address-info">
@@ -338,5 +353,7 @@
         </div>
     </div>
 
+    <script  th:src="@{/js/marketOrder.js}"></script>
 
 
+</th:block>
