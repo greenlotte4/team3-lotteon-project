@@ -1,22 +1,20 @@
 package com.lotteon.controller;
 
 
-import com.lotteon.dto.BannerDTO;
-import com.lotteon.dto.FileDTO;
-import com.lotteon.dto.FooterInfoDTO;
-import com.lotteon.dto.VersionDTO;
+import com.lotteon.DTO.BannerDTO;
+import com.lotteon.DTO.VersionDTO;
+import com.lotteon.DTO.FooterInfoDTO;
+import com.lotteon.entity.Banner;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
 import com.lotteon.service.FooterInfoService;
 import com.lotteon.service.VersionService;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -37,36 +35,49 @@ public class AdminController {
     @GetMapping("/main")
     public String adminMain( Model model) {
 
-        model.addAttribute("cate", "main");
-        return "/content/admin/admin_index";
+        return "content/admin/admin_index";
     }
 
+    @ResponseBody
+    @DeleteMapping("/banner/delete")
+    public ResponseEntity<?> bannerDelete(@RequestBody List<Integer> data){
+         if(data == null || data.isEmpty()){
+             return ResponseEntity.badRequest().body("삭제할 항목이 없습니다.");
+         }
+         adminService.deleteBanner(data);
+         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/config/banner")
+    public String bannerList(Model model) {
+        List<BannerDTO> banners = adminService.selectAllbanner();
+        log.info("gdgd :" + banners);
+        model.addAttribute("banners", banners);
+        return "content/admin/config/admin_Banner";
+    }
 
     @ResponseBody
     @PostMapping("/banner/upload")
-    public ResponseEntity<String> banner(@ModelAttribute BannerDTO bannerDTO) {
+    public ResponseEntity<?> banner(@ModelAttribute BannerDTO bannerDTO , Model model) {
         log.info("bannerDTO :" + bannerDTO);
 
 
         //파일 업로드
-        List<FileDTO> uploadfiles = fileService.uploadFile(bannerDTO);
+        BannerDTO newBanner = fileService.uploadFile(bannerDTO);
+
+        bannerDTO.setBan_oname(newBanner.getBan_oname()); // 원래 파일 이름 설정
+        bannerDTO.setBan_image(newBanner.getBan_image()); // 저장된 파일 이름 설정
 
         //글저장
-         BannerDTO banner = adminService.insertBanner(bannerDTO);
+        Banner banner = adminService.insertBanner(bannerDTO);
 
-        if(!uploadfiles.isEmpty()) {
-            FileDTO fileDTO = uploadfiles.get(0);
-            fileDTO.setFiletype(banner.getBan_type());
-            fileDTO.setFileoption(banner.getBan_location());
-            fileService.insertFile(fileDTO);
-        }
-        return ResponseEntity.ok("배너 등록 성공");
+        return ResponseEntity.ok().body(banner);
     }
 
     @PostMapping("/config/basic")
     public String FooterInfoModify(Model model, FooterInfoDTO footerInfoDTO) {
 
-        footerInfoService.insertFooterInfo(footerInfoDTO);
+//        footerInfoService.insertFooterInfo(footerInfoDTO);
 
         return "redirect:/admin/config/basic";
     }

@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/config")
 public class AdminConfigController {
 
-    @GetMapping("/banner")
-    public String adminBanner(Model model) {
-        model.addAttribute("cate", "config");
-        model.addAttribute("content", "banner");
-        return "content/admin/config/admin_Banner";
-    }
+//    @GetMapping("/banner")
+//    public String adminBanner(Model model) {
+//        model.addAttribute("cate", "config");
+//        model.addAttribute("content", "banner");
+//        return "content/admin/config/admin_Banner";
+//    }
 
     @GetMapping("/basic")
     public String adminBasic(Model model) {
