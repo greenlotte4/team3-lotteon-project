@@ -1,6 +1,5 @@
 package com.lotteon.service.product;
 
-import com.lotteon.dto.FileDTO;
 import com.lotteon.dto.product.ProductFileDTO;
 import com.lotteon.entity.product.ProductFile;
 import com.lotteon.repository.product.ProductFileRepository;
