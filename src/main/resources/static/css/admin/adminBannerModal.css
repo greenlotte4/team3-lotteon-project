@@ -48,7 +48,7 @@ td {
 
 td:first-child {
     font-weight: bold;
-    text-align: left;
+    /*text-align: left;*/
 }
 
 input[type="text"],
@@ -64,12 +64,12 @@ select {
 
 input[type="date"] {
     cursor: pointer;
-    width: 100px;
+    width: 150px;
 }
 
 input[type="time"] {
     cursor: pointer;
-    width: 100px;
+    width: 150px;
 }
 
 input[type="text"]::placeholder {

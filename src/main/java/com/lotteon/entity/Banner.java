@@ -24,15 +24,18 @@ public class Banner {
     private String ban_image;
     private String ban_link;
     private String ban_location;
+    private String ban_oname;
 
     private String ban_sdate;
     private String ban_edate;
     private String ban_stime;
     private String ban_etime;
 
+    private int status;
 
-    @OneToMany(mappedBy = "bno")
-    private List<FileEntity> fileList;
+
+//    @OneToMany(mappedBy = "bno")
+//    private List<FileEntity> fileList;
 
 
 }
