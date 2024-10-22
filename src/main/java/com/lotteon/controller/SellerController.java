@@ -23,8 +23,16 @@ public class SellerController {
 
     @GetMapping("/product/register")
     public String productRegister(Model model) {
-        model.addAttribute("content", "register");
         return "/content/admin/product/admin_productReg"; // Points to the "content/sellerDynamic" template for product registration
+    }
+
+
+
+    @PostMapping("/product/register")
+    public String insertProduct(@ModelAttribute ProductRequestDTO productRequestDTO, Model model) {
+        log.info("전달은 된다.");
+        log.info(productRequestDTO);
+        return "redirect:/seller/product/list";
     }
 
     @GetMapping("/order/delivery")
@@ -53,11 +61,7 @@ public class SellerController {
         model.addAttribute("content", "issued");
         return "/content/admin/coupon/issued"; // Points to "content/admin/coupon/issued"
     }
-    @PostMapping("/product/register")
-    public String insertProduct(@RequestParam ProductRequestDTO productRequestDTO, Model model) {
-        log.info(productRequestDTO);
-        return "content/admin/adminRegister";
-    }
+
 
 
 }

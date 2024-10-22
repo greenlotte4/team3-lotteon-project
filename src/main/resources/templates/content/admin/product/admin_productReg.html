@@ -22,7 +22,7 @@
                             <p><a href="#">HOME</a> > 관리자 메인</p>
                     </section>
 
-                    <form th:action="@{/seller/product/register}" method="post">
+                    <form th:action="@{/seller/product/register}" method="post" id="productForm" enctype="multipart/form-data">
                         <article id="admin_version">
                             <div class="top1">상품분류</div>
                             <div><span class="top2">1차, 2차, 3차 기본분류는 반드시 선택하셔야 합니다.</span></div>
@@ -99,7 +99,7 @@
                                     <td>제조사</td>
                                     <td>
                                         <input type="hidden" name="sellerId">
-                                        <input type="text" placeholder="" name="sellerId">
+                                        <input type="text" placeholder="" name="madeIn">
                                     </td>
                                 </tr>
                                 <tr>
@@ -170,31 +170,31 @@
                                 <tr>
                                     <td>상품상태</td>
                                     <td>
-                                        <input type="text" placeholder="ex: 새상품" name="">
+                                        <input type="text" placeholder="ex: 새상품" name="condition">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>부가세 면세여부</td>
                                     <td>
-                                        <input type="text" placeholder="ex: 과세상품">
+                                        <input type="text" placeholder="ex: 과세상품" name="tax">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>영수증 발행</td>
                                     <td>
-                                        <input type="text" class="custom-width" placeholder="ex: 발행가능 - 신용카드전표, 온라인현금영수증">
+                                        <input type="text" class="custom-width" name="receiptIssuance" placeholder="ex: 발행가능 - 신용카드전표, 온라인현금영수증">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>사업자구분</td>
                                     <td>
-                                        <input type="text" class="custom-width" placeholder="ex: 사업자 판매자">
+                                        <input type="text" class="custom-width"  name="busniesstype" placeholder="ex: 사업자 판매자">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>원산지</td>
                                     <td>
-                                        <input type="text" placeholder="ex: 국내산">
+                                        <input type="text" placeholder="ex: 국내산" name="manufactureCountry" >
                                     </td>
                                 </tr>
                             </table>
@@ -210,5 +210,6 @@
                         </div>
                     </form>
                 </section>
-                <script th:if="${content=='register'}" th:src="@{/js/CategoryLoad.js}"></script>
+                <script th:src="@{/js/CategoryLoad.js}"></script>
+
 </th:block>
