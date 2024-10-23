@@ -52,7 +52,7 @@
                    th:data-type="${coupon.couponType}"
                    th:data-name="${coupon.couponName}"
                    th:data-benefit="${coupon.benefit}"
-                   th:with="period=${coupon.startDate} + ' ~ ' + ${coupon.endDate}"
+                   th:data-period="${coupon.startDate} + ' ~ ' + ${coupon.endDate}"
                    th:data-notes="${coupon.notes}"
                    th:text="${coupon.couponId}"></a>
             </td>
@@ -60,7 +60,7 @@
             <td th:text="${coupon.couponType}"></td>
             <td th:text="${coupon.benefit}"></td>
             <td>
-                <span th:text="${coupon.startDate}"></span><br>
+                <span th:text="${coupon.startDate}"></span> ~
                 <span th:text="${coupon.endDate}"></span>
             </td>
             <td th:text="${coupon.sellerCompany}"></td>
@@ -158,9 +158,9 @@
                                         <td>
                                             <select id="couponType" name="couponType">
                                                 <option value="" disabled selected>종류 선택</option>
-                                                <option value="discount">할인</option>
-                                                <option value="gift">선물</option>
-                                                <option value="free">무료</option>
+                                                <option value="discount">개별상품할인</option>
+                                                <option value="gift" th:if="${sellerGrade == 'admin'}">주문상품할인</option>
+                                                <option value="free" th:if="${sellerGrade == 'admin'}">배송비 무료</option>
                                             </select>
                                         </td>
                                     </tr>

@@ -34,7 +34,8 @@ public class AdminCouponController {
         Seller seller = userDetails.getSeller();
 
         model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
-
+        model.addAttribute("sellerGrade", seller.getGrade());
+        log.info("등급"+seller.getGrade());
         List<CouponDTO> couponList  = couponService.selectCouponAll();
         model.addAttribute("couponList", couponList );
 
@@ -79,4 +80,12 @@ public class AdminCouponController {
             return ResponseEntity.status(500).body("등록에 실패했습니다: " + e.getMessage());
         }
     }
+
+    @PutMapping("/{couponId}/end")
+    public ResponseEntity<CouponDTO> endCoupon(@PathVariable("couponId") String couponId) {
+        CouponDTO updatedCoupon = couponService.endCoupon(couponId);
+        return ResponseEntity.ok(updatedCoupon);
+
+    }
+
 }

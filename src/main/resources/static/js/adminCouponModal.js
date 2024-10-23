@@ -195,4 +195,37 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 });
 
+document.querySelectorAll('.end-button').forEach(button => {
+    button.addEventListener('click', function () {
+        const confirmEnd = confirm("정말로 이 쿠폰을 종료하시겠습니까?");
+        if (confirmEnd) {
+            const couponId = this.closest('tr').querySelector('.order-link').getAttribute('data-coupon-id');
 
+            fetch(`/admin/coupon/${couponId}/end`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(resp => {
+                    if (resp.ok) {
+                        return resp.json(); // 응답을 JSON으로 변환
+                    } else {
+                        alert("쿠폰 종료에 실패했습니다.");
+                        throw new Error("Response not OK");
+                    }
+                })
+                .then(updatedCoupon => {
+                    this.innerText = "종료됨"; // 버튼 텍스트 변경
+                    this.disabled = true; // 버튼 비활성화
+
+                    // 업데이트된 상태를 UI에 반영
+                    const couponRow = this.closest('tr');
+                    couponRow.querySelector('.coupon-status').innerText = updatedCoupon.status; // 반환된 상태를 사용
+                })
+                .catch(error => {
+                    console.error('Error', error);
+                });
+        }
+    });
+});
