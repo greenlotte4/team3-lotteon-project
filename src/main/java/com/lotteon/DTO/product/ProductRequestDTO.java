@@ -19,8 +19,6 @@ public class ProductRequestDTO {
     private String productName;
     private String productDesc; //상품설명
 
-
-//    private OptionDTO options;
     private List<String> optionName;
     private List<String> optionDesc;
     private List<Integer> optionStock;

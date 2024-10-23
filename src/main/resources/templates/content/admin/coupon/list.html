@@ -228,9 +228,10 @@
                             <form id="couponForm">
                                 <table>
                                     <tr>
-                                        <td><label for="issuer">발급처</label></td>
-                                        <td><input type="text" id="issuer" name="issuer"
-                                                   placeholder="(주)다있어"></td>
+                                        <td><label>발급처</label></td>
+                                        <td>
+                                            <span th:text="${seller != null ? seller.company : '정보 없음'}"></span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><label for="couponType">쿠폰 종류</label></td>

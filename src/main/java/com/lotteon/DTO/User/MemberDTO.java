@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Member {
+public class MemberDTO {
 
     @Id
     private long id;
