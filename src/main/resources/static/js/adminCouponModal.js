@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 });
-
+//
 document.querySelectorAll('.end-button').forEach(button => {
     button.addEventListener('click', function () {
         const confirmEnd = confirm("정말로 이 쿠폰을 종료하시겠습니까?");

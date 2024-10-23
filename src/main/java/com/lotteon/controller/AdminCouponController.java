@@ -80,7 +80,7 @@ public class AdminCouponController {
             return ResponseEntity.status(500).body("등록에 실패했습니다: " + e.getMessage());
         }
     }
-
+//
     @PutMapping("/{couponId}/end")
     public ResponseEntity<CouponDTO> endCoupon(@PathVariable("couponId") String couponId) {
         CouponDTO updatedCoupon = couponService.endCoupon(couponId);
