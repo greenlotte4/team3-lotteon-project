@@ -35,19 +35,19 @@
                                                     <div>유형</div>
                                                     <div>
                                                         <td>
-                                                            <select class="first_choice">
-                                                                <option value="" disabled selected>유형 선택</option>
-                                                                <option value="1">가입</option>
-                                                                <option value="2">취소/반품/교환</option>
-                                                                <option value="3">주문/결제</option>
-                                                                <option value="4">쿠폰/이벤트</option>
+                                                            <select class="first_choice" name="faqtype1">
+                                                                <option value="" disabled selected th:text="${faq.faqtype1}"></option>
+                                                                <option value="가입">가입</option>
+                                                                <option value="취소/반품/교환">취소/반품/교환</option>
+                                                                <option value="주문/결제">주문/결제</option>
+                                                                <option value="쿠폰/이벤트">쿠폰/이벤트</option>
                                                             </select>
-                                                            <select class="second_choice">
-                                                                <option value="" disabled selected>유형 선택</option>
-                                                                <option value="1">가입</option>
-                                                                <option value="2">취소/반품/교환</option>
-                                                                <option value="3">주문/결제</option>
-                                                                <option value="4">쿠폰/이벤트</option>
+                                                            <select class="second_choice" name="faqtype2">
+                                                                <option value="" disabled selected th:text="${faq.faqtype2}"></option>
+                                                                <option value="가입">가입</option>
+                                                                <option value="취소/반품/교환">취소/반품/교환</option>
+                                                                <option value="주문/결제">주문/결제</option>
+                                                                <option value="쿠폰/이벤트">쿠폰/이벤트</option>
                                                             </select>
                                                         </td>
                                                     </div>
@@ -55,13 +55,13 @@
                                                 <div class="write-title">
                                                     <div>제목</div>
                                                     <div>
-                                                        <input type="text" placeholder="제목을 입력하세요">
+                                                        <input th:value = "${faq.faqtitle}" name="faqtitle">
                                                     </div>
                                                 </div>
                                                 <div class="write-input">
                                                     <div>내용</div>
                                                     <div>
-                                                        <textarea class="faq-contents" oninput="autoResize(this)"></textarea>
+                                                        <textarea class="faq-contents" th:text="${faq.faqcontent}" oninput="autoResize(this)" name="faqcontent"></textarea>
                                                     </div>
                                                 </div>
                                         </form>
@@ -72,4 +72,34 @@
                                     </div>
                                 </div>
                             </section>
+                            <script>
+                                const modifybtn = document.getElementsByClassName('write-btn-modify')[0];
+                                const form = document.getElementsByTagName('form')[0];
+
+                                modifybtn.addEventListener('click',function (e){
+                                    e.preventDefault();
+
+                                    const data = new FormData(form);
+
+                                    fetch('/admin/faq/modify', {
+                                        method : 'post',
+                                        body : data
+                                    })
+                                        .then(resp => resp.json())
+                                        .then(data => {
+                                            console.log(data);
+                                            if(data != null){
+                                                alert('수정되었습니다.');
+                                                window.location.href="/admin/faq/list"
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.log(err);
+                                        });
+
+
+                                })
+
+
+                            </script>
 </th:block>
