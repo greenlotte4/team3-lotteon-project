@@ -1,4 +1,4 @@
-package com.lotteon.controller;
+package com.lotteon.controller.user;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;

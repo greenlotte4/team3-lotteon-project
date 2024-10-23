@@ -23,7 +23,7 @@ a {
 main {
     position: relative;
     width: 1200px;
-    height: 800px;
+    height: 900px;
     margin: 20px auto;
 }
 
@@ -106,35 +106,39 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
 }
 
 .gender input#female {
-    margin-left: 10px; /* '남'과 '여' 사이에 10px 간격 추가 */
+    margin-left: 5px; /* 남성/여성 사이 간격 조정 */
 }
 
 .btn-container {
-    text-align: center; /* 가운데 정렬 */
-    margin-top: 50px; /* 위쪽 마진 추가 */
-}
-
-.btn {
-    width: 289px;
-    height: 47px;
-    margin: 0 auto;
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
+    text-align: center;
+    margin-top: 50px;
 }
 
 .btn:hover {
     background-color: #c9302c;
 }
 
-input#email {
-    width: 185px;
+input[type="text"] iput[type="password"], input[type="email"], input[type="tel"], input[type="number"] {
+    display: inline-block;
+    width: 180px;
     height: 20px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+.button {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-left: 10px; /* input과 버튼 사이에 간격 추가 */
+    cursor: pointer;
+}
+
+.validation-message {
+    display: inline-block; /* 블록 형태로 변경 */
+    color: red;
+    margin-left: 10px;
+    font-size: 12px;
+}
+
 

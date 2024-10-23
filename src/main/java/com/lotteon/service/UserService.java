@@ -42,4 +42,18 @@ public class UserService {
 
         return memberOptional.map(Member::getName).orElse("Unknown User");
     }
+
+    public boolean checkUserId(String uid) {
+        return userRepository.existsByUid(uid); // uid로 존재 여부 확인
+    }
+
+    // 이메일 중복 체크
+    public boolean checkEmail(String email) {
+        return memberRepository.existsByEmail(email); // email로 존재 여부 확인
+    }
+
+    // 휴대폰 중복 체크
+    public boolean checkPhone(String hp) {
+        return memberRepository.existsByHp(hp); // hp로 존재 여부 확인
+    }
 }
