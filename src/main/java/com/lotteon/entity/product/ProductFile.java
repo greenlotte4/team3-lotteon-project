@@ -15,6 +15,7 @@ public class ProductFile {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int p_fno;
     private String sName;
     private String type;  //사이즈

@@ -22,7 +22,7 @@ server:
 
 spring:
     application:
-        name: LotteOnProject
+        name: LotteOnProject-3조
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: com.zaxxer.hikari.HikariDataSource

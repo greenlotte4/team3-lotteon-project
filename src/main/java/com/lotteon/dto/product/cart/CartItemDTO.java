@@ -1,3 +1,4 @@
+
 package com.lotteon.dto.product.cart;
 
 
@@ -19,3 +20,4 @@ public class CartItemDTO {
     private ProductDTO productDTO;
     private int total;
 }
+

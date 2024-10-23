@@ -1,4 +1,4 @@
-package com.lotteon.dto;
+package com.lotteon.dto.admin;
 
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
