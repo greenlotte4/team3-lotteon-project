@@ -28,11 +28,13 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final ListPath<ProductFile, QProductFile> files = this.<ProductFile, QProductFile>createList("files", ProductFile.class, QProductFile.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> hit = createNumber("hit", Integer.class);
+
     public final BooleanPath isCoupon = createBoolean("isCoupon");
 
     public final BooleanPath isSaled = createBoolean("isSaled");
 
-    public final ListPath<Option, QOption> options = this.<Option, QOption>createList("options", Option.class, QOption.class, PathInits.DIRECT2);
+    public final SetPath<Option, QOption> options = this.<Option, QOption>createSet("options", Option.class, QOption.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> point = createNumber("point", Integer.class);
 

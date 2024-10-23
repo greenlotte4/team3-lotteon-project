@@ -9,9 +9,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -21,7 +19,7 @@ import java.util.List;
 @Log4j2
 public class ProductResponseDTO{
     private ProductDTO product;
-    private List<OptionDTO> options;
+    private Set<OptionDTO> options;
     private ProductDetailsDTO productDetails;
     private MultiValueMap<String, MultipartFile> images;
 
@@ -43,7 +41,7 @@ public class ProductResponseDTO{
                 .build();
 
         log.info("여기2");
-        this.options = new ArrayList<>();
+        this.options= new LinkedHashSet<>();
         List<String> optionNames = productRequest.getOptionName();
         List<String> optionDesc = productRequest.getOptionDesc();
         List<Integer> optionStocks = productRequest.getOptionStock();
