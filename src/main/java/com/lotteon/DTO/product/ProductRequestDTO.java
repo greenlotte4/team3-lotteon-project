@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequestDTO {
+public class ProductRequestDTO{
 
     private int thirdLevelCategory;
 
@@ -33,10 +33,7 @@ public class ProductRequestDTO {
     private String rdate;
     private int point;
 
-    private MultipartFile file190;
-    private MultipartFile file230;
-    private MultipartFile file456;
-    private MultipartFile file940;
+    private List<MultipartFile> files;
 
     private String condition;
     private String tax;

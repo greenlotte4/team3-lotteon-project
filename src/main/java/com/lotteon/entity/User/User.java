@@ -2,12 +2,12 @@ package com.lotteon.entity.User;
 
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Entity
 @Builder
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="USER")
@@ -26,6 +26,7 @@ public class User{
     private Member member; // User와 Member의 관계
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL) // Seller와의 관계
+    @JsonIgnore
     private Seller seller; // User와 Seller의 관계
 
 

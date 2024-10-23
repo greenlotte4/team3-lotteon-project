@@ -20,8 +20,8 @@
                     <th:block th:replace="~{content/admin/admin_gate}"></th:block>
 
                     <section id="admin_navi">
-                        <p>상점목록</p>
-                        <p><a href="#">HOME</a> > 상점관리 > 상점목록</p>
+                        <p>상품현황</p>
+                        <p><a href="#">HOME</a> > 상품관리 > 상품목록</p>
                     </section>
                 
               
@@ -66,17 +66,19 @@
                             <th>조회</th>
                             <th>관리</th>
                         </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td><img src="./img/ch.png" alt=""></td>
-                            <td>201603292</td>
-                            <td>상품명 #1</td>
-                            <td>32,000</td>
-                            <td>10%</td>
-                            <td>320</td>
-                            <td>1,000</td>
-                            <td>(주) 다파라</td>
-                            <td>120</td>
+                        <tr th:each="product:${productDTOS}">
+                            <td><input type="checkbox">
+                                <input type="hidden" name="productId" th:value="${product.productId}">
+                            </td>
+                            <td><img th:src="@{/uploads/product/23}" ></td>
+                            <td>[[${product.productCode}]]</td>
+                            <td>[[${product.productName}]]</td>
+                            <td>[[${product.price}]]</td>
+                            <td><span class="discount">[[${product.discount}]]</span></td>
+                            <td>[[${product.point}]]</td>
+                            <td>[[${product.stock}]]</td>
+                            <td>[[${product.sellerId}]]</td>
+                            <td></td>
                             <td>
                                 <a href="" class="delete">[삭제]</a><br>
                                 <a href="" class="edit">[수정]</a>
@@ -86,6 +88,6 @@
                 </article>
                     <div class="list_button">
                         <button>선택삭제</button>
-                        <button>상품등록</button>
+                        <button><a th:href="@{/seller/product/register}">상품등록</a></button>
                     </div>
                 </section>
