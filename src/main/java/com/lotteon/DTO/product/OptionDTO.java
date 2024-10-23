@@ -17,5 +17,6 @@ public class OptionDTO {
     private String optionDesc;
     private int optionStock;
     private String OptionCode;
+    private String parentCode;
 
 }

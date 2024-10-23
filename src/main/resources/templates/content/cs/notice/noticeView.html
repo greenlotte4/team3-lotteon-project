@@ -1,4 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/csLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn</title>
+    <link rel="stylesheet"  th:href="@{/css/cs/noticeVeiw.css}">
 
+</head>
+<body>
+<th:block layout:fragment="content">
+    <th:block th:replace="~{aside/noticeAside}"></th:block>
 
 <div id="service">
         <div class="title">
@@ -57,3 +71,4 @@
         <a class="list-btn" href="../article/articleeList.html">목록</a>
     </div>
 </div>
+</th:block>

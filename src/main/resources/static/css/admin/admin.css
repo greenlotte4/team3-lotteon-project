@@ -64,13 +64,12 @@
 
 
 .checkbox {
-    margin-left: 10px;
+    text-align: center;
 
 }
 
 .checkboxes, .checkbox {
-    margin-left: 10px;
-    width: 45px;
+    text-align: center;
 }
 
 .number{width: 40px; text-align: center; font-size: 12px;  margin-right: 10px;}
