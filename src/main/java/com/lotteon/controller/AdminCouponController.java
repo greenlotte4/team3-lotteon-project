@@ -7,14 +7,14 @@ import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.admin.CouponService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Log4j2
 @Controller
@@ -23,8 +23,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminCouponController {
 
     private final CouponService couponService;
+
+
+
     @GetMapping("/list")
     public String adminCouponList(Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        Seller seller = userDetails.getSeller();
+
+        model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
+
+        List<CouponDTO> couponList  = couponService.selectCouponAll();
+        model.addAttribute("couponList", couponList );
+
+
+        return "content/admin/coupon/list";
+    }
+
+    public String couponView(String  couponId, Model model) {
+
+        CouponDTO couponDTO = couponService.selectCoupon(couponId);
+
+        model.addAttribute("couponDTO", couponDTO);
 
         return "content/admin/coupon/list";
     }
@@ -36,25 +58,25 @@ public class AdminCouponController {
     }
 
     @PostMapping("/register")
-    public String registerCoupon(@ModelAttribute CouponDTO couponDTO ,Model model) {
+    public ResponseEntity<?> registerCoupon(@RequestBody CouponDTO couponDTO) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        log.info("User details-----------------------: {}", userDetails);
         Seller seller = userDetails.getSeller();
+        log.info("Seller from user details-----------------------: {}", seller);
 
+        if(seller == null) {
+            return ResponseEntity.badRequest().body("셀러 정보를 찾을 수 없습니다.");
 
-        log.info("Received coupon data: {}", couponDTO);
-        log.info("seller--------------------------"+seller);
-        try {
-            couponService.insertCoupon(couponDTO);
-            model.addAttribute("massage","쿠폰이 등록되었스빈다..");
-
-        } catch (Exception e) {
-            model.addAttribute("error","등록에 실패했습니다."+ e.getMessage());
         }
 
-        model.addAttribute("seller", seller);
-
-        return "content/admin/coupon/list";
+        try {
+            couponService.insertCoupon(couponDTO);
+            return ResponseEntity.ok("쿠폰이 등록되었습니다.");
+        } catch (Exception e) {
+            log.error("Coupon registration failed--------------------: {}", e.getMessage());
+            return ResponseEntity.status(500).body("등록에 실패했습니다: " + e.getMessage());
+        }
     }
 }
