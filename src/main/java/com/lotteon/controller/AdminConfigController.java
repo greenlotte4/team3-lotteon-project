@@ -38,27 +38,6 @@ public class AdminConfigController {
     public String adminBasic(Model model) {
         model.addAttribute("cate", "config");
         model.addAttribute("content", "basic");
-
-        // FooterInfo 엔티티를 가져옵니다.
-        FooterInfo footerInfo = footerInfoRepository.findTopByOrderByFt_idDesc();
-
-        // FooterInfo 엔티티를 DTO로 변환합니다.
-        FooterInfoDTO footerInfoDTO = new FooterInfoDTO(
-                footerInfo.getFt_id(),
-                footerInfo.getFt_company(),
-                footerInfo.getFt_ceo(),
-                footerInfo.getFt_bo(),
-                footerInfo.getFt_mo(),
-                footerInfo.getFt_addr1(),
-                footerInfo.getFt_addr2(),
-                footerInfo.getFt_hp(),
-                footerInfo.getFt_time(),
-                footerInfo.getFt_email(),
-                footerInfo.getFt_troublehp(),
-                footerInfo.getFt_copyright()
-        );
-
-        model.addAttribute("footerInfo", footerInfoDTO);
         return "content/admin/config/admin_basic";
     }
 
