@@ -41,13 +41,18 @@
                                     <col style="width: 10%">
                                 </colgroup>
                                 <div>
-                                <select id="faqsearch" >
+                                <select class="faqselect" >
+                                    <option value="" disabled selected>1차 선택</option>
                                     <option value="">주문번호</option>
                                     <option value="">주문자</option>
                                     <option value="">주문자명</option>
                                 </select>
-                                <input id="search" type="text" placeholder="검색어 입력">
-                                <button id="serachbtn" type="button">검색</button>
+                                <select class="faqselect" >
+                                    <option value="" disabled selected>2차 선택</option>
+                                    <option value="">주문번호</option>
+                                    <option value="">주문자</option>
+                                    <option value="">주문자명</option>
+                                </select>
                                 </div>
                                 <tr>
                                     <th><input type="checkbox"></th>
@@ -59,69 +64,19 @@
                                     <th>날짜</th>
                                     <th>관리</th>
                                 </tr>
-                                <tr>
+                                <tr th:each="faq : ${faqDTOs}">
                                     <td><input type="checkbox"></td>
-                                    <td>1</td>
-                                    <td>가입문의</td>
-                                    <td>가입</td>
-                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
-                                    <td>300</td>
-                                    <td>24.12.12</td>
+                                    <td th:text="${faq.faqNo}">1</td>
+                                    <td th:text="${faq.faqtype1}" id="faqtype1">가입문의</td>
+                                    <td th:text="${faq.faqtype2}" id="faqtype2">가입</td>
+                                    <td>
+                                        <a th:href="@{/admin/faq/view(no=${faq.faqNo})}" th:text="${faq.faqtitle}"></a>
+                                    </td>
+                                    <td th:text="${faq.faqhit}">300</td>
+                                    <td>[[${#strings.substring(faq.date,0,10)}]]</td>
                                     <td>
                                             <a href="#">[삭제]</a><br>
-                                            <a th:href="@{/admin/faq/modify}">[수정]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>1</td>
-                                    <td>가입문의</td>
-                                    <td>가입</td>
-                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
-                                    <td>300</td>
-                                    <td>24.12.12</td>
-                                    <td>
-                                        <a href="#">[삭제]</a><br>
-                                        <a href="#">[수정]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>1</td>
-                                    <td>가입문의</td>
-                                    <td>가입</td>
-                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
-                                    <td>300</td>
-                                    <td>24.12.12</td>
-                                    <td>
-                                        <a href="#">[삭제]</a><br>
-                                        <a href="#">[수정]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>1</td>
-                                    <td>가입문의</td>
-                                    <td>가입</td>
-                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
-                                    <td>300</td>
-                                    <td>24.12.12</td>
-                                    <td>
-                                        <a href="#">[삭제]</a><br>
-                                        <a href="#">[수정]</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>1</td>
-                                    <td>가입문의</td>
-                                    <td>가입</td>
-                                    <td>어떻게 가입하나요?dfdfddfdfdfdfdfdfdfdfdf</td>
-                                    <td>300</td>
-                                    <td>24.12.12</td>
-                                    <td>
-                                        <a href="#">[삭제]</a><br>
-                                        <a href="#">[수정]</a>
+                                            <a th:href="@{/admin/faq/modify(no=${faq.faqNo})}">[수정]</a>
                                     </td>
                                 </tr>
                             </table>
@@ -131,4 +86,35 @@
                             <button><a th:href="@{/admin/faq/write}">작성하기</a></button>
                         </div>
                     </section>
+<script>
+    // const faqTypes1 = {
+    //     1: '가입문의',
+    //     2: '취소/반품/교환',
+    //     3: '주문/결제',
+    //     4: '쿠폰/이벤트'
+    // };
+    // const faqTypes2 = {
+    //     1: '가입문의',
+    //     2: '취소/반품/교환',
+    //     3: '주문/결제',
+    //     4: '쿠폰/이벤트'
+    // };
+    //
+    // const faqtype1 = document.querySelectorAll('[id="faqtype1"]');
+    // const faqtype2 = document.querySelectorAll('[id="faqtype2"]');
+    //
+    //     faqtype1.forEach(type1 => {
+    //         const listtype1 = type1.innerText;
+    //         type1.innerText = faqTypes1[listtype1]
+    //     })
+    //
+    //     faqtype2.forEach(type2 => {
+    //         const listtype2 = type2.innerText;
+    //         type2.innerText = faqTypes2[listtype2]
+    //     })
+    //
+    //
+
+
+</script>
 </th:block>

@@ -1,7 +1,7 @@
 package com.lotteon.controller;
 
 
-import com.lotteon.DTO.BannerDTO;
+import com.lotteon.DTO.admin.BannerDTO;
 import com.lotteon.DTO.VersionDTO;
 import com.lotteon.DTO.FooterInfoDTO;
 import com.lotteon.entity.Banner;

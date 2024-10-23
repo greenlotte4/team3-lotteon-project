@@ -1,6 +1,6 @@
 package com.lotteon.service;
 
-import com.lotteon.DTO.BannerDTO;
+import com.lotteon.DTO.admin.BannerDTO;
 import com.lotteon.dto.product.ProductFileDTO;
 import com.lotteon.entity.Banner;
 import com.lotteon.repository.BannerRepository;
@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
