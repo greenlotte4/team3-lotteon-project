@@ -26,7 +26,7 @@ public class CouponService {
     public void insertCoupon(CouponDTO couponDTO) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long sellerId = ((Seller) authentication.getPrincipal()).getId();
+        String sellerId = ((Seller) authentication.getPrincipal()).getUser().getUid();
         log.info("sellerId---------------" + sellerId);
         Coupon coupon = Coupon.builder()
                 .couponName(couponDTO.getCouponName())
@@ -38,7 +38,7 @@ public class CouponService {
                 .rdate(LocalDate.now())
                 .build();
         log.info("coupon------------------------" + coupon);
-        Seller seller = sellerRepository.findById(sellerId)
+        Seller seller = sellerRepository.findByUser_Uid(sellerId)
                 .orElseThrow(() -> new RuntimeException("seller not found"));
 
         coupon.setSeller(seller);

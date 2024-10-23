@@ -33,8 +33,8 @@ public class Coupon {
 
 
 
-    @ManyToOne
-    @JoinColumn(name = "sellerId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_uid")
     private Seller seller;
 
 
