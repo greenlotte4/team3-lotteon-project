@@ -43,7 +43,7 @@ input[type="text"] {
     table-layout: fixed; 
     border-collapse: collapse;
     border-radius: 8px;
-    overflow: hidden; /* 모서리 둥글게 하기 */
+    overflow: scroll; /* 모서리 둥글게 하기 */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
 
 

@@ -26,50 +26,14 @@ public class ProductFileService {
 
     private final ModelMapper modelMapper;
 
-    @Value("spring.servlet.multipart.location")
-    private String uploadPath;
-
-    public List<ProductFileDTO> uploadFile(ProductFileDTO productFileDTO) {
-        //파일 시스템 경로 구하기
-        File fileuploadpath = new File(uploadPath+"productImg/");
-        if(!fileuploadpath.exists()){
-            fileuploadpath.mkdirs();
-        }
-        String path=  fileuploadpath.getAbsolutePath();
-//        List<MultipartFile> files;
-//        List<ProductFileDTO> fileDTOs = new ArrayList<>();
-//
-//        for(MultipartFile file : files){
-//            log.info("file resource " + file.getResource());
-//            String OName = file.getOriginalFilename();
-//            if(OName != null && !OName.isEmpty()){
-//
-//                log.info("original name:"+OName);
-//                //확장자
-//                String ext = OName.substring(OName.lastIndexOf("."));
-//                String Sname= UUID.randomUUID().toString()+ext;
-//
-//                //파일 저장
-//                try {
-//                    file.transferTo(new File(path,Sname));
-//
-//                    ProductFileDTO productFileDTO = ProductFileDTO.builder()
-//                            .sName(Sname)
-//                            .build();
-//
-//
-//
-//                } catch (IOException e) {
-//                    log.error(e);
-//                }
-//
-//
-//
-//            }
-
-        return null;
-
+    public ProductFile insertFile(ProductFileDTO file){
+        log.info("Insert file : "+file);
+        ProductFile savedFile = modelMapper.map(file, ProductFile.class);
+        log.info("Saved file : "+savedFile);
+        ProductFile FileEntity = productFileRepository.save(savedFile);
+        return FileEntity;
     }
+
 
 
 }

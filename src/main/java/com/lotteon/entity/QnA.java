@@ -23,6 +23,7 @@ public class QnA {
     private String qna_type2;
     private String qna_title;
     private String qna_writer;
+    private String qna_content;
 
     @CreationTimestamp
     private LocalDateTime rdate;

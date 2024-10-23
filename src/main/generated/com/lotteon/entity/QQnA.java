@@ -23,6 +23,8 @@ public class QQnA extends EntityPathBase<QnA> {
 
     public final NumberPath<Integer> productid = createNumber("productid", Integer.class);
 
+    public final StringPath qna_content = createString("qna_content");
+
     public final NumberPath<Integer> qna_id = createNumber("qna_id", Integer.class);
 
     public final StringPath qna_title = createString("qna_title");

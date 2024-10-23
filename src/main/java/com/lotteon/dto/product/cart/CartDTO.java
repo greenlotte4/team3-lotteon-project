@@ -1,4 +1,4 @@
-package com.lotteon.DTO.product.cart;
+package com.lotteon.dto.product.cart;
 
 import lombok.*;
 
@@ -22,3 +22,4 @@ public class CartDTO {
 
 
 }
+

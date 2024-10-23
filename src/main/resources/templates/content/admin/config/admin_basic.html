@@ -109,44 +109,45 @@
                             <tr>
                                 <td>상호명</td>
                                 <td>
-                                    <input type="text" placeholder="ex: 롯데쇼핑 주식회사">
+                                    <input type="text" name="ft_company" placeholder="ex: 롯데쇼핑 주식회사">
                                 </td>
                             </tr>
                             <tr>
                                 <td>대표이사</td>
                                 <td>
-                                    <input type="text" placeholder="ex: 홍길동">
+                                    <input type="text" name="ft_ceo" placeholder="ex: 홍길동">
                                 </td>
                             </tr>
                             <tr>
                                 <td>사업자 등록번호</td>
                                 <td>
-                                    <input type="text" placeholder="ex: 123-12-12345">
+                                    <input type="text" name="ft_bo" placeholder="ex: 123-12-12345">
                                 </td>
                             </tr>
                             <tr>
                                 <td>통신 판매업 신고</td>
                                 <td>
-                                    <input type="text" placeholder="ex: 2024-서울강남-1234">
+                                    <input type="text" name="ft_mo" placeholder="ex: 2024-서울강남-1234">
                                 </td>
                             </tr>
                             <tr>
                                 <td>기본주소</td>
                                 <td>
-                                    <input type="text" placeholder="ex: 서울특별시 강남구 머시기동">
+                                    <input type="text" name="ft_addr1" placeholder="ex: 서울특별시 강남구 머시기동">
                                 </td>
                             </tr>
                             <tr>
                                 <td>상세주소</td>
                                 <td>
-                                    <input type="text" placeholder="ex: 삼성동, 머시기 빌딩 7층">
+                                    <input type="text" name="ft_addr2" placeholder="ex: 삼성동, 머시기 빌딩 7층">
                                 </td>
                             </tr>
                         </table>
                         <div class="basic_modi">
-                            <button>수정하기</button>
+                            <button type="button" onclick="submitFooterInfo()">수정하기</button>
                         </div>
                     </article>
+
                     <article id="admin_cs_info">
                         <div class="top1">고객센터 정보</div>
                         <div><span class="top2">푸터에 노출되는 고객센터 정보입니다.</span></div>
@@ -158,32 +159,33 @@
                             <tr>
                                 <td>전화번호</td>
                                 <td>
-                                    <input type="tel" placeholder="ex: 02-1234-1234">
+                                    <input type="tel" name="ft_hp" placeholder="ex: 02-1234-1234">
                                 </td>
                             </tr>
                             <tr>
                                 <td>업무시간</td>
                                 <td>
-                                    <input type="text" placeholder="평일 09:00 ~ 18:00">
+                                    <input type="text" name="ft_time" placeholder="평일 09:00 ~ 18:00">
                                 </td>
                             </tr>
                             <tr>
                                 <td>이메일</td>
                                 <td>
-                                    <input type="email" placeholder="lotte@naver.com">
+                                    <input type="email" name="ft_email" placeholder="lotte@naver.com">
                                 </td>
                             </tr>
                             <tr>
                                 <td>전자금융거래 분쟁담당</td>
                                 <td>
-                                    <input type="tel" placeholder="1234-1234">
+                                    <input type="tel" name="ft_troublehp" placeholder="1234-1234">
                                 </td>
                             </tr>
                         </table>
                         <div class="basic_modi">
-                            <button>수정하기</button>
+                            <button type="button" onclick="submitFooterInfo()">수정하기</button>
                         </div>
                     </article>
+
                     <article id="copy_light">
                         <div class="top1">카피 라이트</div>
                         <div><span class="top2">푸터에 노출되는 카피라이트 정보입니다.</span></div>
@@ -195,13 +197,50 @@
                             <tr>
                                 <td>카피 라이트</td>
                                 <td>
-                                    <input type="text" placeholder="ex: Copyright@LotteUp 머시기">
+                                    <input type="text" name="ft_copyright" placeholder="ex: Copyright@LotteUp 머시기">
                                 </td>
                             </tr>
                         </table>
                         <div class="basic_modi">
-                            <button>수정하기</button>
+                            <button type="button" onclick="submitFooterInfo()">수정하기</button>
                         </div>
                     </article>
+
                 </section>
+                <script>
+
+                    function submitFooterInfo() {
+                        const footerInfo = {
+                            ft_company: document.querySelector('input[name="ft_company"]').value,
+                            ft_ceo: document.querySelector('input[name="ft_ceo"]').value,
+                            ft_bo: document.querySelector('input[name="ft_bo"]').value,
+                            ft_mo: document.querySelector('input[name="ft_mo"]').value,
+                            ft_addr1: document.querySelector('input[name="ft_addr1"]').value,
+                            ft_addr2: document.querySelector('input[name="ft_addr2"]').value,
+                            ft_hp: document.querySelector('input[name="ft_hp"]').value,
+                            ft_time: document.querySelector('input[name="ft_time"]').value,
+                            ft_email: document.querySelector('input[name="ft_email"]').value,
+                            ft_troublehp: document.querySelector('input[name="ft_troublehp"]').value,
+                            ft_copyright: document.querySelector('input[name="ft_copyright"]').value,
+                        };
+
+                        fetch('/admin/config/footerInfo', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(footerInfo),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                // 성공적으로 전송된 경우 처리
+                                console.log('Success:', data);
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                    }
+
+                </script>
+
 </th:block>

@@ -28,6 +28,7 @@ public class ProductCategory {
     private ProductCategory parent;
 
     @OneToMany(mappedBy = "parent")
+    @Builder.Default
     private List<ProductCategory> children = new ArrayList<>();
 
     private String name;
