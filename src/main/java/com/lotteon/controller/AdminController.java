@@ -1,9 +1,8 @@
 package com.lotteon.controller;
 
 
-import com.lotteon.DTO.admin.BannerDTO;
-import com.lotteon.DTO.VersionDTO;
-import com.lotteon.DTO.FooterInfoDTO;
+import com.lotteon.dto.admin.BannerDTO;
+import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.entity.Banner;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
