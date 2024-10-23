@@ -1,88 +1,104 @@
-// 유효성 검사에 사용할 정규표현식
-const reUid   = /^[a-z]+[a-z0-9]{4,19}$/g;
-const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
-const reName  = /^[가-힣]{2,10}$/;
+const reUid = /^[a-z]+[a-z0-9]{5,20}$/;  // 정규표현식 수정
+const rePass = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,12}$/;
+const reName = /^[가-힣]{2,10}$/;
 const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
+const reHp = /^01(?:0|1|[6-9])-(\d{3,4})-\d{4}$/;
 
-let isUidOk   = false;
-let isPassOk  = false;
-let isNameOk  = false;
+let isUidOk = false;
+let isPassOk = false;
+let isNameOk = false;
 let isEmailOk = false;
-let isHpOk    = false;
+let isHpOk = false;
 
-window.onload = function(){
+window.onload = function () {
 
-    const registerForm = document.getElementsByTagName('form')[0];
+    // 아이디 유효성 검사
+    document.getElementById('btnCheckUid').onclick = function () {
+        const uid = document.getElementById('uid').value;
+        const uidResult = document.getElementById('uidValidation'); // 결과 표시할 요소
 
-    // 1.아이디 유효성 검사
-    const btnCheckUid = document.getElementById('btnCheckUid');
-    btnCheckUid.onclick = function(){
-        const uid = registerForm.uid.value;
         if (!uid.match(reUid)) {
-            alert('아이디가 유효하지 않습니다.');
+            uidResult.innerText = '아이디가 유효하지 않습니다.';
+            isUidOk = false;
             return;
         }
-        fetch('/user/checkUser?type=uid&value='+uid)
-            .then(resp => resp.json())
+
+        console.log("Fetching data for UID:", uid); // 요청 전 로그 출력
+
+        fetch('/user/checkUser?type=uid&value=' + uid)
+            .then(resp => {
+                console.log("Fetch response:", resp); // 응답 로그 출력
+                if (!resp.ok) {
+                    throw new Error("서버 응답 에러");
+                }
+                return resp.json();
+            })
             .then(data => {
+                console.log("Parsed data:", data); // 파싱된 데이터 로그 출력
+
                 if (data.result > 0) {
-                    alert('이미 사용중인 아이디 입니다.');
+                    uidResult.innerText = '이미 사용중인 아이디 입니다.';
                     isUidOk = false;
                 } else {
-                    alert('사용 가능한 아이디 입니다.');
+                    uidResult.innerText = '사용 가능한 아이디 입니다.';
                     isUidOk = true;
                 }
             })
             .catch(err => {
-                console.error(err);
+                console.error("Fetch Error:", err); // 에러 로그 출력
+                uidResult.innerText = '아이디 확인 중 오류가 발생했습니다.';
             });
     };
 
-    // 2. 비밀번호 유효성 검사
-    const pass1 = registerForm.pass;
-    const pass2 = registerForm.passConfirm;
-    pass2.addEventListener('focusout', function(){
-        if (!pass1.value.match(rePass)) {
-            alert('비밀번호가 유효하지 않습니다.');
+// 비밀번호 유효성 검사
+    document.getElementById('passwordConfirm').addEventListener('focusout', function () {
+        const passResult = document.getElementById('passConfirmValidation');
+        const pass1 = document.getElementById('pass').value.trim();
+        const pass2 = document.getElementById('passwordConfirm').value.trim();
+        if (!pass1.match(rePass)) {
+            passResult.innerText = '비밀번호가 유효하지 않습니다.';
+            isPassOk = false;
             return;
         }
-        if (pass1.value === pass2.value) {
-            alert('비밀번호가 일치합니다.');
+        if (pass1 === pass2) {
+            passResult.innerText = '비밀번호가 일치합니다.';
             isPassOk = true;
         } else {
-            alert('비밀번호가 일치하지 않습니다.');
+            passResult.innerText = '비밀번호가 일치하지 않습니다.';
             isPassOk = false;
         }
     });
 
-    // 3. 이름 유효성 검사
-    registerForm.name.addEventListener('focusout', function(){
-        const name = registerForm.name.value;
+
+// 이름 유효성 검사
+    document.getElementById('name').addEventListener('focusout', function () {
+        const nameResult = document.getElementById('nameValidation'); // 결과 표시할 요소
+        const name = document.getElementById('name').value;
         if (!name.match(reName)) {
-            alert('이름이 유효하지 않습니다.');
+            nameResult.innerText = '이름이 유효하지 않습니다.';
             isNameOk = false;
         } else {
+            nameResult.innerText = '이름이 유효합니다.';
             isNameOk = true;
         }
     });
 
-    // 4. 이메일 유효성 검사
-    const btnSendEmail = document.getElementById('btnSendEmail');
-    btnSendEmail.onclick = function() {
-        const email = registerForm.email.value;
+// 이메일 유효성 검사
+    document.getElementById('btnSendEmail').onclick = function () {
+        const email = document.getElementById('email').value;
+        const emailResult = document.getElementById('emailValidation'); // 결과 표시할 요소
         if (!email.match(reEmail)) {
-            alert('이메일이 유효하지 않습니다.');
+            emailResult.innerText = '이메일이 유효하지 않습니다.';
             return;
         }
         fetch('/user/checkUser?type=email&value=' + email)
             .then(resp => resp.json())
             .then(data => {
                 if (data.result > 0) {
-                    alert('이미 사용중인 이메일 입니다.');
+                    emailResult.innerText = '이미 사용중인 이메일 입니다.';
                     isEmailOk = false;
                 } else {
-                    alert('이메일 인증 코드를 확인하세요.');
+                    emailResult.innerText = '이메일 인증 코드를 확인하세요.';
                     isEmailOk = true;
                 }
             })
@@ -91,20 +107,45 @@ window.onload = function(){
             });
     };
 
-    // 5. 휴대폰 유효성 검사
-    registerForm.hp.addEventListener('focusout', function(){
-        const hp = registerForm.hp.value;
+    // 이메일 인증코드 발급 및 중복체크
+    fetch('/api/sendVerificationCode', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: document.getElementById('email').value }),
+    })
+        .then(response => response.text())
+        .then(data => console.log(data));
+
+// 인증 코드 확인
+    fetch('/api/verifyCode', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code: document.getElementById('verificationCode').value }),
+    })
+        .then(response => response.text())
+        .then(data => console.log(data));
+
+
+// 휴대폰 유효성 검사
+    document.getElementById('phone').addEventListener('focusout', function () {
+        const hpResult = document.getElementById('phoneValidation'); // 결과 표시할 요소
+        const hp = document.getElementById('phone').value;
         if (!hp.match(reHp)) {
-            alert('휴대폰 번호가 유효하지 않습니다.');
+            hpResult.innerText = '휴대폰 번호가 유효하지 않습니다.';
             return;
         }
         fetch('/user/checkUser?type=hp&value=' + hp)
             .then(resp => resp.json())
             .then(data => {
                 if (data.result > 0) {
-                    alert('이미 사용중인 휴대폰번호 입니다.');
+                    hpResult.innerText = '이미 사용중인 휴대폰번호 입니다.';
                     isHpOk = false;
                 } else {
+                    hpResult.innerText = '사용 가능한 휴대폰번호입니다.';
                     isHpOk = true;
                 }
             })
@@ -113,12 +154,20 @@ window.onload = function(){
             });
     });
 
-    // 최종 폼 전송 유효성 검사
-    registerForm.onsubmit = function(){
-        if (!isUidOk || !isPassOk || !isNameOk || !isEmailOk || !isHpOk) {
-            alert('입력하신 정보에 문제가 있습니다.');
-            return false;  // 폼 전송 중단
-        }
-        return true;
-    };
-};
+    function checkUser(type, value) {
+        fetch(`/checkUser?type=${type}&value=${value}`)
+            .then(response => response.json())  // 응답을 JSON으로 변환
+            .then(data => {
+                if (data.result === 1) {
+                    alert(`${type}가 이미 존재합니다.`);
+                } else {
+                    alert(`${type} 사용 가능합니다.`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('중복 확인 중 오류가 발생했습니다.');
+            });
+
+    }
+}

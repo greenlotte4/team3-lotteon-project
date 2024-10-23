@@ -28,3 +28,12 @@ spring:
         name: LotteOnProject-3조
         version: ${version}
 
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: woo24465@gmail.com
+        password: mawj nxfq tiwx regc
+        properties:
+            mail.smtp.auth: true
+            mail.smtp.starttls.enable: true
+
