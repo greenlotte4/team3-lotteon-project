@@ -38,7 +38,6 @@ public class AdminConfigController {
     public String adminBasic(Model model) {
         model.addAttribute("cate", "config");
         model.addAttribute("content", "basic");
-
         return "content/admin/config/admin_basic";
     }
 
