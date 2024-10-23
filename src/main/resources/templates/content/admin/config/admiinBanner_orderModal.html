@@ -37,11 +37,11 @@
                 <td>배너위치</td>
                 <td>
                     <select class="banner_position">
-                        <option value="mainbanner">메인 상단배너</option>
-                        <option value="slidebanner">메인 슬라이더 배너</option>
-                        <option value="productbanner">상품 상세보기 배너</option>
-                        <option value="loginbanner">회원로그인 배너</option>
-                        <option value="mypagebanner">마이페이지 배너</option>
+                        <option value="메인 상단 배너">메인 상단배너</option>
+                        <option value="메인 슬라이더 배너">메인 슬라이더 배너</option>
+                        <option value="상품 상세보기 배너">상품 상세보기 배너</option>
+                        <option value="회원 로그인 배너">회원로그인 배너</option>
+                        <option value="마이페이지 배너">마이페이지 배너</option>
                     </select>
                 </td>
             </tr>
@@ -64,39 +64,106 @@
     </div>
 </div>
 <script>
-    document.getElementById('submit_btn').addEventListener('click',function(e){
-       e.preventDefault();
-        const formData = new FormData();
+    document.addEventListener("DOMContentLoaded", function() {
+        const startDateInput = document.querySelector('.start_date');
+        const endDateInput = document.querySelector('.end_date');
+        const startTimeInput = document.querySelector('.start_time');
+        const endTimeInput = document.querySelector('.end_time');
+        const bannerImageInput = document.querySelector('.banner_image'); // 파일 입력 요소
 
-        formData.append('ban_name' ,document.querySelector('.banner_name').value);
-        formData.append('ban_size' ,document.querySelector('.banner_size').value);
 
-        const files = document.querySelector('.banner_image').files;
-        for (let i = 0; i < files.length; i++) {
-            formData.append('files', files[i]);
+        function validateDatesAndTimes() {
+            // 현재 날짜와 시간 가져오기
+
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+
+            const today = new Date();
+            const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // 오늘 날짜
+
+
+            // 날짜 유효성 검사
+            if (startDate < currentDate) {
+                alert('시작 날짜는 오늘 이후여야 합니다.');
+                startDateInput.value = '';
+                return;
+            }
+            if (endDate <= startDate){
+                alert('종료날짜는 시작날짜보다 이후여야 합니다');
+                endDateInput.value = '';
+                return;
+            }
         }
-        formData.append('ban_link' ,document.querySelector('.banner_link').value);
-        formData.append('ban_location' ,document.querySelector('.banner_position').value);
-        formData.append('ban_sdate' ,document.querySelector('.start_date').value);
-        formData.append('ban_edate' ,document.querySelector('.end_date').value);
-        formData.append('ban_stime' ,document.querySelector('.start_time').value);
-        formData.append('ban_etime' ,document.querySelector('.end_time').value);
-        formData.append('ban_type', 'banner');
+        // 파일 확장자 유효성 검사
+        bannerImageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0]; // 첫 번째 파일만 가져오기
+            const allowedExtensions = ['.jpg', '.jpeg', '.png'];
 
-        fetch('/admin/banner/upload',{
-            method : 'post',
-            body : formData
-        })
-            .then(resp => resp.text())
-            .then(data => {
-                console.log("data :" + data);
-                if(data != null){
-                alert('배너 등록이 완료되었습니다.')
+            if (file) {
+                const ext = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
+
+                if (!allowedExtensions.includes(ext)) {
+                    alert("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
+                    bannerImageInput.value = ''; // 입력값 초기화
                 }
+            }
+        });
+
+        // 각 입력 필드에 이벤트 리스너 추가
+        startDateInput.addEventListener('input', validateDatesAndTimes);
+        endDateInput.addEventListener('input', validateDatesAndTimes);
+        startTimeInput.addEventListener('input', validateDatesAndTimes);
+        endTimeInput.addEventListener('input', validateDatesAndTimes);
+
+
+        document.getElementById('submit_btn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const formData = new FormData();
+
+            const bannerName = document.querySelector('.banner_name').value;
+            const bannerSize = document.querySelector('.banner_size').value;
+            const bannerImage = document.querySelector('.banner_image').files[0];
+            const bannerLink = document.querySelector('.banner_link').value;
+            const bannerLocation = document.querySelector('.banner_position').value;
+            const startDate = document.querySelector('.start_date').value;
+            const endDate = document.querySelector('.end_date').value;
+            const startTime = document.querySelector('.start_time').value;
+            const endTime = document.querySelector('.end_time').value;
+
+            // 필수 입력값 체크
+            if (!bannerName || !bannerSize || !bannerImage || !bannerLink || !bannerLocation || !startDate || !endDate || !startTime || !endTime) {
+                alert('모든 필드를 입력해주세요.');
+                return; // 함수 종료
+            }
+
+            formData.append('ban_name', document.querySelector('.banner_name').value);
+            formData.append('ban_size', document.querySelector('.banner_size').value);
+            formData.append('file', document.querySelector('.banner_image').files[0]);
+            formData.append('ban_link', document.querySelector('.banner_link').value);
+            formData.append('ban_location', document.querySelector('.banner_position').value);
+            formData.append('ban_sdate', document.querySelector('.start_date').value);
+            formData.append('ban_edate', document.querySelector('.end_date').value);
+            formData.append('ban_stime', document.querySelector('.start_time').value);
+            formData.append('ban_etime', document.querySelector('.end_time').value);
+            formData.append('ban_type', 'banner');
+
+
+            fetch('/admin/banner/upload', {
+                method: 'post',
+                body: formData
             })
-            .catch(err => {
-                console.log(err);
-                alert('배너 등록 오류 발생');
-            });
-    })
+                .then(resp => resp.json())
+                .then(data => {
+                    console.log("data :" + data);
+                    if (data.ban_id > 0) {
+                        alert('배너 등록이 완료되었습니다.');
+                        window.location.href = `/admin/config/banner`;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    alert('배너 등록 오류 발생');
+                });
+        });
+    });
 </script>

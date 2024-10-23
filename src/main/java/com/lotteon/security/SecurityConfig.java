@@ -26,7 +26,8 @@ public class SecurityConfig {
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/")
                 .failureUrl("/user/login?error=true")  // 로그인 실패 시 URL 수정
-                .usernameParameter("inId")  // 로그인 시 사용할 파라미터 이름
+                .usernameParameter("" +
+                        "inId")  // 로그인 시 사용할 파라미터 이름
                 .passwordParameter("Password"));  // 로그인 시 사용할 비밀번호 파라미터 이름
 
         http.sessionManagement(session -> session
@@ -39,15 +40,18 @@ public class SecurityConfig {
         http.logout(logout -> logout
                 .invalidateHttpSession(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutSuccessUrl("/user/login?success=101"));
+                .logoutSuccessUrl("/?success=101"));
 
         // 인가 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/").permitAll()
+                .requestMatchers("/admin/**").hasRole("SELLER")  // 관리자만 접근 가능
+                .requestMatchers("/seller/**").hasRole("SELLER")  // 판매자만 접근 가능
                 .requestMatchers("/article/**").permitAll()
-                .requestMatchers("/category/**").permitAll()
-                .requestMatchers("/user/**").permitAll()
-                .requestMatchers("/article/write").authenticated()
+                .requestMatchers("/company/**").permitAll()
+                .requestMatchers("/policy/**").permitAll()
+                .requestMatchers("/cs/**").permitAll()
+                .requestMatchers("/cart").authenticated()
                 .requestMatchers("/article/delete/**").authenticated()
                 .anyRequest().permitAll());
 

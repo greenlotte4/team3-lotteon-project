@@ -1,5 +1,19 @@
 
-<script>
+
+</div>
+</main>
+=======
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/csLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn</title>
+    <link rel="stylesheet"  th:href="@{/css/cs/faqList.css}">
+  <script>
     //기본 3개출력 , 더보기 버튼을 눌렀을 때 최대 10개까지 출력되도록
     window.onload = function(){
         function AllShowMore(showClass, liClass, TextClass){
@@ -37,6 +51,13 @@
 
     }
 </script>
+
+</head>
+<body>
+<th:block layout:fragment="content">
+    <th:block th:replace="~{aside/qnaAside}"></th:block>
+
+
 
 <div id="service">
     <div class="title">
@@ -163,5 +184,5 @@
         </div>
     </div>
 </div>
-</div>
-</main>
+</th:block>>
+

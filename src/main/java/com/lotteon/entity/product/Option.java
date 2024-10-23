@@ -26,7 +26,7 @@ public class Option {
     private String parentCode;
     @PostPersist
     public void generateOptionCode(){
-        this.optionCode = parent_id+optionName;
+        this.optionCode = parentCode+optionName;
     }
 
 }
