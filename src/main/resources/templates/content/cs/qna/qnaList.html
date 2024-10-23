@@ -1,3 +1,8 @@
+
+
+</div>
+</main>
+=======
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
@@ -7,12 +12,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LotteOn</title>
+<<<<<<< HEAD
     <link rel="stylesheet"  th:href="@{/css/cs/qnaList.css}">
+=======
+    <link rel="stylesheet"  th:href="@{/css/cs/faqList.css}">
+  <script>
+    //기본 3개출력 , 더보기 버튼을 눌렀을 때 최대 10개까지 출력되도록
+    window.onload = function(){
+        function AllShowMore(showClass, liClass, TextClass){
+            const showMore = document.querySelector(showClass + ' .showMore');
+            const liClasses = document.querySelectorAll(liClass);
+            let showing = false;
+
+            //index 3이상은 모두 hidden 처리
+            liClasses.forEach((liClass, index) => {
+                if (index >= 3) {
+                    liClass.classList.add("hidden");
+                }
+            });
+
+            //3이상 10이하
+            showMore.addEventListener('click', function(e){
+                e.preventDefault();
+                showing = !showing //showing이 true로 보여지고 있는 상태 (클릭이 되었다는 의미)
+
+                liClasses.forEach((liClass, index) => {
+                    if(index >=3 && index < 10){
+                        if(!showing){
+                            liClass.classList.add("hidden");
+                        }else {
+                            liClass.classList.remove("hidden");
+                        }
+                    }
+                })
+
+                showMore.textContent = showing ? "간단히 보기" : TextClass;
+            });
+        }
+        AllShowMore('.first_show','.first_li',"더보기");
+        AllShowMore('.second_show','.second_li',"더보기");
+
+    }
+</script>
+
+>>>>>>> f4e077c65a3d8d8b7dcc09ab5213b7a41237438b
 </head>
 <body>
 <th:block layout:fragment="content">
     <th:block th:replace="~{aside/qnaAside}"></th:block>
 
+<<<<<<< HEAD
     <div id="service">
         <div class="title">
             <h2>회원</h2>
@@ -54,3 +103,134 @@
 
     </div>
 </th:block>>
+=======
+
+
+<div id="service">
+    <div class="title">
+        <h2>회원</h2>
+        <p>회원관련 문의내용 입니다.</p>
+    </div>
+    <div class="first container">
+        <h2>가입</h2>
+        <ul class="first_list">
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user123</span>
+                    <span class="date">작성일: 2024-10-22</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user456</span>
+                    <span class="date">작성일: 2024-10-21</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user789</span>
+                    <span class="date">작성일: 2024-10-20</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user101</span>
+                    <span class="date">작성일: 2024-10-19</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user202</span>
+                    <span class="date">작성일: 2024-10-18</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user303</span>
+                    <span class="date">작성일: 2024-10-17</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user404</span>
+                    <span class="date">작성일: 2024-10-16</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user505</span>
+                    <span class="date">작성일: 2024-10-15</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user606</span>
+                    <span class="date">작성일: 2024-10-14</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user707</span>
+                    <span class="date">작성일: 2024-10-13</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user808</span>
+                    <span class="date">작성일: 2024-10-12</span>
+                </a>
+            </li>
+            <li class="first_li">
+                <a href="#">
+                    <span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?
+                    <span class="review-status">검토중</span>
+                    <span class="author-id">작성자: user909</span>
+                    <span class="date">작성일: 2024-10-11</span>
+                </a>
+            </li>
+            <li>
+                <div class="first_show">
+                    <a href="#" class="showMore">더보기</a>
+                </div>
+            </li>
+        </ul>
+        <div class="qna-write-btn">
+            <a href="/admin/qna/qnaWrite.html" type="button" class="btn-Write">작성하기</a>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <div class="qna-pagination">
+            <a href="#">이전</a>
+            <a href="">1</a>
+            <a href="">2</a>
+            <a href="">3</a>
+            <a href="#">다음</a>
+        </div>
+    </div>
+</div>
+</th:block>>
+
+>>>>>>> f4e077c65a3d8d8b7dcc09ab5213b7a41237438b

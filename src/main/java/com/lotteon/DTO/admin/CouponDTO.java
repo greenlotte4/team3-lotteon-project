@@ -21,6 +21,7 @@ public class CouponDTO {
     private String endDate; // 종료 날짜
     private String notes; // 유의사항
 
+    private LocalDate rdate;
 
     private SellerDTO sellerDTO;
 }

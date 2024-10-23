@@ -93,6 +93,10 @@
 
 .qinfo-label {
     display: inline;
+<<<<<<< HEAD
+=======
+    font-size: 14px;
+>>>>>>> f4e077c65a3d8d8b7dcc09ab5213b7a41237438b
     color: #999;
     margin-right: 10px;
 }
