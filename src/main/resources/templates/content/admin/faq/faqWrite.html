@@ -33,19 +33,19 @@
                                     <div>유형</div>
                                     <div>
                                         <td>
-                                            <select class="first_choice">
+                                            <select class="first_choice" name="faqtype1">
                                                 <option value="" disabled selected>유형 선택</option>
-                                                <option value="1">가입</option>
-                                                <option value="2">취소/반품/교환</option>
-                                                <option value="3">주문/결제</option>
-                                                <option value="4">쿠폰/이벤트</option>
+                                                <option value="가입">가입</option>
+                                                <option value="취소/반품/교환">취소/반품/교환</option>
+                                                <option value="주문/결제">주문/결제</option>
+                                                <option value="쿠폰/이벤트">쿠폰/이벤트</option>
                                             </select>
-                                            <select class="second_choice">
+                                            <select class="second_choice" name="faqtype2">
                                                 <option value="" disabled selected>유형 선택</option>
-                                                <option value="1">가입</option>
-                                                <option value="2">취소/반품/교환</option>
-                                                <option value="3">주문/결제</option>
-                                                <option value="4">쿠폰/이벤트</option>
+                                                <option value="가입">가입</option>
+                                                <option value="취소/반품/교환">취소/반품/교환</option>
+                                                <option value="주문/결제">주문/결제</option>
+                                                <option value="쿠폰/이벤트">쿠폰/이벤트</option>
                                             </select>
                                         </td>
                                     </div>
@@ -53,13 +53,13 @@
                                 <div class="write-title">
                                     <div>제목</div>
                                     <div>
-                                        <input type="text" placeholder="제목을 입력하세요">
+                                        <input type="text" placeholder="제목을 입력하세요" name="faqtitle">
                                     </div>
                                 </div>
                                 <div class="write-input">
                                     <div>내용</div>
                                     <div>
-                                        <textarea class="faq-contents" oninput="autoResize(this)"></textarea>
+                                        <textarea class="faq-contents" oninput="autoResize(this)" name="faqcontent"></textarea>
                                     </div>
                                 </div>
                         </form>
@@ -70,4 +70,32 @@
                     </div>
                 </div>
                 </section>
+              <script>
+                  const formdata = document.getElementsByTagName('form')[0];
+                  const regbtn = document.getElementsByClassName('write-btn-regip')[0];
+
+                  regbtn.addEventListener('click',function (e){
+                      e.preventDefault();
+
+                      const data = new FormData(formdata);
+
+                      fetch('/admin/faq/write', {
+                          method : 'post',
+                          body : data
+                      })
+                          .then(resp => resp.json())
+                          .then(data => {
+                              console.log(data);
+                              if(data){
+                                  alert('등록되었습니다.');
+                                  window.location.href='/admin/faq/list'
+                              }
+                          })
+                          .catch(err => {
+                              console.log(err);
+                          });
+
+                  })
+              </script>
 </th:block>
+
