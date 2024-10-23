@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class CartItemDTO {
-
+    //추가
     private int cartItemId;
     private int stock;
     private int price;
