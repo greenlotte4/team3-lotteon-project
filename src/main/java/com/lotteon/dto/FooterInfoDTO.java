@@ -1,4 +1,4 @@
-package com.lotteon.DTO;
+package com.lotteon.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

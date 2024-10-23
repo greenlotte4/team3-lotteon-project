@@ -1,7 +1,7 @@
 package com.lotteon.controller;
 
 
-import com.lotteon.DTO.FaqDTO;
+import com.lotteon.dto.FaqDTO;
 import com.lotteon.entity.Faq;
 import com.lotteon.service.admin.FaqService;
 import lombok.RequiredArgsConstructor;
