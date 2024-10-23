@@ -4,6 +4,7 @@ package com.lotteon.entity.admin;
 import com.lotteon.entity.User.Seller;
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.w3c.dom.Text;
 
 import java.time.LocalDate;
@@ -19,23 +20,25 @@ import java.time.LocalDate;
 public class Coupon {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int couponId;
+    private String couponId; // 쿠폰번호
 
-    private String couponName;
-    private String couponType;
+    private String couponName; // 쿠폰명
+    private String couponType; // 쿠폰종류
     private String benefit; // 혜택
-    private String startDate; // 시작 날짜
-    private String endDate; // 종료 날짜
-    private String Notes;
+    private LocalDate startDate; // 시작 날짜
+    private LocalDate endDate; // 종료 날짜
+    private String notes; // 유의사항
 
-    private LocalDate rdate;
-
-
+    private String sellerCompany;
+    private int issuedCount; // 발급수
+    private int usedCount; // 사용수
+    private String status; // 상태
+    private LocalDate rdate; // 발급일
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_uid")
-    private Seller seller;
+    @JoinColumn(name = "seller_id")
+    @JsonIgnore
+    private Seller seller; // 발급자
 
 
 }

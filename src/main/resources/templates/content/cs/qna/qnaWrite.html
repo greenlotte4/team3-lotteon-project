@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/csLayout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteOn</title>
+    <link rel="stylesheet" th:href="@{/css/cs/qnawrite.css}">
+</head>
+<body>
+<th:block layout:fragment="content">
+    <th:block th:replace="~{aside/qnaAside}"></th:block>
+
+    <div id="service">
+        <div class="title">
+            <h2>회원</h2>
+            <p>회원 관련 문의내용 입니다.</p>
+        </div>
+        <form th:action="@{/cs/qna/write}" method="post" enctype="multipart/form-data">
+            <input  type="hidden" name="qna_writer" th:value="${#authentication.principal.user.uid}">
+
+            <div class="qna-section">
+                <table class="qna-table">
+                    <colgroup>
+                        <col style="width: 150px">
+                        <col style="width: 750px">
+                    </colgroup>
+                    <tr class="type">
+                        <td><label for="inquiry-type">문의유형</label></td>
+                        <td>
+                            <select id="inquiry-type" name="qna_type1" class="first_choice">
+                                <option value="1">가입</option>
+                                <option value="2">취소/반품/교환</option>
+                                <option value="3">주문/결제</option>
+                                <option value="4">쿠폰/이벤트</option>
+                            </select>
+                            <select name="qna_type2" class="second_choice">
+                                <option value="1">가입</option>
+                                <option value="2">취소/반품/교환</option>
+                                <option value="3">주문/결제</option>
+                                <option value="4">쿠폰/이벤트</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="title">
+                        <td><label for="subject">제목</label></td>
+                        <td>
+                            <input id="subject" type="text" name="qna_title" class="texts" placeholder="제목을 입력하세요">
+
+                        </td>
+                    </tr>
+                    <tr class="content">
+                        <td><label for="content">내용</label></td>
+                        <td>
+                            <textarea id="content" name="qna_content" class="texts" placeholder="내용을 입력하세요" rows="5" style="height: 200px"></textarea>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="button-section">
+                    <a class="cancel" href="/cs/qna/list">취소하기</a>
+                    <button type="submit" class="insert">등록하기</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</th:block>
+</body>
+</html>

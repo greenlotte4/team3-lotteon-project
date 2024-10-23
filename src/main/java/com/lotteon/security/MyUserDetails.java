@@ -17,7 +17,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "seller")
 @Builder
 public class MyUserDetails implements UserDetails
 //        , OAuth2User {

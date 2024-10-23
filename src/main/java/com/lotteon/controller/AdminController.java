@@ -1,7 +1,7 @@
 package com.lotteon.controller;
 
 
-import com.lotteon.DTO.BannerDTO;
+import com.lotteon.DTO.admin.BannerDTO;
 import com.lotteon.DTO.VersionDTO;
 import com.lotteon.DTO.FooterInfoDTO;
 import com.lotteon.entity.Banner;
@@ -82,10 +82,4 @@ public class AdminController {
         return "redirect:/admin/config/basic";
     }
 
-    @ResponseBody
-    @PostMapping("/config/version")
-    public ResponseEntity<String> insertVersion(Model model, @RequestBody VersionDTO versionDTO) {
-        versionService.insertVersion(versionDTO);
-        return ResponseEntity.ok("{\"message\":\"버전이 등록되었습니다.\"}"); // JSON 응답으로 변경
-    }
 }

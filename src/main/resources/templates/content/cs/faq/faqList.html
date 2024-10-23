@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
@@ -8,46 +9,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LotteOn</title>
     <link rel="stylesheet"  th:href="@{/css/cs/faqList.css}">
+    <script>
+        //기본 3개출력 , 더보기 버튼을 눌렀을 때 최대 10개까지 출력되도록
+        window.onload = function(){
+            function AllShowMore(showClass, liClass, TextClass){
+                const showMore = document.querySelector(showClass + ' .showMore');
+                const liClasses = document.querySelectorAll(liClass);
+                let showing = false;
 
+                //index 3이상은 모두 hidden 처리
+                liClasses.forEach((liClass, index) => {
+                    if (index >= 3) {
+                        liClass.classList.add("hidden");
+                    }
+                });
+
+                //3이상 10이하
+                showMore.addEventListener('click', function(e){
+                    e.preventDefault();
+                    showing = !showing //showing이 true로 보여지고 있는 상태 (클릭이 되었다는 의미)
+
+                    liClasses.forEach((liClass, index) => {
+                        if(index >=3 && index < 10){
+                            if(!showing){
+                                liClass.classList.add("hidden");
+                            }else {
+                                liClass.classList.remove("hidden");
+                            }
+                        }
+                    })
+
+                    showMore.textContent = showing ? "간단히 보기" : TextClass;
+                });
+            }
+            AllShowMore('.first_show','.first_li',"더보기");
+            AllShowMore('.second_show','.second_li',"더보기");
+
+        }
+    </script>
 </head>
 <body>
 <th:block layout:fragment="content">
     <th:block th:replace="~{aside/faqAside}"></th:block>
 
-    <div class="article-box">
-                <div class="navi-container">
-                    <h3>자주묻는질문 목록</h3>
-                    <div class="navi">
-                      <a href="">HOME</a> > <a href="">고객센터</a> > <a href="">자주묻는질문</a>
+    <div id="service">
+        <div class="title">
+            <h2>회원</h2>
+            <p>회원관련 자주묻는 질문 입니다</p>
+        </div>
+        <div class="first container">
+            <h2>가입</h2>
+            <ul class="first_list">
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <li>
+                    <div class="first_show">
+                        <a href="#" class="showMore">더보기</a>
                     </div>
-                  </div>
-                <div class="article-title">
-                    <select id="customer-service1" name="customer-service">
-                        <option value="service">고객 서비스</option>
-                        <option value="transaction">거래 관련</option>
-                        <option value="inquiry">문의하기</option>
-                        <option value="feedback">피드백</option>
-                    </select>
-                    <select id="customer-service2" name="customer-service">
-                        <option value="service">고객 서비스</option>
-                        <option value="transaction">거래 관련</option>
-                        <option value="inquiry">문의하기</option>
-                        <option value="feedback">피드백</option>
-                    </select>
-                </div>
-                <div class="article-list">
-                    <div class="article-header">
-                        <div class="checkboxes">
-                            <input type="checkbox" id="select-all">
-                        </div>
-                        <div class="number">번호</div>
-                        <div class="type">유형</div>
-                        <div class="type2">유형2</div>
-                        <div class="title">제목</div>
-                        <div class="views">조회</div>
-                        <div class="date">날짜</div>
-                        <div class="manage">관리</div>
+                </li>
+            </ul>
+        </div>
+        <div class="second container">
+            <h2>탈퇴</h2>
+            <ul class="second_list">
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <li>
+                    <div class="second_show">
+                        <a href="#" class="showMore">더보기</a>
                     </div>
+<<<<<<< HEAD
+                </li>
+            </ul>
+        </div>
+    </div>
+</th:block>
+=======
                     <!-- 게시물 리스트 -->
                     <div class="article-inlist">
                         <div class="checkbox">
@@ -96,16 +155,13 @@
         const selectAllCheckbox = document.getElementById('select-all');
         const checkboxes = document.querySelectorAll('.checkbox-item');
 
-        selectAllCheckbox.addEventListener('change', function () {
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = selectAllCheckbox.checked;
-            });
+    selectAllCheckbox.addEventListener('change', function () {
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
         });
-        document.body.addEventListener('click', function (e) {
-            if (e.target.classList.contains('menuList')) {
-                // 메뉴 클릭 시 동작
-            }
-        });
+
     </script>
     <script src="../js/admin.js"></script>
 </th:block>
+</bod
+>>>>>>> f4e077c65a3d8d8b7dcc09ab5213b7a41237438b
