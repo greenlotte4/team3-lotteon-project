@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, Long> {
-
-
-    Optional<Seller> findByUser_Uid(String uid); // User의 uid를 사용
+    Optional<Seller> findByUser_Uid(String userUid); // User의 uid를 사용
 }
+
