@@ -18,12 +18,12 @@ public class Option {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private long parent_id;    //부모상품
     private String optionName; //프로덕트 code
     private String optionDesc;
     private int optionStock;
     private String optionCode;
     private String parentCode;
+
     @PostPersist
     public void generateOptionCode(){
         this.optionCode = parentCode+optionName;
