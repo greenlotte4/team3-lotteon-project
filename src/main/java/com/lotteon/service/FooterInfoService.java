@@ -1,6 +1,6 @@
 package com.lotteon.service;
 
-import com.lotteon.DTO.FooterInfoDTO;
+import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.entity.FooterInfo;
 import com.lotteon.repository.FooterInfoRepository;
 import groovy.util.logging.Log4j2;

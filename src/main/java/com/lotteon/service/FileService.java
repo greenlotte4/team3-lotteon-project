@@ -1,9 +1,8 @@
 package com.lotteon.service;
 
 
-import com.lotteon.DTO.admin.BannerDTO;
+import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.product.ProductFileDTO;
-import com.lotteon.entity.Banner;
 import com.lotteon.repository.BannerRepository;
 import com.lotteon.repository.FileRepository;
 import lombok.RequiredArgsConstructor;

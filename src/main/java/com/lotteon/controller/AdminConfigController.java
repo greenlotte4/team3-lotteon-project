@@ -1,16 +1,14 @@
 package com.lotteon.controller;
 
 
-import com.lotteon.DTO.FooterInfoDTO;
-import com.lotteon.DTO.VersionDTO;
-import com.lotteon.entity.FooterInfo;
+import com.lotteon.dto.FooterInfoDTO;
+import com.lotteon.dto.VersionDTO;
 import com.lotteon.repository.FooterInfoRepository;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
 import com.lotteon.service.FooterInfoService;
 import com.lotteon.service.VersionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

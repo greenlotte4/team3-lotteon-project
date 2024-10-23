@@ -1,4 +1,4 @@
-package com.lotteon.DTO.User;
+package com.lotteon.dto.User;
 
 
 import jakarta.persistence.*;

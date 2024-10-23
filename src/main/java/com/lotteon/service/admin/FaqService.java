@@ -1,6 +1,6 @@
 package com.lotteon.service.admin;
 
-import com.lotteon.DTO.FaqDTO;
+import com.lotteon.dto.FaqDTO;
 import com.lotteon.entity.Faq;
 import com.lotteon.repository.admin.FaqRepository;
 import jakarta.persistence.EntityNotFoundException;
