@@ -108,7 +108,7 @@ window.onload = function () {
     };
 
     // 이메일 인증코드 발급 및 중복체크
-    fetch('/api/sendVerificationCode', {
+    fetch('/api/sendVerifyCode', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
