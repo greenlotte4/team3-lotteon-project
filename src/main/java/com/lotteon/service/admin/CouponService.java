@@ -26,9 +26,11 @@ public class CouponService {
     public void insertCoupon(CouponDTO couponDTO) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (authentication != null || !authentication.isAuthenticated()) {
             throw new RuntimeException("User is not authenticated");
         }
+
         String sellerId = ((Seller) authentication.getPrincipal()).getUser().getUid();
         log.info("sellerId---------------" + sellerId);
         Coupon coupon = Coupon.builder()

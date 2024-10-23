@@ -11,3 +11,4 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
 
     Optional<Seller> findByUser_Uid(String userUid); // User의 uid를 사용
 }
+
