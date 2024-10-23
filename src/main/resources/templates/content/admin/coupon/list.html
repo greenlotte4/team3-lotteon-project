@@ -45,111 +45,31 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><a href="#" class="order-link">6942147241</a></td>
-                <td>상품 할인</td>
-                <td>배송비 무료 쿠폰</td>
-                <td>10% (최대 1,000원)</td>
-                <td>2024-10-18<br>~ 2024-11-18</td>
-                <td>관리자</td>
-                <td>제한 없음</td>
-                <td>-</td>
-                <td class="status-ongoing">발급중</td>
-                <td>2024-10-18<br>10:40:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-            <tr>
-                <td><a href="#" class="order-link">9042037249</a></td>
-                <td>상품 할인</td>
-                <td>[EVENT] 생일 축하 쿠폰</td>
-                <td>10% (최대 5,000원)</td>
-                <td>2024-10-18<br>~ 2024-11-18</td>
-                <td>관리자</td>
-                <td>300</td>
-                <td>1</td>
-                <td class="status-ending">종료</td>
-                <td>2024-10-18<br>10:40:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-            <tr>
-                <td><a href="#" class="order-link">9042037249</a></td>
-                <td>상품 할인</td>
-                <td>[EVENT] 생일 축하 쿠폰</td>
-                <td>10% (최대 5,000원)</td>
-                <td>2024-10-18<br>~ 2024-11-18</td>
-                <td>관리자</td>
-                <td>200</td>
-                <td>1</td>
-                <td class="status-ending">종료</td>
-                <td>2024-10-18<br>10:40:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-            <tr>
-                <td><a href="#" class="order-link">9042037249</a></td>
-                <td>상품 할인</td>
-                <td>[EVENT] 생일 축하 쿠폰</td>
-                <td>10% (최대 5,000원)</td>
-                <td>2024-10-18<br>~ 2024-11-18</td>
-                <td>관리자</td>
-                <td>50</td>
-                <td>1</td>
-                <td class="status-ending">종료</td>
-                <td>2024-10-18<br>10:40:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-            <tr>
-                <td><a href="#" class="order-link">9042037249</a></td>
-                <td>상품 할인</td>
-                <td>[EVENT] 생일 축하 쿠폰</td>
-                <td>10% (최대 5,000원)</td>
-                <td>2024-10-18<br>~ 2024-11-18</td>
-                <td>관리자</td>
-                <td>제한 없음</td>
-                <td>1</td>
-                <td class="status-ongoing">발급중</td>
-                <td>2024-10-18<br>10:40:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-            <tr>
-                <td><a href="#" class="order-link">9042037249</a></td>
-                <td>상품 할인</td>
-                <td>[EVENT] 생일 축하 쿠폰</td>
-                <td>10% (최대 5,000원)</td>
-                <td>2024-10-18<br>~ 2024-11-18</td>
-                <td>관리자</td>
-                <td>제한 없음</td>
-                <td>1</td>
-                <td class="status-ongoing">발급중</td>
-                <td>2024-10-18<br>10:40:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-            <tr>
-                <td><a href="#" class="order-link">9042037249</a></td>
-                <td>상품 할인</td>
-                <td>[EVENT] 생일 축하 쿠폰</td>
-                <td>10% (최대 5,000원)</td>
-                <td>2024-10-18<br>~ 2024-11-18</td>
-                <td>관리자</td>
-                <td>제한 없음</td>
-                <td>1</td>
-                <td class="status-ongoing">발급중</td>
-                <td>2024-10-18<br>10:40:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-            <tr>
-                <td><a href="#" class="order-link">9042037249</a></td>
-                <td>상품 할인</td>
-                <td>[EVENT] 생일 축하 쿠폰</td>
-                <td>10% (최대 5,000원)</td>
-                <td>2024-10-18<br>~ 2024-11-18</td>
-                <td>관리자</td>
-                <td>제한 없음</td>
-                <td>1</td>
-                <td class="status-ongoing">발급중</td>
-                <td>2024-10-18<br>10:40:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-        </tbody>
+        <tr th:each="coupon : ${couponList}">
+            <td><a href="#" class="order-link"
+                   th:data-coupon-id="${coupon.couponId}"
+                   th:data-issuer="${coupon.sellerCompany}"
+                   th:data-type="${coupon.couponType}"
+                   th:data-name="${coupon.couponName}"
+                   th:data-benefit="${coupon.benefit}"
+                   th:with="period=${coupon.startDate} + ' ~ ' + ${coupon.endDate}"
+                   th:data-notes="${coupon.notes}"
+                   th:text="${coupon.couponId}"></a>
+            </td>
+            <td th:text="${coupon.couponName}"></td>
+            <td th:text="${coupon.couponType}"></td>
+            <td th:text="${coupon.benefit}"></td>
+            <td>
+                <span th:text="${coupon.startDate}"></span><br>
+                <span th:text="${coupon.endDate}"></span>
+            </td>
+            <td th:text="${coupon.sellerCompany}"></td>
+            <td th:text="${coupon.issuedCount}"></td>
+            <td th:text="${coupon.usedCount}"></td>
+            <td th:text="${coupon.status}"></td>
+            <td th:text="${coupon.rdate}"></td>
+            <td><button class="end-button">종료</button></td>
+        </tr>
     </table>
     <button class="add-coupon-btn">쿠폰등록</button>
 
@@ -218,7 +138,7 @@
                     </div>
                 </div>
                 <!-- 쿠폰 등록 모달 -->
-                <div id="addCouponModal" class="modal">
+                <div id="addCouponModal" class="modal" data-seller-company="${seller != null ? seller.company : '정보 없음'}">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h3>쿠폰등록</h3>

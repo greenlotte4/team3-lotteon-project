@@ -7,12 +7,11 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder
 @Entity
@@ -46,17 +45,34 @@ public class Product {
     @Builder.Default
     private Boolean isSaled = true; // 판매가능여부
 
+    @Setter
     private String sellerId ;
     @Builder.Default
     private int sold=0; //판매량
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")  // 외래키는 자식 테이블에 생성
+    @JoinColumn(name = "product_id")
+    @ToString.Exclude  // 외래키는 자식 테이블에 생성
     private List<ProductFile> files;
+
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="product_id")
+    @ToString.Exclude
+    private List<Option> options;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="product_id")
+    @ToString.Exclude
+    private ProductDetails productDetails;
+
 
 
     @PostPersist
     public void generateProductCode(){
         this.productCode = "C"+categoryId+"-P"+productId;
     }
+
+
+
 }

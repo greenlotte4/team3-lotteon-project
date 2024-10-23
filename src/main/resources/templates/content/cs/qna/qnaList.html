@@ -12,6 +12,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LotteOn</title>
+<<<<<<< HEAD
+    <link rel="stylesheet"  th:href="@{/css/cs/qnaList.css}">
+=======
     <link rel="stylesheet"  th:href="@{/css/cs/faqList.css}">
   <script>
     //기본 3개출력 , 더보기 버튼을 눌렀을 때 최대 10개까지 출력되도록
@@ -52,11 +55,55 @@
     }
 </script>
 
+>>>>>>> f4e077c65a3d8d8b7dcc09ab5213b7a41237438b
 </head>
 <body>
 <th:block layout:fragment="content">
     <th:block th:replace="~{aside/qnaAside}"></th:block>
 
+<<<<<<< HEAD
+    <div id="service">
+        <div class="title">
+            <h2>회원</h2>
+            <p>회원관련 문의내용 입니다.</p>
+        </div>
+        <div class="first container">
+            <h2>가입</h2>
+            <ul class="first_list">
+                <li class="first_li" th:each="qna : ${qnaPage.content}">
+                    <a th:href="@{/cs/qna/detail/{id}(id=${qna.id})}">
+                        <span>Q .</span>
+                        <span th:text="${qna.qna_title}">질문 제목</span>
+                        <span class="review-status" th:text="${qna.qna_status}">검토중</span>
+                        <span class="author-id" th:text="'작성자: ' + ${qna.authorId}">작성자: user123</span>
+                        <span class="date" th:text="'작성일: ' + ${#dates.format(qna.createdDate, 'yyyy-MM-dd')}">작성일: 2024-10-22</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="qna-write-btn">
+                <a href="/cs/qna/write" type="button" class="btn-Write">작성하기</a>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <div class="qna-pagination">
+                <a th:href="@{/cs/qna/list(page=${qnaPage.number - 1})}"
+                   th:classappend="${qnaPage.first} ? 'disabled'" >이전</a>
+
+                <span th:each="pageNum : ${#numbers.sequence(0, qnaPage.totalPages - 1)}">
+            <a th:href="@{/cs/qna/list(page=${pageNum})}"
+               th:classappend="${qnaPage.number == pageNum} ? 'active'" th:text="${pageNum + 1}">1</a>
+        </span>
+
+                <a th:href="@{/cs/qna/list(page=${qnaPage.number + 1})}"
+                   th:classappend="${qnaPage.last} ? 'disabled'" >다음</a>
+            </div>
+        </div>
+
+    </div>
+</th:block>>
+=======
 
 
 <div id="service">
@@ -186,3 +233,4 @@
 </div>
 </th:block>>
 
+>>>>>>> f4e077c65a3d8d8b7dcc09ab5213b7a41237438b

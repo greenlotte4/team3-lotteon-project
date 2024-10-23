@@ -2,6 +2,7 @@ package com.lotteon.entity.User;
 
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="Seller")
@@ -47,6 +48,7 @@ public class Seller {
 
     @OneToOne
     @JoinColumn(name = "user_uid") // 외래 키
+    @JsonIgnore
     private User user; // User와의 관계
 
 }
