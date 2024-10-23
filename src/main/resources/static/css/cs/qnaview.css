@@ -1,128 +1,7 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: '고딕', sans-serif;
-}
-
-html {
-    color: #111;
-    position: relative;
-}
-
-html,
-body {
-    height: 100%;
-}
-
-ol,
-ul {
-    list-style: none
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-#wrapper {
-    width: 100%;
-    height: auto;
-
-}
-
-main {
-    width: 1200px;
-    height: auto;
-    position: relative;
-    margin: 0 auto;
-
-}
-
-#navi {
-    width: 1200px;
-    height: 50px;
-    border-top: 1px solid rgb(199, 199, 199);
-}
-
-#navi p {
-    font-size: 15px;
-    font-weight: bold;
-    margin-top: 13px;
-}
-
-#container {
-    display: flex;
-    width: 1200px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    border-top: 1px solid rgb(199, 199, 199);
-}
-
-/*어사이드*/
-#aside {
-    width: 200px;
-    border-right: 1px solid rgb(199, 199, 199);
-    box-sizing: border-box;
-
-}
-
-#aside h1 {
-    font-size: large;
-    font-weight: bold;
-    text-align: center;
-    margin: 20px 20px 40px;
-}
-
-.aside_list ul li {
-    overflow: hidden;
-    padding: 16px 0;
-    border-bottom: 1px solid rgb(194, 194, 194);
-    width: 140px;
-    margin-left: 10px;
-}
-
-.aside_list ul li:nth-of-type(1) a {
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.active {
-    line-height: 24px;
-}
-
-.active:hover {
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-/*메인*/
-#service {
-    flex-grow: 1;
-    min-width: 0;
-    width: 1000px;
-}
-
-.hidden {
-    display: none;
-}
-
-
-/*회원 , 회원관련 자주 묻는 질문입니다.*/
-h2 {
-    margin: 30px 40px 0px;
-    font-weight: bold;
-    font-size: large;
-}
-
-.title p {
-    color: rgb(117, 117, 117);
-    margin: 10px 40px 20px;
-}
-
 /* QnA 섹션 */
 .qna-section {
-    width: 80%;
-    margin: 5px auto;
+    width: 90%;
+    margin: 20px 40px;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
@@ -144,32 +23,18 @@ h2 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* QnA 섹션 스타일 */
-.qna-section {
-    width: 90%; /* 테이블의 가로폭을 넓힘 */
-    margin: 10px auto; /* 여백 줄이기 */
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-}
-
 /* 테이블 스타일 */
 .qna-table {
-    width: 100%; /* 테이블의 가로 폭을 100%로 설정 */
-    border-collapse: collapse; /* 세로줄 제거 */
-    table-layout: fixed; /* 셀의 크기를 균등하게 고정 */
+    table-layout: fixed;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);*/
 }
 
-/* 테이블 셀 스타일 */
 .qna-table th, .qna-table td {
-    padding: 20px 15px; /* 세로 간격을 넓힘 (패딩을 증가) */
+    padding: 20px 15px;
     text-align: left;
-    border-top: 1px solid #ddd; /* 가로줄만 남기기 */
-    border-right: none; /* 세로줄 제거 */
-}
-
-table tr:first-of-type {
-    border-top: 3px solid #333; /* 첫 번째 tr의 상단 테두리 진하게 */
+    border-collapse: collapse;
 }
 
 .qna-table th {
@@ -179,10 +44,15 @@ table tr:first-of-type {
     font-size: 16px;
 }
 
+.qna-table th:first-child {
+    border-top: none;
+}
+
 .qna-table td {
     background-color: #fff;
     color: #555;
     font-size: 14px;
+    height: 100px;
 }
 
 /* 문의 작성자, 작성일, 답변 스타일 */
@@ -210,4 +80,20 @@ table tr:first-of-type {
 
 .button-section button:hover {
     background-color: #f0f0f0;
+}
+
+/* ID와 날짜 스타일 */
+.signup-title {
+    position: relative;
+}
+
+.qinfo-container {
+    margin-top: 5px;
+}
+
+.qinfo-label {
+    display: inline;
+    font-size: 14px;
+    color: #999;
+    margin-right: 10px;
 }

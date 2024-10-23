@@ -15,80 +15,80 @@
     <th:block th:replace="~{aside/faqAside}"></th:block>
 
     <div class="article-box">
-                <div class="navi-container">
-                    <h3>자주묻는질문 목록</h3>
-                    <div class="navi">
-                      <a href="">HOME</a> > <a href="">고객센터</a> > <a href="">자주묻는질문</a>
-                    </div>
-                  </div>
-                <div class="article-title">
-                    <select id="customer-service1" name="customer-service">
-                        <option value="service">고객 서비스</option>
-                        <option value="transaction">거래 관련</option>
-                        <option value="inquiry">문의하기</option>
-                        <option value="feedback">피드백</option>
-                    </select>
-                    <select id="customer-service2" name="customer-service">
-                        <option value="service">고객 서비스</option>
-                        <option value="transaction">거래 관련</option>
-                        <option value="inquiry">문의하기</option>
-                        <option value="feedback">피드백</option>
-                    </select>
+        <div class="navi-container">
+            <h3>자주묻는질문 목록</h3>
+            <div class="navi">
+                <a href="">HOME</a> > <a href="">고객센터</a> > <a href="">자주묻는질문</a>
+            </div>
+        </div>
+        <div class="article-title">
+            <select id="customer-service1" name="customer-service">
+                <option value="service">고객 서비스</option>
+                <option value="transaction">거래 관련</option>
+                <option value="inquiry">문의하기</option>
+                <option value="feedback">피드백</option>
+            </select>
+            <select id="customer-service2" name="customer-service">
+                <option value="service">고객 서비스</option>
+                <option value="transaction">거래 관련</option>
+                <option value="inquiry">문의하기</option>
+                <option value="feedback">피드백</option>
+            </select>
+        </div>
+        <div class="article-list">
+            <div class="article-header">
+                <div class="checkboxes">
+                    <input type="checkbox" id="select-all">
                 </div>
-                <div class="article-list">
-                    <div class="article-header">
-                        <div class="checkboxes">
-                            <input type="checkbox" id="select-all">
-                        </div>
-                        <div class="number">번호</div>
-                        <div class="type">유형</div>
-                        <div class="type2">유형2</div>
-                        <div class="title">제목</div>
-                        <div class="views">조회</div>
-                        <div class="date">날짜</div>
-                        <div class="manage">관리</div>
-                    </div>
-                    <!-- 게시물 리스트 -->
-                    <div class="article-inlist">
-                        <div class="checkbox">
-                            <input type="checkbox" class="checkbox-item">
-                        </div>
-                        <div class="number-box">1</div>
-                        <div class="type-box">회원</div>
-                        <div class="type-box type2">가입</div>
-                        <a class="article-box" href="/article/view?no=1">[롯데숏핑] 구매회원 이용약관 계정 안내 (시행일: 0000년00월00일)</a>
-                        <div class="views-box">100</div>
-                        <div class="date-box">2024.07.16</div>
-                        <div class="manage-box"><a href="/article/edit?no=1">수정</a> | <a
-                                href="/article/delete?no=1">삭제</a>
-                        </div>
-                    </div>
-                    <div class="article-inlist">
-                        <div class="checkbox">
-                            <input type="checkbox" class="checkbox-item">
-                        </div>
-                        <div class="number-box">1</div>
-                        <div class="type-box">회원</div>
-                        <div class="type-box type2">가입</div>
-                        <a class="article-box" href="/article/view?no=1">[롯데숏핑] 구매회원 이용약관 계정 안내 (시행일: 0000년00월00일)</a>
-                        <div class="views-box">100</div>
-                        <div class="date-box">2024.07.16</div>
-                        <div class="manage-box"><a href="/article/edit?no=1">수정</a> | <a
-                                href="/article/delete?no=1">삭제</a>
-                        </div>
-                    </div>
+                <div class="number">번호</div>
+                <div class="type">유형</div>
+                <div class="type2">유형2</div>
+                <div class="title">제목</div>
+                <div class="views">조회</div>
+                <div class="date">날짜</div>
+                <div class="manage">관리</div>
+            </div>
+            <!-- 게시물 리스트 -->
+            <div class="article-inlist">
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-item">
                 </div>
-
-
-                <div class="pagination">
-                    <a href="#">이전</a>
-                    <a href="#">다음</a>
-                </div>
-                <div class="button-ctl">
-                    <button type="button" class="btn-delete">선택삭제</button>
-                    <button type="button" class="btn-Write">작성하기</button>
+                <div class="number-box">1</div>
+                <div class="type-box">회원</div>
+                <div class="type-box type2">가입</div>
+                <a class="article-box" href="/article/view?no=1">[롯데숏핑] 구매회원 이용약관 계정 안내 (시행일: 0000년00월00일)</a>
+                <div class="views-box">100</div>
+                <div class="date-box">2024.07.16</div>
+                <div class="manage-box"><a href="/article/edit?no=1">수정</a> | <a
+                        href="/article/delete?no=1">삭제</a>
                 </div>
             </div>
+            <div class="article-inlist">
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-item">
+                </div>
+                <div class="number-box">1</div>
+                <div class="type-box">회원</div>
+                <div class="type-box type2">가입</div>
+                <a class="article-box" href="/article/view?no=1">[롯데숏핑] 구매회원 이용약관 계정 안내 (시행일: 0000년00월00일)</a>
+                <div class="views-box">100</div>
+                <div class="date-box">2024.07.16</div>
+                <div class="manage-box"><a href="/article/edit?no=1">수정</a> | <a
+                        href="/article/delete?no=1">삭제</a>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="pagination">
+        <a href="#">이전</a>
+        <a href="#">다음</a>
+    </div>
+    <div class="button-ctl">
+        <button type="button" class="btn-delete">선택삭제</button>
+        <button type="button" class="btn-Write">작성하기</button>
+    </div>
+</div>
 
     <script>
 
