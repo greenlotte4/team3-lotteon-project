@@ -29,8 +29,6 @@ public class QOption extends EntityPathBase<Option> {
 
     public final NumberPath<Integer> optionStock = createNumber("optionStock", Integer.class);
 
-    public final NumberPath<Long> parent_id = createNumber("parent_id", Long.class);
-
     public final StringPath parentCode = createString("parentCode");
 
     public QOption(String variable) {

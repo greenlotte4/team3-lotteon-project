@@ -18,6 +18,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     private static final long serialVersionUID = 1825934975L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QProduct product = new QProduct("product");
 
     public final NumberPath<Integer> categoryId = createNumber("categoryId", Integer.class);
@@ -30,6 +32,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final BooleanPath isSaled = createBoolean("isSaled");
 
+    public final ListPath<Option, QOption> options = this.<Option, QOption>createList("options", Option.class, QOption.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> point = createNumber("point", Integer.class);
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
@@ -37,6 +41,8 @@ public class QProduct extends EntityPathBase<Product> {
     public final StringPath productCode = createString("productCode");
 
     public final StringPath ProductDesc = createString("ProductDesc");
+
+    public final QProductDetails productDetails;
 
     public final NumberPath<Long> productId = createNumber("productId", Long.class);
 
@@ -55,15 +61,24 @@ public class QProduct extends EntityPathBase<Product> {
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
 
     public QProduct(String variable) {
-        super(Product.class, forVariable(variable));
+        this(Product.class, forVariable(variable), INITS);
     }
 
     public QProduct(Path<? extends Product> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QProduct(PathMetadata metadata) {
-        super(Product.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QProduct(PathMetadata metadata, PathInits inits) {
+        this(Product.class, metadata, inits);
+    }
+
+    public QProduct(Class<? extends Product> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.productDetails = inits.isInitialized("productDetails") ? new QProductDetails(forProperty("productDetails")) : null;
     }
 
 }
