@@ -8,14 +8,16 @@ document.addEventListener("DOMContentLoaded", function () {
     orderLinks.forEach(function (link) {
         link.addEventListener("click", function (event) {
             event.preventDefault();
-            var couponNumber = this.getAttribute("data-coupon");
+
+            var couponNumber = this.getAttribute("data-coupon-id");
             var issuer = this.getAttribute("data-issuer");
             var couponType = this.getAttribute("data-type");
             var couponName = this.getAttribute("data-name");
             var benefit = this.getAttribute("data-benefit");
             var period = this.getAttribute("data-period");
             var notes = this.getAttribute("data-notes");
-
+            console.log(period)
+            console.log()
             // 모달에 데이터 채우기
             document.getElementById("modalCouponNumber").innerText = couponNumber;
             document.getElementById("modalIssuer").innerText = issuer;
@@ -24,6 +26,8 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("modalBenefit").innerText = benefit;
             document.getElementById("modalPeriod").innerText = period;
             document.getElementById("modalNotes").innerText = notes;
+
+
 
             // 모달 보이기
             modal.style.display = "block";
@@ -70,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 모달 닫기 (x 아이콘 클릭 또는 취소 버튼 클릭 시)
     closeBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
-
     // 등록 버튼 클릭 시 폼 제출 처리
     submitBtn.addEventListener('click', (event) => {
         event.preventDefault();
@@ -79,17 +82,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const startDate = document.getElementById("startDate").value;
         const endDate = document.getElementById("endDate").value;
 
+        const sellerCompany = document.getElementById("addCouponModal").getAttribute("data-seller-company");
+        console.log("Seller Company:", sellerCompany);
+
         const couponData = {
-            benefit: benefit.value,
-            startDate: startDate.value,
-            endDate: endDate.value
-        }
+            couponId: 0,
+            couponName: document.getElementById("couponName").value,
+            couponType: document.getElementById("couponType").value,
+            benefit: benefit ? benefit.value : '',
+            startDate: startDate,
+            endDate: endDate,
+            notes: document.getElementById("notes").value,
+            rdate: new Date().toISOString().split('T')[0], // 현재 날짜
+            sellerDTO: {
+                // 필요한 SellerDTO 필드 추가
+                company   : sellerCompany
+            }
+        };
 
-        const formData = new FormData(document.getElementById("couponForm"));
+        console.log("쿠폰데이터:", couponData)
 
-        for (const [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
         fetch('/admin/coupon/register', {
             method: 'POST',
             headers:{
@@ -104,7 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     closeModal();
                     document.getElementById("couponForm").reset();
                 }else {
-                    alert("등록에 실패했습니다.")
+                    return resp.json().then(errorData => {
+                        alert(`등록에 실패했습니다: ${errorData.message || "서버 오류"}.`);
+                    });
                 }
             })
             .catch(error => console.error("Error------------" + error))

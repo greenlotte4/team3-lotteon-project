@@ -28,15 +28,17 @@ public class MyUserDetailsService implements UserDetailsService {
             // 시큐리티 사용자 인증객체 생성 후 반환
             User user = optUser.get();
             log.info("log user getRole :"+user.getRole());
+            log.info("Retrieved user1: {}", user);
+            log.info("Seller associated with user1: {}", user.getSeller());
             if(!user.getRole().equals("BLACK") && !user.getRole().equals("LEAVE")){
                 MyUserDetails myUserDetails = MyUserDetails.builder()
                         .user(user)
+                        .seller(user.getSeller())
                         .build();
                 return myUserDetails;
             }else{
                 throw new UsernameNotFoundException("User does not have the required role.");
             }
-
         }
 
         // 사용자가 입력한 아이디가 없을 경우
