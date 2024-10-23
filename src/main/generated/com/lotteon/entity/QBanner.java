@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -34,13 +33,15 @@ public class QBanner extends EntityPathBase<Banner> {
 
     public final StringPath ban_name = createString("ban_name");
 
+    public final StringPath ban_oname = createString("ban_oname");
+
     public final StringPath ban_sdate = createString("ban_sdate");
 
     public final StringPath ban_size = createString("ban_size");
 
     public final StringPath ban_stime = createString("ban_stime");
 
-    public final ListPath<FileEntity, QFileEntity> fileList = this.<FileEntity, QFileEntity>createList("fileList", FileEntity.class, QFileEntity.class, PathInits.DIRECT2);
+    public final NumberPath<Integer> status = createNumber("status", Integer.class);
 
     public QBanner(String variable) {
         super(Banner.class, forVariable(variable));

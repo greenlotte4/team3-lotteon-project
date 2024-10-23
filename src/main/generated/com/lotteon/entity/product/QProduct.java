@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -23,6 +24,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Integer> discount = createNumber("discount", Integer.class);
 
+    public final ListPath<ProductFile, QProductFile> files = this.<ProductFile, QProductFile>createList("files", ProductFile.class, QProductFile.class, PathInits.DIRECT2);
+
     public final BooleanPath isCoupon = createBoolean("isCoupon");
 
     public final BooleanPath isSaled = createBoolean("isSaled");
@@ -31,19 +34,23 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
 
+    public final StringPath productCode = createString("productCode");
+
     public final StringPath ProductDesc = createString("ProductDesc");
 
     public final NumberPath<Long> productId = createNumber("productId", Long.class);
 
     public final StringPath productName = createString("productName");
 
-    public final StringPath rdate = createString("rdate");
+    public final DateTimePath<java.time.LocalDateTime> rdate = createDateTime("rdate", java.time.LocalDateTime.class);
 
     public final StringPath sellerId = createString("sellerId");
 
     public final NumberPath<Integer> shippingFee = createNumber("shippingFee", Integer.class);
 
     public final NumberPath<Integer> shippingTerms = createNumber("shippingTerms", Integer.class);
+
+    public final NumberPath<Integer> sold = createNumber("sold", Integer.class);
 
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
 
