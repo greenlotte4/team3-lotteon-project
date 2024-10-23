@@ -36,7 +36,7 @@ public class ProductDTO{
     private Boolean isSaled; // 판매가능여부
     private String sellerId;
     private String productCode;
-
+    private int hit;
 
     private List<ProductFileDTO> productFiles;
     private List<OptionDTO> options;
