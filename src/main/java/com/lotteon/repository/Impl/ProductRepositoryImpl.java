@@ -1,6 +1,7 @@
 package com.lotteon.repository.Impl;
 
 import com.lotteon.dto.product.PageRequestDTO;
+import com.lotteon.dto.product.ProductWithDTO;
 import com.lotteon.entity.User.QUser;
 import com.lotteon.entity.product.*;
 import com.lotteon.repository.custom.ProductRepositoryCustom;
@@ -76,5 +77,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 
         return new PageImpl<>(products, pageable,total);
+    }
+
+    @Override
+    public Page<ProductWithDTO> selectProductForListByCategory(PageRequestDTO pageRequest, Pageable pageable) {
+        return null;
     }
 }

@@ -175,8 +175,8 @@ public class ProductService {
             // 추가로 ProductFile 관련 정보를 ProductDTO에 저장하려면 여기에 작성
             List<ProductFile> productFiles = product.getFiles();
             List<ProductFileDTO> productFileDTOS = productFiles.stream().map((element) -> modelMapper.map(element, ProductFileDTO.class)).collect(Collectors.toList());
-            productDTO.setFiles(productDTO.getProductFiles());
-            log.info("productFiles : "+productFiles);
+
+            log.info("productFiles : "+productFileDTOS);
 
             productDTO.setProductFiles(productFileDTOS);
             return productDTO;
@@ -192,5 +192,16 @@ public class ProductService {
 
     }
 
-    public void isSaleProduct() {}
+//////////////////////////////////////////////////////////
+    public ProductListPageResponseDTO selectProductListBymarket(PageRequestDTO pageRequestDTO){
+        Pageable pageable = pageRequestDTO.getPageable("hit",10);
+        Page<ProductWithDTO> tuples = productRepository.selectProductForListByCategory(pageRequestDTO,pageable);
+        log.info("//////////"+tuples.getContent());
+
+        return null;
+
+    }
+
+
+        public void isSaleProduct() {}
 }

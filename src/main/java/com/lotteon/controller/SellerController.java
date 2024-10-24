@@ -29,7 +29,7 @@ public class SellerController {
         String user = authentication.getName();
         ProductPageResponseDTO productPageResponseDTO =  productService.selectProductsBySellerId(user,pageRequestDTO);
         model.addAttribute("productPageResponseDTO", productPageResponseDTO);
-        log.info(productPageResponseDTO);
+        log.info(productPageResponseDTO.getProductDTOList());
 
         return "content/admin/product/admin_productlist"; // Points to the "content/sellerDynamic" template for product listing
     }
