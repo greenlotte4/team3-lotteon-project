@@ -34,7 +34,7 @@ public class AdminService {
         return bannerDTOs;
     }
 
-    public void deleteBanner(List<Integer> data){
+    public void deleteCheck(List<Integer> data){
         for (Integer id : data) {
             bannerRepository.deleteById(id);
         }
