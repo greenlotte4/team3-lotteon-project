@@ -82,6 +82,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const startDate = document.getElementById("startDate").value;
         const endDate = document.getElementById("endDate").value;
 
+        const inpitcouponName = couponForm.couponName.value;
+        const inpitcouponType = couponForm.couponType.value;
+        const inpitbenefit = couponForm.benefit.value;
+        const inpitstartDate = couponForm.startDate.value;
+        const inpitendDate = couponForm.endDate.value;
+        const inpitnotes = couponForm.notes.value;
+
+        // 모든 필드가 입력되었는지 확인
+        if (!inpitcouponName || !inpitcouponType || !inpitbenefit || !inpitstartDate || !inpitendDate || !inpitnotes) {
+            alert("모든 필드를 입력해 주세요.");
+            return; // 폼 제출 방지
+        }
+        if (startDate > endDate) {
+            alert("사용 기간이 잘못 설정 되었습니다.");
+            return; // 폼 제출 방지
+        }
+
         const sellerCompany = document.getElementById("addCouponModal").getAttribute("data-seller-company");
         console.log("Seller Company:", sellerCompany);
 
@@ -194,38 +211,45 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 });
-//
+
+// 쿠폰 종료 버튼 처리
 document.querySelectorAll('.end-button').forEach(button => {
     button.addEventListener('click', function () {
-        const confirmEnd = confirm("정말로 이 쿠폰을 종료하시겠습니까?");
-        if (confirmEnd) {
+        if (confirm("정말로 이 쿠폰을 종료하시겠습니까?")) {
             const couponId = this.closest('tr').querySelector('.order-link').getAttribute('data-coupon-id');
+            const couponRow = this.closest('tr');
+            const statusElement = couponRow.querySelector('.coupon-status');
+            const currentStatus = statusElement.innerText.trim(); // 상태 가져오기
+            console.log("쿠폰 ID:", couponId); // 확인용 로그
 
             fetch(`/admin/coupon/${couponId}/end`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' }
             })
                 .then(resp => {
-                    if (resp.ok) {
-                        return resp.json(); // 응답을 JSON으로 변환
-                    } else {
-                        alert("쿠폰 종료에 실패했습니다.");
-                        throw new Error("Response not OK");
-                    }
+                    if (!resp.ok) throw new Error("Response not OK");
+                    return resp.json();
                 })
                 .then(updatedCoupon => {
-                    this.innerText = "종료됨"; // 버튼 텍스트 변경
                     this.disabled = true; // 버튼 비활성화
-
-                    // 업데이트된 상태를 UI에 반영
-                    const couponRow = this.closest('tr');
-                    couponRow.querySelector('.coupon-status').innerText = updatedCoupon.status; // 반환된 상태를 사용
+                    statusElement.innerText = updatedCoupon.status; // 상태 업데이트
+                    localStorage.setItem(`coupon-${couponId}`, JSON.stringify(updatedCoupon.status));
+                    window.location.href = '/admin/coupon/list'; // 리다이렉트
                 })
-                .catch(error => {
-                    console.error('Error', error);
-                });
+                .catch(error => console.error('Error:', error));
+        }
+    });
+    document.querySelectorAll('.coupon-status').forEach(statusElement => {
+        const couponRow = statusElement.closest('tr');
+        const button = couponRow.querySelector('.end-button');
+        const currentStatus = statusElement.innerText;
+
+        if (currentStatus !== '발급 중') {
+            button.style.backgroundColor = '#888'; // 회색 배경
+            button.style.color = 'white'; // 흰색 글자
+            button.disabled = true; // 상태에 따라 버튼 비활성화
         }
     });
 });
+
+

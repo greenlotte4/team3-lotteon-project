@@ -36,8 +36,11 @@ public class AdminCouponController {
         model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
         model.addAttribute("sellerGrade", seller.getGrade());
         log.info("등급"+seller.getGrade());
+
         List<CouponDTO> couponList  = couponService.selectCouponAll();
         model.addAttribute("couponList", couponList );
+
+
 
 
         return "content/admin/coupon/list";
@@ -84,8 +87,11 @@ public class AdminCouponController {
     @PutMapping("/{couponId}/end")
     public ResponseEntity<CouponDTO> endCoupon(@PathVariable("couponId") String couponId) {
         CouponDTO updatedCoupon = couponService.endCoupon(couponId);
+
+        log.info("---------쿠폰 상태------------"+updatedCoupon);
         return ResponseEntity.ok(updatedCoupon);
 
     }
+
 
 }
