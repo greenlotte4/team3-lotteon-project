@@ -73,12 +73,6 @@ public class AdminController {
         return ResponseEntity.ok().body(banner);
     }
 
-    @PostMapping("/config/basic")
-    public String FooterInfoModify(Model model, FooterInfoDTO footerInfoDTO) {
 
-//        footerInfoService.insertFooterInfo(footerInfoDTO);
-
-        return "redirect:/admin/config/basic";
-    }
 
 }
