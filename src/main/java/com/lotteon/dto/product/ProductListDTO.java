@@ -34,7 +34,7 @@ public class ProductListDTO {
     private String file190;
     private String file230;
     private String file456;
-    private String filedesc;
+    private List<String> filedesc;
 
     private List<ProductFileDTO> productFiles;
 
@@ -47,7 +47,7 @@ public class ProductListDTO {
             }else if (productFileDTO.getType().equals("456")){
                 this.file456=productFileDTO.getSName();
             }else{
-                this.filedesc=productFileDTO.getSName();
+                filedesc.add(productFileDTO.getSName());
             }
         }
     }

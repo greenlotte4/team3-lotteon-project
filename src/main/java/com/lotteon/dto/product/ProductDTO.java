@@ -41,6 +41,7 @@ public class ProductDTO{
     private String file190;
     private String file230;
     private String file456;
+    private List<String> filedesc;
 
 
 

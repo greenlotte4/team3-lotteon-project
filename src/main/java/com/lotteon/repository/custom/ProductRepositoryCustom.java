@@ -1,6 +1,7 @@
 package com.lotteon.repository.custom;
 
 import com.lotteon.dto.product.PageRequestDTO;
+import com.lotteon.dto.product.ProductWithDTO;
 import com.lotteon.entity.product.Product;
 import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ public interface ProductRepositoryCustom {
 
     //main list
     public Page<Tuple> selectProductForList( PageRequestDTO pageRequest,Pageable pageable );
-
+    public Page<ProductWithDTO> selectProductForListByCategory(PageRequestDTO pageRequest, Pageable pageable );
 
 
 

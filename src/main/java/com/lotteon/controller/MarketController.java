@@ -34,7 +34,9 @@ public class MarketController {
         pageRequestDTO.setCategoryId(categoryid);
         ProductListPageResponseDTO responseDTO =  productService.selectProductListByCategory(pageRequestDTO);
         log.info(responseDTO.getProductDTOList());
-        model.addAttribute("products",responseDTO);
+        model.addAttribute("responseDTO",responseDTO);
+
+
         return "content/market/marketList"; // Points to the "content/market/marketList" template
     }
 
