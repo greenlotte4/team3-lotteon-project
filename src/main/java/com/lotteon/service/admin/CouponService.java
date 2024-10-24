@@ -91,4 +91,19 @@ public class CouponService {
         return couponDTOs;
     }
 
+
+    public CouponDTO endCoupon(String couponId){
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(() -> new RuntimeException("Coupon could not be found for id: " + couponId));
+
+        if("발급 중".equals(coupon.getStatus())||"발급 가능".equals(coupon.getStatus())){
+            coupon.setStatus("종료됨");
+            couponRepository.save(coupon);
+            log.info("Coupon ended: " + coupon);
+
+            return modelMapper.map(coupon, CouponDTO.class);
+        } else {
+            throw new RuntimeException("궁시렁궁시렁 오류남");
+        }
+    }
 }

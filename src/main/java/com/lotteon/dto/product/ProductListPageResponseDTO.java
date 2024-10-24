@@ -2,6 +2,7 @@ package com.lotteon.dto.product;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -9,9 +10,9 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductPageResponseDTO {
+public class ProductListPageResponseDTO {
 
-    private List<ProductDTO> productDTOList;
+    private List<ProductListDTO> productDTOList;
 
     private String type;
     private int pg;
@@ -22,17 +23,21 @@ public class ProductPageResponseDTO {
     private int start, end;
     private boolean prev,next;
 
-    private List<ProductFileDTO> productFileDTOList;
-
-
     @Builder
-    public ProductPageResponseDTO(PageRequestDTO pageRequestDTO,List<ProductDTO> productDTOList,int total) {
+    public ProductListPageResponseDTO(PageRequestDTO pageRequestDTO,List<ProductListDTO> productDTOList,int total) {
 
         this.type = pageRequestDTO.getType();
         this.pg = pageRequestDTO.getPage();
         this.size = pageRequestDTO.getSize();
         this.total = total;
         this.productDTOList = productDTOList;
+        for (ProductListDTO productListDTO : productDTOList) {
+            productListDTO.setFiles(productListDTO.getProductFiles());
+        }
+
+
+
+
 
         this.startNo = total - ((pg-1)*size);
         this.end=(int)(Math.ceil(this.pg/ (double)size))*size;
@@ -49,6 +54,5 @@ public class ProductPageResponseDTO {
         this.next = total > this.end * this.size;
 
     }
-
 
 }

@@ -36,7 +36,11 @@ public class MyUserDetailsService implements UserDetailsService {
                         .seller(user.getSeller())
                         .build();
                 return myUserDetails;
-            }else{
+            }else if(user == null){
+                throw new UsernameNotFoundException("User not found with username: " + username);
+
+            }
+            else{
                 throw new UsernameNotFoundException("User does not have the required role.");
             }
         }

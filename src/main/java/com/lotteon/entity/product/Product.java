@@ -24,7 +24,7 @@ public class Product {
     private Long productId;
 
     private String productCode;
-    private int categoryId;
+    private long categoryId;
 
     private String productName;
     private int price;

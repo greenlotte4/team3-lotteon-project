@@ -50,7 +50,7 @@ a {text-decoration: none; color: inherit;}
     /*width: 100px; height: 23px; */
     margin: 18px auto 0;}
 
-.aside_first > h2 {
+.aside_first  h2 a {
     margin-top: 10px;
     margin-bottom: 0px;
     font-size: 15px;
