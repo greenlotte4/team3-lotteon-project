@@ -1,6 +1,7 @@
 package com.lotteon.service.admin;
 
 import com.lotteon.dto.admin.CouponDTO;
+import com.lotteon.dto.admin.CouponListRequestDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.repository.admin.CouponRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -95,21 +97,36 @@ public class CouponService {
         }
     }
     // 페이징 기능 추가
-    public Page<CouponDTO> selectCouponsPagination(String userUid, Pageable pageable) {
+    public Page<CouponDTO> selectCouponsPagination(CouponListRequestDTO request) {
+        // 요청 DTO에서 페이지 정보와 사용자 UID 추출
+        int page = request.getPage() > 0 ? request.getPage() - 1 : 0; // 1-based to 0-based
+        int size = request.getSize();
+
+        Pageable pageable = PageRequest.of(page, size); // Pageable 생성
+
         // 셀러 정보를 가져오기 위해 UserUid로 셀러 조회
-        Optional<Seller> seller = sellerRepository.findByUserUid(userUid); // 셀러 리포지토리 사용
+        Optional<Seller> sellerOpt = sellerRepository.findByUserUid(request.getUid());
 
         // 셀러가 없을 경우 처리 (예: null 체크)
-        if (seller == null) {
-            throw new RuntimeException("셀러 정보를 찾을 수 없습니다."); // 예외 처리 추가
+        if (sellerOpt.isEmpty()) {
+            throw new RuntimeException("셀러 정보를 찾을 수 없습니다."); // 예외 처리
         }
 
+        Seller seller = sellerOpt.get();
         // 등급 체크
-        boolean adminCheck = "admin".equals(seller.get().getGrade()); // grade가 "admin"인지 확인
+        boolean adminCheck = "admin".equals(seller.getGrade()); // grade가 "admin"인지 확인
 
-        // 쿠폰 리스트 조회
-        Page<CouponDTO> couponPage = couponRepository.findCoupons(userUid, pageable);
-        log.info("Admin check for UID {}: {}", userUid, adminCheck);
+        Page<CouponDTO> couponPage;
+
+        if (adminCheck) {
+            // 관리자라면 모든 쿠폰 조회
+            couponPage = couponRepository.findCoupons(null, pageable);
+        } else {
+            // 일반 사용자는 해당 셀러의 쿠폰만 조회
+            couponPage = couponRepository.findCoupons(request.getUid(), pageable);
+        }
+
+        log.info("Admin check for UID {}: {}", request.getUid(), adminCheck);
         return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
     }
 
