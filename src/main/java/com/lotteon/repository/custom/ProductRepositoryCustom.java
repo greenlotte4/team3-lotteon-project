@@ -10,5 +10,14 @@ import org.springframework.data.querydsl.QPageRequest;
 
 
 public interface ProductRepositoryCustom {
-    public Page<Product> selectProductBySellerIdForList(String sellerId, PageRequestDTO pageRequest,Pageable pageable );
+    //admin List
+    public Page<Tuple> selectProductBySellerIdForList(String sellerId, PageRequestDTO pageRequest,Pageable pageable );
+
+    //main list
+    public Page<Tuple> selectProductForList( PageRequestDTO pageRequest,Pageable pageable );
+
+
+
+
+
 }

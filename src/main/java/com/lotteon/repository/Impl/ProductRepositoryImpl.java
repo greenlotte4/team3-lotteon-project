@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -28,16 +27,19 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private QUser qUser = QUser.user;
     private QProductFile qProductFile = QProductFile.productFile;
 
-    @Override
-    public Page<Product> selectProductBySellerIdForList(String sellerId, PageRequestDTO pageRequest,Pageable pageable) {
 
-        List<Product> products = queryFactory
-                .select(qProduct)
+    //admin product list에서 사용
+    @Override
+    public Page<Tuple> selectProductBySellerIdForList(String sellerId, PageRequestDTO pageRequest, Pageable pageable) {
+
+
+        List<Tuple> products = queryFactory
+                .select(qProduct,qProductFile)
                 .from(qProduct)
                 .leftJoin(qProduct.files,qProductFile).fetchJoin()
                 .leftJoin(qProduct.options,qOption).fetchJoin()
                 .leftJoin(qProduct.productDetails,qProductDetails).fetchJoin()
-                .where(qProduct.sellerId.eq(sellerId))
+                .where(qProduct.sellerId.eq(sellerId).and(qProductFile.type.eq("190")))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -46,6 +48,31 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .from(qProduct)
                 .where(qProduct.sellerId.eq(sellerId))
                 .fetchOne().intValue();
+
+
+        return new PageImpl<>(products, pageable,total);
+    }
+
+    @Override
+    public Page<Tuple> selectProductForList(PageRequestDTO pageRequest, Pageable pageable) {
+        List<Tuple> products=null;
+        long total=0;
+        if(pageRequest.getType()==null){
+            products = queryFactory
+                    .select(qProduct,qProductFile)
+                    .from(qProduct)
+                    .leftJoin(qProduct.files,qProductFile).fetchJoin()
+                    .leftJoin(qProduct.options,qOption).fetchJoin()
+                    .leftJoin(qProduct.productDetails,qProductDetails).fetchJoin()
+                    .where(qProduct.categoryId.eq(pageRequest.getCategoryId()))
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+             total = queryFactory.select(qProduct.count())
+                    .from(qProduct)
+                    .fetchOne().intValue();
+        }
 
 
         return new PageImpl<>(products, pageable,total);
