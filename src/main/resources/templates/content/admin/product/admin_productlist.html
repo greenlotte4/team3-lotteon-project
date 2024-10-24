@@ -66,7 +66,7 @@
                             <th>조회</th>
                             <th>관리</th>
                         </tr>
-                        <tr th:each="product:${productDTOS}">
+                        <tr th:each="product:${productPageResponseDTO.getProductDTOList()}">
                             <td><input type="checkbox">
                                 <input type="hidden" name="productId" th:value="${product.productId}">
                             </td>
@@ -80,8 +80,8 @@
                             <td>[[${product.sellerId}]]</td>
                             <td></td>
                             <td>
-                                <a href="" class="delete">[삭제]</a><br>
-                                <a href="" class="edit">[수정]</a>
+                                <a th:href="@{/seller/product/delete(id=${product.productId})}" class="delete">[삭제]</a><br>
+                                <a th:href="@{/seller/product/modify(id=${product.productId})}" class="edit">[수정]</a>
                             </td>
                         </tr>
                     </table>
