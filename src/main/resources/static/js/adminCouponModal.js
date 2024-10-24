@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log("쿠폰데이터:", couponData)
 
-        fetch('/admin/coupon/register', {
+        fetch('/seller/coupon/register', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ document.querySelectorAll('.end-button').forEach(button => {
             const currentStatus = statusElement.innerText.trim(); // 상태 가져오기
             console.log("쿠폰 ID:", couponId); // 확인용 로그
 
-            fetch(`/admin/coupon/${couponId}/end`, {
+            fetch(`/seller/coupon/${couponId}/end`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' }
             })
@@ -234,7 +234,7 @@ document.querySelectorAll('.end-button').forEach(button => {
                     this.disabled = true; // 버튼 비활성화
                     statusElement.innerText = updatedCoupon.status; // 상태 업데이트
                     localStorage.setItem(`coupon-${couponId}`, JSON.stringify(updatedCoupon.status));
-                    window.location.href = '/admin/coupon/list'; // 리다이렉트
+                    window.location.href = '/seller/coupon/list'; // 리다이렉트
                 })
                 .catch(error => console.error('Error:', error));
         }
