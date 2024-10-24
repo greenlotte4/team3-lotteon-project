@@ -6,5 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface CouponRepositoryCustom {
 
-   Page<CouponDTO> findCoupons(String uid , String grade, Pageable pageable);
+   Page<CouponDTO> findCoupons (String uid , Pageable pageable);
+
 }
