@@ -27,29 +27,29 @@
                     <col style="width: 750px">
                 </colgroup>
                 <tr>
-                    <th colspan="2" class="signup-title">[가입] 가입 문의 내용
+                    <th colspan="2" class="signup-title">
+                        <span th:text="${qna.qna_title}" style="font-weight: bold; color: #333; font-size: 16px;"></span>
                         <div class="qinfo-container">
-                            <span class="qinfo-label">wjdwlgus****</span>
-                            <span class="qinfo-label">2024-11-21</span>
+                            <span class="qinfo-label" th:text="${qna.qna_writer}"></span>
+                            <span class="qinfo-label" th:text="${#temporals.format(qna.rdate, 'yyyy-MM-dd')}"></span>
                         </div>
                     </th>
                 </tr>
-
                 <tr>
-                    <td class="qcontent-label">내용</td>
-                    <td>회원가입 하고 싶어요. 어떻게 해야 하나요?</td>
+                    <td class="qcontent-label">[내용]</td>
+                    <td th:text="${qna.qna_content}">질문 내용</td>
                 </tr>
                 <tr>
-                    <th colspan="2">▶[답변] 가입 문의 내용</th>
+                    <th colspan="2">답변</th>
                 </tr>
                 <tr>
-                    <td class="acontent-label">답변</td>
-                    <td>안녕하세요. 회원님 회원가입 하시면 됩니다.</td>
+                    <td class="acontent-label">[답변]</td>
+                    <td th:text="${qna.qna_status == 'completed' ? qna.qna_answer : '아직 답변이 완료되지 않았습니다.'}">답변 내용</td>
                 </tr>
             </table>
 
             <div class="button-section">
-                <button class="list-btn">목록</button>
+                <button class="list-btn" th:onclick="|location.href='@{/cs/qna/list}'|">목록</button>
             </div>
         </div>
     </div>

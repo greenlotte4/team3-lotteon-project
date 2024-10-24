@@ -51,4 +51,7 @@ public class Seller {
     @JsonIgnore
     private User user; // User와의 관계
 
+
+    private boolean isAdmin;
+
 }

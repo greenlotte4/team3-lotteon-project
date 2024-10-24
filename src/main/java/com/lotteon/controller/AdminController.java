@@ -1,6 +1,7 @@
 package com.lotteon.controller;
 
 
+
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.entity.Banner;
@@ -43,7 +44,7 @@ public class AdminController {
          if(data == null || data.isEmpty()){
              return ResponseEntity.badRequest().body("삭제할 항목이 없습니다.");
          }
-         adminService.deleteBanner(data);
+         adminService.deleteCheck(data);
          return ResponseEntity.ok().build();
     }
 

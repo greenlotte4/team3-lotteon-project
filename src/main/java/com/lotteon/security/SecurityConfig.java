@@ -15,7 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig  {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -24,6 +24,14 @@ public class SecurityConfig {
                 .loginPage("/user/login")
                 .successHandler(customAuthSuccessHandler()) // 로그인 성공 핸들러 설정
                 .failureUrl("/user/login?error=true")  // 로그인 실패 시 URL 수정
+                .usernameParameter("inId")  // 로그인 시 사용할 파라미터 이름
+                .passwordParameter("Password")  // 로그인 시 사용할 비밀번호 파라미터 이름
+        );
+
+        http.formLogin(login -> login
+                .loginPage("/seller/login")
+                .successHandler(customAuthSuccessHandler()) // 로그인 성공 핸들러 설정
+                .failureUrl("/seller/login?error=true")  // 로그인 실패 시 URL 수정
                 .usernameParameter("inId")  // 로그인 시 사용할 파라미터 이름
                 .passwordParameter("Password")  // 로그인 시 사용할 비밀번호 파라미터 이름
         );
@@ -45,6 +53,7 @@ public class SecurityConfig {
         // 권한 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/").permitAll()
+                .requestMatchers("/seller/login").permitAll()
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN","SELLER")
                 .requestMatchers("/admin/faq/**").hasRole("ADMIN")
                 .requestMatchers("/admin/qna/**").hasRole("ADMIN")

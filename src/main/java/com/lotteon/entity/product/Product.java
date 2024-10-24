@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -23,7 +24,7 @@ public class Product {
     private Long productId;
 
     private String productCode;
-    private int categoryId;
+    private long categoryId;
 
     private String productName;
     private int price;
@@ -59,13 +60,14 @@ public class Product {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="product_id")
     @ToString.Exclude
-    private List<Option> options;
+    private Set<Option> options;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="product_id")
     @ToString.Exclude
     private ProductDetails productDetails;
 
+    private int hit;
 
 
     @PostPersist

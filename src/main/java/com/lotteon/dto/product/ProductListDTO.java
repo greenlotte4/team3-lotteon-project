@@ -1,15 +1,8 @@
 package com.lotteon.dto.product;
 
-
-import com.lotteon.entity.product.ProductDetails;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Builder
-public class ProductDTO{
+public class ProductListDTO {
 
     private long productId;
 
@@ -41,13 +34,21 @@ public class ProductDTO{
     private String file190;
     private String file230;
     private String file456;
-
-
+    private String filedesc;
 
     private List<ProductFileDTO> productFiles;
-    private List<OptionDTO> options;
-    private ProductDetails productDetails;
 
-
-
+    public void setFiles(List<ProductFileDTO> productFiles){
+        for(ProductFileDTO productFileDTO : productFiles){
+            if (productFileDTO.getType().equals("190")){
+                this.file190=productFileDTO.getSName();
+            }else if (productFileDTO.getType().equals("230")){
+                this.file230=productFileDTO.getSName();
+            }else if (productFileDTO.getType().equals("456")){
+                this.file456=productFileDTO.getSName();
+            }else{
+                this.filedesc=productFileDTO.getSName();
+            }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.lotteon.service;
 
 
+
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.HeaderInfoDTO;
 import com.lotteon.dto.product.ProductFileDTO;
@@ -89,7 +90,7 @@ public class FileService {
             fileuploadpath.mkdirs();
         }
         String path=  fileuploadpath.getAbsolutePath();
-        List<ProductFileDTO> fileDTOs = new ArrayList<>();
+        List<ProductFileDTO> fileDTOs = new ArrayList<>() ;
 
 
         for(String key :images.keySet() ){
