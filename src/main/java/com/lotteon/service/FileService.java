@@ -3,6 +3,7 @@ package com.lotteon.service;
 
 
 import com.lotteon.dto.admin.BannerDTO;
+import com.lotteon.dto.admin.HeaderInfoDTO;
 import com.lotteon.dto.product.ProductFileDTO;
 import com.lotteon.repository.BannerRepository;
 import com.lotteon.repository.FileRepository;
@@ -125,6 +126,58 @@ public class FileService {
         log.info(fileDTOs);
         return fileDTOs;
 
+    }
+
+    public HeaderInfoDTO uploadFile(HeaderInfoDTO headerInfoDTO) {
+
+        // 파일 업로드 경로 파일 객체 생성
+        File fileUploadPath = new File(uploadPath);
+
+        // 파일 업로드 디렉터리가 존재하지 않으면 디렉터리 생성
+        if (!fileUploadPath.exists()) {
+            fileUploadPath.mkdirs();
+        }
+
+        // 파일 업로드 시스템 경로 구하기
+        String path = fileUploadPath.getAbsolutePath();
+
+        // 파일 정보 객체 가져오기
+        MultipartFile file = headerInfoDTO.getFile(); // 배너 DTO에서 파일 정보 가져오기
+
+        HeaderInfoDTO newHeaderInfoDTO = new HeaderInfoDTO();
+
+        if (!file.isEmpty()) {
+            String oName = file.getOriginalFilename();
+            String ext = oName.substring(oName.lastIndexOf("."));
+            String sName = UUID.randomUUID().toString() + ext;
+
+
+            // 허용된 확장자 목록
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
+
+            // 확장자가 허용된 목록에 있는지 확인
+            if (!allowedExtensions.contains(ext)) {
+                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
+            }
+
+            // 파일 저장
+            try {
+                file.transferTo(new File(path, sName));
+            } catch (IOException e) {
+                log.error(e);
+            }
+            newHeaderInfoDTO.setHd_sName1(oName);
+            newHeaderInfoDTO.setHd_sName1(sName);
+
+            newHeaderInfoDTO.setHd_sName2(oName);
+            newHeaderInfoDTO.setHd_sName2(sName);
+
+            newHeaderInfoDTO.setHd_sName3(oName);
+            newHeaderInfoDTO.setHd_sName3(sName);
+
+
+        }
+        return newHeaderInfoDTO;
     }
 
 

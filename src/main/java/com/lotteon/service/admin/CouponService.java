@@ -8,6 +8,8 @@ import com.lotteon.repository.user.SellerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -78,20 +80,6 @@ public class CouponService {
 
     }
 
-
-    public List<CouponDTO> selectCouponAll(){
-
-        List<Coupon> coupons = couponRepository.findAll();
-        List<CouponDTO> couponDTOs = new ArrayList<>();
-
-        for (Coupon coupon : coupons) {
-            CouponDTO couponDTO = modelMapper.map(coupon, CouponDTO.class);
-            couponDTOs.add(couponDTO);
-        }
-        return couponDTOs;
-    }
-
-
     public CouponDTO endCoupon(String couponId){
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new RuntimeException("Coupon could not be found for id: " + couponId));
@@ -106,4 +94,25 @@ public class CouponService {
             throw new RuntimeException("궁시렁궁시렁 오류남");
         }
     }
+    // 페이징 기능 추가
+    public Page<CouponDTO> selectCouponsPagination(String userUid, Pageable pageable) {
+        // 셀러 정보를 가져오기 위해 UserUid로 셀러 조회
+        Optional<Seller> seller = sellerRepository.findByUserUid(userUid); // 셀러 리포지토리 사용
+
+        // 셀러가 없을 경우 처리 (예: null 체크)
+        if (seller == null) {
+            throw new RuntimeException("셀러 정보를 찾을 수 없습니다."); // 예외 처리 추가
+        }
+
+        // 등급 체크
+        boolean adminCheck = "admin".equals(seller.get().getGrade()); // grade가 "admin"인지 확인
+
+        // 쿠폰 리스트 조회
+        Page<CouponDTO> couponPage = couponRepository.findCoupons(userUid, pageable);
+        log.info("Admin check for UID {}: {}", userUid, adminCheck);
+        return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
+    }
+
+
+
 }

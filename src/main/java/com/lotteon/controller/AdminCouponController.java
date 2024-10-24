@@ -7,6 +7,8 @@ import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.admin.CouponService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,23 +27,23 @@ public class AdminCouponController {
     private final CouponService couponService;
 
 
-
     @GetMapping("/list")
-    public String adminCouponList(Model model) {
+    public String adminCouponList(Model model, Pageable pageable) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
         Seller seller = userDetails.getSeller();
 
+        String userUid = seller.getUser().getUid();
+        String grade = seller.getGrade();
+
         model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
         model.addAttribute("sellerGrade", seller.getGrade());
         log.info("등급"+seller.getGrade());
 
-        List<CouponDTO> couponList  = couponService.selectCouponAll();
+        Page<CouponDTO> couponList = couponService.selectCouponsPagination(userUid, pageable);
+
         model.addAttribute("couponList", couponList );
-
-
-
 
         return "content/admin/coupon/list";
     }

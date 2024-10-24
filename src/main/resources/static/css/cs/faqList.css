@@ -28,6 +28,11 @@ h2 {
 }
 
 .first_li span {
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.first_li span:nth-child(1) {
     color: rgb(17, 86, 165);
     font-weight: bold;
 }
@@ -66,6 +71,11 @@ h2 {
 }
 
 .second_li span {
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.second_li span:nth-child(1) {
     color: rgb(17, 86, 165);
     font-weight: bold;
 }

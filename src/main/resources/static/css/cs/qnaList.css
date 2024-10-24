@@ -21,10 +21,6 @@ h2 {
     align-items: center;
 }
 
-.question, .review-status, .author-id, .date {
-    margin-right: 20px;
-}
-
 .review-status, .author-id, .date {
     color: #999;
 }
@@ -34,21 +30,46 @@ h2 {
 }
 
 .first_list li a {
-    display: inline-block;
-    margin: 15px 20px;
     font-weight: 500;
     font-size: 13px;
 }
 
-.first_li span:not(:first-child) {
-    margin-left: 15px;
-    padding-left: 5px;
+.first_li span {
+    font-weight: 500;
+    font-size: 13px;
+    display: inline-block;
+    padding: 17px 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 길면 ... 표시 */
+    white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
 }
 
-.first_li span {
-    display: inline-block;
-    margin-right: 50px;
-    padding: 5px 10px;
+.first_li span:nth-child(1) {
+    color: rgb(17, 86, 165);
+    font-weight: bold;
+    margin-left: 20px;
+    width: 3%;
+}
+
+.first_li span:nth-child(2) {
+    width: 45%;
+}
+
+.first_li span:nth-child(3) {
+    width: 12%;
+    margin-left: 30px;
+}
+
+
+.first_li span:nth-child(4) {
+    width: 11%;
+    padding-left: 35px;
+}
+
+.first_li span:nth-child(5) {
+    width: 15%;
+    text-align: right;
 }
 
 .first_show {
