@@ -25,13 +25,16 @@ public class FaqService {
 
 
     public Faq updatefaq(FaqDTO faqDTO) {
-        boolean result = faqRepository.existsById(faqDTO.getFaqNo());
-        if(result) {
-           Faq faq = faqRepository.save(modelMapper.map(faqDTO, Faq.class));
-           return faq;
-        }else {
-            throw new EntityNotFoundException("FAQ not found for ID: " + faqDTO.getFaqNo());
+        Optional<Faq> faq = faqRepository.findById(faqDTO.getFaqNo());
+        if (faq.isPresent()) {
+            Faq faq1 = faq.get();
+            faq1.setFaqtype1(faqDTO.getFaqtype1());
+            faq1.setFaqtype2(faqDTO.getFaqtype2());
+            faq1.setFaqcontent(faqDTO.getFaqcontent());
+            faq1.setFaqtitle(faqDTO.getFaqtitle());
+            return faqRepository.save(faq1);
         }
+        return null;
     }
 
 
@@ -52,6 +55,20 @@ public class FaqService {
             return faqDTO;
         }
         return null;
+    }
+
+    public void deleteCheck(List<Integer> data){
+        for (Integer id : data) {
+            faqRepository.deleteById(id);
+        }
+    }
+
+    public void deletefaq(int no){
+        Optional<Faq> optfaq = faqRepository.findById(no);
+        if(optfaq.isPresent()){
+            Faq faq = optfaq.get();
+            faqRepository.delete(faq);
+        }
     }
 
     }

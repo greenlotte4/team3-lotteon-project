@@ -34,6 +34,4 @@ public class User{
         MEMBER, SELLER, ADMIN
     }
 
-
-
 }

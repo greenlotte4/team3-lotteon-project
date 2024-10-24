@@ -2,9 +2,7 @@ package com.lotteon.controller;
 
 
 
-import com.lotteon.dto.product.ProductDTO;
-import com.lotteon.dto.product.ProductRequestDTO;
-import com.lotteon.dto.product.ProductResponseDTO;
+import com.lotteon.dto.product.*;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,12 +24,12 @@ public class SellerController {
     private final ProductService productService;
 
     @GetMapping("/product/list")
-    public String productList(Model model,Authentication authentication) {
+    public String productList(Model model, PageRequestDTO pageRequestDTO,Authentication authentication) {
 
         String user = authentication.getName();
-        List<ProductDTO> productDTOS=  productService.selectProducts();
-        model.addAttribute("productDTOS", productDTOS);
-        log.info(productDTOS);
+        ProductPageResponseDTO productPageResponseDTO =  productService.selectProductsBySellerId(user,pageRequestDTO);
+        model.addAttribute("productPageResponseDTO", productPageResponseDTO);
+        log.info(productPageResponseDTO.getProductDTOList());
 
         return "content/admin/product/admin_productlist"; // Points to the "content/sellerDynamic" template for product listing
     }
@@ -64,6 +62,21 @@ public class SellerController {
         }
     }
 
+
+    @GetMapping("/product/delete")
+    public String productDelete(@RequestParam("id") long id,Model model, Authentication authentication) {
+        String user = authentication.getName();
+        log.info(id);
+        int result = productService.deleteProduct(id);
+        if(result >0){
+            //성공시
+            return "redirect:/seller/product/list?success=200";
+        }
+
+        //실패시
+        return "redirect:/seller/product/register?success=100";
+    }
+
     @GetMapping("/order/delivery")
     public String deliveryStatus(Model model) {
         model.addAttribute("content", "delivery");
@@ -78,18 +91,7 @@ public class SellerController {
 
 
 
-    @GetMapping("/coupon/list")
-    public String couponList(Model model) {
-        model.addAttribute("cate", "coupon");
-        return "content/admin/coupon/list"; // Points to the "content/sellerDynamic" template for coupon management
-    }
 
-    @GetMapping("/coupon/issued")
-    public String couponIssued(Model model) {
-        model.addAttribute("cate", "coupon");
-        model.addAttribute("content", "issued");
-        return "content/admin/coupon/issued"; // Points to "content/admin/coupon/issued"
-    }
 
     @GetMapping("/login")
     public String sellerLogin(Model model) {

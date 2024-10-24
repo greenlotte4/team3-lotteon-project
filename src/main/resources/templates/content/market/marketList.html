@@ -41,19 +41,19 @@
                             </ul>
                         </div>
                         <article class="product-list">
-                            <div class="product-item">
+                            <div class="product-item" th:each="product:${responseDTO.getProductDTOList()}">
                                 <div class="product-image">
-                                    <img src="/path/to/image.jpg" alt="상품 이미지">
+                                    <img th:src="@{'/uploads/productimg/'+${product.getFile230()}}" alt="상품 이미지">
                                 </div>
                                 <div class="product-details">
-                                    <h4 class="product-name">상품명</h4>
-                                    <p class="product-description">간단한 상품 설명</p>
+                                    <h4 class="product-name">[[${product.productName}]]</h4>
+                                    <p class="product-description">[[${product.productDesc}]]</p>
                                 </div>
                                 <div class="price-seller-info">
                                     <div class="product-price">
-                                        <span class="final-price">27,000원</span>
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% ↓</span>
+                                        <span class="final-price">[[${product.price}]]원</span>
+                                        <span class="original-price">[[${product.price}]]원</span>
+                                        <span class="discount">[[${product.discount}]]% ↓</span>
                                     </div>
                                     <div class="shipping-info">
                                         <span class="shipping-label">무료배송</span>
@@ -66,106 +66,7 @@
                                 </div>
                             </div>
                         
-                            <div class="product-item">
-                                <div class="product-image">
-                                    <img src="/path/to/image.jpg" alt="상품 이미지">
-                                </div>
-                                <div class="product-details">
-                                    <h4 class="product-name">상품명</h4>
-                                    <p class="product-description">간단한 상품 설명</p>
-                                </div>
-                                <div class="price-seller-info">
-                                    <div class="product-price">
-                                        <span class="final-price">27,000원</span>
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% ↓</span>
-                                    </div>
-                                    <div class="shipping-info">
-                                        <span class="shipping-label">무료배송</span>
-                                    </div>
-                                </div>
-                                <div class="product-seller">
-                                    <span class="seller-name">판매자</span>
-                                    <span class="seller-rating">고객만족우수</span>
-                                    <span class="seller-rank">⭐⭐⭐⭐⭐</span>
-                                </div>
-                            </div>
 
-                            <div class="product-item">
-                                <div class="product-image">
-                                    <img src="/path/to/image.jpg" alt="상품 이미지">
-                                </div>
-                                <div class="product-details">
-                                    <h4 class="product-name">상품명</h4>
-                                    <p class="product-description">간단한 상품 설명</p>
-                                </div>
-                                <div class="price-seller-info">
-                                    <div class="product-price">
-                                        <span class="final-price">27,000원</span>
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% ↓</span>
-                                    </div>
-                                    <div class="shipping-info">
-                                        <span class="shipping-label">무료배송</span>
-                                    </div>
-                                </div>
-                                <div class="product-seller">
-                                    <span class="seller-name">판매자</span>
-                                    <span class="seller-rating">고객만족우수</span>
-                                    <span class="seller-rank">⭐⭐⭐⭐⭐</span>
-                                </div>
-                            </div>
-
-                            <div class="product-item">
-                                <div class="product-image">
-                                    <img src="/path/to/image.jpg" alt="상품 이미지">
-                                </div>
-                                <div class="product-details">
-                                    <h4 class="product-name">상품명</h4>
-                                    <p class="product-description">간단한 상품 설명</p>
-                                </div>
-                                <div class="price-seller-info">
-                                    <div class="product-price">
-                                        <span class="final-price">27,000원</span>
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% ↓</span>
-                                    </div>
-                                    <div class="shipping-info">
-                                        <span class="shipping-label">무료배송</span>
-                                    </div>
-                                </div>
-                                <div class="product-seller">
-                                    <span class="seller-name">판매자</span>
-                                    <span class="seller-rating">고객만족우수</span>
-                                    <span class="seller-rank">⭐⭐⭐⭐⭐</span>
-                                </div>
-                            </div>
-
-
-                            <div class="product-item">
-                                <div class="product-image">
-                                    <img src="/path/to/image.jpg" alt="상품 이미지">
-                                </div>
-                                <div class="product-details">
-                                    <h4 class="product-name">상품명</h4>
-                                    <p class="product-description">간단한 상품 설명</p>
-                                </div>
-                                <div class="price-seller-info">
-                                    <div class="product-price">
-                                        <span class="final-price">27,000원</span>
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% ↓</span>
-                                    </div>
-                                    <div class="shipping-info">
-                                        <span class="shipping-label">무료배송</span>
-                                    </div>
-                                </div>
-                                <div class="product-seller">
-                                    <span class="seller-name">판매자</span>
-                                    <span class="seller-rating">고객만족우수</span>
-                                    <span class="seller-rank">⭐⭐⭐⭐⭐</span>
-                                </div>
-                            </div>
 
                         </article> <!-- Repeat for more products -->
 

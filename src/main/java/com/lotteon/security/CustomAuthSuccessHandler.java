@@ -15,6 +15,9 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
+
+        String uid = authentication.getName();
+
         // 사용자 권한(Role) 확인
         boolean isMember = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MEMBER"));
         boolean isSeller = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SELLER"));
