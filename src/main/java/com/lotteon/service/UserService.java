@@ -8,7 +8,7 @@ import com.lotteon.repository.user.SellerRepository;
 import com.lotteon.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,6 +21,27 @@ public class UserService {
     private final UserRepository userRepository;
     private final MemberRepository memberRepository;
     private final SellerRepository sellerRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public Optional<User> findUserByUid(String uid) {
+        return userRepository.findByUid(uid); // 아이디로 사용자 검색
+    }
+
+    public boolean login(String uid, String password) {
+        Optional<User> optionalUser = findUserByUid(uid); // 아이디로 사용자 검색
+
+        if (optionalUser.isEmpty()) {
+            return false; // 사용자 없음
+        }
+
+        User user = optionalUser.get();
+        if (!passwordEncoder.matches(password, user.getPass())) {
+            return false; // 비밀번호 틀림
+        }
+
+        return true; // 로그인 성공
+    }
+
 
     public void registerMember(User user, Member member) {
         user.setRole(User.Role.MEMBER); // 역할 설정

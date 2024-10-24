@@ -25,6 +25,7 @@ public class MyUserDetails implements UserDetails
     // User 엔티티 선언
     private User user;
     private Seller seller;
+//    private Admin admin;
 
 
 //    //Oauth 인증에 사용되는 속성
