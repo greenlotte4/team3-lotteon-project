@@ -19,7 +19,7 @@ import java.util.List;
 @Log4j2
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/coupon")
+@RequestMapping("/seller/coupon")
 public class AdminCouponController {
 
     private final CouponService couponService;

@@ -91,18 +91,7 @@ public class SellerController {
 
 
 
-    @GetMapping("/coupon/list")
-    public String couponList(Model model) {
-        model.addAttribute("cate", "coupon");
-        return "content/admin/coupon/list"; // Points to the "content/sellerDynamic" template for coupon management
-    }
 
-    @GetMapping("/coupon/issued")
-    public String couponIssued(Model model) {
-        model.addAttribute("cate", "coupon");
-        model.addAttribute("content", "issued");
-        return "content/admin/coupon/issued"; // Points to "content/admin/coupon/issued"
-    }
 
     @GetMapping("/login")
     public String sellerLogin(Model model) {

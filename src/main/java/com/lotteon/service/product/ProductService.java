@@ -8,6 +8,8 @@ import com.lotteon.entity.product.ProductFile;
 import com.lotteon.repository.product.OptionRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.service.FileService;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Expression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -91,19 +93,37 @@ public class ProductService {
     }
 
 
+    //seller list
     public  ProductPageResponseDTO selectProductsBySellerId(String sellerId,PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("hit",10);
 
 
-        Page<Product> products=null;
+        Page<Tuple> tuple =null;
+        int total = 0;
         if(pageRequestDTO.getType() ==null){
-           products = productRepository.selectProductBySellerIdForList(sellerId,pageRequestDTO,pageable);
-            log.info(products);
+            tuple = productRepository.selectProductBySellerIdForList(sellerId,pageRequestDTO,pageable);
+
+            log.info("여기 Product!!!!!!!!!"+tuple.getContent());
+            total = (int) tuple.getTotalElements();
 
         }
-        int total = (int) products.getTotalElements();
+
+
         log.info("total : "+total);
-        List<ProductDTO> productDTOList = products.getContent().stream().map(product -> modelMapper.map(product,ProductDTO.class)).toList();
+        List<ProductDTO> productDTOList = tuple.stream().map(t->{
+            // Tuple에서 Product와 ProductFile 추출
+            Product product = t.get(0, Product.class);  // 첫 번째로 조회된 Product
+            ProductFile productFile = t.get(1, ProductFile.class);  // 두 번째로 조회된 ProductFile
+
+            // Product를 DTO로 변환
+            ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+
+            // 추가로 ProductFile 관련 정보를 ProductDTO에 저장하려면 여기에 작성
+            productDTO.setFile190(productFile.getSName());  // 예시로 productDTO에 파일 정보 저장
+
+            return productDTO;
+
+        }).collect(Collectors.toList());
 
         log.info("productDTOLists : "+productDTOList);
 
@@ -125,5 +145,52 @@ public class ProductService {
         return result;
 
     }
+
+
+
+    //main list
+    public ProductListPageResponseDTO selectProductListByCategory(PageRequestDTO pageRequestDTO){
+        Pageable pageable = pageRequestDTO.getPageable("hit",10);
+
+
+        Page<Tuple> tuple =null;
+        int total = 0;
+        if(pageRequestDTO.getType() ==null){
+            tuple = productRepository.selectProductForList(pageRequestDTO,pageable);
+            log.info("여기 Product!!!!!!!!!"+tuple.getContent());
+            total = (int) tuple.getTotalElements();
+
+        }
+
+
+        log.info("total : "+total);
+        List<ProductListDTO> productDTOList = tuple.stream().map(t->{
+            // Tuple에서 Product와 ProductFile 추출
+            Product product = t.get(0, Product.class);  // 첫 번째로 조회된 Product
+
+            // Product를 DTO로 변환
+            ProductListDTO productDTO = modelMapper.map(product, ProductListDTO.class);
+
+            log.info("productDTO : "+ productDTO);
+            // 추가로 ProductFile 관련 정보를 ProductDTO에 저장하려면 여기에 작성
+            List<ProductFile> productFiles = product.getFiles();
+            List<ProductFileDTO> productFileDTOS = productFiles.stream().map((element) -> modelMapper.map(element, ProductFileDTO.class)).collect(Collectors.toList());
+            productDTO.setFiles(productDTO.getProductFiles());
+            log.info("productFiles : "+productFiles);
+
+            productDTO.setProductFiles(productFileDTOS);
+            return productDTO;
+
+        }).collect(Collectors.toList());
+
+        log.info("productDTOLists : "+productDTOList);
+        return ProductListPageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .productDTOList(productDTOList)
+                .total(total)
+                .build();
+
+    }
+
     public void isSaleProduct() {}
 }
