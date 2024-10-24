@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class AdminFaqController {
         model.addAttribute("faq", faqDTO);
         return "content/admin/faq/faqModify";
     }
+
+    @ResponseBody
     @PostMapping("/modify")
     public ResponseEntity<?> adminFaqModify(FaqDTO faqDTO) {
         Faq faq = faqService.updatefaq(faqDTO);
@@ -58,5 +61,22 @@ public class AdminFaqController {
     public ResponseEntity<?> adminFaqWrite1(Model model, @ModelAttribute FaqDTO faqDTO) {
         Faq faq = faqService.insertfaq(faqDTO);
         return ResponseEntity.ok().body(faq);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/delete/check")
+    public ResponseEntity<?> adminFaqDeleteCheck(@RequestBody List<Integer> data){
+        if(data == null || data.isEmpty()){
+            return ResponseEntity.badRequest().body("삭제할 항목이 없습니다.");
+        }
+        faqService.deleteCheck(data);
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("/delete")
+    public String adminFaqDelete(int no , RedirectAttributes redirectAttributes){
+        faqService.deletefaq(no);
+        redirectAttributes.addFlashAttribute("message", "삭제되었습니다."); // 메시지 추가
+        return "redirect:/admin/faq/list";
+
     }
 }
