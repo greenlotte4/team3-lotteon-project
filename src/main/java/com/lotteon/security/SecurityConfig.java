@@ -28,6 +28,8 @@ public class SecurityConfig {
                 .passwordParameter("Password")  // 로그인 시 사용할 비밀번호 파라미터 이름
         );
 
+
+
         // 세션 설정
         http.sessionManagement(session -> session
                 .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)  // 세션 고정 공격 방지

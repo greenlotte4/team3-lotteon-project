@@ -6,6 +6,7 @@ import com.lotteon.entity.User.User;
 import com.lotteon.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,22 +48,51 @@ public class UserController {
         return "content/user/term"; // Points to "content/user/term"
     }
 
+    @PostMapping("/loginValid")
+    public ResponseEntity<Map<String, Object>> loginValid(@RequestBody Map<String, String> requestBody) {
+        String uid = requestBody.get("inId"); // 클라이언트에서 사용한 키와 일치시켜야 합니다
+        String password = requestBody.get("password"); // 클라이언트에서 사용한 키와 일치시켜야 합니다
+
+        System.out.println("uid: " + uid);
+        System.out.println("password: " + password);
+
+        Map<String, Object> response = new HashMap<>();
+        boolean loginSuccess = userService.login(uid, password); // 로그인 성공 여부를 boolean으로 받음
+
+        if (loginSuccess) {
+            response.put("success", true);
+            response.put("message", "로그인 성공");
+            return ResponseEntity.ok(response); // 200 OK 응답 반환
+        } else {
+            response.put("success", false);
+            response.put("message", "아이디 또는 비밀번호가 잘못되었습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response); // 401 Unauthorized 응답 반환
+        }
+    }
+
+
+
     @PostMapping("/login")
     public String login(@RequestParam("inId") String username,
-                        @RequestParam("Password") String password,
+                        @RequestParam("password") String password,
                         Model model) {
 
-        UsernamePasswordAuthenticationToken authToken =
-        new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = authenticationManager.authenticate(authToken); // 인증 처리
-        SecurityContextHolder.getContext().setAuthentication(authentication); // 인증 설정
+        try {
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(username, password);
+            Authentication authentication = authenticationManager.authenticate(authToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // 로그인 성공 시 Member의 name 값을 가져와 모델에 추가
-        String memberName = userService.getMemberNameByUsername(username);
-        log.info("memberName:"+memberName);
-        model.addAttribute("memberName", memberName);
+            // 로그인 성공 시 Member의 name 값을 가져와 모델에 추가
+            String memberName = userService.getMemberNameByUsername(username);
+            model.addAttribute("memberName", memberName);
 
-        return "redirect:/"; // 로그인 성공 후 이동할 페이지
+            return "redirect:/"; // 로그인 성공 후 이동할 페이지
+        } catch (Exception e) {
+            log.error("로그인 실패: ", e);
+            model.addAttribute("error", "로그인 실패: 아이디 또는 비밀번호가 잘못되었습니다."); // 오류 메시지 추가
+            return "content/user/login"; // 로그인 페이지로 돌아가기
+        }
     }
 
 

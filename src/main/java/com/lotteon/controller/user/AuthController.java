@@ -24,7 +24,8 @@ public class AuthController {
     }
 
     @PostMapping("/verifyCode")
-    public String verifyCode(@RequestParam String code) {
+    public String verifyCode(@RequestBody Map<String, String> request) {
+        String code = request.get("code");
         if (verifyCode.equals(code)) {
             return "인증 성공!";
         } else {
