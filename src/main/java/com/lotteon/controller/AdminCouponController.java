@@ -2,6 +2,7 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.admin.CouponDTO;
+import com.lotteon.dto.admin.CouponListRequestDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.admin.CouponService;
@@ -41,8 +42,15 @@ public class AdminCouponController {
         model.addAttribute("sellerGrade", seller.getGrade());
         log.info("등급"+seller.getGrade());
 
-        Page<CouponDTO> couponList = couponService.selectCouponsPagination(userUid, pageable);
+        // CouponListRequestDTO 생성
+        CouponListRequestDTO requestDTO = CouponListRequestDTO.builder()
+                .uid(userUid)
+                .grade(grade)
+                .page(pageable.getPageNumber() + 1) // 0-based to 1-based
+                .size(pageable.getPageSize())
+                .build();
 
+        Page<CouponDTO> couponList = couponService.selectCouponsPagination(requestDTO);
         model.addAttribute("couponList", couponList );
 
         return "content/admin/coupon/list";
