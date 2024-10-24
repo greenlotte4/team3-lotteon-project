@@ -94,42 +94,36 @@ public class ProductService {
 
 
     //seller list
-    public  ProductPageResponseDTO selectProductsBySellerId(String sellerId,PageRequestDTO pageRequestDTO) {
+    public  ProductListPageResponseDTO selectProductsBySellerId(String sellerId,PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("hit",10);
 
 
-        Page<Tuple> tuple =null;
-        int total = 0;
-        if(pageRequestDTO.getType() ==null){
-            tuple = productRepository.selectProductBySellerIdForList(sellerId,pageRequestDTO,pageable);
+        List<ProductListDTO> productListDTOs = null;
+        int total=0;
 
-            log.info("여기 Product!!!!!!!!!"+tuple.getContent());
-            total = (int) tuple.getTotalElements();
+        Page<ProductListDTO> tuples = productRepository.selectProductBySellerIdForList(sellerId,pageRequestDTO,pageable);
+        if(!tuples.isEmpty()) {
+            if(pageRequestDTO.getType() ==null){
+                productListDTOs = tuples.getContent();
+                for(ProductListDTO productListDTO : productListDTOs) {
+                    ProductFileDTO file = productListDTO.getProductFiles().get(0);
+                    productListDTO.setFile190(file.getSName());
+                }
 
+                total= (int) tuples.getTotalElements();
+                List<ProductFileDTO> files = new ArrayList<>();
+
+            }
+        }else{
+            productListDTOs = Collections.emptyList();
+            total=0;
         }
 
 
-        log.info("total : "+total);
-        List<ProductDTO> productDTOList = tuple.stream().map(t->{
-            // Tuple에서 Product와 ProductFile 추출
-            Product product = t.get(0, Product.class);  // 첫 번째로 조회된 Product
-            ProductFile productFile = t.get(1, ProductFile.class);  // 두 번째로 조회된 ProductFile
 
-            // Product를 DTO로 변환
-            ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
-
-            // 추가로 ProductFile 관련 정보를 ProductDTO에 저장하려면 여기에 작성
-            productDTO.setFile190(productFile.getSName());  // 예시로 productDTO에 파일 정보 저장
-
-            return productDTO;
-
-        }).collect(Collectors.toList());
-
-        log.info("productDTOLists : "+productDTOList);
-
-        return ProductPageResponseDTO.builder()
+        return ProductListPageResponseDTO.builder()
                 .pageRequestDTO(pageRequestDTO)
-                .productDTOList(productDTOList)
+                .productDTOList(productListDTOs)
                 .total(total)
                 .build();
 
@@ -194,11 +188,29 @@ public class ProductService {
 
 //////////////////////////////////////////////////////////
     public ProductListPageResponseDTO selectProductListBymarket(PageRequestDTO pageRequestDTO){
+        List<ProductListDTO> productListDTOs = null;
+        int total=0;
         Pageable pageable = pageRequestDTO.getPageable("hit",10);
-        Page<ProductWithDTO> tuples = productRepository.selectProductForListByCategory(pageRequestDTO,pageable);
-        log.info("//////////"+tuples.getContent());
+        Page<ProductListDTO> tuples = productRepository.selectProductForListByCategory(pageRequestDTO,pageable);
+        if(!tuples.isEmpty()) {
+            if(pageRequestDTO.getType() ==null){
+                productListDTOs = tuples.getContent();
+                total= (int) tuples.getTotalElements();
+                List<ProductFileDTO> files = new ArrayList<>();
 
-        return null;
+            }
+        }else{
+            productListDTOs = Collections.emptyList();
+            total=0;
+        }
+
+
+
+        return ProductListPageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .productDTOList(productListDTOs)
+                .total(total)
+                .build();
 
     }
 

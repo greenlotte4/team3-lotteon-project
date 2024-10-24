@@ -27,9 +27,9 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
         if (isMember) {
             response.sendRedirect("/"); // 회원일 경우 이동할 경로
         } else if (isSeller || isAdmin) {
-            response.sendRedirect("/admin/main"); // 판매자일 경우 이동할 경로
+            response.sendRedirect("/admin/main"); // 판매자 또는 관리자인 경우 이동할 경로
         } else {
-            response.sendRedirect("/user/login");
+            response.sendRedirect("/seller/login?error=true"); // 권한 없는 사용자는 로그인 실패 페이지로 이동
         }
     }
 }

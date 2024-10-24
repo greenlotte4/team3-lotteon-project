@@ -2,11 +2,18 @@ package com.lotteon.controller;
 
 
 
+import com.lotteon.dto.User.UserDTO;
 import com.lotteon.dto.product.*;
+import com.lotteon.entity.User.User;
+import com.lotteon.service.UserService;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +29,16 @@ public class SellerController {
 
 
     private final ProductService productService;
+    private final AuthenticationManager authenticationManager; // AuthenticationManager로 수정
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+
 
     @GetMapping("/product/list")
-    public String productList(Model model, PageRequestDTO pageRequestDTO,Authentication authentication) {
+    public String productList(Model model, PageRequestDTO pageRequestDTO, Authentication authentication) {
 
         String user = authentication.getName();
-        ProductPageResponseDTO productPageResponseDTO =  productService.selectProductsBySellerId(user,pageRequestDTO);
+        ProductListPageResponseDTO productPageResponseDTO = productService.selectProductsBySellerId(user, pageRequestDTO);
         model.addAttribute("productPageResponseDTO", productPageResponseDTO);
         log.info(productPageResponseDTO.getProductDTOList());
 
@@ -40,7 +51,6 @@ public class SellerController {
     }
 
 
-
     @PostMapping("/product/register")
     public String insertProduct(@ModelAttribute ProductRequestDTO productRequestDTO, Authentication auth, Model model) {
         log.info("전달은 된다.");
@@ -48,27 +58,27 @@ public class SellerController {
 
         //product insert
         ProductResponseDTO responseDTO = new ProductResponseDTO(productRequestDTO);
-        log.info("auth ~~~~~~~~~~~~~~~~~~"+auth.getName());
+        log.info("auth ~~~~~~~~~~~~~~~~~~" + auth.getName());
         log.info("responseDTO");
 
-        long result= productService.insertProduct(responseDTO);
+        long result = productService.insertProduct(responseDTO);
         //option insert
         log.info("insertProduct");
-        if(result >0){
+        if (result > 0) {
             return "redirect:/seller/product/list";
 
-        }else{
+        } else {
             return "redirect:/seller/product/register?success=200";
         }
     }
 
 
     @GetMapping("/product/delete")
-    public String productDelete(@RequestParam("id") long id,Model model, Authentication authentication) {
+    public String productDelete(@RequestParam("id") long id, Model model, Authentication authentication) {
         String user = authentication.getName();
         log.info(id);
         int result = productService.deleteProduct(id);
-        if(result >0){
+        if (result > 0) {
             //성공시
             return "redirect:/seller/product/list?success=200";
         }
@@ -90,9 +100,6 @@ public class SellerController {
     }
 
 
-
-
-
     @GetMapping("/login")
     public String sellerLogin(Model model) {
 
@@ -100,5 +107,31 @@ public class SellerController {
     }
 
 
+    @PostMapping("/login")
+    public String login(@RequestParam("inId") String username,
+                        @RequestParam("password") String password,
+                        Model model) {
+                try {
+                    if (userService.sellerlogin(username, password)) {
+                        UsernamePasswordAuthenticationToken authToken =
+                                new UsernamePasswordAuthenticationToken(username, password);
+                        Authentication authentication = authenticationManager.authenticate(authToken);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                        // 로그인 성공 시 Member의 name 값을 가져와 모델에 추가
+                        String memberName = userService.getMemberNameByUsername(username);
+                        model.addAttribute("memberName", memberName);
+
+                        return "redirect:/"; // 로그인 성공 후 이동할 페이지
+                    } else {
+                        return "redirect:/user/login?success=100";
+                    }
+
+                } catch (Exception e) {
+                    log.error("로그인 실패: ", e);
+                    model.addAttribute("error", "로그인 실패: 아이디 또는 비밀번호가 잘못되었습니다."); // 오류 메시지 추가
+                    return "content/admin/adminLogin"; // 로그인 페이지로 돌아가기
+                }
+    }
 }
+

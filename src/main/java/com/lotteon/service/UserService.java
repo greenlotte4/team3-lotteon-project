@@ -38,8 +38,32 @@ public class UserService {
         if (!passwordEncoder.matches(password, user.getPass())) {
             return false; // 비밀번호 틀림
         }
+        if(user.getRole().equals(User.Role.MEMBER)||user.getRole().equals(User.Role.ADMIN)||user.getRole().equals(User.Role.SELLER)) {
+            return true;
+        }else{
+            return false;
+        }
 
-        return true; // 로그인 성공
+    }
+
+    //sellerLogin
+    public boolean sellerlogin(String uid, String password) {
+        Optional<User> optionalUser = findUserByUid(uid); // 아이디로 사용자 검색
+
+        if (optionalUser.isEmpty()) {
+            return false; // 사용자 없음
+        }
+
+        User user = optionalUser.get();
+        if (!passwordEncoder.matches(password, user.getPass())) {
+            return false; // 비밀번호 틀림
+        }
+        if(user.getRole().equals(User.Role.ADMIN)||user.getRole().equals(User.Role.SELLER)) {
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
 

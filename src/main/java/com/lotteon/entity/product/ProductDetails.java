@@ -16,7 +16,6 @@ public class ProductDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int detailId;
-    private Long productId;
     private String Productcondition;
     private String tax;
     private String receiptIssuance;
