@@ -68,15 +68,26 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
-                    <a href="#">이전</a>
-                    <a href="">1</a>
-                    <a href="">2</a>
-                    <a href="">3</a>
-                    <a href="">4</a>
-                    <a href="#">다음</a>
-                </div>
-            </div>
+<!--        <div class="pagination">-->
+<!--            <div class="notice-pagination">-->
+<!--                &lt;!&ndash; 이전 페이지 링크 &ndash;&gt;-->
+<!--                <a th:href="@{/cs/notice/list(page=${noticePage.number - 1})}"-->
+<!--                   th:classappend="${noticePage.first} ? 'disabled'">이전</a>-->
+
+<!--                &lt;!&ndash; 페이지 번호 반복 &ndash;&gt;-->
+<!--                <span th:each="pageNum : ${#numbers.sequence(0, noticePage.totalPages - 1)}">-->
+<!--                    <a th:href="@{/cs/notice/list(page=${pageNum})}"-->
+<!--                       th:classappend="${noticePage.number == pageNum} ? 'active'"-->
+<!--                       th:text="${pageNum + 1}"></a>-->
+<!--                </span>-->
+
+<!--                &lt;!&ndash; 다음 페이지 링크 &ndash;&gt;-->
+<!--                <a th:href="@{/cs/notice/list(page=${noticePage.number + 1})}"-->
+<!--                   th:classappend="${noticePage.last} ? 'disabled'">다음</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+    </div>
 </th:block>
 
 

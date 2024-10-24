@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
@@ -8,11 +7,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LotteOn</title>
-    <link rel="stylesheet"  th:href="@{/css/cs/faqList.css}">
+    <link rel="stylesheet" th:href="@{/css/cs/faqList.css}">
     <script>
         //기본 3개출력 , 더보기 버튼을 눌렀을 때 최대 10개까지 출력되도록
-        window.onload = function(){
-            function AllShowMore(showClass, liClass, TextClass){
+        window.onload = function () {
+            function AllShowMore(showClass, liClass, TextClass) {
                 const showMore = document.querySelector(showClass + ' .showMore');
                 const liClasses = document.querySelectorAll(liClass);
                 let showing = false;
@@ -25,15 +24,15 @@
                 });
 
                 //3이상 10이하
-                showMore.addEventListener('click', function(e){
+                showMore.addEventListener('click', function (e) {
                     e.preventDefault();
                     showing = !showing //showing이 true로 보여지고 있는 상태 (클릭이 되었다는 의미)
 
                     liClasses.forEach((liClass, index) => {
-                        if(index >=3 && index < 10){
-                            if(!showing){
+                        if (index >= 3 && index < 10) {
+                            if (!showing) {
                                 liClass.classList.add("hidden");
-                            }else {
+                            } else {
                                 liClass.classList.remove("hidden");
                             }
                         }
@@ -42,8 +41,18 @@
                     showMore.textContent = showing ? "간단히 보기" : TextClass;
                 });
             }
-            AllShowMore('.first_show','.first_li',"더보기");
-            AllShowMore('.second_show','.second_li',"더보기");
+
+            AllShowMore('.first_show', '.first_li', "더보기");
+            AllShowMore('.second_show', '.second_li', "더보기");
+            // 체크박스 전체 선택 기능
+            const selectAllCheckbox = document.getElementById('select-all');
+            const checkboxes = document.querySelectorAll('.checkbox-item');
+
+            selectAllCheckbox.addEventListener('change', function () {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+            });
 
         }
     </script>
@@ -60,19 +69,13 @@
         <div class="first container">
             <h2>가입</h2>
             <ul class="first_list">
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
-                <li class="first_li"><a href="#"><span>Q .</span> 개인회원과 법인회원에 차이가 있나요 ?</a></li>
+                <!-- FAQ 목록을 반복하여 출력 -->
+                <li class="first_li" th:each="faq : ${faqList}">
+                    <a href="#">
+                        <span>Q .</span>
+                        <span th:text="${faq.faqtitle}">FAQ 제목</span>
+                    </a>
+                </li>
                 <li>
                     <div class="first_show">
                         <a href="#" class="showMore">더보기</a>
@@ -83,85 +86,24 @@
         <div class="second container">
             <h2>탈퇴</h2>
             <ul class="second_list">
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
-                <li class="second_li"><a href="#"><span>Q .</span> 탈퇴회원 처리기간은 얼마나 걸리나요 ?</a></li>
+                <!-- FAQ 목록을 반복하여 출력 -->
+                <li class="second_li" th:each="faq : ${faqList}">
+                    <a href="#">
+                        <span>Q .</span>
+                        <span th:text="${faq.faqtitle}">FAQ 제목</span>
+                    </a>
+                </li>
                 <li>
                     <div class="second_show">
                         <a href="#" class="showMore">더보기</a>
                     </div>
-<<<<<<< HEAD
                 </li>
+            </ul>
             </ul>
         </div>
     </div>
+
 </th:block>
-=======
-                    <!-- 게시물 리스트 -->
-                    <div class="article-inlist">
-                        <div class="checkbox">
-                            <input type="checkbox" class="checkbox-item">
-                        </div>
-                        <div class="number-box">1</div>
-                        <div class="type-box">회원</div>
-                        <div class="type-box type2">가입</div>
-                        <a class="article-box" href="/article/view?no=1">[롯데숏핑] 구매회원 이용약관 계정 안내 (시행일: 0000년00월00일)</a>
-                        <div class="views-box">100</div>
-                        <div class="date-box">2024.07.16</div>
-                        <div class="manage-box"><a href="/article/edit?no=1">수정</a> | <a
-                                href="/article/delete?no=1">삭제</a>
-                        </div>
-                    </div>
-                    <div class="article-inlist">
-                        <div class="checkbox">
-                            <input type="checkbox" class="checkbox-item">
-                        </div>
-                        <div class="number-box">1</div>
-                        <div class="type-box">회원</div>
-                        <div class="type-box type2">가입</div>
-                        <a class="article-box" href="/article/view?no=1">[롯데숏핑] 구매회원 이용약관 계정 안내 (시행일: 0000년00월00일)</a>
-                        <div class="views-box">100</div>
-                        <div class="date-box">2024.07.16</div>
-                        <div class="manage-box"><a href="/article/edit?no=1">수정</a> | <a
-                                href="/article/delete?no=1">삭제</a>
-                        </div>
-                    </div>
-                </div>
 
 
-                <div class="pagination">
-                    <a href="#">이전</a>
-                    <a href="#">다음</a>
-                </div>
-                <div class="button-ctl">
-                    <button type="button" class="btn-delete">선택삭제</button>
-                    <button type="button" class="btn-Write">작성하기</button>
-                </div>
-            </div>
 
-    <script>
-
-        // 체크박스 전체 선택 기능
-        const selectAllCheckbox = document.getElementById('select-all');
-        const checkboxes = document.querySelectorAll('.checkbox-item');
-
-    selectAllCheckbox.addEventListener('change', function () {
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-
-    </script>
-    <script src="../js/admin.js"></script>
-</th:block>
-</bod
->>>>>>> f4e077c65a3d8d8b7dcc09ab5213b7a41237438b
