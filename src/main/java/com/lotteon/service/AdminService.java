@@ -1,5 +1,6 @@
 package com.lotteon.service;
 
+
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.repository.BannerRepository;
 import com.lotteon.entity.Banner;
@@ -34,7 +35,7 @@ public class AdminService {
         return bannerDTOs;
     }
 
-    public void deleteBanner(List<Integer> data){
+    public void deleteCheck(List<Integer> data){
         for (Integer id : data) {
             bannerRepository.deleteById(id);
         }

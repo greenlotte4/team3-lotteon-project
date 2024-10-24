@@ -19,9 +19,9 @@ import java.util.UUID;
 @Builder
 public class ProductDTO{
 
-    private Long productId;
+    private long productId;
 
-    private int categoryId;
+    private long categoryId;
 
     private String productName;
     private int price;
@@ -36,6 +36,12 @@ public class ProductDTO{
     private Boolean isSaled; // 판매가능여부
     private String sellerId;
     private String productCode;
+    private int hit;
+
+    private String file190;
+    private String file230;
+    private String file456;
+
 
 
     private List<ProductFileDTO> productFiles;

@@ -27,6 +27,8 @@ public class QQnA extends EntityPathBase<QnA> {
 
     public final NumberPath<Integer> qna_id = createNumber("qna_id", Integer.class);
 
+    public final EnumPath<QnA.Status> qna_status = createEnum("qna_status", QnA.Status.class);
+
     public final StringPath qna_title = createString("qna_title");
 
     public final StringPath qna_type1 = createString("qna_type1");

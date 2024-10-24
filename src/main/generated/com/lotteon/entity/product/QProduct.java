@@ -22,17 +22,19 @@ public class QProduct extends EntityPathBase<Product> {
 
     public static final QProduct product = new QProduct("product");
 
-    public final NumberPath<Integer> categoryId = createNumber("categoryId", Integer.class);
+    public final NumberPath<Long> categoryId = createNumber("categoryId", Long.class);
 
     public final NumberPath<Integer> discount = createNumber("discount", Integer.class);
 
     public final ListPath<ProductFile, QProductFile> files = this.<ProductFile, QProductFile>createList("files", ProductFile.class, QProductFile.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> hit = createNumber("hit", Integer.class);
+
     public final BooleanPath isCoupon = createBoolean("isCoupon");
 
     public final BooleanPath isSaled = createBoolean("isSaled");
 
-    public final ListPath<Option, QOption> options = this.<Option, QOption>createList("options", Option.class, QOption.class, PathInits.DIRECT2);
+    public final SetPath<Option, QOption> options = this.<Option, QOption>createSet("options", Option.class, QOption.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> point = createNumber("point", Integer.class);
 

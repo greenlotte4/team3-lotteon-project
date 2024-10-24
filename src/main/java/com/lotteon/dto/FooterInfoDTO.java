@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FooterInfoDTO {
 
-    private int ft_id;
+    private Long ft_id;
 
     private String ft_company;
     private String ft_ceo;
