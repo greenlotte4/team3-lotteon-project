@@ -38,9 +38,9 @@ public class UserService {
         if (!passwordEncoder.matches(password, user.getPass())) {
             return false; // 비밀번호 틀림
         }
-        if(user.getRole().equals(User.Role.MEMBER)||user.getRole().equals(User.Role.ADMIN)||user.getRole().equals(User.Role.SELLER)) {
+        if (user.getRole().equals(User.Role.MEMBER) || user.getRole().equals(User.Role.ADMIN) || user.getRole().equals(User.Role.SELLER)) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
@@ -58,9 +58,9 @@ public class UserService {
         if (!passwordEncoder.matches(password, user.getPass())) {
             return false; // 비밀번호 틀림
         }
-        if(user.getRole().equals(User.Role.ADMIN)||user.getRole().equals(User.Role.SELLER)) {
+        if (user.getRole().equals(User.Role.ADMIN) || user.getRole().equals(User.Role.SELLER)) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
