@@ -41,7 +41,10 @@ public class AdminCouponController {
 
 
     @GetMapping("/list")
-    public String adminCouponList(CouponListRequestDTO requestDTO,Model model, Pageable pageable) {
+    public String adminCouponList(
+            CouponListRequestDTO requestDTO,
+            Model model,
+            @RequestParam(defaultValue = "0") int page) {
 
         // 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -55,7 +58,7 @@ public class AdminCouponController {
         model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
         model.addAttribute("sellerGrade", seller.getGrade());
 
-
+            log.info("호출됫따!!!!!!!!!!!!!!!!!!" + page);
             log.info("여기는???????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             Page<CouponDTO> couponPage=null;
@@ -80,17 +83,17 @@ public class AdminCouponController {
         return "content/admin/coupon/list";
     }
 
-    @GetMapping("/coupons")
-    public String listCoupons(@RequestParam(defaultValue = "0") int page, Model model) {
-        Pageable pageable = PageRequest.of(page, 10); // 한 페이지에 10개
-        Page<Coupon> couponPage = couponRepository.findAll(pageable);
-
-        model.addAttribute("couponList", couponPage.getContent());
-        model.addAttribute("totalPages", couponPage.getTotalPages());
-        model.addAttribute("currentPage", couponPage.getNumber());
-
-        return "coupon/list";  // Thymeleaf 뷰
-    }
+//    @GetMapping("/coupons")
+//    public String listCoupons(@RequestParam(defaultValue = "0") int page, Model model) {
+//
+//        Pageable pageable = PageRequest.of(page, 10); // 한 페이지에 10개
+//        Page<Coupon> couponPage = couponRepository.findAll(pageable);
+//
+//        log.info("호출됫따!!!!!!!!!!!!!!!!!!" + page);
+//        log.info("호출됫따!!!!!!!!!!!!!!!!!!");
+//
+//        return "content/admin/coupon/list";  // Thymeleaf 뷰
+//    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerCoupon(@RequestBody CouponDTO couponDTO) {
