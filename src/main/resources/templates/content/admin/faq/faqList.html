@@ -40,12 +40,15 @@
                                     <col style="width: 15%">
                                     <col style="width: 10%">
                                 </colgroup>
+                                <div th:each="board : ${boardCate}">
+                                    <p th:text="${board.name} + ' - parentId: ' + ${board.parentId}"></p>
+                                </div>
                                 <div>
-                                <select class="faqselect" >
+                                <select class="faqselect">
                                     <option value="" disabled selected>1차 선택</option>
-                                    <option value="">주문번호</option>
-                                    <option value="">주문자</option>
-                                    <option value="">주문자명</option>
+                                <th:block th:each="board : ${boardCate}">
+                                    <option th:if="${board.parentId == null}" th:value="${board.boardCateId}">[[${board.name}]]</option>
+                                </th:block>
                                 </select>
                                 <select class="faqselect" >
                                     <option value="" disabled selected>2차 선택</option>

@@ -1,11 +1,15 @@
 package com.lotteon.controller;
 
 
+import com.lotteon.dto.BoardCateDTO;
 import com.lotteon.dto.FaqDTO;
 import com.lotteon.dto.page.FaqPageResponseDTO;
 import com.lotteon.dto.page.PageRequestDTO;
+import com.lotteon.entity.BoardCate;
 import com.lotteon.entity.Faq;
+import com.lotteon.service.BoardService;
 import com.lotteon.service.admin.FaqService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +27,22 @@ import java.util.List;
 public class AdminFaqController {
 
     private final FaqService faqService;
+    private final BoardService boardService;
 
     @GetMapping("/list")
-    public String adminFaqList(Model model, PageRequestDTO pageRequestDTO) {
+    public String adminFaqList( Model model, PageRequestDTO pageRequestDTO) {
+
 
         FaqPageResponseDTO faqPageResponseDTO = faqService.selectfaqListAll(pageRequestDTO);
         model.addAttribute(faqPageResponseDTO);
+
         List<FaqDTO> faqDTOs = faqService.selectAllfaq();
         model.addAttribute("faqDTOs", faqDTOs);
+
+        List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
+        log.info(boardCateDTOS);
+        model.addAttribute("boardCate",boardCateDTOS);
+
         return "content/admin/faq/faqList";
     }
 
