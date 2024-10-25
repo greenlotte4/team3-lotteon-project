@@ -132,6 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert("쿠폰이 등록되었습니다.")
                     closeModal();
                     document.getElementById("couponForm").reset();
+                    window.location.href = '/seller/coupon/list'; // 리다이렉트
+
                 }else {
                     return resp.json().then(errorData => {
                         alert(`등록에 실패했습니다: ${errorData.message || "서버 오류"}.`);
