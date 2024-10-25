@@ -34,7 +34,6 @@ public class ProductPageResponseDTO {
         this.total = total;
         this.productDTOList = productDTOList;
 
-
         this.startNo = total - ((pg-1)*size);
         this.end=(int)(Math.ceil(this.pg/ (double)size))*size;
         this.start= this.end - size-1;

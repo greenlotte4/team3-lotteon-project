@@ -1,7 +1,6 @@
 package com.lotteon.controller.user;
 
 import com.lotteon.service.EmailService;
-import com.lotteon.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,8 @@ public class AuthController {
     }
 
     @PostMapping("/verifyCode")
-    public String verifyCode(@RequestParam String code) {
+    public String verifyCode(@RequestBody Map<String, String> request) {
+        String code = request.get("code");
         if (verifyCode.equals(code)) {
             return "인증 성공!";
         } else {

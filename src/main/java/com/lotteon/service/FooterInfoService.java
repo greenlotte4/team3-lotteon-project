@@ -15,6 +15,10 @@ public class FooterInfoService {
     private final FooterInfoRepository footerInfoRepository;
     private final ModelMapper modelMapper;
 
+    public boolean existsById(Long id) {
+        return footerInfoRepository.existsById(id);
+    }
+
     public void saveFooterInfo(FooterInfoDTO footerInfoDTO) {
         FooterInfo footerInfo = FooterInfo.builder()
                 .ft_company(footerInfoDTO.getFt_company())
@@ -32,6 +36,29 @@ public class FooterInfoService {
 
         footerInfoRepository.save(footerInfo);
     }
+    public void updateFooterInfo(FooterInfoDTO footerInfo) {
+        FooterInfo entity = footerInfoRepository.findById(footerInfo.getFt_id()).orElseThrow(() -> new RuntimeException("FooterInfo not found"));
+        // 기존 엔티티의 데이터를 업데이트
+        entity.setFt_company(footerInfo.getFt_company());
+        entity.setFt_ceo(footerInfo.getFt_ceo());
+        entity.setFt_bo(footerInfo.getFt_bo());
+        entity.setFt_mo(footerInfo.getFt_mo());
+        entity.setFt_addr1(footerInfo.getFt_addr1());
+        entity.setFt_addr2(footerInfo.getFt_addr2());
+        entity.setFt_hp(footerInfo.getFt_hp());
+        entity.setFt_time(footerInfo.getFt_time());
+        entity.setFt_email(footerInfo.getFt_email());
+        entity.setFt_troublehp(footerInfo.getFt_troublehp());
+        entity.setFt_copyright(footerInfo.getFt_copyright());
+
+        footerInfoRepository.save(entity);
+    }
+    public FooterInfo getFooterInfo() {
+        return footerInfoRepository.findById(1L)
+                .orElse(null);  // 데이터가 없으면 null 반환
+    }
+
+
 
 
 

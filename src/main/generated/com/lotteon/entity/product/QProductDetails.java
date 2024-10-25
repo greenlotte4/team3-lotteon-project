@@ -35,8 +35,6 @@ public class QProductDetails extends EntityPathBase<ProductDetails> {
 
     public final StringPath Productcondition = createString("Productcondition");
 
-    public final NumberPath<Long> productId = createNumber("productId", Long.class);
-
     public final StringPath qualityWarranty = createString("qualityWarranty");
 
     public final StringPath receiptIssuance = createString("receiptIssuance");

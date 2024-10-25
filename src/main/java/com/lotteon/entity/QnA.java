@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table
+@Table(name = "qna")
 @Entity
 @ToString
 @Setter
@@ -22,8 +22,15 @@ public class QnA {
     private String qna_type1;
     private String qna_type2;
     private String qna_title;
+
+    @Column(name = "qna_writer")
     private String qna_writer;
+
     private String qna_content;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private Status qna_status = Status.review;
 
     @CreationTimestamp
     private LocalDateTime rdate;
@@ -32,4 +39,9 @@ public class QnA {
     private int sellerid;
     private int productid;
 
+
+    public enum Status {
+        review,     //검토중,
+        completed  // 답변완료
+    }
 }

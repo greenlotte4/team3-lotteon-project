@@ -1,8 +1,8 @@
 <div id="admin_aside">
     <div id="admin_aside_list">
-        <img class="top_log" th:src="@{/images/sample/lotte로고(white).png}" alt="로고사진">
+        <a th:href="@{/}"><img class="top_log" th:src="@{/images/sample/lotte로고(white).png}" alt="로고사진"></a>
         <div class="aside_first">
-            <h2>관리자 메인</h2>
+            <h2><a th:href="@{/admin/main}">관리자 메인</a></h2>
         </div>
         <div class="aside_second">
             <ul class="admin_menu">
@@ -10,26 +10,26 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="share-2" class="lucide lucide-share-2 align-middle"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
                     환경설정</a>
                     <ul class="admin_sub_menu">
-                        <li><a href="#" class="active">기본설정</a></li>
-                        <li><a href="#" class="active">배너관리</a></li>
-                        <li><a href="#" class="active">약관관리</a></li>
-                        <li><a href="#" class="active">버전이력</a></li>
+                        <li><a th:href="@{/admin/config/basic}" class="active">기본설정</a></li>
+                        <li><a th:href="@{/admin/config/banner}" class="active">배너관리</a></li>
+                        <li><a th:href="@{/admin/config/terms}" class="active">약관관리</a></li>
+                        <li><a th:href="@{/admin/config/version}" class="active">버전이력</a></li>
                     </ul>
                 </li>
                 <li><a href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shopping-bag" class="lucide lucide-shopping-bag align-middle"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                     상점관리</a>
                     <ul class="admin_sub_menu">
-                        <li><a href="#" class="active">상점목록</a></li>
-                        <li><a href="#" class="active">판매현황</a></li>
+                        <li><a th:href="@{/admin/store/shoplist}" class="active">상점목록</a></li>
+                        <li><a th:href="@{/admin/store/sale}" class="active">판매현황</a></li>
                     </ul>
                 </li>
                 <li><a href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" class="lucide lucide-users align-middle"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     회원관리</a>
                     <ul class="admin_sub_menu">
-                        <li><a href="#" class="active">회원목록</a></li>
-                        <li><a href="#" class="active">포인트관리</a></li>
+                        <li><a th:href="@{/admin/user/list}" class="active">회원목록</a></li>
+                        <li><a th:href="@{/admin/user/point}" class="active">포인트관리</a></li>
                     </ul>
                 </li>
                 <li><a href="#">
@@ -44,16 +44,16 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="files" class="lucide lucide-files align-middle"><path d="M20 7h-3a2 2 0 0 1-2-2V2"></path><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"></path><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"></path></svg>
                     주문관리</a>
                     <ul class="admin_sub_menu">
-                        <li><a href="#" class="active">주문현황</a></li>
-                        <li><a href="#" class="active">배송현황</a></li>
+                        <li><a th:href="@{/seller/order/status}" class="active">주문현황</a></li>
+                        <li><a th:href="@{/seller/order/delivery}" class="active">배송현황</a></li>
                     </ul>
                 </li>
                 <li><a href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="files" class="lucide lucide-files align-middle"><path d="M20 7h-3a2 2 0 0 1-2-2V2"></path><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"></path><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"></path></svg>
                     쿠폰관리</a>
                     <ul class="admin_sub_menu">
-                        <li><a href="#" class="active">쿠폰목록</a></li>
-                        <li><a href="#" class="active">쿠폰발급현황</a></li>
+                        <li><a th:href="@{/seller/coupon/list}" class="active">쿠폰목록</a></li>
+                        <li><a th:href="@{/seller/coupon/issued}" class="active">쿠폰발급현황</a></li>
                     </ul>
                 </li>
                 <li><a href="#">

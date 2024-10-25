@@ -42,6 +42,8 @@ public class QSeller extends EntityPathBase<Seller> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isAdmin = createBoolean("isAdmin");
+
     public final StringPath mo = createString("mo");
 
     public final StringPath postcode = createString("postcode");

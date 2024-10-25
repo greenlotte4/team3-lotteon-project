@@ -31,9 +31,7 @@ public class User{
 
 
     public enum Role {
-        MEMBER, SELLER
+        MEMBER, SELLER, ADMIN
     }
-
-
 
 }

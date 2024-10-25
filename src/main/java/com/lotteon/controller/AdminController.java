@@ -1,6 +1,7 @@
 package com.lotteon.controller;
 
 
+
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.entity.Banner;
@@ -73,12 +74,6 @@ public class AdminController {
         return ResponseEntity.ok().body(banner);
     }
 
-    @PostMapping("/config/basic")
-    public String FooterInfoModify(Model model, FooterInfoDTO footerInfoDTO) {
 
-//        footerInfoService.insertFooterInfo(footerInfoDTO);
-
-        return "redirect:/admin/config/basic";
-    }
 
 }

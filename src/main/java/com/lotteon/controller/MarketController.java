@@ -1,5 +1,9 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.product.PageRequestDTO;
+import com.lotteon.dto.product.ProductListPageResponseDTO;
+import com.lotteon.dto.product.ProductPageResponseDTO;
+import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -13,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Log4j2
 @RequiredArgsConstructor
 @Controller
-
 @RequestMapping("/market")
 public class MarketController {
+
+    private final ProductService productService;
 
     @GetMapping("/main")
     public String marketMain(Model model) {
@@ -24,8 +29,14 @@ public class MarketController {
     }
 
     @GetMapping("/list")
-    public String marketList(Model model) {
-        model.addAttribute("content", "list");
+    public String marketList(PageRequestDTO pageRequestDTO, Model model) {
+        long categoryid = 20;
+        pageRequestDTO.setCategoryId(categoryid);
+        ProductListPageResponseDTO responseDTO =  productService.selectProductListBymarket(pageRequestDTO);
+        log.info(responseDTO.getProductDTOList());
+        model.addAttribute("responseDTO",responseDTO);
+
+
         return "content/market/marketList"; // Points to the "content/market/marketList" template
     }
 
@@ -40,8 +51,20 @@ public class MarketController {
         model.addAttribute("content", "view");
 
 
+
         return "content/market/marketview"; // Points to the "content/market/marketview" template
     }
+
+
+    @GetMapping("/view/{categoryId}/{productId}")
+    public String marketView(@PathVariable String productId,@PathVariable String categoryId,Model model) {
+        log.info(productId);
+        log.info(categoryId);
+
+
+        return "content/market/marketview"; // Points to the "content/market/marketview" template
+    }
+
 
     @GetMapping("/cart")
     public String marketCart(Model model) {

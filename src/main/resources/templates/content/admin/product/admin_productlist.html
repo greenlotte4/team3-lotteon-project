@@ -70,7 +70,7 @@
                             <td><input type="checkbox">
                                 <input type="hidden" name="productId" th:value="${product.productId}">
                             </td>
-                            <td><img th:src="@{/uploads/product/23}" ></td>
+                            <td><img th:src="@{'/uploads/productImg/' + ${product.file190}}"></td>
                             <td>[[${product.productCode}]]</td>
                             <td>[[${product.productName}]]</td>
                             <td>[[${product.price}]]</td>
