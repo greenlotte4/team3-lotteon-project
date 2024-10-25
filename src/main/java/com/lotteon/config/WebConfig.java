@@ -3,6 +3,7 @@ package com.lotteon.config;
 
 import com.lotteon.interceptor.AppInfoInterceptor;
 import com.lotteon.interceptor.FooterInterceptor;
+import com.lotteon.interceptor.HeaderInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -29,10 +30,14 @@ public class WebConfig implements WebMvcConfigurer {
     private FooterInterceptor footerInterceptor;
 
     @Autowired
-    public WebConfig(FooterInterceptor footerInterceptor) {
-        this.footerInterceptor = footerInterceptor;
-    }
+    private HeaderInterceptor headerInterceptor;
 
+
+    @Autowired
+    public WebConfig(FooterInterceptor footerInterceptor, HeaderInterceptor headerInterceptor) {
+        this.footerInterceptor = footerInterceptor;
+        this.headerInterceptor = headerInterceptor;
+    }
 
 
 
@@ -41,7 +46,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new AppInfoInterceptor(appInfo));
         registry.addInterceptor(footerInterceptor)
                 .addPathPatterns("/**");  // 모든 경로에 대해 인터셉터 적용
+        registry.addInterceptor(headerInterceptor)
+                .addPathPatterns("/**"); // 모든 경로에 대해 headerInterceptor 적용
     }
+
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

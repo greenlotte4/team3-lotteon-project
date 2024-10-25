@@ -147,14 +147,14 @@ public class FileService {
         if (!file1.isEmpty()) {
             String oName = file1.getOriginalFilename();
             String ext = oName.substring(oName.lastIndexOf("."));
-            String sName = UUID.randomUUID().toString() + ext;
+            String sName = "headerLogo.jpg";  // 'favicon'이라는 고정 이름 사용
 
             // 허용된 확장자 목록
-            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png" ,".ico");
 
             // 확장자가 허용된 목록에 있는지 확인
             if (!allowedExtensions.contains(ext)) {
-                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
+                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG, ICO만 업로드할 수 있습니다.");
             }
 
             // 파일 저장
@@ -174,14 +174,14 @@ public class FileService {
         if (!file2.isEmpty()) {
             String oName = file2.getOriginalFilename();
             String ext = oName.substring(oName.lastIndexOf("."));
-            String sName = UUID.randomUUID().toString() + ext;
+            String sName = "footerLogo.jpg";  // 'favicon'이라는 고정 이름 사용
 
             // 허용된 확장자 목록
-            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png" ,".ico");
 
             // 확장자가 허용된 목록에 있는지 확인
             if (!allowedExtensions.contains(ext)) {
-                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
+                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG, ICO만 업로드할 수 있습니다.");
             }
 
             // 파일 저장
@@ -201,23 +201,24 @@ public class FileService {
         if (!file3.isEmpty()) {
             String oName = file3.getOriginalFilename();
             String ext = oName.substring(oName.lastIndexOf("."));
-            String sName = UUID.randomUUID().toString() + ext;
+            String sName = "favicon" + ext;  // 'favicon'이라는 고정 이름 사용
 
             // 허용된 확장자 목록
-            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png", ".ico");
 
-            // 확장자가 허용된 목록에 있는지 확인
+            // 확장자 확인
             if (!allowedExtensions.contains(ext)) {
-                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
+                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG, ICO만 업로드할 수 있습니다.");
             }
 
             // 파일 저장
             try {
                 file3.transferTo(new File(path, sName));
-                log.info("file3 저장 완료: {}", sName); // 로그 추가
+                log.info("file3(파비콘) 저장 완료: {}", sName);
             } catch (IOException e) {
                 log.error(e);
             }
+
 
             newHeaderInfoDTO.setHd_oName3(oName);
             newHeaderInfoDTO.setHd_sName3(sName); // 파일 이름 저장
