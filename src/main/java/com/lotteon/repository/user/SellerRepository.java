@@ -10,7 +10,8 @@ import java.util.Optional;
 public interface SellerRepository extends JpaRepository<Seller, Long> {
 
     Optional<Seller> findById(long id);
-    Optional<Seller> findByUserUid (String uid);
+    Optional<Seller> findByUserUid(String userUid); // UserUid로 조회
+
 
 
 }

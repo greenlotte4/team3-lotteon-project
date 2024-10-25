@@ -78,15 +78,17 @@
     </table>
     <button class="add-coupon-btn">쿠폰등록</button>
 
-    <div class="pagination">
-        <span class="page-btn">이전</span>
-        <span class="page-btn">1</span>
-        <span class="page-btn">2</span>
-        <span class="page-btn">3</span>
-        <span class="page-btn">4</span>
-        <span class="page-btn">다음</span>
+    <div class="pagination" th:if="${totalPages > 0}">
+        <ul>
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                <a th:href="@{/coupons(page=${i})}" th:class="${i == currentPage} ? 'active' : ''">
+                    [[${i + 1}]]
+                </a>
+            </li>
+        </ul>
     </div>
-    
+
+
 </div>
 
 
