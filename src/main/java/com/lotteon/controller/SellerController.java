@@ -2,10 +2,8 @@ package com.lotteon.controller;
 
 
 
-import com.lotteon.dto.User.UserDTO;
 import com.lotteon.dto.product.*;
-import com.lotteon.entity.User.User;
-import com.lotteon.service.UserService;
+import com.lotteon.service.user.UserService;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,9 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor

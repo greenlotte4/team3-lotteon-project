@@ -1,4 +1,4 @@
-package com.lotteon.service;
+package com.lotteon.service.user;
 
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Seller;
