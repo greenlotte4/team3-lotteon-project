@@ -13,136 +13,137 @@
 <body>
 <th:block layout:fragment="content">
     <main class="cs_main">
-    <div id="container">
+        <div id="container">
 
-        <div id="service">
-            <h4 class="tit1">
-                <span>롯데 ON</span> 이 도와드릴게요 !
-            </h4>
+            <div id="service">
+                <h4 class="tit1">
+                    <span>롯데 ON</span> 이 도와드릴게요 !
+                </h4>
 
-            <div class="notice">
-                <div>
-                    <h2>공지사항</h2>
-                    <span><a href="#">전체보기</a></span>
-                </div>
-                <table class="notice_table">
-                    <colgroup>
-                        <col style="width: 700px">
-                        <col style="width: 200px">
-                    </colgroup>
-                    <tr>
-                        <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                        <td>2024.10.31</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                        <td>2024.10.31</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                        <td>2024.10.31</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                        <td>2024.10.31</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                        <td>2024.10.31</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="qna">
-                <div>
-                    <h2>자주하는 질문</h2>
-                    <span><a href="#">전체보기</a></span>
-                </div>
-                <table>
-                    <tr>
-                        <td>
-                            <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                            <a href="#">회원</a>
-                        </td>
-                        <td>
-                            <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                            <a href="#">쿠폰/이벤트</a>
-                        </td>
-                        <td>
-                            <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                            <a href="#">주문/결제</a>
-                        </td>
-                        <td>
-                            <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                            <a href="#">배송</a>
-                        </td>
-                        <td>
-                            <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                            <a href="#">취소/반품/환불</a>
-                        </td>
-                        <td>
-                            <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                            <a href="#">안전결제</a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="question">
-                <div>
-                    <h2>문의하기</h2>
-                    <span><a href="#">전체보기</a></span>
-                </div>
-                <table class="question_table">
-                    <colgroup>
-                        <col style="width: 500px">
-                        <col style="width: 200px">
-                        <col style="width: 200px">
-                    </colgroup>
-                    <tr>
-                        <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                        <td>ckk**</td>
-                        <td>2024.10.10</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                        <td>ckk**</td>
-                        <td>2024.10.10</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                        <td>ckk**</td>
-                        <td>2024.10.10</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                        <td>ckk**</td>
-                        <td>2024.10.10</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                        <td>ckk**</td>
-                        <td>2024.10.10</td>
-                    </tr>
-                </table>
-                <a class="inquiry" href="/cs/qna/list">문의하기 ></a>
-            </div>
-            <div class="onecounsel">
-                <h2>1:1 상담안내</h2>
-                <div class="counsel-container">
-                    <div class="counsel1">
-                        <p><span style="font-size: large; font-weight: bold;">이용안내</span></p>
-                        <p>일반회원/비회원<br>
-                            <span style="font-size: large; font-weight: bold;">1566-0001</span>(평일 09:00~18:00)</p>
-                        <p>스마일클럽 전용<br>
-                            <span style="font-size: large; font-weight: bold;">1566-0002</span>(평일 09:00~18:00)</p>
+                <div class="notice">
+                    <div>
+                        <h2>공지사항</h2>
+                        <span><a th:href="@{/cs/notice/list}">전체보기</a></span>
                     </div>
-                    <div class="counsel2">
-                        <p><span style="font-size: large; font-weight: bold;">판매 상담 이용 안내</span></p>
-                        <p>판매고객<br>
-                            <span style="font-size: large; font-weight: bold;">1566-5700</span>(평일 09:00~18:00)</p>
-                        <a href="#" style="font-size: large; font-weight: bold;">판매자 가입 서류 접수 안내 ></a>
+                    <table class="notice_table">
+                        <colgroup>
+                            <col style="width: 700px">
+                            <col style="width: 200px">
+                        </colgroup>
+                        <tr>
+                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
+                            <td>2024.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
+                            <td>2024.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
+                            <td>2024.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
+                            <td>2024.10.31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
+                            <td>2024.10.31</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="qna">
+                    <div>
+                        <h2>자주하는 질문</h2>
+                        <span><a th:href="@{/cs/faq/list}">전체보기</a></span>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
+                                <a href="#">회원</a>
+                            </td>
+                            <td>
+                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
+                                <a href="#">쿠폰/이벤트</a>
+                            </td>
+                            <td>
+                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
+                                <a href="#">주문/결제</a>
+                            </td>
+                            <td>
+                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
+                                <a href="#">배송</a>
+                            </td>
+                            <td>
+                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
+                                <a href="#">취소/반품/환불</a>
+                            </td>
+                            <td>
+                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
+                                <a href="#">안전결제</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="question">
+                    <div>
+                        <h2>문의하기</h2>
+                        <span><a th:if="${#authentication.name != 'anonymousUser'}" th:href="@{/cs/qna/list}">전체보기</a></span>
+                    </div>
+                    <table class="question_table">
+                        <colgroup>
+                            <col style="width: 500px">
+                            <col style="width: 200px">
+                            <col style="width: 200px">
+                        </colgroup>
+                        <tr>
+                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
+                            <td>ckk**</td>
+                            <td>2024.10.10</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
+                            <td>ckk**</td>
+                            <td>2024.10.10</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
+                            <td>ckk**</td>
+                            <td>2024.10.10</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
+                            <td>ckk**</td>
+                            <td>2024.10.10</td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
+                            <td>ckk**</td>
+                            <td>2024.10.10</td>
+                        </tr>
+                    </table>
+                    <a class="inquiry" th:if="${#authentication.name != 'anonymousUser'}" href="/cs/qna/list" >문의하기 ></a>
+                </div>
+                <div class="onecounsel">
+                    <h2>1:1 상담안내</h2>
+                    <div class="counsel-container">
+                        <div class="counsel1">
+                            <p><span style="font-size: large; font-weight: bold;">이용안내</span></p>
+                            <p>일반회원/비회원<br>
+                                <span style="font-size: large; font-weight: bold;">1566-0001</span>(평일 09:00~18:00)</p>
+                            <p>스마일클럽 전용<br>
+                                <span style="font-size: large; font-weight: bold;">1566-0002</span>(평일 09:00~18:00)</p>
+                        </div>
+                        <div class="counsel2">
+                            <p><span style="font-size: large; font-weight: bold;">판매 상담 이용 안내</span></p>
+                            <p>판매고객<br>
+                                <span style="font-size: large; font-weight: bold;">1566-5700</span>(평일 09:00~18:00)</p>
+                            <a href="#" style="font-size: large; font-weight: bold;">판매자 가입 서류 접수 안내 ></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
+</th:block>
