@@ -78,14 +78,20 @@
     </table>
     <button class="add-coupon-btn">쿠폰등록</button>
 
-    <div class="pagination" th:if="${totalPages > 0}">
-        <ul>
-            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                <a th:href="@{/coupons(page=${i})}" th:class="${i == currentPage} ? 'active' : ''">
-                    [[${i + 1}]]
-                </a>
-            </li>
-        </ul>
+    <div class="pagination">
+        <th:block th:if="${currentPage > 0}">
+            <a th:href="@{/list(page=${currentPage - 1})}" class="page-btn">＜</a>
+        </th:block>
+
+        <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/list(page=${i})}" th:class="${i == currentPage} ? 'active' : ''" class="num">
+                [[${i + 1}]]
+            </a>
+        </th:block>
+
+        <th:block th:if="${currentPage < totalPages - 1}">
+            <a th:href="@{/list(page=${currentPage + 1})}" class="page-btn">＞</a>
+        </th:block>
     </div>
 
 

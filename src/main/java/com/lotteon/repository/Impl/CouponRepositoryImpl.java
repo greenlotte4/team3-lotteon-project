@@ -1,6 +1,6 @@
 package com.lotteon.repository.Impl;
 
-import com.lotteon.dto.admin.CouponPageDTO;
+import com.lotteon.dto.admin.CouponListResponseDTO;
 import com.lotteon.entity.User.QSeller;
 import com.lotteon.entity.admin.QCoupon;
 import com.lotteon.repository.custom.CouponRepositoryCustom;
@@ -28,10 +28,10 @@ public class CouponRepositoryImpl implements CouponRepositoryCustom {
 
     // 기본 셀러 조회
     @Override
-    public Page<CouponPageDTO> selectCouponByUserIdForList(Long  sellerId, Pageable pageable) {
+    public Page<CouponListResponseDTO> selectCouponByUserIdForList(Long  sellerId, Pageable pageable) {
 
-        List<CouponPageDTO> coupons = queryFactory
-                .select(Projections.constructor(CouponPageDTO.class,
+        List<CouponListResponseDTO> coupons = queryFactory
+                .select(Projections.constructor(CouponListResponseDTO.class,
                         qCoupon.couponId,
                         qCoupon.couponName,
                         qCoupon.couponType,
@@ -64,9 +64,9 @@ public class CouponRepositoryImpl implements CouponRepositoryCustom {
 
     // 어드민 조회
     @Override
-    public Page<CouponPageDTO> selectAllCouponsForAdmin(Pageable pageable) {
-        List<CouponPageDTO> coupons = queryFactory
-                .select(Projections.constructor(CouponPageDTO.class,
+    public Page<CouponListResponseDTO> selectAllCouponsForAdmin(Pageable pageable) {
+        List<CouponListResponseDTO> coupons = queryFactory
+                .select(Projections.constructor(CouponListResponseDTO.class,
                         qCoupon.couponId,
                         qCoupon.couponName,
                         qCoupon.couponType,
@@ -94,7 +94,7 @@ public class CouponRepositoryImpl implements CouponRepositoryCustom {
     }
 
     @Override
-    public Page<CouponPageDTO> searchCoupons(Long  sellerId, Pageable pageable, String searchType, String searchValue) {
+    public Page<CouponListResponseDTO> searchCoupons(Long  sellerId, Pageable pageable, String searchType, String searchValue) {
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.and(qSeller.id.eq(sellerId));
@@ -107,8 +107,8 @@ public class CouponRepositoryImpl implements CouponRepositoryCustom {
             builder.and(qCoupon.couponId.contains(searchValue)); // 쿠폰 번호 검색
         }
 
-        List<CouponPageDTO> coupons = queryFactory
-                .select(Projections.constructor(CouponPageDTO.class,
+        List<CouponListResponseDTO> coupons = queryFactory
+                .select(Projections.constructor(CouponListResponseDTO.class,
                         qCoupon.couponId,
                         qCoupon.couponName,
                         qCoupon.couponType,
@@ -136,11 +136,7 @@ public class CouponRepositoryImpl implements CouponRepositoryCustom {
                 .where(qSeller.id.eq(sellerId)) // UID로 필터링
                 .fetchOne();
 
-
         return  new PageImpl<>(coupons, pageable, total);
-
-
-
     }
 
 

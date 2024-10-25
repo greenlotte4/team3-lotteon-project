@@ -2,7 +2,7 @@ package com.lotteon.service.admin;
 
 import com.lotteon.dto.admin.CouponDTO;
 import com.lotteon.dto.admin.CouponListRequestDTO;
-import com.lotteon.dto.admin.CouponPageDTO;
+import com.lotteon.dto.admin.CouponListResponseDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.repository.admin.CouponRepository;
@@ -28,7 +28,6 @@ public class CouponService {
     private final CouponRepository couponRepository;
     private final SellerRepository sellerRepository;
     private final ModelMapper modelMapper;
-
 
     public String randomCouponId(){
         return UUID.randomUUID().toString().replaceAll("-","").substring(0,10);
@@ -98,7 +97,6 @@ public class CouponService {
         int size = request.getSize();
         Pageable pageable = PageRequest.of(page, size); // Pageable 생성
 
-
         // 쿠폰 페이지 조회
         Page<Coupon> couponPage = null;
         if(grade.contains("ADMIN")){
@@ -109,14 +107,6 @@ public class CouponService {
             couponPage = couponRepository.findBySellerId(sellerId, pageable);
             log.info("일반인 쿠폰: " + couponPage);
         }
-
-
-        
-        log.info("요청된 셀러 ID: {}", request.getSellerId());
-
-
-        
-
         return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
     }
 //    // 모든 쿠폰 조회 메소드
@@ -130,7 +120,7 @@ public class CouponService {
 //    }
     // 검색 기능
     public Page<CouponDTO> searchCoupons(long sellerId, String searchType, String searchValue, Pageable pageable) {
-        Page<CouponPageDTO> couponPage = couponRepository.searchCoupons(sellerId, pageable, searchType, searchValue);
+        Page<CouponListResponseDTO> couponPage = couponRepository.searchCoupons(sellerId, pageable, searchType, searchValue);
         return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
     }
 
