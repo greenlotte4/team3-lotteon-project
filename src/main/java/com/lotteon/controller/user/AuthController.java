@@ -1,7 +1,6 @@
 package com.lotteon.controller.user;
 
 import com.lotteon.service.EmailService;
-import com.lotteon.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

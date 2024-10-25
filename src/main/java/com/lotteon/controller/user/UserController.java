@@ -1,9 +1,6 @@
 package com.lotteon.controller.user;
 
-import com.lotteon.entity.User.Member;
-import com.lotteon.entity.User.Seller;
-import com.lotteon.entity.User.User;
-import com.lotteon.service.UserService;
+import com.lotteon.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
