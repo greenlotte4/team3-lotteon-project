@@ -21,6 +21,12 @@ public class QHeaderInfo extends EntityPathBase<HeaderInfo> {
 
     public final NumberPath<Integer> hd_id = createNumber("hd_id", Integer.class);
 
+    public final StringPath hd_oName1 = createString("hd_oName1");
+
+    public final StringPath hd_oName2 = createString("hd_oName2");
+
+    public final StringPath hd_oName3 = createString("hd_oName3");
+
     public final StringPath hd_sName1 = createString("hd_sName1");
 
     public final StringPath hd_sName2 = createString("hd_sName2");
