@@ -21,7 +21,7 @@ public class SecurityConfig  {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .formLogin()
+            .formLogin()
                 .loginPage("/user/login")
                 .usernameParameter("inId")
                 .passwordParameter("password")
@@ -30,7 +30,7 @@ public class SecurityConfig  {
                 .failureHandler(new CustomAuthFailureHandler())
                 .failureUrl("/user/login?error=true")
                 .and()
-                .formLogin()
+            .formLogin()
                 .loginPage("/seller/login")
                 .usernameParameter("inId")
                 .passwordParameter("password")
@@ -58,13 +58,15 @@ public class SecurityConfig  {
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/seller/login").permitAll()
-                .requestMatchers("/admin/**").hasAnyRole("ADMIN","SELLER")
+                .requestMatchers("/admin/qna/**").hasAnyRole("ADMIN","SELLER")
+                .requestMatchers("/admin/config/**").hasRole("ADMIN")
                 .requestMatchers("/admin/faq/**").hasRole("ADMIN")
                 .requestMatchers("/admin/qna/**").hasRole("ADMIN")
                 .requestMatchers("/admin/notice/**").hasRole("ADMIN")
                 .requestMatchers("/admin/store/**").hasRole("ADMIN")
                 .requestMatchers("/admin/user/**").hasRole("ADMIN")
-                .requestMatchers("/seller/**").hasAnyRole("ADMIN","SELLER")
+                .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SELLER")
+                .requestMatchers("/seller/**").hasAnyRole("ADMIN", "SELLER")
                 .requestMatchers("/article/**").permitAll()
                 .requestMatchers("/company/**").permitAll()
                 .requestMatchers("/policy/**").permitAll()
