@@ -2,6 +2,8 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.FaqDTO;
+import com.lotteon.dto.page.FaqPageResponseDTO;
+import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.entity.Faq;
 import com.lotteon.service.admin.FaqService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,10 @@ public class AdminFaqController {
     private final FaqService faqService;
 
     @GetMapping("/list")
-    public String adminFaqList(Model model) {
+    public String adminFaqList(Model model, PageRequestDTO pageRequestDTO) {
+
+        FaqPageResponseDTO faqPageResponseDTO = faqService.selectfaqListAll(pageRequestDTO);
+        model.addAttribute(faqPageResponseDTO);
         List<FaqDTO> faqDTOs = faqService.selectAllfaq();
         model.addAttribute("faqDTOs", faqDTOs);
         return "content/admin/faq/faqList";
