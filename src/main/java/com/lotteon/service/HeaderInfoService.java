@@ -74,4 +74,6 @@ public class HeaderInfoService {
         return headerInfoRepository.findById(1L)
                 .orElse(null);  // 데이터가 없으면 null 반환
     }
+
+
 }
