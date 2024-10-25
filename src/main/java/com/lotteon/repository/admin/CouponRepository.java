@@ -1,7 +1,5 @@
 package com.lotteon.repository.admin;
 
-import com.lotteon.dto.admin.CouponDTO;
-import com.lotteon.dto.admin.CouponPageDTO;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.repository.custom.CouponRepositoryCustom;
 import org.springframework.data.domain.Page;
