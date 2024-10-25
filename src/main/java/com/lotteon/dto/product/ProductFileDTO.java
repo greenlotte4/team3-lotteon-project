@@ -9,7 +9,6 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class ProductFileDTO {
 
@@ -18,9 +17,12 @@ public class ProductFileDTO {
     private int p_fno;
     private String sName;
     private String type;  //사이즈
-    private long product_id;
 
-
+    public ProductFileDTO(int p_fno, String sName, String type) {
+        this.p_fno = p_fno;
+        this.sName = sName;
+        this.type = type;
+    }
 
 
 }

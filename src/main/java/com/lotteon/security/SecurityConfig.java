@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,22 +20,23 @@ public class SecurityConfig  {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // 로그인 설정
-        http.formLogin(login -> login
+        http
+                .formLogin()
                 .loginPage("/user/login")
-                .successHandler(customAuthSuccessHandler()) // 로그인 성공 핸들러 설정
-                .failureUrl("/user/login?error=true")  // 로그인 실패 시 URL 수정
-                .usernameParameter("inId")  // 로그인 시 사용할 파라미터 이름
-                .passwordParameter("Password")  // 로그인 시 사용할 비밀번호 파라미터 이름
-        );
-
-        http.formLogin(login -> login
+                .usernameParameter("inId")
+                .passwordParameter("password")
+                .loginProcessingUrl("/user/login") // 로그인 처리 URL
+                .defaultSuccessUrl("/", true)
+                .failureHandler(new CustomAuthFailureHandler())
+                .failureUrl("/user/login?error=true")
+                .and()
+                .formLogin()
                 .loginPage("/seller/login")
-                .successHandler(customAuthSuccessHandler()) // 로그인 성공 핸들러 설정
-                .failureUrl("/seller/login?error=true")  // 로그인 실패 시 URL 수정
-                .usernameParameter("inId")  // 로그인 시 사용할 파라미터 이름
-                .passwordParameter("Password")  // 로그인 시 사용할 비밀번호 파라미터 이름
-        );
+                .usernameParameter("inId")
+                .passwordParameter("password")
+                .loginProcessingUrl("/seller/login") // 로그인 처리 URL
+                .successHandler(new CustomAuthSuccessHandler()) // CustomAuthSuccessHandler 사용
+                .failureUrl("/seller/login?error=true"); // 로그인 실패 시 이동할 페이지
 
 
         // 세션 설정
@@ -42,6 +44,7 @@ public class SecurityConfig  {
                 .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)  // 세션 고정 공격 방지
                 .maximumSessions(1)  // 동시 로그인 세션 하나로 제한
                 .maxSessionsPreventsLogin(true)  // 새로운 로그인이 기존 세션을 만료시키지 않도록 설정
+
         );
 
         // 로그아웃 설정

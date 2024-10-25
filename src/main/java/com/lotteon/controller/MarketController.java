@@ -30,9 +30,9 @@ public class MarketController {
 
     @GetMapping("/list")
     public String marketList(PageRequestDTO pageRequestDTO, Model model) {
-        long categoryid = 4;
+        long categoryid = 20;
         pageRequestDTO.setCategoryId(categoryid);
-        ProductListPageResponseDTO responseDTO =  productService.selectProductListByCategory(pageRequestDTO);
+        ProductListPageResponseDTO responseDTO =  productService.selectProductListBymarket(pageRequestDTO);
         log.info(responseDTO.getProductDTOList());
         model.addAttribute("responseDTO",responseDTO);
 
