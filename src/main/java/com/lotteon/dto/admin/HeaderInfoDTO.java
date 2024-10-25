@@ -19,6 +19,11 @@ public class HeaderInfoDTO {
     private String hd_sName1;
     private String hd_sName2;
     private String hd_sName3;
+    private String hd_oName1;
+    private String hd_oName2;
+    private String hd_oName3;
 
-    private MultipartFile file;
+    private MultipartFile file1;
+    private MultipartFile file2;
+    private MultipartFile file3;
 }

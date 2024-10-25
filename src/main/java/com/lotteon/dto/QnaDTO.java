@@ -1,6 +1,7 @@
 package com.lotteon.dto;
 
 
+import com.lotteon.entity.QnA;
 import lombok.*;
 
 @Getter
@@ -21,6 +22,7 @@ public class QnaDTO {
     private String iscompleted;
     private int sellerid;
     private int productid;
+    private QnA.Status qna_status; // 상태를 ENUM으로 변경
 }
 
 

@@ -128,29 +128,26 @@ public class FileService {
 
     }
 
-    public HeaderInfoDTO uploadFile(HeaderInfoDTO headerInfoDTO) {
+    public HeaderInfoDTO uploadFiles(HeaderInfoDTO headerInfoDTO) {
+        File fileuploadpath = new File(uploadPath+"ConfigImg/");
 
-        // 파일 업로드 경로 파일 객체 생성
-        File fileUploadPath = new File(uploadPath);
-
-        // 파일 업로드 디렉터리가 존재하지 않으면 디렉터리 생성
-        if (!fileUploadPath.exists()) {
-            fileUploadPath.mkdirs();
+        if (!fileuploadpath.exists()) {
+            fileuploadpath.mkdirs();
         }
 
-        // 파일 업로드 시스템 경로 구하기
-        String path = fileUploadPath.getAbsolutePath();
+        String path = fileuploadpath.getAbsolutePath();
 
-        // 파일 정보 객체 가져오기
-        MultipartFile file = headerInfoDTO.getFile(); // 배너 DTO에서 파일 정보 가져오기
+        MultipartFile file1 = headerInfoDTO.getFile1();
+        MultipartFile file2 = headerInfoDTO.getFile2();
+        MultipartFile file3 = headerInfoDTO.getFile3();
 
         HeaderInfoDTO newHeaderInfoDTO = new HeaderInfoDTO();
 
-        if (!file.isEmpty()) {
-            String oName = file.getOriginalFilename();
+        // 파일1 업로드 처리
+        if (!file1.isEmpty()) {
+            String oName = file1.getOriginalFilename();
             String ext = oName.substring(oName.lastIndexOf("."));
             String sName = UUID.randomUUID().toString() + ext;
-
 
             // 허용된 확장자 목록
             List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
@@ -162,23 +159,85 @@ public class FileService {
 
             // 파일 저장
             try {
-                file.transferTo(new File(path, sName));
+                file1.transferTo(new File(path, sName));
+                log.info("file1 저장 완료: {}", sName); // 로그 추가
             } catch (IOException e) {
                 log.error(e);
             }
-            newHeaderInfoDTO.setHd_sName1(oName);
-            newHeaderInfoDTO.setHd_sName1(sName);
 
-            newHeaderInfoDTO.setHd_sName2(oName);
-            newHeaderInfoDTO.setHd_sName2(sName);
-
-            newHeaderInfoDTO.setHd_sName3(oName);
-            newHeaderInfoDTO.setHd_sName3(sName);
-
-
+            newHeaderInfoDTO.setHd_oName1(oName);
+            newHeaderInfoDTO.setHd_sName1(sName); // 파일 이름 저장
+            log.info("file1 DTO에 저장된 파일 이름: {}", newHeaderInfoDTO.getHd_sName1()); // 로그 추가
         }
+
+        // 파일2 업로드 처리
+        if (!file2.isEmpty()) {
+            String oName = file2.getOriginalFilename();
+            String ext = oName.substring(oName.lastIndexOf("."));
+            String sName = UUID.randomUUID().toString() + ext;
+
+            // 허용된 확장자 목록
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
+
+            // 확장자가 허용된 목록에 있는지 확인
+            if (!allowedExtensions.contains(ext)) {
+                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
+            }
+
+            // 파일 저장
+            try {
+                file2.transferTo(new File(path, sName));
+                log.info("file2 저장 완료: {}", sName); // 로그 추가
+            } catch (IOException e) {
+                log.error(e);
+            }
+
+            newHeaderInfoDTO.setHd_oName2(oName);
+            newHeaderInfoDTO.setHd_sName2(sName); // 파일 이름 저장
+            log.info("file2 DTO에 저장된 파일 이름: {}", newHeaderInfoDTO.getHd_sName2()); // 로그 추가
+        }
+
+        // 파일3 업로드 처리
+        if (!file3.isEmpty()) {
+            String oName = file3.getOriginalFilename();
+            String ext = oName.substring(oName.lastIndexOf("."));
+            String sName = UUID.randomUUID().toString() + ext;
+
+            // 허용된 확장자 목록
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
+
+            // 확장자가 허용된 목록에 있는지 확인
+            if (!allowedExtensions.contains(ext)) {
+                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
+            }
+
+            // 파일 저장
+            try {
+                file3.transferTo(new File(path, sName));
+                log.info("file3 저장 완료: {}", sName); // 로그 추가
+            } catch (IOException e) {
+                log.error(e);
+            }
+
+            newHeaderInfoDTO.setHd_oName3(oName);
+            newHeaderInfoDTO.setHd_sName3(sName); // 파일 이름 저장
+            log.info("file3 DTO에 저장된 파일 이름: {}", newHeaderInfoDTO.getHd_sName3()); // 로그 추가
+        }
+
+        // 최종적으로 저장된 파일 이름 확인
+        log.info("최종 DTO에 저장된 파일 이름들: {}, {}, {}",
+                newHeaderInfoDTO.getHd_sName1(),
+                newHeaderInfoDTO.getHd_sName2(),
+                newHeaderInfoDTO.getHd_sName3(),
+                newHeaderInfoDTO.getHd_oName1(),
+                newHeaderInfoDTO.getHd_oName2(),
+                newHeaderInfoDTO.getHd_oName3()
+        );
+
         return newHeaderInfoDTO;
     }
+
+
 
 
 }

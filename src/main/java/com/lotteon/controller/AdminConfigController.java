@@ -95,26 +95,57 @@ public class AdminConfigController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/headerInfo")
-    public ResponseEntity<Void> saveHeaderInfo(@RequestBody HeaderInfoDTO headerInfo) {
 
-        if (headerInfo.getHd_id() != null) {
-            boolean exists = headerInfoService.existsById(headerInfo.getHd_id());
+    @PostMapping("/headerInfo")
+    public ResponseEntity<?> saveHeaderInfo(@ModelAttribute HeaderInfoDTO headerInfoDTO) {
+
+        if (headerInfoDTO.getHd_id() != null) {
+            boolean exists = headerInfoService.existsById(headerInfoDTO.getHd_id());
             if (exists) {
                 // 데이터가 존재하면 업데이트
-                headerInfoService.updateHeaderInfo(headerInfo);
-
+                headerInfoService.updateHeaderInfo(headerInfoDTO);
             } else {
                 // ID가 있지만 데이터베이스에 존재하지 않으면 삽입
-                headerInfoService.saveHeaderInfo(headerInfo);
+                headerInfoService.saveHeaderInfo(headerInfoDTO);
             }
         } else {
             // ID가 없으면 새로운 데이터로 간주하고 삽입
-            headerInfoService.saveHeaderInfo(headerInfo);
+            headerInfoService.saveHeaderInfo(headerInfoDTO);
         }
 
         return ResponseEntity.ok().build();
-
     }
+
+
+     @PostMapping("/headerLogoInfo")
+    public ResponseEntity<?> saveHeaderLogoInfo(@ModelAttribute HeaderInfoDTO headerInfoDTO) {
+        // 파일 업로드 수행
+        HeaderInfoDTO newheaderInfo = fileService.uploadFiles(headerInfoDTO);
+
+        headerInfoDTO.setHd_sName1(newheaderInfo.getHd_sName1());
+        headerInfoDTO.setHd_sName2(newheaderInfo.getHd_sName2());
+        headerInfoDTO.setHd_sName3(newheaderInfo.getHd_sName3());
+
+        headerInfoDTO.setHd_oName1(newheaderInfo.getHd_oName1());
+        headerInfoDTO.setHd_oName2(newheaderInfo.getHd_oName2());
+        headerInfoDTO.setHd_oName3(newheaderInfo.getHd_oName3());
+
+        if (headerInfoDTO.getHd_id() != null) {
+            boolean exists = headerInfoService.existsById(headerInfoDTO.getHd_id());
+            if (exists) {
+                // 데이터가 존재하면 업데이트
+                headerInfoService.updateHeaderInfo2(headerInfoDTO);
+            } else {
+                // ID가 있지만 데이터베이스에 존재하지 않으면 삽입
+                headerInfoService.saveHeaderInfo2(headerInfoDTO);
+            }
+        } else {
+            // ID가 없으면 새로운 데이터로 간주하고 삽입
+            headerInfoService.saveHeaderInfo2(headerInfoDTO);
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
 
 }

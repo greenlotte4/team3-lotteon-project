@@ -27,6 +27,10 @@
                         <span th:text="${qna.qna_title}">질문 제목</span>
                         <span class="review-status"
                               th:text="${qna.qna_status.name() == 'review' ? '검토중' : '답변완료'}"></span>
+<!--                        <span class="review-status"-->
+<!--                              th:text="${qna.qna_status == T(com.lotteon.entity.QnA.Status).review ? '검토중' : '답변완료'}"></span>-->
+
+
                         <span class="author-id" th:text="${qna.qna_writer}"></span>
                         <span class="date" th:text="${#strings.substring(qna.rdate,0,10)}"></span>
                     </a>
@@ -40,25 +44,18 @@
 
         <div class="pagination">
             <div class="qna-pagination">
-                <!-- 이전 페이지 링크 -->
                 <a th:href="@{/cs/qna/list(page=${qnaPage.number - 1})}"
                    th:classappend="${qnaPage.first} ? 'disabled'">이전</a>
-
-                <!-- 페이지 번호 반복 -->
                 <span th:each="pageNum : ${#numbers.sequence(0, qnaPage.totalPages - 1)}">
                     <a th:href="@{/cs/qna/list(page=${pageNum})}"
                        th:classappend="${qnaPage.number == pageNum} ? 'active'"
                        th:text="${pageNum + 1}"></a>
                 </span>
-
-                <!-- 다음 페이지 링크 -->
                 <a th:href="@{/cs/qna/list(page=${qnaPage.number + 1})}"
                    th:classappend="${qnaPage.last} ? 'disabled'">다음</a>
             </div>
         </div>
-
-
-
     </div>
-</th:block>>
-
+</th:block>
+</body>
+</html>

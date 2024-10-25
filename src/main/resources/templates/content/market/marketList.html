@@ -42,6 +42,7 @@
                         </div>
                         <article class="product-list">
                             <div class="product-item" th:each="product:${responseDTO.getProductDTOList()}">
+                                <a th:href="@{/market/view/{category}/{id}(category=${product.getCategoryId()},id=${product.productId})}">
                                 <div class="product-image">
                                     <img th:src="@{'/uploads/productimg/'+${product.getProductFiles()[0].getSName()}}" alt="상품 이미지">
                                 </div>
@@ -64,6 +65,7 @@
                                     <span class="seller-rating">고객만족우수</span>
                                     <span class="seller-rank">⭐⭐⭐⭐⭐</span>
                                 </div>
+                                </a>
                             </div>
                         
 

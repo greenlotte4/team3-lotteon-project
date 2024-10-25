@@ -26,6 +26,7 @@ public class FaqPageResponseDTO {
     private String type;
     private String keyword;
 
+    @Builder
     public FaqPageResponseDTO(PageRequestDTO pageRequestDTO, List<FaqDTO> faqdtoList, int total) {
         this.pg = pageRequestDTO.getPg();
         this.size = pageRequestDTO.getSize();
@@ -45,4 +46,6 @@ public class FaqPageResponseDTO {
         this.prev = this.start > 1; // 1보다 크면 이전버튼
         this.next = total > this.end * this.size; //마지막 페이지번호보다 글갯수가 더 클때 다음 버튼
     }
+
+
 }
