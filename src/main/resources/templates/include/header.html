@@ -16,16 +16,16 @@
                         <!-- 판매자 로그인 시 -->
                         <span th:if="${#authorization.expression('hasRole(''ROLE_SELLER'')')}">
                         관리자님 환영합니다!
-                    </span>
+                        </span>
 
                         <!-- 일반 사용자 로그인 시 -->
                         <span th:if="${#authorization.expression('hasRole(''ROLE_MEMBER'')')}">
                         <span th:text="${memberName}"></span> 회원님 환영합니다!
-                    </span>
+                         </span>
+                    </li>
 
                         <!-- 로그아웃 메뉴 -->
                     <li><a th:href="@{/user/logout}">로그아웃</a></li>
-                    </li>
 
                     <!-- 로그인된 경우 주문 배송, 고객센터 -->
                     <li><a th:href="@{/user/order}">주문배송</a></li>

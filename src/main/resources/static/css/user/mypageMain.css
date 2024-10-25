@@ -251,7 +251,7 @@ td button{
 
 }
 
-#custom-button {
+.custom-button {
     border: none;
     background-color: rgb(150, 150, 150);
     color: white;
