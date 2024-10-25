@@ -51,8 +51,20 @@ public class MarketController {
         model.addAttribute("content", "view");
 
 
+
         return "content/market/marketview"; // Points to the "content/market/marketview" template
     }
+
+
+    @GetMapping("/view/{categoryId}/{productId}")
+    public String marketView(@PathVariable String productId,@PathVariable String categoryId,Model model) {
+        log.info(productId);
+        log.info(categoryId);
+
+
+        return "content/market/marketview"; // Points to the "content/market/marketview" template
+    }
+
 
     @GetMapping("/cart")
     public String marketCart(Model model) {
