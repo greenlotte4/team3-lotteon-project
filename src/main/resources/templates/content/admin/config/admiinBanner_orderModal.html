@@ -70,7 +70,28 @@
         const startTimeInput = document.querySelector('.start_time');
         const endTimeInput = document.querySelector('.end_time');
         const bannerImageInput = document.querySelector('.banner_image'); // 파일 입력 요소
+        const bannerSizeInput = document.querySelector('.banner_size');
+        const bannerPositionSelect = document.querySelector('.banner_position');
 
+        // 배너 크기 정의
+        const bannerSizes = {
+            "메인 상단 배너": { width: 1200, height: 80 },
+            "메인 슬라이더 배너": { width: 640, height: 300 },
+            "상품 상세보기 배너": { width: 550, height: 64 },
+            "회원 로그인 배너": { width: 420, height: 260 },
+            "마이페이지 배너": { width: 810, height: 86 }
+        };
+
+        function updateBannerSize() {
+            const selectedPosition = bannerPositionSelect.value;
+            const size = bannerSizes[selectedPosition];
+
+            if (size) {
+                bannerSizeInput.value = `${size.width}x${size.height}`;
+                updateCropSize(size.width, size.height);
+            }
+        }
+        bannerPositionSelect.addEventListener('change', updateBannerSize);
 
         function validateDatesAndTimes() {
             // 현재 날짜와 시간 가져오기
