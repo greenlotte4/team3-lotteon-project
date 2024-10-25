@@ -1,19 +1,21 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.User.UserDTO;
 import com.lotteon.entity.User.Member;
+import com.lotteon.entity.User.User;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.repository.user.UserRepository;
 import com.lotteon.service.user.MemberService;
+import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Controller
@@ -35,6 +37,20 @@ public class AdminUserController {
         model.addAttribute("memberList", memberList);
         return "content/admin/user/memberlist";
     }
+
+    @GetMapping("/admin/user/list/{uid}")
+    @ResponseBody
+    public ResponseEntity<Member> getUserDetails(@PathVariable String uid) {
+        // uid를 기반으로 member 정보를 가져오기
+        Optional<Member> memberOptional = memberService.findByUid(uid);
+
+        if (memberOptional.isPresent()) {
+            return ResponseEntity.ok(memberOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @PostMapping("/members/update")
     public String updateMember(@ModelAttribute Member member) {
