@@ -43,7 +43,7 @@
                         <article class="product-list">
                             <div class="product-item" th:each="product:${responseDTO.getProductDTOList()}">
                                 <div class="product-image">
-                                    <img th:src="@{'/uploads/productimg/'+${product.getFile230()}}" alt="상품 이미지">
+                                    <img th:src="@{'/uploads/productimg/'+${product.getProductFiles()[0].getSName()}}" alt="상품 이미지">
                                 </div>
                                 <div class="product-details">
                                     <h4 class="product-name">[[${product.productName}]]</h4>
