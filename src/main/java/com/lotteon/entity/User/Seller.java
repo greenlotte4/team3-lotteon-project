@@ -1,11 +1,13 @@
 package com.lotteon.entity.User;
 
+import com.lotteon.entity.admin.Coupon;
 import jakarta.persistence.*;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -53,5 +55,6 @@ public class Seller {
 
 
     private boolean isAdmin;
+
 
 }

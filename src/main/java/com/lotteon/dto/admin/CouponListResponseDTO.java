@@ -28,24 +28,15 @@ public class CouponListResponseDTO {
         this.total = total;
         this.couponDTOList = couponDTOList;
 
-
         // 시작 번호 계산
-        this.startNo = total - ((pg -1) * size);
+        this.startNo = total - ((pg - 1) * size);
 
         // 페이지 시작과 끝 번호 계산
-        this.end = (int)(Math.ceil(pg / (double)size)) * size;
-        this.start = this.end + size;
-
-        // 마지막 페이지 계산
-        int last = (int)(Math.ceil((pg / (double)size)) * size);
-        this.end = end > last ? last : end;
-
-        if(this.start > this.end){
-            this.start = this.end;
-        }
+        this.end = Math.min((int) (Math.ceil(pg / (double) size) * size), total);
+        this.start = Math.max(1, end - (size - 1));
 
         // 이전 및 다음 페이지 여부
         this.prev = this.start > 1;
-        this.next = total > this.end * this.size;
+        this.next = total > end;
     }
 }

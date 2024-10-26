@@ -26,17 +26,9 @@ public class CouponDTO {
     private String notes;
     private LocalDate rdate; // 발급일
 
+    private long seller_id;
+
     private String sellerCompany; // 발급자
 
-    public CouponDTO(String couponId, String couponName, String status,
-                     LocalDate startDate, LocalDate endDate,
-                     int issuedCount, int usedCount) {
-        this.couponId = couponId;
-        this.couponName = couponName;
-        this.status = status;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.issuedCount = issuedCount;
-        this.usedCount = usedCount;
-    }
+
 }

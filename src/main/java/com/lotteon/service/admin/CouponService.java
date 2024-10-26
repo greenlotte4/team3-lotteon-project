@@ -2,6 +2,7 @@ package com.lotteon.service.admin;
 
 import com.lotteon.dto.admin.CouponDTO;
 import com.lotteon.dto.admin.CouponListRequestDTO;
+import com.lotteon.dto.admin.CouponListResponseDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.repository.admin.CouponRepository;
@@ -16,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -28,7 +28,6 @@ public class CouponService {
     private final CouponRepository couponRepository;
     private final SellerRepository sellerRepository;
     private final ModelMapper modelMapper;
-
 
     public String randomCouponId(){
         return UUID.randomUUID().toString().replaceAll("-","").substring(0,10);
@@ -43,7 +42,7 @@ public class CouponService {
         log.info("Logged in seller username: " + loggedInUserUid );
 
         // 로그인한 셀러 정보를 조회
-        Seller seller = sellerRepository.findByUserUid(loggedInUserUid )
+        Seller seller = sellerRepository.findByUserUid(loggedInUserUid)
                 .orElseThrow(() -> new RuntimeException("Seller not found for username: " + loggedInUserUid ));
 
         Coupon coupon = Coupon.builder()
@@ -59,6 +58,7 @@ public class CouponService {
                 .status("발급 중") // 기본 상태 설정 (필요에 따라 수정)
                 .rdate(LocalDate.now()) // 현재 날짜로 발급일 설정
                 .sellerCompany(seller.getCompany())
+                .seller(seller)
                 .build();
 
         log.info("Coupon------------------------" + coupon);
@@ -67,19 +67,14 @@ public class CouponService {
         log.info("Coupon inserted: " + coupon);
     }
 
-    public CouponDTO selectCoupon(String couponId){
-
-        Optional<Coupon> optCoupon = couponRepository.findById(couponId);
-
-        if(optCoupon.isPresent()){
-            Coupon coupon = optCoupon.get();
-            log.info("Coupon selected: " + coupon);
-
-            return modelMapper.map(coupon, CouponDTO.class);
-        } else {
-            return null;
-        }
-
+    // 쿠폰 상세 조회
+    public CouponDTO selectCoupon(String couponId) {
+        return couponRepository.findById(couponId)
+                .map(coupon -> {
+                    log.info("Coupon selected: " + coupon);
+                    return modelMapper.map(coupon, CouponDTO.class);
+                })
+                .orElse(null);
     }
 
     public CouponDTO endCoupon(String couponId){
@@ -90,46 +85,44 @@ public class CouponService {
             coupon.setStatus("종료됨");
             couponRepository.save(coupon);
             log.info("Coupon ended: " + coupon);
-
             return modelMapper.map(coupon, CouponDTO.class);
         } else {
             throw new RuntimeException("궁시렁궁시렁 오류남");
         }
     }
     // 페이징 기능 추가
-    public Page<CouponDTO> selectCouponsPagination(CouponListRequestDTO request) {
+    public Page<CouponDTO> selectCouponsPagination(CouponListRequestDTO request,String grade,long sellerId) {
         // 요청 DTO에서 페이지 정보와 사용자 UID 추출
         int page = request.getPage() > 0 ? request.getPage() - 1 : 0; // 1-based to 0-based
         int size = request.getSize();
-
         Pageable pageable = PageRequest.of(page, size); // Pageable 생성
 
-        // 셀러 정보를 가져오기 위해 UserUid로 셀러 조회
-        Optional<Seller> sellerOpt = sellerRepository.findByUserUid(request.getUid());
-
-        // 셀러가 없을 경우 처리 (예: null 체크)
-        if (sellerOpt.isEmpty()) {
-            throw new RuntimeException("셀러 정보를 찾을 수 없습니다."); // 예외 처리
+        // 쿠폰 페이지 조회
+        Page<Coupon> couponPage = null;
+        if(grade.contains("ADMIN")){
+            couponPage = couponRepository.findAll(pageable);
+            log.info("관리자 쿠폰: " + couponPage);
+        }else if(grade.contains("SELLER")){
+            // 일반 셀러는 자신의 쿠폰만 조회
+            couponPage = couponRepository.findBySellerId(sellerId, pageable);
+            log.info("일반인 쿠폰: " + couponPage);
         }
-
-        Seller seller = sellerOpt.get();
-        // 등급 체크
-        boolean adminCheck = "admin".equals(seller.getGrade()); // grade가 "admin"인지 확인
-
-        Page<CouponDTO> couponPage;
-
-        if (adminCheck) {
-            // 관리자라면 모든 쿠폰 조회
-            couponPage = couponRepository.findCoupons(null, pageable);
-        } else {
-            // 일반 사용자는 해당 셀러의 쿠폰만 조회
-            couponPage = couponRepository.findCoupons(request.getUid(), pageable);
-        }
-
-        log.info("Admin check for UID {}: {}", request.getUid(), adminCheck);
         return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
     }
-
+//    // 모든 쿠폰 조회 메소드
+//    public Page<CouponPageDTO> selectCouponsPagination(CouponListRequestDTO requestDTO, Pageable pageable) {
+//        return couponRepository.selectCouponByUserIdForList(Seller.getId(), pageable);
+//    }
+//
+//    // 검색 기능을 위한 메소드
+//    public Page<CouponPageDTO> searchCoupons(String uid, Pageable pageable, String searchType, String searchValue) {
+//        return couponRepository.searchCoupons(uid, pageable, searchType, searchValue);
+//    }
+    // 검색 기능
+    public Page<CouponDTO> searchCoupons(long sellerId, String searchType, String searchValue, Pageable pageable) {
+        Page<CouponListResponseDTO> couponPage = couponRepository.searchCoupons(sellerId, pageable, searchType, searchValue);
+        return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
+    }
 
 
 }

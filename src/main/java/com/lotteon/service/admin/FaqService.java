@@ -78,6 +78,8 @@ public class FaqService {
         }
     }
 
+
+
     public FaqPageResponseDTO selectfaqListAll(PageRequestDTO pageRequestDTO){
 
         Pageable pageable = pageRequestDTO.getPageable("no");
