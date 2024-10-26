@@ -213,15 +213,6 @@ public class ProductService {
         return productDTO;
     }
 
-    //view page select
-    public ProductDTO getProduct(Long ProductID) {
-
-        Product product = productRepository.findByProductId(ProductID);
-        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
-
-        return productDTO;
-    }
-
 
         public void isSaleProduct() {}
 }
