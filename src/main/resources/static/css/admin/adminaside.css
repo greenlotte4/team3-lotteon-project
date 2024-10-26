@@ -74,12 +74,19 @@ a {text-decoration: none; color: inherit;}
     cursor: pointer;
     padding: 5px; /* 항목 여백 추가 */
     border-radius: 5px; /* 항목 둥글게 */
-    transition: background 0.3s; /* 배경 변화 효과 */
+    /*transition: background 0.3s; !* 배경 변화 효과 *!*/
     color: rgb(174, 174, 174);
 }
 
-.admin_menu > li:hover {
+.admin_menu li > ul > li:hover {
+    color: #ef2a23;
+
     background-color: #e0e0e0; /* 호버 시 배경색 변경 */
+}
+
+.admin_menu li > ul > li.active {
+    color: #ef2a23;
+    text-decoration-line: underline;
 }
 
 

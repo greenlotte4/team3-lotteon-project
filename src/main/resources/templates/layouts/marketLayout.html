@@ -8,7 +8,7 @@
 
   <link  rel="stylesheet" th:href="@{/css/reset.css}">
   <link rel="stylesheet" th:href="@{/css/common.css}">
-    <link rel="shortcut icon" th:href="@{/uploads/ConfigImg/favicon.ico}" type="image/x-icon">
+  <link rel="shortcut icon" th:href="@{/uploads/ConfigImg/favicon.ico}" type="image/x-icon">
 
 </head>
 <body>
@@ -29,10 +29,11 @@
     </main>
 
           <th:block th:replace="~{include/footer.html}"></th:block>
-          <script th:src="@{/js/market.js}"></script>
-        <script th:src="@{js/headerJs.js}"></script>
 
+<!--        <script th:src="@{/js/marketListView.js}"></script>-->
     </div><!--layout end-->
     </div> <!--wrapper end-->
+    <script th:src="@{/js/market.js}"></script>
+<!--    <script th:src="@{/js/headerJs.js}"></script>-->
   </body>
 </html>

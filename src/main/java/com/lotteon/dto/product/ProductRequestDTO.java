@@ -25,9 +25,9 @@ public class ProductRequestDTO{
 
     private String madeIn;
     private String sellerId;
-    private int price;
+    private long price;
     private int discount;
-    private int stock;
+    private long stock;
     private int shippingFee;
     private int shippingTerms; //무료배송 조건
     private String rdate;

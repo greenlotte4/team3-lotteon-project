@@ -19,7 +19,7 @@ import java.util.*;
 @Log4j2
 public class ProductResponseDTO{
     private ProductDTO product;
-    private Set<OptionDTO> options;
+    private List<OptionDTO> options;
     private ProductDetailsDTO productDetails;
     private MultiValueMap<String, MultipartFile> images;
 
@@ -41,7 +41,7 @@ public class ProductResponseDTO{
                 .build();
 
         log.info("여기2");
-        this.options= new LinkedHashSet<>();
+        this.options= new ArrayList<>();
         List<String> optionNames = productRequest.getOptionName();
         List<String> optionDesc = productRequest.getOptionDesc();
         List<Integer> optionStocks = productRequest.getOptionStock();
