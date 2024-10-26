@@ -28,17 +28,17 @@ public class QCartItem extends EntityPathBase<CartItem> {
 
     public final NumberPath<Integer> deliveryFee = createNumber("deliveryFee", Integer.class);
 
-    public final NumberPath<Integer> discount = createNumber("discount", Integer.class);
+    public final NumberPath<Long> discount = createNumber("discount", Long.class);
 
     public final NumberPath<Integer> point = createNumber("point", Integer.class);
 
-    public final NumberPath<Integer> price = createNumber("price", Integer.class);
+    public final NumberPath<Long> price = createNumber("price", Long.class);
 
     public final com.lotteon.entity.product.QProduct product;
 
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
 
-    public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
+    public final NumberPath<Long> totalPrice = createNumber("totalPrice", Long.class);
 
     public QCartItem(String variable) {
         this(CartItem.class, forVariable(variable), INITS);

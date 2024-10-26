@@ -33,9 +33,9 @@ public class SellerController {
     public String productList(Model model, PageRequestDTO pageRequestDTO, Authentication authentication) {
 
         String user = authentication.getName();
-        ProductListPageResponseDTO productPageResponseDTO = productService.selectProductsBySellerId(user, pageRequestDTO);
+        ProductListPageResponseDTO productPageResponseDTO = productService.selectProductBySellerId(user, pageRequestDTO);
         model.addAttribute("productPageResponseDTO", productPageResponseDTO);
-        log.info(productPageResponseDTO.getProductDTOList());
+        model.addAttribute("productList", "productList");
 
         return "content/admin/product/admin_productlist"; // Points to the "content/sellerDynamic" template for product listing
     }

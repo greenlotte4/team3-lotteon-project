@@ -1,6 +1,9 @@
 package com.lotteon.dto.product;
 
 
+import com.lotteon.dto.User.SellerDTO;
+import com.lotteon.entity.User.Seller;
+import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.ProductDetails;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,10 +25,10 @@ public class ProductDTO{
     private long productId;
 
     private long categoryId;
-
+    private long sellerNo;
     private String productName;
-    private int price;
-    private int stock;
+    private long price;
+    private long stock;
     private int discount;
     private int shippingFee;
     private int shippingTerms; //무료배송 조건
@@ -48,6 +51,12 @@ public class ProductDTO{
     private List<ProductFileDTO> productFiles;
     private List<OptionDTO> options;
     private ProductDetails productDetails;
+    private SellerDTO seller;
+
+    //main list 판매자회사이름
+    private String company;
+    private double productRating;
+
 
 
 

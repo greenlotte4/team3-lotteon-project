@@ -3,7 +3,9 @@ package com.lotteon.service.product;
 
 import com.lotteon.dto.product.CreateCategoryRequestDTO;
 import com.lotteon.dto.product.ProductCategoryDTO;
+import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.ProductCategory;
+import com.lotteon.repository.Impl.ProductCategoryRepositoryImpl;
 import com.lotteon.repository.product.ProductCategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class ProductCategoryService {
     private final ProductCategoryRepository productCategoryRepository;
 
     private final ModelMapper modelMapper;
+    private final ProductCategoryRepositoryImpl productCategoryRepositoryImpl;
 
     public ProductCategory insertCategory(CreateCategoryRequestDTO createCategoryRequestDTO  ) {
         ProductCategory parentCategory = null;
@@ -71,5 +74,12 @@ public class ProductCategoryService {
                 .map(category -> modelMapper.map(category, ProductCategoryDTO.class))
                 .toList();
     }
-    public void selectCategory(){}
+    public List<ProductCategoryDTO> selectCategory(long id){
+
+       List<ProductCategory> categories =  productCategoryRepository.SelectParentCategories(id);
+
+       List<ProductCategoryDTO> categoriesDTO = categories.stream().map(category -> modelMapper.map(category, ProductCategoryDTO.class)).toList();
+
+        return categoriesDTO;
+    }
 }

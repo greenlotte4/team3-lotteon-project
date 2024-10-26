@@ -19,8 +19,8 @@
 
 #mainArea .mainWrapper .section{
     /* Subtract the aside's width and some padding/margin */
-    
-    width: calc(100% - 310px); /* Subtract the aside's width and some padding/margin */
+
+    width: calc(100% - 230px); /* Subtract the aside's width and some padding/margin */
     box-sizing: border-box; /* Ensure proper width calculation */
 
      /* Ensure proper width calculation */
@@ -30,7 +30,7 @@
 #mainArea .section .sectionWrapper{
     border: 1px solid #eee;
     margin-top: 10px;
-    width: 890px;
+    width: 100%;
     padding: 20px;
     box-sizing: border-box;
 }
@@ -158,7 +158,7 @@
     gap: 5px;
 }
 
-.original-price {
+.price-seller-info .original-price {
     font-size: 14px;
     color: #999;
     text-decoration: line-through;
@@ -174,14 +174,31 @@
     margin-top: 5px;
     display: flex;
     flex-direction: column;
+    width: 100%;
+
 }
 
-.shipping-label {
-    background-color: #d1e7ff;
+.shipping-info .shipping-fee{
     padding: 3px 10px;
     border-radius: 5px;
     font-size: 12px;
+}
+
+.shipping-info .shipping-fee:before{
+    content:"배송비";
+    margin-right: 3px;
+}
+.shipping-label {
+    background-color: #d1e7ff;
+    padding: 3px 10px;
+    border-radius: 0px;
+    font-size: 12px;
     color: #0056b3;
+    text-align: center;
+}
+
+.shipping-info .shipping-fee.shipping-label:before{
+    content: "";
 }
 
 /* Seller information */
@@ -327,5 +344,22 @@
 
 
 
+.star {
+    font-size: 1.5em; /* 원하는 별 크기에 맞게 조정 */
+    display: inline-block;
+    color: lightgray; /* 기본 색상 (빈 별 색상) */
+}
 
+.star.full-star {
+    color: gold;
+}
 
+.star.half-star {
+    background: linear-gradient(90deg, gold 50%, lightgray 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; /* 텍스트 색상 투명화 */
+}
+
+.star.empty-star {
+    color: #cccccc; /* 빈 별 색상 */
+}

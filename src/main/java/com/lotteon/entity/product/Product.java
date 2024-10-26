@@ -1,15 +1,17 @@
 package com.lotteon.entity.product;
 
 
+import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.entity.User.Seller;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,8 +29,8 @@ public class Product {
     private long categoryId;
 
     private String productName;
-    private int price;
-    private int stock;
+    private long price;
+    private long stock;
     private int discount;
     private int shippingFee;
     private int shippingTerms; //무료배송 조건
@@ -46,8 +48,9 @@ public class Product {
     @Builder.Default
     private Boolean isSaled = true; // 판매가능여부
 
-    @Setter
-    private String sellerId ;
+    private long sellerNo;
+    private String sellerId;
+
     @Builder.Default
     private int sold=0; //판매량
 
@@ -60,14 +63,26 @@ public class Product {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="product_id")
     @ToString.Exclude
-    private Set<Option> options;
+    private List<Option> options;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="product_id")
+    @JoinColumn(name="detail_id")
     @ToString.Exclude
     private ProductDetails productDetails;
 
     private int hit;
+
+
+    private String file190;
+    private String file230;
+    private String file456;
+
+    @Transient
+    private List<String> fileDescs;
+
+    //리뷰 별 평균 값
+    private double productRating;
+
 
 
     @PostPersist
@@ -76,5 +91,56 @@ public class Product {
     }
 
 
+
+    public void setFiles(List<ProductFile> files) {
+        this.files= files;
+        if(files!=null){
+            for(ProductFile file : files){
+                if (file.getType().equals("190")){
+                    this.file190 = file.getSName();
+                }else if (file.getType().equals("230")){
+                    this.file230 = file.getSName();
+                }else if (file.getType().equals("456")){
+                    this.file456 = file.getSName();
+                }else{
+                    this.fileDescs.add(file.getSName());
+                }
+            }
+        }
+
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options=options;
+    }
+
+    public void setProductDetails(ProductDetails productDetails) {
+        this.productDetails=productDetails;
+    }
+
+    public ProductDTO toDTO(Product product) {
+        ProductDTO dto = ProductDTO.builder()
+                .productId(product.getProductId())
+                .productCode(product.getProductCode())
+                .categoryId(product.getCategoryId())
+                .productName(product.getProductName())
+                .price(product.getPrice())
+                .stock(product.getStock())
+                .discount(product.getDiscount())
+                .shippingFee(product.getShippingFee())
+                .shippingTerms(product.getShippingTerms())
+                .hit(product.getHit())
+                .ProductDesc(product.getProductDesc())
+                .file190(product.getFile190())
+                .file230(product.getFile230())
+                .file456(product.getFile456())
+                .point(product.getPoint())
+                .isCoupon(product.getIsCoupon())
+                .isSaled(product.getIsSaled())
+                .productDetails(product.getProductDetails())
+                .rdate(String.valueOf(product.getRdate()))
+                .build();
+        return dto;
+    }
 
 }

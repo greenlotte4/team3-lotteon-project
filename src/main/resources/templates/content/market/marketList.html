@@ -9,7 +9,60 @@
     <title>[[${headerInfo.hd_title}]]:[[${headerInfo.hd_subtitle}]]</title>
     <link rel="stylesheet" th:href="@{/css/market/marketList.css}">
     <link rel="stylesheet" th:href="@{/css/market/marketAside.css}">
+    <script>
+        window.onload = function (){
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll('.shipping-fee').forEach(function() {
 
+                    // shippingFee 값을 가져와 숫자로 변환
+                    const shippingFee = parseFloat(feeElement.innerText);
+                    console.log("shippingFee"+shippingFee);
+
+                    // shippingFee가 0이면 무료배송으로 텍스트 변경 및 클래스 추가
+                    if (shippingFee === 0) {
+                        feeElement.innerText = "무료배송";
+                        feeElement.classList.add("shipping-label");
+                    }
+                });
+
+
+                // 모든 seller-rating 요소를 가져옵니다.
+                document.querySelectorAll('.seller-rating').forEach(function(ratingElement) {
+                    // data-rating 속성에서 rating 값을 가져옵니다.
+                    const rating = parseFloat(ratingElement.getAttribute('data-rating'));
+                    console.log(rating);
+                    const fullStars = Math.floor(rating);   // 꽉 찬 별 수
+                    console.log("fullstars"+fullStars);
+                    const halfStar = rating % 1 !== 0;     // 반쪽 별 여부 확인
+
+                    // 꽉 찬 별 추가
+                    for (let i = 0; i < fullStars; i++) {
+                        const star = document.createElement('span');
+                        star.classList.add('star', 'full-star');
+                        star.innerHTML = '★';
+                        ratingElement.appendChild(star);
+                    }
+
+                    // 반쪽 별 추가
+                    if (halfStar) {
+                        const halfStar = document.createElement('span');
+                        halfStar.classList.add('star', 'half-star');
+                        halfStar.innerHTML = '★'; // 반쪽 별을 나타낼 경우, CSS를 추가해 스타일링 가능
+                        ratingElement.appendChild(halfStar);
+                    }
+
+                    // 5개 미만인 경우 빈 별 추가
+                    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+                    for (let i = 0; i < emptyStars; i++) {
+                        const star = document.createElement('span');
+                        star.classList.add( 'empty-star');
+                        star.innerHTML = '&#9733;'; // 빈 별도 CSS를 통해 스타일링 가능
+                        ratingElement.appendChild(star);
+                    }
+                });
+            });
+        }
+    </script>
 
 </head>
 <body>
@@ -40,11 +93,11 @@
                                 <!-- 여기에 하위 카테고리 리스트가 동적으로 추가될 예정 -->
                             </ul>
                         </div>
-                        <article class="product-list">
-                            <div class="product-item" th:each="product:${responseDTO.getProductDTOList()}">
+                        <article class="product-list" th:if="${!responseDTO.getProductDTOs().isEmpty()}">
+                            <div class="product-item" th:each="product:${responseDTO.getProductDTOs()}">
                                 <a th:href="@{/market/view/{category}/{id}(category=${product.getCategoryId()},id=${product.productId})}">
                                 <div class="product-image">
-                                    <img th:src="@{'/uploads/productimg/'+${product.getProductFiles()[0].getSName()}}" alt="상품 이미지">
+                                    <img th:src="@{'/uploads/productimg/'+${product.getFile230()}}" alt="상품 이미지">
                                 </div>
                                 <div class="product-details">
                                     <h4 class="product-name">[[${product.productName}]]</h4>
@@ -55,15 +108,16 @@
                                         <span class="final-price">[[${product.price}]]원</span>
                                         <span class="original-price">[[${product.price}]]원</span>
                                         <span class="discount">[[${product.discount}]]% ↓</span>
+
                                     </div>
                                     <div class="shipping-info">
-                                        <span class="shipping-label">무료배송</span>
+                                        <span class="shipping-fee" th:text="${product.shippingFee}"></span>
                                     </div>
                                 </div>
                                 <div class="product-seller">
-                                    <span class="seller-name">판매자</span>
-                                    <span class="seller-rating">고객만족우수</span>
-                                    <span class="seller-rank">⭐⭐⭐⭐⭐</span>
+                                    <span class="seller-name">[[${product.company}]]</span>
+                                    <span >고객만족우수</span>
+                                    <div class="seller-rating" th:data-rating="${product.productRating}"></div>
                                 </div>
                                 </a>
                             </div>
@@ -75,6 +129,7 @@
 
                     </div><!--sectionWrapper-->
                 </section>
+
 
 
 

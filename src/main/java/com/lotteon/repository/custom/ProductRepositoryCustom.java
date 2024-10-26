@@ -1,8 +1,18 @@
 package com.lotteon.repository.custom;
 
+/*
+    날짜 : 2024.10.20
+    이름 : 하진희
+    내용 : product jpql custom
+    =========================
+    추가내용
+    2024.10.26 하진희 - product view query custom
+ */
+
 import com.lotteon.dto.product.PageRequestDTO;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.dto.product.ProductListDTO;
+import com.lotteon.entity.product.Product;
 import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,13 +20,14 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProductRepositoryCustom {
     //admin List
-    public Page<ProductListDTO> selectProductBySellerIdForList(String sellerId, PageRequestDTO pageRequest,Pageable pageable );
+    public Page<Product> selectProductBySellerIdForList(String sellerId, PageRequestDTO pageRequest, Pageable pageable );
 
     //main list
     public Page<Tuple> selectProductForList( PageRequestDTO pageRequest,Pageable pageable );
-    public Page<ProductListDTO> selectProductForListByCategory(PageRequestDTO pageRequest, Pageable pageable );
+    public Page<Tuple> selectProductByCategory(PageRequestDTO pageRequest,Pageable pageable);
 
 
+    //main view
 
 
 }
