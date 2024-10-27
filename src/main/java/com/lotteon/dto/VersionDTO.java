@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class VersionDTO {
 
-    private int ver_id;
+    private int verId;
 
     private String ver_name;
     private String ver_writer;
