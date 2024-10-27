@@ -82,4 +82,18 @@ public class ProductCategoryService {
 
         return categoriesDTO;
     }
+
+    public List<ProductCategory> getCategoryHierarchy() {
+        return buildCategoryTree(null); // 최상위 카테고리부터 시작 (parentId가 NULL인 것)
+    }
+
+    private List<ProductCategory> buildCategoryTree(Long parentId) {
+        List<ProductCategory> categories = productCategoryRepository.findByParentId(parentId);
+        for (ProductCategory category : categories) {
+            category.setChildren(buildCategoryTree(category.getId())); // 재귀적으로 하위 카테고리를 가져옴
+        }
+
+
+        return categories;
+    }
 }
