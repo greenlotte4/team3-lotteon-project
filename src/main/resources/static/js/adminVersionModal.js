@@ -24,26 +24,38 @@ var btn2 = document.querySelectorAll(".openModalBtn2"); // 모든 모달 열기 
 var span2 = document.querySelector(".close2"); // 닫기 버튼
 var closeButton2 = document.querySelector(".closeButton"); // '닫기' 버튼 선택
 
-// 각 모달 열기 버튼에 대해 클릭 이벤트 추가
+// 두 번째 모달 열기 버튼 클릭 이벤트 추가
+var btn2 = document.querySelectorAll(".openModalBtn2"); // 모든 두 번째 모달 열기 버튼 선택
 btn2.forEach(function(button) {
     button.onclick = function() {
-        modal2.style.display = "block"; // 모달 열기
+        // 데이터 속성에서 버전명과 변경내역 가져오기
+        const verName = this.getAttribute("data-ver_name");
+        const verContent = this.getAttribute("data-ver_content").replace(/\n/g, "<br>"); // Enter로 줄바꿈
+
+        // 모달 내 요소에 데이터 설정
+        document.querySelector(".modal.orderModal .verName").textContent = verName;
+        document.querySelector(".modal.orderModal .verContent").innerHTML = verContent; // HTML로 설정하여 줄바꿈 적용
+
+        // 두 번째 모달 열기
+        modal2.style.display = "block"; // 두 번째 모달 표시
     };
 });
 
-// 닫기 버튼 (×)을 클릭하면 모달을 닫기
+// 두 번째 모달 닫기 버튼 클릭 이벤트
 span2.onclick = function() {
-    modal2.style.display = "none"; // 모달 닫기
+    modal2.style.display = "none"; // 두 번째 모달 숨기기
 };
 
-// '닫기' 버튼을 클릭하면 모달을 닫기
+// '닫기' 버튼 클릭 이벤트
 closeButton2.onclick = function() {
-    modal2.style.display = "none"; // 모달 닫기
+    modal2.style.display = "none"; // 두 번째 모달 숨기기
 };
 
-// 모달 외부를 클릭하면 모달을 닫기
+// 모달 외부 클릭 시 모달 닫기
 window.onclick = function(event) {
-    if (event.target == modal2) {
-        modal2.style.display = "none"; // 모달 닫기
+    if (event.target == modal) {
+        modal.style.display = "none"; // 첫 번째 모달 숨기기
+    } else if (event.target == modal2) {
+        modal2.style.display = "none"; // 두 번째 모달 숨기기
     }
 };
