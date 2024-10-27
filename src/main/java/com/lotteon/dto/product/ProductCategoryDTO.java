@@ -2,6 +2,8 @@ package com.lotteon.dto.product;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,6 +19,10 @@ public class ProductCategoryDTO {
     private String subcategory;
     private String disp_yn; //디스플레이 유무
     private String note;
+
+
+    private List<ProductCategoryDTO> children;  // 추가된 필드
+
 
 
 }

@@ -68,7 +68,7 @@ public class MarketController {
        ProductDTO productdto = productService.getProduct(productId);
         log.info("productVIew Controller:::::"+productdto);
 
-        model.addAttribute("categories",categoryDTOs);
+        model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("products",productdto);
 
         return "content/market/marketview"; // Points to the "content/market/marketview" template

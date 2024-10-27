@@ -101,106 +101,32 @@
                             <span class="blind">전체 카테고리
                                 보기
                             </span>
-                        <span class="bar">
+                            <span class="bar">
                                 <!-- Dropdown Menu -->
                                 <div class="categoryMenu">
-                                    <ul class="main-menu">
-                                        <li class="menu-item">
-                                            <a th:href="@{/market/main}">패션</a>
-                                            <ul class="sub-menu">
-                                                <li><a th:href="@{/market/list}">남성패션</a></li>
-                                                <li><a th:href="@{/market/list}">여성패션</a></li>
-                                                <li><a th:href="@{/market/list}">키즈패션</a></li>
-                                                <li><a th:href="@{/market/list}">패션잡화</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a th:href="@{/market/main}">의류</a>
-                                            <ul class="sub-menu">
-                                                <li><a th:href="@{/market/list}">남성의류</a></li>
-                                                <li><a th:href="@{/market/list}">여성의류</a></li>
-                                                <li><a th:href="@{/market/list}">아동의류</a></li>
-                                                <li><a th:href="@{/market/list}">언더웨어</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="#">뷰티</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">기초화장</a></li>
-                                                <li><a href="#">색조화장</a></li>
-                                                <li><a href="#">헤어제품</a></li>
-                                                <li><a href="#">이너뷰티</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="#">가구/인테리어</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">소파</a></li>
-                                                <li><a href="#">침대/매트리스</a></li>
-                                                <li><a href="#">주방가구</a></li>
-                                                <li><a href="#">수납장</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="#">가전</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">생활가전</a></li>
-                                                <li><a href="#">주방가전</a></li>
-                                                <li><a href="#">TV/영상가전</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="#">디지털</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">노트북/PC/태블릿 </a></li>
-                                                <li><a href="#">모니터/프린터/복합기</a></li>
-                                                <li><a href="#">휴대폰/스마트기기</a></li>
-                                                <li><a href="#">음향기기/이어폰</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="#">생필품</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">생활용품 </a></li>
-                                                <li><a href="#">건강용품</a></li>
-                                                <li><a href="#">주방용품</a></li>
-                                                <li><a href="#">세탁/욕실용품</a></li>
-                                            </ul>
-                                        </li>
+                                    <ul class="menu-1depth" id="menu-1depth">
+                                        <!-- 1st Depth Categories -->
+                                        <li th:each="category : ${categories}" onmouseover="showSubmenu(this)" onmouseout="hideSubmenu(this)">
+                                            <span><a th:text="${category.name}" th:href="@{/market/main}">Category Name</a></span>
 
-                                        <li class="menu-item">
-                                            <a href="#">도서</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">국내도서 </a></li>
-                                                <li><a href="#">외국도서</a></li>
-                                                <li><a href="#">중고도서</a></li>
-                                                <li><a href="#">음반/LP</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="#">문구</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">필기도구 </a></li>
-                                                <li><a href="#">문구용폼</a></li>
-                                                <li><a href="#">사무용품</a></li>
-                                                <li><a href="#">데스크용품</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="#">취미</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">꽃/가드닝 </a></li>
-                                                <li><a href="#">악기/음향기기</a></li>
-                                                <li><a href="#">공예용품</a></li>
-                                                <li><a href="#">피규어/프라모델</a></li>
+                                            <!-- 2nd Depth Subcategories -->
+                                            <ul th:if="${category.children != null && !#lists.isEmpty(category.children)}" class="menu-2depth">
+                                                <li th:each="child : ${category.children}" onmouseover="showSubmenu(this)" onmouseout="hideSubmenu(this)">
+                                                    <span th:text="${child.name}">Subcategory Name</span>
+
+                                                    <!-- 3rd Depth Sub-subcategories -->
+                                                    <ul th:if="${child.children != null && !#lists.isEmpty(child.children)}" class="menu-3depth">
+                                                        <li th:each="subChild : ${child.children}">
+                                                            <a th:text="${subChild.name}" th:href="@{/market/list}">Sub-subcategory Name</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
                                             </ul>
                                         </li>
                                     </ul>
-
                                 </div>
                             </span>
                     </button>
-
                 </div>
                 <div class="menu">
                     <div id="menuInner" tabindex="0" class="menuInner"><!---->

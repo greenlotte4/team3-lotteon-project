@@ -22,14 +22,14 @@ public class ProductCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id ;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="parent_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private ProductCategory parent;
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name="parent_id")
+@OnDelete(action = OnDeleteAction.CASCADE)
+private ProductCategory parent;
 
-    @OneToMany(mappedBy = "parent")
-    @Builder.Default
-    private List<ProductCategory> children = new ArrayList<>();
+@OneToMany(mappedBy = "parent")
+@Builder.Default
+private List<ProductCategory> children = new ArrayList<>();
 
     private String name;
     private int level;

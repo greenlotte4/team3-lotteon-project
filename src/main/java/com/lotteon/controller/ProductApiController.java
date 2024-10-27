@@ -2,6 +2,7 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.product.ProductCategoryDTO;
+import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.service.product.ProductCategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +20,10 @@ public class ProductApiController {
 
     private final ProductCategoryService productCategoryService;
 
+    @GetMapping("/api/categories")
+    public List<ProductCategory> getCategories() {
+        return productCategoryService.getCategoryHierarchy();
+    }
 
     @GetMapping("/api/categories/level/{level}")
     public List<ProductCategoryDTO> getCategoriesByLevel(@PathVariable int level) {
