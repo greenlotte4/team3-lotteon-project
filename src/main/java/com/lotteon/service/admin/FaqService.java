@@ -3,8 +3,11 @@ package com.lotteon.service.admin;
 import com.lotteon.dto.FaqDTO;
 import com.lotteon.dto.page.FaqPageResponseDTO;
 import com.lotteon.dto.page.PageRequestDTO;
+import com.lotteon.entity.BoardCate;
 import com.lotteon.entity.Faq;
+import com.lotteon.repository.BoardRepository;
 import com.lotteon.repository.admin.FaqRepository;
+import com.lotteon.service.BoardService;
 import com.querydsl.core.Tuple;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,35 +27,39 @@ import java.util.Optional;
 public class FaqService {
     private final FaqRepository faqRepository;
     private final ModelMapper modelMapper;
+    private final BoardRepository boardRepository;
 
     public Faq insertfaq(FaqDTO faqDTO) {
-        Faq faq = faqRepository.save(modelMapper.map(faqDTO, Faq.class));
+        BoardCate selectedCate = boardRepository.findByBoardCateId(faqDTO.getCate());
+
+        Faq faq = new Faq();
+        faq.setCate(selectedCate);
+        faq.setFaqtitle(faqDTO.getFaqtitle());
+        faq.setFaqcontent(faqDTO.getFaqcontent());
+
+        faqRepository.save(faq);
+
         return faq;
     }
 
 
-    public Faq updatefaq(FaqDTO faqDTO) {
-        Optional<Faq> faq = faqRepository.findById(faqDTO.getFaqNo());
-        if (faq.isPresent()) {
-            Faq faq1 = faq.get();
-            faq1.setFaqtype1(faqDTO.getFaqtype1());
-            faq1.setFaqtype2(faqDTO.getFaqtype2());
-            faq1.setFaqcontent(faqDTO.getFaqcontent());
-            faq1.setFaqtitle(faqDTO.getFaqtitle());
-            return faqRepository.save(faq1);
-        }
-        return null;
-    }
+//    public Faq updatefaq(FaqDTO faqDTO) {
+//        Optional<Faq> faq = faqRepository.findById(faqDTO.getFaqNo());
+//        if (faq.isPresent()) {
+//            Faq faq1 = faq.get();
+//            faq1.setFaqtype1(faqDTO.getFaqtype1());
+//            faq1.setFaqtype2(faqDTO.getFaqtype2());
+//            faq1.setFaqcontent(faqDTO.getFaqcontent());
+//            faq1.setFaqtitle(faqDTO.getFaqtitle());
+//            return faqRepository.save(faq1);
+//        }
+//        return null;
+//    }
 
 
-    public List<FaqDTO> selectAllfaq(){
-        List<Faq> faqs = faqRepository.findAll();
-        List<FaqDTO> faqDTOs = new ArrayList<>();
-        for (Faq faq : faqs) {
-            FaqDTO faqDTO = modelMapper.map(faq, FaqDTO.class);
-            faqDTOs.add(faqDTO);
-        }
-        return faqDTOs;
+    public List<Faq> selectAllfaq(){
+         return faqRepository.findAll();
+
     }
     public FaqDTO selectfaq(int no){
         Optional<Faq> optfaq = faqRepository.findById(no);

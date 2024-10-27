@@ -13,5 +13,6 @@ public class BoardCateDTO {
     private Long boardCateId;
     private String name;
     private int level;
-    private Long parentId;
+    private BoardCateDTO parent;
+    private BoardCateDTO child;
 }

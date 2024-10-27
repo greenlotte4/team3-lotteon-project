@@ -40,22 +40,16 @@
                                     <col style="width: 15%">
                                     <col style="width: 10%">
                                 </colgroup>
-                                <div th:each="board : ${boardCate}">
-                                    <p th:text="${board.name} + ' - parentId: ' + ${board.parentId}"></p>
-                                </div>
                                 <div>
-                                <select class="faqselect">
-                                    <option value="" disabled selected>1차 선택</option>
-                                <th:block th:each="board : ${boardCate}">
-                                    <option th:if="${board.parentId == null}" th:value="${board.boardCateId}">[[${board.name}]]</option>
-                                </th:block>
-                                </select>
-                                <select class="faqselect" >
-                                    <option value="" disabled selected>2차 선택</option>
-                                    <option value="">주문번호</option>
-                                    <option value="">주문자</option>
-                                    <option value="">주문자명</option>
-                                </select>
+                                    <select id="selectOption1" class="faqselect">
+                                        <option value="" disabled selected>1차 선택</option>
+                                    <th:block th:each="board : ${boardCate}">
+                                        <option th:value="${board.boardCateId}" th:text="${board.name}"></option>
+                                    </th:block>
+                                    </select>
+                                    <select id="selectOption2" class="faqselect">
+                                        <option value="2차 선택" disabled selected>2차 선택</option>
+                                    </select>
                                 </div>
                                 <tr>
                                     <th><input type="checkbox" class="checkbox"></th>
@@ -106,7 +100,9 @@
                                 <a th:if="${faqPageResponseDTO.keyword != null}" th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.end)+1}, type=${faqPageResponseDTO.type}, keyword=${faqPageResponseDTO.keyword})}" class="faqnext">다음</a>
                             </th:block>
                         </div>
+
                     </section>
+<!--선택삭제 스크립트-->
 <script>
     //제목줄 체크박스
     const checkAll = document.querySelector('.checkbox');
@@ -169,7 +165,7 @@
                     const tr = checkbox.closest('tr');
                     if (tr) {
                         tr.remove();
-                        location.reload(); // 새로 추가..
+                        location.reload(); // 새로 추가.. reload말고 다른방법 생각해보기..
                     }
                 })
             })
@@ -182,6 +178,7 @@
     })
 
 </script>
+<!--단일삭제-->
 <script>
     document.querySelectorAll('.admin_faq_delete_a').forEach(button => {
         button.addEventListener('click',function (e) {
@@ -201,5 +198,32 @@
         }
     });
 </script>
+<script>
+    const selectOption1 = document.getElementById('selectOption1');
+    const selectOption2 = document.getElementById('selectOption2');
 
+    selectOption1.addEventListener('change',function(){
+        const parentId = this.value;
+
+        selectOption2.innerHTML = '<option value="2차 선택" disabled selected>2차 선택</option>';
+
+        fetch(`/admin/faq/subcate/${parentId}`)
+            .then(resp => resp.json())
+            .then(data => {
+                console.log(data);
+                data.forEach(boardsubCate => {
+                    const option = document.createElement('option');
+                    option.value = boardsubCate.boardCateId;
+                    option.text = boardsubCate.name;
+                    selectOption2.appendChild(option)
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+
+    })
+
+</script>
 </th:block>

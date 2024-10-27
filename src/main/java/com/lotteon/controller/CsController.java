@@ -44,13 +44,13 @@ public class CsController {
     }
 
 
-    @GetMapping("/faq/list")
-    public String faqList(Model model) {
-        // FAQ 목록을 조회하여 모델에 추가
-        List<FaqDTO> faqList = faqService.selectAllfaq();
-        model.addAttribute("faqList", faqList);
-        return "content/cs/faq/faqList";
-    }
+//    @GetMapping("/faq/list")
+//    public String faqList(Model model) {
+//        // FAQ 목록을 조회하여 모델에 추가
+//        List<FaqDTO> faqList = faqService.selectAllfaq();
+//        model.addAttribute("faqList", faqList);
+//        return "content/cs/faq/faqList";
+//    }
 
     @GetMapping("/faq/view/{id}") // ID를 URL로 받도록 수정
     public String faqView(@PathVariable("id") int id, Model model) {

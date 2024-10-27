@@ -26,4 +26,8 @@ public class Faq {
 
     @CreationTimestamp
     private LocalDateTime date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private BoardCate cate;
 }
