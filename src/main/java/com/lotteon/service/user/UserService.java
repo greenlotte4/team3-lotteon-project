@@ -6,11 +6,13 @@ import com.lotteon.entity.User.User;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.repository.user.SellerRepository;
 import com.lotteon.repository.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Log4j2
@@ -101,4 +103,6 @@ public class UserService {
     public boolean checkPhone(String hp) {
         return memberRepository.existsByHp(hp); // hp로 존재 여부 확인
     }
+
+
 }

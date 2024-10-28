@@ -61,7 +61,7 @@
                         </div>
 
                         <tr th:each="seller, iterStat : ${sellerList}">
-                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox" class="sellerCheckbox" th:value="${seller.id}"></td>
                             <td th:text="${seller.id}"></td>
                             <td th:text="${seller.company}"></td>
                             <td th:text="${seller.ceo}"></td>
@@ -76,10 +76,18 @@
                 </div>
             </article>
             <div class="list_button">
-                <button>선택삭제</button>
+                <button  id="deleteSelectedBtn" >선택삭제</button>
                 <button class="openModalBtn">상점등록</button>
             </div>
             <th:block th:replace="~{content/admin/shop/shoplistmodal}"></th:block>
 
             <script  th:src="@{/js/shoplistmodal.js}"></script>
+            <script>
+                // DOMContentLoaded를 사용하여 DOM이 완전히 로드된 후에 함수 설정
+                document.addEventListener("DOMContentLoaded", function () {
+                    document.getElementById('btnPostCode').onclick = function () {
+                        postcode(); // postcode 함수 호출
+                    };
+                });
+            </script>
 </th:block>
