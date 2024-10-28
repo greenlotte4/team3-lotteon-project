@@ -71,6 +71,7 @@ public class Product {
     @ToString.Exclude
     private ProductDetails productDetails;
 
+
     private int hit;
 
 
@@ -79,8 +80,12 @@ public class Product {
     private String file456;
 
 
+    @OneToMany(mappedBy = "product")
+    private List<Review> reviews = new ArrayList<>();
+
     @Transient
     private List<String> fileDescs = new ArrayList<>();
+  
     //리뷰 별 평균 값
     private double productRating;
 

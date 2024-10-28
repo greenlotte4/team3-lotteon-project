@@ -9,6 +9,7 @@ import com.lotteon.service.user.MemberService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ import java.util.Optional;
 public class AdminUserController {
 
     private final MemberService memberService;
+    private final UserService userService;
 
     @GetMapping("/list")
     public String adminUserList(Model model) {
@@ -38,8 +40,7 @@ public class AdminUserController {
         return "content/admin/user/memberlist";
     }
 
-    @GetMapping("/admin/user/list/{uid}")
-    @ResponseBody
+    @GetMapping("/list/{uid}")
     public ResponseEntity<Member> getUserDetails(@PathVariable String uid) {
         // uid를 기반으로 member 정보를 가져오기
         Optional<Member> memberOptional = memberService.findByUid(uid);
@@ -48,6 +49,18 @@ public class AdminUserController {
             return ResponseEntity.ok(memberOptional.get());
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/deletemembers")
+    public ResponseEntity<String> deleteMembers(@RequestBody List<Long> memberIds) {
+        System.out.println("Received member IDs: " + memberIds); // 로그 출력
+        try {
+            memberService.deleteMembersByIds(memberIds);
+            return ResponseEntity.ok("선택한 회원이 삭제되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace(); // 예외 로그 출력
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제에 실패했습니다.");
         }
     }
 

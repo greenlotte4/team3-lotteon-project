@@ -1,7 +1,9 @@
 package com.lotteon.service.user;
 
 import com.lotteon.entity.User.Member;
+import com.lotteon.entity.User.Seller;
 import com.lotteon.repository.user.MemberRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,8 +57,15 @@ public class MemberService {
 
     // 회원 삭제
     @Transactional
-    public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
+    public void deleteMembersByIds(List<Long> memberIds) {
+        for (Long memberId : memberIds) {
+            Optional<Member> memberOptional = memberRepository.findById(memberId);
+            if (memberOptional.isPresent()) {
+                // Seller가 존재하면 삭제
+                memberRepository.delete(memberOptional.get());
+            } else {
+                throw new EntityNotFoundException("일치하는 아이디의 seller가 없습니다.: " + memberId);
+            }
+        }
     }
-
 }

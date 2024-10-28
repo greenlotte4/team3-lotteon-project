@@ -9,6 +9,10 @@
     <title>Admin Banner Page</title>
     <link rel="stylesheet" th:href="@{/css/admin/adminshoplist.css}">
     <link rel="stylesheet" th:href="@{/css/admin/shoplistmodal.css}">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:src="@{/js/validation.js}"></script>
+    <script th:src="@{/js/postcode.js}"></script>
+
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -55,81 +59,35 @@
                             <span class="status-icon-standby">●</span> <span class="status-text-standby">운영
                                                 준비</span>
                         </div>
-                        <tr>
-                            <th><input type="checkbox"></th>
-                            <th>번호</th>
-                            <th>상호명</th>
-                            <th>대표</th>
-                            <th>사업자등록번호</th>
-                            <th>통신판매업번호</th>
-                            <th>연락처</th>
-                            <th>운영</th>
-                            <th>관리</th>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>5</td>
-                            <td>(주)다나와</td>
-                            <td>정우성</td>
-                            <td>112-12-12345</td>
-                            <td>2024-서울강남-04433</td>
-                            <td>010-1234-1001</td>
-                            <td class="status-icon-running">●</td>
-                            <td><a href="">[중단]</a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>4</td>
-                            <td>(주)다나와</td>
-                            <td>정우성</td>
-                            <td>112-12-12345</td>
-                            <td>2024-서울강남-04433</td>
-                            <td>010-1234-1001</td>
-                            <td class="status-icon-running">●</td>
-                            <td><a href="">[중단]</a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>3</td>
-                            <td>(주)다나와</td>
-                            <td>정우성</td>
-                            <td>112-12-12345</td>
-                            <td>2024-서울강남-04433</td>
-                            <td>010-1234-1001</td>
-                            <td class="status-icon-running">●</td>
-                            <td><a href="">[중단]</a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>2</td>
-                            <td>(주)다나와</td>
-                            <td>정우성</td>
-                            <td>112-12-12345</td>
-                            <td>2024-서울강남-04433</td>
-                            <td>010-1234-1001</td>
-                            <td class="status-icon-paused">●</td>
-                            <td><a href="">[재개]</a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>1</td>
-                            <td>(주)다나와</td>
-                            <td>정우성</td>
-                            <td>112-12-12345</td>
-                            <td>2024-서울강남-04433</td>
-                            <td>010-1234-1001</td>
+
+                        <tr th:each="seller, iterStat : ${sellerList}">
+                            <td><input type="checkbox" class="sellerCheckbox" th:value="${seller.id}"></td>
+                            <td th:text="${seller.id}"></td>
+                            <td th:text="${seller.company}"></td>
+                            <td th:text="${seller.ceo}"></td>
+                            <td th:text="${seller.bno}"></td>
+                            <td th:text="${seller.mo}"></td>
+                            <td th:text="${seller.hp}"></td>
                             <td class="status-icon-standby">●</td>
-                            <td><a href="">[중단]</a></td>
-                        </tr>
+                            <td><a href="">[준비]</a></td>
+                       </tr>
 
                     </table>
                 </div>
             </article>
             <div class="list_button">
-                <button>선택삭제</button>
+                <button  id="deleteSelectedBtn" >선택삭제</button>
                 <button class="openModalBtn">상점등록</button>
             </div>
             <th:block th:replace="~{content/admin/shop/shoplistmodal}"></th:block>
 
             <script  th:src="@{/js/shoplistmodal.js}"></script>
+            <script>
+                // DOMContentLoaded를 사용하여 DOM이 완전히 로드된 후에 함수 설정
+                document.addEventListener("DOMContentLoaded", function () {
+                    document.getElementById('btnPostCode').onclick = function () {
+                        postcode(); // postcode 함수 호출
+                    };
+                });
+            </script>
 </th:block>

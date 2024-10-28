@@ -6,79 +6,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin::Notice</title>
+    <title>Admin QnA Page</title>
+    <link rel="stylesheet" th:href="@{/css/admin/adminnoticelist.css}">
 
 </head>
 <body>
 <th:block layout:fragment="content">
-                <div id="admin_service">
-                    <section>
-                        <th:block th:replace="~{content/admin/admin_gate}"></th:block>
+    <div id="admin_service">
+        <section>
+            <th:block th:replace="~{content/admin/admin_gate}"></th:block>
 
-                        <section id="admin_navi">
-                            <p>관리자 메인</p>
-                            <p><a href="#">HOME</a> > 관리자 메인</p>
-                        </section>
+            <section id="admin_navi">
+                <p>고객센터</p>
+                <p>
+                    <a href="#">HOME</a>
+                    <span>></span>
+                    <a href="#">고객센터</a>
+                    <span>></span>
+                    <a href="#">공지사항</a>
+                </p>
+            </section>
 
-                        <div class="admin-article-in">
-                            <aside id="adminAside">
-
-                            </aside>
-                            <div class="article-box">
-                                <div class="article-title">
-                                    <select id="customer-service1" name="customer-service">
-                                        <option value="service">고객 서비스</option>
-                                        <option value="transaction">거래 관련</option>
-                                        <option value="inquiry">문의하기</option>
-                                        <option value="feedback">피드백</option>
-                                    </select>
-                                    <select id="customer-service2" name="customer-service">
-                                        <option value="service">고객 서비스</option>
-                                        <option value="transaction">거래 관련</option>
-                                        <option value="inquiry">문의하기</option>
-                                        <option value="feedback">피드백</option>
-                                    </select>
-                                </div>
-                                <div class="article-list">
-                                    <div class="article-header">
-                                        <div class="checkboxes">
-                                            <input type="checkbox" id="select-all">
-                                        </div>
-                                        <div class="number">번호</div>
-                                        <div class="type">유형</div>
-                                        <div class="type2">유형2</div>
-                                        <div class="title">제목</div>
-                                        <div class="views">조회</div>
-                                        <div class="date">날짜</div>
-                                        <div class="manage">관리</div>
-                                    </div>
-                                    <!-- 게시물 리스트 -->
-                                    <div class="article-inlist">
-                                        <div class="checkbox">
-                                            <input type="checkbox" class="checkbox-item">
-                                        </div>
-                                        <div class="number">1</div>
-                                        <div class="type">회원</div>
-                                        <div class="type2">가입</div>
-                                        <div class="title"><a th:href="@{/admin/notice/view(no=1)}">[롯데숏핑] 구매회원 이용약관 계정 안내 (시행일:
-                                                0000년00월00일)</a>
-                                        </div>
-                                        <div class="views">100</div>
-                                        <div class="date">2024.07.16</div>
-                                        <div class="manage"><a th:href="@{/admin/notice/modify(no=1)}">수정</a> | <a
-                                                href="/article/delete?no=1">삭제</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pagination">
-                                    <a href="#">이전</a>
-                                    <a href="#">다음</a>
-                                </div>
-                                <div class="button-ctl">
-                                    <button class="btn-delete">선택삭제</button>
-                                    <button class="btn-Write"><a th:href="@{/admin/notice/write}" style="text-decoration: none;">등록하기</a></button>
-                                </div>
-                            </div>
+            <article id="admin_notice_list">
+                <div>
+                    <table class="admin_notice_list_table">
+                        <colgroup>
+                            <col style="width: 7.5%">
+                            <col style="width: 7.5%">
+                            <col style="width: 10%">
+                            <col style="width: 40%">
+                            <col style="width: 10%">
+                            <col style="width: 15%">
+                            <col style="width: 10%">
+                        </colgroup>
+                        <div>
+                            <select id="noticesearch" class="noticeselect">
+                                <option value="" disabled selected>유형 선택</option>
+                                <option value="고객서비스">고객서비스</option>
+                                <option value="이벤트당첨">이벤트당첨</option>
+                                <option value="안전거래">안전거래</option>
+                                <option value="위해상품">위해상품</option>
+                            </select>
                         </div>
-                    </section>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>번호</th>
+                            <th>유형</th>
+                            <th>제목</th>
+                            <th>조회</th>
+                            <th>날짜</th>
+                            <th>관리</th>
+                        </tr>
+                        <tr th:each="notices : ${notice}">
+                            <td><input type="checkbox" name="noticeNo" th:value="${notices.noticeNo}"></td>
+                            <td th:text="${notices.noticeNo}"></td>
+                            <td th:text="${notices.noticetype}">고객서비스</td>
+                            <td>
+                                <a th:href="@{/admin/notice/view(no=${notices.noticeNo})}" th:text="${notices.noticetitle}"></a>
+                            </td>
+                            <td th:text="${notices.noticehit}"></td>
+                            <td>[[${#strings.substring(notices.date,0,10)}]]</td>
+                            <td>
+                                <a th:href="@{/admin/notice/delete(no=${notices.noticeNo})}" class="admin_notice_delete_a">[삭제]</a><br>
+                                <a th:href="@{/admin/notice/modify(no=${notices.noticeNo})}">[수정]</a>
+                            </td>
+                        </tr>
+                    </table>
+            </article>
+            <div class="notice_button">
+                <a href="" class="notice_delete_a">선택삭제</a>
+                <a th:href="@{/admin/notice/write}" class="notice_register_a">작성하기</a>
+            </div>
+        </section>
 </th:block>

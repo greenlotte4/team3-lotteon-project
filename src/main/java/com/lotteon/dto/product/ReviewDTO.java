@@ -1,6 +1,7 @@
 package com.lotteon.dto.product;
 
 
+import com.lotteon.entity.product.ReviewFile;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,5 +23,6 @@ public class ReviewDTO {
     private String content;
     private String rating;  //상품평점
     private List<MultipartFile> pReviewFiles;
-
+    private List<ReviewFile> savedReviewFiles;
+    private Long productId;
 }

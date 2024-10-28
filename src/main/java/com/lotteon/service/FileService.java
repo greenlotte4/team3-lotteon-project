@@ -5,6 +5,8 @@ package com.lotteon.service;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.HeaderInfoDTO;
 import com.lotteon.dto.product.ProductFileDTO;
+import com.lotteon.dto.product.ReviewDTO;
+import com.lotteon.entity.product.ReviewFile;
 import com.lotteon.repository.BannerRepository;
 import com.lotteon.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
@@ -54,46 +56,46 @@ public class FileService {
 
         BannerDTO newBannerDTO = new BannerDTO();
 
-            if (!file.isEmpty()) {
-                String oName = file.getOriginalFilename();
-                String ext = oName.substring(oName.lastIndexOf("."));
-                String sName = UUID.randomUUID().toString() + ext;
+        if (!file.isEmpty()) {
+            String oName = file.getOriginalFilename();
+            String ext = oName.substring(oName.lastIndexOf("."));
+            String sName = UUID.randomUUID().toString() + ext;
 
 
-                // 허용된 확장자 목록
-                List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
+            // 허용된 확장자 목록
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
 
-                // 확장자가 허용된 목록에 있는지 확인
-                if (!allowedExtensions.contains(ext)) {
-                    throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
-                }
-
-                // 파일 저장
-                try {
-                    file.transferTo(new File(path, sName));
-                } catch (IOException e) {
-                    log.error(e);
-                }
-                newBannerDTO.setBan_oname(oName);
-                newBannerDTO.setBan_image(sName);
-
-
+            // 확장자가 허용된 목록에 있는지 확인
+            if (!allowedExtensions.contains(ext)) {
+                throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
             }
+
+            // 파일 저장
+            try {
+                file.transferTo(new File(path, sName));
+            } catch (IOException e) {
+                log.error(e);
+            }
+            newBannerDTO.setBan_oname(oName);
+            newBannerDTO.setBan_image(sName);
+
+
+        }
         return newBannerDTO;
     }
 
     //productFile upload;
     public List<ProductFileDTO> uploadFile(MultiValueMap<String, MultipartFile> images) {
         //파일 시스템 경로 구하기
-        File fileuploadpath = new File(uploadPath+"productImg/");
-        if(!fileuploadpath.exists()){
+        File fileuploadpath = new File(uploadPath + "productImg/");
+        if (!fileuploadpath.exists()) {
             fileuploadpath.mkdirs();
         }
-        String path=  fileuploadpath.getAbsolutePath();
-        List<ProductFileDTO> fileDTOs = new ArrayList<>() ;
+        String path = fileuploadpath.getAbsolutePath();
+        List<ProductFileDTO> fileDTOs = new ArrayList<>();
 
 
-        for(String key :images.keySet() ){
+        for (String key : images.keySet()) {
             List<MultipartFile> files = images.get(key);
             if (files != null) {
                 for (MultipartFile file : files) {
@@ -129,7 +131,7 @@ public class FileService {
     }
 
     public HeaderInfoDTO uploadFiles(HeaderInfoDTO headerInfoDTO) {
-        File fileuploadpath = new File(uploadPath+"ConfigImg/");
+        File fileuploadpath = new File(uploadPath + "ConfigImg/");
 
         if (!fileuploadpath.exists()) {
             fileuploadpath.mkdirs();
@@ -150,7 +152,7 @@ public class FileService {
             String sName = "headerLogo.jpg";  // 'favicon'이라는 고정 이름 사용
 
             // 허용된 확장자 목록
-            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png" ,".ico");
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png", ".ico");
 
             // 확장자가 허용된 목록에 있는지 확인
             if (!allowedExtensions.contains(ext)) {
@@ -177,7 +179,7 @@ public class FileService {
             String sName = "footerLogo.jpg";  // 'favicon'이라는 고정 이름 사용
 
             // 허용된 확장자 목록
-            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png" ,".ico");
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png", ".ico");
 
             // 확장자가 허용된 목록에 있는지 확인
             if (!allowedExtensions.contains(ext)) {
@@ -238,7 +240,55 @@ public class FileService {
         return newHeaderInfoDTO;
     }
 
+    public ReviewDTO uploadReviewFiles(ReviewDTO reviewDTO) {
+        File fileUploadPath = new File(uploadPath + "ReviewImg/");
 
+        // 업로드할 디렉토리가 없으면 생성
+        if (!fileUploadPath.exists()) {
+            fileUploadPath.mkdirs();
+        }
 
+        List<MultipartFile> files = reviewDTO.getPReviewFiles(); // 업로드할 파일 리스트
+        List<ReviewFile> reviewFiles = new ArrayList<>(); // ReviewFile 리스트 생성
 
+        // 파일 리스트가 null이 아니고 비어있지 않은 경우 처리 시작
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile file : files) {
+                // 각 파일 이름 로깅
+                log.debug("Processing file: " + file.getOriginalFilename());
+                if (!file.isEmpty()) {
+                    String originalName = file.getOriginalFilename();
+                    String ext = originalName.substring(originalName.lastIndexOf(".")).toLowerCase(); // 확장자를 소문자로 변환
+                    String savedName = UUID.randomUUID().toString() + ext; // UUID로 파일 이름 생성
+                    String filePath = fileUploadPath.getAbsolutePath() + File.separator + savedName; // 파일 저장 경로
+
+                    // 허용된 확장자 체크
+                    List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
+                    if (!allowedExtensions.contains(ext)) {
+                        throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
+                    }
+
+                    try {
+                        // 파일을 지정된 경로에 저장
+                        file.transferTo(new File(filePath));
+                        // ReviewFile 객체 생성 및 리스트에 추가
+                        ReviewFile reviewFile = new ReviewFile();
+                        reviewFile.setSname(savedName);
+                        reviewFile.setPath(filePath);
+                        reviewFiles.add(reviewFile);
+                    } catch (IOException e) {
+                        log.error("파일 업로드 오류: ", e);
+                    }
+                } else {
+                    log.warn("Empty file detected: " + file.getOriginalFilename());
+                }
+            }
+        }
+
+        // 새로 업로드된 파일 리스트를 reviewDTO에 추가
+        log.debug("Saved review files: " + reviewFiles.size());
+        reviewDTO.setSavedReviewFiles(reviewFiles);
+
+        return reviewDTO;
+    }
 }

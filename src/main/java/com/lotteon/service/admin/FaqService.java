@@ -31,13 +31,12 @@ public class FaqService {
     private final BoardRepository boardRepository;
 
     public Faq insertfaq(FaqDTO faqDTO) {
-        BoardCate selectedCate = boardRepository.findByBoardCateId(faqDTO.getCategory().getBoardCateId());
+        BoardCate selectedCate = boardRepository.findByBoardCateId(faqDTO.getCategoryid());
         BoardCateDTO selectedCated =  modelMapper.map(selectedCate, BoardCateDTO.class);
-
-
 
         faqDTO.setCategory(selectedCated);
         Faq faq = new Faq();
+        faq.setCate(selectedCate);
         faq.setFaqtitle(faqDTO.getFaqtitle());
         faq.setFaqcontent(faqDTO.getFaqcontent());
 
@@ -47,29 +46,32 @@ public class FaqService {
     }
 
 
-//    public Faq updatefaq(FaqDTO faqDTO) {
-//        Optional<Faq> faq = faqRepository.findById(faqDTO.getFaqNo());
-//        if (faq.isPresent()) {
-//            Faq faq1 = faq.get();
-//            faq1.setFaqtype1(faqDTO.getFaqtype1());
-//            faq1.setFaqtype2(faqDTO.getFaqtype2());
-//            faq1.setFaqcontent(faqDTO.getFaqcontent());
-//            faq1.setFaqtitle(faqDTO.getFaqtitle());
-//            return faqRepository.save(faq1);
-//        }
-//        return null;
-//    }
+    public Faq updatefaq(FaqDTO faqDTO) {
+        Optional<Faq> faq = faqRepository.findById(faqDTO.getFaqNo());
+        BoardCate selectedCate = boardRepository.findByBoardCateId(faqDTO.getCategoryid());
+        BoardCateDTO selectedCated =  modelMapper.map(selectedCate, BoardCateDTO.class);
 
+        faqDTO.setCategory(selectedCated);
 
-    public List<Faq> selectAllfaq(){
-         return faqRepository.findAll();
-
+        if (faq.isPresent()) {
+            Faq faq1 = faq.get();
+            faq1.setCate(selectedCate);
+            faq1.setFaqtitle(faqDTO.getFaqtitle());
+            faq1.setFaqcontent(faqDTO.getFaqcontent());
+            return faqRepository.save(faq1);
+        }
+        return null;
     }
+
+
     public FaqDTO selectfaq(int no){
         Optional<Faq> optfaq = faqRepository.findById(no);
+
         if(optfaq.isPresent()){
             Faq faq = optfaq.get();
+            BoardCate cate = faq.getCate();
             FaqDTO faqDTO = modelMapper.map(faq, FaqDTO.class);
+            faqDTO.setCategory(modelMapper.map(cate, BoardCateDTO.class));
             return faqDTO;
         }
         return null;
@@ -99,13 +101,17 @@ public class FaqService {
         pagefaq = faqRepository.selectFaqAllForList(pageRequestDTO, pageable);
 
         List<FaqDTO> faqList = pagefaq.getContent().stream().map(tuple -> {
-            Integer id = tuple.get(0, Integer.class); // ID를 가져옴
-            Faq faq = faqRepository.findById(id) // ID로 Faq 조회
-                    .orElseThrow(() -> new RuntimeException("Faq not found")); // 예외 처리
+            Integer id = tuple.get(0, Integer.class); // Get the ID
+            Faq faq = faqRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Faq not found with ID: " + id)); // Handle not found
+
             BoardCate cate = faq.getCate();
+            if (cate == null) {
+                throw new RuntimeException("Category not found for Faq with ID: " + id); // Handle null category
+            }
 
-            FaqDTO faqdto =  modelMapper.map(faq, FaqDTO.class);
-
+            FaqDTO faqdto = modelMapper.map(faq, FaqDTO.class);
+            // Ensure the mapping for the category is safe
             faqdto.setCategory(modelMapper.map(cate, BoardCateDTO.class));
             return faqdto;
         }).toList();

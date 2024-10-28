@@ -66,8 +66,8 @@
                             <th>관리</th>
                         </tr>
                         <tr th:each="member, iterStat : ${memberList}">
-                            <td><input type="checkbox"></td>
-                            <td th:text="${iterStat.count}"></td>  <!-- 번호 -->
+                            <td><input type="checkbox" class="memberCheckbox" th:value="${member.id}"></td>
+                            <td th:text="${member.id}"></td>  <!-- 번호 -->
                             <td th:text="${member.user.uid}"></td>  <!-- 아이디 -->
                             <td th:text="${member.name}"></td>      <!-- 이름 -->
                             <td th:text="${member.gender}"></td>    <!-- 성별 -->
@@ -98,7 +98,7 @@
                 </div>
             </article>
             <div class="list_button">
-                <button>선택수정</button>
+                <button  id="deleteSelectedBtn" >선택삭제</button>
             </div>
         </section>
 
@@ -144,7 +144,7 @@
                             <td><span>정상</span><br></td>
                         </tr>
                         <tr>
-                            <th><label for="Email">EMAIL</label></th>
+                            <th><label for="EMAIL">EMAIL</label></th>
                             <td>
                                 <input type="text" id="EMAIL" name="EMAIL" placeholder="a101@naver.com">
                             </td>

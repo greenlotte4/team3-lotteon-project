@@ -30,7 +30,4 @@ public class Faq {
     @JoinColumn
     private BoardCate cate;
 
-    //삭제예정
-    private String faqtype1;
-    private String faqtype2;
 }
