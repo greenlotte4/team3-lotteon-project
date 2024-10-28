@@ -80,7 +80,8 @@ public class Product {
     private String file456;
 
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Review> reviews = new ArrayList<>();
 
     @Transient

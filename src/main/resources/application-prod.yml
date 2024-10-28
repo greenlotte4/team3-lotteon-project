@@ -15,6 +15,10 @@ logging:
                 sql: debug
         root: info
         org.springframework.web: DEBUG
+        org.hibernate.SQL: WARN
+        org.hibernate.type: WARN
+        org.hibernate.engine: WARN
+        org.hibernate.type.descriptor.sql.BasicBinder: OFF
 server:
     port: 8085
     servlet:
@@ -57,3 +61,18 @@ spring:
         enabled: true
         prefix: classpath:/templates/
         suffix: .html
+    data:
+        redis:
+            host: 43.202.32.28
+            port: 6379
+            repositories:
+                enabled: false
+            lettuce:
+                pool:
+                    max-wait: 5000ms  # adjust based on network latency
+management:
+    endpoint:
+        caches:
+            enabled: true
+        metrics:
+            enabled: true

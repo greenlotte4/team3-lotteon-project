@@ -19,7 +19,7 @@ public class QOption extends EntityPathBase<Option> {
 
     public static final QOption option = new QOption("option");
 
-    public final NumberPath<Integer> id = createNumber("id", Integer.class);
+    public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath optionCode = createString("optionCode");
 

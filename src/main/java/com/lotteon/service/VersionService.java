@@ -1,11 +1,13 @@
 package com.lotteon.service;
 
 import com.lotteon.dto.VersionDTO;
+import com.lotteon.dto.admin.HeaderInfoDTO;
 import com.lotteon.entity.Version;
 import com.lotteon.repository.VersionRepository;
-import groovy.util.logging.Log4j2;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -50,8 +52,11 @@ public class VersionService {
         }
     }
 
-    public Version getLatestVersion() {
-        return versionRepository.findTopByOrderByVerIdDesc()
-                .orElse(null); // 최신 버전이 없으면 null 반환
+    @Cacheable(value = "Version", key = "1")  // Cache with key "1" assuming a single HeaderInfo entry
+    public VersionDTO getLatestVersion() {
+        log.info("Fetching Version from the database.");
+        Version version = versionRepository.findTopByOrderByVerIdDesc().orElse(null);
+
+        return version != null ? modelMapper.map(version, VersionDTO.class) : null;
     }
 }

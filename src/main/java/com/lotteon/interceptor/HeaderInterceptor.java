@@ -1,5 +1,6 @@
 package com.lotteon.interceptor;
 
+import com.lotteon.dto.admin.HeaderInfoDTO;
 import com.lotteon.entity.HeaderInfo;
 import com.lotteon.service.HeaderInfoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public class HeaderInterceptor implements HandlerInterceptor {
                            ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {
 
-            HeaderInfo headerInfo = headerInfoService.getHeaderInfo();
+            HeaderInfoDTO headerInfo = headerInfoService.getHeaderInfo();
             modelAndView.addObject("headerInfo", headerInfo);
 
             String imagePath = "/uploads/ConfigImg/headerLogo.jpg"; // 실제 이미지 경로로 변경하세요.
