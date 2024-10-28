@@ -38,13 +38,5 @@ public class BoardCate {
 
     private String name;
 
-    @Override
-    public String toString() {
-        return "BoardCate{" +
-                "boardCateId=" + boardCateId +
-                ", level=" + level +
-                ", name='" + name + '\'' +
-                ", childrenCount=" + children.size() +
-                '}';
-    }
+ 
 }

@@ -35,6 +35,7 @@ public class AdminFaqController {
 
         FaqPageResponseDTO faqPageResponseDTO = faqService.selectfaqListAll(pageRequestDTO);
         model.addAttribute(faqPageResponseDTO);
+        log.info("list faq"+faqPageResponseDTO);
 
 //        List<Faq> faqs = faqService.selectAllfaq();
 //        model.addAttribute("faqs", faqs);
@@ -87,6 +88,7 @@ public class AdminFaqController {
     @ResponseBody
     @PostMapping("/write")
     public ResponseEntity<?> adminFaqWrite1(Model model, @ModelAttribute FaqDTO faqDTO) {
+        log.info("FaQDTO >L: >>>>>>:"+faqDTO);
         Faq faq = faqService.insertfaq(faqDTO);
         return ResponseEntity.ok().body(faq);
     }

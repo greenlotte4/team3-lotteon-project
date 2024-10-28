@@ -1,5 +1,6 @@
 package com.lotteon.service.admin;
 
+import com.lotteon.dto.BoardCateDTO;
 import com.lotteon.dto.FaqDTO;
 import com.lotteon.dto.page.FaqPageResponseDTO;
 import com.lotteon.dto.page.PageRequestDTO;
@@ -30,10 +31,13 @@ public class FaqService {
     private final BoardRepository boardRepository;
 
     public Faq insertfaq(FaqDTO faqDTO) {
-        BoardCate selectedCate = boardRepository.findByBoardCateId(faqDTO.getCate());
+        BoardCate selectedCate = boardRepository.findByBoardCateId(faqDTO.getCategory().getBoardCateId());
+        BoardCateDTO selectedCated =  modelMapper.map(selectedCate, BoardCateDTO.class);
 
+
+
+        faqDTO.setCategory(selectedCated);
         Faq faq = new Faq();
-        faq.setCate(selectedCate);
         faq.setFaqtitle(faqDTO.getFaqtitle());
         faq.setFaqcontent(faqDTO.getFaqcontent());
 
@@ -98,7 +102,12 @@ public class FaqService {
             Integer id = tuple.get(0, Integer.class); // ID를 가져옴
             Faq faq = faqRepository.findById(id) // ID로 Faq 조회
                     .orElseThrow(() -> new RuntimeException("Faq not found")); // 예외 처리
-            return modelMapper.map(faq, FaqDTO.class);
+            BoardCate cate = faq.getCate();
+
+            FaqDTO faqdto =  modelMapper.map(faq, FaqDTO.class);
+
+            faqdto.setCategory(modelMapper.map(cate, BoardCateDTO.class));
+            return faqdto;
         }).toList();
 
         int total = (int) pagefaq.getTotalElements();

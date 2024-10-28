@@ -2,6 +2,8 @@ package com.lotteon.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,4 +17,5 @@ public class BoardCateDTO {
     private int level;
     private BoardCateDTO parent;
     private BoardCateDTO child;
+
 }

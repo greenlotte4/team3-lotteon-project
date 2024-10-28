@@ -41,11 +41,13 @@
                                     <col style="width: 10%">
                                 </colgroup>
                                 <div>
+
                                     <select id="selectOption1" class="faqselect">
                                         <option value="" disabled selected>1차 선택</option>
-                                    <th:block th:each="board : ${boardCate}">
+                                        <th:block th:each="board : ${boardCate}">
                                         <option th:value="${board.boardCateId}" th:text="${board.name}"></option>
-                                    </th:block>
+                                        </th:block>
+
                                     </select>
                                     <select id="selectOption2" class="faqselect">
                                         <option value="2차 선택" disabled selected>2차 선택</option>
@@ -64,8 +66,8 @@
                                 <tr th:each="faq, i:${faqPageResponseDTO.getFaqdtoList()}">
                                     <td><input type="checkbox" class="checkboxes" th:value="${faq.faqNo}"></td>
                                     <td>[[${faqPageResponseDTO.startNo - i.index}]]</td>
-                                    <td th:text="${faq.faqtype1}" id="faqtype1">가입문의</td>
-                                    <td th:text="${faq.faqtype2}" id="faqtype2">가입</td>
+                                    <td th:text="${faq.getCategory().getParent().getName()}" id="faqtype1">가입문의</td>
+                                    <td th:text="${faq.getCategory().getName()}" id="faqtype2">가입</td>
                                     <td>
                                         <a th:href="@{/admin/faq/view(no=${faq.faqNo})}" th:text="${faq.faqtitle}"></a>
                                     </td>
