@@ -6,28 +6,26 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@ToString
-@Table
+@Table(name = "Notice")
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class Faq {
+public class Notice {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int faqNo;
+    private Long noticeNo;
 
-    private String faqtitle;
-    private String faqcontent;
-    private int faqhit;
+    private String noticetitle;
+    private String noticetype;
+    private String noticecontent;
 
     @CreationTimestamp
     private LocalDateTime date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private BoardCate cate;
-
+    private int noticehit;
 }

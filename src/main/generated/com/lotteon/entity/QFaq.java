@@ -34,10 +34,6 @@ public class QFaq extends EntityPathBase<Faq> {
 
     public final StringPath faqtitle = createString("faqtitle");
 
-    public final StringPath faqtype1 = createString("faqtype1");
-
-    public final StringPath faqtype2 = createString("faqtype2");
-
     public QFaq(String variable) {
         this(Faq.class, forVariable(variable), INITS);
     }
