@@ -11,6 +11,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +45,7 @@ public class ProductDTO{
     private String file190;
     private String file230;
     private String file456;
-    private List<String> filedesc;
+    private List<String> filedesc = new ArrayList<>();;
 
 
 
@@ -58,6 +59,11 @@ public class ProductDTO{
     private double productRating;
 
 
+    public void addFileDescriptions(List<String> files) {
+        if (files != null && !files.isEmpty()) {
+            this.filedesc.addAll(files);
+        }
+    }
 
 
 }

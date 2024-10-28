@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -78,7 +79,7 @@ public class Product {
     private String file456;
 
     @Transient
-    private List<String> fileDescs;
+    private List<String> fileDescs = new ArrayList<>();
 
     //리뷰 별 평균 값
     private double productRating;
