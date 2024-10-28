@@ -1,6 +1,9 @@
 package com.lotteon.dto.product;
 
 
+import com.lotteon.dto.User.SellerDTO;
+import com.lotteon.entity.User.Seller;
+import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.ProductDetails;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,6 +11,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,10 +26,10 @@ public class ProductDTO{
     private long productId;
 
     private long categoryId;
-
+    private long sellerNo;
     private String productName;
-    private int price;
-    private int stock;
+    private long price;
+    private long stock;
     private int discount;
     private int shippingFee;
     private int shippingTerms; //무료배송 조건
@@ -41,14 +45,25 @@ public class ProductDTO{
     private String file190;
     private String file230;
     private String file456;
-    private List<String> filedesc;
+    private List<String> filedesc = new ArrayList<>();;
 
 
 
     private List<ProductFileDTO> productFiles;
     private List<OptionDTO> options;
     private ProductDetails productDetails;
+    private SellerDTO seller;
 
+    //main list 판매자회사이름
+    private String company;
+    private double productRating;
+
+
+    public void addFileDescriptions(List<String> files) {
+        if (files != null && !files.isEmpty()) {
+            this.filedesc.addAll(files);
+        }
+    }
 
 
 }

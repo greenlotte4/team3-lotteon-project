@@ -1,7 +1,7 @@
 #mainArea .section .sectionWrapper{
     border: 1px solid #eee;
     margin-top: 10px;
-    width: 890px;
+    width: 100%;
     padding: 20px;
     box-sizing: border-box;
 }
@@ -150,11 +150,28 @@
     align-items: center;
     margin-top: 20px;
 }
-
-.shipping {
-    color: #0056b3;
+.shipping-fee{
     padding-right: 10px;
+    color:  #0056b3;
+    font-size: 14px;
 }
+
+.shipping-fee:after{
+    content: "원";
+}
+
+.shipping-fee:before{
+    content: "배송비 ";
+}
+.shipping-fee.shipping-label:after{
+    content: "";
+}
+
+.shipping-fee.shipping-label:before{
+    content: " ";
+}
+
+
 
 /* Delivery Info */
 .delivery-info {
@@ -198,7 +215,7 @@
     flex-direction: column;
 }
 
-.original-price {
+.product-info-container .original-price {
     font-size: 16px;
     color: #999;
     text-decoration: line-through;
@@ -800,3 +817,23 @@ select::-ms-expand {
 }
 
 
+
+.star {
+    font-size: 1.5em; /* 원하는 별 크기에 맞게 조정 */
+    display: inline-block;
+    color: lightgray; /* 기본 색상 (빈 별 색상) */
+}
+
+.star.full-star {
+    color: gold;
+}
+
+.star.half-star {
+    background: linear-gradient(90deg, gold 50%, lightgray 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; /* 텍스트 색상 투명화 */
+}
+
+.star.empty-star {
+    color: #cccccc; /* 빈 별 색상 */
+}

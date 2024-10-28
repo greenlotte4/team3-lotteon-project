@@ -23,11 +23,11 @@ public class QVersion extends EntityPathBase<Version> {
 
     public final StringPath ver_content = createString("ver_content");
 
-    public final NumberPath<Integer> ver_id = createNumber("ver_id", Integer.class);
-
     public final StringPath ver_name = createString("ver_name");
 
     public final StringPath ver_writer = createString("ver_writer");
+
+    public final NumberPath<Integer> verId = createNumber("verId", Integer.class);
 
     public QVersion(String variable) {
         super(Version.class, forVariable(variable));

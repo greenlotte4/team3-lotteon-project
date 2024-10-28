@@ -1,10 +1,20 @@
 package com.lotteon.repository.Impl;
+/*
+    날짜 : 2024.10.20
+    이름 : 하진희
+    내용 : product CRUD
+    ==================================
+    추가내용 
+    2024.10.26 - product List 사용 메서드 변경
+ */
+
 
 import com.lotteon.dto.product.*;
 import com.lotteon.entity.User.QSeller;
 import com.lotteon.entity.User.QUser;
 import com.lotteon.entity.product.*;
 import com.lotteon.repository.custom.ProductRepositoryCustom;
+import com.lotteon.repository.user.SellerRepository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,6 +35,7 @@ import static com.querydsl.jpa.JPAExpressions.select;
 @Repository
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
+    private final SellerRepository sellerRepository;
     private QProduct qProduct = QProduct.product;
     private QOption qOption = QOption.option;
     private QProductDetails qProductDetails = QProductDetails.productDetails;
@@ -35,33 +46,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     //admin product list에서 사용
     @Override
-    public Page<ProductListDTO> selectProductBySellerIdForList(String sellerId, PageRequestDTO pageRequest, Pageable pageable) {
+    public Page<Product> selectProductBySellerIdForList(String sellerId, PageRequestDTO pageRequest, Pageable pageable) {
 
-        List<ProductListDTO> products = queryFactory
-                .select(Projections.constructor(ProductListDTO.class,
-                        qProduct.productId,
-                        qProduct.categoryId,
-                        qProduct.productName,
-                        qProduct.price,
-                        qProduct.stock,
-                        qProduct.discount,
-                        qProduct.shippingFee,
-                        qProduct.shippingTerms,
-                        qProduct.rdate,  // LocalDateTime 그대로 받기
-                        qProduct.ProductDesc,
-                        qProduct.sellerId,  // 이 부분 추가
-                        qProduct.productCode,  // 이 부분 추가
-                        qProduct.hit,
-                        Projections.list(Projections.constructor(ProductFileDTO.class,
-                                qProductFile.p_fno,
-                                qProductFile.sName,
-                                qProductFile.type
-                        ))
-                ))
+        List<Product> products = queryFactory.select(qProduct)
                 .from(qProduct)
-                .leftJoin(qProduct.files, qProductFile)
-                .where(qProduct.sellerId.eq(sellerId).and(qProductFile.type.eq("190")))
-                .distinct()
+                .where(qProduct.sellerId.eq(sellerId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -69,7 +58,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         long total = queryFactory.select(qProduct.count())
                 .from(qProduct)
                 .where(qProduct.sellerId.eq(sellerId))
-                .fetchOne().intValue();
+                .fetchOne().longValue();
 
 
         return new PageImpl<>(products, pageable,total);
@@ -80,45 +69,32 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return null;
     }
 
+
+    //main 3차 카테고리 선택시
     @Override
-    public Page<ProductListDTO> selectProductForListByCategory(PageRequestDTO pageRequest, Pageable pageable) {
-        List<ProductListDTO> products = queryFactory
-                .select(Projections.constructor(ProductListDTO.class,
-                        qProduct.productId,
-                        qProduct.categoryId,
-                        qProduct.productName,
-                        qProduct.price,
-                        qProduct.stock,
-                        qProduct.discount,
-                        qProduct.shippingFee,
-                        qProduct.shippingTerms,
-                        qProduct.rdate,  // LocalDateTime 그대로 받기
-                        qProduct.ProductDesc,
-                        qProduct.sellerId,  // 이 부분 추가
-                        qProduct.productCode,  // 이 부분 추가
-                        qProduct.hit,
-                        Projections.list(Projections.constructor(ProductFileDTO.class,
-                                qProductFile.p_fno,
-                                qProductFile.sName,
-                                qProductFile.type
-                        ))
-                ))
+    public Page<Tuple> selectProductByCategory(PageRequestDTO pageRequest, Pageable pageable) {
+
+        List<Tuple> products = queryFactory.select(qProduct,qSeller)
                 .from(qProduct)
-                .leftJoin(qProduct.files, qProductFile)
-                .where(qProduct.categoryId.eq(pageRequest.getCategoryId()).and(qProductFile.type.eq("230")))
-                .distinct()
+                .leftJoin(qSeller)
+                .on(qSeller.user.uid.eq(qProduct.sellerId))
+                .where(qProduct.categoryId.eq(pageRequest.getCategoryId()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        log.info("productgetO00000"+products);
-        long total = queryFactory
-                .select(qProduct.count())
+
+        log.info("did=dosidjflskdjfls : "+products);
+        long total = queryFactory.select(qProduct.count())
                 .from(qProduct)
                 .where(qProduct.categoryId.eq(pageRequest.getCategoryId()))
-                .fetchOne();
+                .fetchOne().longValue();
 
+        log.info("totalllllllllllll:"+total);
 
-        return  new PageImpl<>(products, pageable, total);
+        return new PageImpl<>(products, pageable,total);
+
     }
+
+
 }

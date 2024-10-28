@@ -1,5 +1,9 @@
 package com.lotteon.entity.cart;
+/*
 
+ ===
+ 추가사항 2024.10.26 하진희 price 관련 부분 long으로 변경
+ */
 import com.lotteon.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,14 +31,14 @@ public class CartItem {
 
 
     private int stock;
-    private int price;
-    private int discount;
+    private long price;
+    private long discount;
     private int point;
     private int deliveryFee;
-    private int totalPrice;
+    private long totalPrice;
 
     public void totalPrice(){
-        int discountAmount = (price * discount) / 100;
+        long discountAmount = (price * discount) / 100;
         this.totalPrice = (price - discountAmount) * stock + deliveryFee;
     }
 }

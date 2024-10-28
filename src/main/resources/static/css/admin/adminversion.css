@@ -37,3 +37,5 @@ text-align: center; /* 텍스트 왼쪽 정렬 */}
 
 .top1 {font-weight: bold; font-size: 14px;}
 .top2 {width: auto; padding: 3px; background: linear-gradient(to top, #cdd8e6 50%, transparent 50%);}
+
+.versionPage {width: 500px; height: 30px; margin: 20px auto; text-align: center}

@@ -1,8 +1,7 @@
 package com.lotteon.controller;
 
-import com.lotteon.dto.product.PageRequestDTO;
-import com.lotteon.dto.product.ProductListPageResponseDTO;
-import com.lotteon.dto.product.ProductPageResponseDTO;
+import com.lotteon.dto.product.*;
+import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 
 @Log4j2
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MarketController {
 
     private final ProductService productService;
+    private final ProductCategoryService productCategoryService;
 
     @GetMapping("/main")
     public String marketMain(Model model) {
@@ -30,10 +32,10 @@ public class MarketController {
 
     @GetMapping("/list")
     public String marketList(PageRequestDTO pageRequestDTO, Model model) {
-        long categoryid = 20;
+        long categoryid = 3;
         pageRequestDTO.setCategoryId(categoryid);
-        ProductListPageResponseDTO responseDTO =  productService.selectProductListBymarket(pageRequestDTO);
-        log.info(responseDTO.getProductDTOList());
+        ProductListPageResponseDTO responseDTO =  productService.getProductList(pageRequestDTO);
+        log.info("controlllermarket::::"+responseDTO.getProductDTOs());
         model.addAttribute("responseDTO",responseDTO);
 
 
@@ -57,10 +59,17 @@ public class MarketController {
 
 
     @GetMapping("/view/{categoryId}/{productId}")
-    public String marketView(@PathVariable String productId,@PathVariable String categoryId,Model model) {
+    public String marketView(@PathVariable long productId,@PathVariable long categoryId,Model model) {
         log.info(productId);
         log.info(categoryId);
 
+       List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
+       log.info("categories LLLLL "+ categoryDTOs);
+       ProductDTO productdto = productService.getProduct(productId);
+        log.info("productVIew Controller:::::"+productdto);
+
+        model.addAttribute("categoryDTOs",categoryDTOs);
+        model.addAttribute("products",productdto);
 
         return "content/market/marketview"; // Points to the "content/market/marketview" template
     }

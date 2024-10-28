@@ -16,7 +16,6 @@
             <div id="admin_service">
                 <section>
 
-
                     <th:block th:replace="~{content/admin/admin_gate}"></th:block>
 
                     <section id="admin_navi">
@@ -25,67 +24,74 @@
                     </section>
                 
               
-                <article id="admin_banner_main">
-                
-                <div>
-                    <table class="admin_banner_table">
-                        <colgroup>
-                            <col style="width: 6%">
-                            <col style="width: 9%">
-                            <col style="width: 11%">
-                            <col style="width: 16%">
-                            <col style="width: 8%">
-                            <col style="width: 8%">
-                            <col style="width: 8%">
-                            <col style="width: 7%">
-                            <col style="width: 9%">
-                            <col style="width: 9%">
-                            <col style="width: 9%">
-                        </colgroup>
+                    <article id="admin_banner_main">
                         <div>
-                        <select id="shopsearch" >
-                            <option value="">상품명</option>
-                            <option value="">상품번호</option>
-                            <option value="">판매자</option>
-                            <option value="">제조사</option>
-                        </select>
-                        <input id="search" type="text" placeholder="키워드 입력">
-                        <button id="serachbtn" type="button">검색</button>
+                            <table class="admin_banner_table">
+                                <colgroup>
+                                    <col style="width: 6%">
+                                    <col style="width: 9%">
+                                    <col style="width: 11%">
+                                    <col style="width: 16%">
+                                    <col style="width: 8%">
+                                    <col style="width: 8%">
+                                    <col style="width: 8%">
+                                    <col style="width: 7%">
+                                    <col style="width: 9%">
+                                    <col style="width: 9%">
+                                    <col style="width: 9%">
+                                </colgroup>
+                                <div>
+                                <select id="shopsearch" >
+                                    <option value="">상품명</option>
+                                    <option value="">상품번호</option>
+                                    <option value="">판매자</option>
+                                    <option value="">제조사</option>
+                                </select>
+                                <input id="search" type="text" placeholder="키워드 입력">
+                                <button id="serachbtn" type="button">검색</button>
+                                </div>
+
+                                <tr>
+                                    <th><input type="checkbox"></th>
+                                    <th>사진</th>
+                                    <th>상품코드</th>
+                                    <th>상품명</th>
+                                    <th>판매가격</th>
+                                    <th>할인율</th>
+                                    <th>포인트</th>
+                                    <th>재고</th>
+                                    <th>판매자</th>
+                                    <th>조회</th>
+                                    <th>관리</th>
+                                </tr>
+                                <th:block th:if="${productPageResponseDTO.getProductDTOs().isEmpty()}">
+                                    <tr>
+                                       <th  th:colspan="11">등록하신 상품이 없습니다.</th>
+                                    </tr>
+                                </th:block>
+                                <th:block th:unless="${productPageResponseDTO.getProductDTOs().isEmpty()}">
+                                    <tr th:each="product:${productPageResponseDTO.getProductDTOs()}">
+                                        <td><input type="checkbox">
+                                            <input type="hidden" name="productId" th:value="${product.productId}">
+                                        </td>
+                                        <td><img th:src="@{'/uploads/productImg/' + ${product.file190}}"></td>
+                                        <td>[[${product.productCode}]]</td>
+                                        <td>[[${product.productName}]]</td>
+                                        <td>[[${product.price}]]</td>
+                                        <td><span class="discount">[[${product.discount}]]</span></td>
+                                        <td>[[${product.point}]]</td>
+                                        <td>[[${product.stock}]]</td>
+                                        <td>[[${product.sellerId}]]</td>
+                                        <td></td>
+                                        <td>
+                                            <a th:href="@{/seller/product/delete(id=${product.productId})}" class="delete">[삭제]</a><br>
+                                            <a th:href="@{/seller/product/modify(id=${product.productId})}" class="edit">[수정]</a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </table>
                         </div>
-                        
-                        <tr>
-                            <th><input type="checkbox"></th>
-                            <th>사진</th>
-                            <th>상품코드</th>
-                            <th>상품명</th>
-                            <th>판매가격</th>
-                            <th>할인율</th>
-                            <th>포인트</th>
-                            <th>재고</th>
-                            <th>판매자</th>
-                            <th>조회</th>
-                            <th>관리</th>
-                        </tr>
-                        <tr th:each="product:${productPageResponseDTO.getProductDTOList()}">
-                            <td><input type="checkbox">
-                                <input type="hidden" name="productId" th:value="${product.productId}">
-                            </td>
-                            <td><img th:src="@{'/uploads/productImg/' + ${product.file190}}"></td>
-                            <td>[[${product.productCode}]]</td>
-                            <td>[[${product.productName}]]</td>
-                            <td>[[${product.price}]]</td>
-                            <td><span class="discount">[[${product.discount}]]</span></td>
-                            <td>[[${product.point}]]</td>
-                            <td>[[${product.stock}]]</td>
-                            <td>[[${product.sellerId}]]</td>
-                            <td></td>
-                            <td>
-                                <a th:href="@{/seller/product/delete(id=${product.productId})}" class="delete">[삭제]</a><br>
-                                <a th:href="@{/seller/product/modify(id=${product.productId})}" class="edit">[수정]</a>
-                            </td>
-                        </tr>
-                    </table>
-                </article>
+                    </article>
                     <div class="list_button">
                         <button>선택삭제</button>
                         <button><a th:href="@{/seller/product/register}">상품등록</a></button>

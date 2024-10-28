@@ -38,6 +38,10 @@ public class MarketCartService {
 
     public Cart insertCart(int productId, int stock, int price) {
 
+        if (stock <= 0){
+            throw new RuntimeException("수량은 1 이상이어야 합니다,.");
+        }
+
         User user = getUser();
         // 사용자의 장바구니를 가져오고, 없으면 새로 생성
         Cart cart = cartRepository.findByUserWithItems(user).orElseGet(() -> createCart(user));
