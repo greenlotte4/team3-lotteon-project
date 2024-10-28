@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -47,4 +48,24 @@ public class AdminNoticeController {
         return ResponseEntity.ok().body(notice);
     }
 
+    @ResponseBody
+    @DeleteMapping("/delete/check")
+    public ResponseEntity<?> adminNoticeDeleteCheck(@RequestBody List<Long> data) {
+            if(data == null || data.isEmpty()){
+                return ResponseEntity.badRequest().body("삭제할 항목이 없습니다.");
+            }
+            noticeService.deleteCheck(data);
+            return ResponseEntity.ok().build();
+        }
+    @GetMapping("/delete")
+    public String adminFaqDelete(Long no , RedirectAttributes redirectAttributes){
+        noticeService.deleteNotice(no);
+        redirectAttributes.addFlashAttribute("message", "삭제되었습니다."); // 메시지 추가
+        return "redirect:/admin/notice/list";
+
+    }
+
+
 }
+
+
