@@ -9,7 +9,6 @@ import com.lotteon.repository.product.ProductRepository;
 import groovy.util.logging.Log4j2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,5 +55,9 @@ public class ReviewService {
         reviewRepository.save(review);
 
         return true;
+    }
+
+    public List<Review> getRecentReviews() {
+        return reviewRepository.findTop3ByOrderByRdateDesc();
     }
 }
