@@ -36,19 +36,14 @@
                                                     <div>유형</div>
                                                     <div>
                                                         <td>
-                                                            <select class="first_choice" name="faqtype1">
-                                                                <option th:value="${faq.faqtype1}" selected th:text="${faq.faqtype1}"></option>
-                                                                <option value="가입">가입</option>
-                                                                <option value="취소/반품/교환">취소/반품/교환</option>
-                                                                <option value="주문/결제">주문/결제</option>
-                                                                <option value="쿠폰/이벤트">쿠폰/이벤트</option>
+                                                            <select class="first_choice" name="faqtype1" id="selectOption1">
+                                                                <option th:value="${faq.category.getParent().getName()}"  disabled selected th:text="${faq.category.getParent().getName()}">1차 선택</option>
+                                                                <th:block th:each="board : ${boardCate}">
+                                                                    <option th:value="${board.boardCateId}" th:text="${board.name}"></option>
+                                                                </th:block>
                                                             </select>
-                                                            <select class="second_choice" name="faqtype2">
-                                                                <option th:value="${faq.faqtype2}" selected th:text="${faq.faqtype2}"></option>
-                                                                <option value="가입">가입</option>
-                                                                <option value="취소/반품/교환">취소/반품/교환</option>
-                                                                <option value="주문/결제">주문/결제</option>
-                                                                <option value="쿠폰/이벤트">쿠폰/이벤트</option>
+                                                            <select class="second_choice" name="categoryid" id="selectOption2">
+                                                                <option th:value="${faq.category.getBoardCateId()}" selected th:text="${faq.category.getName()}"></option>
                                                             </select>
                                                         </td>
                                                     </div>
@@ -101,6 +96,34 @@
 
                                 })
 
+
+                            </script>
+                            <script>
+                                const selectOption1 = document.getElementById('selectOption1');
+                                const selectOption2 = document.getElementById('selectOption2');
+
+                                selectOption1.addEventListener('change',function(){
+                                    const parentId = this.value;
+
+                                    selectOption2.innerHTML = '<option value="2차 선택" disabled selected>2차 선택</option>';
+
+                                    fetch(`/admin/faq/subcate/${parentId}`)
+                                        .then(resp => resp.json())
+                                        .then(data => {
+                                            console.log(data);
+                                            data.forEach(boardsubCate => {
+                                                const option = document.createElement('option');
+                                                option.value = boardsubCate.boardCateId;
+                                                option.text = boardsubCate.name;
+                                                selectOption2.appendChild(option)
+                                            })
+                                        })
+                                        .catch(err => {
+                                            console.log(err);
+                                        });
+
+
+                                })
 
                             </script>
 </th:block>

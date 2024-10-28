@@ -13,6 +13,16 @@
 <body>
 <th:block layout:fragment="content">
     <main>
+
+
+        <h2>구매자 약관</h2>
+        <ul>
+            <li th:each="term : ${termsList}">
+                <h3 th:text="${term.title}">약관 제목</h3>
+                <p th:text="${term.content}">약관 내용</p>
+            </li>
+        </ul>
+
         <nav class="termTop">
             <div>
                 <p>약관동의</p>
@@ -60,55 +70,67 @@
     </main>
 
     <script>
-        const userType = new URLSearchParams(window.location.search).get('type'); // URL 파라미터에서 userType 가져오기
+        cdocument.addEventListener("DOMContentLoaded", function () {
+            const userType = new URLSearchParams(window.location.search).get('type'); // URL 파라미터에서 userType 가져오기
+            const termsList = /*[[${termsList}]]*/ []; // 모든 약관 리스트
 
-        // 약관 내용 설정
-        const termsContent = {
-            member: {
-                term1: "member 회원을 위한 이용약관 내용입니다.",
-                term2: "전자금융 이용약관 내용입니다.",
-                term3: "개인정보 수집 동의 내용입니다.",
-                term4: "위치정보 이용약관 내용입니다."
-            },
-            seller: {
-                term1: "seller 회원을 위한 이용약관 내용입니다.",
-                term2: "전자금융 이용약관 내용입니다.",
-                term3: "개인정보 수집 동의 내용입니다.",
-                term4: "위치정보 이용약관 내용입니다."
+            const filteredTerms = termsList.filter(term => {
+                if (userType === "member") {
+                    return ["BUYER", "ELECTRONIC_FINANCE", "LOCATION_INFO", "PRIVACY_POLICY"].includes(term.type);
+                } else if (userType === "seller") {
+                    return ["SELLER", "ELECTRONIC_FINANCE", "PRIVACY_POLICY"].includes(term.type);
+                }
+                return false;
+            });
+
+            // 약관 내용 설정
+            const termsContent = {
+                member: {
+                    term1: "member 회원을 위한 이용약관 내용입니다.",
+                    term2: "전자금융 이용약관 내용입니다.",
+                    term3: "개인정보 수집 동의 내용입니다.",
+                    term4: "위치정보 이용약관 내용입니다."
+                },
+                seller: {
+                    term1: "seller 회원을 위한 이용약관 내용입니다.",
+                    term2: "전자금융 이용약관 내용입니다.",
+                    term3: "개인정보 수집 동의 내용입니다.",
+                    term4: "위치정보 이용약관 내용입니다."
+                }
+            };
+
+            // 각 textarea에 내용 할당
+            if (userType === "member") {
+                document.getElementById('term1').value = termsContent.member.term1;
+                document.getElementById('term2').value = termsContent.member.term2;
+                document.getElementById('term3').value = termsContent.member.term3;
+                document.getElementById('term4').value = termsContent.member.term4;
+            } else if (userType === "seller") {
+                document.getElementById('term1').value = termsContent.seller.term1;
+                document.getElementById('term2').value = termsContent.seller.term2;
+                document.getElementById('term3').value = termsContent.seller.term3;
+                document.getElementById('termMain4').style.display = 'none'; // seller일 때 term4 섹션 숨김
             }
-        };
 
-        // 각 textarea에 내용 할당
-        if (userType === "member") {
-            document.getElementById('term1').value = termsContent.member.term1;
-            document.getElementById('term2').value = termsContent.member.term2;
-            document.getElementById('term3').value = termsContent.member.term3;
-            document.getElementById('term4').value = termsContent.member.term4;
-        } else if (userType === "seller") {
-            document.getElementById('term1').value = termsContent.seller.term1;
-            document.getElementById('term2').value = termsContent.seller.term2;
-            document.getElementById('term3').value = termsContent.seller.term3;
-            document.getElementById('termMain4').style.display = 'none'; // seller일 때 term4 섹션 숨김
-        }
+            // 동의 버튼 클릭 시 동작
+            document.getElementById('agreeBtn').addEventListener('click', function () {
+                const isAgree1 = document.getElementById('agree1').checked;
+                const isAgree2 = document.getElementById('agree2').checked;
+                const isAgree3 = document.getElementById('agree3').checked;
 
-        // 동의 버튼 클릭 시 동작
-        document.getElementById('agreeBtn').addEventListener('click', function () {
-            const isAgree1 = document.getElementById('agree1').checked;
-            const isAgree2 = document.getElementById('agree2').checked;
-            const isAgree3 = document.getElementById('agree3').checked;
+                // 필수 약관 동의 체크
+                if (!isAgree1 || !isAgree2 || !isAgree3) {
+                    alert('모든 필수 약관에 동의해야 합니다.');
+                    return;
+                }
 
-            // 필수 약관 동의 체크
-            if (!isAgree1 || !isAgree2 || !isAgree3) {
-                alert('모든 필수 약관에 동의해야 합니다.');
-                return;
-            }
-
-            // 약관에 동의한 후 회원가입 페이지로 리다이렉트
-            if (userType === 'member') {
-                window.location.href = '/user/memberregister'; // 개인 회원가입 페이지
-            } else if (userType === 'seller') {
-                window.location.href = '/user/sellerregister'; // 판매자 회원가입 페이지
-            }
+                // 약관에 동의한 후 회원가입 페이지로 리다이렉트
+                if (userType === 'member') {
+                    window.location.href = '/user/memberregister'; // 개인 회원가입 페이지
+                } else if (userType === 'seller') {
+                    window.location.href = '/user/sellerregister'; // 판매자 회원가입 페이지
+                }
+            });
         });
     </script>
 </th:block>

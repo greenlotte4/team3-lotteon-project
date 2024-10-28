@@ -23,6 +23,10 @@ import java.util.Optional;
 public class SellerService {
 
     private final SellerRepository sellerRepository;
+
+
+    public List<Seller> getAllSellers() { return sellerRepository.findAll(); }
+
     private final ModelMapper getModelMapper;
 
     public SellerDTO getSeller(String sellerId) {
@@ -36,4 +40,5 @@ public class SellerService {
        log.info("sellerrrrrrrrrrrrrrrr:"+sellerDTO);
        return sellerDTO;
     }
+
 }
