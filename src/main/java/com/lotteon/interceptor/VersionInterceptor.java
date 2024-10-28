@@ -1,5 +1,6 @@
 package com.lotteon.interceptor;
 
+import com.lotteon.dto.VersionDTO;
 import com.lotteon.entity.Version;
 import com.lotteon.service.VersionService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ public class VersionInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if (modelAndView != null){
 
-            Version version = versionService.getLatestVersion();
+            VersionDTO version = versionService.getLatestVersion();
             modelAndView.addObject("versionInfo", version);
         }
     }

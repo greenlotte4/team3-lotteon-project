@@ -1,5 +1,6 @@
 package com.lotteon.interceptor;
 
+import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.entity.FooterInfo;
 import com.lotteon.service.FooterInfoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class FooterInterceptor implements HandlerInterceptor {
                            ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {
             // footerInfo 객체를 모델에 추가합니다.
-            FooterInfo footerInfo = footerInfoService.getFooterInfo();
+            FooterInfoDTO footerInfo = footerInfoService.getFooterInfo();
             modelAndView.addObject("footerInfo", footerInfo);
         }
     }

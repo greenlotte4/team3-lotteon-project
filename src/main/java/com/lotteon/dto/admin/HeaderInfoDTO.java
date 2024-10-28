@@ -6,11 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HeaderInfoDTO {
+public class HeaderInfoDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private Long hd_id;
 
@@ -26,4 +29,6 @@ public class HeaderInfoDTO {
     private MultipartFile file1;
     private MultipartFile file2;
     private MultipartFile file3;
+
+
 }

@@ -7,6 +7,8 @@ import com.lotteon.service.product.ProductCategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -23,14 +25,21 @@ public class CategoryControllerAdvice {
    private final ProductCategoryService productCategoryService;
     private final ModelMapper modelMapper;
 
+    @Cacheable(value = "categories")
     @ModelAttribute("categories")
     public List<ProductCategoryDTO> populateCategories() {
-
+        log.info("Fetching category data from the database...");
         List<ProductCategory> categories = productCategoryService.getCategoryHierarchy();
         List<ProductCategoryDTO> categoryDTOs = new ArrayList<>();
         categories.forEach(category -> categoryDTOs.add(convertToDto(category)));
         return categoryDTOs;
     }
+
+    @CacheEvict(value = "categories", allEntries = true)
+    public void updateCategoryData() {
+        // Logic to update category data
+    }
+
     private ProductCategoryDTO convertToDto(ProductCategory category) {
         ProductCategoryDTO categoryDTO = modelMapper.map(category, ProductCategoryDTO.class);
         // 재귀적으로 children도 매핑

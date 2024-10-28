@@ -5,9 +5,11 @@ import com.lotteon.entity.FooterInfo;
 import com.lotteon.entity.HeaderInfo;
 import com.lotteon.repository.HeaderInfoRepository;
 import groovy.util.logging.Log;
-import groovy.util.logging.Log4j2;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.logging.Logger;
@@ -33,7 +35,7 @@ public class HeaderInfoService {
 
         headerInfoRepository.save(headerInfo);
     }
-
+    @CacheEvict(value = "headerInfo", key = "1")
     public void updateHeaderInfo(HeaderInfoDTO headerInfoDTO){
         HeaderInfo entity = headerInfoRepository.findById(headerInfoDTO.getHd_id()).orElseThrow(() -> new RuntimeException("FooterInfo not found"));
 
@@ -41,6 +43,8 @@ public class HeaderInfoService {
         entity.setHd_subtitle(headerInfoDTO.getHd_subtitle());
 
         headerInfoRepository.save(entity);
+        log.info("Updated HeaderInfo and evicted cache.");
+
     }
 
     public void saveHeaderInfo2(HeaderInfoDTO headerInfoDTO){
@@ -70,9 +74,11 @@ public class HeaderInfoService {
     }
 
 
-    public HeaderInfo getHeaderInfo() {
-        return headerInfoRepository.findById(1L)
-                .orElse(null);  // 데이터가 없으면 null 반환
+    @Cacheable(value = "headerInfo", key = "1")  // Cache with key "1" assuming a single HeaderInfo entry
+    public HeaderInfoDTO  getHeaderInfo() {
+        log.info("Fetching HeaderInfo from the database.");
+        HeaderInfo headerInfo = headerInfoRepository.findById(1L).orElse(null);
+        return headerInfo != null ? modelMapper.map(headerInfo, HeaderInfoDTO.class) : null;
     }
 
 

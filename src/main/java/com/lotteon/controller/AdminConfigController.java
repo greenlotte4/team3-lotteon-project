@@ -93,8 +93,8 @@ public class AdminConfigController {
         model.addAttribute("cate", "config");
         model.addAttribute("content", "basic");
 
-        FooterInfo footerInfo = footerInfoService.getFooterInfo();
-        HeaderInfo headerInfo = headerInfoService.getHeaderInfo();
+        FooterInfoDTO footerInfo = footerInfoService.getFooterInfo();
+        HeaderInfoDTO headerInfo = headerInfoService.getHeaderInfo();
 
         // 조회한 정보를 모델에 추가
         model.addAttribute("headerInfo", headerInfo);

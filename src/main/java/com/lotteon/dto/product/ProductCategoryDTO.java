@@ -2,6 +2,7 @@ package com.lotteon.dto.product;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -10,7 +11,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @ToString
 @Builder
-public class ProductCategoryDTO {
+public class ProductCategoryDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private long id;
     private long parent_id;

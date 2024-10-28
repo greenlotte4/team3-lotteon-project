@@ -5,6 +5,7 @@ import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.ProductDetails;
+import com.lotteon.entity.product.Review;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import lombok.*;
@@ -57,6 +58,10 @@ public class ProductDTO{
     //main list 판매자회사이름
     private String company;
     private double productRating;
+
+    //리뷰 추가
+    private List<Review> reviews;
+    private List<ReviewDTO> reviewDTOs;
 
 
     public void addFileDescriptions(List<String> files) {

@@ -24,5 +24,7 @@ public class ReviewDTO {
     private String rating;  //상품평점
     private List<MultipartFile> pReviewFiles;
     private List<ReviewFile> savedReviewFiles;
+    private List<ReviewFileDTO> reviewFileDTOS;
     private Long productId;
+
 }

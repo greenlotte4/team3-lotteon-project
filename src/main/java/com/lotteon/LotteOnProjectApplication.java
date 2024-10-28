@@ -2,10 +2,12 @@ package com.lotteon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @SpringBootApplication
+@EnableCaching
 @EnableJpaRepositories(basePackages = "com.lotteon.repository")
 public class LotteOnProjectApplication {
 

@@ -15,10 +15,8 @@ package com.lotteon.service.product;
 import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.entity.User.Seller;
-import com.lotteon.entity.product.Option;
-import com.lotteon.entity.product.Product;
-import com.lotteon.entity.product.ProductDetails;
-import com.lotteon.entity.product.ProductFile;
+import com.lotteon.entity.product.*;
+import com.lotteon.repository.ReviewFileRepository;
 import com.lotteon.repository.product.OptionRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.repository.user.SellerRepository;
@@ -48,6 +46,7 @@ public class ProductService {
     private final ProductFileService productFileService;
     private final SellerRepository sellerRepository;
     private final SellerService sellerService;
+    private final ReviewFileRepository reviewFileRepository;
 
     public Long insertProduct(ProductResponseDTO insertProduct) {
 
@@ -191,6 +190,19 @@ public class ProductService {
 
         List<OptionDTO> optionDTOs = product.getOptions().stream().map(option -> modelMapper.map(option, OptionDTO.class)).collect(Collectors.toList());
         List<ProductFileDTO> productFileDTOs = product.getFiles().stream().map(file -> modelMapper.map(file, ProductFileDTO.class)).collect(Collectors.toList());
+
+        List<Review> reviews = product.getReviews();
+        List<ReviewDTO> reviewDTOs = new ArrayList<>();
+        for(Review review : reviews) {
+           List<ReviewFileDTO> fileDTOS = productFileDTOs.stream().map(file -> modelMapper.map(file, ReviewFileDTO.class)).collect(Collectors.toList());
+           ReviewDTO reviewDTO = modelMapper.map(review, ReviewDTO.class);
+           reviewDTO.setReviewFileDTOS(fileDTOS);
+           reviewDTOs.add(reviewDTO);
+        }
+
+
+
+        productDTO.setReviewDTOs(reviewDTOs);
         productDTO.setOptions(optionDTOs);
         productDTO.setProductFiles(productFileDTOs);
         List<String> filedesc= new ArrayList<>();

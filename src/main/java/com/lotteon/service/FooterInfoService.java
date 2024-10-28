@@ -3,9 +3,11 @@ package com.lotteon.service;
 import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.entity.FooterInfo;
 import com.lotteon.repository.FooterInfoRepository;
-import groovy.util.logging.Log4j2;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Log4j2
@@ -36,6 +38,7 @@ public class FooterInfoService {
 
         footerInfoRepository.save(footerInfo);
     }
+    @CacheEvict(value = "footerInfo", allEntries = true)
     public void updateFooterInfo(FooterInfoDTO footerInfo) {
         FooterInfo entity = footerInfoRepository.findById(footerInfo.getFt_id()).orElseThrow(() -> new RuntimeException("FooterInfo not found"));
         // 기존 엔티티의 데이터를 업데이트
@@ -53,9 +56,13 @@ public class FooterInfoService {
 
         footerInfoRepository.save(entity);
     }
-    public FooterInfo getFooterInfo() {
-        return footerInfoRepository.findById(1L)
-                .orElse(null);  // 데이터가 없으면 null 반환
+
+    @Cacheable(value = "footerInfo")
+    public FooterInfoDTO  getFooterInfo() {
+        FooterInfo footerInfo = footerInfoRepository.findById(1L)
+                .orElse(null);
+        log.info("Fetched FooterInfo with ID 1 from database");
+        return footerInfo != null ? modelMapper.map(footerInfo, FooterInfoDTO.class) : null;
     }
 
 
