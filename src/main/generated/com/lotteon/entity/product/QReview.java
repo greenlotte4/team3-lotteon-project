@@ -18,11 +18,15 @@ public class QReview extends EntityPathBase<Review> {
 
     private static final long serialVersionUID = 658555848L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QReview review = new QReview("review");
 
     public final StringPath content = createString("content");
 
     public final ListPath<ReviewFile, QReviewFile> pReviewFiles = this.<ReviewFile, QReviewFile>createList("pReviewFiles", ReviewFile.class, QReviewFile.class, PathInits.DIRECT2);
+
+    public final QProduct product;
 
     public final StringPath rating = createString("rating");
 
@@ -35,15 +39,24 @@ public class QReview extends EntityPathBase<Review> {
     public final StringPath writer = createString("writer");
 
     public QReview(String variable) {
-        super(Review.class, forVariable(variable));
+        this(Review.class, forVariable(variable), INITS);
     }
 
     public QReview(Path<? extends Review> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QReview(PathMetadata metadata) {
-        super(Review.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QReview(PathMetadata metadata, PathInits inits) {
+        this(Review.class, metadata, inits);
+    }
+
+    public QReview(Class<? extends Review> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.product = inits.isInitialized("product") ? new QProduct(forProperty("product"), inits.get("product")) : null;
     }
 
 }

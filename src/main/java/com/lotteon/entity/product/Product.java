@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -79,6 +80,9 @@ public class Product {
 
     @Transient
     private List<String> fileDescs;
+
+    @OneToMany(mappedBy = "product")
+    private List<Review> reviews = new ArrayList<>();
 
     //리뷰 별 평균 값
     private double productRating;

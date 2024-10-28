@@ -7,9 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -28,8 +30,12 @@ public class Review {
     private String content;
     private String rating;  //상품평점
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="review_id")
-    private List<ReviewFile> pReviewFiles;
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewFile> pReviewFiles = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
 
 }

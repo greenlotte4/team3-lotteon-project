@@ -60,6 +60,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final DateTimePath<java.time.LocalDateTime> rdate = createDateTime("rdate", java.time.LocalDateTime.class);
 
+    public final ListPath<Review, QReview> reviews = this.<Review, QReview>createList("reviews", Review.class, QReview.class, PathInits.DIRECT2);
+
     public final StringPath sellerId = createString("sellerId");
 
     public final NumberPath<Long> sellerNo = createNumber("sellerNo", Long.class);
