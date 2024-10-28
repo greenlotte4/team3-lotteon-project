@@ -34,7 +34,7 @@
                     </colgroup>
                     <tr>
                         <td>유형</td>
-                        <td th:text="${faq.faqtype1} + ' - ' + ${faq.faqtype2}">
+                        <td th:text="${faq.category.getParent().name} + ' - ' + ${faq.category.getName()}">
                         </td>
                     </tr>
                     <tr>

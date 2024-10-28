@@ -11,7 +11,7 @@
 </head>
 <body>
 <th:block layout:fragment="content">
-          <div id="admin_service">    
+          <div id="admin_service">
               <section>
                   <th:block th:replace="~{content/admin/admin_gate}"></th:block>
 
@@ -39,7 +39,7 @@
                                                     <option th:value="${board.boardCateId}" th:text="${board.name}"></option>
                                                 </th:block>
                                             </select>
-                                            <select class="second_choice" name="cate" id="selectOption2">
+                                            <select class="second_choice" name="categoryid" id="selectOption2">
                                                 <option value="2차 선택" disabled selected>2차 선택</option>
                                             </select>
                                         </td>

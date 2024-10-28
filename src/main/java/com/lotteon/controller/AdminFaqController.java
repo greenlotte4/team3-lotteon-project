@@ -37,8 +37,6 @@ public class AdminFaqController {
         model.addAttribute(faqPageResponseDTO);
         log.info("list faq"+faqPageResponseDTO);
 
-//        List<Faq> faqs = faqService.selectAllfaq();
-//        model.addAttribute("faqs", faqs);
 
         List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
         log.info(boardCateDTOS);
@@ -58,19 +56,24 @@ public class AdminFaqController {
     public String adminFaqModify(Model model, int no) {
         FaqDTO faqDTO = faqService.selectfaq(no);
         model.addAttribute("faq", faqDTO);
+
+        List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
+        log.info(boardCateDTOS);
+        model.addAttribute("boardCate",boardCateDTOS);
         return "content/admin/faq/faqModify";
     }
 
-//    @ResponseBody
-//    @PostMapping("/modify")
-//    public ResponseEntity<?> adminFaqModify(FaqDTO faqDTO) {
-//        Faq faq = faqService.updatefaq(faqDTO);
-//        log.info("faqasdfasdfasdf : " + faq.toString());
-//        return ResponseEntity.ok().body(faq);
-//    }
+    @ResponseBody
+    @PostMapping("/modify")
+    public ResponseEntity<?> adminFaqModify(@ModelAttribute FaqDTO faqDTO) {
+        log.info("asdfadfasfdasdfasdfsadfasdfsadfsdafasdfdsafsdafasdfsd" + faqDTO);
+        Faq faq = faqService.updatefaq(faqDTO);
+        log.info("faqasdfasdfasdf : " + faq.toString());
+        return ResponseEntity.ok().body(faq);
+    }
 
     @GetMapping("/view")
-    public String adminFaqView(int no,Model model) {
+    public String adminFaqView(int no, Model model) {
         FaqDTO faqDTO = faqService.selectfaq(no);
         model.addAttribute("faq", faqDTO);
         return "content/admin/faq/faqView";
