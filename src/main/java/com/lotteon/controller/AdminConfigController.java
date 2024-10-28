@@ -3,20 +3,23 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.dto.VersionDTO;
-import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.HeaderInfoDTO;
-import com.lotteon.entity.Banner;
+import com.lotteon.dto.admin.TermsDto;
 import com.lotteon.entity.FooterInfo;
 import com.lotteon.entity.HeaderInfo;
+import com.lotteon.entity.admin.Terms;
 import com.lotteon.repository.FooterInfoRepository;
 import com.lotteon.repository.HeaderInfoRepository;
 import com.lotteon.service.*;
+import com.lotteon.service.admin.TermsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class AdminConfigController {
     private final HeaderInfoService headerInfoService;
     private final HeaderInfoRepository headerInfoRepository;
     private final VersionService versionService;
+    private final TermsService termsService;
 
 //    @GetMapping("/banner")
 //    public String adminBanner(Model model) {
@@ -43,8 +47,22 @@ public class AdminConfigController {
     public String adminTerms(Model model) {
         model.addAttribute("cate", "config");
         model.addAttribute("content", "terms");
+
+        List<Terms> termsList = termsService.findAllTerms();
+        model.addAttribute("termsList", termsList);
+
         return "content/admin/config/admin_Terms";
     }
+
+    @PostMapping("/terms")
+    public String updateTerms(@ModelAttribute TermsDto termsDto, Model model) {
+        termsService.updateTermsContent(termsDto);
+        model.addAttribute("message", "약관이 수정되었습니다."); // 메시지 추가
+        model.addAttribute("termsList", termsService.findAllTerms()); // 약관 목록을 다시 가져오는 로직 추가
+        return "content/admin/config/admin_Terms"; // 약관 관리 페이지로 리다이렉트
+    }
+
+
 
     @GetMapping("/version")
     public String adminVersion(Model model) {

@@ -62,6 +62,19 @@ public class UserRegisterController {
         return "redirect:/user/login";
     }
 
+    @PostMapping("/sellerregister2")
+    public String registerSeller2(@ModelAttribute User user, @ModelAttribute Seller seller) {
+        // 비밀번호 인코딩
+        String encodedPassword = passwordEncoder.encode(user.getPass());
+        user.setPass(encodedPassword);  // 인코딩된 비밀번호 설정
+
+        log.info("Encoded Password: " + encodedPassword);  // 인코딩된 비밀번호 로그
+
+        userService.registerSeller(user, seller);
+        log.info("user: " + user + " seller: " + seller);
+        return "redirect:/admin/store/shoplist";
+    }
+
     @ResponseBody
     @GetMapping("/checkUser")
     public ResponseEntity<Map<String, Object>> checkUser(@RequestParam String type, @RequestParam String value) {
