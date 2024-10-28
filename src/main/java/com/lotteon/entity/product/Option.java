@@ -16,7 +16,7 @@ public class Option {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     private String optionName; //프로덕트 code
     private String optionDesc;

@@ -85,13 +85,19 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchCartItems();
 
     function fetchCartItems(){
-        fetch('/api/cart',{
+        fetch('/api/list',{
             method: 'GET',
             headers: {
                 'Content-type' : 'application/json'
             }
         })
             .then(resp => {
+                if(resp.status === 401){
+                    // 사용자 인증이 안 된 경우 로그인 페이지로
+                    alert('로그인 없이 이곳은 접근 금지! 빨리 로그인해 주세요')
+                    window.location.href ='/user/login'
+                    return ;
+                }
                 if(!resp.ok){
                     throw new Error('network resp')
                 }

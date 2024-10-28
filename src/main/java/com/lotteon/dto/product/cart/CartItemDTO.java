@@ -5,6 +5,8 @@ package com.lotteon.dto.product.cart;
 import com.lotteon.dto.product.ProductDTO;
 import lombok.*;
 
+import java.util.List;
+
 @Setter
 @Getter
 @ToString
@@ -15,8 +17,9 @@ public class CartItemDTO {
     //추가
     private int cartItemId;
     private int stock;
-    private int price;
+    private long price;
 
+    private String optionName;
     private ProductDTO productDTO;
     private int total;
 }
