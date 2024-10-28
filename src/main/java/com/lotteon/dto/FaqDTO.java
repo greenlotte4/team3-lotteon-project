@@ -1,5 +1,6 @@
 package com.lotteon.dto;
 
+import com.lotteon.entity.BoardCate;
 import lombok.*;
 
 @Getter
@@ -17,6 +18,9 @@ public class FaqDTO {
     private int faqhit;
     private String date;
 
-    private String categoryId;
+    private Long categoryid;
+
+
+
 }
 
