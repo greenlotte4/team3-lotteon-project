@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    
+
 
     if(moreqnaBtn !=null){
         // qna 더보기 버튼 클릭 시
@@ -156,13 +156,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    
+
 
     // Image carousel functionality
     const reviewImages = document.getElementById('reviewImages');
     const leftArrow = document.getElementById('leftArrow');
     const rightArrow = document.getElementById('rightArrow');
-   
+
 
     if(reviewImages !=null){
 
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
         function updateImagePosition() {
             reviewImages.style.transform = `translateX(${-currentPosition * imageWidth}px)`;
         }
-    
+
         // Move left
         leftArrow.addEventListener('click', function () {
             if (currentPosition > 0) {
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateImagePosition();
             }
         });
-    
+
         // Move right
         rightArrow.addEventListener('click', function () {
             if (currentPosition < maxPosition) {
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     }
-   
+
 
     // Submenu functionality for lnb-items
     const lnbItems = document.querySelectorAll('.lnb-item > a');
@@ -365,7 +365,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-    
+
+
+
+
 
 
 });
