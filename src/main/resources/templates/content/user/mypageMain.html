@@ -160,31 +160,28 @@
                         <th>작성일</th>
 
                     </tr>
+                    <th:block th:each="review : ${recentReviews}">
                     <tr class="tr3">
-                        <td>
-                            <data value="">1</data>
-                        </td>
+                        <td th:text="${review.reviewId}"><data value="">1</data></td>
                         <td>
                             <data value="">
                                 <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
+                                    <!-- 첫 번째 ReviewFile의 sname을 사용하여 이미지 표시 -->
+                                    <img th:if="${review.getPReviewFiles().size() > 0}"
+                                         th:src="@{'/uploads/ReviewImg/' + ${review.getPReviewFiles()[0].sname}}"
+                                         alt="상품 이미지">
                                 </div>
                                 <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
+                                    <p>상품번호<br> <span th:text="${review.product.productId}">123456</span></p>
+                                    <p>상품명<br> <span th:text="${review.product.productName}">치킨</span></p>
                                 </div>
                             </data>
                         </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value="">평점</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
+                        <td><data th:text="${review.content}">배송이 빠릅니다. 잘 사용하겠습니다.</data></td>
+                        <td><data th:text="${review.rating}">평점</data></td>
+                        <td><data th:text="${review.rdate}">2022-12-10</data></td>
                     </tr>
+                    </th:block>
 
                     </tbody>
                 </table>
