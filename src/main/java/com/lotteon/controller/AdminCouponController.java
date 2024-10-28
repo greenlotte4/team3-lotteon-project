@@ -26,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,9 +43,8 @@ public class AdminCouponController {
 
     @GetMapping("/list")
     public String adminCouponList(
-            CouponListRequestDTO requestDTO,
-            Model model,
-            @RequestParam(defaultValue = "0") int page) {
+            @ModelAttribute CouponListRequestDTO requestDTO,
+            Model model) {
 
         // 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -58,42 +58,41 @@ public class AdminCouponController {
         model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
         model.addAttribute("sellerGrade", seller.getGrade());
 
-            log.info("호출됫따!!!!!!!!!!!!!!!!!!" + page);
-            log.info("여기는???????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.info("여기는???????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-            Page<CouponDTO> couponPage=null;
+        Page<CouponDTO> couponPage = couponService.selectCouponsPagination(requestDTO, grade2, seller.getId());
 
-            // 등급에 따라 쿠폰 목록 조회
-            if (grade2.contains("ADMIN")) {
-                log.info("어드민!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                couponPage = couponService.selectCouponsPagination(requestDTO,grade2,0); // adminRequest를 사용하여 모든 쿠폰 조회
-            } else if (grade2.contains("SELLER")) {
-                couponPage = couponService.selectCouponsPagination(requestDTO,grade2,sellerId);
-                log.info("else??????????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        // 등급에 따라 쿠폰 목록 조회
+        if (grade2.contains("ADMIN")) {
+            log.info("어드민!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            couponPage = couponService.selectCouponsPagination(requestDTO,grade2,0); // adminRequest를 사용하여 모든 쿠폰 조회
+        } else if (grade2.contains("SELLER")) {
+            couponPage = couponService.selectCouponsPagination(requestDTO,grade2,sellerId);
+            log.info("else??????????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-            }
+        }
 
-            model.addAttribute("couponList", couponPage.getContent());
-            model.addAttribute("totalPages", couponPage.getTotalPages());
-            model.addAttribute("currentPage", couponPage.getNumber());
-            log.info("쿠폰 목록 조회 성공: {}", couponPage);
-            log.info("등급!!!!!!!!!!!!!!!!"+seller.getGrade() );
+        model.addAttribute("couponList", couponPage.getContent());
+        model.addAttribute("totalPages", couponPage.getTotalPages());
+        model.addAttribute("currentPage", couponPage.getNumber());
+        log.info("쿠폰 목록 조회 성공: {}", couponPage);
+        log.info("등급!!!!!!!!!!!!!!!!"+seller.getGrade() );
 
 
         return "content/admin/coupon/list";
     }
 
-//    @GetMapping("/coupons")
-//    public String listCoupons(@RequestParam(defaultValue = "0") int page, Model model) {
-//
-//        Pageable pageable = PageRequest.of(page, 10); // 한 페이지에 10개
-//        Page<Coupon> couponPage = couponRepository.findAll(pageable);
-//
-//        log.info("호출됫따!!!!!!!!!!!!!!!!!!" + page);
-//        log.info("호출됫따!!!!!!!!!!!!!!!!!!");
-//
-//        return "content/admin/coupon/list";  // Thymeleaf 뷰
-//    }
+    @GetMapping("/coupons")
+    public String listCoupons(@RequestParam(defaultValue = "0") int page, Model model) {
+
+        Pageable pageable = PageRequest.of(page, 10); // 한 페이지에 10개
+        Page<Coupon> couponPage = couponRepository.findAll(pageable);
+
+        log.info("호출됫따!!!!!!!!!!!!!!!!!!" + page);
+        log.info("호출됫따!!!!!!!!!!!!!!!!!!");
+
+        return "content/admin/coupon/list";  // Thymeleaf 뷰
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerCoupon(@RequestBody CouponDTO couponDTO) {
