@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -77,9 +78,9 @@ public class Product {
     private String file230;
     private String file456;
 
-    @Transient
-    private List<String> fileDescs;
 
+    @Transient
+    private List<String> fileDescs = new ArrayList<>();
     //리뷰 별 평균 값
     private double productRating;
 
@@ -91,23 +92,21 @@ public class Product {
     }
 
 
-
     public void setFiles(List<ProductFile> files) {
-        this.files= files;
-        if(files!=null){
-            for(ProductFile file : files){
-                if (file.getType().equals("190")){
-                    this.file190 = file.getSName();
-                }else if (file.getType().equals("230")){
-                    this.file230 = file.getSName();
-                }else if (file.getType().equals("456")){
-                    this.file456 = file.getSName();
-                }else{
-                    this.fileDescs.add(file.getSName());
+        this.files = files;
+        if (files != null) {
+            if (this.fileDescs == null) {
+                this.fileDescs = new ArrayList<>();
+            }
+            for (ProductFile file : files) {
+                switch (file.getType()) {
+                    case "190" -> this.file190 = file.getSName();
+                    case "230" -> this.file230 = file.getSName();
+                    case "456" -> this.file456 = file.getSName();
+                    default -> this.fileDescs.add(file.getSName());
                 }
             }
         }
-
     }
 
     public void setOptions(List<Option> options) {
