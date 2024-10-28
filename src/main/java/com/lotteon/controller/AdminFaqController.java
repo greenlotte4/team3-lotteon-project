@@ -35,15 +35,23 @@ public class AdminFaqController {
 
         FaqPageResponseDTO faqPageResponseDTO = faqService.selectfaqListAll(pageRequestDTO);
         model.addAttribute(faqPageResponseDTO);
+        log.info("list faq"+faqPageResponseDTO);
 
-        List<FaqDTO> faqDTOs = faqService.selectAllfaq();
-        model.addAttribute("faqDTOs", faqDTOs);
+//        List<Faq> faqs = faqService.selectAllfaq();
+//        model.addAttribute("faqs", faqs);
 
         List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
         log.info(boardCateDTOS);
         model.addAttribute("boardCate",boardCateDTOS);
 
         return "content/admin/faq/faqList";
+    }
+
+    @GetMapping("/subcate/{parentId}")
+    @ResponseBody
+    public List<BoardCateDTO> adminFaqOption(@PathVariable Long parentId){
+        List<BoardCateDTO> boardsubCate = boardService.selectBoardSubCate(parentId);
+        return boardsubCate;
     }
 
     @GetMapping("/modify")
@@ -53,13 +61,13 @@ public class AdminFaqController {
         return "content/admin/faq/faqModify";
     }
 
-    @ResponseBody
-    @PostMapping("/modify")
-    public ResponseEntity<?> adminFaqModify(FaqDTO faqDTO) {
-        Faq faq = faqService.updatefaq(faqDTO);
-        log.info("faqasdfasdfasdf : " + faq.toString());
-        return ResponseEntity.ok().body(faq);
-    }
+//    @ResponseBody
+//    @PostMapping("/modify")
+//    public ResponseEntity<?> adminFaqModify(FaqDTO faqDTO) {
+//        Faq faq = faqService.updatefaq(faqDTO);
+//        log.info("faqasdfasdfasdf : " + faq.toString());
+//        return ResponseEntity.ok().body(faq);
+//    }
 
     @GetMapping("/view")
     public String adminFaqView(int no,Model model) {
@@ -70,12 +78,17 @@ public class AdminFaqController {
 
     @GetMapping("/write")
     public String adminFaqWrite(Model model) {
+
+        List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
+        log.info(boardCateDTOS);
+        model.addAttribute("boardCate",boardCateDTOS);
         return "content/admin/faq/faqWrite";
     }
 
     @ResponseBody
     @PostMapping("/write")
     public ResponseEntity<?> adminFaqWrite1(Model model, @ModelAttribute FaqDTO faqDTO) {
+        log.info("FaQDTO >L: >>>>>>:"+faqDTO);
         Faq faq = faqService.insertfaq(faqDTO);
         return ResponseEntity.ok().body(faq);
     }
