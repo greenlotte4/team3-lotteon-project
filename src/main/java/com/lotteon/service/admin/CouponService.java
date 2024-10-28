@@ -30,7 +30,13 @@ public class CouponService {
     private final ModelMapper modelMapper;
 
     public String randomCouponId(){
-        return UUID.randomUUID().toString().replaceAll("-","").substring(0,10);
+
+        String couponId;
+        do{
+            couponId = UUID.randomUUID().toString().replaceAll("-","").substring(0,10);
+        }while (couponRepository.existsById(couponId));
+
+        return couponId;
     }
 
 
@@ -109,7 +115,7 @@ public class CouponService {
         }
         return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
     }
-//    // 모든 쿠폰 조회 메소드
+    //    // 모든 쿠폰 조회 메소드
 //    public Page<CouponPageDTO> selectCouponsPagination(CouponListRequestDTO requestDTO, Pageable pageable) {
 //        return couponRepository.selectCouponByUserIdForList(Seller.getId(), pageable);
 //    }
