@@ -64,10 +64,6 @@ public class FaqService {
     }
 
 
-//    public List<Faq> selectAllfaq(){
-//         return faqRepository.findAll();
-//
-//    }
     public FaqDTO selectfaq(int no){
         Optional<Faq> optfaq = faqRepository.findById(no);
 

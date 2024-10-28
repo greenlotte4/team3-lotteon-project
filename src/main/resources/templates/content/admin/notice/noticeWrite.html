@@ -27,12 +27,12 @@
                                     <div>유형</div>
                                     <div>
                                         <td>
-                                            <select class="first_choice">
+                                            <select class="first_choice" name="noticetype">
                                                 <option value="" disabled selected>유형 선택</option>
-                                                <option value="1">가입</option>
-                                                <option value="2">취소/반품/교환</option>
-                                                <option value="3">주문/결제</option>
-                                                <option value="4">쿠폰/이벤트</option>
+                                                <option value="고객서비스">고객서비스</option>
+                                                <option value="이벤트당첨">이벤트당첨</option>
+                                                <option value="안전거래">안전거래</option>
+                                                <option value="위해상품">위해상품</option>
                                             </select>
                                         </td>
                                     </div>
@@ -40,13 +40,13 @@
                                 <div class="write-title">
                                     <div>제목</div>
                                     <div>
-                                        <input type="text" placeholder="제목을 입력하세요">
+                                        <input type="text" placeholder="제목을 입력하세요" name="noticetitle">
                                     </div>
                                 </div>
                                 <div class="write-input">
                                     <div>내용</div>
                                     <div>
-                                        <textarea class="faq-contents" oninput="autoResize(this)"></textarea>
+                                        <textarea class="faq-contents" oninput="autoResize(this)" name="noticecontent"></textarea>
                                     </div>
                                 </div>
                         </form>
@@ -57,4 +57,29 @@
                     </div>
                 </div>
                 </section>
+              <script>
+                  const formdata = document.getElementsByTagName('form')[0];
+                  const noticewritebtn = document.getElementsByClassName('write-btn-regip')[0];
+
+                  noticewritebtn.addEventListener('click', function (e){
+                      e.preventDefault();
+                      const data = new FormData(formdata);
+                      fetch('/admin/notice/write', {
+                          method : 'POST',
+                          body : data
+                      })
+                          .then(resp => resp.json())
+                          .then(data => {
+                              console.log(data);
+                              if(data){
+                                  alert('등록되었습니다.');
+                                  window.location.href='/admin/notice/list'
+                              }
+                          })
+                          .catch(err => {
+                              console.log(err);
+                          });
+                  })
+
+              </script>
 </th:block>

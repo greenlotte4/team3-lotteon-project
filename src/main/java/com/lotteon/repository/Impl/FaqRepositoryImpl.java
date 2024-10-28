@@ -30,7 +30,7 @@ public class FaqRepositoryImpl implements FaqRepositoryCustom {
 
         // 출력 화면 표시
         List<Tuple> content = queryFactory
-                .select(faq.faqNo, faq.faqtype1, faq.faqtype2, faq.faqtitle, faq.faqhit, faq.date)
+                .select(faq.faqNo, faq.faqtitle, faq.faqhit, faq.date)
                 .from(faq)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize()) //부터 10개까지(size 만큼까지)
