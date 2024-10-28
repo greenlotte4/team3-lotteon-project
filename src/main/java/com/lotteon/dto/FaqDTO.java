@@ -11,11 +11,12 @@ import lombok.*;
 public class FaqDTO {
 
     private int faqNo;
-    private String faqtype1;
-    private String faqtype2;
+    private BoardCateDTO category;
     private String faqtitle;
     private String faqcontent;
     private int faqhit;
     private String date;
+
+    private String categoryId;
 }
 

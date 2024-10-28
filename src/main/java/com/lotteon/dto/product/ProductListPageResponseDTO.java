@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductListPageResponseDTO {
 
-    private List<ProductListDTO> productDTOList;
+    private List<ProductDTO> productDTOs;
 
     private String type;
     private int pg;
@@ -25,13 +25,13 @@ public class ProductListPageResponseDTO {
 
 
     @Builder
-    public ProductListPageResponseDTO(PageRequestDTO pageRequestDTO,List<ProductListDTO> productDTOList,int total) {
+    public ProductListPageResponseDTO(PageRequestDTO pageRequestDTO,List<ProductDTO> productDTOs,int total) {
 
         this.type = pageRequestDTO.getType();
         this.pg = pageRequestDTO.getPage();
         this.size = pageRequestDTO.getSize();
         this.total = total;
-        this.productDTOList = (productDTOList != null) ? productDTOList : new ArrayList<>();
+        this.productDTOs = (productDTOs != null) ? productDTOs : new ArrayList<>();
 
 
         this.startNo = total - ((pg-1)*size);

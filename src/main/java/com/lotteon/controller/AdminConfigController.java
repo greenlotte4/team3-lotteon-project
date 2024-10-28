@@ -18,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -48,9 +50,19 @@ public class AdminConfigController {
 
     @GetMapping("/version")
     public String adminVersion(Model model) {
-        model.addAttribute("cate", "config");
-        model.addAttribute("content", "version");
+        List<VersionDTO> versionList = versionService.getAllVersions();
+        model.addAttribute("versionList", versionList);  // 데이터를 모델에 추가
         return "content/admin/config/admin_Version";
+    }
+
+    @ResponseBody
+    @DeleteMapping("/version/delete")
+    public ResponseEntity<?> bannerDelete(@RequestBody List<Integer> data){
+        if(data == null || data.isEmpty()){
+            return ResponseEntity.badRequest().body("삭제할 항목이 없습니다.");
+        }
+        versionService.deleteCheck(data);
+        return ResponseEntity.ok().build();
     }
 
     @ResponseBody
@@ -117,7 +129,7 @@ public class AdminConfigController {
     }
 
 
-     @PostMapping("/headerLogoInfo")
+    @PostMapping("/headerLogoInfo")
     public ResponseEntity<?> saveHeaderLogoInfo(@ModelAttribute HeaderInfoDTO headerInfoDTO) {
         // 파일 업로드 수행
         HeaderInfoDTO newheaderInfo = fileService.uploadFiles(headerInfoDTO);

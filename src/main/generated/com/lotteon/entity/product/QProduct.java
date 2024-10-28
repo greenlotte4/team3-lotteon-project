@@ -26,6 +26,12 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Integer> discount = createNumber("discount", Integer.class);
 
+    public final StringPath file190 = createString("file190");
+
+    public final StringPath file230 = createString("file230");
+
+    public final StringPath file456 = createString("file456");
+
     public final ListPath<ProductFile, QProductFile> files = this.<ProductFile, QProductFile>createList("files", ProductFile.class, QProductFile.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> hit = createNumber("hit", Integer.class);
@@ -34,11 +40,11 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final BooleanPath isSaled = createBoolean("isSaled");
 
-    public final SetPath<Option, QOption> options = this.<Option, QOption>createSet("options", Option.class, QOption.class, PathInits.DIRECT2);
+    public final ListPath<Option, QOption> options = this.<Option, QOption>createList("options", Option.class, QOption.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> point = createNumber("point", Integer.class);
 
-    public final NumberPath<Integer> price = createNumber("price", Integer.class);
+    public final NumberPath<Long> price = createNumber("price", Long.class);
 
     public final StringPath productCode = createString("productCode");
 
@@ -50,9 +56,13 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath productName = createString("productName");
 
+    public final NumberPath<Double> productRating = createNumber("productRating", Double.class);
+
     public final DateTimePath<java.time.LocalDateTime> rdate = createDateTime("rdate", java.time.LocalDateTime.class);
 
     public final StringPath sellerId = createString("sellerId");
+
+    public final NumberPath<Long> sellerNo = createNumber("sellerNo", Long.class);
 
     public final NumberPath<Integer> shippingFee = createNumber("shippingFee", Integer.class);
 
@@ -60,7 +70,7 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Integer> sold = createNumber("sold", Integer.class);
 
-    public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
+    public final NumberPath<Long> stock = createNumber("stock", Long.class);
 
     public QProduct(String variable) {
         this(Product.class, forVariable(variable), INITS);

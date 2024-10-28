@@ -19,7 +19,8 @@ public class Version {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ver_id; // 필드명
+    @Column(name = "ver_id")
+    private int verId; // ver_id를 verId로 변경
 
     private String ver_name;
     private String ver_writer;

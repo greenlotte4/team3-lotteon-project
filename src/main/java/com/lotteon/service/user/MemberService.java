@@ -21,9 +21,14 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    // 특정 회원 조회
+    // id로 특정 회원 조회
     public Optional<Member> getMemberByUid(Long id) {
         return memberRepository.findById(id);
+    }
+
+    // uid로 특정회원 조회
+    public Optional<Member> findByUid(String uid) {
+        return memberRepository.findByUser_Uid(uid);
     }
 
     // 회원 정보 수정

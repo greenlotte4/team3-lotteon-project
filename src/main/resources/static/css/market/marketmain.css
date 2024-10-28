@@ -18,7 +18,7 @@
 #mainArea .mainWrapper .section{
     /* Subtract the aside's width and some padding/margin */
     
-    width: calc(100% - 310px); /* Subtract the aside's width and some padding/margin */
+    width: calc(100% - 230px); /* Subtract the aside's width and some padding/margin */
     box-sizing: border-box; /* Ensure proper width calculation */
 
      /* Ensure proper width calculation */
@@ -28,7 +28,7 @@
 #mainArea .section .sectionWrapper{
     border: 1px solid #eee;
     margin-top: 10px;
-    width: 890px;
+    width: 100%;
     padding: 20px;
     box-sizing: border-box;
 }

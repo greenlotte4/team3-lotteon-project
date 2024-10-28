@@ -18,12 +18,19 @@ public class Faq {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int faqNo;
-    private String faqtype1;
-    private String faqtype2;
+
     private String faqtitle;
     private String faqcontent;
     private int faqhit;
 
     @CreationTimestamp
     private LocalDateTime date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private BoardCate cate;
+
+    //삭제예정
+    private String faqtype1;
+    private String faqtype2;
 }

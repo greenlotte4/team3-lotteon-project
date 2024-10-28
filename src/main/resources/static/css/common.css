@@ -1,3 +1,80 @@
+/**/
+/* 1depth 스타일 */
+/* 1depth 스타일 */
+.menu-1depth {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #FFFFFF;
+
+    width: 250px;
+}
+
+.menu-1depth li {
+    color: #0a0101;
+    padding: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.menu-1depth li:hover {
+    background-color: #ef2a23;
+    color: white;
+}
+
+/* 2depth 스타일 */
+.menu-2depth {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0px;
+    left: 250px;
+    background-color: #ef2a23;
+
+    width: 250px;
+    z-index: 1;
+}
+
+.menu-2depth li {
+    padding: 15px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s;
+
+}
+
+.menu-2depth li:hover {
+    background-color: #f3c7c6;
+    color: #0a0101;
+}
+
+/* 3depth 스타일 */
+.menu-3depth {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    left: 250px;
+    top: 0px;
+    background-color: #f3c7c6;
+    width: 250px;
+    z-index: 2;
+}
+
+.menu-3depth li {
+    padding: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.menu-3depth li:hover {
+    background-color: #d5afae;
+}
+/**/
+
 body{}
 
 #wrapper{
@@ -450,10 +527,10 @@ input[type=search] {
 
 .menuVisible .categoryMenu {
     display: block;
-    width: 300px;
+    width: 250px;
     top: 26px;
     left: -16px;
-    border: 2px solid #ef2a23;
+    /*border: 2px solid #ef2a23;*/
     transition: max-height 0.5s cubic-bezier(0.22, 1.61, 0.36, 1); /* 촤라락 효과 */
 
     height: auto;
@@ -609,7 +686,7 @@ input[type=search] {
 
 #mainArea .aside.market{
     height: auto;
-    width: 300px;
+    width: 220px;
     box-sizing: border-box;
     border: 1px solid #eee;
     margin-top: 10px ;
