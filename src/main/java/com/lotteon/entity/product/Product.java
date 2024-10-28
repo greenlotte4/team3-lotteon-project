@@ -71,6 +71,7 @@ public class Product {
     @ToString.Exclude
     private ProductDetails productDetails;
 
+
     private int hit;
 
 
