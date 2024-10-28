@@ -1,6 +1,7 @@
 package com.lotteon.service.admin;
 
 import com.lotteon.dto.NoticeDTO;
+import com.lotteon.entity.Faq;
 import com.lotteon.entity.Notice;
 import com.lotteon.repository.admin.NoticeRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -28,5 +30,19 @@ public class NoticeService {
                 .map(notice -> modelMapper.map(notice, NoticeDTO.class)) // 엔티티를 DTO로 변환
                 .collect(Collectors.toList());
 
+    }
+    public void deleteCheck(List<Long> data) {
+        for (Long id : data) {
+            noticeRepository.deleteById(id);
+        }
+
+    }
+
+    public void deleteNotice(Long no){
+        Optional<Notice> optNotice = noticeRepository.findById(no);
+        if(optNotice.isPresent()){
+            Notice notice = optNotice.get();
+            noticeRepository.delete(notice);
+        }
     }
 }
