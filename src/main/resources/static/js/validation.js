@@ -196,6 +196,12 @@ window.onload = function () {
     document.querySelector('form').onsubmit = function (event) {
         event.preventDefault(); // 기본 폼 제출 방지
 
+        // 모든 유효성 검사 통과 여부 확인
+        if (!isUidOk || !isPassOk || !isNameOk || !isEmailOk) {
+            alert('유효성 검사를 통과 하셔야합니다.');
+            return; // 유효성 검사가 통과되지 않으면 회원가입 중단
+        }
+
         const formData = new FormData(event.target); // 폼 데이터 가져오기
 
         // 회원가입 API 호출

@@ -23,7 +23,8 @@ public class Terms {
     private String title;  // 약관 제목
 
     @Setter
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "LONGTEXT", nullable = false )
     private String content;  // 약관 내용
 
     @Column(nullable = false, length = 50)

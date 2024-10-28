@@ -46,7 +46,7 @@ public class Member {
     @CreationTimestamp
     private LocalDateTime regDate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_uid") // 외래 키
     private User user; // User와의 관계
 
