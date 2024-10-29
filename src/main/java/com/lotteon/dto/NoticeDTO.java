@@ -1,6 +1,7 @@
 package com.lotteon.dto;
 
 
+import com.lotteon.entity.NoticeType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,7 +21,7 @@ public class NoticeDTO {
 
     private Long noticeNo;
     private String noticetitle;
-    private String noticetype;
+    private NoticeType noticetype;
     private String noticecontent;
     private String date;
     private int noticehit;

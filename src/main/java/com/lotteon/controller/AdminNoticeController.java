@@ -2,8 +2,10 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.NoticeDTO;
 import com.lotteon.entity.Notice;
+import com.lotteon.entity.NoticeType;
 import com.lotteon.service.admin.NoticeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+@Log4j2
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/admin/notice")
@@ -21,23 +24,38 @@ public class AdminNoticeController {
 
     @GetMapping("/list")
     public String adminNoticeList(Model model) {
+        model.addAttribute("noticeTypes", NoticeType.values());
         List<NoticeDTO> notice = noticeService.selectAllNotice();
         model.addAttribute("notice", notice);
         return "content/admin/notice/noticeList";
     }
 
     @GetMapping("/modify")
-    public String adminNoticeModify(Model model) {
+    public String adminNoticeModify(Model model, Long no) {
+        NoticeDTO noticeDTO = noticeService.selectNotice(no);
+        model.addAttribute("notice", noticeDTO);
+        model.addAttribute("noticeTypes", NoticeType.values());
         return "content/admin/notice/noticeModify";
     }
 
+    @ResponseBody
+    @PostMapping("/modify")
+    public ResponseEntity<?> adminNoticeModify(Model model, NoticeDTO noticeDTO) {
+        log.info("adminNoticeModify :" + noticeDTO);
+        Notice notice = noticeService.UpdateNotice(noticeDTO);
+        return ResponseEntity.ok().body(notice);
+    }
+
     @GetMapping("/view")
-    public String adminNoticeView(Model model) {
+    public String adminNoticeView(Model model, Long no) {
+        NoticeDTO noticeDTO = noticeService.selectNotice(no);
+        model.addAttribute("notice", noticeDTO);
         return "content/admin/notice/noticeView";
     }
 
     @GetMapping("/write")
     public String adminNoticeWrite(Model model) {
+        model.addAttribute("noticeTypes", NoticeType.values());
         return "content/admin/notice/noticeWrite";
     }
 

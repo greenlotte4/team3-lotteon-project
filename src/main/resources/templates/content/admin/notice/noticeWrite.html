@@ -29,10 +29,9 @@
                                         <td>
                                             <select class="first_choice" name="noticetype">
                                                 <option value="" disabled selected>유형 선택</option>
-                                                <option value="고객서비스">고객서비스</option>
-                                                <option value="이벤트당첨">이벤트당첨</option>
-                                                <option value="안전거래">안전거래</option>
-                                                <option value="위해상품">위해상품</option>
+                                                <th:block th:each="type : ${noticeTypes}">
+                                                    <option th:value="${type.name()}" th:text="${type.name()}"></option>
+                                                </th:block>
                                             </select>
                                         </td>
                                     </div>
