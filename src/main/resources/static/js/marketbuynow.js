@@ -59,7 +59,7 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(productData)
-        })
+            })
             .then(response => response.json())
             .then(data => {
                 console.log(data); // 서버 응답을 확인
@@ -88,8 +88,4 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
                 alert("구매 처리 중 오류가 발생했습니다.");
             });
     }
-
-
-
-
 });
