@@ -1,6 +1,5 @@
 package com.lotteon.dto.admin;
 
-import com.lotteon.dto.admin.PageRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminPageResponseDTO<T> {
+public class PageResponseDTO<T> {
     private List<T> dtoList;
     private String cate;
     private int pg;
@@ -28,8 +27,8 @@ public class AdminPageResponseDTO<T> {
     private String cateNo;
 
     @Builder
-    public AdminPageResponseDTO(PageRequestDTO pageRequestDTO, List<T> dtoList, int total) {
-        this.cate = pageRequestDTO.getCate();
+    public PageResponseDTO(PageRequestDTO pageRequestDTO, List<T> dtoList, int total) {
+        this.cate = pageRequestDTO.getCateNo();
         this.pg = pageRequestDTO.getPg();
         this.size = pageRequestDTO.getSize();
         this.total = total;
