@@ -1,6 +1,8 @@
 package com.lotteon.controller;
 
 import com.lotteon.dto.NoticeDTO;
+import com.lotteon.dto.page.PageRequestDTO;
+import com.lotteon.dto.page.NoticePageResponseDTO;
 import com.lotteon.entity.Notice;
 import com.lotteon.entity.NoticeType;
 import com.lotteon.service.admin.NoticeService;
@@ -23,10 +25,15 @@ public class AdminNoticeController {
     private final NoticeService noticeService;
 
     @GetMapping("/list")
-    public String adminNoticeList(Model model) {
+    public String adminNoticeList(Model model , PageRequestDTO pageRequestDTO) {
+
+        NoticePageResponseDTO noticePageResponseDTO = noticeService.selectNoticeListAll(pageRequestDTO);
+        log.info(noticePageResponseDTO);
+        model.addAttribute(noticePageResponseDTO);
+
         model.addAttribute("noticeTypes", NoticeType.values());
-        List<NoticeDTO> notice = noticeService.selectAllNotice();
-        model.addAttribute("notice", notice);
+//        List<NoticeDTO> notice = noticeService.selectAllNotice();
+//        model.addAttribute("notice", notice);
         return "content/admin/notice/noticeList";
     }
 
