@@ -60,28 +60,28 @@
                     <table>
                         <tr>
                             <td>
-                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                                <a href="#">회원</a>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-user.png"></a><br>
+                                <a th:href="@{/cs/faq/list}">회원</a>
                             </td>
                             <td>
-                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                                <a href="#">쿠폰/이벤트</a>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-coupon.png"></a><br>
+                                <a th:href="@{/cs/faq/list}">쿠폰/이벤트</a>
                             </td>
                             <td>
-                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                                <a href="#">주문/결제</a>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-order.png"></a><br>
+                                <a th:href="@{/cs/faq/list}">주문/결제</a>
                             </td>
                             <td>
-                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                                <a href="#">배송</a>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-shipping.png"></a><br>
+                                <a th:href="@{/cs/faq/list}">배송</a>
                             </td>
                             <td>
-                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                                <a href="#">취소/반품/환불</a>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-return.png"></a><br>
+                                <a th:href="@{/cs/faq/list}">취소/반품/환불</a>
                             </td>
                             <td>
-                                <a href="#"><img src="../images/sample/81769152668.jpg"></a><br>
-                                <a href="#">안전결제</a>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-safety.png"></a><br>
+                                <a th:href="@{/cs/faq/list}">안전결제</a>
                             </td>
                         </tr>
                     </table>
@@ -91,36 +91,22 @@
                         <h2>문의하기</h2>
                         <span><a th:if="${#authentication.name != 'anonymousUser'}" th:href="@{/cs/qna/list}">전체보기</a></span>
                     </div>
+                    <div>
+                        <span th:if="${#lists.isEmpty(qnaList)}">QnA 데이터가 없습니다.</span>
+                    </div>
                     <table class="question_table">
                         <colgroup>
                             <col style="width: 500px">
                             <col style="width: 200px">
                             <col style="width: 200px">
                         </colgroup>
-                        <tr>
-                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                            <td>ckk**</td>
-                            <td>2024.10.10</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                            <td>ckk**</td>
-                            <td>2024.10.10</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                            <td>ckk**</td>
-                            <td>2024.10.10</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                            <td>ckk**</td>
-                            <td>2024.10.10</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">[회원] 개인회원과 법인회원에 차이가 있나요?</a></td>
-                            <td>ckk**</td>
-                            <td>2024.10.10</td>
+
+                        <tr th:each="qna : ${qnaList}">
+                            <td>
+                                <a th:href="@{/cs/qna/detail/{id}(id=${qna.qnaId})}" th:text="${qna.qnaTitle}"></a>
+                            </td>
+                            <td th:text="${#strings.substring(qna.qnaWriter, 0, 2) + '**'}"></td> <!-- 작성자 마스킹 -->
+                            <td th:text="${#dates.format(qna.rdate.toLocalDate(), 'yyyy-MM-dd')}"></td>
                         </tr>
                     </table>
                     <a class="inquiry" th:if="${#authentication.name != 'anonymousUser'}" href="/cs/qna/list" >문의하기 ></a>
