@@ -7,6 +7,7 @@ import com.lotteon.repository.VersionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,7 @@ public class VersionService {
     private final VersionRepository versionRepository;
     private final ModelMapper modelMapper;
 
-
+    @CacheEvict(value = "Version", allEntries = true)
     public void insertVersion(VersionDTO versionDTO) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
