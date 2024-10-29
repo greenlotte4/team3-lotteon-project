@@ -29,7 +29,7 @@ public class QNotice extends EntityPathBase<Notice> {
 
     public final StringPath noticetitle = createString("noticetitle");
 
-    public final StringPath noticetype = createString("noticetype");
+    public final EnumPath<NoticeType> noticetype = createEnum("noticetype", NoticeType.class);
 
     public QNotice(String variable) {
         super(Notice.class, forVariable(variable));
