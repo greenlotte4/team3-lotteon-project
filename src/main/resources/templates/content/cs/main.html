@@ -30,26 +30,16 @@
                             <col style="width: 700px">
                             <col style="width: 200px">
                         </colgroup>
-                        <tr>
-                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                            <td>2024.10.31</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                            <td>2024.10.31</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                            <td>2024.10.31</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                            <td>2024.10.31</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">[안내] 해외결제사 창 문자주의</a></td>
-                            <td>2024.10.31</td>
-                        </tr>
+                        <!-- Notice 데이터 출력 -->
+                        <th:block th:if="${!top5Notices.isEmpty()}">
+                            <tr th:each="notice : ${top5Notices}">
+                                <td>
+                                    <a th:href="@{/notice/view(id=${notice.noticeNo})}"
+                                       th:text="${notice.noticetitle}"></a>
+                                </td>
+                                <td th:text="${#strings.substring(notice.date, 0, 10)}"></td>
+                            </tr>
+                        </th:block>
                     </table>
                 </div>
                 <div class="qna">
@@ -89,10 +79,11 @@
                 <div class="question">
                     <div>
                         <h2>문의하기</h2>
-                        <span><a th:if="${#authentication.name != 'anonymousUser'}" th:href="@{/cs/qna/list}">전체보기</a></span>
+                        <span><a th:if="${#authentication.name != 'anonymousUser'}"
+                                 th:href="@{/cs/qna/list}">전체보기</a></span>
                     </div>
                     <div>
-                        <span th:if="${#lists.isEmpty(qnaList)}">QnA 데이터가 없습니다.</span>
+                        <span th:if="${qnaPage.getContent().isEmpty()}">QnA 데이터가 없습니다.</span>
                     </div>
                     <table class="question_table">
                         <colgroup>
@@ -100,16 +91,19 @@
                             <col style="width: 200px">
                             <col style="width: 200px">
                         </colgroup>
-
-                        <tr th:each="qna : ${qnaList}">
-                            <td>
-                                <a th:href="@{/cs/qna/detail/{id}(id=${qna.qnaId})}" th:text="${qna.qnaTitle}"></a>
-                            </td>
-                            <td th:text="${#strings.substring(qna.qnaWriter, 0, 2) + '**'}"></td> <!-- 작성자 마스킹 -->
-                            <td th:text="${#dates.format(qna.rdate.toLocalDate(), 'yyyy-MM-dd')}"></td>
-                        </tr>
+                        <!-- QnA 데이터 출력 -->
+                        <th:block th:if="${qnaPage != null && !qnaPage.content.isEmpty()}">
+                            <tr th:each="qna : ${qnaPage.content}"> <!-- content를 사용 -->
+                                <td>
+                                    <a th:href="@{/cs/qna/detail/{id}(id=${qna.qna_id})}"
+                                       th:text="${qna.qna_title}"></a>
+                                </td>
+                                <td th:text="${#strings.substring(qna.qna_writer, 0, 2) + '**'}"></td>
+                                <td th:text="${#strings.substring(qna.rdate, 0, 10)}"></td>
+                            </tr>
+                        </th:block>
                     </table>
-                    <a class="inquiry" th:if="${#authentication.name != 'anonymousUser'}" href="/cs/qna/list" >문의하기 ></a>
+                    <a class="inquiry" th:if="${#authentication.name != 'anonymousUser'}" href="/cs/qna/list">문의하기 ></a>
                 </div>
                 <div class="onecounsel">
                     <h2>1:1 상담안내</h2>

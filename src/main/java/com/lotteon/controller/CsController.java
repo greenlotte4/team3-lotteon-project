@@ -2,14 +2,20 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.FaqDTO;
+import com.lotteon.dto.NoticeDTO;
 import com.lotteon.dto.QnaDTO;
+import com.lotteon.entity.Notice;
 import com.lotteon.entity.QnA;
 import com.lotteon.repository.QnaRepository;
+import com.lotteon.repository.admin.NoticeRepository;
 import com.lotteon.service.CsService;
 import com.lotteon.service.admin.FaqService;
+import com.lotteon.service.admin.NoticeService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
@@ -20,10 +26,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -37,12 +45,23 @@ public class CsController {
     private final QnaRepository qnaRepository;
     private final CsService csService;
     private final FaqService faqService;
+    private final NoticeService noticeService;
+    private final NoticeRepository noticeRepository;
+    private final ModelMapper getModelMapper;
 
     @GetMapping("/main")
-    public String main(Model model, @PageableDefault(size = 10) Pageable pageable) {
-        Page<QnA> qnaPage = qnaRepository.findAll(pageable); // 모든 QnA를 페이지 형태로 가져오기
+    public String main(Model model, @PageableDefault(size = 5) Pageable pageable) {
+        List<NoticeDTO> top5Notices = noticeService.getTop5Notices(); // 최신 공지사항 5개 DTO로 가져옴
+        List<QnaDTO> top5QnAs = csService.getTop5QnAs(); // 인스턴스를 통해 호출
+
+        // QnA 데이터 가져오기
+        Page<QnaDTO> qnaPage = csService.getAllQnA(pageable);
+
         model.addAttribute("cate", "main");
+        model.addAttribute("top5Notices", top5Notices);
         model.addAttribute("qnaPage", qnaPage); // qnaPage를 모델에 추가
+        model.addAttribute("top5QnAs", top5QnAs); // top5QnAs도 모델에 추가
+
         return "content/cs/main";
     }
 
@@ -69,14 +88,27 @@ public class CsController {
 
 
     @GetMapping("/notice/list")
-    public String noticeList(Model model) {
-        return "content/cs/notice/noticeList";
+    public String noticeList(Model model, Pageable pageable) {
+        // 데이터베이스에서 모든 공지사항을 페이지 형태로 가져옴
+        Page<Notice> noticePage = noticeService.getNotices(pageable);
+
+        // 모델에 공지사항 페이지 추가
+        model.addAttribute("noticePage", noticePage); // Page 객체 추가
+
+        return "content/cs/notice/noticeList"; // 뷰 이름 반환
     }
 
-
     @GetMapping("/notice/view")
-    public String noticeView(Model model) {
-        return "content/cs/notice/noticeView";
+    public String noticeView(Model model, @RequestParam Long no, RedirectAttributes redirectAttributes) {
+        // 공지사항 번호를 이용해 개별 공지사항 정보를 가져옴
+        Optional<Notice> noticeOpt = noticeService.getNoticeById(no);
+        if (noticeOpt.isPresent()) {
+            model.addAttribute("notice", noticeOpt.get()); // 모델에 공지사항 추가
+            return "content/cs/notice/noticeView"; // 뷰 이름 반환
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "공지사항을 찾을 수 없습니다."); // 에러 메시지 추가
+            return "redirect:/notice/list"; // 공지사항이 없으면 목록으로 리다이렉트
+        }
     }
 
 
