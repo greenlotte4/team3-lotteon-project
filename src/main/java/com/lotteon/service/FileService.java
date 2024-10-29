@@ -6,6 +6,7 @@ import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.HeaderInfoDTO;
 import com.lotteon.dto.product.ProductFileDTO;
 import com.lotteon.dto.product.ReviewDTO;
+import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.product.ReviewFile;
 import com.lotteon.repository.BannerRepository;
 import com.lotteon.repository.FileRepository;
@@ -240,7 +241,7 @@ public class FileService {
         return newHeaderInfoDTO;
     }
 
-    public ReviewDTO uploadReviewFiles(ReviewDTO reviewDTO) {
+    public ReviewRequestDTO uploadReviewFiles(ReviewRequestDTO reviewDTO) {
         File fileUploadPath = new File(uploadPath + "ReviewImg/");
 
         // 업로드할 디렉토리가 없으면 생성
