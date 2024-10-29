@@ -337,6 +337,8 @@
 }
 
 .orderSection .orderInfo div table td{
+    text-indent: 20px;
+
     height: 40px;
 }
 
@@ -356,7 +358,18 @@
 
 
 
+.orderSection .point_use{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
 
+.orderSection #pointuseBtn{
+    margin-left: 5px;
+    height: 22px;
+    padding: 2px;
+}
 
 
 
@@ -398,6 +411,12 @@
 
 .point_wrap .point_use span{
     margin-left: 10px;
+    width: 250px;
+    display: flex;
+    flex-direction: row;
+}
+.point_wrap .point_use p{
+    margin-left: 5px;
 }
 /* coupon */
 
@@ -577,4 +596,19 @@
     height: 18px;
     margin-left: 5px;
     vertical-align: middle;
+}
+
+.M_postcode:after{
+    content: "]";
+}
+.M_postcode:before{
+    content: "[";
+}
+
+.postArea{
+    display: flex;
+}
+
+.totalAddress {
+    margin-left: 20px;
 }

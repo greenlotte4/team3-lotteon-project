@@ -16,6 +16,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +38,11 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String userLogin(Model model) {
+    public String userLogin(Model model,HttpServletRequest request,@RequestParam(value = "redirect", required = false) String redirectUrl) {
+        if(redirectUrl != null) {
+            request.getSession().setAttribute("redirectUrl", redirectUrl);
+
+        }
         model.addAttribute("content", "login");
         return "content/user/login"; // Points to "content/user/login"
     }
@@ -74,8 +79,8 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@RequestParam("inId") String username,
-                        @RequestParam("password") String password, HttpServletRequest request,
-                        Model model) {
+                        @RequestParam("password") String password, HttpServletRequest request
+            ,Model model) {
 
         try {
             if(userService.login(username, password)) {
@@ -91,6 +96,13 @@ public class UserController {
                 // 로그인 성공 시 Member의 name 값을 가져와 모델에 추가
                 String memberName = userService.getMemberNameByUsername(username);
                 model.addAttribute("memberName", memberName);
+
+
+                String redirectUrl = (String) request.getSession().getAttribute("redirectUrl");
+                if (redirectUrl != null && !redirectUrl.isEmpty()) {
+                    request.getSession().removeAttribute("redirectUrl"); // Clear session attribute
+                    return "redirect:" + redirectUrl;
+                }
 
                 return "redirect:/?success=100"; // 로그인 성공 후 이동할 페이지
             }else{

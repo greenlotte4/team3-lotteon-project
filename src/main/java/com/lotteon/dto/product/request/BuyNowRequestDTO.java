@@ -21,6 +21,8 @@ public class BuyNowRequestDTO {
     private String optionId;
     private String optionName;
     private String point;
+    private String shippingFee;
+    private String ShippingTerms;
 
     private Member member;
 

@@ -66,284 +66,72 @@
                         <th>작성일</th>
 
                     </tr>
+                    <th:block th:each="review : ${pageResponseReviewDTO.getDtoList()}">
                     <tr class="tr3">
+                        <td th:text="${review.reviewId}"><data value="">1</data></td>
                         <td>
-                            <data value="">1</data>
-                        </td>
-                        <td>
+
                             <data value="">
+
                                 <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
+                                    <img th:if="${review.savedReviewFiles.size() > 0}"
+                                         th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
+                                         alt="상품 이미지">
                                 </div>
+
                                 <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
+                                    <p>상품번호<br> <span th:text="${review.productId}">123456</span></p>
+                                    <p>상품명<br> <span th:text="${review.product.productName}">치킨</span></p>
                                 </div>
                             </data>
+
                         </td>
+
+                        <td><data th:text="${review.content}">배송이 빠릅니다. 잘 사용하겠습니다.</data></td>
                         <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
+                            <data class="rating-display" th:text="${review.rating}">평점</data>
                         </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
+                        <td>[[${#strings.substring(review.rdate,0,10)}]]</td>
                     </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">2</data>
-                        </td>
-                        <td>
-                            <data value="">
-                                <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
-                                </div>
-                            </data>
-                        </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">3</data>
-                        </td>
-                        <td>
-                            <data value="">
-                                <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
-                                </div>
-                            </data>
-                        </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">4</data>
-                        </td>
-                        <td>
-                            <data value="">
-                                <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
-                                </div>
-                            </data>
-                        </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">5</data>
-                        </td>
-                        <td>
-                            <data value="">
-                                <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
-                                </div>
-                            </data>
-                        </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">6</data>
-                        </td>
-                        <td>
-                            <data value="">
-                                <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
-                                </div>
-                            </data>
-                        </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">7</data>
-                        </td>
-                        <td>
-                            <data value="">
-                                <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
-                                </div>
-                            </data>
-                        </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">8</data>
-                        </td>
-                        <td>
-                            <data value="">
-                                <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
-                                </div>
-                            </data>
-                        </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">9</data>
-                        </td>
-                        <td>
-                            <data value="">
-                                <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
-                                </div>
-                            </data>
-                        </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">10</data>
-                        </td>
-                        <td>
-                            <data value="">
-                                <div class="eximg2">
-                                    <img src="./img/ch.png" alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> 123456</p>
-                                    <p>상품명<br> 치킨</p>
-                                </div>
-                            </data>
-                        </td>
-                        <td>
-                            <data value="">배송이 빠릅니다. 잘사용하겠습니다.</data>
-                        </td>
-                        <td>
-                            <data value=""><span class="star">★ ★ ★ ★</span><span class="gray-star"> ★</span></data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-10</data>
-                        </td>
-                    </tr>
+                    </th:block>
 
                     </tbody>
+
                 </table>
             </div>
+            <div class="reviewpage">
+                <th:block th:if="${pageResponseReviewDTO.prev}">
+                    <a th:href="@{/mypage/reviewdetails(pg=${pageResponseReviewDTO.start - 1})}" class="prev">이전</a>
+                </th:block>
+
+                <th:block th:each="num : ${#numbers.sequence(pageResponseReviewDTO.start, pageResponseReviewDTO.end)}">
+                    <a th:href="@{/mypage/reviewdetails(pg=${num})}"
+                       th:class="${num == pageResponseReviewDTO.pg} ? 'current' : 'num'" class="num">[[${num}]]</a>
+                </th:block>
+
+                <th:block th:if="${pageResponseReviewDTO.next}">
+                    <a th:href="@{/mypage/reviewdetails(pg=${pageResponseReviewDTO.end + 1})}" class="next">다음</a>
+                </th:block>
+
+            </div>
         </div>
-        <article class="paging">
-            <p>
-                <!-- 이전 페이지 링크 -->
-                <!-- <th:block th:if="${pageResponseDTO.prev}"> -->
-                <a href="/admin/product/list?pg=${pageResponseDTO.start-1}"> < </a>
-                <!-- </th:block> -->
 
-                <!-- 페이지 번호 목록 -->
-                <!-- <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}"> -->
-                <a href="/admin/product/list?pg=1" class="num">[1]</a>
-                <a href="/admin/product/list?pg=2" class="num">[2]</a>
-                <a href="/admin/product/list?pg=3" class="num current">[3]</a>
-                <a href="/admin/product/list?pg=4" class="num">[4]</a>
-                <a href="/admin/product/list?pg=5" class="num">[5]</a>
-                <!-- </th:block> -->
-
-                <!-- 다음 페이지 링크 -->
-                <!-- <th:block th:if="${pageResponseDTO.next}"> -->
-                <a href="/admin/product/list?pg=${pageResponseDTO.end+1}"> > </a>
-                <!-- </th:block> -->
-            </p>
-
-        </article>
     </div>
 </main>
+    <script>
+        document.querySelectorAll('.rating-display').forEach(display => {
+            const rating = parseInt(display.textContent);
+            let stars = '';
+
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<span class="star-selected">&#9733;</span>'; // 선택된 별
+                } else {
+                    stars += '<span class="star">&#9734;</span>'; // 선택되지 않은 별
+                }
+            }
+
+            display.innerHTML = stars; // 별 모양으로 업데이트
+        });
+    </script>
 </th:block>
