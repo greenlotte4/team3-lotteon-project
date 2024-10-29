@@ -17,7 +17,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
 @Entity
 @Table(name="review")
@@ -66,5 +65,16 @@ public class Review {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "Review{" +
+                "reviewId=" + reviewId +
+                ", writer='" + writer + '\'' +
+                ", rdate=" + rdate +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", rating='" + rating + '\'' +
+                // Exclude pReviewFiles and product to avoid recursion
+                '}';
+    }
 }
