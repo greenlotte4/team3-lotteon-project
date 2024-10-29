@@ -82,5 +82,12 @@ public class CsService {
         });
     }
 
+    public Page<QnaDTO> getAllQnA(Pageable pageable) {
+        // 모든 QnA 데이터를 가져와서 DTO로 변환
+        Page<QnA> qnas = qnaRepository.findAll(pageable);
+        return qnas.map(qnA -> getModelMapper.map(qnA, QnaDTO.class));
+    }
+
+
 
 }

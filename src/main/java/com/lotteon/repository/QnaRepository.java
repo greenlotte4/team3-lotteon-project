@@ -10,6 +10,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/*
+   날짜 : 2024/00/00
+   이름 : 박수정
+   내용 : Qna 레퍼지토리 생성
+
+   추가내역
+   -------------
+
+ */
 
 @Repository
 public interface QnaRepository extends JpaRepository<QnA, Integer> {

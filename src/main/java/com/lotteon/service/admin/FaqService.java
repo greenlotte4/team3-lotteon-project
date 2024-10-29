@@ -69,6 +69,7 @@ public class FaqService {
 
         if(optfaq.isPresent()){
             Faq faq = optfaq.get();
+            log.info("faqqqqqqqqqqqqqqqq:"+faq);
             BoardCate cate = faq.getCate();
             FaqDTO faqDTO = modelMapper.map(faq, FaqDTO.class);
             faqDTO.setCategory(modelMapper.map(cate, BoardCateDTO.class));
@@ -91,6 +92,15 @@ public class FaqService {
         }
     }
 
+    public List<FaqDTO> selectAllfaq(){
+        List<Faq> faqs = faqRepository.findAll();
+        List<FaqDTO> faqDTOs = new ArrayList<>();
+        for (Faq faq : faqs) {
+            FaqDTO faqDTO = modelMapper.map(faq, FaqDTO.class);
+            faqDTOs.add(faqDTO);
+        }
+        return faqDTOs;
+    }
 
 
     public FaqPageResponseDTO selectfaqListAll(PageRequestDTO pageRequestDTO){
