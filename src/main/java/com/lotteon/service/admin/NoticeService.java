@@ -11,8 +11,12 @@ import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +29,32 @@ import java.util.stream.Collectors;
 public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final ModelMapper modelMapper;
+
+    @Autowired
+    private NoticeRepository noticeRepositoryy;
+
+    public List<Notice> getAllNotices() {
+        return noticeRepository.findAll();
+    }
+
+    public Optional<Notice> getNoticeById(Long no) {
+        return noticeRepository.findById(no);
+    }
+
+
+
+    // 전체 공지사항을 페이지 형태로 가져오는 메서드 추가
+    public Page<Notice> getNotices(Pageable pageable) {
+        return noticeRepository.findAll(pageable); // 페이지 형태로 공지사항을 가져옴
+    }
+
+    // 최신 공지사항 5개를 가져오는 메서드 추가
+    public List<NoticeDTO> getTop5Notices() {
+        Pageable topFive = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "date"));
+        return noticeRepository.findAll(topFive).getContent().stream()
+                .map(notice -> modelMapper.map(notice, NoticeDTO.class)) // 엔티티를 DTO로 변환
+                .collect(Collectors.toList());
+    }
 
     //등록
     public Notice insertNotice(NoticeDTO noticeDTO) {

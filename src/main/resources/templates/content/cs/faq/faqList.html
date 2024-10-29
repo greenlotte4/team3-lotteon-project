@@ -72,7 +72,6 @@
             <ul class="first_list">
                 <!-- FAQ 목록을 반복하여 출력 -->
                 <li class="first_li" th:each="faq : ${faqList}">
-<!--                    <a href="#">-->
                     <a th:href="@{/cs/faq/view/{id}(id=${faq.faqNo})}">
                         <span>Q .</span>
                         <span th:text="${faq.faqtitle}">FAQ 제목</span>
@@ -90,7 +89,7 @@
             <ul class="second_list">
                 <!-- FAQ 목록을 반복하여 출력 -->
                 <li class="second_li" th:each="faq : ${faqList}">
-                    <a href="#">
+                    <a th:href="@{/cs/faq/view/{id}(id=${faq.faqNo})}">
                         <span>Q .</span>
                         <span th:text="${faq.faqtitle}">FAQ 제목</span>
                     </a>
