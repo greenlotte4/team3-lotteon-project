@@ -26,5 +26,6 @@ public class ReviewDTO {
     private List<ReviewFile> savedReviewFiles;
     private List<ReviewFileDTO> reviewFileDTOS;
     private Long productId;
+    private ProductDTO product; // Product 정보를 포함
 
 }

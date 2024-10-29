@@ -21,11 +21,15 @@ public class Notice {
     private Long noticeNo;
 
     private String noticetitle;
-    private String noticetype;
+
+    @Enumerated(EnumType.STRING)  // Enum을 문자열로 저장
+    private NoticeType noticetype;
+
     private String noticecontent;
 
     @CreationTimestamp
     private LocalDateTime date;
 
     private int noticehit;
+
 }

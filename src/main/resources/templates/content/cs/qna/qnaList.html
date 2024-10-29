@@ -11,7 +11,7 @@
 </head>
 <body>
 <th:block layout:fragment="content">
-    <th:block th:replace="~{aside/qnaAside}"></th:block>
+<!--    <th:block th:replace="~{aside/qnaAside}"></th:block>-->
 
     <div id="service">
         <div class="title">
@@ -21,7 +21,7 @@
         <div class="first container">
             <h2>가입</h2>
             <ul class="first_list">
-                <li class="first_li" th:each="qna : ${qnaPage.content}">
+                <li class="first_li" th:each="qna : ${qnaPage.getContent()}">
                     <a th:href="@{/cs/qna/detail/{id}(id=${qna.qna_id})}">
                         <span>Q .</span>
                         <span th:text="${qna.qna_title}">질문 제목</span>
@@ -58,4 +58,3 @@
     </div>
 </th:block>
 </body>
-</html>

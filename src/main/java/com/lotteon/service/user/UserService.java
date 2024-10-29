@@ -1,5 +1,6 @@
 package com.lotteon.service.user;
 
+import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.User.User;
@@ -9,6 +10,7 @@ import com.lotteon.repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +26,14 @@ public class UserService {
     private final MemberRepository memberRepository;
     private final SellerRepository sellerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper getModelMapper;
 
     public Optional<User> findUserByUid(String uid) {
+
         return userRepository.findByUid(uid); // 아이디로 사용자 검색
     }
+
+
 
     public boolean login(String uid, String password) {
         Optional<User> optionalUser = findUserByUid(uid); // 아이디로 사용자 검색
@@ -90,6 +96,17 @@ public class UserService {
         return memberOptional.map(Member::getName).orElse("Unknown User");
     }
 
+    public MemberDTO getByUsername(String username) {
+        log.info("username passed to getByUsername: " + username); // 확인용 로그
+        Optional<Member> memberOptional = memberRepository.findByUser_Uid(username);
+        if(memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            MemberDTO memberDTO = getModelMapper.map(member, MemberDTO.class);
+            return memberDTO;
+        }
+        return null;
+    }
+
     public boolean checkUserId(String uid) {
         return userRepository.existsByUid(uid); // uid로 존재 여부 확인
     }
@@ -103,6 +120,5 @@ public class UserService {
     public boolean checkPhone(String hp) {
         return memberRepository.existsByHp(hp); // hp로 존재 여부 확인
     }
-
 
 }

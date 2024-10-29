@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
@@ -8,6 +9,7 @@ import com.lotteon.entity.cart.CartItem;
 import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
+import com.lotteon.service.user.MemberService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -104,8 +106,13 @@ public class MarketController {
     }
 
 
-    @GetMapping("/order")
-    public String marketOrder(Model model) {
+    @GetMapping("/order/{uid}")
+    public String marketOrder(@PathVariable String uid,Model model) {
+        log.info("uid ::::::::::"+uid);
+        MemberDTO memberDTO = userService.getByUsername(uid);
+        log.info(memberDTO);
+        model.addAttribute("memberDTO",memberDTO);
+
 
         return "content/market/marketorder"; // Points to the "content/market/marketorder" template
     }

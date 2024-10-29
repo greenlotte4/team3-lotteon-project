@@ -1,5 +1,6 @@
 package com.lotteon.service.user;
 
+import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.repository.user.MemberRepository;
@@ -24,12 +25,12 @@ public class MemberService {
     }
 
     // id로 특정 회원 조회
-    public Optional<Member> getMemberByUid(Long id) {
-        return memberRepository.findById(id);
+    public Optional<Member> getMemberByUid(String uid) {
+        return memberRepository.findByUser_Uid(uid);
     }
 
     // uid로 특정회원 조회
-    public Optional<Member> findByUid(String uid) {
+    public Optional<Member> findByUserId(String uid) {
         return memberRepository.findByUser_Uid(uid);
     }
 
@@ -67,5 +68,12 @@ public class MemberService {
                 throw new EntityNotFoundException("일치하는 아이디의 seller가 없습니다.: " + memberId);
             }
         }
+    }
+
+
+
+    //특정회원 uid로 조회
+    public MemberDTO selectMemberByUid(String uid) {
+        return null;
     }
 }

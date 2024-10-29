@@ -62,14 +62,14 @@
                             </td>
                             <td >
                                 <div class="qnt">
-                                    <input type="number" name="quantity"  id="quantity"  readonly>
+                                    <input type="number" name="quantity"  id="quantity"  class="T_quantity" readonly>
                                 </div>
                             </td>
-                            <td><span class="price" id="originalPrice">30000</span></td>
-                            <td><span id="discount"></span>%</td>
-                            <td><span class="price" id="point">300</span></td>
-                            <td><span class="price" id="shippingFee">3000</span></td>
-                            <td><span class="price"  id="finalPrice">29500</span></td>
+                            <td><span class="T_originalPrice price" id="originalPrice"  data-original="">30000</span></td>
+                            <td><span id="discount" class="T_discount" ></span>%</td>
+                            <td><span class="T_point price" id="point">300</span></td>
+                            <td><span class="T_shippingFee price" id="shippingFee" data-ship="" th:text="2000"></span></td>
+                            <td><span class="T_finalPrice price"  id="finalPrice"></span></td>
                         </tr>
                     </th:block>
 
@@ -86,14 +86,14 @@
                         </td>
                         <td >
                             <div class="qnt">
-                                <input type="number" name="quantity" placeholder="1" readonly>
+                                <input type="number" name="quantity" class="T_quantity" th:value="1" readonly>
                             </div>
                         </td>
-                        <td><span class="price">30000</span></td>
-                        <td>10%</td>
-                        <td><span class="price">300</span></td>
-                        <td><span class="price">3000</span></td>
-                        <td><span class="price">29500</span></td>
+                        <td><span  class="T_originalPrice price" data-original="30000">30000</span></td>
+                        <td><span class="T_discount"></span>%</td>
+                        <td><span class="T_point price" >300</span></td>
+                        <td><span class="T_shippingFee price" data-ship="2000" th:text="2000">3000</span></td>
+                        <td><span class="T_finalPrice price" >29500</span></td>
                     </tr>
 
                 </table>
@@ -121,19 +121,20 @@
                             </colgroup>
                             <tr>
                                 <th>수령자</th>
-                                <td><input type="text" name="name" id="name" readonly placeholder="하진희"></td>
+                                <td>
+                                    <input type="text" name="name" id="name" readonly th:placeholder="${memberDTO.getName()}"></td>
                             </tr>
                             <tr>
                                 <th>휴대폰</th>
-                                <td><input type="text" name="hp" id="hp" placeholder="010-5555-5555" readonly></td>
+                                <td><input type="text" name="hp" id="hp" th:placeholder="${memberDTO.getHp()}" readonly></td>
                             </tr>
                             <tr  class="address_info">
                                 <th>배송지</th>
                                 <td>
-                                                <span>
-                                                [ 123456 ] <input type="button" class="address_change" value="주소지 변경">
-                                                </span><br>
-                                    <span> 부산 연제구 address1 , address2  부산 연제구 address1 , address2  부산 연제구 address1 , address2</span>
+                                    <span class="postArea">
+                                    <p class="M_postcode" th:text="${memberDTO.getPostcode()}"></p><input type="button" class="address_change" value="주소지 변경">
+                                    </span>
+                                    <span th:text="${memberDTO.getAddr()+'  '+memberDTO.getAddr2()}" class="totalAddress"> </span>
 
                                 </td>
                             </tr>
@@ -146,7 +147,9 @@
                     <div class="discountWrapper">
                         <div class="point_wrap">
                             <div class="point_info">
-                                <span class="price">현재 포인트 : [point]</span>
+                                <input type="hidden" id="currentPoint" th:value="${memberDTO.point.intValue()}">
+                                <span>현재 포인트 :
+                                <span class="price"  id="currentIn" th:text="${memberDTO.point.intValue()}"></span></span>
                                 <p>
                                     포인트 : 2,000점이상이면
                                     현금처럼 사용가능
@@ -158,9 +161,6 @@
                                 <input type="button" value="사용하기" id="pointuseBtn" >
                                 <span>적용포인트 : <p class="usedPoint price"></p></span>
                             </div>
-
-
-
                         </div>
 
                         <div class="coupon_Info">
@@ -178,10 +178,10 @@
                                 <p>포인트 할인금액 : </p><span class="usedPointResult price">2000</span>
                             </div>
                             <div>
-                                <p>쿠폰 할인금액 : </p><span class="usedCouponResult price">2000</span>
+                                <p>쿠폰 할인금액 : </p><span class="usedCouponResult price" th:text="2000">2000</span>
                             </div>
                             <div class="totalDiscount">
-                                <p >총 할인금액 : </p><span class="DiscountResult price">4000</span>
+                                <p >총 할인금액 : </p><span class="DiscountResult price" >4000</span>
                             </div>
                         </div>
                     </div>
@@ -220,27 +220,27 @@
                     <h3>최종결제정보 </h3>
                     <div class="orderQnt">
                         <label for="">상품수</label>
-                        <span>2</span>
+                        <span  id="finalOrderQuantity">2</span>
                     </div>
                     <div class="orderOriginPrice">
                         <label for="">상품금액</label>
-                        <span class="price">270000000000</span>
+                        <span class="price" id="finalOrderProductPrice">270000000000</span>
                     </div>
                     <div class="orderSalePrice">
                         <label for="">할인금액</label>
-                        <span  class="price">-1350</span>
+                        <span  class="price"  id="finalOrderDiscount">-1350</span>
                     </div>
                     <div class="delivery-fee">
                         <label for="">배송비</label>
-                        <span  class="price">0</span>
+                        <span  class="price" id="finalOrderDeliveryFee">0</span>
                     </div>
                     <div class="orderTotalPrice">
                         <label for="">전체 주문금액</label>
-                        <span class="price">25650</span>
+                        <span class="price" id="finalOrderTotal">25650</span>
                     </div>
                     <div class="orderPoint">
-                        <label for="">적립예정포인트</label>
-                        <span  class="price">270</span>
+                    <label for="">적립예정포인트</label>
+                        <span  class="price" id="finalOrderPoint">270</span>
                     </div>
                     <div class="orderBtn">
                         <button type="submit" class="order-Btn">결제하기</button>
@@ -324,40 +324,6 @@
 
     <script  th:src="@{/js/marketOrder.js}"></script>
 
-    <script>
-        // 로컬 스토리지에서 JSON 파일을 가져와서 파싱
-        document.addEventListener("DOMContentLoaded", function() {
-            try {
-                const productData = JSON.parse(localStorage.getItem("productData"));
-                if (!productData) {
-                    // productData가 없을 경우 buynow 블록을 숨기기
-                    console.log(document.getElementById("buynow"))
-                    document.getElementById("buynow").style.display = "none";
-                } else {
-
-                    // 요소에 데이터를 채워 넣음
-                    document.getElementById("productId").value = productData.productId;
-                    document.getElementById("productName").innerText = productData.productName;
-                    document.getElementById("originalPrice").innerText = productData.originalPrice;
-                    document.getElementById("finalPrice").innerText = productData.finalPrice;
-                    document.getElementById("optionName").innerText = productData.optionName;
-                    document.getElementById("optionId").value = productData.optionId;
-                    const file190 = productData.file190;
-                    document.getElementById("quantity").value = productData.quantity;
-
-                    document.getElementById("productImage").src = `/uploads/productimg/${productData.file190}`;
-                    document.getElementById("productImage").alt = productData.productName;
-                    document.getElementById("discount").innerText = productData.discount
-                }
-            }catch (error){
-                document.getElementById("buynow").style.display = "none";
-            }
-        });
-        // 페이지를 떠날 때 로컬 스토리지에서 productData 삭제
-        window.addEventListener("beforeunload", function() {
-            localStorage.removeItem("productData");
-        });
-    </script>
 
 
 </th:block>

@@ -14,15 +14,6 @@
 <th:block layout:fragment="content">
     <main>
 
-
-        <h2>구매자 약관</h2>
-        <ul>
-            <li th:each="term : ${termsList}">
-                <h3 th:text="${term.title}">약관 제목</h3>
-                <p th:text="${term.content}">약관 내용</p>
-            </li>
-        </ul>
-
         <nav class="termTop">
             <div>
                 <p>약관동의</p>
@@ -70,7 +61,7 @@
     </main>
 
     <script>
-        cdocument.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
             const userType = new URLSearchParams(window.location.search).get('type'); // URL 파라미터에서 userType 가져오기
             const termsList = /*[[${termsList}]]*/ []; // 모든 약관 리스트
 

@@ -16,9 +16,6 @@ import org.springframework.data.domain.Sort;
 public class PageRequestDTO {
 
     @Builder.Default
-    private String cate = "free";
-
-    @Builder.Default
     private int no = 1;
 
     @Builder.Default

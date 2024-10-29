@@ -41,7 +41,7 @@ public class TermsService {
         System.out.println("allTerms: " + allTerms);
 
         // 사용자 타입에 따라 필터링
-        if ("buyer".equalsIgnoreCase(userType)) {
+        if ("member".equalsIgnoreCase(userType)) {
             return allTerms.stream()
                     .filter(terms -> List.of(1L, 3L, 4L, 5L).contains(terms.getId())) // ID 1, 3, 4, 5
                     .collect(Collectors.toList());

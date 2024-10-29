@@ -42,10 +42,9 @@
                         <div>
                             <select id="noticesearch" class="noticeselect">
                                 <option value="" disabled selected>유형 선택</option>
-                                <option value="고객서비스">고객서비스</option>
-                                <option value="이벤트당첨">이벤트당첨</option>
-                                <option value="안전거래">안전거래</option>
-                                <option value="위해상품">위해상품</option>
+                                <th:block th:each="type : ${noticeTypes}">
+                                    <option th:value="${type.name()}" th:text="${type.name()}"></option>
+                                </th:block>
                             </select>
                         </div>
                         <tr>
@@ -57,18 +56,22 @@
                             <th>날짜</th>
                             <th>관리</th>
                         </tr>
-                        <tr th:each="notices : ${notice}">
-                            <td><input type="checkbox" name="noticeNo" th:value="${notices.noticeNo}" class="checkboxes"></td>
-                            <td th:text="${notices.noticeNo}"></td>
-                            <td th:text="${notices.noticetype}">고객서비스</td>
+                        <th:block th:if="${noticePageResponseDTO.getNoticedtoList() == null}">
+                            notice가 없습니다.
+                        </th:block>
+                        <th:block th:unless="${noticePageResponseDTO.getNoticedtoList() ==null}">
+                        <tr th:each="notice, i:${noticePageResponseDTO.getNoticedtoList()}">
+                            <td><input type="checkbox" name="noticeNo" th:value="${notice.noticeNo}" class="checkboxes"></td>
+                            <td>[[${noticePageResponseDTO.startNo - i.index}]]</td>
+                            <td th:text="${notice.noticetype}">고객서비스</td>
                             <td>
-                                <a th:href="@{/admin/notice/view(no=${notices.noticeNo})}" th:text="${notices.noticetitle}"></a>
+                                <a th:href="@{/admin/notice/view(no=${notice.noticeNo})}" th:text="${notice.noticetitle}"></a>
                             </td>
-                            <td th:text="${notices.noticehit}"></td>
-                            <td>[[${#strings.substring(notices.date,0,10)}]]</td>
+                            <td th:text="${notice.noticehit}"></td>
+                            <td>[[${#strings.substring(notice.date,0,10)}]]</td>
                             <td>
-                                <a th:href="@{/admin/notice/delete(no=${notices.noticeNo})}" class="admin_notice_delete_a">[삭제]</a><br>
-                                <a th:href="@{/admin/notice/modify(no=${notices.noticeNo})}">[수정]</a>
+                                <a th:href="@{/admin/notice/delete(no=${notice.noticeNo})}" class="admin_notice_delete_a">[삭제]</a><br>
+                                <a th:href="@{/admin/notice/modify(no=${notice.noticeNo})}">[수정]</a>
                             </td>
                         </tr>
                     </table>
@@ -77,6 +80,23 @@
                 <button class="notice_delete_a" id="notice_delete_btn"> 선택삭제</button>
                 <a th:href="@{/admin/notice/write}" class="notice_register_a">작성하기</a>
             </div>
+            <div class="noticepage">
+                <th:block th:if="${noticePageResponseDTO.prev}">
+                    <a th:if="${noticePageResponseDTO.keyword == null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.start)-1})}" class="noticeprev">이전</a>
+                    <a th:if="${noticePageResponseDTO.keyword != null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.start)-1}, type=${noticePageResponseDTO.type}, keyword=${noticePageResponseDTO.keyword})}" class="noticeprev">이전</a>
+                </th:block>
+
+                <th:block th:each="num:${#numbers.sequence(noticePageResponseDTO.start,noticePageResponseDTO.end)}">
+                    <a th:if="${noticePageResponseDTO.keyword == null}" th:href="@{/admin/notice/list(pg=${num})}" th:class="${num == noticePageResponseDTO.pg} ? 'noticecurrent' : 'noticenum'">[[${num}]]</a>
+                    <a th:if="${noticePageResponseDTO.keyword != null}" th:href="@{/admin/notice/list(pg=${num}, type=${noticePageResponseDTO.type}, keyword=${noticePageResponseDTO.keyword})}" class="noticenum" >[[${num}]]</a>
+                </th:block>
+
+                <th:block th:if="${noticePageResponseDTO.next}">
+                    <a th:if="${noticePageResponseDTO.keyword == null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.end)+1})}" class="noticenext">다음</a>
+                    <a th:if="${noticePageResponseDTO.keyword != null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.end)+1}, type=${noticePageResponseDTO.type}, keyword=${noticePageResponseDTO.keyword})}" class="noticenext">다음</a>
+                </th:block>
+            </div>
+
         </section>
         <script>
             //제목줄 체크박스

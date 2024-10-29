@@ -24,36 +24,38 @@ public class TermsController {
 
     private final TermsService termsService;
 
-//    @GetMapping("/terms")
-//    public String terms(@RequestParam String type, Model model) {
-//        // 모든 약관을 조회
-//        List<Terms> allTerms = termsService.findAllTerms();
-//
-////        // 사용자 타입에 따라 필터링
-////        List<Terms> termsList;
-////        if ("member".equalsIgnoreCase(type)) {
-////            termsList = allTerms.stream()
-////                    .filter(term -> "BUYER".equals(term.getType()) ||
-////                            "ELECTRONIC_FINANCE".equals(term.getType()) ||
-////                            "LOCATION_INFO".equals(term.getType()) ||
-////                            "PRIVACY_POLICY".equals(term.getType()))
-////                    .collect(Collectors.toList());
-////        } else if ("seller".equalsIgnoreCase(type)) {
-////            termsList = allTerms.stream()
-////                    .filter(term -> "SELLER".equals(term.getType()) ||
-////                            "ELECTRONIC_FINANCE".equals(term.getType()) ||
-////                            "PRIVACY_POLICY".equals(term.getType()))
-////                    .collect(Collectors.toList());
-////        } else {
-////            termsList = List.of(); // 기본적으로 빈 리스트
-////        }
-//
-//
-////        System.out.println("Filtered terms for " + type + ": " + termsList); // 로그 추가
-//        model.addAttribute("termsList", allTerms); // 필터링된 약관 리스트를 모델에 추가
-//        model.addAttribute("userType", type); // 사용자 타입도 추가
-//        return "/terms"; // terms.html 페이지로 이동
-//    }
+    @GetMapping("/terms")
+    public String terms(@RequestParam String type, Model model) {
+        // 모든 약관을 조회
+        List<Terms> allTerms = termsService.findAllTerms();
+        log.info(allTerms);
+
+
+//         사용자 타입에 따라 필터링
+        List<Terms> termsList;
+        if ("member".equalsIgnoreCase(type)) {
+            termsList = allTerms.stream()
+                    .filter(term -> "BUYER".equals(term.getType()) ||
+                            "ELECTRONIC_FINANCE".equals(term.getType()) ||
+                            "LOCATION_INFO".equals(term.getType()) ||
+                            "PRIVACY_POLICY".equals(term.getType()))
+                    .collect(Collectors.toList());
+        } else if ("seller".equalsIgnoreCase(type)) {
+            termsList = allTerms.stream()
+                    .filter(term -> "SELLER".equals(term.getType()) ||
+                            "ELECTRONIC_FINANCE".equals(term.getType()) ||
+                            "PRIVACY_POLICY".equals(term.getType()))
+                    .collect(Collectors.toList());
+        } else {
+            termsList = List.of(); // 기본적으로 빈 리스트
+        }
+
+        log.info(termsList);
+
+        model.addAttribute("termsList", termsList); // 필터링된 약관 리스트를 모델에 추가
+        model.addAttribute("userType", type); // 사용자 타입도 추가
+        return "/terms"; // terms.html 페이지로 이동
+    }
 
 
 

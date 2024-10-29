@@ -1,5 +1,7 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.admin.PageRequestDTO;
+import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
@@ -86,7 +88,13 @@ public class MypageController {
     }
 
     @GetMapping("/reviewdetails")
-    public String reviewDetails(Model model) {
+    public String reviewDetails(Model model, PageRequestDTO pageRequestDTO) {
+
+        PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewss(pageRequestDTO);
+        model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
+
+        List<Review> recentReviews = reviewService.getAllReviews();
+        model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "reviewdetails");
         return "content/user/reviewdetails"; // Points to "content/user/reviewdetails"
     }

@@ -8,9 +8,7 @@ import com.lotteon.entity.BoardCate;
 import com.lotteon.entity.Faq;
 import com.lotteon.repository.BoardRepository;
 import com.lotteon.repository.admin.FaqRepository;
-import com.lotteon.service.BoardService;
 import com.querydsl.core.Tuple;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -69,6 +67,7 @@ public class FaqService {
 
         if(optfaq.isPresent()){
             Faq faq = optfaq.get();
+            log.info("faqqqqqqqqqqqqqqqq:"+faq);
             BoardCate cate = faq.getCate();
             FaqDTO faqDTO = modelMapper.map(faq, FaqDTO.class);
             faqDTO.setCategory(modelMapper.map(cate, BoardCateDTO.class));
@@ -91,6 +90,15 @@ public class FaqService {
         }
     }
 
+    public List<FaqDTO> selectAllfaq(){
+        List<Faq> faqs = faqRepository.findAll();
+        List<FaqDTO> faqDTOs = new ArrayList<>();
+        for (Faq faq : faqs) {
+            FaqDTO faqDTO = modelMapper.map(faq, FaqDTO.class);
+            faqDTOs.add(faqDTO);
+        }
+        return faqDTOs;
+    }
 
 
     public FaqPageResponseDTO selectfaqListAll(PageRequestDTO pageRequestDTO){

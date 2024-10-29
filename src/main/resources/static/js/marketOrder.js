@@ -1,106 +1,224 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // price 클래스를 가진 모든 요소를 선택
+    // Format prices with thousands separator for all elements with class 'price'
     const priceElements = document.querySelectorAll('.price');
-
-    // 각 price 요소에 대해 반복하여 처리
     priceElements.forEach(priceElement => {
-        let priceValue = priceElement.textContent.trim().replace(/[^0-9]/g, ''); // 숫자가 아닌 문자를 제거
-        priceValue = parseInt(priceValue, 10); // 정수로 변환
-
-        if (!isNaN(priceValue)) { // 변환된 값이 NaN이 아닌 경우에만 적용
-            priceElement.textContent = priceValue.toLocaleString();  // 천단위로 쉼표 추가
+        let priceValue = priceElement.textContent.trim().replace(/[^0-9]/g, '');
+        priceValue = parseInt(priceValue, 10);
+        if (!isNaN(priceValue)) {
+            priceElement.textContent = priceValue.toLocaleString();
         }
     });
 
-
+    // Define necessary elements for scrolling functionality
     const aside = document.querySelector('aside');
     const sectionWrapper = document.querySelector('.sectionWrapper');
-    const sectionHeight = sectionWrapper.offsetHeight;
-    console.log(sectionWrapper)
-    console.log(sectionHeight)
-    const headerHeight = 188; // 헤더 높이
-    const topHeight=headerHeight+sectionHeight;
+    const headerHeight = 188;
     const footer = document.querySelector('footer');
-    const footerHeight = 440; // 푸터 높이
-    const asideHeight = aside.offsetHeight; // aside 높이
-    console.log('asdieHeight:'+asideHeight)
+    const footerHeight = 440;
+    const asideHeight = aside.offsetHeight;
+    const sectionHeight = sectionWrapper.offsetHeight;
+    const topHeight = headerHeight + sectionHeight;
+
     function handleAsideScroll() {
-        const scrollPosition = window.scrollY; // 현재 스크롤 위치
-        console.log(scrollPosition)
-        const footerTop = footer.getBoundingClientRect().top + window.scrollY; // Footer의 상단 위치
-        console.log('footerTop:'+footerTop);
-        // 스크롤 위치가 헤더 아래에 있고, 푸터에 도달하기 전이면 aside에 scroll 클래스를 추가
-        if (scrollPosition <= topHeight && (scrollPosition + asideHeight + 50) < footerTop ) {
+        const scrollPosition = window.scrollY;
+        const footerTop = footer.getBoundingClientRect().top + window.scrollY;
+        if (scrollPosition <= topHeight && (scrollPosition + asideHeight + 50) < footerTop) {
             aside.classList.remove('scroll');
-            // aside.style.position = 'fixed';
-            // aside.style.top = `${headerHeight}px`; // 헤더 아래에 고정
-            aside.style.bottom = ''; // 푸터 닿지 않음
+            aside.style.bottom = '';
         } else if ((scrollPosition + asideHeight + 50) >= footerTop) {
-            // 푸터에 도달하면 aside를 푸터 상단에서 멈추게 하기
             aside.classList.add('scroll');
-            // aside.style.position = 'absolute';
-            aside.style.top = `${footerTop - asideHeight - 50}px`;  // 푸터 상단에 고정
-            // console.log('asdide top : '+`${footerTop - asideHeight - 50}px`)
+            aside.style.top = `${footerTop - asideHeight - 50}px`;
         } else {
             aside.classList.add('scroll');
-            aside.style.position = ''; // 초기 위치로 돌아감
-            aside.style.top = ''; // 원래 위치로 초기화
+            aside.style.position = '';
+            aside.style.top = '';
         }
     }
 
-    // 스크롤할 때마다 실행
     window.addEventListener('scroll', handleAsideScroll);
-    // 화면 크기가 변경될 때도 실행
     window.addEventListener('resize', handleAsideScroll);
 
-
-
-
-
-    // 배송지 선택 모달
+    // Modal control for address selection
     const addressSelectModal = document.getElementById("addressSelectModal");
     const addressRegisterModal = document.getElementById("addressRegisterModal");
     const closeAddressSelect = addressSelectModal.querySelector(".close");
     const closeAddressRegister = addressRegisterModal.querySelector(".close");
-
     const editButtons = document.querySelectorAll(".edit-btn");
 
-    // 배송지 선택 모달 열기
-    document.querySelector('.address_change').addEventListener('click', function () {
+    document.querySelector('.address_change').addEventListener('click', () => {
         addressSelectModal.style.display = "block";
     });
 
-    // 모달 닫기 버튼 클릭 시 닫기
-    closeAddressSelect.addEventListener('click', function () {
+    closeAddressSelect.addEventListener('click', () => {
         addressSelectModal.style.display = "none";
     });
 
-    closeAddressRegister.addEventListener('click', function () {
+    closeAddressRegister.addEventListener('click', () => {
         addressRegisterModal.style.display = "none";
     });
 
-    // 모달 외부 클릭 시 닫기
-    window.addEventListener('click', function (event) {
-        if (event.target == addressSelectModal) {
-            addressSelectModal.style.display = "none";
-        }
-        if (event.target == addressRegisterModal) {
-            addressRegisterModal.style.display = "none";
-        }
+    window.addEventListener('click', event => {
+        if (event.target == addressSelectModal) addressSelectModal.style.display = "none";
+        if (event.target == addressRegisterModal) addressRegisterModal.style.display = "none";
     });
 
-    // 배송지 수정 버튼 클릭 시 배송지 등록 모달 열기
-    editButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            addressSelectModal.style.display = "none"; // 배송지 선택 모달 닫기
-            addressRegisterModal.style.display = "block"; // 배송지 등록 모달 열기
+    editButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            addressSelectModal.style.display = "none";
+            addressRegisterModal.style.display = "block";
         });
     });
 
-    // 새 배송지 추가 버튼 클릭 시 배송지 등록 모달 열기
-    document.querySelector('.new-address-btn').addEventListener('click', function () {
+    document.querySelector('.new-address-btn').addEventListener('click', () => {
         addressSelectModal.style.display = "none";
         addressRegisterModal.style.display = "block";
     });
+
+    // Retrieve product data from localStorage and display
+    try {
+        const productData = JSON.parse(localStorage.getItem("productData"));
+        if (!productData) {
+            document.getElementById("buynow").style.display = "none";
+        } else {
+            populateProductDetails(productData);
+        }
+    } catch (error) {
+        document.getElementById("buynow").style.display = "none";
+    }
+
+    // Populate product details in the document
+    function populateProductDetails(data) {
+        document.getElementById("productId").value = data.productId;
+        document.getElementById("productName").innerText = data.productName;
+        document.getElementById("originalPrice").innerText = data.originalPrice * data.quantity;
+        document.getElementById("originalPrice").dataset.original = data.originalPrice;
+        document.getElementById("finalPrice").innerText = data.finalPrice;
+        document.getElementById("optionName").innerText = data.optionName;
+        document.getElementById("shippingFee").innerText = "4000";
+        document.getElementById("shippingFee").dataset.ship = "4000";
+        document.getElementById("optionId").value = data.optionId;
+        document.getElementById("quantity").value = data.quantity;
+        document.getElementById("productImage").src = `/uploads/productimg/${data.file190}`;
+        document.getElementById("productImage").alt = data.productName;
+        document.getElementById("discount").innerText = data.discount;
+    }
+
+    // Elements for final order calculations
+    const currentPoint = parseInt(document.getElementById("currentPoint").value);
+    const usedPointInput = document.getElementById("used_point");
+    const couponSelect = document.querySelector("select[name='coupons']");
+    const usedPointResult = document.querySelector(".usedPointResult");
+    const usedCouponResult = document.querySelector(".usedCouponResult");
+    const discountResult = document.querySelector(".DiscountResult");
+    const finalOrderQuantity = document.getElementById("finalOrderQuantity");
+    const finalOrderProductPrice = document.getElementById("finalOrderProductPrice");
+    const finalOrderDiscount = document.getElementById("finalOrderDiscount");
+    const finalOrderDeliveryFee = document.getElementById("finalOrderDeliveryFee");
+    const finalOrderTotal = document.getElementById("finalOrderTotal");
+    const finalOrderPoint = document.getElementById("finalOrderPoint");
+
+    let productPrice = parseInt(document.getElementById("originalPrice").innerText);
+    let deliveryFee = parseInt(document.getElementById("shippingFee").innerText) || 0;
+    let productQuantity = parseInt(document.getElementById("quantity").value) || 1;
+
+    usedPointInput.addEventListener("input", function () {
+        const usedPoint = parseInt(usedPointInput.value) || 0;
+        if (usedPoint > currentPoint) {
+            alert("사용가능한 포인트가 부족합니다.");
+            usedPointInput.value = 0;
+        } else {
+            updateDiscountResult();
+        }
+    });
+
+    couponSelect.addEventListener("change", updateDiscountResult);
+
+    function updateDiscountResult() {
+        const usedPoint = parseInt(usedPointInput.value) || 0;
+
+        // Get coupon discount based on the selected coupon
+        const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex].value;
+        let couponDiscount = 0;
+        if (selectedCouponValue === "1") {
+            couponDiscount = Math.floor(productPrice * 0.03); // Example: 3% discount
+        }
+
+        // Calculate initial order total before points
+        const initialTotalOrderAmount = (productPrice * productQuantity) - couponDiscount + deliveryFee;
+
+        // If used points exceed the total order amount, limit them
+        const limitedUsedPoint = Math.min(usedPoint, initialTotalOrderAmount);
+
+        // Display the limited used points if they were capped
+        usedPointInput.value = limitedUsedPoint;
+        currentIn.textContent = currentPoint - limitedUsedPoint; // Update displayed remaining points
+
+        // Update discount and final order information
+        usedPointResult.textContent = limitedUsedPoint;
+        usedCouponResult.textContent = couponDiscount;
+
+        const totalDiscount = limitedUsedPoint + couponDiscount;
+        discountResult.textContent = totalDiscount;
+
+        // Final order calculations
+        finalOrderQuantity.textContent = productQuantity;
+        finalOrderProductPrice.textContent = productPrice * productQuantity;
+        finalOrderDiscount.textContent = totalDiscount;
+        finalOrderDeliveryFee.textContent = deliveryFee;
+
+        // Calculate final total after all discounts
+        const orderTotal = initialTotalOrderAmount - limitedUsedPoint;
+        finalOrderTotal.textContent = orderTotal;
+
+        // Calculate and display estimated points (example: 1% of the final price)
+        finalOrderPoint.textContent = Math.floor(orderTotal * 0.01);
+    }
+
+    // Calculate total values for the final order
+    calculateTotals();
+
+    function calculateTotals() {
+        const totalQuantity = Array.from(document.querySelectorAll('.T_quantity'))
+            .reduce((total, elem) => total + parseInt(elem.value || 0), 0);
+
+        const totalOriginalPrice = Array.from(document.querySelectorAll('.T_originalPrice'))
+            .reduce((total, elem) => total + parseInt(elem.dataset.original || 0), 0);
+
+        const totalShipping = Array.from(document.querySelectorAll('.T_shippingFee'))
+            .reduce((total, elem) => total + parseInt(elem.dataset.ship || 0), 0);
+
+        const totalDiscountAmount = Array.from(document.querySelectorAll('.T_discount'))
+            .reduce((total, elem, index) => {
+                const originalPrice = parseInt(document.querySelectorAll('.T_originalPrice')[index].dataset.original || 0);
+                const discountPercentage = parseInt(elem.innerText || 0);
+                return total + Math.floor((originalPrice * discountPercentage) / 100);
+            }, 0);
+
+        finalOrderQuantity.textContent = totalQuantity;
+        finalOrderProductPrice.textContent = totalOriginalPrice;
+        finalOrderDiscount.textContent = totalDiscountAmount + parseInt(discountResult.textContent) || 0;
+        finalOrderDeliveryFee.textContent = totalShipping;
+        finalOrderPoint.textContent = totalQuantity * 10; // Example: points per quantity
+    }
+
+
+});
+
+
+// Set a flag in sessionStorage on page load
+window.addEventListener("load", () => {
+    sessionStorage.setItem("page_reload", "true");
+});
+
+// Detect unload event
+window.addEventListener("beforeunload", (event) => {
+    // Check if "page_reload" flag is set; if not, it's a true navigation away from the page
+    if (sessionStorage.getItem("page_reload") === "true") {
+        // Remove the flag to indicate a refresh
+        sessionStorage.removeItem("page_reload");
+    } else {
+        // On true navigation, remove productData
+        localStorage.removeItem("productData");
+    }
 });

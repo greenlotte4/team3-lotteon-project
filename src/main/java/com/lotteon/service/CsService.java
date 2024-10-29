@@ -1,11 +1,3 @@
-//package com.lotteon.service;
-//
-//import org.springframework.stereotype.Service;
-//
-//@Service
-//public class CsService {
-//
-//}
 package com.lotteon.service;
 
 import com.lotteon.dto.QnaDTO; // DTO import
@@ -14,7 +6,9 @@ import com.lotteon.repository.QnaRepository; // Repository import
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -81,6 +75,35 @@ public class CsService {
             return dto;
         });
     }
+
+//    public Page<QnaDTO> getAllQnA(Pageable pageable) {
+//        // 모든 QnA 데이터를 가져와서 DTO로 변환
+//        Page<QnA> qnas = qnaRepository.findAll(pageable);
+//        return qnas.map(qnA -> getModelMapper.map(qnA, QnaDTO.class));
+//    }
+
+//    public List<QnaDTO> getTop5QnA() {
+//        Pageable topFive = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "rdate"));
+//        Page<QnA> qnas = qnaRepository.findAll(topFive);
+//        return qnas.getContent().stream()
+//                .map(qnA -> getModelMapper.map(qnA, QnaDTO.class)) // 엔티티를 DTO로 변환
+//                .collect(Collectors.toList());
+//    }
+
+    public Page<QnaDTO> getAllQnA(Pageable pageable) {
+        // pageable에 5개를 가져오도록 설정
+        return qnaRepository.findAll(pageable).map(qnA -> getModelMapper.map(qnA, QnaDTO.class));
+    }
+
+
+    public List<QnaDTO> getTop5QnAs() { // static 키워드 제거
+        Pageable topFive = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "rdate"));
+        Page<QnA> qnas = qnaRepository.findAll(topFive);
+        return qnas.getContent().stream()
+                .map(qnA -> getModelMapper.map(qnA, QnaDTO.class)) // 엔티티를 DTO로 변환
+                .collect(Collectors.toList());
+    }
+
 
 
 }
