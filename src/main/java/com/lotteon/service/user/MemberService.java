@@ -24,12 +24,12 @@ public class MemberService {
     }
 
     // id로 특정 회원 조회
-    public Optional<Member> getMemberByUid(Long id) {
-        return memberRepository.findById(id);
+    public Optional<Member> getMemberByUid(String uid) {
+        return memberRepository.findByUser_Uid(uid);
     }
 
     // uid로 특정회원 조회
-    public Optional<Member> findByUid(String uid) {
+    public Optional<Member> findByUserId(String uid) {
         return memberRepository.findByUser_Uid(uid);
     }
 

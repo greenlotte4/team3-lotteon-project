@@ -26,8 +26,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public Optional<User> findUserByUid(String uid) {
+
         return userRepository.findByUid(uid); // 아이디로 사용자 검색
     }
+
+
 
     public boolean login(String uid, String password) {
         Optional<User> optionalUser = findUserByUid(uid); // 아이디로 사용자 검색
@@ -103,6 +106,5 @@ public class UserService {
     public boolean checkPhone(String hp) {
         return memberRepository.existsByHp(hp); // hp로 존재 여부 확인
     }
-
 
 }
