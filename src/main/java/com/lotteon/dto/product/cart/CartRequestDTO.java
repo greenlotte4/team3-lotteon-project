@@ -14,6 +14,15 @@ import java.util.List;
 public class CartRequestDTO {
 
     private long productId;
+    private String productName;
+    private int originalPrice;
+    private long finalPrice;
     private int quantity;
-    private int optionId;
+    private String file190;
+    private long optionId;
+    private String optionName;
+    private int point;
+    private int shippingFee;
+    private long discount;
+
 }

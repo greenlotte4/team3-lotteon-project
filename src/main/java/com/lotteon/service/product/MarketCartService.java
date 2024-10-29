@@ -1,6 +1,7 @@
 package com.lotteon.service.product;
 
 import com.lotteon.dto.product.cart.CartRequestDTO;
+import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.entity.User.User;
 import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,53 +43,60 @@ public class MarketCartService {
                 .orElseThrow(() -> new RuntimeException("user not found"));// 사용자 ID 반환
     }
 
-    public Cart insertCartItem(long productId, int stock, int price) {
-        log.info("일단 호출됨!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1" +
-                " productId: " + productId +
-                ", stock: " + stock +
-                ", price: " + price);
+    public CartItem insertCartItem(CartRequestDTO cartRequestDTO) {
 
-        log.info("Attempting to find product with ID: " + productId);
-
-        if (stock <= 0){
+        if (cartRequestDTO.getQuantity() <= 0) {
             throw new RuntimeException("수량은 1 이상이어야 합니다,.");
         }
 
         User user = getUser();
         // 사용자의 장바구니를 가져오고, 없으면 새로 생성
-        Cart cart = cartRepository.findByUserWithItems(user).orElseGet(() -> createCart(user));
+        Cart cart = cartRepository.findByUserWithItems(user)
+                .orElseGet(() -> createCart(user));
 
-        // 제품 정보 조회
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-        log.info("11111111111111111111111111Product found: " + product); // 여기 추가
-        Long optionId = 1L; // Long으로 선언
-        Option option = optionRepository.findById(optionId)
-                .orElseThrow(() -> new RuntimeException("Option not found"));
-        log.info("일단 호출됨!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!2" +
-                " productId: " + productId +
-                ", stock: " + stock +
-                ", price: " + price);
-        // 장바구니 아이템 생성 및 저장
-        CartItem cartItem = CartItem.builder()
-                .stock(stock)
-                .price(product.getPrice())
-                .discount(product.getDiscount()) // 할인율 추가
-                .deliveryFee(product.getShippingFee()) // 배송비 추가
-                .option(option)
-                .cart(cart)
-                .product(product)
-                .build();
-        log.info("카트아이템!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+cartItem);
-        cartItem.totalPrice();
-        cartItemRepository.save(cartItem);
-        log.info("카트넣는다! -------------- " + productId);
-        log.info("카트아이템! ------------------" + cartItem);
-        log.info("일단 호출됨!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!3" +
-                " productId: " + productId +
-                ", stock: " + stock +
-                ", price: " + price);
-        return cart;
+        Product product = productRepository.findById(cartRequestDTO.getProductId())
+                .orElseThrow(() -> new RuntimeException("상품이 없습니다."));
+
+        Option option = optionRepository.findById(cartRequestDTO.getOptionId())
+                .orElseThrow(() -> {
+                    log.error("옵션 ID가 유효하지 않습니다: {}", cartRequestDTO.getOptionId());
+                    return new RuntimeException("옵션이 없습니다.");
+                });
+        Optional<CartItem> existingItem = cartItemRepository
+                .findByCart_CartIdAndProduct_ProductIdAndOption_Id(
+        cart.getCartId(), product.getProductId(), cartRequestDTO.getOptionId());
+        CartItem cartItem;
+        if (existingItem.isPresent()) {
+            // 아이템이 이미 존재하는 경우 수량 업데이트
+            cartItem = existingItem.get();
+            int newQuantity = cartItem.getQuantity() + cartRequestDTO.getQuantity();
+            long newTotalPrice = cartItem.getTotalPrice() + (cartRequestDTO.getFinalPrice() * cartRequestDTO.getQuantity());
+
+            cartItem.setQuantity(newQuantity); // 수량 업데이트
+            cartItem.setTotalPrice(newTotalPrice); // 총 가격 업데이트
+            cartItemRepository.save(cartItem);
+            return cartItem; // 업데이트된 아이템 반환
+        } else {
+            // 새로운 아이템 생성 및 저장
+            CartItem newCartItem = CartItem.builder()
+                    .cart(cart)
+                    .product(product)
+                    .productName(product.getProductName())
+                    .imageUrl(product.getFile190())
+                    .quantity(cartRequestDTO.getQuantity())
+                    .points(product.getPoint())
+                    .deliveryFee(product.getShippingFee())
+                    .price(cartRequestDTO.getOriginalPrice())
+                    .totalPrice((int) cartRequestDTO.getFinalPrice())
+                    .discount((int) cartRequestDTO.getDiscount())
+                    .deliveryFee(cartRequestDTO.getShippingFee())
+                    .option(option)
+                    .build();
+
+            cartItemRepository.save(newCartItem);
+            return newCartItem; // 새로 추가된 아이템 반환
+        }
+
     }
 
     // 새로운 장바구니를 생성
@@ -101,6 +110,7 @@ public class MarketCartService {
         return cartRepository.save(newCart);
     }
 
+    //유저 검색후
     public List<CartItem> selectCartAll(){
 
         User user = getUser();
@@ -113,8 +123,33 @@ public class MarketCartService {
                     log.info("Created new cart for user: " + user.getUid());
                     return newCart;
                 });
+
         List<CartItem> cartItems = cart.getCartItems();
-        log.info("cartItems count: " + cartItems);
+        log.info("cartItems count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: " + cartItems.size());
         return cartItems;
+    }
+
+    public CartSummary calculateCartSummary(List<CartItem> cartItems) {
+
+        int totalQuantity = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
+        double totalPrice = cartItems.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+        double totalDiscount = cartItems.stream()
+                .mapToDouble(CartItem::getDiscount).sum(); // 할인 총합
+        double totalDeliveryFee = cartItems.stream()
+                .mapToDouble(CartItem::getDeliveryFee).sum(); // 배송비 총합
+        double totalOrderPrice = totalPrice - totalDiscount - totalDeliveryFee;
+        double totalPoints = cartItems.stream().mapToDouble(CartItem::getPoints).sum();
+
+
+
+        return  CartSummary.builder()
+                .finalTotalDeliveryFee(totalDeliveryFee)
+                .finalTotalPrice(totalPrice)
+                .finalTotalQuantity(totalQuantity)
+                .finalTotalDiscount(totalDiscount)
+                .finalTotalOrderPrice(totalOrderPrice)
+                .finalTotalPoints(totalPoints)
+                .build();
     }
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart,Integer> {
+public interface CartRepository extends JpaRepository<Cart, Long> {
 
 
     Optional<Cart> findByUser_Uid(String uid);

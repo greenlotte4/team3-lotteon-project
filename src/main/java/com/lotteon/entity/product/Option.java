@@ -1,9 +1,15 @@
 package com.lotteon.entity.product;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
+/*
+    이름 : 최영진
+    날짜 : 2024-10-29
+    @JsonInclude(JsonInclude.Include.NON_NULL) 추가
 
+*/
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,6 +18,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name="product_option")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Option {
 
     @Id
