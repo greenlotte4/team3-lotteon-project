@@ -90,3 +90,43 @@ function validateFile(file, maxSize, maxWidth,maxHeight,inputElement) {
     };
     return true; // 파일 크기와 확장자가 적합할 경우 true 반환
 }
+
+//유저 등급 변경
+function confirmGradeChange(selectElement) {
+    const selectedGrade = selectElement.value;
+    const memberId = selectElement.dataset.id; // 데이터 속성에서 멤버 ID 가져오기
+
+    const confirmChange = confirm(`해당 등급으로 변경하시겠습니까? (${selectedGrade})`);
+    if (confirmChange) {
+        // 등급 수정 요청을 서버로 보냄
+        const updatedData = {
+            id: memberId,
+            grade: selectedGrade
+        };
+
+        fetch(`/admin/user/member/updateGrade`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData), // 수정할 데이터 전송
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message); // 성공 메시지 표시
+                // 여기에서 필요에 따라 페이지를 새로 고치거나 UI를 업데이트할 수 있습니다.
+                // 예: location.reload(); // 페이지 새로 고침
+            })
+            .catch(error => console.error("Error updating grade:", error));
+    } else {
+        // 변경 취소 시
+        // 선택된 옵션을 원래 등급으로 재설정하려면 추가 로직이 필요할 수 있음
+        // 원래 등급 값을 저장하고 그 값을 사용하여 재설정할 수 있습니다.
+    }
+}
+

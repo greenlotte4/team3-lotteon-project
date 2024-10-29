@@ -119,7 +119,7 @@ public class SellerController {
 
                         return "redirect:/"; // 로그인 성공 후 이동할 페이지
                     } else {
-                        return "redirect:/user/login?success=100";
+                        return "redirect:/user/term?type=seller";
                     }
 
                 } catch (Exception e) {

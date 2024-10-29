@@ -36,6 +36,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final DateTimePath<java.time.LocalDateTime> lastDate = createDateTime("lastDate", java.time.LocalDateTime.class);
+
     public final StringPath name = createString("name");
 
     public final NumberPath<java.math.BigDecimal> point = createNumber("point", java.math.BigDecimal.class);

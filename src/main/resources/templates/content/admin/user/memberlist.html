@@ -9,6 +9,10 @@
     <title>Admin::Member</title>
     <link rel="stylesheet" th:href="@{/css/memberlist.css}">
     <link rel="stylesheet" th:href="@{/css/memberlistmodal.css}">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:src="@{/js/validation.js}"></script>
+    <script th:src="@{/js/postcode.js}"></script>
+
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -72,7 +76,7 @@
                             <td th:text="${member.name}"></td>      <!-- 이름 -->
                             <td th:text="${member.gender}"></td>    <!-- 성별 -->
                             <td>
-                                <select id="grade" th:value="${member.grade}">
+                                <select id="grade" th:value="${member.grade}" onchange="confirmGradeChange(this)">
                                     <option value="VVIP" th:selected="${member.grade == 'VVIP'}">VVIP</option>
                                     <option value="VIP" th:selected="${member.grade == 'VIP'}">VIP</option>
                                     <option value="GOLD" th:selected="${member.grade == 'GOLD'}">GOLD</option>
@@ -98,10 +102,9 @@
                 </div>
             </article>
             <div class="list_button">
-                <button  id="deleteSelectedBtn" >선택삭제</button>
+                <button id="deleteSelectedBtn">선택삭제</button>
             </div>
         </section>
-
 
         <div id="memberlistModal" class="modal">
             <div class="modal-content">
@@ -114,17 +117,18 @@
                         <tr>
                             <th><label for="uid">아이디</label></th>
                             <td>
-                                <input type="text" id="uid" name="uid" placeholder="a101" readonly>
+                                <input type="text" id="uidDisplay" name="uidDisplay" placeholder="a101" readonly>
+                                <input type="hidden" id="uid" name="uid" value="a101">
                             </td>
                         </tr>
                         <tr>
-                            <th><label for="password">이름</label></th>
+                            <th><label for="name">이름</label></th>
                             <td>
-                                <input type="password" id="password" name="password" placeholder="홍길동">
+                                <input type="text" id="name" name="name" placeholder="홍길동" required>
                             </td>
                         </tr>
                         <tr>
-                            <th><label for="gender">성별</label></th>
+                            <th><label for="gender" id="gender">성별</label></th>
                             <td>
                                 <label>
                                     <input type="radio" name="gender" value="male"> 남
@@ -146,29 +150,30 @@
                         <tr>
                             <th><label for="EMAIL">EMAIL</label></th>
                             <td>
-                                <input type="text" id="EMAIL" name="EMAIL" placeholder="a101@naver.com">
+                                <input type="text" id="EMAIL" name="EMAIL" placeholder="a101@naver.com" required>
                             </td>
                         </tr>
                         <tr>
                             <th><label for="HP">휴대폰</label></th>
                             <td>
-                                <input type="text" id="HP" name="HP" placeholder="010-1111-1111">
+                                <input type="text" id="HP" name="HP" placeholder="010-1111-1111" required>
                             </td>
                         </tr>
                         <tr>
                             <th><label for="zipcode">주소</label></th>
                             <td>
-                                <input type="text" id="zipcode" placeholder="zip" required> <a href="">검색</a><br>
-                                <input type="text" id="address1" placeholder="addr1" required><br>
-                                <input type="text" id="address2" placeholder="addr2" required>
+                                <input type="text" id="zipcode" name="postcode" placeholder="우편번호">
+                                <button type="button" id="btnPostCode">우편번호 검색</button>
+                                <input type="text" id="address1" name="addr1" placeholder="기본주소"><br>
+                                <input type="text" id="address2" name="addr12" placeholder="상세주소">
                             </td>
                         </tr>
                         <tr>
-                            <th><label for="Joindate">가입일</label></th>
+                            <th><label for="Joindate" id="Joindate">가입일</label></th>
                             <td><span>0000-00-00 00:00:00</span><br></td>
                         </tr>
                         <tr>
-                            <th><label for="Lastlogindate">최근로그인날짜</label></th>
+                            <th><label for="Lastlogindate" id="Lastlogindate">최근로그인날짜</label></th>
                             <td><span>0000-00-00 00:00:00</span><br></td>
                         </tr>
                         <tr>
@@ -176,11 +181,55 @@
                             <td><textarea name="etc" id="etc"></textarea><br></td>
                         </tr>
                     </table>
-                    <button type="submit">등록하기</button>
+                    <button type="submit">수정하기</button>
                 </form>
 
             </div>
         </div>
         <script th:src="@{/js/memberlistmodal.js}"></script>
+        <!--        <script th:src="@{/js/util.js}"></script>-->
 
+        <script>
+            // DOMContentLoaded를 사용하여 DOM이 완전히 로드된 후에 함수 설정
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById('btnPostCode').onclick = function () {
+                    postcode(); // postcode 함수 호출
+                };
+            });
+        </script>
+
+        <script>
+            function confirmGradeChange(selectElement) {
+                const selectedGrade = selectElement.value;
+                const memberId = selectElement.dataset.id; // 데이터 속성에서 멤버 ID 가져오기
+
+                const confirmChange = confirm(`해당 등급으로 변경하시겠습니까? (${selectedGrade})`);
+                if (confirmChange) {
+                    const updatedData = {
+                        uid: memberId, // uid를 포함
+                        grade: selectedGrade
+                    };
+
+                    fetch(`/admin/user/member/updateGrade`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedData), // 수정할 데이터 전송
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("Network response was not ok");
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            alert(data.message); // 성공 메시지 표시
+                            // 여기에서 필요에 따라 페이지를 새로 고치거나 UI를 업데이트할 수 있습니다.
+                            // 예: location.reload(); // 페이지 새로 고침
+                        })
+                        .catch(error => console.error("Error updating grade:", error));
+                }
+            }
+        </script>
 </th:block>
