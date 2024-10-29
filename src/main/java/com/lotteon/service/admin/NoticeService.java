@@ -1,13 +1,18 @@
 package com.lotteon.service.admin;
 
-import ch.qos.logback.classic.Logger;
+
 import com.lotteon.dto.NoticeDTO;
-import com.lotteon.entity.Faq;
+import com.lotteon.dto.page.FaqPageResponseDTO;
+import com.lotteon.dto.page.NoticePageResponseDTO;
+import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.entity.Notice;
 import com.lotteon.repository.admin.NoticeRepository;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,4 +84,26 @@ public class NoticeService {
         }
         return null;
     }
+    //페이징
+    public NoticePageResponseDTO selectNoticeListAll(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable("no");
+        Page<Tuple> pagenotice = null;
+        pagenotice = noticeRepository.selectNoticeAllForList(pageRequestDTO, pageable);
+
+        List<NoticeDTO> noticeList = pagenotice.getContent().stream().map(tuple -> {
+            Long id = tuple.get(0, Long.class);
+            Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException("Notice not fonund with ID : " + id));
+            NoticeDTO noticeDTO = modelMapper.map(notice, NoticeDTO.class);
+            return noticeDTO;
+        }).toList();
+
+        int total = (int) pagenotice.getTotalElements();
+
+        return NoticePageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .noticedtoList(noticeList)
+                .total(total)
+                .build();
+    }
+
 }
