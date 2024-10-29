@@ -5,7 +5,9 @@ import com.lotteon.dto.product.cart.CartRequestDTO;
 import com.lotteon.entity.User.User;
 import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
+import com.lotteon.entity.product.Product;
 import com.lotteon.repository.cart.CartRepository;
+import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.service.product.MarketCartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,7 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -29,17 +33,22 @@ public class ProductCartController {
 
     private final MarketCartService marketCartService;
     private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
 
 
     @GetMapping("/list")
     public ResponseEntity<List<CartItem>> selectCartAll(@AuthenticationPrincipal UserDetails userDetails) {
 
+        log.info("리스트호출!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
        if(userDetails == null) {
            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
        }
 
        try {
            List<CartItem> cartItems = marketCartService.selectCartAll();
+
+           log.info("카트 총집합! cart items: {}", cartItems);
+
            return ResponseEntity.ok(cartItems);
        } catch (Exception e) {
            log.error(e.getMessage());
@@ -50,23 +59,25 @@ public class ProductCartController {
 
 
     @PostMapping("/cart")
-    public ResponseEntity<List<CartItem>> insertCart(@RequestBody CartRequestDTO cartRequestDTO) {
+    public ResponseEntity<Map<String, Object>> insertCart(@RequestBody CartRequestDTO cartRequestDTO) {
         log.info("호출됨0000000000000000000000000000");
+
+        Map<String, Object> resp = new HashMap<>();
+
         try {
-            User user = marketCartService.getUser();
 
-            int stock = cartRequestDTO.getQuantity();
-            log.info("stock ====================================== " + stock);
-            log.info("Requested stock: {}-------------------", cartRequestDTO.getQuantity());
+            // 장바구니에 아이템 추가
+            CartItem cartItem = marketCartService.insertCartItem(cartRequestDTO);
+            log.info("인설트 됨ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ");
 
-            // 장바구니에 상품 추가
-            Cart cart = marketCartService.insertCartItem(cartRequestDTO.getProductId(), stock, cartRequestDTO.getOptionId());
-            // 카트의 아이템 리스트를 응답으로 반환
-            List<CartItem> cartItems = cart.getCartItems();
-            return ResponseEntity.status(HttpStatus.CREATED).body(cartItems);
+            resp.put("status", 200);
+            return ResponseEntity.ok(resp); // 성공적으로 추가됨
         } catch (Exception e) {
-            log.error("카트 추가중 오류=========================" + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            log.error("장바구니 추가 중 오류 발생: {}", e.getMessage());
+            resp.put("status", 500);
+            resp.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+
     }
 }

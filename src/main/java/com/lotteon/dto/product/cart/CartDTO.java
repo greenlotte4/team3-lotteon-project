@@ -14,10 +14,10 @@ import java.util.List;
 @Builder
 public class CartDTO {
 
-    private int cartId;
+    private long cartId;
     private String uid ;
     private LocalDateTime rdate;
-
+    private int quantity;
     private List<com.lotteon.dto.product.cart.CartItemDTO> items;
 
 

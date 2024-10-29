@@ -80,89 +80,26 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// list 불러오는 스크립트
-document.addEventListener("DOMContentLoaded", function () {
-    fetchCartItems();
-
-    function fetchCartItems(){
-        fetch('/api/list',{
-            method: 'GET',
-            headers: {
-                'Content-type' : 'application/json'
-            }
-        })
-            .then(resp => {
-                if(resp.status === 401){
-                    // 사용자 인증이 안 된 경우 로그인 페이지로
-                    alert('로그인 없이 이곳은 접근 금지! 빨리 로그인해 주세요')
-                    window.location.href ='/user/login'
-                    return ;
-                }
-                if(!resp.ok){
-                    throw new Error('network resp')E
-                }
-                return resp.json();
-            })
-            .then(data => {
-                renderCartItems(data);
-            })
-            .catch(err => {
-                console.error('err',err)
-            });
-    }
-    function renderCartItems(cartItems){
-        const cartTable = document.querySelector('.productCart');
-
-        // 기존 항목 삭제
-        while(cartTable.rows.length > 1){
-            cartTable.deleteRow(1);
-        }
-        // 장바구니가 비어있는 경우 처리
-        if(cartItems.length === 0){
-            const row = cartTable.insertRow();
-            row.innerHTML = `<td colspan="8">장바구니가 비어있습니다.</td>`;
-            return
-        }
-
-        // 장바구니 항목 추가
-        cartItems.forEach(item => {
-            const row = cartTable.insertRow();
-            row.innerHTML = `
-                <td><input type="checkbox" name="select"></td>
-                <td>
-                    <div><img src="${item.imageUrl}" alt=""></div>
-                    <div>
-                        <span>${item.proName}</span>
-                        <p class="product_option">[ 옵션 : ${item.option} ]</p>
-                    </div>
-                </td>
-                <td>
-                    <input type="number" name="quantity" value="${item.quantity}" min="1" readonly>
-                </td>
-                <td>${item.price}</td>
-                <td>${item.discount}</td>
-                <td>${item.point}</td>
-                <td>${item.deliveryFee}</td>
-                <td>${item.totalPrice}</td>
-            `;
-        });
-    }
-});
-
-function updateCartSummary(cartItems) {
-    const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
-    const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0 );
-    const totalDiscount = cartItems.reduce((total, item) => total + item.discount * item.quantity, 0);
-    const deliveryFee = 0;
-    const totalOrderPrice = totalPrice - totalDiscount + deliveryFee;
-    const totalPoints = Math.floor(totalPrice * 0.01);
-
-    // ui 업데이트
-    document.querySelector('.orderQnt span').innerText = totalQuantity;
-    document.querySelector('.orderOriginPrice  .price').innerText = totalPrice;
-    document.querySelector('.orderSalePrice .price').innerText = totalDiscount;
-    document.querySelector('.delivery-fee .price').innerText = deliveryFee;
-    document.querySelector('.orderTotalPrice .price').innerText = totalOrderPrice;
-    document.querySelector('.orderPoint .price').innerText = totalPoints;
-}
+// function updateCartSummary(cartItems) {
+//     const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+//     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0 );
+//     const totalDiscount = cartItems.reduce((total, item) => total + item.discount * item.quantity, 0);
+//     const deliveryFee = 0;
+//     const totalOrderPrice = totalPrice - totalDiscount + deliveryFee;
+//     const totalPoints = Math.floor(totalPrice * 0.01);
+//
+//     // ui 업데이트
+//     document.querySelector('.orderQnt span').innerText = totalQuantity;
+//     document.querySelector('.orderOriginPrice  .price').innerText = totalPrice;
+//     document.querySelector('.orderSalePrice .price').innerText = totalDiscount;
+//     document.querySelector('.delivery-fee .price').innerText = deliveryFee;
+//     document.querySelector('.orderTotalPrice .price').innerText = totalOrderPrice;
+//     document.querySelector('.orderPoint .price').innerText = totalPoints;
+// }
 const cartItems = [];
+
+
+// 수정 && 삭줴하기 붜틘
+
+
+

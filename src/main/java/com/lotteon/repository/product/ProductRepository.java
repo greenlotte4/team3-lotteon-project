@@ -1,5 +1,8 @@
 package com.lotteon.repository.product;
+/*
+    최영진:      Optional<Product> findById(long productId);추가
 
+*/
 import com.lotteon.entity.product.Product;
 import com.lotteon.repository.custom.ProductRepositoryCustom;
 import lombok.RequiredArgsConstructor;
@@ -17,4 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> , Produc
     public Page<Product> findBySellerId(String sellerId, Pageable pageable);
 
     public Product findByProductId(Long productId);
+
+    Optional<Product> findById(long productId);
 }

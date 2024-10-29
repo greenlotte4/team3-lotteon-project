@@ -2,8 +2,11 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.product.*;
+import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.entity.User.User;
+import com.lotteon.entity.cart.CartItem;
+import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
 import com.lotteon.service.user.MemberService;
@@ -34,6 +37,7 @@ public class MarketController {
     private final ProductService productService;
     private final ProductCategoryService productCategoryService;
     private final UserService userService;
+    private final MarketCartService marketCartService;
 
     @GetMapping("/main")
     public String marketMain(Model model) {
@@ -88,7 +92,16 @@ public class MarketController {
 
     @GetMapping("/cart")
     public String marketCart(Model model) {
-        model.addAttribute("content", "cart");
+
+
+        List<CartItem> cartItems = marketCartService.selectCartAll();
+
+        CartSummary cartSummary = marketCartService.calculateCartSummary(cartItems);
+
+        model.addAttribute("cartItems",cartItems);
+        model.addAttribute("cartSummary",cartSummary);
+        log.info("카트 총집합! cart items: {}", cartItems);
+
         return "content/market/marketcart"; // Points to the "content/market/marketcart" template
     }
 
