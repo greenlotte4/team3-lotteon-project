@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     return ;
                 }
                 if(!resp.ok){
-                    throw new Error('network resp')
+                    throw new Error('network resp')E
                 }
                 return resp.json();
             })

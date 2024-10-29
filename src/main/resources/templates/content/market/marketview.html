@@ -30,6 +30,7 @@
                             <div class="product-info-container">
                                 <!-- Product Image -->
                                 <div class="product-image">
+                                        <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
                                     <img th:src="@{'/uploads/productimg/'+${products.file456}}" alt="상품 이미지">
                                     <input type="hidden" th:value="${products.file190}" id="file190">
                                 </div>

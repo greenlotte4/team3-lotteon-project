@@ -19,6 +19,7 @@ const finalPrice = document.getElementById("finalPrice").innerText;
 const file190 = document.getElementById("file190").value;
 const discount = document.getElementById("discount").value;
 
+
 console.log("Product ID:", productId);
 console.log("Original Price:", originalPrice);
 console.log("Final Price:", finalPrice);
@@ -65,12 +66,16 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
                 console.log(data); // 서버 응답을 확인
 
                 if (data.result === "success") {
+                    const uid = document.getElementById("uid").value;
+                    console.log(uid);
                     // 구매 성공 시 주문 페이지로 리다이렉트
-                    window.location.href = "/market/order";
+                    window.location.href = `/market/order/${uid}`;
                 } else if(data.result === "login_required") {
                     const isconfirm= confirm("로그인이 필요합니다. 로그인 하시겠습니까?");
                     if(isconfirm) {
-                        window.location.href = "/user/login";
+                        const currentUrl = encodeURIComponent(window.location.href);
+                        console.log(currentUrl);
+                        window.location.href = `/user/login?redirect=${currentUrl}`;
                     }else{
                         location.reload();
                     }
