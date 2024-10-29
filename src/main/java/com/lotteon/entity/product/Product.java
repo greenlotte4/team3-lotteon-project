@@ -1,6 +1,7 @@
 package com.lotteon.entity.product;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.entity.User.Seller;
 import jakarta.persistence.*;
@@ -82,6 +83,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
+    @JsonManagedReference // 순환 참조 방지를 위해 사용
     private List<Review> reviews = new ArrayList<>();
 
     @Transient

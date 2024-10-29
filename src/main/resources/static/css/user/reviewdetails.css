@@ -29,7 +29,6 @@ main {
 }
 .info-title {
     position: relative;
-    width: 101x;
     height: 22px;
     font-size: 18px;
     font-weight: 700;
@@ -116,11 +115,6 @@ aside > ul > li:nth-child(4){
     font-weight: 700;
     float: left;
 }
-.center a{
-    font-size: 12px;
-    font-weight: 400;
-    float: right;
-}
 
 table {
     width: 900px;
@@ -162,7 +156,6 @@ td {
 
 .eximg2 > img{
     width: 100px;
-    height: 98px;
     float: left;
     margin-left: 30px   ;
 }
@@ -178,6 +171,7 @@ td {
     margin-left: 40px;          /* 왼쪽에 10px 여백 추가 */
 }
 .Pinf2 >p {
+    width: 45px;
     font-size: 12px;
     font-weight: 400;
     margin: 5px;
@@ -198,3 +192,19 @@ td {
     margin-top: 10px;
     height: 19px;
 }
+
+.star-rating {
+    font-size: 24px; /* 별 크기 조정 */
+    color: #ccc; /* 기본 색상 (선택되지 않은 별의 색상) */
+}
+
+.star {
+    color: lightgray; /* 선택된 별의 색상 */
+}
+
+.star-selected {
+    color: gold; /* 선택된 별의 색상 */
+}
+
+.reviewpage {width: 500px; height: 30px; margin: 20px auto; text-align: center}
+

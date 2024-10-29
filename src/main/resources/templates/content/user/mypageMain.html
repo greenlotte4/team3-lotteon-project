@@ -42,7 +42,7 @@
                 <li><a href="">전체주문내역</a></li>
                 <li><a href="">포인트내역</a></li>
                 <li><a href="">쿠폰</a></li>
-                <li><a href="">나의리뷰</a></li>
+                <li><a th:href="@{/mypage/reviewdetails}">나의리뷰</a></li>
                 <li><a href="">문의하기</a></li>
                 <li><a href="">나의설정</a></li>
             </ul>
@@ -178,8 +178,10 @@
                             </data>
                         </td>
                         <td><data th:text="${review.content}">배송이 빠릅니다. 잘 사용하겠습니다.</data></td>
-                        <td><data th:text="${review.rating}">평점</data></td>
-                        <td><data th:text="${review.rdate}">2022-12-10</data></td>
+                        <td>
+                            <data class="rating-display" th:text="${review.rating}">평점</data>
+                        </td>
+                        <td>[[${#strings.substring(review.rdate,0,10)}]]</td>
                     </tr>
                     </th:block>
 

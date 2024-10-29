@@ -237,6 +237,7 @@ td {
     margin-left: 40px;          /* 왼쪽에 10px 여백 추가 */
 }
 .Pinf2 >p {
+    width: 45px;
     font-size: 12px;
     font-weight: 400;
     margin: 5px;
@@ -818,4 +819,17 @@ td button{
     display: block;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.star-rating {
+    font-size: 24px; /* 별 크기 조정 */
+    color: #ccc; /* 기본 색상 (선택되지 않은 별의 색상) */
+}
+
+.star {
+    color: lightgray; /* 선택된 별의 색상 */
+}
+
+.star-selected {
+    color: gold; /* 선택된 별의 색상 */
 }
