@@ -9,11 +9,12 @@ const productName = document.getElementById("productName").value;
 const originalPrice = parseFloat(document.getElementById("originalPrice").innerText.replace(/,/g, ""));
 const discount = parseInt(document.getElementById("discount").value);
 const file190 = document.getElementById("file190").value;
-const shippingFee = parseInt(document.getElementById("shippingFee").value) || 0;
+const shippingFee = parseInt(document.getElementById("shippingFee").getAttribute("data-shippingfee")) || 0;
 let quantity = parseInt(document.getElementById("quantity").value); // Default quantity
 
 const byCart = document.getElementById('buyCart');
 console.log(byCart);
+console.log("shippingFee ",shippingFee)
 
 // Function to add a new selection or update an existing one
 function addOrUpdateSelection(optionId, optionText, optionDesc, quantity) {
@@ -196,8 +197,10 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
             point: point,
             discount: discount
         }));
+        const orderInfo={
+             shippingFee:shippingFee,
+        }
 
-        console.log
 
         // Store the array in localStorage (optional)
         localStorage.setItem("productDataArray", JSON.stringify(productDataArray));

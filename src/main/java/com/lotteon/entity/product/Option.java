@@ -11,7 +11,6 @@ import lombok.*;
 
 */
 @Getter
-@Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
@@ -27,13 +26,17 @@ public class Option {
 
     private String optionName; //프로덕트 code
     private String optionDesc;
-    private int optionStock;
+    private long optionStock;
     private String optionCode;
     private String parentCode;
 
     @PostPersist
     public void generateOptionCode(){
         this.optionCode = parentCode+optionName;
+    }
+
+    public void setStock(long stock){
+        this.optionStock = stock;
     }
 
 }

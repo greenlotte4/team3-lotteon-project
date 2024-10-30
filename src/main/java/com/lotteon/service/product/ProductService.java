@@ -122,7 +122,15 @@ public class ProductService {
                 .build();
     }
 
-    public void selectProduct() {}
+    public ProductDTO selectProduct(long productId) {
+        Product product = productRepository.findByProductId(productId);
+        log.info("옵션이 있을까?????????? : " +product.getOptions());
+        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+        log.info("변경해도 있을까?????????ㅣ:"+productDTO.getOptions());
+
+        return modelMapper.map(product, ProductDTO.class);
+
+    }
     public  List<ProductDTO> selectProducts() {
         List<Product> products = productRepository.findAll();
         log.info(products);
