@@ -1,5 +1,6 @@
 package com.lotteon.security;
 
+import com.lotteon.service.user.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
-public class SecurityConfig  {
+public class SecurityConfig {
+
+//    private final CustomOAuth2UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,6 +32,7 @@ public class SecurityConfig  {
                 .defaultSuccessUrl("/", true)
                 .failureHandler(new CustomAuthFailureHandler())
                 .failureUrl("/user/login?error=true")
+
                 .and()
             .formLogin()
                 .loginPage("/seller/login")
@@ -36,7 +40,21 @@ public class SecurityConfig  {
                 .passwordParameter("password")
                 .loginProcessingUrl("/seller/login") // 로그인 처리 URL
                 .successHandler(new CustomAuthSuccessHandler()) // CustomAuthSuccessHandler 사용
-                .failureUrl("/seller/login?error=true"); // 로그인 실패 시 이동할 페이지
+                .failureUrl("/seller/login?error=true") // 로그인 실패 시 이동할 페이지
+
+                .and()
+            .rememberMe() // rememberMe 설정 추가
+                .key("1234Asd@") // 키 설정
+                .tokenValiditySeconds(60 * 60 * 24 * 3) // 토큰 유효 시간 설정 (3일)
+                .alwaysRemember(true) // 항상 기억
+
+                .and()
+            .oauth2Login(login -> login
+                .loginPage("/user/login") // OAuth2 로그인 페이지 설정
+                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService())) // 사용자 정보 처리
+                .defaultSuccessUrl("/",true)
+                .failureUrl("/user/login?error=true") // OAuth2 로그인 성공 시 이동할 URL
+            ); // 사용자 정의 OAuth2 사용자 서비스
 
 
         // 세션 설정
@@ -54,11 +72,13 @@ public class SecurityConfig  {
                 .logoutSuccessUrl("/?success=101")
         );
 
+
         // 권한 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/").permitAll()
+                .requestMatchers("/user/login", "/login/oauth2/**").permitAll() // 로그인 페이지 및 OAuth2 로그인 요청 허용
                 .requestMatchers("/seller/login").permitAll()
-                .requestMatchers("/admin/qna/**").hasAnyRole("ADMIN","SELLER")
+                .requestMatchers("/admin/qna/**").hasAnyRole("ADMIN", "SELLER")
                 .requestMatchers("/admin/config/**").hasRole("ADMIN")
                 .requestMatchers("/admin/faq/**").hasRole("ADMIN")
                 .requestMatchers("/admin/qna/**").hasRole("ADMIN")
@@ -75,6 +95,8 @@ public class SecurityConfig  {
                 .requestMatchers("/article/delete/**").authenticated()
                 .anyRequest().permitAll()
         );
+
+
 
         // CSRF 비활성화 (필요에 따라 활성화 가능)
         http.csrf().disable();
@@ -97,5 +119,10 @@ public class SecurityConfig  {
     @Bean
     public AuthenticationSuccessHandler customAuthSuccessHandler() {
         return new CustomAuthSuccessHandler();
+    }
+
+    @Bean
+    public CustomOAuth2UserService customOAuth2UserService() {
+        return new CustomOAuth2UserService();
     }
 }
