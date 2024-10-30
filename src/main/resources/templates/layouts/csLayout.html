@@ -11,11 +11,7 @@
     <link rel="stylesheet" th:href="@{/css/cs/csCommon.css}">
     <link rel="shortcut icon" th:href="@{/uploads/ConfigImg/favicon.ico}" type="image/x-icon">
 
-
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-
-    <script th:src="@{/js/include.js}"></script>
-
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet"/>
 
     <title>LotteOn::cs</title>
 </head>
@@ -27,14 +23,14 @@
         </div>
         <th:block th:replace="~{include/header}"></th:block>
         <th:block th:if="${cate == 'main'}">
-            <th:block  layout:fragment="content"></th:block>
+            <th:block layout:fragment="content"></th:block>
         </th:block>
         <th:block th:unless="${cate == 'main'}">
 
 
             <main>
                 <div id="container">
-                    <th:block  layout:fragment="content"></th:block>
+                    <th:block layout:fragment="content"></th:block>
 
 
                 </div>
@@ -43,7 +39,6 @@
         </th:block>
 
         <!--        <th:block th:replace="~{content/cs/noticeView}"></th:block>-->
-
 
 
         <th:block th:replace="~{include/footer}"></th:block>
@@ -84,11 +79,11 @@
         });
     });
 
-        // 체크박스 전체 선택 기능
-        const selectAllCheckbox = document.getElementById('select-all');
-        const checkboxes = document.querySelectorAll('.checkbox-item');
+    // 체크박스 전체 선택 기능
+    const selectAllCheckbox = document.getElementById('select-all');
+    const checkboxes = document.querySelectorAll('.checkbox-item');
 
-        selectAllCheckbox.addEventListener('change', function () {
+    selectAllCheckbox.addEventListener('change', function () {
         checkboxes.forEach(checkbox => {
             checkbox.checked = selectAllCheckbox.checked;
         });
