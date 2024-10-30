@@ -1,11 +1,14 @@
 package com.lotteon.controller;
 
 import com.lotteon.dto.User.MemberDTO;
+import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.entity.User.User;
 import com.lotteon.entity.cart.CartItem;
+import com.lotteon.entity.product.Review;
+import com.lotteon.service.ReviewService;
 import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
@@ -35,6 +38,7 @@ public class MarketController {
     private final ProductCategoryService productCategoryService;
     private final UserService userService;
     private final MarketCartService marketCartService;
+    private final ReviewService reviewService;
 
     @GetMapping("/main")
     public String marketMain(Model model) {
@@ -71,14 +75,23 @@ public class MarketController {
 
 
     @GetMapping("/view/{categoryId}/{productId}")
-    public String marketView(@PathVariable long productId,@PathVariable long categoryId,Model model) {
+    public String marketView(@PathVariable long productId,@PathVariable long categoryId,Model model, com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
         log.info(productId);
         log.info(categoryId);
+
+        pageRequestDTO.setSize(6);
 
        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
        log.info("categories LLLLL "+ categoryDTOs);
        ProductDTO productdto = productService.getProduct(productId);
         log.info("productVIew Controller:::::"+productdto);
+
+        PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewss(pageRequestDTO);
+        model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
+
+        List<Review> ReviewImgs = reviewService.getAllReviews();
+
+        model.addAttribute("reviewImgs", ReviewImgs);
 
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("products",productdto);

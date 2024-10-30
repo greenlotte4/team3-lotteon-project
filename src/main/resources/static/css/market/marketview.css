@@ -512,11 +512,10 @@ select::-ms-expand {
 }
 
 .product_review .review-body .review_img{
-    border: 1px solid black;
     width: 100px;
     height: 100px;
-    flex-shrink: 0; 
-    
+    flex-shrink: 0;
+
 
 }
 
@@ -574,22 +573,22 @@ select::-ms-expand {
 }
 
 .review-image-wrapper {
-    width: 780px; /* Adjust width as necessary */
-    overflow: hidden;
+    width: 810px; /* Adjust width as necessary */
+    overflow: hidden; /* 숨겨질 부분을 숨김 */
     position: relative;
 }
 
 .review-images {
-    display: flex;
-    transition: transform 0.3s ease-in-out;
+    display: flex; /* 이미지를 가로로 나열 */
+    transition: transform 0.3s ease-in-out; /* 슬라이드 효과 */
 }
 
 .reviewImg {
-    width: 150px;
+    width: 150px; /* 이미지 크기 */
     height: 150px;
-    margin: 0 5px;
+    margin: 0 5px; /* 이미지 간격 */
     border: 1px solid black;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
 
 .reviewImg img {
@@ -597,7 +596,17 @@ select::-ms-expand {
     height: 100%;
     object-fit: cover;
 }
+.disabled {
+    pointer-events: none; /* 클릭 비활성화 */
+    opacity: 0.5; /* 반투명 효과 */
+}
 
+/* Optional: to add some styling to images */
+.reviewImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 /* Navigation arrow buttons */
 .arrow {
     background-color: #ef2a23;
@@ -617,11 +626,11 @@ select::-ms-expand {
 
 .left {
     z-index: 20;
-    left: 0px;
+    left: 10px;
 }
 
 .right {
-    right: 0px;
+    right: 10px;
 }
 
 /* .reviewImgSlider {
@@ -879,4 +888,40 @@ select::-ms-expand {
     position: relative;
     box-sizing: border-box;
     width: 150px;
+}
+
+.star-rating {
+    font-size: 24px; /* 별 크기 조정 */
+    color: #ccc; /* 기본 색상 (선택되지 않은 별의 색상) */
+}
+
+.star {
+    color: lightgray; /* 선택된 별의 색상 */
+}
+
+.star-selected {
+    color: gold; /* 선택된 별의 색상 */
+    font-size: 1.5em;
+}
+
+.num, .prev, .next {
+    margin: 0 5px;
+    cursor: pointer;
+    color: #ef2a23;
+}
+.num, .prev, .next{
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+}
+
+.current {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background-color: #ef2a23;
+    font-weight: bold;
+    color: white;
 }
