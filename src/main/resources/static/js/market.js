@@ -74,21 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    const viewdecrease = document.getElementById('decrease');
-    const viewincrease = document.getElementById('increase');
-    if(viewdecrease != null){
-    viewdecrease.addEventListener('click', function () {
-            let quantity = document.getElementById('quantity');
-            if (quantity.value > 1) {
-                quantity.value = parseInt(quantity.value) - 1;
-            }
-        });
-
-        viewincrease.addEventListener('click', function () {
-            let quantity = document.getElementById('quantity');
-            quantity.value = parseInt(quantity.value) + 1;
-        });
-    }
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

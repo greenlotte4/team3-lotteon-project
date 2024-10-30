@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const sectionWrapper = document.querySelector('.sectionWrapper');
     const headerHeight = 188;
     const footer = document.querySelector('footer');
-    const footerHeight = 440;
     const asideHeight = aside.offsetHeight;
     const sectionHeight = sectionWrapper.offsetHeight;
     const topHeight = headerHeight + sectionHeight;
@@ -76,32 +75,45 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Retrieve product data from localStorage and display
+    const productDataArray = JSON.parse(localStorage.getItem("productDataArray")) || [];
+
     try {
-        const productData = JSON.parse(localStorage.getItem("productData"));
-        if (!productData) {
-            document.getElementById("buynow").style.display = "none";
+        // const productDataArray = JSON.parse(localStorage.getItem("productDataArray")) || [];
+        if (productDataArray.length > 0) {
+            const orderTable = document.querySelector(".productOrder");
+            productDataArray.forEach(data => {
+                orderTable.insertAdjacentHTML("beforeend", createProductRow(data));
+            });
         } else {
-            populateProductDetails(productData);
+
         }
     } catch (error) {
-        document.getElementById("buynow").style.display = "none";
+        console.error("Error parsing product data:", error);
     }
 
-    // Populate product details in the document
-    function populateProductDetails(data) {
-        document.getElementById("productId").value = data.productId;
-        document.getElementById("productName").innerText = data.productName;
-        document.getElementById("originalPrice").innerText = data.originalPrice * data.quantity;
-        document.getElementById("originalPrice").dataset.original = data.originalPrice;
-        document.getElementById("finalPrice").innerText = data.finalPrice;
-        document.getElementById("optionName").innerText = data.optionName;
-        document.getElementById("shippingFee").innerText = "4000";
-        document.getElementById("shippingFee").dataset.ship = "4000";
-        document.getElementById("optionId").value = data.optionId;
-        document.getElementById("quantity").value = data.quantity;
-        document.getElementById("productImage").src = `/uploads/productimg/${data.file190}`;
-        document.getElementById("productImage").alt = data.productName;
-        document.getElementById("discount").innerText = data.discount;
+    // Function to create a new product row in the table
+    function createProductRow(data) {
+        return `
+            <tr class="order-row">
+                <td>
+                    <div><img src="/uploads/productimg/${data.file190}" alt="${data.productName}"></div>
+                    <div>
+                        <span>${data.productName}</span>
+                        <p class="product_option"> [ 옵션 : ${data.optionName} ]</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="qnt">
+                        <input type="number" class="T_quantity" value="${data.quantity}" readonly>
+                    </div>
+                </td>
+                <td><span class="T_originalPrice price" data-original="${data.originalPrice}">${(data.originalPrice).toLocaleString()}</span></td>
+                <td><span class="T_discount">${data.discount}</span>%</td>
+                <td><span class="T_point">${data.point}</span></td>
+                <td><span class="T_shippingFee" data-ship="${data.shippingFee}">${data.shippingFee}</span></td>
+                <td><span class="T_finalPrice price">${(data.finalPrice * data.quantity).toLocaleString()}</span></td>
+            </tr>
+        `;
     }
 
     // Elements for final order calculations
@@ -118,10 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const finalOrderTotal = document.getElementById("finalOrderTotal");
     const finalOrderPoint = document.getElementById("finalOrderPoint");
 
-    let productPrice = parseInt(document.getElementById("originalPrice").innerText);
-    let deliveryFee = parseInt(document.getElementById("shippingFee").innerText) || 0;
-    let productQuantity = parseInt(document.getElementById("quantity").value) || 1;
-
+    // Calculate and display discount results based on used points and coupons
     usedPointInput.addEventListener("input", function () {
         const usedPoint = parseInt(usedPointInput.value) || 0;
         if (usedPoint > currentPoint) {
@@ -141,18 +150,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex].value;
         let couponDiscount = 0;
         if (selectedCouponValue === "1") {
-            couponDiscount = Math.floor(productPrice * 0.03); // Example: 3% discount
+            couponDiscount = Math.floor(totalProductPrice() * 0.03); // Example: 3% discount
         }
 
         // Calculate initial order total before points
-        const initialTotalOrderAmount = (productPrice * productQuantity) - couponDiscount + deliveryFee;
+        const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
 
         // If used points exceed the total order amount, limit them
         const limitedUsedPoint = Math.min(usedPoint, initialTotalOrderAmount);
 
-        // Display the limited used points if they were capped
         usedPointInput.value = limitedUsedPoint;
-        currentIn.textContent = currentPoint - limitedUsedPoint; // Update displayed remaining points
+        currentIn.textContent = currentPoint - limitedUsedPoint;
 
         // Update discount and final order information
         usedPointResult.textContent = limitedUsedPoint;
@@ -161,31 +169,43 @@ document.addEventListener('DOMContentLoaded', function () {
         const totalDiscount = limitedUsedPoint + couponDiscount;
         discountResult.textContent = totalDiscount;
 
-        // Final order calculations
-        finalOrderQuantity.textContent = productQuantity;
-        finalOrderProductPrice.textContent = productPrice * productQuantity;
-        finalOrderDiscount.textContent = totalDiscount;
-        finalOrderDeliveryFee.textContent = deliveryFee;
+        finalOrderQuantity.textContent = totalQuantity();
+        finalOrderProductPrice.textContent = totalProductPrice().toLocaleString();
+        finalOrderDiscount.textContent = totalDiscount.toLocaleString();
+        finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
 
-        // Calculate final total after all discounts
         const orderTotal = initialTotalOrderAmount - limitedUsedPoint;
-        finalOrderTotal.textContent = orderTotal;
-
-        // Calculate and display estimated points (example: 1% of the final price)
-        finalOrderPoint.textContent = Math.floor(orderTotal * 0.01);
+        finalOrderTotal.textContent = orderTotal.toLocaleString();
+        finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
     }
 
-    // Calculate total values for the final order
+    // Calculate the total values based on all selected options
+    function totalQuantity() {
+        return Array.from(document.querySelectorAll('.T_quantity'))
+            .reduce((total, elem) => total + parseInt(elem.value || 0), 0);
+    }
+
+    function totalProductPrice() {
+        return Array.from(document.querySelectorAll('.T_originalPrice'))
+            .reduce((total, elem) => total + parseInt(elem.dataset.original || 0), 0);
+    }
+
+    function totalShippingFee() {
+        return Array.from(document.querySelectorAll('.T_shippingFee'))
+            .reduce((total, elem) => total + parseInt(elem.dataset.ship || 0), 0);
+    }
+
     calculateTotals();
 
     function calculateTotals() {
+        // 총 수량, 상품 금액, 배송비 계산
         const totalQuantity = Array.from(document.querySelectorAll('.T_quantity'))
             .reduce((total, elem) => total + parseInt(elem.value || 0), 0);
 
-        const totalOriginalPrice = Array.from(document.querySelectorAll('.T_originalPrice'))
+        const totalProductPrice = Array.from(document.querySelectorAll('.T_originalPrice'))
             .reduce((total, elem) => total + parseInt(elem.dataset.original || 0), 0);
 
-        const totalShipping = Array.from(document.querySelectorAll('.T_shippingFee'))
+        const totalShippingFee = Array.from(document.querySelectorAll('.T_shippingFee'))
             .reduce((total, elem) => total + parseInt(elem.dataset.ship || 0), 0);
 
         const totalDiscountAmount = Array.from(document.querySelectorAll('.T_discount'))
@@ -195,30 +215,58 @@ document.addEventListener('DOMContentLoaded', function () {
                 return total + Math.floor((originalPrice * discountPercentage) / 100);
             }, 0);
 
+        // 최종 결과 업데이트
         finalOrderQuantity.textContent = totalQuantity;
-        finalOrderProductPrice.textContent = totalOriginalPrice;
-        finalOrderDiscount.textContent = totalDiscountAmount + parseInt(discountResult.textContent) || 0;
-        finalOrderDeliveryFee.textContent = totalShipping;
-        finalOrderPoint.textContent = totalQuantity * 10; // Example: points per quantity
+        finalOrderProductPrice.textContent = totalProductPrice.toLocaleString();
+        finalOrderDiscount.textContent = totalDiscountAmount.toLocaleString();
+        finalOrderDeliveryFee.textContent = totalShippingFee.toLocaleString();
+        finalOrderPoint.textContent = Math.floor((totalProductPrice - totalDiscountAmount) * 0.01).toLocaleString(); // 포인트 예제
     }
 
 
+
+
+    // 구매하기 버튼 클릭 시
+    document.querySelector('.order-Btn').addEventListener('click', function (event) {
+        event.preventDefault();  // 기본 제출 동작 방지
+
+        if (productDataArray.length > 0) {
+            // 서버에 데이터를 전송
+            fetch('/order/saveOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(productDataArray),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === 'success') {
+                        alert('주문이 완료되었습니다!');
+                        localStorage.removeItem('productDataArray');  // 성공 시 로컬 데이터 삭제
+                        window.location.href = '/order/confirmation'; // 완료 후 페이지 이동
+                    } else {
+                        alert('주문 처리 중 오류가 발생했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('서버와의 통신 중 오류가 발생했습니다.');
+                });
+        } else {
+            alert('주문할 상품이 없습니다.');
+        }
+    });
+
 });
 
 
-// Set a flag in sessionStorage on page load
-window.addEventListener("load", () => {
-    sessionStorage.setItem("page_reload", "true");
-});
 
-// Detect unload event
+// Detect unload event for refreshing
 window.addEventListener("beforeunload", (event) => {
-    // Check if "page_reload" flag is set; if not, it's a true navigation away from the page
     if (sessionStorage.getItem("page_reload") === "true") {
-        // Remove the flag to indicate a refresh
         sessionStorage.removeItem("page_reload");
     } else {
-        // On true navigation, remove productData
-        localStorage.removeItem("productData");
+        localStorage.removeItem("productDataArray");
     }
 });

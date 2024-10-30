@@ -61,6 +61,7 @@
     border: 1px solid #eaeaea;
     padding: 20px;
     margin-bottom: 20px;
+    justify-content: space-between;
 }
 
 /* Product Image */
@@ -836,4 +837,46 @@ select::-ms-expand {
 
 .star.empty-star {
     color: #cccccc; /* 빈 별 색상 */
+}
+
+
+
+.couponArea > button{
+    width: 100%;
+    border: 1px solid #ef2323;
+    color: #ef2323;
+    padding: 6px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #ffff;
+    border-radius: 4px;
+}
+
+.bannerArea > img{
+    width: 100%;
+}
+
+
+.selectResult > .option-detail{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.selectResult > .option-detail .remove-option{
+    position: absolute;
+    background-color: #FFFFFF;
+    padding: 3px;
+    margin-left: 5px;
+    top: 3px;
+}
+
+.selectResult > .option-detail .btnArea{
+    position: relative;
+    box-sizing: border-box;
+    width: 150px;
 }
