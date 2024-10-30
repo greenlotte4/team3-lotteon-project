@@ -3,6 +3,7 @@ package com.lotteon.service;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
+import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
 import com.lotteon.entity.product.ReviewFile;
@@ -34,17 +35,17 @@ public class ReviewService {
 
     @PostConstruct
     public void init() {
-        modelMapper.addMappings(new PropertyMap<Review, ReviewDTO>() {
-            @Override
-            protected void configure() {
-                skip(destination.getPReviewFiles()); // pReviewFiles 필드를 무시
-                skip(destination.getSavedReviewFiles()); // savedReviewFiles도 무시
-                // 필요한 다른 매핑 설정 추가
-            }
-        });
+//        modelMapper.addMappings(new PropertyMap<Review, ReviewDTO>() {
+//            @Override
+//            protected void configure() {
+//                skip(destination.getPReviewFiles()); // pReviewFiles 필드를 무시
+//                skip(destination.getSavedReviewFiles()); // savedReviewFiles도 무시
+//                // 필요한 다른 매핑 설정 추가
+//            }
+//        });
     }
 
-    public boolean saveReview(ReviewDTO reviewDTO) {
+    public boolean saveReview(ReviewRequestDTO reviewDTO) {
         Long productId = reviewDTO.getProductId(); // ReviewDTO에서 productId 가져오기
         Product product = productRepository.findById(productId).orElse(null);
 
@@ -60,7 +61,7 @@ public class ReviewService {
 
         // 파일 업로드 로직 호출
         // fileService의 uploadReviewFiles 메서드 호출하여 파일 업로드
-        ReviewDTO uploadedReviewDTO = fileService.uploadReviewFiles(reviewDTO);
+        ReviewRequestDTO uploadedReviewDTO = fileService.uploadReviewFiles(reviewDTO);
 
         // 업로드된 파일 정보를 Review 엔티티에 설정
         List<ReviewFile> reviewFiles = uploadedReviewDTO.getSavedReviewFiles();

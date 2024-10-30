@@ -49,53 +49,28 @@
                         <th>배송비</th>
                         <th>총합</th>
                     </tr>
-                    <th:block >
-                        <tr id="buynow">
-                            <td>
-                                <div><img id="productImage"  alt=""></div>
-                                <div>
-                                    <span id="productName">상품명</span>
-                                    <input type="hidden"  id="productId" >
-                                    <input type="hidden" name="optionId" id="optionId">
-                                    <p class="product_option" > [ 옵션 : <span id="optionName"></span> ]</p>
-                                </div>
-                            </td>
-                            <td >
-                                <div class="qnt">
-                                    <input type="number" name="quantity"  id="quantity"  class="T_quantity" readonly>
-                                </div>
-                            </td>
-                            <td><span class="T_originalPrice price" id="originalPrice"  data-original="">30000</span></td>
-                            <td><span id="discount" class="T_discount" ></span>%</td>
-                            <td><span class="T_point price" id="point">300</span></td>
-                            <td><span class="T_shippingFee price" id="shippingFee" data-ship="" th:text="2000"></span></td>
-                            <td><span class="T_finalPrice price"  id="finalPrice"></span></td>
-                        </tr>
-                    </th:block>
-
-
-                    <!-- 반복부분 -->
-
-                    <tr>
-                        <td>
-                            <div><img src="" alt=""></div>
-                            <div>
-                                <span>상품명</span>
-                                <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
-                            </div>
-                        </td>
-                        <td >
-                            <div class="qnt">
-                                <input type="number" name="quantity" class="T_quantity" th:value="1" readonly>
-                            </div>
-                        </td>
-                        <td><span  class="T_originalPrice price" data-original="30000">30000</span></td>
-                        <td><span class="T_discount"></span>%</td>
-                        <td><span class="T_point price" >300</span></td>
-                        <td><span class="T_shippingFee price" data-ship="2000" th:text="2000">3000</span></td>
-                        <td><span class="T_finalPrice price" >29500</span></td>
-                    </tr>
-
+<!--                    &lt;!&ndash; 반복부분 &ndash;&gt;-->
+<!--                    <th:block th:if="${#lists.isEmpty(productDataArray)}">-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <div><img src="" alt=""></div>-->
+<!--                                <div>-->
+<!--                                    <span>상품명</span>-->
+<!--                                    <p class="product_option"> [ 옵션 : 크림 / 66 Size ]</p>-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                            <td >-->
+<!--                                <div class="qnt">-->
+<!--                                    <input type="number" name="quantity" class="T_quantity" th:value="1" readonly>-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                            <td><span  class="T_originalPrice price" data-original="30000">30000</span></td>-->
+<!--                            <td><span class="T_discount"></span>%</td>-->
+<!--                            <td><span class="T_point price" >300</span></td>-->
+<!--                            <td><span class="T_shippingFee price" data-ship="2000" th:text="2000">3000</span></td>-->
+<!--                            <td><span class="T_finalPrice price" >29500</span></td>-->
+<!--                        </tr>-->
+<!--                    </th:block>-->
                 </table>
                 <!-- <div class="btn-group">
                     <button class="returnCart" >장바구니로 돌아가기</button>

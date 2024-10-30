@@ -3,6 +3,7 @@ package com.lotteon.controller;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
+import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
 import com.lotteon.service.FileService;
@@ -45,7 +46,7 @@ public class MypageController {
 
     @ResponseBody
     @PostMapping("/myInfo/review")
-    public ResponseEntity<?> submitReview(@ModelAttribute ReviewDTO reviewDTO) {
+    public ResponseEntity<?> submitReview(@ModelAttribute ReviewRequestDTO reviewDTO) {
         try {
             // ReviewService의 saveReview 메서드에 reviewDTO를 직접 전달
             boolean isSaved = reviewService.saveReview(reviewDTO);

@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Builder
-public class ReviewDTO {
+public class ReviewRequestDTO {
 
     private long reviewId;
     private String writer;
@@ -22,6 +22,7 @@ public class ReviewDTO {
     private String title;
     private String content;
     private String rating;  //상품평점
+    private List<MultipartFile> pReviewFiles;
     private List<ReviewFile> savedReviewFiles;
     private List<ReviewFileDTO> reviewFileDTOS;
     private Long productId;

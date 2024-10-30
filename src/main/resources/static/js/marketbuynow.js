@@ -2,8 +2,6 @@
 // 전역 변수로 선택된 옵션 값을 초기화
 let selectedOptionValue = "";
 let selectedOptionText = "";
-
-
 const productId = document.getElementById("productId").value;
 const point = document.getElementById("point").value;
 const productName = document.getElementById("productName").value;

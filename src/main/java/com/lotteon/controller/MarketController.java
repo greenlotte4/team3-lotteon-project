@@ -20,10 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 /*
     2024.10.28 하진희 - marketorder => 구매하기 버튼 기능 추가 (/buynow)
  */
@@ -108,6 +105,7 @@ public class MarketController {
 
     @GetMapping("/order/{uid}")
     public String marketOrder(@PathVariable String uid,Model model) {
+
         log.info("uid ::::::::::"+uid);
         MemberDTO memberDTO = userService.getByUsername(uid);
         log.info(memberDTO);
@@ -117,38 +115,58 @@ public class MarketController {
         return "content/market/marketorder"; // Points to the "content/market/marketorder" template
     }
 
+    @PostMapping("/order/saveOrder")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> saveorder(@RequestBody List<BuyNowRequestDTO> productDataList, Authentication authentication){
+
+        return null;
+    }
+
+
     @PostMapping("/buyNow")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> processOrder(@RequestBody BuyNowRequestDTO productDTO, Authentication authentication) {
+    public ResponseEntity<Map<String, String>> processOrder(@RequestBody List<BuyNowRequestDTO> productDataList, Authentication authentication) {
         Map<String, String> response = new HashMap<>();
 
-        // Authentication 객체가 null인지 확인하고 인증 여부를 구분
+        // Check if user is authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             response.put("result", "login_required");
             return ResponseEntity.ok(response);
         }
-        if(productDTO != null) {
-            String uid= authentication.getName();
-            Optional<User> opt= userService.findUserByUid(uid);
-            if(opt.isPresent()) {
-                User user=opt.get();
-                if(user.getRole() != User.Role.MEMBER) {
-                    //admin, seller계정은 구매 불가
-                    response.put("result", "auth");
-                    return ResponseEntity.ok(response);
-                }
-                //member계정 구매가능
-                response.put("result", "success");
 
-            }else{
-            //계정이 없다.
-            response.put("result", "none");
+        // Check if product data list is provided
+        if (productDataList == null || productDataList.isEmpty()) {
+            response.put("result", "fail");
+            return ResponseEntity.ok(response);
+        }
+
+        // Retrieve user details using authentication
+        String uid = authentication.getName();
+        Optional<User> opt = userService.findUserByUid(uid);
+
+        if (opt.isPresent()) {
+            User user = opt.get();
+
+            // Check if the user role is not allowed for purchase
+            if (user.getRole() != User.Role.MEMBER) {
+                response.put("result", "auth"); // Admin or seller accounts cannot purchase
+                return ResponseEntity.ok(response);
             }
 
-        }else{
-            //order정보가 없다.
-            response.put("result", "fail");
+            // Process each product item (additional business logic can be added here)
+            for (BuyNowRequestDTO productData : productDataList) {
+                // Here, implement any logic needed for each product in the order
+                System.out.println("Processing order for product: " + productData.getProductName());
+            }
+
+            // Purchase is successful for member role
+            response.put("result", "success");
+
+        } else {
+            // No user account found
+            response.put("result", "none");
         }
+
         return ResponseEntity.ok(response);
 
     }
