@@ -9,9 +9,7 @@ import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
 
 
-/**
- * QOption is a Querydsl query type for Option
- */
+
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QOption extends EntityPathBase<Option> {
 
@@ -28,6 +26,7 @@ public class QOption extends EntityPathBase<Option> {
     public final StringPath optionName = createString("optionName");
 
     public final NumberPath<Long> optionStock = createNumber("optionStock", Long.class);
+
 
     public final StringPath parentCode = createString("parentCode");
 

@@ -62,18 +62,22 @@ public class FaqService {
     }
 
 
-    public FaqDTO selectfaq(int no){
-        Optional<Faq> optfaq = faqRepository.findById(no);
+    public FaqDTO selectfaq(int no) {
+        Optional<Faq> optfaq = faqRepository.findById(no); // int 타입 그대로 사용
 
-        if(optfaq.isPresent()){
+        if (optfaq.isPresent()) {
             Faq faq = optfaq.get();
-            log.info("faqqqqqqqqqqqqqqqq:"+faq);
             BoardCate cate = faq.getCate();
             FaqDTO faqDTO = modelMapper.map(faq, FaqDTO.class);
-            faqDTO.setCategory(modelMapper.map(cate, BoardCateDTO.class));
+
+            if (cate != null) {
+                faqDTO.setCategory(modelMapper.map(cate, BoardCateDTO.class));
+            }
+
             return faqDTO;
         }
-        return null;
+
+        return null; // 여기서 null 반환 시 호출하는 쪽에서 처리 필요
     }
 
     public void deleteCheck(List<Integer> data){

@@ -1,14 +1,15 @@
-// Global variables for product details
+
+// 전역 변수로 선택된 옵션 값을 초기화
 let selectedOptionValue = "";
 let selectedOptionText = "";
-let selectedOptionDesc = "";
-let selectedOptions = []; // Array to store selected options
+
 const productId = document.getElementById("productId").value;
 const point = document.getElementById("point").value;
 const productName = document.getElementById("productName").value;
-const originalPrice = parseFloat(document.getElementById("originalPrice").innerText.replace(/,/g, ""));
-const discount = parseInt(document.getElementById("discount").value);
+const originalPrice = document.getElementById("originalPrice").innerText;
+const finalPrice = document.getElementById("finalPrice").innerText;
 const file190 = document.getElementById("file190").value;
+
 const shippingFee = parseInt(document.getElementById("shippingFee").getAttribute("data-shippingfee")) || 0;
 let quantity = parseInt(document.getElementById("quantity").value); // Default quantity
 
@@ -39,140 +40,36 @@ function updateSelectedResult() {
         const optionDetail = document.createElement("div");
         optionDetail.classList.add("option-detail");
 
-        optionDetail.innerHTML = `
-            ${option.optionId} ${option.optionText} ${option.optionDesc}
-            <div class="btnArea">
-                <div class="quantity-control">
-                    <button type="button" class="decrease" data-index="${index}">-</button>
-                    <input type="number" class="quantity" value="${option.quantity}" min="1" data-index="${index}">
-                    <button type="button" class="increase" data-index="${index}">+</button>
-                </div>
-            </div>
-        `;
+const discount = document.getElementById("discount").value;
+const quantity = document.getElementById("quantity").value;
+const shippingFee =document.getElementById("shippingFee").value;
 
-        // Create a remove button for each option
-        const removeButton = document.createElement("button");
-        removeButton.innerText = "제거";
-        removeButton.classList.add("remove-option");
-        removeButton.addEventListener("click", () => removeOption(index));
 
-        // Append the remove button to the option detail
-        const btnArea = optionDetail.querySelector(".btnArea");
-        btnArea.appendChild(removeButton);
+document.addEventListener("DOMContentLoaded", function () {
 
-        selectResult.appendChild(optionDetail);
+    document.getElementById("option").addEventListener("change", function() {
+        selectedOptionValue = this.value; // 선택된 옵션의 값 (ID)
+        selectedOptionText = this.options[this.selectedIndex].text; // 선택된 옵션의 텍스트
+
+        console.log("선택된 옵션 ID:", selectedOptionValue);
+        console.log("선택된 옵션 설명:", selectedOptionText);
     });
-
-    updateTotalPrice(); // Recalculate the total price
-    addQuantityListeners(); // Add event listeners to new quantity controls
-}
-
-// Function to add event listeners to quantity controls
-function addQuantityListeners() {
-    document.querySelectorAll('.increase').forEach(button => {
-        button.addEventListener('click', (event) => {
-            const index = event.target.dataset.index;
-            selectedOptions[index].quantity += 1;
-            updateSelectedResult(); // Refresh the display
-        });
-    });
-
-    document.querySelectorAll('.decrease').forEach(button => {
-        button.addEventListener('click', (event) => {
-            const index = event.target.dataset.index;
-            if (selectedOptions[index].quantity > 1) {
-                selectedOptions[index].quantity -= 1;
-                updateSelectedResult(); // Refresh the display
-            }
-        });
-    });
-
-    document.querySelectorAll('.quantity').forEach(input => {
-        input.addEventListener('input', (event) => {
-            const index = event.target.dataset.index;
-            selectedOptions[index].quantity = parseInt(event.target.value) || 1;
-            updateTotalPrice(); // Recalculate the total price
-        });
-    });
-}
+    console.log("2323선택된 옵션 ID:", selectedOptionValue);
+    console.log("23233선택된 옵션 설명:", selectedOptionText);
 
 
-// Function to calculate and update the total price for all selected options
-function updateTotalPrice() {
-    let totalPrice = 0;
+console.log("Product ID:", productId);
+console.log("Original Price:", originalPrice);
+console.log("Final Price:", finalPrice);
 
-    selectedOptions.forEach(option => {
-        const discountedPrice = Math.floor(originalPrice * (100 - discount) / 100);
-        totalPrice += discountedPrice * option.quantity;
-    });
-
-    document.querySelector(".total-price").innerText = `총 상품금액: ${totalPrice.toLocaleString()}원`;
-}
-
-// Option change listener for dropdown selection
-document.getElementById("option").addEventListener("change", function() {
-    selectedOptionValue = this.value;
-    selectedOptionText = this.options[this.selectedIndex].text.split(" - ")[0];
-    selectedOptionDesc = this.options[this.selectedIndex].text.split(" - ")[1] || "No description";
-
-    addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
-});
-
-
-
-// Initial setup for total price and selected options display
-updateTotalPrice();
-updateSelectedResult();
-// Function to remove an option from selectedOptions by index
-function removeOption(index) {
-    selectedOptions.splice(index, 1); // Remove option from array
-    updateSelectedResult(); // Refresh the display
-    updateTotalPrice(); // Update the total price
-}
-
-
-
-
-
-// Event listeners for the increase and decrease buttons
-document.getElementById('decrease').addEventListener('click', function () {
-    if (quantity > 1) {
-        quantity -= 1;
-        document.getElementById("quantity").value = quantity;
-
-        // Update the last selected option's quantity in the array
-        if (selectedOptionValue) {
-            addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
+    document.getElementById("buy-now-btn").addEventListener("click", function(e) {
+        alert("여기1!!");
+        if(!selectedOptionValue) {
+            alert("옵션을 선택해주세요.")
+            return;
         }
-    }
-});
-
-document.getElementById('increase').addEventListener('click', function () {
-    quantity += 1;
-    document.getElementById("quantity").value = quantity;
-
-    // Update the last selected option's quantity in the array
-    if (selectedOptionValue) {
-        addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
-    }
-});
-
-// Update total price and selected result if user manually changes quantity
-document.getElementById("quantity").addEventListener("input", function () {
-    quantity = parseInt(this.value) || 1; // Set to 1 if invalid input
-    this.value = quantity; // Correct the input if needed
-
-    // Update the last selected option's quantity in the array
-    if (selectedOptionValue) {
-        addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
-    }
-});
 
 
-
-// Initial total price calculation on page load
-updateTotalPrice();
-updateSelectedResult();
 
 // Event listener for Buy Now button
 document.getElementById("buy-now-btn").addEventListener("click", function(e) {
@@ -202,30 +99,39 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
         }
 
 
-        // Store the array in localStorage (optional)
-        localStorage.setItem("productDataArray", JSON.stringify(productDataArray));
 
-        fetch("/market/buyNow", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(productDataArray) // Send as an array
-        })
-            .then(response => response.json())
-            .then(data => {
+            // JSON 형식으로 데이터 전송
+            fetch("/market/buyNow", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(productData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // 서버 응답을 확인
+
                 if (data.result === "success") {
                     const uid = document.getElementById("uid").value;
+                    console.log(uid);
+                    // 구매 성공 시 주문 페이지로 리다이렉트
                     window.location.href = `/market/order/${uid}`;
-                } else if (data.result === "login_required") {
-                    if (confirm("로그인이 필요합니다. 로그인 하시겠습니까?")) {
-                        window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
-                    } else {
+                } else if(data.result === "login_required") {
+                    const isconfirm= confirm("로그인이 필요합니다. 로그인 하시겠습니까?");
+                    if(isconfirm) {
+                        const currentUrl = encodeURIComponent(window.location.href);
+                        console.log(currentUrl);
+                        window.location.href = `/user/login?redirect=${currentUrl}`;
+                    }else{
                         location.reload();
                     }
-                } else if (data.result === "auth") {
+                }
+                else if (data.result === "auth") {
+                    // 권한 없는 사용자(관리자 또는 판매자)일 경우 경고 메시지 표시
                     alert("구매 권한이 없는 계정입니다. 관리자 또는 판매자는 구매할 수 없습니다.");
-                } else {
+                } else if (data.result === "fail") {
+                    // 계정이 없거나 기타 오류가 발생한 경우
                     alert("구매 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
                 }
             })
@@ -236,63 +142,83 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
     }
 });
 
-// Initial setting for Add to Cart buttons and functionality
-document.querySelectorAll('.add-to-cart').forEach(btn => {
-    btn.addEventListener('click', function () {
-        const user = localStorage.getItem('user');
-        if (!user) {
-            alert('로그인 후 사용 가능합니다. 로그인 페이지로 이동합니다.');
-            window.location.href = '/user/login';
-            return;
-        }
 
-        if (quantity <= 0) {
-            alert('수량을 1 이상으로 설정해 주세요.');
-            return;
-        } else if (!selectedOptionValue) {
-            alert("옵션을 선택해 주세요");
-            return;
-        }
 
-        if (confirm("장바구니에 추가 하시겠습니까.")) {
-            const productCart = {
-                productId: parseInt(productId, 10),
-                productName: productName,
-                originalPrice: originalPrice,
-                finalPrice: finalPrice,
-                quantity: quantity,
-                file190: file190,
-                shippingFee: shippingFee,
-                optionId: parseInt(selectedOptionValue, 10),
-                optionName: selectedOptionText,
-                point: parseInt(point, 10),
-                discount: discount
-            };
 
-            localStorage.setItem("productCart", JSON.stringify(productCart));
-            fetch('/api/cart', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(productCart)
-            })
-                .then(resp => {
-                    if (!resp.ok) throw new Error(`서버 응답 오류: ${resp.status}`);
-                    return resp.json();
+    // 모든 장바구니 버튼에 클릭 이벤트 추가
+    const addToCartBtn = document.querySelectorAll('.add-to-cart');
+    console.log('클릭됨');
+
+    addToCartBtn.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                alert('로그인 후 사용 가능합니다. 로그인 페이지로 이동합니다.');
+                window.location.href = '/user/login'; // 로그인 페이지로 이동
+                return;
+            }
+
+            // 상품 정보 수집
+            const quantity = document.querySelector(`#quantity`).value; // 수정된 부분
+            if (quantity <= 0) {
+                alert('수량을 1 이상으로 설정해 주세요.');
+                return;
+            } else if (!selectedOptionValue) {
+                alert("옵션을 선택해 주세요");
+                return;
+            }
+            console.log("Quantity:", quantity);
+
+            const isConfirmed = confirm("장바구니에 추가 하시겠습니까.");
+            if (isConfirmed) {
+                // json 객체 생성
+                const productCart = {
+                    productId: parseInt(productId, 10), // 숫자로 변환
+                    productName: productName,
+                    originalPrice: parseInt(originalPrice, 10),
+                    finalPrice: parseInt(finalPrice, 10),
+                    quantity: parseInt(quantity, 10),
+                    file190: file190,
+                    shippingFee: shippingFee || 0,
+                    optionId: parseInt(selectedOptionValue, 10),
+                    optionName: selectedOptionText,
+                    point: parseInt(point, 10),
+                    discount: parseInt(discount, 10)
+                };
+
+                console.log('전송할 데이터:', JSON.stringify(productCart));
+                localStorage.setItem("productCart", JSON.stringify(productCart));
+                fetch('/api/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productCart), // JSON 형식으로 전송
                 })
-                .then(data => {
-                    if (data.status === 200) {
-                        alert('장바구니에 추가 되었습니다!');
-                    } else if (data.status === 401) {
-                        alert('로그인 없이 이곳은 접근 금지! 빨리 로그인해 주세요');
-                        window.location.href = '/user/login';
-                    } else {
+                    .then(resp => {
+                        // 서버 응답을 JSON으로 변환
+                        if (!resp.ok) {
+                            throw new Error(`서버 응답 오류: ${resp.status} ${resp.statusText}`);
+                        }
+                        return resp.json(); // JSON으로 변환된 응답을 반환
+                    })
+                    .then(data => {
+                        if (data.status === 200) {
+                            alert('장바구니에 추가 되었습니다!');
+                        } else if (data.status === 401) {
+                            alert('로그인 없이 이곳은 접근 금지! 빨리 로그인해 주세요');
+                            window.location.href = '/user/login';
+                        } else if (data.status === 'fail') {
+                            alert('장바구니에 추가하는 데 실패하셨습니다.');
+                        } else {
+                            throw new Error('알 수 없는 오류가 발생했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('장바구니에 추가하는 데 실패함:', error);
                         alert('장바구니에 추가하는 데 실패하셨습니다.');
-                    }
-                })
-                .catch(error => {
-                    console.error('장바구니에 추가하는 데 실패함:', error);
-                    alert('장바구니에 추가하는 데 실패하셨습니다.');
-                });
-        }
+                    });
+            }
+        });
     });
 });

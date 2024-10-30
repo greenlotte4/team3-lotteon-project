@@ -15,11 +15,19 @@
     font-size: 18px;
     padding: 15px 20px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
     font-weight: bold;
     color: #333;
-    border-radius: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
 }
+
+.view-subtitle {
+    font-size: 18px;
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+}
+
 
 /* 날짜 스타일 */
 .view-title .view-data {
