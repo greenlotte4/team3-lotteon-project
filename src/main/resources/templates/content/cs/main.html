@@ -23,7 +23,7 @@
                 <div class="notice">
                     <div>
                         <h2>공지사항</h2>
-                        <span><a th:href="@{/cs/notice/list}">전체보기</a></span>
+                        <span><a th:href="@{/cs/notice/list}" style="color: rgb(17, 86, 165); font-weight: bold;">전체보기</a></span>
                     </div>
                     <table class="notice_table">
                         <colgroup>
@@ -34,7 +34,7 @@
                         <th:block th:if="${!top5Notices.isEmpty()}">
                             <tr th:each="notice : ${top5Notices}">
                                 <td>
-                                    <a th:href="@{/notice/view(id=${notice.noticeNo})}"
+                                    <a th:href="@{/cs/notice/view(no=${notice.noticeNo})}"
                                        th:text="${notice.noticetitle}"></a>
                                 </td>
                                 <td th:text="${#strings.substring(notice.date, 0, 10)}"></td>
@@ -45,32 +45,32 @@
                 <div class="qna">
                     <div>
                         <h2>자주하는 질문</h2>
-                        <span><a th:href="@{/cs/faq/list}">전체보기</a></span>
+                        <span><a th:href="@{/cs/faq/list}" style="color: rgb(17, 86, 165); font-weight: bold;">전체보기</a></span>
                     </div>
                     <table>
                         <tr>
                             <td>
-                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-user.png"></a><br>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon01.png"></a><br>
                                 <a th:href="@{/cs/faq/list}">회원</a>
                             </td>
                             <td>
-                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-coupon.png"></a><br>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon02.png"></a><br>
                                 <a th:href="@{/cs/faq/list}">쿠폰/이벤트</a>
                             </td>
                             <td>
-                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-order.png"></a><br>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon03.png"></a><br>
                                 <a th:href="@{/cs/faq/list}">주문/결제</a>
                             </td>
                             <td>
-                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-shipping.png"></a><br>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon04.png"></a><br>
                                 <a th:href="@{/cs/faq/list}">배송</a>
                             </td>
                             <td>
-                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-return.png"></a><br>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon05.png"></a><br>
                                 <a th:href="@{/cs/faq/list}">취소/반품/환불</a>
                             </td>
                             <td>
-                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon-safety.png"></a><br>
+                                <a th:href="@{/cs/faq/list}"><img src="../images/sample/icon06.png"></a><br>
                                 <a th:href="@{/cs/faq/list}">안전결제</a>
                             </td>
                         </tr>
@@ -79,8 +79,7 @@
                 <div class="question">
                     <div>
                         <h2>문의하기</h2>
-                        <span><a th:if="${#authentication.name != 'anonymousUser'}"
-                                 th:href="@{/cs/qna/list}">전체보기</a></span>
+                        <span><a th:href="@{/cs/qna/list}" style="color: rgb(17, 86, 165); font-weight: bold;">전체보기</a></span>
                     </div>
                     <div>
                         <span th:if="${qnaPage.getContent().isEmpty()}">QnA 데이터가 없습니다.</span>
@@ -103,7 +102,8 @@
                             </tr>
                         </th:block>
                     </table>
-                    <a class="inquiry" th:if="${#authentication.name != 'anonymousUser'}" href="/cs/qna/list">문의하기 ></a>
+                    <a class="inquiry" th:if="${#authentication.name != 'anonymousUser'}" href="/cs/qna/list"
+                       style="color: rgb(17, 86, 165); font-weight: bold;" ;>문의글 작성 ></a>
                 </div>
                 <div class="onecounsel">
                     <h2>1:1 상담안내</h2>

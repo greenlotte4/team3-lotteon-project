@@ -49,12 +49,12 @@ a:hover {text-decoration: underline; font-weight: bold;}
 .tit1 {
     text-align: center;
     margin: 50px 0;
-    font-size: large;
+    font-size: 36px;
     font-weight: bold;
 }
 .tit1 span {
     color: #ef2a23;
-    font-size: 25px;
+    font-size: 36px;
     font-weight: 700;
 }
 
@@ -63,6 +63,7 @@ a:hover {text-decoration: underline; font-weight: bold;}
     box-shadow:0px 4px 8px rgba(0, 0, 0, 0.1); /* 하단 그림자 */
     padding: 10px;
     margin-bottom: 40px;
+    border-radius: 10px;
 }
 
 #service > div > div{
@@ -114,7 +115,8 @@ h4 { margin: 0 10px 40px;}
 .qna span{float: right; margin-top: 10px;}
 .qna table {margin: 50px 10px; text-align: center; width: 98%;}
 /* .qna table td {width: 100px;} */
-.qna table img {width: 90px;}
+.qna table img {width: 58%; height: auto; margin-bottom: 15px; transition: transform 0.3s ease;}
+.qna table img:hover {transform: scale(1.25);}
 
 
 /*문의하기*/
