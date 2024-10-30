@@ -101,5 +101,39 @@ const cartItems = [];
 
 // 수정 && 삭줴하기 붜틘
 
+document.querySelectorAll('.apply-btn').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const quantityInput = this.closest('.qnt').querySelector('.quantity-input');
+        const newQuantity = parseInt(quantityInput.value, 10);
 
+        if(isNaN(newQuantity) || newQuantity < 1){
+            alert("수량은 1 이상이어야 합니다.");
+            return;
+        }
+        fetch(`/api/cart/${productId}`,{
+            method: 'PUT',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({quantity: newQuantity}),
+        })
+            .then(resp => {
+                if (!resp.ok){
+                    alert('서버 요청중 요류발생')
+                }
+                    return resp;
+            })
+            .then(data => {
+                const quantityField = this.closest('tr').querySelector('input[name="quantity"]');
+                quantityField.value = newQuantity; // 수량 업뎃
+
+
+            })
+            .catch(error => {
+                console.log('error',error)
+                alert('수량 업뎃중 오류닭')
+            })
+    })
+})
 

@@ -2,10 +2,7 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.product.cart.CartRequestDTO;
-import com.lotteon.entity.User.User;
-import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
-import com.lotteon.entity.product.Product;
 import com.lotteon.repository.cart.CartRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.service.product.MarketCartService;
@@ -15,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.ui.Model;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -78,6 +73,25 @@ public class ProductCartController {
             resp.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
 
+    @PutMapping("/cart/{productId}")
+    public ResponseEntity<Map<String, Object>> updateCart(
+            @RequestBody CartRequestDTO cartRequestDTO) {
+        log.info("카트 수량 없데이트 요청됬다!!!!!!!");
+
+        try {
+            marketCartService.updateQuantity(cartRequestDTO.getProductId(), cartRequestDTO.getQuantity());
+
+            // 성공 응답
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "장바구니 수량이 업데이트되었습니다.");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            // 에러 응답
+            Map<String, Object> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }

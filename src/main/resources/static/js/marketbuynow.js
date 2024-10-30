@@ -1,8 +1,10 @@
 // Global variables for product details
 let selectedOptionValue = "";
 let selectedOptionText = "";
+
 let selectedOptionDesc = "";
 let selectedOptions = []; // Array to store selected options
+
 const productId = document.getElementById("productId").value;
 const point = document.getElementById("point").value;
 const productName = document.getElementById("productName").value;
