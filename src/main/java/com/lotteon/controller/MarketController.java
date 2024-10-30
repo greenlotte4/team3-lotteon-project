@@ -1,15 +1,17 @@
 package com.lotteon.controller;
 
 import com.lotteon.dto.User.MemberDTO;
+import com.lotteon.dto.order.OrderResponseDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
+import com.lotteon.dto.order.OrderRequestDTO;
 import com.lotteon.entity.User.User;
 import com.lotteon.entity.cart.CartItem;
+import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
-import com.lotteon.service.user.MemberService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -35,6 +37,7 @@ public class MarketController {
     private final ProductCategoryService productCategoryService;
     private final UserService userService;
     private final MarketCartService marketCartService;
+    private final OrderService orderService;
 
     @GetMapping("/main")
     public String marketMain(Model model) {
@@ -117,7 +120,14 @@ public class MarketController {
 
     @PostMapping("/order/saveOrder")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> saveorder(@RequestBody List<BuyNowRequestDTO> productDataList, Authentication authentication){
+    public ResponseEntity<Map<String, String>> saveOrder(@RequestBody OrderRequestDTO orderRequestDTO, Authentication authentication){
+
+        log.info("요기!!!!!!!!!!!!!!!!!"+orderRequestDTO);
+        OrderResponseDTO orderResponseDTO  = new OrderResponseDTO(orderRequestDTO);
+        long orderId = orderService.saveOrder(orderResponseDTO);
+
+
+
 
         return null;
     }

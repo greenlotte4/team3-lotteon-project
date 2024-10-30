@@ -14,6 +14,7 @@ public class BuyNowRequestDTO {
 
     private String productId;
     private String productName;
+    private String discount;
     private String originalPrice;
     private String finalPrice;
     private int quantity;
@@ -21,9 +22,9 @@ public class BuyNowRequestDTO {
     private String optionId;
     private String optionName;
     private String point;
-    private String shippingFee;
-    private String ShippingTerms;
-
+    private String shippingFee ="0";
+    private String ShippingTerms ="0";
+    private int expectedPoint;
     private Member member;
 
 }
