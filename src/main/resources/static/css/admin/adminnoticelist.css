@@ -80,4 +80,8 @@ button{cursor: pointer; color: white; border-radius: 4px;}
 .noticepage {width: 500px; height: 30px; margin: 20px auto; text-align: center}
 .noticenum , .noticecurrent,.noticeprev,.noticenext {padding: 10px; border: none; border-radius: 8px; background: #afc8e6; color:white}
 .noticeprev,.noticenext {background: #8EB4E3;}
-.noticecurrent {background: #6681a3}
+.noticecurrent {background: #6681a3 !important;}
+
+.noticenums , .noticecurrents,.noticeprevs,.noticenexts {padding: 10px; border: none; border-radius: 8px; background: #afc8e6; color:white; margin-left: 5px}
+.noticeprevs,.noticenexts {background: #8EB4E3;}
+.noticecurrents {background: #6681a3 !important;}
