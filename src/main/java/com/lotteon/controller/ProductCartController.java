@@ -75,13 +75,15 @@ public class ProductCartController {
         }
     }
 
-    @PutMapping("/cart/{productId}")
+    @PutMapping("/cart/{cartItemId}")
     public ResponseEntity<Map<String, Object>> updateCart(
+            @PathVariable Long cartItemId,
             @RequestBody CartRequestDTO cartRequestDTO) {
         log.info("카트 수량 없데이트 요청됬다!!!!!!!");
-
+        log.info("요청받은 여기가 아이디:"+ cartItemId);
+        log.info("요청받은 여기가 수량:"+cartRequestDTO.getQuantity());
         try {
-            marketCartService.updateQuantity(cartRequestDTO.getProductId(), cartRequestDTO.getQuantity());
+            marketCartService.updateQuantity(cartRequestDTO.getCartItemId(), cartRequestDTO.getQuantity());
 
             // 성공 응답
             Map<String, Object> response = new HashMap<>();
@@ -94,4 +96,26 @@ public class ProductCartController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @DeleteMapping("/delete/{cartItemId}")
+    public ResponseEntity<Map<String, String>> deleteCartItem(@PathVariable List<Long> cartItemId) {
+        log.info("삭제 요청 들어왓따ㅣ");
+
+
+        try {
+            marketCartService.deleteCartItem(cartItemId);
+
+            // 성공 응답
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "장바구니 아이템이 삭제되었습니다.");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            // 에러 응답
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+
 }

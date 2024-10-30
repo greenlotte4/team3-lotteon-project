@@ -29,6 +29,14 @@
 
             <article id="admin_notice_list">
                 <div>
+                    <div>
+                        <select id="noticesearch" class="noticeselect" name="noticeType">
+                            <option value="" disabled selected>유형 선택</option>
+                            <th:block th:each="type : ${noticeTypes}">
+                                <option th:value="${type.name()}" th:text="${type.name()}"></option>
+                            </th:block>
+                        </select>
+                    </div>
                     <table class="admin_notice_list_table">
                         <colgroup>
                             <col style="width: 7.5%">
@@ -39,14 +47,7 @@
                             <col style="width: 15%">
                             <col style="width: 10%">
                         </colgroup>
-                        <div>
-                            <select id="noticesearch" class="noticeselect">
-                                <option value="" disabled selected>유형 선택</option>
-                                <th:block th:each="type : ${noticeTypes}">
-                                    <option th:value="${type.name()}" th:text="${type.name()}"></option>
-                                </th:block>
-                            </select>
-                        </div>
+                        <thead>
                         <tr>
                             <th><input type="checkbox" class="checkbox"></th>
                             <th>번호</th>
@@ -56,6 +57,8 @@
                             <th>날짜</th>
                             <th>관리</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <th:block th:if="${noticePageResponseDTO.getNoticedtoList() == null}">
                             notice가 없습니다.
                         </th:block>
@@ -74,6 +77,7 @@
                                 <a th:href="@{/admin/notice/modify(no=${notice.noticeNo})}">[수정]</a>
                             </td>
                         </tr>
+                        </tbody>
                     </table>
             </article>
             <div class="notice_button">
@@ -82,18 +86,18 @@
             </div>
             <div class="noticepage">
                 <th:block th:if="${noticePageResponseDTO.prev}">
-                    <a th:if="${noticePageResponseDTO.keyword == null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.start)-1})}" class="noticeprev">이전</a>
-                    <a th:if="${noticePageResponseDTO.keyword != null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.start)-1}, type=${noticePageResponseDTO.type}, keyword=${noticePageResponseDTO.keyword})}" class="noticeprev">이전</a>
+                    <a th:if="${noticePageResponseDTO.getNoticeType() == null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.start)-1})}" class="noticeprev">이전</a>
+                    <a th:if="${noticePageResponseDTO.getNoticeType() != null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.start)-1},noticeType=${noticePageResponseDTO.noticeType})}" class="noticeprev">이전</a>
                 </th:block>
 
                 <th:block th:each="num:${#numbers.sequence(noticePageResponseDTO.start,noticePageResponseDTO.end)}">
-                    <a th:if="${noticePageResponseDTO.keyword == null}" th:href="@{/admin/notice/list(pg=${num})}" th:class="${num == noticePageResponseDTO.pg} ? 'noticecurrent' : 'noticenum'">[[${num}]]</a>
-                    <a th:if="${noticePageResponseDTO.keyword != null}" th:href="@{/admin/notice/list(pg=${num}, type=${noticePageResponseDTO.type}, keyword=${noticePageResponseDTO.keyword})}" class="noticenum" >[[${num}]]</a>
+                    <a th:if="${noticePageResponseDTO.getNoticeType() == null}" th:href="@{/admin/notice/list(pg=${num})}" th:class="${num == noticePageResponseDTO.pg} ? 'noticecurrent' : 'noticenum'">[[${num}]]</a>
+                    <a th:if="${noticePageResponseDTO.getNoticeType() != null}" th:href="@{/admin/notice/list(pg=${num}, noticeType=${noticePageResponseDTO.noticeType})}" class="noticenum" >[[${num}]]</a>
                 </th:block>
 
                 <th:block th:if="${noticePageResponseDTO.next}">
-                    <a th:if="${noticePageResponseDTO.keyword == null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.end)+1})}" class="noticenext">다음</a>
-                    <a th:if="${noticePageResponseDTO.keyword != null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.end)+1}, type=${noticePageResponseDTO.type}, keyword=${noticePageResponseDTO.keyword})}" class="noticenext">다음</a>
+                    <a th:if="${noticePageResponseDTO.getNoticeType() == null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.end)+1})}" class="noticenext">다음</a>
+                    <a th:if="${noticePageResponseDTO.getNoticeType() != null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.end)+1}, noticeType=${noticePageResponseDTO.noticeType})}" class="noticenext">다음</a>
                 </th:block>
             </div>
 
@@ -192,5 +196,78 @@
                     alert(message);
                 }
             });
+        </script>
+        <script>
+            document.getElementById('noticesearch').addEventListener('change', function () {
+                const selecttype = this.value;
+                console.log("Selected type:", selecttype);
+
+                if (!selecttype) {
+                    return;
+                } else {
+                    fetch(`/admin/notice/list/check?noticeType=${selecttype}`)
+                        .then(resp => resp.json())
+                        .then(noticePageResponseDTO => {
+                            console.log("뿌애애애애애애애애앵애앵애애애애애애앵:", noticePageResponseDTO);
+                            console.log("부애앵2 :" + noticePageResponseDTO.noticedtoList.length);
+
+
+
+                            // 목록 갱신
+                            const noticeListElement = document.querySelector('.admin_notice_list_table tbody');
+                            noticeListElement.innerHTML = ''; // 기존 목록 초기화
+
+                            // 목록 업데이트
+                            noticePageResponseDTO.noticedtoList.forEach(notice => {
+                                const row = `
+                                    <tr>
+                                        <td><input type="checkbox" name="noticeNo" value="${notice.noticeNo}" class="checkboxes"></td>
+                                        <td>${noticePageResponseDTO.startNo--}</td>
+                                        <td>${notice.noticetype}</td>
+                                        <td><a href="/admin/notice/view?no=${notice.noticeNo}">${notice.noticetitle}</a></td>
+                                        <td>${notice.noticehit}</td>
+                                        <td>${notice.date.substring(0, 10)}</td>
+                                        <td>
+                                            <a href="/admin/notice/delete?no=${notice.noticeNo}" class="admin_notice_delete_a">[삭제]</a><br>
+                                            <a href="/admin/notice/modify?no=${notice.noticeNo}">[수정]</a>
+                                        </td>
+                                    </tr>`;
+                                noticeListElement.innerHTML += row;
+                            });
+
+// 페이지네이션 요소 선택
+                            const paginationElement = document.querySelector('.noticepage');
+                            paginationElement.innerHTML = ''; // 기존 내용 초기화
+
+// 이전 버튼
+                            if (noticePageResponseDTO.prev) {
+                                const prevLink = noticePageResponseDTO.noticeType == null
+                                    ? `<a href="/admin/notice/list?pg=${noticePageResponseDTO.start - 1}" class="noticeprev">이전</a>`
+                                    : `<a href="/admin/notice/list?pg=${noticePageResponseDTO.start - 1}&noticeType=${noticePageResponseDTO.noticeType}" class="noticeprev">이전</a>`;
+                                paginationElement.innerHTML += prevLink;
+                            }
+
+// 페이지 번호
+                            for (let num = noticePageResponseDTO.start; num <= noticePageResponseDTO.end; num++) {
+                                const pageLink = noticePageResponseDTO.noticeType == null
+                                    ? `<a href="/admin/notice/list?pg=${num}" class="${num === noticePageResponseDTO.pg ? 'noticecurrent' : 'noticenum'}">${num}</a>`
+                                    : `<a href="/admin/notice/list?pg=${num}&noticeType=${noticePageResponseDTO.noticeType}" class="noticenum">${num}</a>`;
+                                paginationElement.innerHTML += pageLink;
+                            }
+
+// 다음 버튼
+                            if (noticePageResponseDTO.next) {
+                                const nextLink = noticePageResponseDTO.noticeType == null
+                                    ? `<a href="/admin/notice/list?pg=${noticePageResponseDTO.end + 1}" class="noticenext">다음</a>`
+                                    : `<a href="/admin/notice/list?pg=${noticePageResponseDTO.end + 1}&noticeType=${noticePageResponseDTO.noticeType}" class="noticenext">다음</a>`;
+                                paginationElement.innerHTML += nextLink;
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }
+            });
+
         </script>
 </th:block>

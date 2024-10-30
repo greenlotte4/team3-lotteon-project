@@ -24,11 +24,11 @@ public class AdminNoticeController {
 
     private final NoticeService noticeService;
 
+
     @GetMapping("/list")
     public String adminNoticeList(Model model , PageRequestDTO pageRequestDTO) {
-
         NoticePageResponseDTO noticePageResponseDTO = noticeService.selectNoticeListAll(pageRequestDTO);
-        log.info(noticePageResponseDTO);
+        log.info("왜왜왜왜오애왜왜오애오왕애오애왱ㅇ :" + noticePageResponseDTO);
         model.addAttribute(noticePageResponseDTO);
 
         model.addAttribute("noticeTypes", NoticeType.values());
@@ -36,6 +36,27 @@ public class AdminNoticeController {
 //        model.addAttribute("notice", notice);
         return "content/admin/notice/noticeList";
     }
+
+    @ResponseBody
+    @GetMapping("/list/check")
+    public ResponseEntity<?> adminNoticeListCheck(Model model , PageRequestDTO pageRequestDTO) {
+        NoticePageResponseDTO noticePageResponseDTO = noticeService.selectNoticeListAll(pageRequestDTO);
+        log.info("흐어어어어어어어어엉엉흡엌어어어엉엉 :" + noticePageResponseDTO);
+        model.addAttribute(noticePageResponseDTO);
+
+        model.addAttribute("noticeTypes", NoticeType.values());
+//        List<NoticeDTO> notice = noticeService.selectAllNotice();
+//        model.addAttribute("notice", notice);
+        return ResponseEntity.ok(noticePageResponseDTO);
+    }
+//    @PostMapping("/list/check")
+//    public String adminNoticeListPost(Model model, @RequestBody PageRequestDTO pageRequestDTO){
+//        log.info("Selected notice type: " + pageRequestDTO.getNoticeType());
+//        log.info("와랄랄랄랄라 :" + pageRequestDTO);
+//        NoticePageResponseDTO noticePageResponseDTOs = noticeService.selectNoticeTypeList(pageRequestDTO);
+//        model.addAttribute(noticePageResponseDTOs);
+//        return "content/admin/notice/noticeList";
+//    }
 
     @GetMapping("/modify")
     public String adminNoticeModify(Model model, Long no) {

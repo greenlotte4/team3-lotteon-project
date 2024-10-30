@@ -9,9 +9,41 @@ const productName = document.getElementById("productName").value;
 const originalPrice = document.getElementById("originalPrice").innerText;
 const finalPrice = document.getElementById("finalPrice").innerText;
 const file190 = document.getElementById("file190").value;
+
+const shippingFee = parseInt(document.getElementById("shippingFee").getAttribute("data-shippingfee")) || 0;
+let quantity = parseInt(document.getElementById("quantity").value); // Default quantity
+
+const byCart = document.getElementById('buyCart');
+console.log(byCart);
+console.log("shippingFee ",shippingFee)
+
+// Function to add a new selection or update an existing one
+function addOrUpdateSelection(optionId, optionText, optionDesc, quantity) {
+    const existingOption = selectedOptions.find(option => option.optionId === optionId);
+
+    if (existingOption) {
+        existingOption.quantity = quantity;
+    } else {
+        selectedOptions.push({ optionId, optionText, optionDesc, quantity });
+    }
+
+    updateSelectedResult(); // Refresh the display
+}
+
+
+// Function to update the selectResult section with all selected options, including quantity controls and a remove button
+function updateSelectedResult() {
+    const selectResult = document.querySelector(".selectResult");
+    selectResult.innerHTML = ""; // Clear previous content
+
+    selectedOptions.forEach((option, index) => {
+        const optionDetail = document.createElement("div");
+        optionDetail.classList.add("option-detail");
+
 const discount = document.getElementById("discount").value;
 const quantity = document.getElementById("quantity").value;
 const shippingFee =document.getElementById("shippingFee").value;
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -39,25 +71,34 @@ console.log("Final Price:", finalPrice);
 
 
 
-        console.log("Quantity:", quantity);
-        const isConfirmed = confirm("구매하시겠습니까?");
-        if (isConfirmed) {
-            // JSON 객체 생성
-            const productData = {
-                productId: productId,         // 실제 값 추가
-                productName: productName,     // 실제 값 추가
-                originalPrice: originalPrice, // 실제 값 추가
-                finalPrice: finalPrice,       // 실제 값 추가
-                quantity: quantity,            // 실제 값 추가
-                file190: file190,
-                optionId :selectedOptionValue,
-                optionName : selectedOptionText,
-                point : point,
-                discount : discount
-            };
+// Event listener for Buy Now button
+document.getElementById("buy-now-btn").addEventListener("click", function(e) {
+    if (selectedOptions.length === 0) {
+        alert("옵션을 선택해주세요.");
+        return;
+    }
 
-            // `localStorage`에 데이터 저장
-            localStorage.setItem("productData", JSON.stringify(productData));
+    const isConfirmed = confirm("구매하시겠습니까?");
+    if (isConfirmed) {
+        // Create an array to hold all selected product data
+        const productDataArray = selectedOptions.map(option => ({
+            productId: productId,
+            productName: productName,
+            originalPrice: originalPrice,
+            finalPrice: Math.floor(originalPrice * (100 - discount) / 100),
+            quantity: option.quantity,
+            file190: file190,
+            optionId: option.optionId,
+            optionName: option.optionText,
+            optionDesc: option.optionDesc,
+            point: point,
+            discount: discount
+        }));
+        const orderInfo={
+             shippingFee:shippingFee,
+        }
+
+
 
             // JSON 형식으로 데이터 전송
             fetch("/market/buyNow", {
@@ -181,3 +222,61 @@ console.log("Final Price:", finalPrice);
         });
     });
 });
+
+document.querySelectorAll('.rating-display').forEach(display => {
+    const rating = parseInt(display.textContent);
+    let stars = '';
+
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            stars += '<span class="star-selected">&#9733;</span>'; // 선택된 별
+        } else {
+            stars += '<span class="star">&#9734;</span>'; // 선택되지 않은 별
+        }
+    }
+
+    display.innerHTML = stars; // 별 모양으로 업데이트
+});
+
+let currentIndex = 0; // 현재 보여주는 이미지 인덱스
+const images = document.querySelector('.review-images');
+const totalImages = document.querySelectorAll('.reviewImg').length; // 전체 이미지 수
+
+// 왼쪽 화살표 클릭 이벤트
+document.getElementById('leftArrow').addEventListener('click', function() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        updateSlide();
+    }
+});
+
+// 오른쪽 화살표 클릭 이벤트
+document.getElementById('rightArrow').addEventListener('click', function() {
+    if (currentIndex < totalImages - 5 ) {
+        currentIndex++;
+        updateSlide();
+    }
+});
+
+// 슬라이드 업데이트 함수
+function updateSlide() {
+    const offset = currentIndex * (152 + 10); // 이미지 너비 + 마진을 고려 (150px + 10px)
+    images.style.transform = `translateX(${-offset}px)`; // 이미지 슬라이드
+
+    // 오른쪽 화살표 비활성화 효과
+    if (currentIndex === totalImages - 5) {
+        document.getElementById('rightArrow').classList.add('disabled');
+    } else {
+        document.getElementById('rightArrow').classList.remove('disabled');
+    }
+
+    // 왼쪽 화살표 비활성화 효과
+    if (currentIndex === 0) {
+        document.getElementById('leftArrow').classList.add('disabled');
+    } else {
+        document.getElementById('leftArrow').classList.remove('disabled');
+    }
+}
+
+// 초기 버튼 상태 설정
+updateSlide();

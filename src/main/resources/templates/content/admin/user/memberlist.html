@@ -83,6 +83,7 @@
                                     <option value="SILVER" th:selected="${member.grade == 'SILVER'}">SILVER</option>
                                     <option value="FAMILY" th:selected="${member.grade == 'FAMILY'}">FAMILY</option>
                                 </select>
+                                <input type="hidden" value="${member.user.uid}" class="member-uid">
                             </td>
                             <td th:text="${member.point}"></td>    <!-- 포인트 -->
                             <td th:text="${member.email}"></td>    <!-- 이메일 -->
@@ -119,6 +120,7 @@
                             <td>
                                 <input type="text" id="uidDisplay" name="uidDisplay" placeholder="a101" readonly>
                                 <input type="hidden" id="uid" name="uid" value="a101">
+                                <span style="margin-left: 10px;">아이디는 수정 불가</span><br>
                             </td>
                         </tr>
                         <tr>
@@ -141,7 +143,8 @@
                         <tr>
                             <th><label for="status">등급</label></th>
                             <td><input type="text" id="status" name="status" placeholder="FAMILY" readonly>
-                                <span style="margin-left: 10px;">등급 수정은 회원 목록에서 선택수정 가능</span><br></td>
+                                <span style="margin-left: 10px;">등급 수정은 회원 목록에서 선택수정 가능</span><br>
+                            </td>
                         </tr>
                         <tr>
                             <th><label for="status">상태</label></th>
@@ -200,36 +203,41 @@
 
         <script>
             function confirmGradeChange(selectElement) {
-                const selectedGrade = selectElement.value;
-                const memberId = selectElement.dataset.id; // 데이터 속성에서 멤버 ID 가져오기
+                const selectedGrade = selectElement.value; // 선택된 등급
+                const row = selectElement.closest('tr'); // select 요소가 속한 tr 찾기
+                const memberUid = row.cells[2].innerText; // 세 번째 td에서 UID 가져오기
 
                 const confirmChange = confirm(`해당 등급으로 변경하시겠습니까? (${selectedGrade})`);
                 if (confirmChange) {
                     const updatedData = {
-                        uid: memberId, // uid를 포함
-                        grade: selectedGrade
+                        uid: memberUid, // uid를 포함
+                        grade: selectedGrade // 새 등급
                     };
 
-                    fetch(`/admin/user/member/updateGrade`, {
+                    console.log("updatedData:", updatedData); // updatedData 값 확인
+
+                    fetch('/admin/user/member/updateGrade', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify(updatedData), // 수정할 데이터 전송
+                        body: JSON.stringify(updatedData)
                     })
                         .then(response => {
-                            if (!response.ok) {
-                                throw new Error("Network response was not ok");
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('네트워크 응답이 좋지 않습니다.');
                             }
-                            return response.json();
                         })
                         .then(data => {
-                            alert(data.message); // 성공 메시지 표시
-                            // 여기에서 필요에 따라 페이지를 새로 고치거나 UI를 업데이트할 수 있습니다.
-                            // 예: location.reload(); // 페이지 새로 고침
+                            console.log(data.message); // 성공 메시지 출력
                         })
-                        .catch(error => console.error("Error updating grade:", error));
+                        .catch(error => {
+                            console.error('업데이트 오류:', error);
+                        });
                 }
             }
+
         </script>
 </th:block>
