@@ -222,3 +222,61 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
         });
     });
 });
+
+document.querySelectorAll('.rating-display').forEach(display => {
+    const rating = parseInt(display.textContent);
+    let stars = '';
+
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            stars += '<span class="star-selected">&#9733;</span>'; // 선택된 별
+        } else {
+            stars += '<span class="star">&#9734;</span>'; // 선택되지 않은 별
+        }
+    }
+
+    display.innerHTML = stars; // 별 모양으로 업데이트
+});
+
+let currentIndex = 0; // 현재 보여주는 이미지 인덱스
+const images = document.querySelector('.review-images');
+const totalImages = document.querySelectorAll('.reviewImg').length; // 전체 이미지 수
+
+// 왼쪽 화살표 클릭 이벤트
+document.getElementById('leftArrow').addEventListener('click', function() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        updateSlide();
+    }
+});
+
+// 오른쪽 화살표 클릭 이벤트
+document.getElementById('rightArrow').addEventListener('click', function() {
+    if (currentIndex < totalImages - 5 ) {
+        currentIndex++;
+        updateSlide();
+    }
+});
+
+// 슬라이드 업데이트 함수
+function updateSlide() {
+    const offset = currentIndex * (152 + 10); // 이미지 너비 + 마진을 고려 (150px + 10px)
+    images.style.transform = `translateX(${-offset}px)`; // 이미지 슬라이드
+
+    // 오른쪽 화살표 비활성화 효과
+    if (currentIndex === totalImages - 5) {
+        document.getElementById('rightArrow').classList.add('disabled');
+    } else {
+        document.getElementById('rightArrow').classList.remove('disabled');
+    }
+
+    // 왼쪽 화살표 비활성화 효과
+    if (currentIndex === 0) {
+        document.getElementById('leftArrow').classList.add('disabled');
+    } else {
+        document.getElementById('leftArrow').classList.remove('disabled');
+    }
+}
+
+// 초기 버튼 상태 설정
+updateSlide();

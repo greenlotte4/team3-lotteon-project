@@ -17,6 +17,8 @@ import org.modelmapper.PropertyMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -49,6 +51,10 @@ public class ReviewService {
         Long productId = reviewDTO.getProductId(); // ReviewDTO에서 productId 가져오기
         Product product = productRepository.findById(productId).orElse(null);
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
+
         if (product == null) {
             return false; // Product가 없을 경우 저장 중단
         }
@@ -57,6 +63,7 @@ public class ReviewService {
         review.setProduct(product);
         review.setRating(reviewDTO.getRating()); // DTO에서 rating 가져오기
         review.setContent(reviewDTO.getContent()); // DTO에서 content 가져오기
+        review.setWriter(currentUsername);
         review.setRdate(LocalDateTime.now());
 
         // 파일 업로드 로직 호출
@@ -91,9 +98,12 @@ public class ReviewService {
         Pageable pageable = pageRequestDTO.getPageable("no");
         Page<Review> pageReview = reviewRepository.selectReviewAllForList(pageRequestDTO, pageable);
 
-        // ModelMapper 대신 Review 엔티티의 ToDTO 메서드를 사용해 DTO 변환
         List<ReviewDTO> reviewList = pageReview.stream()
-                .map(review -> review.ToDTO(review))
+                .map(review -> {
+                    ReviewDTO reviewDTO = review.ToDTO(review); // DTO 변환
+                    reviewDTO.setWriter(reviewDTO.getMaskedWriter()); // 마스킹된 아이디 설정
+                    return reviewDTO; // 마스킹된 아이디가 포함된 DTO 반환
+                })
                 .collect(Collectors.toList());
 
         int total = (int) pageReview.getTotalElements();
@@ -104,8 +114,5 @@ public class ReviewService {
                 .total(total)
                 .build();
     }
-
-
-
 
 }
