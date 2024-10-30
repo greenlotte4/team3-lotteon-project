@@ -942,7 +942,7 @@ select[readonly] {
 
 .faqListWrap li {
     display: inline-block;
-    margin-right: 15px;
+    margin-right: 5px;
     margin-top: 5px;
 }
 
@@ -953,6 +953,7 @@ select[readonly] {
     color: #999;
     font-size: 14px;
     border: 1px solid #999;
+    border-radius: 3px;
     line-height: 15px;
     padding: 2px 5px;
 }
