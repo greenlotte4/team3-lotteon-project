@@ -152,4 +152,18 @@ public class MarketCartService {
                 .finalTotalPoints(totalPoints)
                 .build();
     }
+
+
+    public void updateQuantity(Long productId, int quantity) {
+
+        if (quantity < 1) {
+            throw new RuntimeException("수량은 1 이상이어야 합니다.");
+        }
+
+        CartItem cartItem = cartItemRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("장바구니에 해당 상품이 없습니다."));
+
+        cartItem.setQuantity(quantity);
+        cartItemRepository.save(cartItem);
+    }
 }

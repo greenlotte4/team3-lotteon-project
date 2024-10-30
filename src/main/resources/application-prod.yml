@@ -18,7 +18,7 @@ logging:
         org.hibernate.SQL: WARN
         org.hibernate.type: WARN
         org.hibernate.engine: WARN
-        org.hibernate.type.descriptor.sql.BasicBinder: OFF
+        org.springframework.cache: DEBUG
 server:
     port: 8085
     servlet:
@@ -70,6 +70,9 @@ spring:
             lettuce:
                 pool:
                     max-wait: 5000ms  # adjust based on network latency
+    cache:
+        redis:
+            time-to-live: 3600s
 management:
     endpoint:
         caches:

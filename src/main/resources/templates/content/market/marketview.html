@@ -63,7 +63,7 @@
                                         <span class="final-price price"  id="finalPrice" th:value="${products.price*(100 - products.discount)/100}">[[${products.price*(100-products.discount)/100}]]</span>
                                     </div>
                                     <div class="delivery">
-                                        <span class="shipping-fee"  id="shippingFee" th:text="${products.shippingFee}"></span>
+                                        <span class="shipping-fee"  id="shippingFee" th:attr="data-shippingfee=${products.shippingFee}" th:text="${products.shippingFee}"></span>
                                         <p class="delivery-info">모레 (금) 7/8 도착예정</p>
                                     </div>
                                     <span name="Domestic" class="deli active">본 상품은 국내배송만 가능합니다.</span>
