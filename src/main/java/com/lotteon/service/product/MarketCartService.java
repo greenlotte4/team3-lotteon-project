@@ -59,6 +59,8 @@ public class MarketCartService {
                     return createCart(user);
                 });
 
+        log.info("현재 카트 ID: {}", cart.getCartId());
+
         Product product = productRepository.findById(cartRequestDTO.getProductId())
                 .orElseThrow(() -> new RuntimeException("상품이 없습니다."));
 
@@ -71,7 +73,7 @@ public class MarketCartService {
                 .findByCart_CartIdAndProduct_ProductIdAndOption_Id
                         (cart.getCartId(), product.getProductId(), cartRequestDTO.getOptionId());
 
-        CartItem cartItem;
+        CartItem cartItem = null;
 
         if (existingItem.isPresent()) {
             // 아이템이 이미 존재하는 경우 수량 업데이트
@@ -82,6 +84,9 @@ public class MarketCartService {
             cartItem.setQuantity(newQuantity); // 수량 업데이트
             cartItem.setTotalPrice(newTotalPrice); // 총 가격 업데이트
             cartItemRepository.save(cartItem);
+
+            log.info("기존 아이템 업데이트: {}, 새로운 수량: {}", cartItem.getProduct().getProductName(), newQuantity);
+
             return cartItem; // 업데이트된 아이템 반환
         } else {
             // 새로운 아이템 생성 및 저장
@@ -101,15 +106,39 @@ public class MarketCartService {
                     .build();
 
             cartItemRepository.save(newCartItem);
-            return newCartItem; // 새로 추가된 아이템 반환
+            cart.getCartItems().add(newCartItem); // 카트에 새 아이템 추가
+
+            log.info("새로운 아이템 추가: {}, 수량: {}", newCartItem.getProductName(), newCartItem.getQuantity());
+
         }
 
+        // 카트의 총 수량과 총 가격 업데이트
+        updateCartSummary(cart);
+
+        return cartItem; // 카트 아이템 반환
+
     }
+
+
+    private void updateCartSummary(Cart cart) {
+
+        int totalItemCount = (int) cart.getCartItems().stream()
+                .map(item -> item.getOption().getId())
+                .distinct()
+                .count();
+
+        cart.setItemQuantity(totalItemCount);
+        cartRepository.save(cart); // 카트 저장
+        log.info("업데이트된 카트 아이템 수량: {}", totalItemCount);
+
+    }
+
 
     // 새로운 장바구니를 생성
     private Cart createCart(User user) {
         Cart newCart = Cart.builder()
                 .user(user)
+                .cartItems(new ArrayList<>())
                 .rdate(LocalDateTime.now())
                 .build();
 
