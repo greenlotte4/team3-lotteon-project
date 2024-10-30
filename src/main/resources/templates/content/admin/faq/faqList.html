@@ -94,18 +94,15 @@
 
                         <div class="faqpage">
                             <th:block th:if="${faqPageResponseDTO.prev}">
-                                <a th:if="${faqPageResponseDTO.keyword == null}" th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.start)-1})}" class="faqprev">이전</a>
-                                <a th:if="${faqPageResponseDTO.keyword != null}" th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.start)-1}, type=${faqPageResponseDTO.type}, keyword=${faqPageResponseDTO.keyword})}" class="faqprev">이전</a>
+                                <a th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.start)-1})}" class="faqprev">이전</a>
                             </th:block>
 
                             <th:block th:each="num:${#numbers.sequence(faqPageResponseDTO.start,faqPageResponseDTO.end)}">
-                                <a th:if="${faqPageResponseDTO.keyword == null}" th:href="@{/admin/faq/list(pg=${num})}" th:class="${num == faqPageResponseDTO.pg} ? 'faqcurrent' : 'faqnum'">[[${num}]]</a>
-                                <a th:if="${faqPageResponseDTO.keyword != null}" th:href="@{/admin/faq/list(pg=${num}, type=${faqPageResponseDTO.type}, keyword=${faqPageResponseDTO.keyword})}" class="faqnum" >[[${num}]]</a>
+                                <a th:href="@{/admin/faq/list(pg=${num})}" th:class="${num == faqPageResponseDTO.pg} ? 'faqcurrent' : 'faqnum'">[[${num}]]</a>
                             </th:block>
 
                             <th:block th:if="${faqPageResponseDTO.next}">
-                                <a th:if="${faqPageResponseDTO.keyword == null}" th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.end)+1})}" class="faqnext">다음</a>
-                                <a th:if="${faqPageResponseDTO.keyword != null}" th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.end)+1}, type=${faqPageResponseDTO.type}, keyword=${faqPageResponseDTO.keyword})}" class="faqnext">다음</a>
+                                <a th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.end)+1})}" class="faqnext">다음</a>
                             </th:block>
                         </div>
 

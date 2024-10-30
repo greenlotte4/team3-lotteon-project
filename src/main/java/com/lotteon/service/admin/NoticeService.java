@@ -114,11 +114,15 @@ public class NoticeService {
         }
         return null;
     }
-    //페이징
+    //페이징 1
     public NoticePageResponseDTO selectNoticeListAll(PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("no");
         Page<Tuple> pagenotice = null;
-        pagenotice = noticeRepository.selectNoticeAllForList(pageRequestDTO, pageable);
+        if(pageRequestDTO.getNoticeType() == null){
+            pagenotice = noticeRepository.selectNoticeAllForList(pageRequestDTO, pageable);
+        }else {
+            pagenotice = noticeRepository.selectNoticeTypeList(pageRequestDTO, pageable);
+        }
 
         List<NoticeDTO> noticeList = pagenotice.getContent().stream().map(tuple -> {
             Long id = tuple.get(0, Long.class);
@@ -135,5 +139,6 @@ public class NoticeService {
                 .total(total)
                 .build();
     }
+
 
 }
