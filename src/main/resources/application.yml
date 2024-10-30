@@ -37,3 +37,21 @@ spring:
             mail.smtp.auth: true
             mail.smtp.starttls.enable: true
 
+    security:
+        remember-me:
+            key: "1234Asd@"
+
+        oauth2:
+            client:
+                registration:
+                    google:
+                        client-id: 260686576423-cd9o4qepuuq5mfnprhbftso2h3h8nqv5.apps.googleusercontent.com
+                        client-secret: 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
+                        scope: profile, email
+                        redirect-uri: http://localhost:8085/login/oauth2/code/google
+                provider:
+                    google:
+                        authorization-uri: https://accounts.google.com/o/oauth2/auth
+                        token-uri: https://oauth2.googleapis.com/token
+                        user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+                        user-name-attribute: sub

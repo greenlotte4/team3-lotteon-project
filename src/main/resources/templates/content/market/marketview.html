@@ -63,7 +63,7 @@
                                         <span class="final-price price"  id="finalPrice" th:value="${products.price*(100 - products.discount)/100}">[[${products.price*(100-products.discount)/100}]]</span>
                                     </div>
                                     <div class="delivery">
-                                        <span class="shipping-fee"  id="shippingFee" th:text="${products.shippingFee}"></span>
+                                        <span class="shipping-fee"  id="shippingFee" th:attr="data-shippingfee=${products.shippingFee}" th:text="${products.shippingFee}"></span>
                                         <p class="delivery-info">모레 (금) 7/8 도착예정</p>
                                     </div>
                                     <span name="Domestic" class="deli active">본 상품은 국내배송만 가능합니다.</span>
@@ -211,37 +211,38 @@
                                         <div class="review-image-container">
                                             <div class="arrow left" id="leftArrow">&#9664;</div>
                                             <div class="review-image-wrapper">
-                                                <div class="review-images" id="reviewImages">
-                                                    <div class="reviewImg"><img src="" alt=""></div>
-                                                    <div class="reviewImg"><img src="" alt=""></div>
-                                                    <div class="reviewImg"><img src="" alt=""></div>
-                                                    <div class="reviewImg"><img src="" alt=""></div>
-                                                    <div class="reviewImg"><img src="" alt=""></div>
-                                                    <div class="reviewImg"><img src="" alt=""></div>
-                                                    <div class="reviewImg"><img src="" alt=""></div>
-                                                    <div class="reviewImg"><img src="" alt=""></div>
-                                                    <div class="reviewImg"><img src="" alt=""></div>
+                                                <div class="review-images">
+                                                    <th:block th:each="file : ${reviewImgs}">
+                                                        <th:block th:each="image : ${file.getPReviewFiles()}">
+                                                            <div class="reviewImg">
+                                                                <img th:src="@{'/uploads/ReviewImg/' + ${image.sname}}" alt="review-image" class="review_img">
+                                                            </div>
+                                                        </th:block>
+                                                    </th:block>
                                                 </div>
                                             </div>
                                             <div class="arrow right" id="rightArrow">&#9654;</div>
                                         </div>
                                     </div>
+
+
                                     <div class="reviewList" id="reviewContent">
+                                        <th:block th:each="review : ${pageResponseReviewDTO.getDtoList()}">
                                         <article class="p-review">
                                             <div class="review-header">
                                                 <div class="review-rating">
-                                                    ⭐⭐⭐⭐⭐
+                                                    <data class="rating-display" th:text="${review.rating}">평점</data>
                                                 </div>
                                                 <div class="reviewer-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
+                                                    <span class="reviewer-name" th:text="${review.maskedWriter}">seo******</span>
+                                                    <span class="review-date">[[${#strings.substring(review.rdate,0,10)}]]</span>
                                                 </div>
                                             </div>
                                             <div class="review-body">
-                                                <h5>상품명</h5>
+                                                <h5 th:text="${review.product.productName}">상품명</h5>
                                                 <div>
-                                                    <div class="rimg"><img src="" alt="review-image" class="review_img"></div>
-                                                    <p class="review-text">
+                                                    <div class="rimg"><img th:if="${review.savedReviewFiles.size() > 0}" th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}" alt="review-image" class="review_img"></div>
+                                                    <p class="review-text" th:text="${review.content}">
                                                         가격대비정 말괜찮 은 옷이라 생각되네요 핏은... 제기억기 엔 어깨선이 맞고 루즈핏 이라하기도 좀힘드네요 . 아주약간
                                                         루즈한정도 ... 그래도이 만한 옷은없다고 봅니다 깨끗하고포장도 괜찮고다음에도여기서판매하는 제품을구매하고 싶네요정 말만족
                                                         하고후기 남깁니다많이파시길바래요 ~~~
@@ -249,109 +250,24 @@
                                                 </div>
                                             </div>
                                         </article>
-                                        <article class="p-review">
-                                            <div class="review-header">
-                                                <div class="review-rating">
-                                                    ⭐⭐⭐⭐⭐
-                                                </div>
-                                                <div class="reviewer-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="review-body">
-                                                <h5>상품명</h5>
-                                                <p class="review-text">
-                                                    가격대비정 말괜찮 은 옷이라 생각되네요 핏은... 제기억기 엔 어깨선이 맞고 루즈핏 이라하기도 좀힘드네요 . 아주약간
-                                                    루즈한정도 ... 그래도이 만한 옷은없다고 봅니다 깨끗하고포장도 괜찮고다음에도여기서판매하는 제품을구매하고 싶네요정 말만족
-                                                    하고후기 남깁니다많이파시길바래요 ~~~
-                                                </p>
-                                            </div>
-                                        </article>
-                                        <article class="p-review">
-                                            <div class="review-header">
-                                                <div class="review-rating">
-                                                    ⭐⭐⭐⭐⭐
-                                                </div>
-                                                <div class="reviewer-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="review-body">
-                                                <h5>상품명</h5>
-                                                <p class="review-text">
-                                                    가격대비정 말괜찮 은 옷이라 생각되네요 핏은... 제기억기 엔 어깨선이 맞고 루즈핏 이라하기도 좀힘드네요 . 아주약간
-                                                    루즈한정도 ... 그래도이 만한 옷은없다고 봅니다 깨끗하고포장도 괜찮고다음에도여기서판매하는 제품을구매하고 싶네요정 말만족
-                                                    하고후기 남깁니다많이파시길바래요 ~~~
-                                                </p>
-                                            </div>
-                                        </article>
-                                        <article class="p-review">
-                                            <div class="review-header">
-                                                <div class="review-rating">
-                                                    ⭐⭐⭐⭐⭐
-                                                </div>
-                                                <div class="reviewer-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="review-body">
-                                                <h5>상품명</h5>
-                                                <p class="review-text">
-                                                    가격대비정 말괜찮 은 옷이라 생각되네요 핏은... 제기억기 엔 어깨선이 맞고 루즈핏 이라하기도 좀힘드네요 . 아주약간
-                                                    루즈한정도 ... 그래도이 만한 옷은없다고 봅니다 깨끗하고포장도 괜찮고다음에도여기서판매하는 제품을구매하고 싶네요정 말만족
-                                                    하고후기 남깁니다많이파시길바래요 ~~~
-                                                </p>
-                                            </div>
-                                        </article>
-                                        <article class="p-review">
-                                            <div class="review-header">
-                                                <div class="review-rating">
-                                                    ⭐⭐⭐⭐⭐
-                                                </div>
-                                                <div class="reviewer-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="review-body">
-                                                <h5>상품명</h5>
-                                                <p class="review-text">
-                                                    가격대비정 말괜찮 은 옷이라 생각되네요 핏은... 제기억기 엔 어깨선이 맞고 루즈핏 이라하기도 좀힘드네요 . 아주약간
-                                                    루즈한정도 ... 그래도이 만한 옷은없다고 봅니다 깨끗하고포장도 괜찮고다음에도여기서판매하는 제품을구매하고 싶네요정 말만족
-                                                    하고후기 남깁니다많이파시길바래요 ~~~
-                                                </p>
-                                            </div>
-                                        </article>
-                                        <article class="p-review">
-                                            <div class="review-header">
-                                                <div class="review-rating">
-                                                    ⭐⭐⭐⭐⭐
-                                                </div>
-                                                <div class="reviewer-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="review-body">
-                                                <h5>상품명</h5>
-                                                <p class="review-text">
-                                                    가격대비정 말괜찮 은 옷이라 생각되네요 핏은... 제기억기 엔 어깨선이 맞고 루즈핏 이라하기도 좀힘드네요 . 아주약간
-                                                    루즈한정도 ... 그래도이 만한 옷은없다고 봅니다 깨끗하고포장도 괜찮고다음에도여기서판매하는 제품을구매하고 싶네요정 말만족
-                                                    하고후기 남깁니다많이파시길바래요 ~~~
-                                                </p>
-                                            </div>
-                                        </article>
+                                        </th:block>
                                         <!-- 리뷰 더보기 버튼 -->
                                         <div class="btnwrapper"><button id="moreReviewsBtn">더보기</button></div>
 
 
                                         <div class="pagination" id="reviews-pagination">
-                                            <span class="page-link active" data-page="1">1</span>
-                                            <span class="page-link" data-page="2">2</span>
-                                            <span class="page-link" data-page="3">3</span>
+                                            <th:block th:if="${pageResponseReviewDTO.prev}">
+                                                <a th:href="@{/market/view/{categoryId}/{productId}(categoryId=${categoryId}, productId=${productId}, pg=${pageResponseReviewDTO.start - 1})}" class="prev">이전</a>
+                                            </th:block>
+
+                                            <th:block th:each="num : ${#numbers.sequence(pageResponseReviewDTO.start, pageResponseReviewDTO.end)}">
+                                                <a th:href="@{/market/view/{categoryId}/{productId}(categoryId=${categoryId}, productId=${productId}, pg=${num})}"
+                                                   th:class="${num == pageResponseReviewDTO.pg} ? 'current' : 'num'" class="num">[[${num}]]</a>
+                                            </th:block>
+
+                                            <th:block th:if="${pageResponseReviewDTO.next}">
+                                                <a th:href="@{/market/view/{categoryId}/{productId}(categoryId=${categoryId}, productId=${productId}, pg=${pageResponseReviewDTO.end + 1})}" class="next">다음</a>
+                                            </th:block>
                                         </div>
 
                                     </div><!--reviewList end-->
@@ -498,4 +414,5 @@
 
 
     <script th:src="@{/js/marketbuynow.js}"></script>
+
 </th:block>

@@ -88,7 +88,7 @@ public class CsController {
 
 
     @GetMapping("/notice/list")
-    public String noticeList(Model model, Pageable pageable) {
+    public String noticeList(Model model, @PageableDefault(size = 10) Pageable pageable) {
         // 데이터베이스에서 모든 공지사항을 페이지 형태로 가져옴
         Page<Notice> noticePage = noticeService.getNotices(pageable);
 
@@ -97,6 +97,7 @@ public class CsController {
 
         return "content/cs/notice/noticeList"; // 뷰 이름 반환
     }
+
 
     @GetMapping("/notice/view")
     public String noticeView(Model model, @RequestParam Long no, RedirectAttributes redirectAttributes) {
@@ -144,10 +145,11 @@ public class CsController {
         QnA qna = qnaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid QnA ID: " + id));
 
-        String username = principal.getName();
+        // 현재 사용자의 이름을 가져옴
+        String username = (principal != null) ? principal.getName() : null;
 
         // 작성자와 현재 사용자가 다를 경우 팝업 메시지 표시
-        if (!qna.getQna_writer().equals(username)) {
+        if (username == null || !qna.getQna_writer().equals(username)) {
             model.addAttribute("popupMessage", "다른 사용자의 게시물입니다.<br>해당 게시물에 접근할 수 없습니다.");
             model.addAttribute("isPopup", true);
         } else {

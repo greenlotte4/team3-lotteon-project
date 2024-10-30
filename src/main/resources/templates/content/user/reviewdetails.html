@@ -101,7 +101,7 @@
             </div>
             <div class="reviewpage">
                 <th:block th:if="${pageResponseReviewDTO.prev}">
-                    <a th:href="@{/mypage/reviewdetails(pg=${pageResponseReviewDTO.start - 1})}" class="prev">이전</a>
+                    <a th:href="@{/market/reviewdetails(pg=${pageResponseReviewDTO.start - 1})}" class="prev">이전</a>
                 </th:block>
 
                 <th:block th:each="num : ${#numbers.sequence(pageResponseReviewDTO.start, pageResponseReviewDTO.end)}">

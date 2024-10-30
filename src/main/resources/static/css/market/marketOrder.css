@@ -125,11 +125,16 @@
     text-indent: 10px;
     display: flex;
     align-items: center;
+    margin-bottom: 5px;
+}
+#product_order .productOrder tr td:nth-child(1) div{
+    width: 100px;
+    height: 100px;
 }
 #product_order .productOrder tr td:nth-child(1) img{
     border: 1px solid #000000;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
 }
 
 #product_order .productOrder tr > td > span{
@@ -298,6 +303,8 @@
 }
 
 .orderSection .orderInfo div table{
+    width: 96%;
+
     margin-left: 20px;
     height: auto;
     margin-top: 10px;
@@ -612,3 +619,28 @@
 .totalAddress {
     margin-left: 20px;
 }
+
+.shipping_info{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    height: 30px;
+    margin-left: 20px;
+
+}
+.shipping_info p{
+    font-size: 15px;
+}
+
+
+.shipping_info > input {
+    margin-left: 20px;
+    height: 30px;
+    text-indent: 6px;
+    border: 1px solid;
+    border-color: #ccc;
+
+}
+

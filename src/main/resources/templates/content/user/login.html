@@ -131,8 +131,8 @@
                         </div>
                         <div class="autoLogin">
                             <div class="checkboxSet">
-                                <input id="checkbox1" type="checkbox" name="checkbox1" checked="checked">
-                                <label for="checkbox1">아이디 저장</label>
+                                <input id="autoLogin" type="checkbox" name="remember-me" checked="checked">
+                                <label for="autoLogin">자동 로그인</label>
                             </div>
                             <input id="checkbox11" type="hidden" name="checkbox" value="N">
                             <div class="btnFindIdPasswordWrap">
@@ -144,11 +144,18 @@
                             <strong class="subTitle"> 간편하게 시작하기 </strong>
                             <div class="socialSignupWrap">
                                 <div class="btnLoginGroup">
-                                    <button type="button" class="kakaoLoginBtn">카카오</button>
-                                    <button type="button" class="naverLoginBtn">
-                                        <a href="#" class="naver" style="display: none;"></a>네이버
+                                    <button type="button" class="kakaoLoginBtn"
+                                            onclick="location.href='/oauth2/authorization/naver'">
+                                        카카오
                                     </button>
-                                    <button type="button" class="googleLoginBtn">구글</button>
+                                    <button type="button" class="naverLoginBtn"
+                                            onclick="location.href='/oauth2/authorization/naver'">
+                                        네이버
+                                    </button>
+                                    <button type="button" class="googleLoginBtn"
+                                            onclick="location.href='/oauth2/authorization/google'">
+                                        구글
+                                    </button>
                                 </div>
                             </div>
                         </div>

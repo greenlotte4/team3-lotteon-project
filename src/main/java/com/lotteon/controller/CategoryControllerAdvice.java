@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -25,7 +26,7 @@ public class CategoryControllerAdvice {
    private final ProductCategoryService productCategoryService;
     private final ModelMapper modelMapper;
 
-    @Cacheable(value = "categories")
+    @Cacheable("cateogires")
     @ModelAttribute("categories")
     public List<ProductCategoryDTO> populateCategories() {
         log.info("Fetching category data from the database...");
@@ -36,8 +37,19 @@ public class CategoryControllerAdvice {
     }
 
     @CacheEvict(value = "categories", allEntries = true)
+    public void refreshCategories() {
+        log.info("Evicting categories cache...");
+    }
+
+    @Scheduled(cron = "0 0 0 * * *") // 24시간마다 갱신
+    public void scheduledUpdate() {
+        updateCategoryData();
+    }
+
+    @CacheEvict(value = "categories", allEntries = true)
     public void updateCategoryData() {
-        // Logic to update category data
+        refreshCategories(); // Evict the cache
+        populateCategories(); // Populate the cache externally
     }
 
     private ProductCategoryDTO convertToDto(ProductCategory category) {

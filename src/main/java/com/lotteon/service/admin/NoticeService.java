@@ -45,7 +45,9 @@ public class NoticeService {
 
     // 전체 공지사항을 페이지 형태로 가져오는 메서드 추가
     public Page<Notice> getNotices(Pageable pageable) {
-        return noticeRepository.findAll(pageable); // 페이지 형태로 공지사항을 가져옴
+        // 정렬된 Pageable 객체를 전달하여 최신순으로 데이터 가져오기
+        Pageable sortedByDateDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "date"));
+        return noticeRepository.findAllByOrderByDateDesc(sortedByDateDesc);
     }
 
     // 최신 공지사항 5개를 가져오는 메서드 추가
@@ -86,12 +88,12 @@ public class NoticeService {
     }
     //글보기
     public NoticeDTO selectNotice(Long no){
-       Optional<Notice> notice = noticeRepository.findById(no);
-       if(notice.isPresent()){
-           NoticeDTO noticeDTO = modelMapper.map(notice.get(), NoticeDTO.class);
-           return noticeDTO;
-       }
-       return null;
+        Optional<Notice> notice = noticeRepository.findById(no);
+        if(notice.isPresent()){
+            NoticeDTO noticeDTO = modelMapper.map(notice.get(), NoticeDTO.class);
+            return noticeDTO;
+        }
+        return null;
     }
 
     //글 수정

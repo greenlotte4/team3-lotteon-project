@@ -3,26 +3,46 @@
   <div class="aside_list">
     <ul>
       <li>
-        <a class="active" href="#">회원</a>
+        <a class="" href="#">회원</a>
       </li>
       <li>
-        <a class="active" href="#">쿠폰 / 이벤트</a>
+        <a class="" href="#">쿠폰 / 이벤트</a>
       </li>
       <li>
-        <a class="active" href="#">주문 / 결제</a>
+        <a class="" href="#">주문 / 결제</a>
       </li>
       <li>
-        <a class="active" href="#">배송</a>
+        <a class="" href="#">배송</a>
       </li>
       <li>
-        <a class="active" href="#">취소 / 반품 / 교환</a>
+        <a class="" href="#">취소 / 반품 / 교환</a>
       </li>
       <li>
-        <a class="active" href="#">여행 / 숙박 / 항공</a>
+        <a class="" href="#">여행 / 숙박 / 항공</a>
       </li>
       <li>
-        <a class="active" href="#">안전거래</a>
+        <a class="" href="#">안전거래</a>
       </li>
     </ul>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('#aside .aside_list ul li a');
+
+    // 첫 번째 링크에 기본적으로 active 클래스 추가
+    if (links.length > 0) {
+      links[0].classList.add('active');
+    }
+
+    links.forEach(link => {
+      link.addEventListener('click', function() {
+        // 모든 링크에서 active 클래스 제거
+        links.forEach(item => item.classList.remove('active'));
+        // 클릭한 링크에 active 클래스 추가
+        this.classList.add('active');
+      });
+    });
+  });
+</script>

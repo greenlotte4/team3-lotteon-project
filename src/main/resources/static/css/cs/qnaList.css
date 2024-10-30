@@ -81,29 +81,12 @@ h2 {
     background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 50px;
-    flex-grow: 1;
-    padding-left: 100px;
-
-}
-
-.pagination .a {
-    width: 10%;
-    height: 10px;
-    text-align: center;
-    border: 1px solid #dddddd;
-}
-
 .qna-write-btn {
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
     margin-right: 38px;
 }
-
 
 .btn-Write {
     width: 80px;
@@ -122,4 +105,55 @@ h2 {
     background-color: #ef2a23;
     color: #ffffff !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.pagination {
+    text-align: center;
+    font-family: Roboto, NotoSansKR, Malgun Gothic, AppleSDGothicNeo, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.47;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 30px 0;
+}
+
+.pagination a, .pagination button, .pagination span {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #999;
+    line-height: 26px;
+    margin: 2px 2px;
+    text-indent: -1px;
+}
+
+.pagination a.active, .pagination button.active, .pagination span.active {
+    margin: 0 4px;
+    background-color: #343b4d;
+    border: 1px solid #343b4d;
+    color: #fff;
+}
+
+.pagination a:hover, .pagination button:hover {
+    color: #333;
+}
+
+.pagination .prev, .pagination .next {
+    width: 28px;
+    height: 28px;
+    background-size: contain;
+}
+
+.pagination .prev.off, .pagination .next.off {
+    pointer-events: none;
+    background-size: contain;
+}
+
+.pagination .skip {
+    margin: 0 7px 0 4px;
+    width: auto;
+    letter-spacing: 1px;
 }

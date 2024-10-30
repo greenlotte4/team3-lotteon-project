@@ -7,11 +7,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LotteOn</title>
-    <link rel="stylesheet"  th:href="@{/css/cs/qnaList.css}">
+    <link rel="stylesheet" th:href="@{/css/cs/qnaList.css}">
 </head>
 <body>
 <th:block layout:fragment="content">
-<!--    <th:block th:replace="~{aside/qnaAside}"></th:block>-->
+        <th:block th:replace="~{aside/qnaAside}"></th:block>
 
     <div id="service">
         <div class="title">
@@ -27,10 +27,6 @@
                         <span th:text="${qna.qna_title}">질문 제목</span>
                         <span class="review-status"
                               th:text="${qna.qna_status.name() == 'review' ? '검토중' : '답변완료'}"></span>
-<!--                        <span class="review-status"-->
-<!--                              th:text="${qna.qna_status == T(com.lotteon.entity.QnA.Status).review ? '검토중' : '답변완료'}"></span>-->
-
-
                         <span class="author-id" th:text="${qna.qna_writer}"></span>
                         <span class="date" th:text="${#strings.substring(qna.rdate,0,10)}"></span>
                     </a>
@@ -38,21 +34,34 @@
             </ul>
 
             <div class="qna-write-btn">
-                <a href="/cs/qna/write" type="button" class="btn-Write">작성하기</a>
+                <a th:if="${#authentication.name != 'anonymousUser'}"
+                   href="/cs/qna/write" type="button" class="btn-Write">작성하기</a>
             </div>
         </div>
 
+        <!-- 페이지네이션 -->
         <div class="pagination">
             <div class="qna-pagination">
-                <a th:href="@{/cs/qna/list(page=${qnaPage.number - 1})}"
-                   th:classappend="${qnaPage.first} ? 'disabled'">이전</a>
+                <!-- 이전 페이지 링크: 첫 페이지에서는 비활성화 및 숨김 -->
+                <span th:if="${qnaPage.totalPages > 1 && !qnaPage.first}">
+                    <a th:href="@{/cs/qna/list(page=${qnaPage.number - 1})}" class="prev">이전</a>
+                </span>
+                <span th:if="${qnaPage.first && qnaPage.totalPages > 1}" class="disabled"
+                      style="display:none;">이전</span>
+
+                <!-- 페이지 번호 반복 -->
                 <span th:each="pageNum : ${#numbers.sequence(0, qnaPage.totalPages - 1)}">
                     <a th:href="@{/cs/qna/list(page=${pageNum})}"
-                       th:classappend="${qnaPage.number == pageNum} ? 'active'"
-                       th:text="${pageNum + 1}"></a>
+                       th:classappend="${qnaPage.number == pageNum} ? 'active'">
+                        <span th:text="${pageNum + 1}"></span>
+                    </a>
                 </span>
-                <a th:href="@{/cs/qna/list(page=${qnaPage.number + 1})}"
-                   th:classappend="${qnaPage.last} ? 'disabled'">다음</a>
+
+                <!-- 다음 페이지 링크: 마지막 페이지에서는 비활성화 및 숨김 -->
+                <span th:if="${qnaPage.totalPages > 1 && !qnaPage.last}">
+                    <a th:href="@{/cs/qna/list(page=${qnaPage.number + 1})}" class="next">다음</a>
+                </span>
+                <span th:if="${qnaPage.last && qnaPage.totalPages > 1}" class="disabled" style="display:none;">다음</span>
             </div>
         </div>
     </div>

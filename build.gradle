@@ -52,6 +52,7 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.1'
     //로그인 scrurity & oaut2 설정
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
