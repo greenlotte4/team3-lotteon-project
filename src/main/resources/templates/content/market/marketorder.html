@@ -97,19 +97,37 @@
                             <tr>
                                 <th>수령자</th>
                                 <td>
-                                    <input type="text" name="name" id="name" readonly th:placeholder="${memberDTO.getName()}"></td>
+                                    <input type="text" name="name" id="receiver" readonly th:value="${memberDTO.getName()}"></td>
                             </tr>
                             <tr>
                                 <th>휴대폰</th>
-                                <td><input type="text" name="hp" id="hp" th:placeholder="${memberDTO.getHp()}" readonly></td>
+                                <td><input type="text" name="hp" id="hp" th:value="${memberDTO.getHp()}" readonly></td>
                             </tr>
                             <tr  class="address_info">
                                 <th>배송지</th>
                                 <td>
                                     <span class="postArea">
-                                    <p class="M_postcode" th:text="${memberDTO.getPostcode()}"></p><input type="button" class="address_change" value="주소지 변경">
+                                    <p class="M_postcode" id="M_postcode" th:attr="data-postcode=${memberDTO.getPostcode()}" th:text="${memberDTO.getPostcode()}"></p><input type="button" class="address_change" value="주소지 변경">
                                     </span>
-                                    <span th:text="${memberDTO.getAddr()+'  '+memberDTO.getAddr2()}" class="totalAddress"> </span>
+                                    <span th:text="${memberDTO.getAddr()+'  '+memberDTO.getAddr2()}" class="totalAddress"
+                                          th:attr="data-addr=${memberDTO.getAddr()}, data-addr2=${memberDTO.getAddr2()}">
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr  class="address_info">
+                                <th>배송 요청사항</th>
+                                <td>
+                                    <span class="shipping_info">
+                                        <select name="shippingInfo" id="shippingInfo">
+                                            <option value="1">경비실에 맡겨주세요</option>
+                                            <option value="2">부재시 연락주세요</option>
+                                            <option value="3">배송전 연락주세요</option>
+                                            <option value="4">택배함에 넣어주세요</option>
+                                            <option value="5">부재시 문앞에 놔주세요</option>
+                                            <option value="6">직접입력</option>
+                                        </select>
+                                        <div><input type="hidden"  th:placeholder=" 직접입력" class="InfoInput"></div>
+                                    </span>
 
                                 </td>
                             </tr>
@@ -122,6 +140,7 @@
                     <div class="discountWrapper">
                         <div class="point_wrap">
                             <div class="point_info">
+                                <input type="hidden" id="memberUid" th:value="${memberDTO.getUid()}">
                                 <input type="hidden" id="currentPoint" th:value="${memberDTO.point.intValue()}">
                                 <span>현재 포인트 :
                                 <span class="price"  id="currentIn" th:text="${memberDTO.point.intValue()}"></span></span>

@@ -12,6 +12,7 @@ import com.lotteon.repository.cart.CartRepository;
 import com.lotteon.repository.product.OptionRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.repository.user.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +54,10 @@ public class MarketCartService {
         User user = getUser();
         // 사용자의 장바구니를 가져오고, 없으면 새로 생성
         Cart cart = cartRepository.findByUserWithItems(user)
-                .orElseGet(() -> createCart(user));
+                .orElseGet(() -> {
+                    log.info("카트가 없어서 새로 생성합니다.");
+                    return createCart(user);
+                });
 
         Product product = productRepository.findById(cartRequestDTO.getProductId())
                 .orElseThrow(() -> new RuntimeException("상품이 없습니다."));
@@ -63,9 +68,11 @@ public class MarketCartService {
                     return new RuntimeException("옵션이 없습니다.");
                 });
         Optional<CartItem> existingItem = cartItemRepository
-                .findByCart_CartIdAndProduct_ProductIdAndOption_Id(
-        cart.getCartId(), product.getProductId(), cartRequestDTO.getOptionId());
+                .findByCart_CartIdAndProduct_ProductIdAndOption_Id
+                        (cart.getCartId(), product.getProductId(), cartRequestDTO.getOptionId());
+
         CartItem cartItem;
+
         if (existingItem.isPresent()) {
             // 아이템이 이미 존재하는 경우 수량 업데이트
             cartItem = existingItem.get();
@@ -114,15 +121,14 @@ public class MarketCartService {
     public List<CartItem> selectCartAll(){
 
         User user = getUser();
-        log.info("user uid`````````------------------"+user.getUid());
+        log.info("user uid`````````------------------" + user.getUid());
 
-        Cart cart = cartRepository.findByUser_Uid(user.getUid())
-                .orElseGet(() -> {
-                    // 카트가 없으면 새 카트를 생성하고 저장
-                    Cart newCart = createCart(user);
-                    log.info("Created new cart for user: " + user.getUid());
-                    return newCart;
-                });
+        Cart cart = cartRepository.findByUser_Uid(user.getUid()).orElse(null);
+
+        if (cart == null) {
+            log.info("카트가 없습니다.");
+            return Collections.emptyList(); // 빈 리스트 반환
+        }
 
         List<CartItem> cartItems = cart.getCartItems();
         log.info("cartItems count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: " + cartItems.size());
@@ -152,4 +158,67 @@ public class MarketCartService {
                 .finalTotalPoints(totalPoints)
                 .build();
     }
+
+    @Transactional
+    public void updateQuantity(Long cartItemId, int quantity) {
+
+        log.info("일단 여기까진 들어옴");
+        if (quantity < 1) {
+            throw new RuntimeException("수량은 1 이상이어야 합니다.");
+        }
+        log.info("Received cartItemId: {}, quantity: {}", cartItemId, quantity);
+
+        log.info("1111111111111111:"+cartItemId);
+        log.info("2222222222222222:"+quantity);
+
+        try {
+            CartItem cartItem = cartItemRepository.findById(cartItemId)
+                    .orElseThrow(() -> new RuntimeException("장바구니에 해당 상품이 없습니다."));
+            log.info("카트 아이템이다"+cartItemId);
+
+            cartItem.setQuantity(quantity);
+            cartItemRepository.save(cartItem);
+            log.info("상품 {}의 수량이 {}로 업데이트되었습니다.", cartItemId, quantity);
+        } catch (RuntimeException e) {
+            log.error("오류 발생: {}", e.getMessage());
+            throw e; // 예외를 다시 던져서 컨트롤러에서 처리
+        }
+
+    }
+
+    @Transactional
+    public void deleteCartItem(List<Long> cartItemIds) {
+        Long cartId = null; // 카트 ID를 저장할 변수
+
+        for (Long cartItemId : cartItemIds) {
+            // 카트 아이템을 먼저 조회하여 카트 ID를 저장
+            CartItem cartItem = cartItemRepository.findById(cartItemId)
+                    .orElseThrow(() -> new RuntimeException("장바구니에 해당 상품이 읍다"));
+
+            // 카트 ID 저장
+            if (cartId == null) {
+                cartId = cartItem.getCart().getCartId();
+            }
+
+            cartItemRepository.delete(cartItem);
+            log.info("삭제 완료했다: cartItemId = " + cartItemId);
+
+        }
+        // 카트에 남은 아이템 수 확인
+        long itemCount = cartItemRepository.countByCart_CartId(cartId);
+        log.info("남은 아이템수!!!!!!!!!"+itemCount);
+        if (itemCount == 0) {
+            Cart cart = cartRepository.findById(cartId)
+                    .orElseThrow(() -> new RuntimeException("해당 카트가 존재하지 않음"));
+
+            cartRepository.delete(cart);
+            log.info("카트 삭제 완료: cartId = " + cartId);
+        }
+    }
+
+
+
+
+
+
 }

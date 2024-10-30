@@ -22,8 +22,9 @@ public class NoticePageResponseDTO {
     private int start, end;
     private boolean prev, next;
 
+    private String noticeType;
 
-    private String keyword;
+//    private String keyword;
 
     @Builder
     public NoticePageResponseDTO(PageRequestDTO pageRequestDTO, List<NoticeDTO> noticedtoList, int total) {
@@ -31,8 +32,8 @@ public class NoticePageResponseDTO {
         this.size = pageRequestDTO.getSize();
         this.total = total;
         this.noticedtoList = noticedtoList;
-        this.keyword = pageRequestDTO.getKeyword();
-
+//        this.keyword = pageRequestDTO.getKeyword();
+        this.noticeType = pageRequestDTO.getNoticeType();
         this.startNo = total - ((pg - 1) * size); //첫번째 글 번호
         this.end = (int) (Math.ceil(this.pg / 10.0))* 10; //마지막 페이지 번호
         this.start = this.end - 9; //첫번째 페이지 번호

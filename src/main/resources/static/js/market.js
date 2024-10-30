@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    const modifyButtons = document.querySelectorAll('.countModifyBtn');
+   /* const modifyButtons = document.querySelectorAll('.countModifyBtn');
     const cancelButtons = document.querySelectorAll('.cancel-btn');
     const applyButtons = document.querySelectorAll('.apply-btn');
     const currentValue=null;
@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-
+*/
 
 
 
