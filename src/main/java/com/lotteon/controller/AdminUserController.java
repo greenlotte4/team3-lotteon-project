@@ -82,6 +82,9 @@ public class AdminUserController {
             existingMember.setPostcode(memberDTO.getPostcode());
             existingMember.setAddr(memberDTO.getAddr());
             existingMember.setAddr2(memberDTO.getAddr2());
+            existingMember.setGrade(memberDTO.getGrade());
+            existingMember.setAddr(memberDTO.getAddr());
+            existingMember.setAddr2(memberDTO.getAddr2());
             // 추가적인 필드가 있다면 여기서 업데이트
 
             // 업데이트 메서드 호출
@@ -95,10 +98,12 @@ public class AdminUserController {
         }
     }
 
-    @PostMapping("/admin/user/member/updateGrade")
+    @PostMapping("/member/updateGrade")
     public ResponseEntity<Map<String, String>> updateGrade(@RequestBody Map<String, String> request) {
         String uid = request.get("uid"); // UID 가져오기
         String grade = request.get("grade"); // 새 등급 가져오기
+
+        log.info("uid: " + uid + " grade: " + grade);
 
         Optional<Member> existingMemberOpt = memberService.findByUserId(uid);
         if (existingMemberOpt.isPresent()) {

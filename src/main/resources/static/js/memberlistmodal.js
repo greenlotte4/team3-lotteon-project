@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const uidInput = modal.querySelector("#uid");
     const nameInput = modal.querySelector("#name");
     const genderInputs = modal.querySelectorAll("input[name='gender']"); // 성별은 여러 개의 input이므로 NodeList로 가져옵니다.
-    const gradeInput = modal.querySelector("#grade"); // 등급은 readonly이므로 #status로 가져옵니다.
+    const gradeInput = modal.querySelector("#status"); // 등급은 readonly이므로 #status로 가져옵니다.
     const emailInput = modal.querySelector("#EMAIL");
     const hpInput = modal.querySelector("#HP");
     const zipcodeInput = modal.querySelector("#zipcode");
@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
             uidInputDisplay.value = '';
             nameInput.value = '';
             emailInput.value = '';
+            gradeInput.value = '';
             hpInput.value = '';
             zipcodeInput.value = '';
             address1Input.value = '';
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log(nameInput.value);
                     emailInput.value = data.email || ''; // 기본값으로 빈 문자열 설정
                     hpInput.value = data.hp || ''; // 기본값으로 빈 문자열 설정
+                    gradeInput.value = data.grade || '';
                     zipcodeInput.value = data.postcode || ''; // 기본값으로 빈 문자열 설정
                     address1Input.value = data.addr || ''; // 기본값으로 빈 문자열 설정
                     address2Input.value = data.addr2 || ''; // 기본값으로 빈 문자열 설정
@@ -108,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
             gender: Array.from(genderInputs).find(input => input.checked)?.value,
             email: emailInput.value,
             hp: hpInput.value,
+            grade: gradeInput.value,
             postcode: zipcodeInput.value,
             addr: address1Input.value,
             addr2: address2Input.value,

@@ -21,6 +21,8 @@
                     <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요.">
                 </div>
                 <div class="links">
+                    <input id="autoLogin" type="checkbox" name="remember-me" checked="checked">
+                    <label for="autoLogin">자동 로그인</label>
                     <a th:href="@{/member/findid}">아이디찾기</a>
                     <a th:href="@{/member/findpass}">비밀번호찾기</a>
                     <a th:href="@{/member/term(type='seller')}">회원가입</a>
