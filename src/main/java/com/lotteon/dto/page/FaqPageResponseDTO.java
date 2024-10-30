@@ -13,9 +13,9 @@ import java.util.List;
 public class FaqPageResponseDTO {
 
     private List<FaqDTO> faqdtoList;
-
-    private String type1;
-    private String type2;
+//
+//    private String type1;
+//    private String type2;
     private int pg;
     private int size;
     private int total;
@@ -23,8 +23,8 @@ public class FaqPageResponseDTO {
     private int start, end;
     private boolean prev, next;
 
-    private String type;
-    private String keyword;
+//    private String type;
+//    private String keyword;
 
     @Builder
     public FaqPageResponseDTO(PageRequestDTO pageRequestDTO, List<FaqDTO> faqdtoList, int total) {
@@ -32,10 +32,10 @@ public class FaqPageResponseDTO {
         this.size = pageRequestDTO.getSize();
         this.total = total;
         this.faqdtoList = faqdtoList;
-        this.type1 = pageRequestDTO.getType1();
-        this.type2 = pageRequestDTO.getType2();
-        this.type = pageRequestDTO.getType();
-        this.keyword = pageRequestDTO.getKeyword();
+//        this.type1 = pageRequestDTO.getType1();
+//        this.type2 = pageRequestDTO.getType2();
+//        this.type = pageRequestDTO.getType();
+//        this.keyword = pageRequestDTO.getKeyword();
 
         this.startNo = total - ((pg - 1) * size); //첫번째 글 번호
         this.end = (int) (Math.ceil(this.pg / 10.0))* 10; //마지막 페이지 번호

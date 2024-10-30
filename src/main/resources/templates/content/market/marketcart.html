@@ -58,7 +58,11 @@
 
                 <!-- 반복부분 -->
                 <th:block th:unless="${cartItems.size() <= 0}">
-                <tr th:each="item : ${cartItems}" style="border-bottom: 1px solid #dddddd">
+                <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
+                    <tr th:each="item : ${cartItems}"
+                    th:data-cart-item-id="${item.getCartItemId()}"
+                    th:data-cart-id="${item.cart.cartId}"
+                    style="border-bottom: 1px solid #dddddd">
                     <td><input type="checkbox" name="select"></td>
                     <td>
                         <div>
@@ -67,6 +71,7 @@
                         <div>
                             <span th:text="${item.getProduct().productName}">상품명</span>
                             <p class="product_option" th:text="${item.getOption().getOptionName()}">[ 옵션 ]</p>
+
                         </div>
                     </td>
                     <td>
