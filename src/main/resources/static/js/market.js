@@ -91,27 +91,27 @@ document.addEventListener('DOMContentLoaded', function () {
     let isExpanded = false;  // 더보기 상태를 저장하는 변수
 
     // 리뷰 더보기 버튼 클릭 시
-    if(moreReviewsBtn !=null){
+    if (moreReviewsBtn != null) {
         moreReviewsBtn.addEventListener('click', function (e) {
-            e.preventDefault();
+            e.preventDefault(); // 기본 동작 방지
             if (!isExpanded) {
-                // 더보기를 눌렀을 때: 3개 이상의 리뷰 표시 + 페이지네이션 활성화
+                // 더보기를 눌렀을 때: 3개 이상의 리뷰 표시
                 isExpanded = true;
                 reviews.forEach((review, index) => {
                     if (index >= 3) {
-                        review.classList.add('show');
-                        pagination.classList.add('show');
+                        review.classList.add('show'); // 추가 리뷰 표시
                     }
                 });
-                moreReviewsBtn.textContent = '더보기 닫기';  // 더보기 버튼 텍스트 변경
+                moreReviewsBtn.textContent = '더보기 닫기'; // 버튼 텍스트 변경
+                pagination.classList.add('show'); // 페이지네이션 표시
             } else {
-                // 더보기 닫기를 눌렀을 때: 첫 3개의 리뷰만 표시 + 페이지네이션 숨김
+                // 더보기 닫기를 눌렀을 때: 첫 3개의 리뷰만 표시
                 isExpanded = false;
                 reviews.forEach((review, index) => {
-                    review.classList.remove('show');
+                    review.classList.remove('show'); // 숨김
                 });
-                pagination.classList.remove('show');
-                moreReviewsBtn.textContent = '더보기';  // 더보기 버튼 텍스트 복구
+                moreReviewsBtn.textContent = '더보기'; // 버튼 텍스트 복구
+                pagination.classList.remove('show'); // 페이지네이션 숨김
             }
         });
     }
