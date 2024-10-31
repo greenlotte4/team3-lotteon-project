@@ -377,18 +377,4 @@ function updateExpectedTotal(totalPrice, totalShippingFee) {
     const expectedPrice = totalPrice + totalShippingFee;
     document.getElementById("expectedPrice").innerText = `${expectedPrice.toLocaleString()}원`;
 }
-document.querySelectorAll('.rating-display').forEach(display => {
-    const rating = parseInt(display.textContent);
-    let stars = '';
-
-    for (let i = 1; i <= 5; i++) {
-        if (i <= rating) {
-            stars += '<span class="star-selected">&#9733;</span>'; // 선택된 별
-        } else {
-            stars += '<span class="star">&#9734;</span>'; // 선택되지 않은 별
-        }
-    }
-
-    display.innerHTML = stars; // 별 모양으로 업데이트
-});
 
