@@ -363,7 +363,6 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     updateTotalPrice();
     updateSelectedResult();
 
-
 });
 function calculateShippingFee(totalPrice) {
     // totalPrice와 shippingTerms 비교하여 shippingFee 결정
