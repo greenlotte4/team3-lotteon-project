@@ -243,7 +243,7 @@
                             if (noticePageResponseDTO.prev) {
                                 const prevLink = noticePageResponseDTO.noticeType == null
                                     ? `<a href="/admin/notice/list?pg=${noticePageResponseDTO.start - 1}" class="noticeprev">이전</a>`
-                                    : `<a href="/admin/notice/list?pg=${noticePageResponseDTO.start - 1}&noticeType=${noticePageResponseDTO.noticeType}" class="noticeprev">이전</a>`;
+                                    : `<a href="/admin/notice/list?pg=${noticePageResponseDTO.start - 1}&noticeType=${noticePageResponseDTO.noticeType}" class="noticeprevs">이전</a>`;
                                 paginationElement.innerHTML += prevLink;
                             }
 
@@ -251,15 +251,15 @@
                             for (let num = noticePageResponseDTO.start; num <= noticePageResponseDTO.end; num++) {
                                 const pageLink = noticePageResponseDTO.noticeType == null
                                     ? `<a href="/admin/notice/list?pg=${num}" class="${num === noticePageResponseDTO.pg ? 'noticecurrent' : 'noticenum'}">${num}</a>`
-                                    : `<a href="/admin/notice/list?pg=${num}&noticeType=${noticePageResponseDTO.noticeType}" class="noticenum">${num}</a>`;
+                                    : `<a href="/admin/notice/list?pg=${num}&noticeType=${noticePageResponseDTO.noticeType}" class="${num === noticePageResponseDTO.pg && noticePageResponseDTO.noticeType === noticePageResponseDTO.noticeType ? 'noticecurrents' : 'noticenums'}">${num}</a>`;
                                 paginationElement.innerHTML += pageLink;
                             }
 
 // 다음 버튼
                             if (noticePageResponseDTO.next) {
                                 const nextLink = noticePageResponseDTO.noticeType == null
-                                    ? `<a href="/admin/notice/list?pg=${noticePageResponseDTO.end + 1}" class="noticenext">다음</a>`
-                                    : `<a href="/admin/notice/list?pg=${noticePageResponseDTO.end + 1}&noticeType=${noticePageResponseDTO.noticeType}" class="noticenext">다음</a>`;
+                                    ? `<a href="/admin/notice/list?pg=${noticePageResponseDTO.end + 1}" class="noticenexts">다음</a>`
+                                    : `<a href="/admin/notice/list?pg=${noticePageResponseDTO.end + 1}&noticeType=${noticePageResponseDTO.noticeType}" class="noticenexts">다음</a>`;
                                 paginationElement.innerHTML += nextLink;
                             }
                         })
