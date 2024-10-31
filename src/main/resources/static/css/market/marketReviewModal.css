@@ -129,7 +129,7 @@ th:nth-child(5) {width: 8%;}  /* 115px / 930px */
     height: 150px;
     object-fit: contain;
     border: 1px solid black;
-    margin: 0 5px
+    margin: 0 20px
 }
 
 .modal-content table tr td:nth-child(2){
