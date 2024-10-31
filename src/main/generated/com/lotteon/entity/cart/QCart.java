@@ -26,6 +26,8 @@ public class QCart extends EntityPathBase<Cart> {
 
     public final ListPath<CartItem, QCartItem> cartItems = this.<CartItem, QCartItem>createList("cartItems", CartItem.class, QCartItem.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> itemQuantity = createNumber("itemQuantity", Integer.class);
+
     public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
 
     public final DateTimePath<java.time.LocalDateTime> rdate = createDateTime("rdate", java.time.LocalDateTime.class);

@@ -115,4 +115,29 @@ public class ReviewService {
                 .build();
     }
 
+    public PageResponseDTO<ReviewDTO> getAllReviewsss(PageRequestDTO pageRequestDTO, Long productId) {
+        // `productId`를 `type` 필드로 설정
+        pageRequestDTO.setType(String.valueOf(productId));
+
+        Pageable pageable = pageRequestDTO.getPageable("no");
+        Page<Review> pageReview = reviewRepository.selectReviewAllForList(pageRequestDTO, pageable);
+
+        // 리뷰 엔티티를 DTO로 변환 및 마스킹 처리
+        List<ReviewDTO> reviewList = pageReview.stream()
+                .map(review -> {
+                    ReviewDTO reviewDTO = review.ToDTO(review); // DTO 변환
+                    reviewDTO.setWriter(reviewDTO.getMaskedWriter()); // 마스킹된 아이디 설정
+                    return reviewDTO;
+                })
+                .collect(Collectors.toList());
+
+        int total = (int) pageReview.getTotalElements();
+
+        return PageResponseDTO.<ReviewDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(reviewList)
+                .total(total)
+                .build();
+    }
+
 }

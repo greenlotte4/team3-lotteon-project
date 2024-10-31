@@ -9,6 +9,7 @@
     <title>[[${headerInfo.hd_title}]]:[[${headerInfo.hd_subtitle}]]</title>
     <link rel="stylesheet" th:href="@{/css/market/marketview.css}">
     <link rel="stylesheet" th:href="@{/css/market/marketAside.css}">
+    <link rel="stylesheet" th:href="@{/css/market/marketReviewModal.css}">
 
 
 </head>
@@ -226,10 +227,19 @@
                                             <div class="review-image-wrapper">
                                                 <div class="review-images">
                                                     <th:block th:each="file : ${reviewImgs}">
-                                                        <th:block th:each="image : ${file.getPReviewFiles()}">
-                                                            <div class="reviewImg">
-                                                                <img th:src="@{'/uploads/ReviewImg/' + ${image.sname}}" alt="review-image" class="review_img">
-                                                            </div>
+                                                        <!-- Check if the review image's product code matches the displayed product's code -->
+                                                        <th:block th:if="${file.product.productId} == ${products.productId}">
+                                                            <th:block th:each="image : ${file.getPReviewFiles()}">
+                                                                <div class="reviewImg"
+                                                                     th:data-writer-content="${file.writer}"
+                                                                     th:data-rating-content="${file.rating}"
+                                                                     th:data-prodName-content="${file.product.productName}"
+                                                                     th:data-reviewImages-content="${file.PReviewFiles}"
+                                                                     th:data-review-content="${file.content}">
+
+                                                                    <img th:src="@{'/uploads/ReviewImg/' + ${image.sname}}" alt="review-image" class="review_img">
+                                                                </div>
+                                                            </th:block>
                                                         </th:block>
                                                     </th:block>
                                                 </div>
@@ -239,33 +249,37 @@
                                     </div>
 
 
+
                                     <div class="reviewList" id="reviewContent">
                                         <th:block th:each="review : ${pageResponseReviewDTO.getDtoList()}">
-                                        <article class="p-review">
-                                            <div class="review-header">
-                                                <div class="review-rating">
-                                                    <data class="rating-display" th:text="${review.rating}">평점</data>
+                                            <!-- Check if the review's product code matches the displayed product's code -->
+                                            <article class="p-review" th:if="${review.product.productId} == ${products.productId}">
+                                                <div class="review-header">
+                                                    <div class="review-rating">
+                                                        <data class="rating-display" th:text="${review.rating}">평점</data>
+                                                    </div>
+                                                    <div class="reviewer-info">
+                                                        <span class="reviewer-name" th:text="${review.maskedWriter}">seo******</span>
+                                                        <span class="review-date">[[${#strings.substring(review.rdate, 0, 10)}]]</span>
+                                                    </div>
                                                 </div>
-                                                <div class="reviewer-info">
-                                                    <span class="reviewer-name" th:text="${review.maskedWriter}">seo******</span>
-                                                    <span class="review-date">[[${#strings.substring(review.rdate,0,10)}]]</span>
+                                                <div class="review-body">
+                                                    <h5 th:text="${review.product.productName}">상품명</h5>
+                                                    <div>
+                                                        <div class="rimg">
+                                                            <img th:if="${review.savedReviewFiles.size() > 0}" th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
+                                                                 alt="review-image" class="review_img">
+                                                        </div>
+                                                        <p class="review-text" th:text="${review.content}">
+                                                            리뷰 내용이 여기에 표시됩니다.
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="review-body">
-                                                <h5 th:text="${review.product.productName}">상품명</h5>
-                                                <div>
-                                                    <div class="rimg"><img th:if="${review.savedReviewFiles.size() > 0}" th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}" alt="review-image" class="review_img"></div>
-                                                    <p class="review-text" th:text="${review.content}">
-                                                        가격대비정 말괜찮 은 옷이라 생각되네요 핏은... 제기억기 엔 어깨선이 맞고 루즈핏 이라하기도 좀힘드네요 . 아주약간
-                                                        루즈한정도 ... 그래도이 만한 옷은없다고 봅니다 깨끗하고포장도 괜찮고다음에도여기서판매하는 제품을구매하고 싶네요정 말만족
-                                                        하고후기 남깁니다많이파시길바래요 ~~~
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </article>
+                                            </article>
                                         </th:block>
                                         <!-- 리뷰 더보기 버튼 -->
                                         <div class="btnwrapper"><button id="moreReviewsBtn">더보기</button></div>
+                                    </div>
 
 
                                         <div class="pagination" id="reviews-pagination">
@@ -424,8 +438,65 @@
 
                         </div><!--sectionWrapper-->
                     </section>
+    <div id="pReviewModal" class="modal pReview">
+        <div class="modal-content pReview">
+            <div class="header">
+                <span class="close pReview">&times;</span>
+                <h3>리뷰</h3>
+            </div>
+            <table class="modalreview">
+                <colgroup>
+                    <col style="width: 20%;">
+                    <col style="width: 80%;">
+
+                </colgroup>
+                <tr>
+                    <th>작성자</th>
+                    <td>
+                        <span id="modalReviewWriter" class="ReviewWriter" >작성자 출력</span>
+                        <input type="hidden" id="modalReviewWriter2" name="Writer" value="5">
+                    </td>
+                </tr>
+                <tr>
+                    <th>상품명</th>
+                    <td>
+                        <span id="modalProductName" class="productName" >상품명 출력</span>
+                        <input type="hidden" id="modalWriter" name="Writer" value="5">
+                    </td>
+                </tr>
+                <tr>
+                    <th>만족도</th>
+                    <td>
+                        <div class="review-rating">
+                            <data class="rating-display2" id="rating-display">평점</data>
+                        </div>
+                        <input type="hidden" id="rating" name="rating" value="">
+                    </td>
+                </tr>
+                <tr>
+                    <th>이미지</th>
+                    <td>
+                        <div class="review-images">
+                            <div class="reviewImgs">
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td><span class="verContent" id="verContent" style="line-height: 1.8;"></span></td>
+                </tr>
+            </table>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary">닫기</button>
+            </div>
+        </div>
+    </div>
 
 
     <script th:src="@{/js/marketbuynow.js}"></script>
+    <script th:src="@{/js/marketReviewModal.js}"></script>
 
 </th:block>
