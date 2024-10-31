@@ -1,5 +1,6 @@
 package com.lotteon.service.product;
 
+import com.lotteon.config.RedirectToLoginException;
 import com.lotteon.dto.product.cart.CartRequestDTO;
 import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.entity.User.User;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,12 +41,20 @@ public class MarketCartService {
 
     public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RedirectToLoginException("사용자가 인증되지 않았습니다.");
+        }
+
         String username = authentication.getName();
 
-        return userRepository.findByUid(username)
-                .orElseThrow(() -> new RuntimeException("user not found"));// 사용자 ID 반환
+        try {
+            return userRepository.findByUid(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("유저가 없습니다."));
+        } catch (UsernameNotFoundException e) {
+            // 사용자 정보를 찾지 못한 경우 로그인 페이지로 리다이렉트
+            throw new RedirectToLoginException("사용자가 인증되지 않았습니다.");
+        }
     }
-
     public CartItem insertCartItem(CartRequestDTO cartRequestDTO) {
 
         if (cartRequestDTO.getQuantity() <= 0) {
@@ -52,6 +62,7 @@ public class MarketCartService {
         }
 
         User user = getUser();
+
         // 사용자의 장바구니를 가져오고, 없으면 새로 생성
         Cart cart = cartRepository.findByUserWithItems(user)
                 .orElseGet(() -> {
@@ -102,6 +113,7 @@ public class MarketCartService {
                     .totalPrice((int) cartRequestDTO.getFinalPrice())
                     .discount((int) cartRequestDTO.getDiscount())
                     .deliveryFee(cartRequestDTO.getShippingFee())
+                    .optionName(option.getOptionName())
                     .option(option)
                     .build();
 
@@ -165,21 +177,24 @@ public class MarketCartService {
         return cartItems;
     }
 
-    public CartSummary calculateCartSummary(List<CartItem> cartItems) {
+    public CartSummary calculateSelectedCartSummary(List<CartItem> selectedItems) {
+        int totalQuantity = selectedItems.stream().mapToInt(CartItem::getQuantity).sum();
+        long totalPrice = selectedItems.stream()
+                .mapToLong(item -> (long) item.getPrice() * item.getQuantity()).sum();
+        long totalDiscount = selectedItems.stream()
+                .mapToLong(CartItem::getDiscount).sum();
+        long totalDeliveryFee = selectedItems.stream()
+                .mapToLong(CartItem::getDeliveryFee).sum();
+        long totalOrderPrice = totalPrice - totalDiscount + totalDeliveryFee; // 배송비 더하기
+        long totalPoints = selectedItems.stream().mapToLong(CartItem::getPoints).sum();
 
-        int totalQuantity = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
-        double totalPrice = cartItems.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
-        double totalDiscount = cartItems.stream()
-                .mapToDouble(CartItem::getDiscount).sum(); // 할인 총합
-        double totalDeliveryFee = cartItems.stream()
-                .mapToDouble(CartItem::getDeliveryFee).sum(); // 배송비 총합
-        double totalOrderPrice = totalPrice - totalDiscount - totalDeliveryFee;
-        double totalPoints = cartItems.stream().mapToDouble(CartItem::getPoints).sum();
-
-
-
-        return  CartSummary.builder()
+        log.info("totalQuantity :"+totalQuantity);
+        log.info("totalPrice :"+totalPrice);
+        log.info("totalDiscount :"+totalDiscount);
+        log.info("totalDeliveryFee :"+totalDeliveryFee);
+        log.info("totalOrderPrice :"+totalOrderPrice);
+        log.info("totalPoints :"+totalPoints);
+        return CartSummary.builder()
                 .finalTotalDeliveryFee(totalDeliveryFee)
                 .finalTotalPrice(totalPrice)
                 .finalTotalQuantity(totalQuantity)
@@ -188,6 +203,7 @@ public class MarketCartService {
                 .finalTotalPoints(totalPoints)
                 .build();
     }
+
 
     @Transactional
     public void updateQuantity(Long cartItemId, int quantity) {

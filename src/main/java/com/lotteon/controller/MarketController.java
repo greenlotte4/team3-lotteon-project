@@ -117,7 +117,7 @@ public class MarketController {
 
         List<CartItem> cartItems = marketCartService.selectCartAll();
 
-        CartSummary cartSummary = marketCartService.calculateCartSummary(cartItems);
+        CartSummary cartSummary = marketCartService.calculateSelectedCartSummary(cartItems);
 
         model.addAttribute("cartItems",cartItems);
         model.addAttribute("cartSummary",cartSummary);
