@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-
     // Format prices with thousands separator for all elements with class 'price'
     const priceElements = document.querySelectorAll('.price');
     priceElements.forEach(priceElement => {
@@ -78,60 +77,125 @@ document.addEventListener('DOMContentLoaded', function () {
     const productDataArray = JSON.parse(localStorage.getItem("productDataArray")) || [];
 
     try {
-        // const productDataArray = JSON.parse(localStorage.getItem("productDataArray")) || [];
         if (productDataArray.length > 0) {
             const orderTable = document.querySelector(".productOrder");
             productDataArray.forEach(data => {
                 orderTable.insertAdjacentHTML("beforeend", createProductRow(data));
             });
-        } else {
-
         }
     } catch (error) {
         console.error("Error parsing product data:", error);
     }
 
+    // Function to calculate total shipping fee based on grouped product data
+    function calculateShippingFee(dataArray) {
+        const groupedShippingFees = {};
+
+        // Group products by productId and calculate the total final price for each group
+        dataArray.forEach(data => {
+            const productId = data.productId;
+            const finalPrice = data.finalPrice * data.quantity;
+
+            // Initialize or accumulate total price for the product group
+            if (!groupedShippingFees[productId]) {
+                groupedShippingFees[productId] = {
+                    totalFinalPrice: 0,
+                    shippingFee: parseInt(data.shippingFee || 0),
+                    shippingTerms: parseInt(data.shippingTerms || 0),
+                };
+            }
+
+            groupedShippingFees[productId].totalFinalPrice += finalPrice;
+        });
+
+        // Set shipping fee to 0 if total price exceeds shipping terms
+        for (const productId in groupedShippingFees) {
+            const productGroup = groupedShippingFees[productId];
+            if (productGroup.totalFinalPrice >= productGroup.shippingTerms) {
+                productGroup.shippingFee = 0;
+            }
+        }
+
+        return groupedShippingFees;
+    }
+
     // Function to create a new product row in the table
     function createProductRow(data) {
+        // Get grouped shipping fees for all products
+        const shippingFees = calculateShippingFee(productDataArray);
+        const shippingFee = shippingFees[data.productId].shippingFee;
+
         return `
-            <tr class="order-row">
-                <td>
-                    <div><img th:src="@{/uploads/productimg/${data.file190}}" alt="${data.productName}"></div>
-                    <div>
-                        <span>${data.productName}</span>
-                        <p class="product_option"> [ 옵션 : ${data.optionName} ]</p>
-                    </div>
-                </td>
-                <td>
-                    <div class="qnt">
-                        <input type="number" class="T_quantity" value="${data.quantity}" readonly>
-                    </div>
-                </td>
-                <td><span class="T_originalPrice price" data-original="${data.originalPrice}">${(data.originalPrice).toLocaleString()}</span></td>
-                <td><span class="T_discount">${data.discount}</span>%</td>
-                <td><span class="T_point">${data.point}</span></td>
-                <td><span class="T_shippingFee" data-ship="${data.shippingFee}">${data.shippingFee}</span></td>
-                <td><span class="T_finalPrice price">${(data.finalPrice * data.quantity).toLocaleString()}</span></td>
-            </tr>
-        `;
+        <tr class="order-row">
+            <td>
+                <div><img src="/uploads/productImg/${data.file190}" alt="${data.productName}"></div>
+                <div>
+                    <span>${data.productName}</span>
+                    <p class="product_option"> [ 옵션 : ${data.optionName} ]</p>
+                </div>
+            </td>
+            <td>
+                <div class="qnt">
+                    <input type="number" class="T_quantity" value="${data.quantity}" readonly>
+                </div>
+            </td>
+            <td><span class="T_originalPrice price" data-original="${data.originalPrice}">${(data.originalPrice).toLocaleString()}</span></td>
+            <td><span class="T_discount">${data.discount}</span>%</td>
+            <td><span class="T_point">${data.point}</span></td>
+            <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
+            <td><span class="T_finalPrice price">${(data.finalPrice * data.quantity).toLocaleString()}</span></td>
+            <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
+        </tr>
+    `;
     }
 
     // Elements for final order calculations
+
+    let orderItem= {};
+    let totalDiscount = 0;
+    let totalDiscountPandC=0;
+    let orderTotal=0;
     const currentPoint = parseInt(document.getElementById("currentPoint").value);
     const usedPointInput = document.getElementById("used_point");
     const couponSelect = document.querySelector("select[name='coupons']");
     const usedPointResult = document.querySelector(".usedPointResult");
+    const usedPointResultspan = document.getElementById("usedPointResult");
     const usedCouponResult = document.querySelector(".usedCouponResult");
     const discountResult = document.querySelector(".DiscountResult");
+    const DiscountResult = document.getElementById("finalDiscountResult");
     const finalOrderQuantity = document.getElementById("finalOrderQuantity");
     const finalOrderProductPrice = document.getElementById("finalOrderProductPrice");
     const finalOrderDiscount = document.getElementById("finalOrderDiscount");
     const finalOrderDeliveryFee = document.getElementById("finalOrderDeliveryFee");
     const finalOrderTotal = document.getElementById("finalOrderTotal");
     const finalOrderPoint = document.getElementById("finalOrderPoint");
+    // Retrieve the elements
+    const postcodeElement = document.getElementById("M_postcode");
+    const addressElement = document.querySelector(".totalAddress");
 
-    // Calculate and display discount results based on used points and coupons
-    usedPointInput.addEventListener("input", function () {
+    //수령자
+    const receiver = document.getElementById('receiver').value;
+    console.log(receiver);
+
+    //핸드폰
+    const hp = document.getElementById('hp').value;
+    console.log(hp);
+
+
+
+// Get the values from data attributes
+    const postcode = postcodeElement.getAttribute("data-postcode");
+    const addr = addressElement.getAttribute("data-addr");
+    const addr2 = addressElement.getAttribute("data-addr2");
+    // Log or use the values as needed
+    console.log("Postcode:", postcode);
+    console.log("Address Line 1:", addr);
+    console.log("Address Line 2:", addr2);
+
+// Calculate and display discount results based on used points and coupons
+    const pointuseBtn = document.getElementById("pointuseBtn");
+
+    pointuseBtn.addEventListener("click", function () {
         const usedPoint = parseInt(usedPointInput.value) || 0;
         if (usedPoint > currentPoint) {
             alert("사용가능한 포인트가 부족합니다.");
@@ -141,13 +205,26 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // // Calculate and display discount results based on used points and coupons
+    // usedPointInput.addEventListener("input", function () {
+    //     const usedPoint = parseInt(usedPointInput.value) || 0;
+    //     if (usedPoint > currentPoint) {
+    //         alert("사용가능한 포인트가 부족합니다.");
+    //         usedPointInput.value = 0;
+    //     } else {
+    //         updateDiscountResult();
+    //     }
+    // });
+
     couponSelect.addEventListener("change", updateDiscountResult);
-    let totalDiscount = 0;
+
+
+    // Function to update discount and calculate final order details
     function updateDiscountResult() {
         const usedPoint = parseInt(usedPointInput.value) || 0;
 
         // Get coupon discount based on the selected coupon
-        const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex].value;
+        const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex]?.value || "0";
         let couponDiscount = 0;
         if (selectedCouponValue === "1") {
             couponDiscount = Math.floor(totalProductPrice() * 0.03); // Example: 3% discount
@@ -163,11 +240,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update each discount and display the final results
         usedPointResult.textContent = limitedUsedPoint;
+        usedPointResultspan.innerText = limitedUsedPoint;
         usedCouponResult.textContent = couponDiscount;
 
         // Total discount including product discounts, coupon, and used points
-        totalDiscount = limitedUsedPoint + couponDiscount + totalProductDiscount();
-        discountResult.textContent = totalDiscount.toLocaleString();
+        totalDiscount = totalProductDiscount();   // 상품 할인금액
+        totalDiscountPandC = limitedUsedPoint + couponDiscount;   // 쿠폰 및 포인트 사용금액
+        discountResult.textContent = totalDiscountPandC;
+        DiscountResult.textContent = totalDiscountPandC;
 
         // Update final order information
         finalOrderQuantity.textContent = totalQuantity();
@@ -175,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
         finalOrderDiscount.textContent = totalDiscount.toLocaleString();
         finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
 
-        const orderTotal = initialTotalOrderAmount - limitedUsedPoint;
+        orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
         finalOrderTotal.textContent = orderTotal.toLocaleString();
         finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
     }
@@ -183,15 +263,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function totalProductDiscount() {
         return Array.from(document.querySelectorAll('.T_discount')).reduce((total, elem, index) => {
             const originalPrice = parseInt(document.querySelectorAll('.T_originalPrice')[index].dataset.original || 0);
+            const quantity = document.querySelectorAll('.T_quantity')[index].value || 0;
             const discountPercentage = parseInt(elem.innerText || 0);
-            return total + Math.floor((originalPrice * discountPercentage) / 100);
+
+            return total + Math.floor((originalPrice * discountPercentage) / 100) * quantity;
         }, 0);
     }
 
     calculateTotals();
-
-
-
 
     // Calculate the total values based on all selected options
     function totalQuantity() {
@@ -209,43 +288,50 @@ document.addEventListener('DOMContentLoaded', function () {
             .reduce((total, elem) => total + parseInt(elem.dataset.ship || 0), 0);
     }
 
-
     function calculateTotals() {
         // Total quantity, product price, and shipping fee calculation
         const totalQuantity = Array.from(document.querySelectorAll('.T_quantity')).reduce((total, elem) => total + parseInt(elem.value || 0), 0);
         const totalProductPrice = Array.from(document.querySelectorAll('.T_originalPrice')).reduce((total, elem) => total + parseInt(elem.dataset.original || 0), 0);
         const totalShippingFee = Array.from(document.querySelectorAll('.T_shippingFee')).reduce((total, elem) => total + parseInt(elem.dataset.ship || 0), 0);
 
-        const totalDiscountAmount = totalProductDiscount(); // Use new function to get the total product discount
+        const totalDiscountAmount = totalProductDiscount();
 
         // Update final result display
         finalOrderQuantity.textContent = totalQuantity;
         finalOrderProductPrice.textContent = totalProductPrice.toLocaleString();
         finalOrderDiscount.textContent = (totalDiscountAmount + totalDiscount).toLocaleString();
         finalOrderDeliveryFee.textContent = totalShippingFee.toLocaleString();
-        finalOrderPoint.textContent = Math.floor((totalProductPrice - totalDiscountAmount) * 0.01).toLocaleString(); // 포인트 예제
+        finalOrderPoint.textContent = Math.floor((totalProductPrice - totalDiscountAmount) * 0.01).toLocaleString();
     }
 
-    //수령자
-    const receiver = document.getElementById('receiver').value;
-    console.log(receiver);
+    // Call updateDiscountResult on page load to initialize totals
+    updateDiscountResult();
 
-    //핸드폰
-    const hp = document.getElementById('hp').value;
-    console.log(hp);
+    // Get the select element
+    const shippingInfoSelect = document.getElementById("shippingInfo");
 
-    //postcode
-    const postcodeElement = document.getElementsByClassName('M_postcode')[0];
-    const postcode = postcodeElement.getAttribute('data-postcode');
-    console.log(postcode);
-    //const
+    const InfoInput = document.getElementById("InfoInput");
+    shippingInfoSelect.addEventListener('change', () => {
+        console.log("선택됨",shippingInfoSelect.value)
+        if (shippingInfoSelect.value === '6') {
+            InfoInput.type = 'text';
+        } else {
+            InfoInput.type = 'hidden';
+        }
+    });
+// Function to get the selected value
+    function getSelectedShippingInfo() {
+        const selectedValue = shippingInfoSelect.value;
+        if(selectedValue === '6'){
+            console.log(InfoInput.value);
+            return InfoInput.value;
+        }
+        console.log("Selected shipping info:", selectedValue);
+        return selectedValue;
+    }
 
-
-    const totalAddressElement = document.querySelector('.totalAddress');
-    const addr = totalAddressElement.getAttribute('data-addr');
-    const addr2 = totalAddressElement.getAttribute('data-addr2');
-    console.log(addr)
-    console.log(addr2)
+// Example: Call this function on a button click or when the selection changes
+    shippingInfoSelect.addEventListener("change", getSelectedShippingInfo);
 
     const paymentOptions = document.getElementsByName('payment');
     let selectedPayment=null;
@@ -255,8 +341,6 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("선택된 결제 방식:", selectedPayment);
         });
     })
-
-
     let couponValue = 0;
     let couponText= 0;
     couponSelect.addEventListener('change', () => {
@@ -267,6 +351,8 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("쿠폰 값 (value):", couponValue);
         console.log("쿠폰 사용 금액 (text):", couponText);
     });
+
+
     function updateOrderItem() {
         orderItem = {
             productDataArray: productDataArray,            // List<BuyNowRequestDTO>로 매핑
@@ -275,107 +361,71 @@ document.addEventListener('DOMContentLoaded', function () {
             postcode: postcode,                            // 일치
             addr1: addr,                                   // 일치
             addr2: addr2,                                  // 일치
-            TotalDiscount: finalOrderDiscount.textContent,                              // 기본값 설정 필요 (맞는지 확인)
+            TotalDiscount: finalOrderDiscount.textContent,   //총 할인금액
+            productDiscount: finalOrderDiscount.textContent,
+            totalPointandCoupon:  totalDiscountPandC,
             usedPointResult: Number(usedPointResult.textContent),  // 일치
             usedCouponResult: Number(couponValue),         // usedCoupon -> usedCouponResult로 매핑
             usedCouponName:couponText,
-            totalShippingFee: 1000,                           // 기본값 설정 필요
-            totalFinalPrice: 0,                            // 기본값 설정 필요
+            totalOrderQuantity: finalOrderQuantity.textContent,
+            totalOriginalPrice:finalOrderProductPrice.textContent,
+            totalShippingFee: finalOrderDeliveryFee.textContent,                           // 기본값 설정 필요
+            totalFinalPrice: finalOrderTotal.textContent,                            // 기본값 설정 필요
             credit: selectedPayment,                       // 일치
-            couponId: Number(couponValue)                  // couponValue를 couponId로 매핑 (확인 필요)
+            couponId: Number(couponValue),            // couponValue를 couponId로 매핑 (확인 필요)
+            shippingInfo: getSelectedShippingInfo(),
+            finalOrderPoint: finalOrderPoint.textContent
         };
     }
 
-    let orderItem= {};
-
-    // 결제 방식이나 쿠폰이 변경될 때마다 `updateOrderItem` 호출
-    paymentOptions.forEach(option => {
-        option.addEventListener('change', () => {
-            selectedPayment = document.querySelector('input[name="payment"]:checked').value;
-            updateOrderItem();
-            console.log("업데이트된 orderItem:", orderItem);
-        });
-    });
-
-    couponSelect.addEventListener('change', () => {
-        const selectedOption = couponSelect.options[couponSelect.selectedIndex];
-        couponValue = selectedOption.value || 1;
-        couponText = selectedOption.text || 1;
-        updateOrderItem();
-        console.log("업데이트된 orderItem:", orderItem);
-    });
-
-
-    // 구매하기 버튼 클릭 시
+    updateOrderItem();
+    console.log(orderItem);
     document.querySelector('.order-Btn').addEventListener('click', function (event) {
         event.preventDefault();  // 기본 제출 동작 방지
 
         if (productDataArray.length > 0) {
-            // 서버에 데이터를 전송
-            fetch('/market/order/saveOrder', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderItem),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.result > 0) {
-                        alert('주문이 완료되었습니다!');
-                        localStorage.removeItem('productDataArray');  // 성공 시 로컬 데이터 삭제
-                        window.location.href = '/market/completed/'+data.result; // 완료 후 페이지 이동
-                    } else {
-                        alert('주문 처리 중 오류가 발생했습니다.');
-                    }
+            const isConfirm = confirm("주문하시겠습니까?");
+            if(isConfirm){
+                updateOrderItem();
+                console.log(orderItem)
+                // 서버에 데이터를 전송
+                fetch('/market/order/saveOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderItem),
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('서버와의 통신 중 오류가 발생했습니다.');
-                });
-        } else {
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result > 0) {
+                            alert('주문이 완료되었습니다!');
+                            localStorage.removeItem('productDataArray');  // 성공 시 로컬 데이터 삭제
+                            window.location.href = '/market/completed/'+data.result; // 완료 후 페이지 이동
+                        } else {
+                            alert('주문 처리 중 오류가 발생했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('서버와의 통신 중 오류가 발생했습니다.');
+                    });
+            }
+        }else {
             alert('주문할 상품이 없습니다.');
         }
     });
 
-    // 배송 요청사항 select 요소와 input 요소를 선택
-    const shippingInfoSelect = document.getElementById('shippingInfo');
-    const infoInput = document.querySelector('.InfoInput');
 
-// select 요소에서 변경이 발생할 때 이벤트 처리
-    shippingInfoSelect.addEventListener('change', () => {
-        console.log("선택됨",shippingInfoSelect.value)
-        if (shippingInfoSelect.value === '6') { // '6'이 직접입력에 해당하는 value
-            infoInput.type = 'text';            // input 요소를 표시
-        } else {
-            infoInput.type = 'hidden';          // input 요소를 숨김
+    window.addEventListener("beforeunload", (event) => {
+        if (!sessionStorage.getItem("page_reload")) {
+            localStorage.removeItem("productDataArray");
         }
     });
 
-});
+    sessionStorage.setItem("page_reload", "true");
 
-
-
-// Detect unload event for refreshing
-// window.addEventListener("beforeunload", (event) => {
-//     if (sessionStorage.getItem("page_reload") === "true") {
-//         sessionStorage.removeItem("page_reload");
-//     } else {
-//         localStorage.removeItem("productDataArray");
-//     }
-// });
-
-// 새로고침 감지를 위한 상태 설정
-sessionStorage.setItem("page_reload", "true");
-
-// 새로고침 또는 페이지 이동 이벤트 감지
-window.addEventListener("beforeunload", () => {
-    // sessionStorage에 `page_reload`가 남아있다면 새로고침으로 간주
-    if (sessionStorage.getItem("page_reload")) {
-        // 새로고침 시에만 sessionStorage 상태를 삭제하고, localStorage 유지
+    window.addEventListener("load", () => {
         sessionStorage.removeItem("page_reload");
-    } else {
-        // 페이지를 떠나는 경우에만 localStorage의 `productDataArray`를 삭제
-        localStorage.removeItem("productDataArray");
-    }
+    });
 });

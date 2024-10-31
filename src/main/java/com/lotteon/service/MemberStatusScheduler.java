@@ -15,7 +15,7 @@ public class MemberStatusScheduler {
     @Autowired
     private MemberRepository memberRepository; // MemberRepository를 주입받습니다.
 
-    @Scheduled(fixedRate = 60000) // 1분마다 실행
+    @Scheduled(cron="0 0 0 * * *") //
 //    @Scheduled(fixedRate = 60000*60*24*30*3) // 3달 마다 실행
     public void updateDormantMembers() {
         // 현재 시간을 가져옵니다.

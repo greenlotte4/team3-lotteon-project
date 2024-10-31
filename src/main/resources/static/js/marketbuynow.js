@@ -190,7 +190,6 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
         alert("옵션을 선택해주세요.");
         return;
     }
-
     const isConfirmed = confirm("구매하시겠습니까?");
     if (isConfirmed) {
         const productDataArray = selectedOptions.map(option => ({
@@ -206,7 +205,7 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
             point: point,
             discount: discount,
             shippingFee: shippingFee,
-            shippingTerms: shippingTerms
+            shippingTerms: shippingTerms,
         }));
 
 
@@ -269,7 +268,8 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
                 optionId: parseInt(selectedOptionValue, 10),
                 optionName: selectedOptionText,
                 point: point,
-                discount: discount
+                discount: discount,
+                totalShippingFee: totalShippingFee
             };
 
             localStorage.setItem("productCart", JSON.stringify(productCart));

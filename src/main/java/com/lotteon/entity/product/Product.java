@@ -54,7 +54,9 @@ public class Product {
     private String sellerId;
 
     @Builder.Default
-    private int sold=0; //판매량
+    private long sold=0; //판매량
+    @Builder.Default
+    private long hit=0; //보는수
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -73,7 +75,6 @@ public class Product {
     private ProductDetails productDetails;
 
 
-    private int hit;
 
 
     private String file190;
@@ -115,6 +116,9 @@ public class Product {
                 }
             }
         }
+    }
+    public void setHit(){
+        this.hit++;
     }
 
     public void setOptions(List<Option> options) {

@@ -59,6 +59,7 @@ public class OrderService {
         orderDTO.setUid(uid);
         Order order =  orderDTO.toEntity();
         Order savedOrder = orderRepository.save(order);
+
         result=savedOrder.getOrderId();
 
         List<OrderItemDTO> orderItems = orderResponseDTO.getOrderItems();
@@ -67,7 +68,12 @@ public class OrderService {
             orderItemDTO.setOrder(getModelMapper.map(savedOrder,OrderDTO.class));
 
             ProductDTO product = productService.selectProduct(orderItemDTO.getProductId());
+
+
+            log.info("sellerUid가 안들어와???"+product.getSeller());
+            orderItemDTO.setSellerUid(product.getSellerId());
             orderItemDTO.setProduct(product);
+            orderItemDTO.setSavedPrice(product.getPrice());
             orderItemDTO.setOptionId(orderItemDTO.getOptionId());
 
             // option재고 업데이트
@@ -91,6 +97,7 @@ public class OrderService {
            OrderItem savedOrderItem = orderItemRepository.save(OrderItem);
 
         }
+
 
         return result;
 
@@ -118,6 +125,7 @@ public class OrderService {
                if(option.getId() == orderItem.getOptionId()) {
                    log.info("일치!!!!!!!!!"+option);
                    orderItemDTO.setSelectOption(getModelMapper.map(option, OptionDTO.class));
+                   break;
                }
            }
            orderItemDtos.add(orderItemDTO);

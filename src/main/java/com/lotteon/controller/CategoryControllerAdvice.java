@@ -28,7 +28,7 @@ public class CategoryControllerAdvice {
    private final ProductCategoryService productCategoryService;
     private final ModelMapper modelMapper;
 
-    @Cacheable("cateogires")
+    @Cacheable("categories")
     @ModelAttribute("categories")
     public List<ProductCategoryDTO> populateCategories() {
         log.info("Fetching category data from the database...");
@@ -43,9 +43,11 @@ public class CategoryControllerAdvice {
         log.info("Evicting categories cache...");
     }
 
-    @Scheduled(cron = "0 0 10 * * *") // 매일 10시마다 갱신
+    @Scheduled(cron = "0 23 2 * * *") // 매일 오전 10시에 갱신
     public void scheduledUpdate() {
-        updateCategoryData();
+        log.info("Scheduled update triggered at 10 AM.");
+        refreshCategories();  // 기존 캐시 비우기
+        populateCategories(); // 새로 캐시 채우기
     }
 
     @CacheEvict(value = "categories", allEntries = true)
