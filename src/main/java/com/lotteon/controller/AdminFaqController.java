@@ -42,6 +42,8 @@ public class AdminFaqController {
         log.info(boardCateDTOS);
         model.addAttribute("boardCate",boardCateDTOS);
 
+
+
         return "content/admin/faq/faqList";
     }
     @ResponseBody

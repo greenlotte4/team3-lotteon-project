@@ -97,15 +97,22 @@
 
                         <div class="faqpage">
                             <th:block th:if="${faqPageResponseDTO.prev}">
-                                <a th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.start)-1})}" class="faqprev">이전</a>
+                                <a th:if="${faqPageResponseDTO.getParentId() == null && faqPageResponseDTO.getChildId() == null}" th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.start)-1})}" class="faqprev">이전</a>
+                                <a th:if="${faqPageResponseDTO.getParentId() != null}" th:href="@{/admin/faq/list(pg=${faqPageResponseDTO.start - 1}, parentId=${faqPageResponseDTO.getParentId()})}" th:class="faqprevs">이전</a>
+                                <a th:if="${faqPageResponseDTO.getChildId() != null}" th:href="@{/admin/faq/list(pg=${faqPageResponseDTO.start - 1}, parentId=${faqPageResponseDTO.getChildId()})}" th:class="faqprevs">이전</a>
+
                             </th:block>
 
                             <th:block th:each="num:${#numbers.sequence(faqPageResponseDTO.start,faqPageResponseDTO.end)}">
-                                <a th:href="@{/admin/faq/list(pg=${num})}" th:class="${num == faqPageResponseDTO.pg} ? 'faqcurrent' : 'faqnum'">[[${num}]]</a>
+                                <a th:if="${faqPageResponseDTO.getParentId() == null && faqPageResponseDTO.getChildId() == null}" th:href="@{/admin/faq/list(pg=${num})}" th:class="${num == faqPageResponseDTO.pg} ? 'faqcurrent' : 'faqnum'">[[${num}]]</a>
+                                <a th:if="${faqPageResponseDTO.getParentId() != null}" th:href="@{/admin/faq/list(pg=${num}, parentId=${faqPageResponseDTO.getParentId()})}" th:class="${num == faqPageResponseDTO.pg} ? 'faqcurrent' : 'faqnum'">[[${num}]]</a>
+                                <a th:if="${faqPageResponseDTO.getChildId() != null}" th:href="@{/admin/faq/list(pg=${num}, childId=${faqPageResponseDTO.getChildId()})}" th:class="${num == faqPageResponseDTO.pg} ? 'faqcurrent' : 'faqnum'">[[${num}]]</a>
                             </th:block>
 
                             <th:block th:if="${faqPageResponseDTO.next}">
-                                <a th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.end)+1})}" class="faqnext">다음</a>
+                                <a th:if="${faqPageResponseDTO.getParentId() == null && faqPageResponseDTO.getChildId() == null}" th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.end)+1})}" class="faqnext">다음</a>
+                                <a th:if="${faqPageResponseDTO.getParentId() != null}" th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.end)+1}, parentId=${faqPageResponseDTO.getParentId()})}" class="faqnext">다음</a>
+                                <a th:if="${faqPageResponseDTO.getChildId() != null}" th:href="@{/admin/faq/list(pg=${(faqPageResponseDTO.end)+1}, childId=${faqPageResponseDTO.getChildId()})}" class="faqnext">다음</a>
                             </th:block>
                         </div>
 
@@ -237,6 +244,7 @@
             .then(resp => resp.json())
             .then(faqPageResponseDTO => {
                 console.log("야오야오야옹야옹야오양옹야옹야옹ㅇ:", faqPageResponseDTO);
+                console.log("흐어어엉 : " + faqPageResponseDTO.parentId);
 
                 // 목록 갱신
                 const faqListElement = document.querySelector('.admin_faq_list_table tbody');
@@ -259,6 +267,8 @@
                                             <a href="/admin/faq/delete?no=${faq.faqNo}" class="admin_faq_delete_a">[삭제]</a><br>
                                             <a href="/admin/faq/modify?no=${faq.faqNo}">[수정]</a>
                                     </td>
+                                    <td>${faqPageResponseDTO.parentId}</td>
+
                               </tr>`;
                     faqListElement.innerHTML += row;
                 });
