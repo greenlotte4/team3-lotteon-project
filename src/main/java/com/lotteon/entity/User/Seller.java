@@ -48,6 +48,8 @@ public class Seller {
     @CreationTimestamp
     private LocalDateTime regDate;
 
+    private String status;
+
     @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_uid") // 외래 키
     @JsonIgnore
