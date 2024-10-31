@@ -46,6 +46,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
 
+    public final EnumPath<Member.MemberStatus> status = createEnum("status", Member.MemberStatus.class);
+
     public final QUser user;
 
     public final StringPath userinfocol = createString("userinfocol");

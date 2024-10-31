@@ -61,4 +61,7 @@ public class SellerDTO {
         return Objects.hash(uid);
     }
 
+    private String status;
+
+
 }

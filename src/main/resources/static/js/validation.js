@@ -103,7 +103,6 @@ window.onload = function () {
                 } else {
                     emailResult.innerText = '이메일 인증 코드를 확인하세요.';
                     emailResult.style.color='green';
-                    isEmailOk = true;
                 }
             })
             .catch(err => {
@@ -131,6 +130,8 @@ window.onload = function () {
         const code = document.getElementById('emailCode').value;
         const codeResult = document.getElementById('codeValidation');
 
+        console.log("인증코드: ",code);
+
         fetch('/api/verifyCode', {
             method: 'POST',
             headers: {
@@ -144,6 +145,7 @@ window.onload = function () {
                 if (data.trim() === '인증 성공!') {
                     codeResult.innerText = '인증 성공!';
                     codeResult.style.color = 'green';
+                    isEmailOk = true;
                 } else {
                     codeResult.innerText = '인증 실패!';
                     codeResult.style.color = 'red';
@@ -153,28 +155,28 @@ window.onload = function () {
     };
 
     // 휴대폰 유효성 검사
-    document.getElementById('phone').addEventListener('focusout', function () {
-        const hpResult = document.getElementById('phoneValidation'); // 결과 표시할 요소
-        const hp = document.getElementById('phone').value;
-        if (!hp.match(reHp)) {
-            hpResult.innerText = '휴대폰 번호가 유효하지 않습니다.';
-            return;
-        }
-        fetch('/user/checkUser?type=hp&value=' + hp)
-            .then(resp => resp.json())
-            .then(data => {
-                if (data.result > 0) {
-                    hpResult.innerText = '이미 사용중인 휴대폰번호 입니다.';
-                    isHpOk = false;
-                } else {
-                    hpResult.innerText = '사용 가능한 휴대폰번호입니다.';
-                    isHpOk = true;
-                }
-            })
-            .catch(err => {
-                console.error(err);
-            });
-    });
+    // document.getElementById('phone').addEventListener('focusout', function () {
+    //     const hpResult = document.getElementById('phoneValidation'); // 결과 표시할 요소
+    //     const hp = document.getElementById('phone').value;
+    //     if (!hp.match(reHp)) {
+    //         hpResult.innerText = '휴대폰 번호가 유효하지 않습니다.';
+    //         return;
+    //     }
+    //     fetch('/user/checkUser?type=hp&value=' + hp)
+    //         .then(resp => resp.json())
+    //         .then(data => {
+    //             if (data.result > 0) {
+    //                 hpResult.innerText = '이미 사용중인 휴대폰번호 입니다.';
+    //                 isHpOk = false;
+    //             } else {
+    //                 hpResult.innerText = '사용 가능한 휴대폰번호입니다.';
+    //                 isHpOk = true;
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.error(err);
+    //         });
+    // });
 
     function checkUser(type, value) {
         fetch(`/checkUser?type=${type}&value=${value}`)
@@ -196,6 +198,11 @@ window.onload = function () {
     document.querySelector('form').onsubmit = function (event) {
         event.preventDefault(); // 기본 폼 제출 방지
 
+        console.log(isUidOk);
+        console.log(isPassOk);
+        console.log(isNameOk);
+        console.log(isEmailOk);
+
         // 모든 유효성 검사 통과 여부 확인
         if (!isUidOk || !isPassOk || !isNameOk || !isEmailOk) {
             alert('유효성 검사를 통과 하셔야합니다.');
@@ -213,10 +220,11 @@ window.onload = function () {
                 if (response.ok) {
                     // 회원가입 성공 시 alert 및 리다이렉트
                     alert('회원가입 되셨습니다.');
-                    window.location.href = '/login'; // 로그인 페이지로 리다이렉트
-                } else {
+                    window.location.href = '/user/login'; // 로그인 페이지로 리다이렉트
+                }
+                else {
                     // 회원가입 실패 시 메시지 표시
-                    alert('유효성 검사를 통과 하셔야합니다.');
+                    alert('가입 오류.');
                     return response.text(); // 실패 시 메시지 반환
                 }
             })

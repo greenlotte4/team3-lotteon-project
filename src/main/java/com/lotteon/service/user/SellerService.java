@@ -8,8 +8,11 @@ package com.lotteon.service.user;
  */
 
 import com.lotteon.dto.User.SellerDTO;
+import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Seller;
+import com.lotteon.entity.User.User;
 import com.lotteon.repository.user.SellerRepository;
+import com.lotteon.repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +30,12 @@ import java.util.Optional;
 public class SellerService {
 
     private final SellerRepository sellerRepository;
+    private final UserRepository userRepository;
+
+    public Optional<User> findSellerByUid(String uid) {
+
+        return userRepository.findByUid(uid); // 아이디로 사용자 검색
+    }
 
 
     public List<Seller> getAllSellers() {
@@ -58,5 +68,17 @@ public class SellerService {
             }
         }
     }
+
+    @Transactional
+    public Seller updateSeller(Long id, Seller updatedSeller) {
+        Optional<Seller> existingSellerOpt = sellerRepository.findById(id);
+        if (existingSellerOpt.isPresent()) {
+            Seller existingMember = existingSellerOpt.get();
+
+            return sellerRepository.save(existingMember);
+        }
+        return null; // 회원이 존재하지 않는 경우
+    }
+
 
 }
