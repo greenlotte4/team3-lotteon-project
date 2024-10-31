@@ -299,6 +299,21 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
         }
     });
 
+    document.querySelectorAll('.rating-display').forEach(display => {
+        const rating = parseInt(display.textContent);
+        let stars = '';
+
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                stars += '<span class="star-selected">&#9733;</span>'; // 선택된 별
+            } else {
+                stars += '<span class="star">&#9734;</span>'; // 선택되지 않은 별
+            }
+        }
+
+        display.innerHTML = stars; // 별 모양으로 업데이트
+    });
+
 
     let currentIndex = 0; // 현재 보여주는 이미지 인덱스
     const images = document.querySelector('.review-images');
