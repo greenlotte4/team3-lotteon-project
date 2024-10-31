@@ -46,6 +46,7 @@ public class CartItem {
     @JoinColumn(name ="option_id")
     private Option option;
 
+    private String optionName;
 
     private String productName;
     private int price;

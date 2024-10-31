@@ -49,11 +49,7 @@
                     <th>배송비</th>
                     <th>총합</th>
                 </tr>
-                <th:block th:if="${cartItems.size() <= 0}">
-                    <tr>
-                        장바구니가 비어있습니다.
-                    </tr>
-                </th:block>
+
 
 
                 <!-- 반복부분 -->
@@ -100,7 +96,11 @@
 
                 </th:block>
 
-
+                <th:block th:if="${cartItems.size() <= 0}" >
+                    <tr>
+                        <td colspan="8" style="text-align: center; font-size: 25px">장바구니가 비어있습니다.</td>
+                    </tr>
+                </th:block>
 
 
             </table>
@@ -108,7 +108,7 @@
                 <button class="selected-delete" >선택삭제</button>
                 <div class="orderbtn">
                     <button class="selected-order">선택주문</button>
-                    <button class="selected-all">전체선택</button>
+                    <button class="selected-all" id="selectAllButton">전체선택</button>
                 </div>
 
             </div>
@@ -122,28 +122,27 @@
         <h3>전체합계 </h3>
         <div class="orderQnt">
             <label for="">상품수</label>
-            <span th:text="${cartSummary.finalTotalQuantity}">0</span>
+            <span th:text="${cartSummary.finalTotalQuantity}" data-default-quantity="${cartSummary.finalTotalQuantity}"></span>
         </div>
         <div class="orderOriginPrice">
             <label for="">상품금액</label>
-            <span th:text="${cartSummary.finalTotalPrice}" class="price">0</span>
-
+            <span th:text="${cartSummary.finalTotalPrice}" class="price" data-default-price="${cartSummary.finalTotalPrice}"></span>
         </div>
         <div class="orderSalePrice">
             <label for="">할인금액</label>
-            <span th:text="${cartSummary.finalTotalDiscount}" class="price">-0</span>
+            <span th:text="${cartSummary.finalTotalDiscount}" class="price" data-default-discount="${cartSummary.finalTotalDiscount}"></span>
         </div>
         <div class="delivery-fee">
             <label for="">배송비</label>
-            <span th:text="${cartSummary.finalTotalDeliveryFee}" class="price">0</span>
+            <span th:text="${cartSummary.finalTotalDeliveryFee}" class="price" data-default-delivery="${cartSummary.finalTotalDeliveryFee}"></span>
         </div>
         <div class="orderTotalPrice">
             <label for="">전체 주문금액</label>
-            <span th:text="${cartSummary.finalTotalOrderPrice}" class="price">0</span>
+            <span th:text="${cartSummary.finalTotalOrderPrice}" class="price" data-default-total="${cartSummary.finalTotalOrderPrice}"></span>
         </div>
         <div class="orderPoint">
             <label for="">적립예정포인트</label>
-            <span th:text="${cartSummary.finalTotalPoints}" class="price">0</span>
+            <span th:text="${cartSummary.finalTotalPoints}" class="price" data-default-points="${cartSummary.finalTotalPoints}"></span>
         </div>
         <div class="orderBtn">
             <button type="submit" class="order-Btn">주문하기</button>
