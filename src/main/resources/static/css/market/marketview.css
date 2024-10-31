@@ -326,19 +326,42 @@ select::-ms-expand {
     text-align: center;
     margin-bottom: 20px;
 }
-.total-price,.expectedPrice,.totalShippingFee {
+
+.expectedTotal{
+    border: 1px solid #ddd;
+    padding: 10px 0;
+    border-radius: 5px;
+    background: linear-gradient(to top, #f8f8f8 35%, transparent 30%);
+}
+.total-price,.expectedPrice,.totalShippingFee,.originalTotalPrice,.totalPrice {
+
     display: flex;
     justify-content: flex-end;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 14px;
+    padding: 0 20px;
+}
+.totalPrice{
+    color: #ef2a23;
 }
 
+.expectedPrice{
+    font-weight: 700;
+    color: black;
+    margin-top: 20px;
+    font-size: 18px;
+}
 .expectedTotal{
     margin-bottom:20px;
 }
 
 .expectedTotal > div{
     margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+#totalPrice{
+    color: #ef2a23;
 }
 
 /* Buttons */
