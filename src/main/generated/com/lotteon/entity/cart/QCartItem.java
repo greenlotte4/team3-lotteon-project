@@ -34,6 +34,8 @@ public class QCartItem extends EntityPathBase<CartItem> {
 
     public final com.lotteon.entity.product.QOption option;
 
+    public final StringPath optionName = createString("optionName");
+
     public final NumberPath<Integer> points = createNumber("points", Integer.class);
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
