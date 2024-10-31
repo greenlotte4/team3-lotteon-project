@@ -43,7 +43,6 @@ th:nth-child(5) {width: 8%;}  /* 115px / 930px */
 }
 
 .reviewImgs {
-    width: 150px; /* 이미지 크기 */
     height: 150px;
     margin: 0 5px; /* 이미지 간격 */
     flex-shrink: 0;
@@ -130,6 +129,7 @@ th:nth-child(5) {width: 8%;}  /* 115px / 930px */
     height: 150px;
     object-fit: contain;
     border: 1px solid black;
+    margin: 0 20px
 }
 
 .modal-content table tr td:nth-child(2){
@@ -145,9 +145,10 @@ th:nth-child(5) {width: 8%;}  /* 115px / 930px */
     align-items: center;
 }
 
-.modal-content table tr td:nth-child(2) div{
+.modal-content table tr td:nth-child(2) .rating-display2{
     margin-left: 10px;
 }
+
 .modal-content table tr td:nth-child(2) div .price{
     font-size: 18px;
     font-weight: 700;
