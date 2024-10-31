@@ -300,9 +300,54 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     });
 
 
+    let currentIndex = 0; // 현재 보여주는 이미지 인덱스
+    const images = document.querySelector('.review-images');
+    const totalImages = document.querySelectorAll('.reviewImg').length; // 전체 이미지 수
+
+// 왼쪽 화살표 클릭 이벤트
+    document.getElementById('leftArrow').addEventListener('click', function() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSlide();
+        }
+    });
+
+// 오른쪽 화살표 클릭 이벤트
+    document.getElementById('rightArrow').addEventListener('click', function() {
+        if (currentIndex < totalImages - 5 ) {
+            currentIndex++;
+            updateSlide();
+        }
+    });
+
+// 슬라이드 업데이트 함수
+    function updateSlide() {
+        const offset = currentIndex * (152 + 10); // 이미지 너비 + 마진을 고려 (150px + 10px)
+        images.style.transform = `translateX(${-offset}px)`; // 이미지 슬라이드
+
+        // 오른쪽 화살표 비활성화 효과
+        if (currentIndex === totalImages - 5) {
+            document.getElementById('rightArrow').classList.add('disabled');
+        } else {
+            document.getElementById('rightArrow').classList.remove('disabled');
+        }
+
+        // 왼쪽 화살표 비활성화 효과
+        if (currentIndex === 0) {
+            document.getElementById('leftArrow').classList.add('disabled');
+        } else {
+            document.getElementById('leftArrow').classList.remove('disabled');
+        }
+    }
+
+// 초기 버튼 상태 설정
+    updateSlide();
+
+
 // 초기화 및 각 상품 선택 이벤트에 따른 업데이트 실행
     updateTotalPrice();
     updateSelectedResult();
+
 
 });
 function calculateShippingFee(totalPrice) {
