@@ -88,3 +88,45 @@ h2 {
 .second_li a:hover {
     background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);
 }
+
+/*세번째 자주 묻는 질문*/
+.third_list {
+    border: 1px solid rgb(197, 197, 197);
+    border-radius: 7px;
+    margin: 20px 40px;
+}
+
+.third_li {
+    height: 50px;
+    border-bottom: 1px solid rgb(197, 197, 197);
+}
+
+.third_li:last-child {
+    border-bottom: none;
+}
+
+.third_list li a {
+    display: inline-block;
+    margin: 15px 20px;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.third_li span {
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.third_li span:nth-child(1) {
+    color: rgb(17, 86, 165);
+    font-weight: bold;
+}
+
+.third_show {
+    text-align: center;
+}
+
+/*hover 추가*/
+.third_li a:hover {
+    background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);
+}

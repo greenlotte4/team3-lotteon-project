@@ -35,7 +35,6 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartItem> cartItems = new ArrayList<>();      // CartItem과 일대다 관계
-
     private int itemQuantity;             // 장바구니에 담긴 아이템 수량
     private long totalPrice;               // 장바구니 전체 금액
     private LocalDateTime rdate;

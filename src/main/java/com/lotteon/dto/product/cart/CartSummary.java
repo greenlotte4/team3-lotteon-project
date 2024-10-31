@@ -11,10 +11,10 @@ import lombok.*;
 public class CartSummary {
 
     private int finalTotalQuantity;
-    private double finalTotalPrice;
-    private double finalTotalDiscount;
-    private double finalTotalDeliveryFee;
-    private double finalTotalOrderPrice;
-    private double finalTotalPoints;
+    private long finalTotalPrice;
+    private long finalTotalDiscount;
+    private long finalTotalDeliveryFee;
+    private long finalTotalOrderPrice;
+    private long finalTotalPoints;
 
 }

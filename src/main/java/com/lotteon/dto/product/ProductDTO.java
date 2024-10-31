@@ -64,6 +64,7 @@ public class ProductDTO{
     private List<ReviewDTO> reviewDTOs;
 
 
+
     public void addFileDescriptions(List<String> files) {
         if (files != null && !files.isEmpty()) {
             this.filedesc.addAll(files);

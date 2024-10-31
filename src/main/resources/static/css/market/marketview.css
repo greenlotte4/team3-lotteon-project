@@ -209,11 +209,12 @@
 }
 /* Pricing */
 
-.pricing {
+.pricing > div {
     display: flex;
-    align-items: flex-start;
     margin-bottom: 10px;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 
 .product-info-container .original-price {
@@ -222,12 +223,16 @@
     text-decoration: line-through;
     margin-right: 10px;
     margin-bottom: 10px;
+    margin-left: 10px;
 }
 
 .view .discount {
-    font-size: 16px;
+    font-size: 20px;
     color: red;
     margin-right: 10px;
+}
+.view .discount::after{
+    content: "%";
 }
 
 .view .final-price {
@@ -321,11 +326,42 @@ select::-ms-expand {
     text-align: center;
     margin-bottom: 20px;
 }
-.total-price {
+
+.expectedTotal{
+    border: 1px solid #ddd;
+    padding: 10px 0;
+    border-radius: 5px;
+    background: linear-gradient(to top, #f8f8f8 35%, transparent 30%);
+}
+.total-price,.expectedPrice,.totalShippingFee,.originalTotalPrice,.totalPrice {
+
     display: flex;
     justify-content: flex-end;
+    font-size: 14px;
+    padding: 0 20px;
+}
+.totalPrice{
+    color: #ef2a23;
+}
+
+.expectedPrice{
+    font-weight: 700;
+    color: black;
+    margin-top: 20px;
     font-size: 18px;
-    font-weight: bold;
+}
+.expectedTotal{
+    margin-bottom:20px;
+}
+
+.expectedTotal > div{
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+#totalPrice{
+    color: #ef2a23;
 }
 
 /* Buttons */
@@ -830,7 +866,7 @@ select::-ms-expand {
 
 
 .star {
-    font-size: 1.5em; /* 원하는 별 크기에 맞게 조정 */
+    font-size: 12px;
     display: inline-block;
     color: lightgray; /* 기본 색상 (빈 별 색상) */
 }
