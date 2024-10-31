@@ -129,6 +129,7 @@ public class MarketCartService {
 
         cart.setItemQuantity(totalItemCount);
         cartRepository.save(cart); // 카트 저장
+        log.info("업데이트된 카트 아이템 수량: {}", cart.getTotalPrice());
         log.info("업데이트된 카트 아이템 수량: {}", totalItemCount);
 
     }
@@ -215,33 +216,46 @@ public class MarketCartService {
 
     }
 
-    @Transactional
     public void deleteCartItem(List<Long> cartItemIds) {
         Long cartId = null; // 카트 ID를 저장할 변수
+        int deletedItemCount = cartItemIds.size(); // 삭제할 아이템 수
+
+        // 카트의 아이템 수 확인 (초기 아이템 수)
+        if (!cartItemIds.isEmpty()) {
+            CartItem firstItem = cartItemRepository.findById(cartItemIds.get(0))
+                    .orElseThrow(() -> new RuntimeException("장바구니에 해당 상품이 읍다"));
+            cartId = firstItem.getCart().getCartId();
+        }
 
         for (Long cartItemId : cartItemIds) {
             // 카트 아이템을 먼저 조회하여 카트 ID를 저장
             CartItem cartItem = cartItemRepository.findById(cartItemId)
                     .orElseThrow(() -> new RuntimeException("장바구니에 해당 상품이 읍다"));
-
             // 카트 ID 저장
             if (cartId == null) {
                 cartId = cartItem.getCart().getCartId();
             }
 
             cartItemRepository.delete(cartItem);
+            cartItemRepository.flush();
+
             log.info("삭제 완료했다: cartItemId = " + cartItemId);
 
         }
         // 카트에 남은 아이템 수 확인
         long itemCount = cartItemRepository.countByCart_CartId(cartId);
         log.info("남은 아이템수!!!!!!!!!"+itemCount);
-        if (itemCount == 0) {
-            Cart cart = cartRepository.findById(cartId)
-                    .orElseThrow(() -> new RuntimeException("해당 카트가 존재하지 않음"));
+        log.info("삭제한 아이템 수: " + deletedItemCount + ", 삭제된 아이템 IDs: " + cartItemIds);
 
-            cartRepository.delete(cart);
+        if (itemCount == 0) {
+           cartRepository.deleteById(cartId);
             log.info("카트 삭제 완료: cartId = " + cartId);
+        } else {
+            Cart cart = cartRepository.findById(cartId)
+                    .orElseThrow(() -> new RuntimeException("상품 아이디가 읍다"));
+
+            updateCartSummary(cart);
+
         }
     }
 
