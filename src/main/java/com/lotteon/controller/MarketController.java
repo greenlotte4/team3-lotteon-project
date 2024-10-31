@@ -43,18 +43,24 @@ public class MarketController {
     private final ReviewService reviewService;
     private final OrderService orderService;
 
-    @GetMapping("/main")
-    public String marketMain(Model model) {
+    @GetMapping("/main/{category}")
+    public String marketMain(Model model,@PathVariable long category) {
+        ProductCategoryDTO categoryDTOs =  productCategoryService.getCategoryById(category);
+        log.info(categoryDTOs);
+        model.addAttribute("categoryDTOs",categoryDTOs);
+
         model.addAttribute("content", "main");
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
     }
 
-    @GetMapping("/list")
-    public String marketList(PageRequestDTO pageRequestDTO, Model model) {
-        long categoryid = 3;
-        pageRequestDTO.setCategoryId(categoryid);
+    @GetMapping("/list/{category}")
+    public String marketList(PageRequestDTO pageRequestDTO,@PathVariable long category,Model model) {
+        pageRequestDTO.setCategoryId(category);
+        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(category);
+        log.info("dsdsdsdsd"+categoryDTOs);
         ProductListPageResponseDTO responseDTO =  productService.getProductList(pageRequestDTO);
         log.info("controlllermarket::::"+responseDTO.getProductDTOs());
+        model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("responseDTO",responseDTO);
 
 
@@ -133,16 +139,20 @@ public class MarketController {
 
     @PostMapping("/order/saveOrder")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> saveOrder(@RequestBody OrderRequestDTO orderRequestDTO, Authentication authentication){
-
+    public ResponseEntity<Map<String, Long>> saveOrder(@RequestBody OrderRequestDTO orderRequestDTO, Authentication authentication){
+        Map<String, Long> response = new HashMap<>();
+        response.put("result", 0L);
         log.info("요기!!!!!!!!!!!!!!!!!"+orderRequestDTO);
         OrderResponseDTO orderResponseDTO  = new OrderResponseDTO(orderRequestDTO);
         long orderId = orderService.saveOrder(orderResponseDTO);
 
+        if(orderId>0){
+            response.put("result",orderId);
+
+        }
 
 
-
-        return null;
+        return ResponseEntity.ok(response);
     }
 
 
@@ -184,6 +194,7 @@ public class MarketController {
 
             // Purchase is successful for member role
             response.put("result", "success");
+
 
         } else {
             // No user account found

@@ -1,5 +1,7 @@
 package com.lotteon.controller;
-
+/*
+    2024.10.30 하진희 캐싱작업시 스케쥴 돌리는기능 업데이트
+ */
 
 import com.lotteon.dto.product.ProductCategoryDTO;
 import com.lotteon.entity.product.ProductCategory;
@@ -41,7 +43,7 @@ public class CategoryControllerAdvice {
         log.info("Evicting categories cache...");
     }
 
-    @Scheduled(cron = "0 0 0 * * *") // 24시간마다 갱신
+    @Scheduled(cron = "0 0 10 * * *") // 매일 10시마다 갱신
     public void scheduledUpdate() {
         updateCategoryData();
     }

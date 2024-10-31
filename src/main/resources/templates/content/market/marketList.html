@@ -73,9 +73,10 @@
                         <div class="sub_tit">
                             <h3 id="h3_list">상품목록</h3>
                             <div class="location">
-                                <span><a href="">홈&nbsp;</a></span>
-                                <span>패션·의류·뷰티&nbsp;</span>
-                                <span><strong>남성의류&nbsp;</strong></span>
+                                <span><a th:href="@{'/market/main/'+${categoryDTOs.get(2).getId()}}">홈&nbsp;</a></span>
+                                <span th:text="${categoryDTOs.get(2).getName()}">&nbsp;</span>
+                                <span th:text="${categoryDTOs.get(1).getName()}"></span>
+                                <span><strong>[[${categoryDTOs.get(0).getName()}]]&nbsp;</strong></span>
                             </div>
                         </div>
                         <div class="sort-options">
