@@ -29,9 +29,13 @@ public class OrderItem {
     @JoinColumn(name="product_id")
     @ToString.Exclude
     private Product product;
-
+    private long savedPrice;
+    private long orderPrice;
+    private long savedDiscount;
+    private long point;
     private String sellerUid;
 
+    private String optionDesc;
     private long optionId;
     private long stock;
     private long price;

@@ -91,6 +91,9 @@ public class MarketController {
         log.info(categoryId);
 
         pageRequestDTO.setSize(6);
+        //선택시 hit update
+        productService.updatehit(productId);
+
 
        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
        log.info("categories LLLLL "+ categoryDTOs);

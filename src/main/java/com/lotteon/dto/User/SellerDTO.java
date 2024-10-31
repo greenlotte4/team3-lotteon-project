@@ -45,6 +45,9 @@ public class SellerDTO {
     //추가필드
     private List<OrderItemDTO> orderItems;
     private String uid;
+    private long totalPrice;
+    private long totalDiscount;
+    private long totalShipping;
 
 
     // uid 필드를 기준으로 equals와 hashCode 오버라이드

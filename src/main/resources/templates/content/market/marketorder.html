@@ -119,14 +119,15 @@
                                 <td>
                                     <span class="shipping_info">
                                         <select name="shippingInfo" id="shippingInfo">
-                                            <option value="1">경비실에 맡겨주세요</option>
-                                            <option value="2">부재시 연락주세요</option>
-                                            <option value="3">배송전 연락주세요</option>
-                                            <option value="4">택배함에 넣어주세요</option>
-                                            <option value="5">부재시 문앞에 놔주세요</option>
+                                            <option value="0" ></option>
+                                            <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
+                                            <option value="부재시 연락주세요">부재시 연락주세요</option>
+                                            <option value="배송전 연락주세요">배송전 연락주세요</option>
+                                            <option value="택배함에 넣어주세요">택배함에 넣어주세요</option>
+                                            <option value="부재시 문앞에 놔주세요">부재시 문앞에 놔주세요</option>
                                             <option value="6">직접입력</option>
                                         </select>
-                                        <div><input type="hidden"  th:placeholder=" 직접입력" class="InfoInput"></div>
+                                        <div><input type="hidden"  th:placeholder=" 직접입력" id="InfoInput"></div>
                                     </span>
 
                                 </td>
@@ -153,7 +154,7 @@
                             <div class="point_use">
                                 <input type="number" name="used_point" id="used_point" value="0">
                                 <input type="button" value="사용하기" id="pointuseBtn" >
-                                <span>적용포인트 : <p class="usedPoint price"></p></span>
+                                <span>적용포인트 : <p class="usedPoint price" id="usedPointResult"></p></span>
                             </div>
                         </div>
 
@@ -169,13 +170,13 @@
                         </div>
                         <div class="totalSalePrice">
                             <div>
-                                <p>포인트 할인금액 : </p><span class="usedPointResult price">2000</span>
+                                <p>포인트 할인금액 : </p><span class="usedPointResult price">0</span>
                             </div>
                             <div>
-                                <p>쿠폰 할인금액 : </p><span class="usedCouponResult price" th:text="2000">2000</span>
+                                <p>쿠폰 할인금액 : </p><span class="usedCouponResult price" >0</span>
                             </div>
                             <div class="totalDiscount">
-                                <p >총 할인금액 : </p><span class="DiscountResult price" >4000</span>
+                                <p >총 할인금액 : </p><span class="DiscountResult price" >0</span>
                             </div>
                         </div>
                     </div>
@@ -218,11 +219,15 @@
                     </div>
                     <div class="orderOriginPrice">
                         <label for="">상품금액</label>
-                        <span class="price" id="finalOrderProductPrice">270000000000</span>
+                        <span class="price" id="finalOrderProductPrice">0</span>
                     </div>
                     <div class="orderSalePrice">
-                        <label for="">할인금액</label>
-                        <span  class="price"  id="finalOrderDiscount">-1350</span>
+                        <label for="">└ 상품 할인금액</label>
+                        <span  class="price"  id="finalOrderDiscount">-0</span>
+                    </div>
+                    <div class="orderSalePrice">
+                        <label for="">└ 포인트 및 쿠폰할인</label>
+                        <span  class="price"  id="finalDiscountResult">-0</span>
                     </div>
                     <div class="delivery-fee">
                         <label for="">배송비</label>
@@ -230,7 +235,7 @@
                     </div>
                     <div class="orderTotalPrice">
                         <label for="">전체 주문금액</label>
-                        <span class="price" id="finalOrderTotal">25650</span>
+                        <span class="price" id="finalOrderTotal">0</span>
                     </div>
                     <div class="orderPoint">
                     <label for="">적립예정포인트</label>
