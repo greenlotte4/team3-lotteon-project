@@ -2,6 +2,8 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
+import com.lotteon.dto.order.OrderCompletedResponseDTO;
+import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderResponseDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.dto.product.cart.CartSummary;
@@ -205,9 +207,14 @@ public class MarketController {
 
     }
 
-    @GetMapping("/completed")
-    public String marketOrderCompleted(Model model) {
+    @GetMapping("/completed/{orderId}")
+    public String marketOrderCompleted(@PathVariable long orderId,Model model) {
         model.addAttribute("content", "completed");
+        OrderCompletedResponseDTO orderDTO = orderService.selectOrderById(orderId);
+        log.info("여기!!!!!!!!!!!!!!!! : "+orderDTO);
+        model.addAttribute("orderDTO",orderDTO);
+
+
         return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template
     }
 

@@ -98,17 +98,31 @@ function addQuantityListeners() {
 
 // Function to calculate and update the total price for all selected options
 function updateTotalPrice() {
-    let totalPrice = 0;
-    selectedOptions.forEach(option => {
-        const discountedPrice = Math.floor(originalPrice * (100 - discount) / 100);
-        totalPrice += discountedPrice * option.quantity;
-    });
-    document.querySelector(".total-price").innerText = `${totalPrice.toLocaleString()}`;
+    let totalOriginalPrice = 0; // 총 상품 금액 (할인 전)
+    let totalDiscountedPrice = 0; // 할인 적용 금액 (할인 후)
+    let totalDiscount = 0;
+    // 기본 상품 1개의 가격 반영 (할인 전)
+    if (selectedOptions.length === 0) {
+        totalOriginalPrice = originalPrice * quantity;
+        totalDiscount = Math.floor((originalPrice * discount) / 100) * quantity;
+        totalDiscountedPrice = Math.floor(originalPrice * (100 - discount) / 100) * quantity;
+    } else {
+        // 선택된 옵션에 따라 가격 계산
+        selectedOptions.forEach(option => {
+            const discountedPricePerItem = Math.floor(originalPrice * (100 - discount) / 100);
+            totalDiscount += Math.floor((originalPrice * discount) / 100) * option.quantity;
+            totalOriginalPrice += originalPrice * option.quantity;
+            totalDiscountedPrice += discountedPricePerItem * option.quantity;
+        });
+    }
 
+    // Update HTML elements with calculated prices
+    document.getElementById("originalTotalPrice").innerText = `${totalOriginalPrice.toLocaleString()}원`;
+    document.getElementById("totalPrice").innerText = `-${totalDiscount.toLocaleString()}원`;
 
     // 배송비 계산 및 결제 예상금액 업데이트
-    const totalShippingFee = calculateShippingFee(totalPrice);
-    updateExpectedTotal(totalPrice, totalShippingFee);
+    const totalShippingFee = calculateShippingFee(totalDiscountedPrice);
+    updateExpectedTotal(totalDiscountedPrice, totalShippingFee);
 }
 
 // Option change listener for dropdown selection
@@ -163,11 +177,15 @@ updateTotalPrice();
 updateSelectedResult();
 const uidElement = document.getElementById("uid");
 const uid = uidElement ? uidElement.value : null;
+
+
+
 // Event listener for Buy Now button
 document.getElementById("buy-now-btn").addEventListener("click", function(e) {
     if (!uid) {
         alert('로그인 후 이용해 주세요');
-        window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;        return;
+        window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+        return;
     } else if (selectedOptions.length === 0) {
         alert("옵션을 선택해주세요.");
         return;
