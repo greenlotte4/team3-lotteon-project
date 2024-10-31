@@ -2,6 +2,8 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
+import com.lotteon.dto.order.OrderCompletedResponseDTO;
+import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderResponseDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.dto.product.cart.CartSummary;
@@ -43,18 +45,24 @@ public class MarketController {
     private final ReviewService reviewService;
     private final OrderService orderService;
 
-    @GetMapping("/main")
-    public String marketMain(Model model) {
+    @GetMapping("/main/{category}")
+    public String marketMain(Model model,@PathVariable long category) {
+        ProductCategoryDTO categoryDTOs =  productCategoryService.getCategoryById(category);
+        log.info(categoryDTOs);
+        model.addAttribute("categoryDTOs",categoryDTOs);
+
         model.addAttribute("content", "main");
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
     }
 
-    @GetMapping("/list")
-    public String marketList(PageRequestDTO pageRequestDTO, Model model) {
-        long categoryid = 3;
-        pageRequestDTO.setCategoryId(categoryid);
+    @GetMapping("/list/{category}")
+    public String marketList(PageRequestDTO pageRequestDTO,@PathVariable long category,Model model) {
+        pageRequestDTO.setCategoryId(category);
+        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(category);
+        log.info("dsdsdsdsd"+categoryDTOs);
         ProductListPageResponseDTO responseDTO =  productService.getProductList(pageRequestDTO);
         log.info("controlllermarket::::"+responseDTO.getProductDTOs());
+        model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("responseDTO",responseDTO);
 
 
@@ -89,7 +97,7 @@ public class MarketController {
        ProductDTO productdto = productService.getProduct(productId);
         log.info("productVIew Controller:::::"+productdto);
 
-        PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewss(pageRequestDTO);
+        PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
         List<Review> ReviewImgs = reviewService.getAllReviews();
@@ -109,7 +117,7 @@ public class MarketController {
 
         List<CartItem> cartItems = marketCartService.selectCartAll();
 
-        CartSummary cartSummary = marketCartService.calculateCartSummary(cartItems);
+        CartSummary cartSummary = marketCartService.calculateSelectedCartSummary(cartItems);
 
         model.addAttribute("cartItems",cartItems);
         model.addAttribute("cartSummary",cartSummary);
@@ -133,16 +141,20 @@ public class MarketController {
 
     @PostMapping("/order/saveOrder")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> saveOrder(@RequestBody OrderRequestDTO orderRequestDTO, Authentication authentication){
-
+    public ResponseEntity<Map<String, Long>> saveOrder(@RequestBody OrderRequestDTO orderRequestDTO, Authentication authentication){
+        Map<String, Long> response = new HashMap<>();
+        response.put("result", 0L);
         log.info("요기!!!!!!!!!!!!!!!!!"+orderRequestDTO);
         OrderResponseDTO orderResponseDTO  = new OrderResponseDTO(orderRequestDTO);
         long orderId = orderService.saveOrder(orderResponseDTO);
 
+        if(orderId>0){
+            response.put("result",orderId);
+
+        }
 
 
-
-        return null;
+        return ResponseEntity.ok(response);
     }
 
 
@@ -185,6 +197,7 @@ public class MarketController {
             // Purchase is successful for member role
             response.put("result", "success");
 
+
         } else {
             // No user account found
             response.put("result", "none");
@@ -194,9 +207,14 @@ public class MarketController {
 
     }
 
-    @GetMapping("/completed")
-    public String marketOrderCompleted(Model model) {
+    @GetMapping("/completed/{orderId}")
+    public String marketOrderCompleted(@PathVariable long orderId,Model model) {
         model.addAttribute("content", "completed");
+        OrderCompletedResponseDTO orderDTO = orderService.selectOrderById(orderId);
+        log.info("여기!!!!!!!!!!!!!!!! : "+orderDTO);
+        model.addAttribute("orderDTO",orderDTO);
+
+
         return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template
     }
 

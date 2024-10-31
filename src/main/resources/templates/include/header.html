@@ -65,7 +65,7 @@
                         </button>
                     </li>
                     <li>
-                        <a href="https://www.lotteon.com/p/mylotte/bmk/wish" data-cmpnt-typ="header_main"
+                        <a th:href="@{/mypage/myInfo}" data-cmpnt-typ="header_main"
                            data-cmpnt-name="wishlist" class="heart">
                             나의 찜
                         </a>
@@ -109,7 +109,7 @@
                                         <li th:each="category : ${categories}" onmouseover="showSubmenu(this)"
                                             onmouseout="hideSubmenu(this)">
                                             <span><a th:text="${category.name}"
-                                                     th:href="@{/market/main}">Category Name</a></span>
+                                                     th:href="@{'/market/main/'+${category.id}}">Category Name</a></span>
 
                                             <!-- 2nd Depth Subcategories -->
                                             <ul th:if="${category.children != null && !#lists.isEmpty(category.children)}"
@@ -122,7 +122,7 @@
                                                     <ul th:if="${child.children != null && !#lists.isEmpty(child.children)}"
                                                         class="menu-3depth">
                                                         <li th:each="subChild : ${child.children}">
-                                                            <a th:text="${subChild.name}" th:href="@{/market/list}">Sub-subcategory Name</a>
+                                                            <a th:text="${subChild.name}" th:href="@{'/market/list/' + ${subChild.id}}">Sub-subcategory Name</a>
                                                         </li>
                                                     </ul>
                                                 </li>

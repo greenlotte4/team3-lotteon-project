@@ -29,6 +29,19 @@
                 
                         <article id="admin_faq_list">
                         <div>
+                            <div>
+
+                                <select id="selectOption1" class="faqselect">
+                                    <option value="" disabled selected>1차 선택</option>
+                                    <th:block th:each="board : ${boardCate}">
+                                        <option th:value="${board.boardCateId}" th:text="${board.name}"></option>
+                                    </th:block>
+
+                                </select>
+                                <select id="selectOption2" class="faqselect">
+                                    <option value="2차 선택" disabled selected>2차 선택</option>
+                                </select>
+                            </div>
                             <table class="admin_faq_list_table">
                                 <colgroup>
                                     <col style="width: 7.5%">
@@ -40,19 +53,7 @@
                                     <col style="width: 15%">
                                     <col style="width: 10%">
                                 </colgroup>
-                                <div>
-
-                                    <select id="selectOption1" class="faqselect">
-                                        <option value="" disabled selected>1차 선택</option>
-                                        <th:block th:each="board : ${boardCate}">
-                                        <option th:value="${board.boardCateId}" th:text="${board.name}"></option>
-                                        </th:block>
-
-                                    </select>
-                                    <select id="selectOption2" class="faqselect">
-                                        <option value="2차 선택" disabled selected>2차 선택</option>
-                                    </select>
-                                </div>
+                                <thead>
                                 <tr>
                                     <th><input type="checkbox" class="checkbox"></th>
                                     <th>번호</th>
@@ -63,6 +64,8 @@
                                     <th>날짜</th>
                                     <th>관리</th>
                                 </tr>
+                                </thead>
+                                <tbody>
                                 <th:block th:if="${faqPageResponseDTO.getFaqdtoList() ==null}">
                                     faq가 없습니다.
                                 </th:block>
@@ -70,8 +73,8 @@
                                 <tr th:each="faq, i:${faqPageResponseDTO.getFaqdtoList()}">
                                     <td><input type="checkbox" class="checkboxes" th:value="${faq.faqNo}"></td>
                                     <td>[[${faqPageResponseDTO.startNo - i.index}]]</td>
-                                    <td th:text="${faq.getCategory().getParent().getName()}" id="faqtype1">가입문의</td>
-                                    <td th:text="${faq.getCategory().getName()}" id="faqtype2">가입</td>
+                                    <td th:text="${faq.getCategory().getParent().getName()}" class="faqtype1">가입문의</td>
+                                    <td th:text="${faq.getCategory().getName()}" class="faqtype2">가입</td>
                                     <td>
                                         <a th:href="@{/admin/faq/view(no=${faq.faqNo})}" th:text="${faq.faqtitle}"></a>
                                     </td>
@@ -83,7 +86,7 @@
                                     </td>
                                 </tr>
                                 </th:block>
-
+                                </tbody>
                             </table>
                             <div th:if="${message}" class="hidden" th:text="${message}" id="messageDiv"></div>
                         </article>
@@ -207,8 +210,11 @@
     const selectOption1 = document.getElementById('selectOption1');
     const selectOption2 = document.getElementById('selectOption2');
 
+
+
     selectOption1.addEventListener('change',function(){
         const parentId = this.value;
+        console.log("부모부모부모:" + parentId);
 
         selectOption2.innerHTML = '<option value="2차 선택" disabled selected>2차 선택</option>';
 
@@ -226,8 +232,135 @@
             .catch(err => {
                 console.log(err);
             });
+        //부모 카테고리로 요청
+        fetch(`/admin/faq/list/page?parentId=${parentId}`)
+            .then(resp => resp.json())
+            .then(faqPageResponseDTO => {
+                console.log("야오야오야옹야옹야오양옹야옹야옹ㅇ:", faqPageResponseDTO);
 
+                // 목록 갱신
+                const faqListElement = document.querySelector('.admin_faq_list_table tbody');
+                faqListElement.innerHTML = ''; // 기존 목록 초기화
 
+                // 목록 업데이트
+                faqPageResponseDTO.faqdtoList.forEach(faq => {
+                    const row = `
+                              <tr>
+                                    <td><input type="checkbox" class="checkboxes" value="${faq.faqNo}"></td>
+                                    <td>${faqPageResponseDTO.startNo--}</td>
+                                    <td>${faq.category.parent.name}</td>
+                                    <td>${faq.category.name}</td>
+                                    <td>
+                                        <a href="/admin/faq/view?no=${faq.faqNo}">${faq.faqtitle}</a>
+                                    </td>
+                                    <td>${faq.faqhit}</td>
+                                    <td>${faq.date.substring(0, 10)}</td>
+                                    <td>
+                                            <a href="/admin/faq/delete?no=${faq.faqNo}" class="admin_faq_delete_a">[삭제]</a><br>
+                                            <a href="/admin/faq/modify?no=${faq.faqNo}">[수정]</a>
+                                    </td>
+                              </tr>`;
+                    faqListElement.innerHTML += row;
+                });
+
+                // 페이지네이션 요소 선택
+                const paginationElement = document.querySelector('.faqpage');
+                paginationElement.innerHTML = ''; // 기존 내용 초기화
+
+                // 이전 버튼
+                if (faqPageResponseDTO.prev) {
+                    const prevLink = faqPageResponseDTO.parentId == null
+                        ? `<a href="/admin/faq/list?pg=${faqPageResponseDTO.start - 1}" class="faqprev">이전</a>`
+                        : `<a href="/admin/faq/list?pg=${faqPageResponseDTO.start - 1}&parentId=${faqPageResponseDTO.parentId}" class="faqprevs">이전</a>`;
+                    paginationElement.innerHTML += prevLink;
+                }
+
+                // 페이지 번호
+                for (let num = faqPageResponseDTO.start; num <= faqPageResponseDTO.end; num++) {
+                    const pageLink = faqPageResponseDTO.parentId == null
+                        ? `<a href="/admin/faq/list?pg=${num}" class="${num === faqPageResponseDTO.pg ? 'faqcurrents' : 'faqnums'}">${num}</a>`
+                        : `<a href="/admin/faq/list?pg=${num}&parentId=${faqPageResponseDTO.parentId}" class="${num === faqPageResponseDTO.pg && faqPageResponseDTO.childId === faqPageResponseDTO.childId ? 'faqcurrents' : 'faqnums'}">${num}</a>`;
+                    paginationElement.innerHTML += pageLink;
+                }
+
+                // 다음 버튼
+                if (faqPageResponseDTO.next) {
+                    const nextLink = faqPageResponseDTO.parentId == null
+                        ? `<a href="/admin/faq/list?pg=${faqPageResponseDTO.end + 1}" class="faqnext">다음</a>`
+                        : `<a href="/admin/faq/list?pg=${faqPageResponseDTO.end + 1}&parentId=${faqPageResponseDTO.parentId}" class="faqnexts">다음</a>`;
+                    paginationElement.innerHTML += nextLink;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+    })
+    //자식 카테고리로 요청
+    selectOption2.addEventListener('change', function (){
+        const parentId = selectOption1.value;
+        const childId = this.value;
+        console.log("자식자식자식 : " + childId);
+        fetch(`/admin/faq/list/page?parentId=${parentId}&childId=${childId}`)
+            .then(resp => resp.json())
+            .then(faqPageResponseDTO => {
+                console.log("바우오웅와우옹우ㅏ와우오아웅:", faqPageResponseDTO);
+                // 목록 갱신
+                const faqListElement = document.querySelector('.admin_faq_list_table tbody');
+                faqListElement.innerHTML = ''; // 기존 목록 초기화
+
+                // 목록 업데이트
+                faqPageResponseDTO.faqdtoList.forEach(faq => {
+                    const row = `
+                              <tr>
+                                    <td><input type="checkbox" class="checkboxes" value="${faq.faqNo}"></td>
+                                    <td>${faqPageResponseDTO.startNo--}</td>
+                                    <td>${faq.category.parent.name}</td>
+                                    <td>${faq.category.name}</td>
+                                    <td>
+                                        <a href="/admin/faq/view?no=${faq.faqNo}">${faq.faqtitle}</a>
+                                    </td>
+                                    <td>${faq.faqhit}</td>
+                                    <td>${faq.date.substring(0, 10)}</td>
+                                    <td>
+                                            <a href="/admin/faq/delete?no=${faq.faqNo}" class="admin_faq_delete_a">[삭제]</a><br>
+                                            <a href="/admin/faq/modify?no=${faq.faqNo}">[수정]</a>
+                                    </td>
+                              </tr>`;
+                    faqListElement.innerHTML += row;
+                });
+
+                // 페이지네이션 요소 선택
+                const paginationElement = document.querySelector('.faqpage');
+                paginationElement.innerHTML = ''; // 기존 내용 초기화
+
+                // 이전 버튼
+                if (faqPageResponseDTO.prev) {
+                    const prevLink = faqPageResponseDTO.childId == null
+                        ? `<a href="/admin/faq/list?pg=${faqPageResponseDTO.start - 1}" class="faqprev">이전</a>`
+                        : `<a href="/admin/faq/list?pg=${faqPageResponseDTO.start - 1}&childId=${faqPageResponseDTO.childId}}" class="faqprevs">이전</a>`;
+                    paginationElement.innerHTML += prevLink;
+                }
+
+                // 페이지 번호
+                for (let num = faqPageResponseDTO.start; num <= faqPageResponseDTO.end; num++) {
+                    const pageLink = faqPageResponseDTO.childId == null
+                        ? `<a href="/admin/faq/list?pg=${num}" class="${num === faqPageResponseDTO.pg ? 'faqcurrents' : 'faqnums'}">${num}</a>`
+                        : `<a href="/admin/faq/list?pg=${num}&childId=${faqPageResponseDTO.childId}" class="${num === faqPageResponseDTO.pg && faqPageResponseDTO.childId === faqPageResponseDTO.childId ? 'faqcurrents' : 'faqnums'}">${num}</a>`;
+                    paginationElement.innerHTML += pageLink;
+                }
+
+                // 다음 버튼
+                if (faqPageResponseDTO.next) {
+                    const nextLink = faqPageResponseDTO.childId == null
+                        ? `<a href="/admin/faq/list?pg=${faqPageResponseDTO.end + 1}" class="faqnext">다음</a>`
+                        : `<a href="/admin/faq/list?pg=${faqPageResponseDTO.end + 1}&childId=${faqPageResponseDTO.childId}}" class="faqnexts">다음</a>`;
+                    paginationElement.innerHTML += nextLink;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
     })
 
 </script>

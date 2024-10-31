@@ -44,6 +44,20 @@ public class AdminFaqController {
 
         return "content/admin/faq/faqList";
     }
+    @ResponseBody
+    @GetMapping("/list/page")
+    public ResponseEntity<?> adminFaqListPage( @RequestParam(required = false) Long childId, @RequestParam(required = false) Long parentId, PageRequestDTO pageRequestDTO) {
+        pageRequestDTO.setParentId(parentId);
+        log.info("이거먼데!!!!" + pageRequestDTO);
+        pageRequestDTO.setChildId(childId);
+        log.info("이건또먼데!!!!!" + pageRequestDTO);
+
+        FaqPageResponseDTO faqPageResponseDTO = faqService.selectfaqListAll(pageRequestDTO);
+        log.info("진짜루 여기 확인해!!!! : " + faqPageResponseDTO);
+
+        return ResponseEntity.ok(faqPageResponseDTO);
+    }
+
 
     @GetMapping("/subcate/{parentId}")
     @ResponseBody

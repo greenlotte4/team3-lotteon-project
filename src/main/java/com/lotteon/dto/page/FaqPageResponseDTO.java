@@ -23,6 +23,9 @@ public class FaqPageResponseDTO {
     private int start, end;
     private boolean prev, next;
 
+    private Long childId;
+    private Long parentId;
+
 //    private String type;
 //    private String keyword;
 
@@ -32,6 +35,8 @@ public class FaqPageResponseDTO {
         this.size = pageRequestDTO.getSize();
         this.total = total;
         this.faqdtoList = faqdtoList;
+        this.childId = pageRequestDTO.getChildId();
+        this.parentId = pageRequestDTO.getParentId();
 //        this.type1 = pageRequestDTO.getType1();
 //        this.type2 = pageRequestDTO.getType2();
 //        this.type = pageRequestDTO.getType();

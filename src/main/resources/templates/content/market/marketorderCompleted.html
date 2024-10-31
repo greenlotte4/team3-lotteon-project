@@ -26,13 +26,13 @@
                             </div>
                             <div class="orderInfo-txt">
                                 <span>고객님의 주문이 정상적으로 완료되었습니다.</span>
-                                <span>주문번호 : <strong>20200980519683953</strong></span>
+                                <span>주문번호 : <strong th:text="${orderDTO.getOrder().getOrderId()}"></strong></span>
                                 <p>즐거운 쇼핑이 되셨나요? 항상 고객님을 위한 <strong>롯데ON</strong>이 되겠습니다.</p>
                             </div>
                         <section class="orderCompany">
-                            <div class="order-groupbyCom">
-                                <h4>판매자 회사명</h4>
-                                <table class="order-items">
+                            <div class="order-groupbyCom" th:each="seller:${orderDTO.getSellers()}">
+                                <h4 th:text="${seller.getCompany()}"></h4>
+                                <table class="order-items" th:each="orderItem:${seller.getOrderItems()}">
                                     <colgroup>
                                         <col style="width: 40%;">
                                         <col style="width: 20%;">
@@ -43,21 +43,21 @@
                                         <td>
                                             <div><img src="" alt=""></div>
                                             <div>
-                                                <span>상품명</span>
-                                                <p id="product_option"> [ 옵션 : 크림 / 66 Size ]</p>
+                                                <span th:text="${orderItem.getProduct().getProductName()}">상품명</span>
+                                                <p id="product_option"> [ 옵션 :[[${orderItem.getSelectOption().optionDesc}]]]</p>
                                             </div>
                                         </td>
                                         <td >
                                             <div class="qnt">
                                                 주문 수량  
-                                                <input type="number" name="quantity" placeholder="1" readonly>
+                                                <input type="number" name="quantity" th:placeholder="${orderItem.getStock()}" readonly>
                                             </div>
                                         </td>
 
                                         <td >
-                                            <p>상품금액 :<span class="price">30000</span></p>
-                                            <p>할인금액 : <span class="price">-1350</span></p>
-                                            <p>결제금액 : <span class="price">28500</span></p>
+                                            <p>상품금액 :<span class="price" th:text="${orderItem.getProduct().getPrice()*orderItem.getStock()}"></span></p>
+                                            <p>할인금액 : <span class="price" th:text="${(orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount())/100}">-1350</span></p>
+                                            <p>결제금액 : <span class="price" th:text="${orderItem.getProduct().getPrice()*orderItem.getStock()-(orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount())/100}">28500</span></p>
                                         </td>   
                                     </tr>
                                   

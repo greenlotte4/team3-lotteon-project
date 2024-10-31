@@ -321,10 +321,10 @@ document.addEventListener('DOMContentLoaded', function () {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.result === 'success') {
+                    if (data.result > 0) {
                         alert('주문이 완료되었습니다!');
                         localStorage.removeItem('productDataArray');  // 성공 시 로컬 데이터 삭제
-                        window.location.href = '/order/confirmation'; // 완료 후 페이지 이동
+                        window.location.href = '/market/completed/'+data.result; // 완료 후 페이지 이동
                     } else {
                         alert('주문 처리 중 오류가 발생했습니다.');
                     }
@@ -357,10 +357,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // Detect unload event for refreshing
-window.addEventListener("beforeunload", (event) => {
-    if (sessionStorage.getItem("page_reload") === "true") {
+// window.addEventListener("beforeunload", (event) => {
+//     if (sessionStorage.getItem("page_reload") === "true") {
+//         sessionStorage.removeItem("page_reload");
+//     } else {
+//         localStorage.removeItem("productDataArray");
+//     }
+// });
+
+// 새로고침 감지를 위한 상태 설정
+sessionStorage.setItem("page_reload", "true");
+
+// 새로고침 또는 페이지 이동 이벤트 감지
+window.addEventListener("beforeunload", () => {
+    // sessionStorage에 `page_reload`가 남아있다면 새로고침으로 간주
+    if (sessionStorage.getItem("page_reload")) {
+        // 새로고침 시에만 sessionStorage 상태를 삭제하고, localStorage 유지
         sessionStorage.removeItem("page_reload");
     } else {
+        // 페이지를 떠나는 경우에만 localStorage의 `productDataArray`를 삭제
         localStorage.removeItem("productDataArray");
     }
 });

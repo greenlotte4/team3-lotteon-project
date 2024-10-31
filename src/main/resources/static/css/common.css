@@ -929,7 +929,7 @@ select[readonly] {
     margin-bottom: 10px;
     margin-top: 5px;
     width: 100%;
-    border-bottom: 1px solid #f0efef;
+    /*border-bottom: 1px solid #f0efef;*/
     box-sizing: border-box;
 }
 

@@ -172,10 +172,10 @@ document.getElementById("quantity").addEventListener("input", function () {
 // Initial total price calculation on page load
 updateTotalPrice();
 updateSelectedResult();
-
+let uid=null;
 // Event listener for Buy Now button
 document.getElementById("buy-now-btn").addEventListener("click", function(e) {
-    const uid = document.getElementById("uid").value;
+    uid = document.getElementById("uid").value;
 
     if(!uid){
         alert('로그인 후 이용해 주세요')
@@ -243,7 +243,7 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     btn.addEventListener('click', function () {
 
 
-        const uid = document.getElementById("uid").value;
+        uid = document.getElementById("uid").value;
         if (!uid){
             alert('로그인 후 이용해 주세요')
             window.location.href = '/user/login';
