@@ -3,32 +3,32 @@ let selectedOptionValue = "";
 let selectedOptionText = "";
 let selectedOptionDesc = "";
 let selectedOptions = []; // Array to store selected options
+
 const productId = document.getElementById("productId").value;
-const point = document.getElementById("point").value;
+const point = parseInt(document.getElementById("point").value, 10) || 0;
 const productName = document.getElementById("productName").value;
-const originalPrice = parseFloat(document.getElementById("originalPrice").innerText.replace(/,/g, ""));
-const discount = parseInt(document.getElementById("discount").value);
+const originalPrice = parseFloat(document.getElementById("originalPrice").innerText.replace(/,/g, "")) || 0;
+const discount = parseInt(document.getElementById("discount").value, 10) || 0;
 const file190 = document.getElementById("file190").value;
 const shippingFee = parseInt(document.getElementById("shippingFee").getAttribute("data-shippingfee")) || 0;
-let quantity = parseInt(document.getElementById("quantity").value); // Default quantity
+let quantity = parseInt(document.getElementById("quantity").value, 10) || 1;
+const shippingTerms = document.getElementById("shippingTerms").value;
 
 const byCart = document.getElementById('buyCart');
-console.log(byCart);
-console.log("shippingFee ",shippingFee)
+console.log("byCart:", byCart);
+console.log("shippingFee:", shippingFee);
+console.log("shippingTerms:",shippingTerms)
 
 // Function to add a new selection or update an existing one
 function addOrUpdateSelection(optionId, optionText, optionDesc, quantity) {
     const existingOption = selectedOptions.find(option => option.optionId === optionId);
-
     if (existingOption) {
         existingOption.quantity = quantity;
     } else {
         selectedOptions.push({ optionId, optionText, optionDesc, quantity });
     }
-
     updateSelectedResult(); // Refresh the display
 }
-
 
 // Function to update the selectResult section with all selected options, including quantity controls and a remove button
 function updateSelectedResult() {
@@ -96,17 +96,33 @@ function addQuantityListeners() {
     });
 }
 
-
 // Function to calculate and update the total price for all selected options
 function updateTotalPrice() {
-    let totalPrice = 0;
+    let totalOriginalPrice = 0; // 총 상품 금액 (할인 전)
+    let totalDiscountedPrice = 0; // 할인 적용 금액 (할인 후)
+    let totalDiscount = 0;
+    // 기본 상품 1개의 가격 반영 (할인 전)
+    if (selectedOptions.length === 0) {
+        totalOriginalPrice = originalPrice * quantity;
+        totalDiscount = Math.floor((originalPrice * discount) / 100) * quantity;
+        totalDiscountedPrice = Math.floor(originalPrice * (100 - discount) / 100) * quantity;
+    } else {
+        // 선택된 옵션에 따라 가격 계산
+        selectedOptions.forEach(option => {
+            const discountedPricePerItem = Math.floor(originalPrice * (100 - discount) / 100);
+            totalDiscount += Math.floor((originalPrice * discount) / 100) * option.quantity;
+            totalOriginalPrice += originalPrice * option.quantity;
+            totalDiscountedPrice += discountedPricePerItem * option.quantity;
+        });
+    }
 
-    selectedOptions.forEach(option => {
-        const discountedPrice = Math.floor(originalPrice * (100 - discount) / 100);
-        totalPrice += discountedPrice * option.quantity;
-    });
+    // Update HTML elements with calculated prices
+    document.getElementById("originalTotalPrice").innerText = `${totalOriginalPrice.toLocaleString()}원`;
+    document.getElementById("totalPrice").innerText = `-${totalDiscount.toLocaleString()}원`;
 
-    document.querySelector(".total-price").innerText = `총 상품금액: ${totalPrice.toLocaleString()}원`;
+    // 배송비 계산 및 결제 예상금액 업데이트
+    const totalShippingFee = calculateShippingFee(totalDiscountedPrice);
+    updateExpectedTotal(totalDiscountedPrice, totalShippingFee);
 }
 
 // Option change listener for dropdown selection
@@ -114,15 +130,13 @@ document.getElementById("option").addEventListener("change", function() {
     selectedOptionValue = this.value;
     selectedOptionText = this.options[this.selectedIndex].text.split(" - ")[0];
     selectedOptionDesc = this.options[this.selectedIndex].text.split(" - ")[1] || "No description";
-
     addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
 });
-
-
 
 // Initial setup for total price and selected options display
 updateTotalPrice();
 updateSelectedResult();
+
 // Function to remove an option from selectedOptions by index
 function removeOption(index) {
     selectedOptions.splice(index, 1); // Remove option from array
@@ -130,17 +144,11 @@ function removeOption(index) {
     updateTotalPrice(); // Update the total price
 }
 
-
-
-
-
 // Event listeners for the increase and decrease buttons
 document.getElementById('decrease').addEventListener('click', function () {
     if (quantity > 1) {
         quantity -= 1;
         document.getElementById("quantity").value = quantity;
-
-        // Update the last selected option's quantity in the array
         if (selectedOptionValue) {
             addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
         }
@@ -150,8 +158,6 @@ document.getElementById('decrease').addEventListener('click', function () {
 document.getElementById('increase').addEventListener('click', function () {
     quantity += 1;
     document.getElementById("quantity").value = quantity;
-
-    // Update the last selected option's quantity in the array
     if (selectedOptionValue) {
         addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
     }
@@ -159,31 +165,34 @@ document.getElementById('increase').addEventListener('click', function () {
 
 // Update total price and selected result if user manually changes quantity
 document.getElementById("quantity").addEventListener("input", function () {
-    quantity = parseInt(this.value) || 1; // Set to 1 if invalid input
+    quantity = parseInt(this.value, 10) || 1; // Set to 1 if invalid input
     this.value = quantity; // Correct the input if needed
-
-    // Update the last selected option's quantity in the array
     if (selectedOptionValue) {
         addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
     }
 });
 
-
-
 // Initial total price calculation on page load
 updateTotalPrice();
 updateSelectedResult();
+const uidElement = document.getElementById("uid");
+const uid = uidElement ? uidElement.value : null;
+
+
 
 // Event listener for Buy Now button
 document.getElementById("buy-now-btn").addEventListener("click", function(e) {
-    if (selectedOptions.length === 0) {
+    if (!uid) {
+        alert('로그인 후 이용해 주세요');
+        window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+        return;
+    } else if (selectedOptions.length === 0) {
         alert("옵션을 선택해주세요.");
         return;
     }
 
     const isConfirmed = confirm("구매하시겠습니까?");
     if (isConfirmed) {
-        // Create an array to hold all selected product data
         const productDataArray = selectedOptions.map(option => ({
             productId: productId,
             productName: productName,
@@ -195,27 +204,21 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
             optionName: option.optionText,
             optionDesc: option.optionDesc,
             point: point,
-            discount: discount
+            discount: discount,
+            shippingFee: shippingFee,
+            shippingTerms: shippingTerms
         }));
-        const orderInfo={
-            shippingFee:shippingFee,
-        }
 
-
-        // Store the array in localStorage (optional)
-        localStorage.setItem("productDataArray", JSON.stringify(productDataArray));
 
         fetch("/market/buyNow", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(productDataArray) // Send as an array
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(productDataArray)
         })
             .then(response => response.json())
             .then(data => {
                 if (data.result === "success") {
-                    const uid = document.getElementById("uid").value;
+                    localStorage.setItem("productDataArray", JSON.stringify(productDataArray));
                     window.location.href = `/market/order/${uid}`;
                 } else if (data.result === "login_required") {
                     if (confirm("로그인이 필요합니다. 로그인 하시겠습니까?")) {
@@ -239,14 +242,12 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
 // Initial setting for Add to Cart buttons and functionality
 document.querySelectorAll('.add-to-cart').forEach(btn => {
     btn.addEventListener('click', function () {
-        const user = localStorage.getItem('user');
-        if (!user) {
-            alert('로그인 후 사용 가능합니다. 로그인 페이지로 이동합니다.');
-            window.location.href = '/user/login';
-            return;
-        }
 
-        if (quantity <= 0) {
+        if (!uid) {
+            alert('로그인 후 이용해 주세요');
+            window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+            return;
+        } else if (quantity <= 0) {
             alert('수량을 1 이상으로 설정해 주세요.');
             return;
         } else if (!selectedOptionValue) {
@@ -255,8 +256,10 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
         }
 
         if (confirm("장바구니에 추가 하시겠습니까.")) {
+            const finalPrice = Math.floor(originalPrice * (100 - discount) / 100);
             const productCart = {
                 productId: parseInt(productId, 10),
+                cartItemId: 0,
                 productName: productName,
                 originalPrice: originalPrice,
                 finalPrice: finalPrice,
@@ -265,7 +268,7 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
                 shippingFee: shippingFee,
                 optionId: parseInt(selectedOptionValue, 10),
                 optionName: selectedOptionText,
-                point: parseInt(point, 10),
+                point: point,
                 discount: discount
             };
 
@@ -295,63 +298,24 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
                 });
         }
     });
+
+
+// 초기화 및 각 상품 선택 이벤트에 따른 업데이트 실행
+    updateTotalPrice();
+    updateSelectedResult();
+
 });
-
-
-document.querySelectorAll('.rating-display').forEach(display => {
-    const rating = parseInt(display.textContent);
-    let stars = '';
-
-    for (let i = 1; i <= 5; i++) {
-        if (i <= rating) {
-            stars += '<span class="star-selected">&#9733;</span>'; // 선택된 별
-        } else {
-            stars += '<span class="star">&#9734;</span>'; // 선택되지 않은 별
-        }
-    }
-
-    display.innerHTML = stars; // 별 모양으로 업데이트
-});
-
-let currentIndex = 0; // 현재 보여주는 이미지 인덱스
-const images = document.querySelector('.review-images');
-const totalImages = document.querySelectorAll('.reviewImg').length; // 전체 이미지 수
-
-// 왼쪽 화살표 클릭 이벤트
-document.getElementById('leftArrow').addEventListener('click', function() {
-    if (currentIndex > 0) {
-        currentIndex--;
-        updateSlide();
-    }
-});
-
-// 오른쪽 화살표 클릭 이벤트
-document.getElementById('rightArrow').addEventListener('click', function() {
-    if (currentIndex < totalImages - 5 ) {
-        currentIndex++;
-        updateSlide();
-    }
-});
-
-// 슬라이드 업데이트 함수
-function updateSlide() {
-    const offset = currentIndex * (152 + 10); // 이미지 너비 + 마진을 고려 (150px + 10px)
-    images.style.transform = `translateX(${-offset}px)`; // 이미지 슬라이드
-
-    // 오른쪽 화살표 비활성화 효과
-    if (currentIndex === totalImages - 5) {
-        document.getElementById('rightArrow').classList.add('disabled');
-    } else {
-        document.getElementById('rightArrow').classList.remove('disabled');
-    }
-
-    // 왼쪽 화살표 비활성화 효과
-    if (currentIndex === 0) {
-        document.getElementById('leftArrow').classList.add('disabled');
-    } else {
-        document.getElementById('leftArrow').classList.remove('disabled');
-    }
+function calculateShippingFee(totalPrice) {
+    // totalPrice와 shippingTerms 비교하여 shippingFee 결정
+    const totalShippingFee = totalPrice >= parseInt(shippingTerms) ? 0 : shippingFee;
+    document.getElementById("totalShippingFee").innerText = `${totalShippingFee.toLocaleString()}원`;
+    return totalShippingFee;
 }
 
-// 초기 버튼 상태 설정
-updateSlide();
+function updateExpectedTotal(totalPrice, totalShippingFee) {
+    // totalPrice와 totalShippingFee 합산하여 결제 예상금액 설정
+    const expectedPrice = totalPrice + totalShippingFee;
+    document.getElementById("expectedPrice").innerText = `${expectedPrice.toLocaleString()}원`;
+}
+
+

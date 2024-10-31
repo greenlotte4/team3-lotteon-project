@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,6 +75,18 @@ public class ProductCategoryService {
                 .map(category -> modelMapper.map(category, ProductCategoryDTO.class))
                 .toList();
     }
+
+
+    //메인 카테고리 가져오기
+    public ProductCategoryDTO getCategoryById(long id){
+        Optional<ProductCategory> opt  = productCategoryRepository.findById(id);
+        if (opt.isPresent()) {
+            return modelMapper.map(opt.get(), ProductCategoryDTO.class);
+        }
+        return null;
+
+    }
+
     public List<ProductCategoryDTO> selectCategory(long id){
 
        List<ProductCategory> categories =  productCategoryRepository.SelectParentCategories(id);

@@ -1,6 +1,8 @@
 package com.lotteon.dto.order;
 
+import com.lotteon.dto.product.OptionDTO;
 import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.entity.User.Seller;
 import lombok.*;
 
 @Getter
@@ -21,6 +23,11 @@ public class OrderItemDTO {
     private long price;
     private String traceNumber;
     private String sellerUid;
+    private Seller seller;
+
+
+    //selectOption
+    private OptionDTO selectOption;
 
 
 }

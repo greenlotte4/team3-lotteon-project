@@ -58,15 +58,19 @@
 
                                     <div class="pricing">
                                         <div>
+                                            <span class="discount" th:value="${products.discount}">[[${products.discount}]]</span>
+                                            <span class="final-price price"  id="finalPrice" th:value="${products.price*(100 - products.discount)/100}">[[${products.price*(100-products.discount)/100}]]</span>
                                             <span class="original-price price" id="originalPrice" th:text="${products.price}">[[${products.price}]]</span>
-                                            <span class="discount" th:value="${products.discount}">[[${products.discount}]]% ↓</span>
                                         </div>
-                                        <span class="final-price price"  id="finalPrice" th:value="${products.price*(100 - products.discount)/100}">[[${products.price*(100-products.discount)/100}]]</span>
+
                                     </div>
                                     <div class="delivery">
+                                        <input type="hidden" th:value="${products.getShippingTerms()}" id="shippingTerms">
                                         <span class="shipping-fee"  id="shippingFee" th:attr="data-shippingfee=${products.shippingFee}" th:text="${products.shippingFee}"></span>
+
                                         <p class="delivery-info">모레 (금) 7/8 도착예정</p>
                                     </div>
+                                    <span>[[${products.getShippingTerms()}]]이상시 무료배송!</span>
                                     <span name="Domestic" class="deli active">본 상품은 국내배송만 가능합니다.</span>
                                     <span name="global" class="deli hidden">본 상품은 국내배송만 가능합니다.</span>
                                     <div class="credit">
@@ -99,18 +103,27 @@
                                     </div>
                                     <div class="total">
                                         <div class="quantity-control">
-                                            <button type="button" id="decrease">-</button>
-                                            <input type="number" id="quantity" value="1" min="1">
-                                            <button type="button" id="increase">+</button>
+                                            <button type="button" id="decrease" hidden>-</button>
+                                            <input type="number" id="quantity" hidden value="1" min="1">
+                                            <button type="button" id="increase" hidden>+</button>
                                         </div>
-                                        <div class="total-price">총 상품금액: 27,000원</div>
+<!--                                        <div class="total-price" hidden>총 상품금액: 27,000원</div>-->
                                     </div>
 
-                                    <div class="couponArea">
-                                       <button id="couponBtn">할인 쿠폰을 받아보세요</button>
-                                    </div>
+
                                     <div class="bannerArea">
                                         <img src="" alt="">
+                                    </div>
+
+                                    <div class="expectedTotal">
+
+                                        <div><label for="originalTotalPrice" class="originalTotalPrice">총 상품금액:</label><span id="originalTotalPrice" class="originalTotalPrice"></span></div>
+                                        <div><label for="totalPrice"  class="totalPrice">└ 할인 금액:</label><span id="totalPrice" class="total-price"></span></div>
+                                        <div><label for="totalShippingFee" class="totalShippingFee">└ 배송비 :</label><span class="totalShippingFee" id="totalShippingFee"></span></div>
+                                        <div><label for="expectedPrice" class="expectedPrice">결제 예상금액 : </label><span class="expectedPrice" id="expectedPrice"> </span></div>
+                                    </div>
+                                    <div class="couponArea">
+                                        <button id="couponBtn">할인 쿠폰을 받아보세요</button>
                                     </div>
 
                                     <div class="buttons">

@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LotteOn</title>
     <link rel="stylesheet" th:href="@{/css/cs/qnawrite.css}">
+    <script src="/js/cateQna.js"></script> <!-- qna.js 파일을 추가 -->
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -31,16 +32,19 @@
                         <td><label for="inquiry-type">문의유형</label></td>
                         <td>
                             <select id="inquiry-type" name="qna_type1" class="first_choice">
-                                <option value="1">가입</option>
-                                <option value="2">취소/반품/교환</option>
+                                <option value="1">회원</option>
+                                <option value="2">쿠폰/이벤트</option>
                                 <option value="3">주문/결제</option>
-                                <option value="4">쿠폰/이벤트</option>
+                                <option value="4">배송</option>
+                                <option value="5">취소/반품/교환</option>
+                                <option value="6">여행/숙박/항공</option>
+                                <option value="7">안전거래</option>
                             </select>
                             <select name="qna_type2" class="second_choice">
-                                <option value="1">가입</option>
-                                <option value="2">취소/반품/교환</option>
-                                <option value="3">주문/결제</option>
-                                <option value="4">쿠폰/이벤트</option>
+<!--                                <option value="1">가입</option>-->
+<!--                                <option value="2">취소/반품/교환</option>-->
+<!--                                <option value="3">주문/결제</option>-->
+<!--                                <option value="4">쿠폰/이벤트</option>-->
                             </select>
                         </td>
                     </tr>

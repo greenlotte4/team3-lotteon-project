@@ -95,5 +95,8 @@
     letter-spacing: 1px;
 }
 
+.article-list td > a:hover {
+    background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);
+}
 
 
