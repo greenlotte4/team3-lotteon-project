@@ -130,3 +130,17 @@ function confirmGradeChange(selectElement) {
     }
 }
 
+
+function loginredirect(url){
+    const uidElement = document.getElementById("uid");
+    const uid = uidElement ? uidElement.value : null;
+    if(!uid){
+        alert('로그인 후 이용해 주세요');
+        window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+        return;
+    }else{
+        window.location.href= url;
+        return;
+    }
+}
+
