@@ -8,54 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LotteOn</title>
     <link rel="stylesheet" th:href="@{/css/cs/faqList.css}">
-    <script>
-        //기본 3개출력 , 더보기 버튼을 눌렀을 때 최대 10개까지 출력되도록
-        window.onload = function () {
-            function AllShowMore(showClass, liClass, TextClass) {
-                const showMore = document.querySelector(showClass + ' .showMore');
-                const liClasses = document.querySelectorAll(liClass);
-                let showing = false;
-
-                //index 3이상은 모두 hidden 처리
-                liClasses.forEach((liClass, index) => {
-                    if (index >= 3) {
-                        liClass.classList.add("hidden");
-                    }
-                });
-
-                //3이상 10이하
-                showMore.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    showing = !showing //showing이 true로 보여지고 있는 상태 (클릭이 되었다는 의미)
-
-                    liClasses.forEach((liClass, index) => {
-                        if (index >= 3 && index < 10) {
-                            if (!showing) {
-                                liClass.classList.add("hidden");
-                            } else {
-                                liClass.classList.remove("hidden");
-                            }
-                        }
-                    })
-
-                    showMore.textContent = showing ? "간단히 보기" : TextClass;
-                });
-            }
-
-            AllShowMore('.first_show', '.first_li', "더보기");
-            AllShowMore('.second_show', '.second_li', "더보기");
-            // 체크박스 전체 선택 기능
-            const selectAllCheckbox = document.getElementById('select-all');
-            const checkboxes = document.querySelectorAll('.checkbox-item');
-
-            selectAllCheckbox.addEventListener('change', function () {
-                checkboxes.forEach(checkbox => {
-                    checkbox.checked = selectAllCheckbox.checked;
-                });
-            });
-
-        }
-    </script>
+    <script src="/js/faqList.js" defer></script> <!-- faq.js 파일을 추가 -->
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -63,8 +16,8 @@
 
     <div id="service">
         <div class="title">
-            <h2>회원</h2>
-            <p>회원관련 자주묻는 질문 입니다</p>
+            <h2>회원</h2>   <!-- 여기에 카테고리명 -->
+            <p>회원관련 자주 묻는 질문입니다</p> <!-- 여기에 카테고리명 -->
         </div>
         <div class="first container">
             <h2>가입</h2>
@@ -99,11 +52,26 @@
                     </div>
                 </li>
             </ul>
+        </div>
+        <div class="third container" style="display: none;">
+            <h2></h2> <!-- 여기에 3번째 카테고리 제목이 들어갑니다 -->
+            <ul class="third_list">
+                <!-- FAQ 목록을 반복하여 출력 -->
+                <li class="third_li" th:each="faq : ${faqList}">
+                    <a th:href="@{/cs/faq/view/{id}(id=${faq.faqNo})}">
+                        <span>Q .</span>
+                        <span th:text="${faq.faqtitle}">FAQ 제목</span>
+                    </a>
+                </li>
+                <li>
+                    <div class="third_show">
+                        <a href="#" class="showMore">더보기</a>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
 
 </th:block>
-
-
-
+</body>
+</html>
