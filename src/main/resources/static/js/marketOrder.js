@@ -321,10 +321,10 @@ document.addEventListener('DOMContentLoaded', function () {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.result === 'success') {
+                    if (data.result > 0) {
                         alert('주문이 완료되었습니다!');
                         localStorage.removeItem('productDataArray');  // 성공 시 로컬 데이터 삭제
-                        window.location.href = '/order/confirmation'; // 완료 후 페이지 이동
+                        window.location.href = '/market/completed'; // 완료 후 페이지 이동
                     } else {
                         alert('주문 처리 중 오류가 발생했습니다.');
                     }
