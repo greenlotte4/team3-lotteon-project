@@ -26,13 +26,11 @@ public class QCart extends EntityPathBase<Cart> {
 
     public final ListPath<CartItem, QCartItem> cartItems = this.<CartItem, QCartItem>createList("cartItems", CartItem.class, QCartItem.class, PathInits.DIRECT2);
 
-    public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
+    public final NumberPath<Integer> itemQuantity = createNumber("itemQuantity", Integer.class);
 
     public final DateTimePath<java.time.LocalDateTime> rdate = createDateTime("rdate", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> totalPrice = createNumber("totalPrice", Long.class);
-
-    public final NumberPath<Integer> totalQuantity = createNumber("totalQuantity", Integer.class);
 
     public final com.lotteon.entity.User.QUser user;
 

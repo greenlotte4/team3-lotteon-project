@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-   /* function isLoginUser(){
+    function isLoginUser(){
         const uid = document.getElementById("uid").value; // 값 가져오기
         return uid && uid.trim() !== ""; // uid 가 존재하고 비어 있지 않은지 확인
     }if(!isLoginUser()){
         alert('로그인이 필요합니다. 로그인 페이지로 날려버립니다.')
         window.location.href = '/user/login';
         return; // 더이상 실행 하지 않음
-    }*/
+    }
     // price 클래스를 가진 모든 요소를 선택
     const priceElements = document.querySelectorAll('.price');
 
@@ -240,8 +240,8 @@ document.querySelector('.selected-delete').addEventListener('click', function() 
     }
 
 
-        console.log('삭제할 아이템 ID:', cartItemId);
         const cartItemIds = [];
+
         selectedItems.forEach(function (checkbox){
             const cartItemRow = checkbox.closest('tr');
             const cartItemId = cartItemRow.getAttribute('data-cart-item-id'); // 카트 아이템 ID 가져오기
@@ -250,7 +250,7 @@ document.querySelector('.selected-delete').addEventListener('click', function() 
 
         if (confirm(`정말로 ${cartItemIds.length}개의 항목을 삭제 할기가?`)) {
             const deletionPromises = cartItemIds.map(cartItemId => {
-                return fetch(`/api/delete`, {
+                return fetch(`/api/delete/${cartItemId}`, { // cartItemId를 URL에 추가
                     method: `DELETE`
                 })
                     .then(resp => {
