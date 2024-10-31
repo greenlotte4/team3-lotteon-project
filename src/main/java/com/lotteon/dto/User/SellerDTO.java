@@ -39,5 +39,7 @@ public class SellerDTO {
 
     private LocalDateTime regDate;
 
+    private String status;
+
 
 }

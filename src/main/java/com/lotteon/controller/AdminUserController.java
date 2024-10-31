@@ -47,7 +47,7 @@ public class AdminUserController {
 
     @GetMapping("/{uid}")
     public ResponseEntity<Member> getUserById(@PathVariable String uid) {
-        Optional<Member> optionalMember = memberService.getMemberByUid(uid);
+        Optional<Member> optionalMember = memberService.findByUserId(uid);
         if (optionalMember.isPresent()) {
             return ResponseEntity.ok(optionalMember.get());
         } else {
@@ -116,6 +116,30 @@ public class AdminUserController {
             // 메시지를 Map으로 감싸서 JSON 형태로 반환
             Map<String, String> response = new HashMap<>();
             response.put("message", "회원 등급이 성공적으로 업데이트되었습니다.");
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/member/updateStatus")
+    public ResponseEntity<Map<String, String>> updateStatus(@RequestBody Map<String, String> request) {
+        String uid = request.get("uid"); // UID 가져오기
+        String status = request.get("status"); // 새 등급 가져오기
+
+        log.info("uid: " + uid + " status: " + status);
+
+        Optional<Member> existingMemberOpt = memberService.findByUserId(uid);
+        if (existingMemberOpt.isPresent()) {
+            Member existingMember = existingMemberOpt.get();
+            existingMember.setStatus(Member.MemberStatus.valueOf(status)); // 등급 업데이트
+
+            // 업데이트 메서드 호출
+            memberService.updateMember(existingMember.getId(), existingMember);
+
+            // 메시지를 Map으로 감싸서 JSON 형태로 반환
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "회원 상태가 성공적으로 업데이트되었습니다.");
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
