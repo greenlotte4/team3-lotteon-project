@@ -47,20 +47,20 @@
                                     <div class="product-name">
                                         <!-- active시 빨간색 바뀜 -->
                                         <input type="hidden" th:value="${products.productName}" id="productName">
-                                        <input type="hidden" th:value="${products.discount}" id="discount">
+                                        <input type="hidden"  th:value="${products.discount}" id="discount">
                                         <h4 class="prodName" >[[${products.productName}]]<a href=""><img class="heart active"
                                                     src="/images/common/icon_heart_black.svg" alt="찜하트"></a></h4>
                                         <div class="rating-and-reivew">
                                             <span class="seller-rating" th:data-rating="${products.getProductRating()}"></span>
-                                            <span class="review">상품평보기</span>
+                                            <span class="review"><a href="#reviewContent">상품평보기</a></span>
                                         </div>
                                     </div>
 
                                     <div class="pricing">
                                         <div>
-                                            <span class="discount" th:value="${products.discount}">[[${products.discount}]]</span>
-                                            <span class="final-price price"  id="finalPrice" th:value="${products.price*(100 - products.discount)/100}">[[${products.price*(100-products.discount)/100}]]</span>
-                                            <span class="original-price price" id="originalPrice" th:text="${products.price}">[[${products.price}]]</span>
+                                            <span class="discount" th:if="${products.discount > 0}" th:value="${products.discount}">[[${products.discount}]]</span>
+                                            <span class="final-price price"   id="finalPrice" th:value="${products.price*(100 - products.discount)/100}">[[${products.price*(100-products.discount)/100}]]</span>
+                                            <span class="original-price price"  th:style="${products.discount == 0} ? 'display:none;' : ''"  id="originalPrice" th:text="${products.price}">[[${products.price}]]</span>
                                         </div>
 
                                     </div>

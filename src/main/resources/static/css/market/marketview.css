@@ -107,11 +107,12 @@
 
 }
 .product-details .prodName .heart.active{
-    background-image: url(/images/common/ico_heart_red.svg);
+    background-image: url(/images/common/ico_heart_black.svg) no-repeat;
 }
 
 .product-details .prodName {
-    font-size: 24px;
+    font-size: 20px;
+
     margin-bottom: 10px;
 }
 
