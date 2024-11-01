@@ -389,3 +389,4 @@ function updateExpectedTotal(totalPrice, totalShippingFee) {
     document.getElementById("expectedPrice").innerText = `${expectedPrice.toLocaleString()}원`;
 }
 
+

@@ -38,7 +38,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
         List<Review> content = queryFactory
                 .selectFrom(qReview)
                 .join(qReview.product).fetchJoin()
-                .join(qReview.pReviewFiles).fetchJoin()
+                .leftJoin(qReview.pReviewFiles).fetchJoin() // 변경: leftJoin 사용
                 .where(expression)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

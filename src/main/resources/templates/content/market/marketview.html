@@ -273,13 +273,16 @@
                                                     <div class="review-body">
                                                         <h5 th:text="${review.product.productName}">상품명</h5>
                                                         <div>
-                                                            <div class="rimg">
-                                                                <img th:if="${review.savedReviewFiles.size() > 0}" th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
+                                                            <div class="rimg" th:if="${!#lists.isEmpty(review.savedReviewFiles)}">
+                                                                <!-- 리뷰 이미지가 있을 경우에만 이미지 태그를 출력 -->
+                                                                <img th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
                                                                      alt="review-image" class="review_img">
                                                             </div>
-                                                            <p class="review-text" th:text="${review.content}">
-                                                                리뷰 내용이 여기에 표시됩니다.
-                                                            </p>
+                                                            <div th:if="${#lists.isEmpty(review.savedReviewFiles)}" class="no-image-message">
+                                                                <!-- 이미지가 없는 경우 보여줄 메시지 -->
+
+                                                            </div>
+                                                            <p class="review-text" th:text="${review.content}">리뷰 내용이 여기에 표시됩니다.</p>
                                                         </div>
                                                     </div>
                                                 </article>
@@ -507,5 +510,6 @@
 
     <script th:src="@{/js/marketbuynow.js}"></script>
     <script th:src="@{/js/marketReviewModal.js}"></script>
+
 
 </th:block>
