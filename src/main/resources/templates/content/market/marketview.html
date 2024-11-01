@@ -47,20 +47,20 @@
                                     <div class="product-name">
                                         <!-- active시 빨간색 바뀜 -->
                                         <input type="hidden" th:value="${products.productName}" id="productName">
-                                        <input type="hidden" th:value="${products.discount}" id="discount">
+                                        <input type="hidden"  th:value="${products.discount}" id="discount">
                                         <h4 class="prodName" >[[${products.productName}]]<a href=""><img class="heart active"
                                                     src="/images/common/icon_heart_black.svg" alt="찜하트"></a></h4>
                                         <div class="rating-and-reivew">
                                             <span class="seller-rating" th:data-rating="${products.getProductRating()}"></span>
-                                            <span class="review">상품평보기</span>
+                                            <span class="review"><a href="#reviewContent">상품평보기</a></span>
                                         </div>
                                     </div>
 
                                     <div class="pricing">
                                         <div>
-                                            <span class="discount" th:value="${products.discount}">[[${products.discount}]]</span>
-                                            <span class="final-price price"  id="finalPrice" th:value="${products.price*(100 - products.discount)/100}">[[${products.price*(100-products.discount)/100}]]</span>
-                                            <span class="original-price price" id="originalPrice" th:text="${products.price}">[[${products.price}]]</span>
+                                            <span class="discount" th:if="${products.discount > 0}" th:value="${products.discount}">[[${products.discount}]]</span>
+                                            <span class="final-price price"   id="finalPrice" th:value="${products.price*(100 - products.discount)/100}">[[${products.price*(100-products.discount)/100}]]</span>
+                                            <span class="original-price price"  th:style="${products.discount == 0} ? 'display:none;' : ''"  id="originalPrice" th:text="${products.price}">[[${products.price}]]</span>
                                         </div>
 
                                     </div>
@@ -251,34 +251,46 @@
 
 
                                     <div class="reviewList" id="reviewContent">
-                                        <th:block th:each="review : ${pageResponseReviewDTO.getDtoList()}">
-                                            <!-- Check if the review's product code matches the displayed product's code -->
-                                            <article class="p-review" th:if="${review.product.productId} == ${products.productId}">
-                                                <div class="review-header">
-                                                    <div class="review-rating">
-                                                        <data class="rating-display" th:text="${review.rating}">평점</data>
-                                                    </div>
-                                                    <div class="reviewer-info">
-                                                        <span class="reviewer-name" th:text="${review.maskedWriter}">seo******</span>
-                                                        <span class="review-date">[[${#strings.substring(review.rdate, 0, 10)}]]</span>
-                                                    </div>
-                                                </div>
-                                                <div class="review-body">
-                                                    <h5 th:text="${review.product.productName}">상품명</h5>
-                                                    <div>
-                                                        <div class="rimg">
-                                                            <img th:if="${review.savedReviewFiles.size() > 0}" th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
-                                                                 alt="review-image" class="review_img">
-                                                        </div>
-                                                        <p class="review-text" th:text="${review.content}">
-                                                            리뷰 내용이 여기에 표시됩니다.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </article>
+                                        <!-- 리뷰가 없는 경우 "리뷰가 없습니다." 메시지를 표시 -->
+                                        <th:block th:if="${pageResponseReviewDTO.getDtoList().size() == 0}">
+                                            <p class="no-reviews-message">리뷰가 없습니다.</p>
                                         </th:block>
-                                        <!-- 리뷰 더보기 버튼 -->
-                                        <div class="btnwrapper"><button id="moreReviewsBtn">더보기</button></div>
+
+                                        <!-- 리뷰가 있는 경우에만 리스트와 더보기 버튼을 표시 -->
+                                        <th:block th:if="${pageResponseReviewDTO.getDtoList().size() > 0}">
+                                            <th:block th:each="review : ${pageResponseReviewDTO.getDtoList()}">
+                                                <!-- Check if the review's product code matches the displayed product's code -->
+                                                <article class="p-review" th:if="${review.product.productId} == ${products.productId}">
+                                                    <div class="review-header">
+                                                        <div class="review-rating">
+                                                            <data class="rating-display" th:text="${review.rating}">평점</data>
+                                                        </div>
+                                                        <div class="reviewer-info">
+                                                            <span class="reviewer-name" th:text="${review.maskedWriter}">seo******</span>
+                                                            <span class="review-date">[[${#strings.substring(review.rdate, 0, 10)}]]</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="review-body">
+                                                        <h5 th:text="${review.product.productName}">상품명</h5>
+                                                        <div>
+                                                            <div class="rimg" th:if="${!#lists.isEmpty(review.savedReviewFiles)}">
+                                                                <!-- 리뷰 이미지가 있을 경우에만 이미지 태그를 출력 -->
+                                                                <img th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
+                                                                     alt="review-image" class="review_img">
+                                                            </div>
+                                                            <div th:if="${#lists.isEmpty(review.savedReviewFiles)}" class="no-image-message">
+                                                                <!-- 이미지가 없는 경우 보여줄 메시지 -->
+
+                                                            </div>
+                                                            <p class="review-text" th:text="${review.content}">리뷰 내용이 여기에 표시됩니다.</p>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </th:block>
+
+                                            <!-- 리뷰 더보기 버튼: 리뷰가 있을 때만 표시 -->
+                                            <div class="btnwrapper"><button id="moreReviewsBtn">더보기</button></div>
+                                        </th:block>
                                     </div>
 
 
@@ -498,5 +510,6 @@
 
     <script th:src="@{/js/marketbuynow.js}"></script>
     <script th:src="@{/js/marketReviewModal.js}"></script>
+
 
 </th:block>

@@ -107,11 +107,12 @@
 
 }
 .product-details .prodName .heart.active{
-    background-image: url(/images/common/ico_heart_red.svg);
+    background-image: url(/images/common/ico_heart_black.svg) no-repeat;
 }
 
 .product-details .prodName {
-    font-size: 24px;
+    font-size: 20px;
+
     margin-bottom: 10px;
 }
 
@@ -577,11 +578,23 @@ select::-ms-expand {
     display: flex;
     flex-direction: row;
 }
-.product_review .review-body div > div {
+.product_review .review-body div {
+    display: flex; /* flexbox를 사용하여 내용 정렬 */
+    flex-direction: column; /* 세로 방향으로 정렬 */
+}
+
+.product_review .review-body .rimg {
     width: 100px;
     height: 100px;
-    border: 1px solid black;
-    margin-right: 7px;
+    margin-bottom: 7px; /* 이미지와 텍스트 사이 여백 */
+    display: flex; /* flexbox 사용 */
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center; /* 중앙 정렬 */
+}
+
+.product_review .review-body .no-image-message {
+    margin-bottom: 7px; /* 텍스트와 내용 사이 여백 */
+    color: #888; /* 텍스트 색상 조정 */
 }
 
 .product_review .review-body h5 {
@@ -961,4 +974,14 @@ select::-ms-expand {
     background-color: #ef2a23;
     font-weight: bold;
     color: white;
+}
+.no-reviews-message {
+    font-size: 16px;
+    color: #888;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.arrow {
+    display: none; /* 기본적으로 화살표를 숨김 */
 }

@@ -32,7 +32,7 @@
     top: 0px;
     left: 250px;
     background-color: #ef2a23;
-
+    color: white;
     width: 250px;
     z-index: 1;
 }
@@ -40,13 +40,13 @@
 .menu-2depth li {
     padding: 15px;
     cursor: pointer;
-    color: white;
+    color: black;
     transition: background-color 0.3s;
 
 }
 
 .menu-2depth li:hover {
-    background-color: #f3c7c6;
+    background-color: #FFFFFF;
     color: #0a0101;
 }
 

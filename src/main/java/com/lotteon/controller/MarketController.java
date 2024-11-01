@@ -50,7 +50,7 @@ public class MarketController {
         ProductCategoryDTO categoryDTOs =  productCategoryService.getCategoryById(category);
         log.info(categoryDTOs);
         model.addAttribute("categoryDTOs",categoryDTOs);
-
+        model.addAttribute("active",category);
         model.addAttribute("content", "main");
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
     }

@@ -95,6 +95,7 @@ public class UserController {
 
                 // 로그인 성공 시 Member의 name 값을 가져와 모델에 추가
                 String memberName = userService.getMemberNameByUsername(username);
+                log.info("login성공!!!!!!"+memberName);
                 model.addAttribute("memberName", memberName);
 
 

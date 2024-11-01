@@ -63,7 +63,6 @@
 .aside.market .cate_aside li ul li {
     height: auto;
     margin-top: 5px;
-    margin-left: 25px;
     line-height: 20px;
 }
 
@@ -107,6 +106,12 @@
 .aside.market .cate_aside .lnb-item .lnb-sub-menu a:hover {
     color: #ef2a23;
     font-size: 17px;
+}
+
+.aside.market .cate_aside .lnb-item .lnb-sub-menu a.cateactive {
+    color: #ef2a23;
+    font-size: 17px;
+    font-weight: 700;
 }
 
 /* 메인 카테고리 Hover 및 Active 스타일 */

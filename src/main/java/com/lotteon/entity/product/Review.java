@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -55,11 +56,10 @@ public class Review {
                 .reviewId(review.getReviewId())
                 .writer(review.getWriter())
                 .rdate(review.getRdate())
-                .title(review.getTitle())
                 .content(review.getContent())
                 .rating(review.getRating())
-                .savedReviewFiles(review.getPReviewFiles()) // ReviewFile 리스트 설정
-                .productId(review.getProduct().getProductId())
+                .savedReviewFiles(review.getPReviewFiles() != null ? review.getPReviewFiles() : Collections.emptyList()) // ReviewFile 리스트 설정
+                .productId(review.getProduct() != null ? review.getProduct().getProductId() : null) // ProductId null 체크
                 .product(productDTO) // ProductDTO 설정
                 .build();
     }

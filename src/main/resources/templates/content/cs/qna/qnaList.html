@@ -20,7 +20,6 @@
             <p>회원관련 문의내용 입니다.</p>
         </div>
         <div class="first container">
-            <h2>가입</h2>
             <ul class="first_list">
                 <li class="first_li" th:each="qna : ${qnaPage.getContent()}">
                     <a th:href="@{/cs/qna/detail/{id}(id=${qna.qna_id})}">

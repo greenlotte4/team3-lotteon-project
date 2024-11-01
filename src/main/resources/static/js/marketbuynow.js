@@ -155,6 +155,19 @@ document.getElementById('decrease').addEventListener('click', function () {
     }
 });
 
+// price 클래스를 가진 모든 요소를 선택
+const priceElements = document.querySelectorAll('.price');
+
+// 각 price 요소에 대해 반복하여 처리
+priceElements.forEach(priceElement => {
+    let priceValue = priceElement.textContent.trim().replace(/[^0-9]/g, ''); // 숫자가 아닌 문자를 제거
+    priceValue = parseInt(priceValue, 10); // 정수로 변환
+
+    if (!isNaN(priceValue)) { // 변환된 값이 NaN이 아닌 경우에만 적용
+        priceElement.textContent = priceValue.toLocaleString();  // 천단위로 쉼표 추가
+    }
+});
+
 document.getElementById('increase').addEventListener('click', function () {
     quantity += 1;
     document.getElementById("quantity").value = quantity;
@@ -319,6 +332,18 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     const images = document.querySelector('.review-images');
     const totalImages = document.querySelectorAll('.reviewImg').length; // 전체 이미지 수
 
+    document.addEventListener("DOMContentLoaded", function() {
+        const reviewImagesContainer = document.querySelector(".review-images");
+        const leftArrow = document.getElementById("leftArrow");
+        const rightArrow = document.getElementById("rightArrow");
+
+        // 이미지가 있을 때만 화살표를 표시
+        if (reviewImagesContainer && reviewImagesContainer.querySelector(".reviewImg")) {
+            leftArrow.style.display = "block";
+            rightArrow.style.display = "block";
+        }
+    });
+
 // 왼쪽 화살표 클릭 이벤트
     document.getElementById('leftArrow').addEventListener('click', function() {
         if (currentIndex > 0) {
@@ -376,4 +401,5 @@ function updateExpectedTotal(totalPrice, totalShippingFee) {
     const expectedPrice = totalPrice + totalShippingFee;
     document.getElementById("expectedPrice").innerText = `${expectedPrice.toLocaleString()}원`;
 }
+
 

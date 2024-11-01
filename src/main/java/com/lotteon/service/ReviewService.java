@@ -12,6 +12,7 @@ import com.lotteon.repository.product.ProductRepository;
 import groovy.util.logging.Log4j2;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.data.domain.Page;
@@ -22,9 +23,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Log4j2
 @RequiredArgsConstructor
 @Service
@@ -125,11 +128,22 @@ public class ReviewService {
         // 리뷰 엔티티를 DTO로 변환 및 마스킹 처리
         List<ReviewDTO> reviewList = pageReview.stream()
                 .map(review -> {
-                    ReviewDTO reviewDTO = review.ToDTO(review); // DTO 변환
-                    reviewDTO.setWriter(reviewDTO.getMaskedWriter()); // 마스킹된 아이디 설정
+                    ReviewDTO reviewDTO = review.ToDTO(review);
+                    reviewDTO.setWriter(reviewDTO.getMaskedWriter());
+
+                    // 이미지 파일 리스트가 null인 경우 빈 리스트로 초기화
+                    if (reviewDTO.getSavedReviewFiles() == null) {
+                        reviewDTO.setSavedReviewFiles(Collections.emptyList());
+                    }
+
                     return reviewDTO;
                 })
                 .collect(Collectors.toList());
+
+        log.info("페이지 리뷰 수: {}", pageReview.getTotalElements());
+
+        log.info("리뷰 리스트 크기: {}", reviewList.size());
+        log.info("리뷰 리스트 내용: {}", reviewList);
 
         int total = (int) pageReview.getTotalElements();
 
