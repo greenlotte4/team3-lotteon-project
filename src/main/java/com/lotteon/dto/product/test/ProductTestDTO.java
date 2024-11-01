@@ -1,21 +1,17 @@
-package com.lotteon.dto.product;
+package com.lotteon.dto.product.test;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lotteon.dto.User.SellerDTO;
-import com.lotteon.entity.User.Seller;
-import com.lotteon.entity.product.Product;
+import com.lotteon.dto.product.OptionDTO;
+import com.lotteon.dto.product.OptionGroupDTO;
+import com.lotteon.dto.product.ProductFileDTO;
+import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.entity.product.ProductDetails;
 import com.lotteon.entity.product.Review;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -23,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Builder
-public class ProductDTO{
+public class ProductTestDTO {
 
     private long productId;
 
@@ -43,16 +39,13 @@ public class ProductDTO{
     private String sellerId;
     private String productCode;
     private long hit;
+
+    private List<OptionGroupDTO> optionGroups;
+
     private String file190;
     private String file230;
     private String file456;
     private List<String> filedesc = new ArrayList<>();;
-
-    //변경된 OptionDTO
-    @JsonManagedReference("product-options")
-    private List<OptionGroupDTO> optionGroups;
-
-
 
     private List<ProductFileDTO> productFiles;
     private List<OptionDTO> options;

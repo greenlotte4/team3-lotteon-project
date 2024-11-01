@@ -78,27 +78,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>옵션</td>
-                                    <td class="optionTag">
-                                        <section>
-                                            <div id="optionList">
-                                                <div>
-                                                    <div class="optionItem"  name="options">
-                                                        <input type="text" placeholder="옵션 이름 예) R100" name="optionName">
-                                                        <input type="text" placeholder="옵션 내용 예) red/100size" name="optionDesc">
-                                                        <input type="number" placeholder="해당 옵션 재고수량" name="optionStock">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </section>
-                                        <button type="button" id="addOptionBtn">옵션 추가</button>
-
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td>제조사</td>
                                     <td>
                                         <input type="hidden" name="sellerId" th:value="${#authentication.principal.user.uid}">
+                                        <input type="hidden" id="optionsJson" name="optionsJson">
                                         <input type="text" placeholder="" name="madeIn">
                                     </td>
                                 </tr>
@@ -114,16 +97,16 @@
                                         <input type="text" placeholder="" name="discount"> %
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>포인트</td>
-                                    <td>
-                                        <input type="text" placeholder="" name="point"> 원
-                                    </td>
-                                </tr>
+<!--                                <tr>-->
+<!--                                    <td>포인트</td>-->
+<!--                                    <td>-->
+<!--                                        <input type="text" placeholder="" name="point"> 원-->
+<!--                                    </td>-->
+<!--                                </tr>-->
                                 <tr>
                                     <td>재고수량</td>
                                     <td>
-                                        <input type="text" placeholder="" name="stock"> 개
+                                        <input type="text" placeholder="옵션이 없는 경우 필수 작성" name="stock"> 개
                                     </td>
                                 </tr>
                                 <tr>
@@ -153,7 +136,56 @@
                                 </tr>
 
                             </table>
+
                             <div class="basic_modi"></div>
+
+                        </article>
+                        <article>
+
+                        </article>
+
+                        <article>
+                            <div id="option-container">
+                                <div class="option-group">
+                                    <div>
+                                        <label>옵션 그룹명</label>
+                                        <input type="text" name="optionGroupName[]" placeholder="옵션 그룹명을 입력하세요" onblur="addOptionGroup(this)">
+                                    </div>
+                                    <div class="option-items">
+                                        <label>옵션 항목</label>
+                                        <div class="addOption">
+                                            <input type="text" placeholder="옵션 항목을 입력하세요" onblur="addOptionItem(this)">
+
+                                        </div>
+                                        <button type="button" onclick="addOptionItemField(this)">옵션 항목 추가</button>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="addNewOptionGroup()">옵션 그룹 추가</button>
+                            </div>
+
+                            <div id="option-stock-container">
+                                <div id="optionBtnArea">
+                                    <button type="button" onclick="generateCombinations()">옵션 조합 생성</button>
+                                    <button type="button" onclick="resetCombinations()">조합 리셋</button>
+                                    <button type="button" onclick="collectOptionData();" id="optionSaved">옵션임시저장</button>
+
+
+                                </div>
+                                <div class="codeArea hidden" id="codeArea">
+                                    <div>
+                                        <label>기본 코드</label>
+                                        <input type="text" id="baseCode" placeholder="기본 코드 (예: ABC)">
+                                        <button type="button" onclick="generateSequentialCodes()">연속 코드 생성</button>
+                                    </div>
+                                    <div>
+                                        <label>일괄 재고 수량</label>
+                                        <input type="number" id="bulkStock" placeholder="일괄 재고 수량">
+                                        <button type="button" onclick="applyBulkStock()">일괄 수량 적용</button>
+                                    </div>
+                                </div>
+                                <div id="stock-input-area"></div>
+
+                            </div>
 
                         </article>
 

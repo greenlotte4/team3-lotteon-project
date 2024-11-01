@@ -1,6 +1,7 @@
-package com.lotteon.dto.product;
+package com.lotteon.entity.product.test;
 
 
+import com.lotteon.entity.product.OptionGroup;
 import lombok.*;
 
 @Getter
@@ -9,19 +10,19 @@ import lombok.*;
 @RequiredArgsConstructor
 @ToString
 @Builder
-public class OptionDTO {
+public class OptionTest {
 
-    private long id;
+    private long optionId;
     private long parent_id;    //부모상품
     private String optionName;     //프로덕트 서브네임
     private String optionDesc;
     private long optionStock;
-    private String optionCode;
+    private String OptionCode;
     private String parentCode;
-    private String combination;
 
-    private OptionGroupDTO optionGroup;
+    private OptionGroup optionGroup;
     private String name;
-    private long additionalPrice;
+    private int additionalPrice;
+
 
 }

@@ -23,7 +23,7 @@ public class CategoryInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         // 모델이 존재하는 경우에만 카테고리 데이터를 추가
         if (modelAndView != null) {
-            List<ProductCategory> categories = productCategoryService.getCategoryHierarchy();
+            List<ProductCategoryDTO> categories = productCategoryService.getCategoriesWithCacheCheck(); // 캐시된 데이터 가져옴
             modelAndView.addObject("categories", categories);
         }
     }

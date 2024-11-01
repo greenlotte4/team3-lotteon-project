@@ -25,7 +25,7 @@ public class VersionInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if (modelAndView != null){
 
-            VersionDTO version = versionService.getLatestVersion();
+            VersionDTO version = versionService.getVersionWithCacheCheck();
             modelAndView.addObject("versionInfo", version);
         }
     }

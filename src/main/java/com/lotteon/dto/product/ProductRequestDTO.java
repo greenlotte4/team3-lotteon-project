@@ -1,10 +1,13 @@
 package com.lotteon.dto.product;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.lotteon.entity.product.OptionGroup;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -14,10 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductRequestDTO{
 
+    private int firstLevelCategory;  // 추가된 필드
+    private int secondLevelCategory; // 추가된 필드
     private int thirdLevelCategory;
 
     private String productName;
-    private String productDesc; //상품설명
+    private String productDesc;
     private String productCode;
     private List<String> optionName;
     private List<String> optionDesc;
@@ -29,7 +34,7 @@ public class ProductRequestDTO{
     private int discount;
     private long stock;
     private int shippingFee;
-    private int shippingTerms; //무료배송 조건
+    private int shippingTerms;
     private String rdate;
     private int point;
 
@@ -38,10 +43,11 @@ public class ProductRequestDTO{
     private String condition;
     private String tax;
     private String receiptIssuance;
-    //사업자구분
     private String busniesstype;
-
-    //원산지
     private String manufactureCountry;
+
+    private List<OptionGroupDTO> options;
+    private List<ProductOptionCombinationDTO> combinations;
+    private List<Map<String, Long>> stockMap;
 
 }

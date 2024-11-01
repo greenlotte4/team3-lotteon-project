@@ -53,7 +53,7 @@ public class HeaderInterceptor implements HandlerInterceptor {
 
         if (modelAndView != null) {
 
-            HeaderInfoDTO headerInfo = headerInfoService.getHeaderInfo();
+            HeaderInfoDTO headerInfo = headerInfoService.fetchIfCacheEmpty();
             modelAndView.addObject("headerInfo", headerInfo);
             modelAndView.addObject("memberName", memberName);
 
