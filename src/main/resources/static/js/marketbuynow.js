@@ -319,6 +319,18 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     const images = document.querySelector('.review-images');
     const totalImages = document.querySelectorAll('.reviewImg').length; // 전체 이미지 수
 
+    document.addEventListener("DOMContentLoaded", function() {
+        const reviewImagesContainer = document.querySelector(".review-images");
+        const leftArrow = document.getElementById("leftArrow");
+        const rightArrow = document.getElementById("rightArrow");
+
+        // 이미지가 있을 때만 화살표를 표시
+        if (reviewImagesContainer && reviewImagesContainer.querySelector(".reviewImg")) {
+            leftArrow.style.display = "block";
+            rightArrow.style.display = "block";
+        }
+    });
+
 // 왼쪽 화살표 클릭 이벤트
     document.getElementById('leftArrow').addEventListener('click', function() {
         if (currentIndex > 0) {

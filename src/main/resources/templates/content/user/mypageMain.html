@@ -164,15 +164,18 @@
                         <td th:text="${review.reviewId}"><data value="">1</data></td>
                         <td>
                             <data value="">
-                                <div class="eximg2">
-                                    <!-- 첫 번째 ReviewFile의 sname을 사용하여 이미지 표시 -->
-                                    <img th:if="${review.getPReviewFiles().size() > 0}"
-                                         th:src="@{'/uploads/ReviewImg/' + ${review.getPReviewFiles()[0].sname}}"
-                                         alt="상품 이미지">
-                                </div>
-                                <div class="Pinf2">
-                                    <p>상품번호<br> <span th:text="${review.product.productId}">123456</span></p>
-                                    <p>상품명<br> <span th:text="${review.product.productName}">치킨</span></p>
+                                <div class="product-container">
+                                    <div class="eximg2">
+                                        <!-- 첫 번째 ReviewFile의 sname을 사용하여 이미지 표시 -->
+                                        <img th:if="${review.getPReviewFiles().size() > 0}"
+                                             th:src="@{'/uploads/ReviewImg/' + ${review.getPReviewFiles()[0].sname}}"
+                                             alt="상품 이미지">
+                                        <span th:if="${review.getPReviewFiles().size() == 0}" class="no-image-text">이미지 없음</span>
+                                    </div>
+                                    <div class="Pinf2">
+                                        <p>상품번호<br> <span th:text="${review.product.productId}">123456</span></p>
+                                        <p>상품명<br> <span th:text="${review.product.productName}">치킨</span></p>
+                                    </div>
                                 </div>
                             </data>
                         </td>

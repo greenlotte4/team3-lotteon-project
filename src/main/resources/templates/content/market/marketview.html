@@ -251,34 +251,43 @@
 
 
                                     <div class="reviewList" id="reviewContent">
-                                        <th:block th:each="review : ${pageResponseReviewDTO.getDtoList()}">
-                                            <!-- Check if the review's product code matches the displayed product's code -->
-                                            <article class="p-review" th:if="${review.product.productId} == ${products.productId}">
-                                                <div class="review-header">
-                                                    <div class="review-rating">
-                                                        <data class="rating-display" th:text="${review.rating}">평점</data>
-                                                    </div>
-                                                    <div class="reviewer-info">
-                                                        <span class="reviewer-name" th:text="${review.maskedWriter}">seo******</span>
-                                                        <span class="review-date">[[${#strings.substring(review.rdate, 0, 10)}]]</span>
-                                                    </div>
-                                                </div>
-                                                <div class="review-body">
-                                                    <h5 th:text="${review.product.productName}">상품명</h5>
-                                                    <div>
-                                                        <div class="rimg">
-                                                            <img th:if="${review.savedReviewFiles.size() > 0}" th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
-                                                                 alt="review-image" class="review_img">
-                                                        </div>
-                                                        <p class="review-text" th:text="${review.content}">
-                                                            리뷰 내용이 여기에 표시됩니다.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </article>
+                                        <!-- 리뷰가 없는 경우 "리뷰가 없습니다." 메시지를 표시 -->
+                                        <th:block th:if="${pageResponseReviewDTO.getDtoList().size() == 0}">
+                                            <p class="no-reviews-message">리뷰가 없습니다.</p>
                                         </th:block>
-                                        <!-- 리뷰 더보기 버튼 -->
-                                        <div class="btnwrapper"><button id="moreReviewsBtn">더보기</button></div>
+
+                                        <!-- 리뷰가 있는 경우에만 리스트와 더보기 버튼을 표시 -->
+                                        <th:block th:if="${pageResponseReviewDTO.getDtoList().size() > 0}">
+                                            <th:block th:each="review : ${pageResponseReviewDTO.getDtoList()}">
+                                                <!-- Check if the review's product code matches the displayed product's code -->
+                                                <article class="p-review" th:if="${review.product.productId} == ${products.productId}">
+                                                    <div class="review-header">
+                                                        <div class="review-rating">
+                                                            <data class="rating-display" th:text="${review.rating}">평점</data>
+                                                        </div>
+                                                        <div class="reviewer-info">
+                                                            <span class="reviewer-name" th:text="${review.maskedWriter}">seo******</span>
+                                                            <span class="review-date">[[${#strings.substring(review.rdate, 0, 10)}]]</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="review-body">
+                                                        <h5 th:text="${review.product.productName}">상품명</h5>
+                                                        <div>
+                                                            <div class="rimg">
+                                                                <img th:if="${review.savedReviewFiles.size() > 0}" th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
+                                                                     alt="review-image" class="review_img">
+                                                            </div>
+                                                            <p class="review-text" th:text="${review.content}">
+                                                                리뷰 내용이 여기에 표시됩니다.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </th:block>
+
+                                            <!-- 리뷰 더보기 버튼: 리뷰가 있을 때만 표시 -->
+                                            <div class="btnwrapper"><button id="moreReviewsBtn">더보기</button></div>
+                                        </th:block>
                                     </div>
 
 

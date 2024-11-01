@@ -30,10 +30,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // 컨테이너 초기화
             reviewImgsContainer.innerHTML = '';
 
+            // 서버 주소 설정 (로컬/배포 환경에 따라 동적으로 설정)
+            const serverUrl = window.location.hostname === 'localhost'
+                ? 'http://localhost:8085'
+                : 'http://43.202.32.28:8085';
+
             // 각 이미지에 대해 <img> 태그 생성 및 추가
             imgNames.forEach(imgName => {
                 const imgElement = document.createElement('img');
-                imgElement.src = `http://localhost:8085/uploads/ReviewImg/${imgName.trim()}`;
+                imgElement.src = `${serverUrl}/uploads/ReviewImg/${imgName.trim()}`;
                 imgElement.alt = 'Review Image';
                 reviewImgsContainer.appendChild(imgElement);
             });
