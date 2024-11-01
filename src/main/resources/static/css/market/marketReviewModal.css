@@ -125,7 +125,7 @@ th:nth-child(5) {width: 8%;}  /* 115px / 930px */
 }
 
 .modal-content table tr td img{
-    width: 150px;
+    width: auto;
     height: 150px;
     object-fit: contain;
     border: 1px solid black;
