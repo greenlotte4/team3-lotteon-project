@@ -1,7 +1,167 @@
-     
-        .admin_menu > li:nth-child(4) .admin_sub_menu > li:nth-child(2) > a {
-            text-decoration: underline;
-       }
+
+
+/* 옵션 그룹 및 옵션 항목 스타일 */
+#option-container {
+    width: 900px;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.option-group {
+    margin-bottom: 15px;
+    border-bottom: 0.5px solid #cccccc;
+}
+
+
+.option-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+.option-group > div{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 5px;
+}
+.option-group > div:nth-child(1){
+    border-bottom: 0.5px solid #dddddd;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+    padding: 5px 0;
+
+}
+
+
+.option-group > div > label{
+    margin-right: 10px;
+    width: 150px;
+    box-sizing: border-box;
+}
+
+.option-group input[type="text"],
+.option-group input[type="number"] {
+    width: 300px;
+    height: 30px;
+    /*margin: 5px 0;*/
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#optionBtnArea{
+    display: flex;
+    justify-content: space-between;
+}
+
+.codeArea{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.codeArea.hidden{
+    display: none;
+}
+
+.option-items {
+    margin-top: 10px;
+    display: flex;
+}
+
+.option-items button{
+    margin-left: 20px;
+}
+
+.option-items .option-item {
+    margin-top: 5px;
+}
+
+button[type="button"] {
+    background-color: #5c9ded;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button[type="button"]:hover {
+    background-color: #4a8cd3;
+}
+
+/* 옵션 조합 테이블 스타일 */
+#option-stock-container {
+    width: 900px;
+    margin: 30px auto 0;
+    background-color: #f7f9fc;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.option-stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.option-stock-table thead {
+    background-color: #e8f4fc;
+}
+
+.option-stock-table th,
+.option-stock-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.option-stock-table th {
+    font-weight: bold;
+    color: #333;
+}
+
+.option-stock-table td input[type="number"] {
+    width: 100px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 스타일 조정 */
+.option-stock-container button {
+    display: block;
+    margin: 0 auto 15px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    background-color: #5c9ded;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.option-stock-container button:hover {
+    background-color: #4a8cd3;
+}
+
+
+
+/**/
+
+.admin_menu > li:nth-child(4) .admin_sub_menu > li:nth-child(2) > a {
+    text-decoration: underline;
+}
 
 
 

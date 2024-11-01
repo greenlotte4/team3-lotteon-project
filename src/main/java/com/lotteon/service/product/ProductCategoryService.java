@@ -7,12 +7,20 @@ import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.repository.Impl.ProductCategoryRepositoryImpl;
 import com.lotteon.repository.product.ProductCategoryRepository;
+import com.lotteon.service.CacheableService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,9 +31,53 @@ import java.util.stream.Collectors;
 public class ProductCategoryService {
 
     private final ProductCategoryRepository productCategoryRepository;
+    private final CacheableService cacheableService;
 
     private final ModelMapper modelMapper;
     private final ProductCategoryRepositoryImpl productCategoryRepositoryImpl;
+    private final CacheManager cacheManager;
+
+
+    @Cacheable("categories")
+    public List<ProductCategoryDTO> populateCategories() {
+        List<ProductCategory> categories = getCategoryHierarchy();
+        List<ProductCategoryDTO> categoryDTOs = new ArrayList<>();
+        categories.forEach(category -> categoryDTOs.add(convertToDto(category)));
+        return categoryDTOs;
+    }
+
+    private ProductCategoryDTO convertToDto(ProductCategory category) {
+        ProductCategoryDTO categoryDTO = modelMapper.map(category, ProductCategoryDTO.class);
+        if (category.getChildren() != null) {
+            List<ProductCategoryDTO> childrenDTOs = new ArrayList<>();
+            for (ProductCategory child : category.getChildren()) {
+                childrenDTOs.add(convertToDto(child));
+            }
+            categoryDTO.setChildren(childrenDTOs);
+        }
+        return categoryDTO;
+    }
+
+//    public List<ProductCategoryDTO> populateCategories() {
+//        log.info("Fetching category data from the database...");
+//        List<ProductCategory> categories = getCategoryHierarchy();
+//        List<ProductCategoryDTO> categoryDTOs = new ArrayList<>();
+//        categories.forEach(category -> categoryDTOs.add(convertToDto(category)));
+//        return categoryDTOs;
+//    }
+//
+//    private ProductCategoryDTO convertToDto(ProductCategory category) {
+//        ProductCategoryDTO categoryDTO = modelMapper.map(category, ProductCategoryDTO.class);
+//        // 재귀적으로 children도 매핑
+//        if (category.getChildren() != null) {
+//            List<ProductCategoryDTO> childrenDTOs = new ArrayList<>();
+//            for (ProductCategory child : category.getChildren()) {
+//                childrenDTOs.add(convertToDto(child));
+//            }
+//            categoryDTO.setChildren(childrenDTOs);
+//        }
+//        return categoryDTO;
+//    }
 
     public ProductCategory insertCategory(CreateCategoryRequestDTO createCategoryRequestDTO  ) {
         ProductCategory parentCategory = null;
@@ -96,9 +148,13 @@ public class ProductCategoryService {
         return categoriesDTO;
     }
 
+
+
+
     public List<ProductCategory> getCategoryHierarchy() {
         return buildCategoryTree(null); // 최상위 카테고리부터 시작 (parentId가 NULL인 것)
     }
+
 
     private List<ProductCategory> buildCategoryTree(Long parentId) {
         List<ProductCategory> categories = productCategoryRepository.findByParentId(parentId);
@@ -108,5 +164,19 @@ public class ProductCategoryService {
 
 
         return categories;
+    }
+
+
+    public List<ProductCategoryDTO> getCategoriesWithCacheCheck() {
+        Cache cache = cacheManager.getCache("categories");
+        List<ProductCategoryDTO> cachedCategories = cache != null ? cache.get(0, List.class) : null;
+
+        if (cachedCategories == null) {
+            log.info("Cache miss - Fetching categories from the database");
+            return populateCategories(); // 캐시 갱신
+        } else {
+            log.info("Cache hit - Returning cached categories");
+            return cachedCategories;
+        }
     }
 }

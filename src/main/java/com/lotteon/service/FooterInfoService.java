@@ -6,8 +6,12 @@ import com.lotteon.repository.FooterInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Log4j2
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class FooterInfoService {
     private final FooterInfoRepository footerInfoRepository;
     private final ModelMapper modelMapper;
+    private final CacheManager cacheManager;
 
     public boolean existsById(Long id) {
         return footerInfoRepository.existsById(id);
@@ -38,6 +43,15 @@ public class FooterInfoService {
 
         footerInfoRepository.save(footerInfo);
     }
+
+    @CacheEvict(value = "footerInfo", allEntries = true)
+    public void refreshFooterInfoCache() {
+        getFooterInfo(); // 캐시를 초기화하기 위해 호출
+    }
+    @Scheduled(cron = "0 40 2 * * *") // 매일 10:10 AM에 실행
+    public void scheduledFooterInfoCacheUpdate() {
+        refreshFooterInfoCache();
+    }
     @CacheEvict(value = "footerInfo", allEntries = true)
     public void updateFooterInfo(FooterInfoDTO footerInfo) {
         FooterInfo entity = footerInfoRepository.findById(footerInfo.getFt_id()).orElseThrow(() -> new RuntimeException("FooterInfo not found"));
@@ -55,6 +69,20 @@ public class FooterInfoService {
         entity.setFt_copyright(footerInfo.getFt_copyright());
 
         footerInfoRepository.save(entity);
+    }
+
+
+    public FooterInfoDTO getFooterInfoWithCacheCheck() {
+        Cache cache = cacheManager.getCache("footerInfo");
+        FooterInfoDTO cachedFooterInfo = cache != null ? cache.get(1, FooterInfoDTO.class) : null;
+
+        if (cachedFooterInfo == null) {
+            log.info("Cache miss - Fetching FooterInfo from the database");
+            return getFooterInfo(); // @Cacheable 메서드 호출로 캐시 갱신
+        } else {
+            log.info("Cache hit - Returning cached FooterInfo");
+            return cachedFooterInfo;
+        }
     }
 
     @Cacheable(value = "footerInfo")

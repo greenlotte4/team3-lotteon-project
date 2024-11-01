@@ -2,11 +2,14 @@ package com.lotteon.controller;
 
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotteon.dto.product.*;
 import com.lotteon.service.user.UserService;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -27,6 +34,8 @@ public class SellerController {
     private final AuthenticationManager authenticationManager; // AuthenticationManager로 수정
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
 
 
     @GetMapping("/product/list")
@@ -46,22 +55,49 @@ public class SellerController {
     }
 
 
-    @PostMapping("/product/register")
-    public String insertProduct(@ModelAttribute ProductRequestDTO productRequestDTO, Authentication auth, Model model) {
+    @ResponseBody
+    @PostMapping(value = "/product/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String insertProduct(  @RequestParam("productJson") String productJson,
+                                  @RequestParam("optionsJson") String optionsJson,
+                                  @RequestParam("files") List<MultipartFile> files,
+                                  @RequestParam("combinationsJson") String combinationsJson,
+                                Authentication auth, Model model) {
         log.info("전달은 된다.");
-        log.info(productRequestDTO);
+        log.info("formData: " + files);
+
+//        try{
+//            OptionGroupDTO[] options = objectMapper.readValue(formData, OptionGroupDTO[].class);
+//            log.info("Parsed Options: {}", optionsList);
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return "상품 등록 중 오류가 발생했습니다.";
+//        }
+
+
 
         //product insert
-        ProductResponseDTO responseDTO = new ProductResponseDTO(productRequestDTO);
-        log.info("auth ~~~~~~~~~~~~~~~~~~" + auth.getName());
-        log.info("responseDTO");
+//        ProductResponseDTO responseDTO = new ProductResponseDTO(productRequestDTO);
+        try {
+            // Parse JSON strings to DTOs if necessary
+            ProductRequestDTO productRequest = objectMapper.readValue(productJson, ProductRequestDTO.class);
+            log.info("Parsed Product Data: " + productRequest);
+            List<OptionGroupDTO> options = objectMapper.readValue(optionsJson, new TypeReference<List<OptionGroupDTO>>() {});
 
-        long result = productService.insertProduct(responseDTO);
-        //option insert
-        log.info("insertProduct");
+            log.info("Parsed Options List: " + options);
+
+            // Use parsed data and files as needed
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error occurred while processing product data";
+        }
+
+        // Placeholder for insert logic
+        long result = 0;
+
         if (result > 0) {
             return "redirect:/seller/product/list";
-
         } else {
             return "redirect:/seller/product/register?success=200";
         }
