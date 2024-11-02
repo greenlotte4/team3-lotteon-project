@@ -1,6 +1,9 @@
 package com.lotteon.dto.order;
 
+import com.lotteon.dto.product.OptionDTO;
 import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.entity.User.Seller;
+import jakarta.persistence.Transient;
 import lombok.*;
 
 @Getter
@@ -15,12 +18,27 @@ public class OrderItemDTO {
     private OrderDTO order;
     private ProductDTO product;
     private long productId;
+    private long savedPrice;
+    private long savedDiscount;
+    private long orderPrice;
     private long orderId;
     private long optionId;
+    private String optionDesc;
     private long stock;
     private long price;
     private String traceNumber;
     private String sellerUid;
+    private long shippingTerms;
+    private long shippingFees;
+    private long point;
+
+    @Transient
+    private Seller seller;
+
+
+
+    //selectOption
+    private OptionDTO selectOption;
 
 
 }

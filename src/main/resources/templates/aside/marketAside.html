@@ -1,19 +1,16 @@
 <aside class="aside market">
     <div class="cate_aside">
         <ul>
-            <!-- 1st Depth Categories -->
             <li class="lnb1" th:each="category : ${categories}">
-                <a th:href="@{'/market/main/'+${category.id}}" th:text="${category.name}">1차분류</a>
-
-                <!-- 2nd Depth Subcategories -->
+                <a th:href="@{'/market/main/' + ${category.id}}" th:text="${category.name}">1차분류</a>
                 <ul th:if="${category.children != null && !#lists.isEmpty(category.children)}">
                     <li class="lnb-item" th:each="child : ${category.children}">
                         <a th:text="${child.name}">2차분류</a>
-
-                        <!-- 3rd Depth Sub-subcategories -->
                         <ul class="lnb-sub-menu" th:if="${child.children != null && !#lists.isEmpty(child.children)}">
                             <li th:each="subChild : ${child.children}">
-                                <a th:href="@{'/market/list/' + ${subChild.id}}" th:text="${subChild.name}">3차분류</a>
+                                <a th:href="@{'/market/list/' + ${subChild.id}}"
+                                   th:classappend="${active == subChild.id} ? 'cateactive' : ''"
+                                   th:text="${subChild.name}">3차분류</a>
                             </li>
                         </ul>
                     </li>

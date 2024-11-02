@@ -26,17 +26,19 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     @Override
     public Page<Review> selectReviewAllForList(PageRequestDTO pageRequestDTO, Pageable pageable) {
         log.info("Fetching reviews...");
-        String type = pageRequestDTO.getType();
 
+        String productIdStr = pageRequestDTO.getType(); // type을 productId로 사용
         BooleanExpression expression = null;
-        if (type != null) {
-            expression = qReview.product.productId.eq(Long.parseLong(type));
+
+        if (productIdStr != null) {
+            Long productId = Long.parseLong(productIdStr);
+            expression = qReview.product.productId.eq(productId); // productId 조건 추가
         }
 
         List<Review> content = queryFactory
                 .selectFrom(qReview)
                 .join(qReview.product).fetchJoin()
-                .join(qReview.pReviewFiles).fetchJoin()
+                .leftJoin(qReview.pReviewFiles).fetchJoin() // 변경: leftJoin 사용
                 .where(expression)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

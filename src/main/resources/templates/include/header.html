@@ -21,7 +21,7 @@
                         <!-- 일반 사용자 로그인 시 -->
                         <span th:elseif="${#authorization.expression('hasRole(''ROLE_MEMBER'')')}">
 <!--                         + ${userName} + -->
-                          <span style="margin-right: 10px;">님 환영합니다!</span>
+                          <span style="margin-right: 10px;" >[[${memberName}]]님 환영합니다!</span>
                          </span>
 
                         <!-- 로그아웃 메뉴 -->
@@ -64,12 +64,12 @@
                             문의
                         </button>
                     </li>
-                    <li>
-                        <a th:href="@{/mypage/myInfo}" data-cmpnt-typ="header_main"
-                           data-cmpnt-name="wishlist" class="heart">
-                            나의 찜
-                        </a>
-                    </li>
+<!--                    <li>-->
+<!--                        <a th:href="@{/mypage/myInfo}" data-cmpnt-typ="header_main"-->
+<!--                           data-cmpnt-name="wishlist" class="heart">-->
+<!--                            나의 찜-->
+<!--                        </a>-->
+<!--                    </li>-->
                     <li>
                         <a th:href="@{/mypage/myInfo}" data-cmpnt-typ="header_main"
                            data-cmpnt-name="mylotte" class="my">

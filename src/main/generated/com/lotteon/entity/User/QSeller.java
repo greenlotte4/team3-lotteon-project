@@ -50,6 +50,8 @@ public class QSeller extends EntityPathBase<Seller> {
 
     public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
 
+    public final StringPath status = createString("status");
+
     public final QUser user;
 
     public QSeller(String variable) {

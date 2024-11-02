@@ -2,6 +2,8 @@ package com.lotteon.repository;
 
 import com.lotteon.entity.product.Review;
 import com.lotteon.repository.custom.ReviewRepositoryCustom;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

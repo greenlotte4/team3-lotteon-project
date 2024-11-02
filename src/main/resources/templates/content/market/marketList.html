@@ -98,7 +98,7 @@
                             <div class="product-item" th:each="product:${responseDTO.getProductDTOs()}">
                                 <a th:href="@{/market/view/{category}/{id}(category=${product.getCategoryId()},id=${product.productId})}">
                                 <div class="product-image">
-                                    <img th:src="@{'/uploads/productimg/'+${product.getFile230()}}" alt="상품 이미지">
+                                    <img th:src="@{'/uploads/productImg/'+${product.getFile230()}}" alt="상품 이미지">
                                 </div>
                                 <div class="product-details">
                                     <h4 class="product-name">[[${product.productName}]]</h4>
@@ -106,7 +106,7 @@
                                 </div>
                                 <div class="price-seller-info">
                                     <div class="product-price">
-                                        <span class="final-price">[[${product.price}]]원</span>
+                                        <span class="final-price">[[${product.price*(100-product.discount)/100}]]원</span>
                                         <span class="original-price">[[${product.price}]]원</span>
                                         <span class="discount">[[${product.discount}]]% ↓</span>
 

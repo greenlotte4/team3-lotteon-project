@@ -15,6 +15,8 @@ public class OrderResponseDTO {
 
     private OrderDTO order;
     private List<OrderItemDTO> orderItems;
+    private long usePoint;
+    private long couponResult;
 
 
     @Builder
@@ -22,11 +24,10 @@ public class OrderResponseDTO {
 
         List<BuyNowRequestDTO> products = orderRequestDTO.getProductDataArray();
 
-        long totalPrice=0;
-        long totalQuantity=0;
-        long totalDiscount=0;
-        long totalShipping=0;
-        long expectedPoint=0;
+        this.usePoint=orderRequestDTO.getUsedPointResult();
+        this.couponResult=orderRequestDTO.getUsedCouponResult();
+
+
         this.orderItems = new ArrayList<>();
         for (BuyNowRequestDTO buyNowRequestDTO : products) {
 
@@ -37,44 +38,47 @@ public class OrderResponseDTO {
                     .price(originalPrice)
                     .productId(parseLongOrDefault(buyNowRequestDTO.getProductId(), 0))
                     .optionId(parseLongOrDefault(buyNowRequestDTO.getOptionId(), 0))
+                    .optionDesc(buyNowRequestDTO.getOptionName())
+                    .savedPrice(Long.parseLong(buyNowRequestDTO.getOriginalPrice()))
+                    .orderPrice(Long.parseLong(buyNowRequestDTO.getFinalPrice()))
+                    .savedDiscount(Long.parseLong(buyNowRequestDTO.getDiscount()))
+                    .shippingTerms(Long.parseLong(buyNowRequestDTO.getShippingTerms()))
                     .stock(originalQuantity)
+                    .point(parseLongOrDefault(buyNowRequestDTO.getPoint(),0))
                     .build();
 
             this.orderItems.add(orderItemDTO);
 
-            totalQuantity += originalQuantity;
-            totalPrice += originalPrice * originalQuantity;
-            double discountAmount = (double) (parseLongOrDefault(buyNowRequestDTO.getOriginalPrice(), 0) * (100 - parseLongOrDefault(buyNowRequestDTO.getDiscount(), 0))) / 100;
-            totalDiscount += (long) Math.floor(discountAmount);
-            totalShipping += parseLongOrDefault(buyNowRequestDTO.getShippingFee(), 0);
-            expectedPoint += parseLongOrDefault(buyNowRequestDTO.getPoint(), 0);
         }
 
-        OrderDTO orderDTO = OrderDTO.builder()
-                .receiver(orderRequestDTO.getReceiver())
-                .hp(orderRequestDTO.getHp())
-                .postcode(orderRequestDTO.getPostcode())
+        this.order = OrderDTO.builder()
                 .addr1(orderRequestDTO.getAddr1())
                 .addr2(orderRequestDTO.getAddr2())
-                .shippingInfo(orderRequestDTO.getShippingInfo())
-                .expectedPoint(orderRequestDTO.getUsedPointResult())
-                .pay(orderRequestDTO.getCredit())
-                .usedPoint(orderRequestDTO.getUsedPointResult())
+                .hp(orderRequestDTO.getHp())
                 .couponId(orderRequestDTO.getCouponId())
                 .isCoupon(orderRequestDTO.getCouponId() > 0)
-                .totalPrice(totalPrice)
-                .totalQuantity(totalQuantity)
-                .totalDiscount(totalDiscount)
-                .totalShipping(totalShipping)
-                .expectedPoint(expectedPoint)
+                .expectedPoint(parseLongOrDefault(orderRequestDTO.getFinalOrderPoint(), 0))
+                .postcode(orderRequestDTO.getPostcode())
+                .receiver(orderRequestDTO.getReceiver())
+                .shippingInfo(orderRequestDTO.getShippingInfo())
+                .totalOriginalPrice(parseLongOrDefault(orderRequestDTO.getTotalOriginalPrice(), 0))
+                .totalDiscount(parseLongOrDefault(orderRequestDTO.getTotalDiscount(), 0))
+                .usedPoint(orderRequestDTO.getUsedPointResult())
+                .totalQuantity(parseLongOrDefault(orderRequestDTO.getTotalOrderQuantity(), 0))
+                .totalShipping(parseLongOrDefault(orderRequestDTO.getTotalShippingFee(), 0))
+                .couponDiscount(orderRequestDTO.getUsedCouponResult())
+                .pay(orderRequestDTO.getCredit())
+                .postcode(orderRequestDTO.getPostcode())
+                .totalPrice(parseLongOrDefault(orderRequestDTO.getTotalFinalPrice(), 0))
+                .totalShipping(parseLongOrDefault(orderRequestDTO.getTotalShippingFee(), 0))
                 .build();
-        this.order = orderDTO;
+
 
     }
 
     private long parseLongOrDefault(String value, long defaultValue) {
         try {
-            return value != null ? Long.parseLong(value) : defaultValue;
+            return value != null ? Long.parseLong(value.replaceAll(",", "")) : defaultValue;
         } catch (NumberFormatException e) {
             return defaultValue;
         }

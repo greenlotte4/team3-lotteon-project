@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,11 +19,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
 //    private final CustomOAuth2UserService userService;
 
     @Bean
+
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .formLogin()
@@ -30,7 +33,6 @@ public class SecurityConfig {
                 .usernameParameter("inId")
                 .passwordParameter("password")
                 .loginProcessingUrl("/user/login") // 로그인 처리 URL
-                .defaultSuccessUrl("/", true)
                 .failureHandler(new CustomAuthFailureHandler())
                 .failureUrl("/user/login?error=true")
 

@@ -14,24 +14,28 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderRequestDTO {
 
-  private List<BuyNowRequestDTO> productDataArray;
 
-  private String uid;
-  private Member member;  //주문자
+  private List<BuyNowRequestDTO> productDataArray; // Mapping to List<BuyNowRequestDTO>
   private String receiver;
   private String hp;
   private String postcode;
   private String addr1;
   private String addr2;
-  private String discount; //할인율
-  private long TotalDiscount;
-  private long usedPointResult;
-  private long usedCouponResult;
-  private long totalShippingFee;
-  private long totalFinalPrice;
-  private String credit;
-  private long couponId;
-  private String shippingInfo;
+  private String totalDiscount;             // Total discount amount
+  private String productDiscount;           // Product discount amount
+  private int totalPointandCoupon;          // Total amount of points and coupon applied
+  private int usedPointResult;              // Amount of points used
+  private int usedCouponResult;             // Amount of coupon used
+  private String usedCouponName;            // Name of the coupon used
+  private String totalOrderQuantity;        // Total quantity of items ordered
+  private String totalShippingFee;          // Total shipping fee
+  private String totalFinalPrice;           // Final total price of the order
+  private String totalOriginalPrice;           // Final total price of the order
+  private String credit;                    // Payment method
+  private int couponId;                     // ID of the coupon used
+  private String shippingInfo;              // Shipping information or notes
+  private String finalOrderPoint;
+  private long point;
 
 
 

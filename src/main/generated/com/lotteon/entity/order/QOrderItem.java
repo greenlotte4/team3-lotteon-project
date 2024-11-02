@@ -22,15 +22,25 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public static final QOrderItem orderItem = new QOrderItem("orderItem");
 
+    public final StringPath optionDesc = createString("optionDesc");
+
     public final NumberPath<Long> optionId = createNumber("optionId", Long.class);
 
     public final QOrder order;
 
     public final NumberPath<Long> orderItemId = createNumber("orderItemId", Long.class);
 
+    public final NumberPath<Long> orderPrice = createNumber("orderPrice", Long.class);
+
+    public final NumberPath<Long> point = createNumber("point", Long.class);
+
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
     public final com.lotteon.entity.product.QProduct product;
+
+    public final NumberPath<Long> savedDiscount = createNumber("savedDiscount", Long.class);
+
+    public final NumberPath<Long> savedPrice = createNumber("savedPrice", Long.class);
 
     public final StringPath sellerUid = createString("sellerUid");
 

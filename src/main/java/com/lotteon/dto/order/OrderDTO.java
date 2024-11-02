@@ -1,10 +1,12 @@
 package com.lotteon.dto.order;
 
 
+import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.entity.order.Order;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,12 +31,16 @@ public class OrderDTO {
     private String addr2;
     private String shippingInfo;
     private long usedPoint;   //사용 포인트
+    private long usedCoupon;   //사용 포인트
     private LocalDateTime orderDate;
     private String orderStatus;
     private String pay;
     //쿠폰 사용유무
     private boolean isCoupon;
     private long couponId;
+    private long couponDiscount;
+    private SellerDTO seller;
+    private List<OrderItemDTO> orderItems;
 
 
     public Order toEntity() {

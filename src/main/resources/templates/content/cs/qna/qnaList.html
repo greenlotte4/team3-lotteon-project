@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LotteOn</title>
     <link rel="stylesheet" th:href="@{/css/cs/qnaList.css}">
+    <script src="/js/cateQna.js"></script>
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -19,11 +20,10 @@
             <p>회원관련 문의내용 입니다.</p>
         </div>
         <div class="first container">
-            <h2>가입</h2>
             <ul class="first_list">
                 <li class="first_li" th:each="qna : ${qnaPage.getContent()}">
                     <a th:href="@{/cs/qna/detail/{id}(id=${qna.qna_id})}">
-                        <span>Q .</span>
+                        <span th:text="'[' + ${qna.qna_type2} + ']'">Q .</span> <!-- 카테고리 이름을 가져옵니다. -->
                         <span th:text="${qna.qna_title}">질문 제목</span>
                         <span class="review-status"
                               th:text="${qna.qna_status.name() == 'review' ? '검토중' : '답변완료'}"></span>
@@ -32,6 +32,7 @@
                     </a>
                 </li>
             </ul>
+
 
             <div class="qna-write-btn">
                 <a th:if="${#authentication.name != 'anonymousUser'}"
