@@ -115,20 +115,34 @@ public class CsController {
 
     // 문의하기 전체 내역 조회
     @GetMapping("/qna/list")
-    public String qnaList(Model model, @PageableDefault(size = 10, sort = "rdate", direction = Sort.Direction.DESC) Pageable pageable) {
+    public String qnaList(
+            @RequestParam(value = "cate", required = false) String category,
+            Model model,
+            @PageableDefault(size = 10, sort = "rdate", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         // 페이지가 첫 번째 페이지일 경우 1페이지로 리다이렉트
         if (pageable.getPageNumber() == 0) {
             pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "rdate"));
         }
 
-        Page<QnA> qnaPage = qnaRepository.findAll(pageable);
+        Page<QnA> qnaPage;
+
+        // 카테고리가 존재하면 해당 카테고리로 필터링하여 조회
+        if (category != null) {
+            qnaPage = qnaRepository.findByQna_type1(category, pageable);
+            log.info("qna!!!!:"+qnaPage);
+        } else {
+            qnaPage = qnaRepository.findAll(pageable);
+        }
 
         // QnA 목록의 작성자 아이디를 마스킹 처리
         qnaPage.forEach(qna -> qna.setQna_writer(maskUsername(qna.getQna_writer())));
 
         model.addAttribute("qnaPage", qnaPage);
+        model.addAttribute("selectedCategory", category); // 선택된 카테고리 정보 추가
         return "content/cs/qna/qnaList";
     }
+
 
     // 아이디 마스킹 메소드
     public String maskUsername(String username) {

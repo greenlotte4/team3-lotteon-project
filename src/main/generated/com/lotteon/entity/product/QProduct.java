@@ -34,7 +34,7 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final ListPath<ProductFile, QProductFile> files = this.<ProductFile, QProductFile>createList("files", ProductFile.class, QProductFile.class, PathInits.DIRECT2);
 
-    public final NumberPath<Integer> hit = createNumber("hit", Integer.class);
+    public final NumberPath<Long> hit = createNumber("hit", Long.class);
 
     public final BooleanPath isCoupon = createBoolean("isCoupon");
 
@@ -70,7 +70,7 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Integer> shippingTerms = createNumber("shippingTerms", Integer.class);
 
-    public final NumberPath<Integer> sold = createNumber("sold", Integer.class);
+    public final NumberPath<Long> sold = createNumber("sold", Long.class);
 
     public final NumberPath<Long> stock = createNumber("stock", Long.class);
 

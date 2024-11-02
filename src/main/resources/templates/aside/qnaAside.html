@@ -1,48 +1,102 @@
 <div id="aside">
-  <h1>문의하기</h1>
-  <div class="aside_list">
-    <ul>
-      <li>
-        <a class="" href="#">회원</a>
-      </li>
-      <li>
-        <a class="" href="#">쿠폰 / 이벤트</a>
-      </li>
-      <li>
-        <a class="" href="#">주문 / 결제</a>
-      </li>
-      <li>
-        <a class="" href="#">배송</a>
-      </li>
-      <li>
-        <a class="" href="#">취소 / 반품 / 교환</a>
-      </li>
-      <li>
-        <a class="" href="#">여행 / 숙박 / 항공</a>
-      </li>
-      <li>
-        <a class="" href="#">안전거래</a>
-      </li>
-    </ul>
-  </div>
+    <h1>문의하기</h1>
+    <div class="aside_list">
+        <ul>
+            <li>
+                <a th:href="@{/cs/qna/list(cate='1')}" >회원</a>
+            </li>
+            <li>
+                <a href="/cs/faq?category=2" onclick="fetchQnaByCategory(2)">쿠폰/이벤트</a>
+            </li>
+            <li>
+                <a href="/cs/faq?category=3" onclick="fetchQnaByCategory(3)">주문/결제</a>
+            </li>
+            <li>
+                <a href="/cs/faq?category=4" onclick="fetchQnaByCategory(4)">배송</a>
+            </li>
+            <li>
+                <a href="/cs/faq?category=5" onclick="fetchQnaByCategory(5)">취소/반품/교환</a>
+            </li>
+            <li>
+                <a href="/cs/faq?category=6" onclick="fetchQnaByCategory(6)">여행/숙박/항공</a>
+            </li>
+            <li>
+                <a href="/cs/faq?category=7" onclick="fetchQnaByCategory(7)">안전거래</a>
+            </li>
+            <li class="myqnaList">
+                <th:block th:if="${#authentication.name != 'anonymousUser'}">
+                    <input type="hidden" name="uid" id="uid" th:value="${#authentication.getName()}">
+                </th:block>
+                <a href="#" id="listLink" onclick="loginredirect('/cs/qna/list')">1:1 문의내역 ></a><br>
+                <p>나의 문의 내역을<br>보고싶다면?</p>
+            </li>
+            <li class="myqna">
+                <a href="#" id="qnaLink" onclick="loginredirect('/cs/qna/write')">1:1 문의하기 ></a><br>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const links = document.querySelectorAll('#aside .aside_list ul li a');
+    document.addEventListener("DOMContentLoaded", () => {
+        // 로그인 리디렉션 함수
+        function loginredirect(url) {
+            const uidElement = document.getElementById("uid");
+            const uid = uidElement ? uidElement.value : null;
 
-    // 첫 번째 링크에 기본적으로 active 클래스 추가
-    if (links.length > 0) {
-      links[0].classList.add('active');
-    }
+            if (!uid) {
+                alert('로그인 후 이용해 주세요');
+                window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+            } else {
+                window.location.href = url;
+            }
+        }
 
-    links.forEach(link => {
-      link.addEventListener('click', function() {
-        // 모든 링크에서 active 클래스 제거
-        links.forEach(item => item.classList.remove('active'));
-        // 클릭한 링크에 active 클래스 추가
-        this.classList.add('active');
-      });
+        // Q&A 리스트 가져오기 함수
+        function fetchQnaList(uid) {
+            fetch(`/api/qna/list?uid=${uid}`)
+                .then(response => response.json())
+                .then(data => {
+                    const qnaListElement = document.getElementById('qnaList');
+                    qnaListElement.innerHTML = ''; // 기존 내용 초기화
+
+                    data.forEach(qna => {
+                        if (qna.qna_writer === uid) {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = qna.title;
+                            qnaListElement.appendChild(listItem);
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching Q&A list:', error);
+                });
+        }
+
+        // 1:1 문의하기 클릭 이벤트 처리
+        document.getElementById('qnaLink').addEventListener('click', function(event) {
+            event.preventDefault();
+            loginredirect('/cs/qna/write');
+        });
+
+        // 1:1 문의내역 클릭 이벤트 처리
+        document.getElementById('listLink').addEventListener('click', function(event) {
+            event.preventDefault();
+            const uidElement = document.getElementById("uid");
+            const uid = uidElement ? uidElement.value : null;
+
+            if (uid) {
+                fetchQnaList(uid); // uid로 Q&A 리스트 가져오기
+            } else {
+                alert('로그인 후 이용해 주세요');
+                window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+            }
+        });
+
+        // 전역에서 loginredirect 함수 접근 가능하도록 바인딩
+        window.loginredirect = loginredirect;
     });
-  });
 </script>
+
+<!-- Q&A 리스트를 출력할 요소 -->
+<ul id="qnaList"></ul>

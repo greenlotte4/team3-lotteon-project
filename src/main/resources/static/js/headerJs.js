@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+
+
+
     document.addEventListener('click', function (event) {
         if (event.target.tagName === 'LI' && event.target.querySelector('ul')) {
             event.target.classList.toggle('expanded');

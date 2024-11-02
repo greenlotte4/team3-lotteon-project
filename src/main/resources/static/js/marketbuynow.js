@@ -98,17 +98,31 @@ function addQuantityListeners() {
 
 // Function to calculate and update the total price for all selected options
 function updateTotalPrice() {
-    let totalPrice = 0;
-    selectedOptions.forEach(option => {
-        const discountedPrice = Math.floor(originalPrice * (100 - discount) / 100);
-        totalPrice += discountedPrice * option.quantity;
-    });
-    document.querySelector(".total-price").innerText = `${totalPrice.toLocaleString()}`;
+    let totalOriginalPrice = 0; // 총 상품 금액 (할인 전)
+    let totalDiscountedPrice = 0; // 할인 적용 금액 (할인 후)
+    let totalDiscount = 0;
+    // 기본 상품 1개의 가격 반영 (할인 전)
+    if (selectedOptions.length === 0) {
+        totalOriginalPrice = originalPrice * quantity;
+        totalDiscount = Math.floor((originalPrice * discount) / 100) * quantity;
+        totalDiscountedPrice = Math.floor(originalPrice * (100 - discount) / 100) * quantity;
+    } else {
+        // 선택된 옵션에 따라 가격 계산
+        selectedOptions.forEach(option => {
+            const discountedPricePerItem = Math.floor(originalPrice * (100 - discount) / 100);
+            totalDiscount += Math.floor((originalPrice * discount) / 100) * option.quantity;
+            totalOriginalPrice += originalPrice * option.quantity;
+            totalDiscountedPrice += discountedPricePerItem * option.quantity;
+        });
+    }
 
+    // Update HTML elements with calculated prices
+    document.getElementById("originalTotalPrice").innerText = `${totalOriginalPrice.toLocaleString()}원`;
+    document.getElementById("totalPrice").innerText = `-${totalDiscount.toLocaleString()}원`;
 
     // 배송비 계산 및 결제 예상금액 업데이트
-    const totalShippingFee = calculateShippingFee(totalPrice);
-    updateExpectedTotal(totalPrice, totalShippingFee);
+    const totalShippingFee = calculateShippingFee(totalDiscountedPrice);
+    updateExpectedTotal(totalDiscountedPrice, totalShippingFee);
 }
 
 // Option change listener for dropdown selection
@@ -141,6 +155,19 @@ document.getElementById('decrease').addEventListener('click', function () {
     }
 });
 
+// price 클래스를 가진 모든 요소를 선택
+const priceElements = document.querySelectorAll('.price');
+
+// 각 price 요소에 대해 반복하여 처리
+priceElements.forEach(priceElement => {
+    let priceValue = priceElement.textContent.trim().replace(/[^0-9]/g, ''); // 숫자가 아닌 문자를 제거
+    priceValue = parseInt(priceValue, 10); // 정수로 변환
+
+    if (!isNaN(priceValue)) { // 변환된 값이 NaN이 아닌 경우에만 적용
+        priceElement.textContent = priceValue.toLocaleString();  // 천단위로 쉼표 추가
+    }
+});
+
 document.getElementById('increase').addEventListener('click', function () {
     quantity += 1;
     document.getElementById("quantity").value = quantity;
@@ -163,16 +190,19 @@ updateTotalPrice();
 updateSelectedResult();
 const uidElement = document.getElementById("uid");
 const uid = uidElement ? uidElement.value : null;
+
+
+
 // Event listener for Buy Now button
 document.getElementById("buy-now-btn").addEventListener("click", function(e) {
     if (!uid) {
         alert('로그인 후 이용해 주세요');
-        window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;        return;
+        window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+        return;
     } else if (selectedOptions.length === 0) {
         alert("옵션을 선택해주세요.");
         return;
     }
-
     const isConfirmed = confirm("구매하시겠습니까?");
     if (isConfirmed) {
         const productDataArray = selectedOptions.map(option => ({
@@ -188,7 +218,7 @@ document.getElementById("buy-now-btn").addEventListener("click", function(e) {
             point: point,
             discount: discount,
             shippingFee: shippingFee,
-            shippingTerms: shippingTerms
+            shippingTerms: shippingTerms,
         }));
 
 
@@ -251,7 +281,8 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
                 optionId: parseInt(selectedOptionValue, 10),
                 optionName: selectedOptionText,
                 point: point,
-                discount: discount
+                discount: discount,
+                totalShippingFee: totalShippingFee
             };
 
             localStorage.setItem("productCart", JSON.stringify(productCart));
@@ -280,6 +311,77 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
                 });
         }
     });
+
+    document.querySelectorAll('.rating-display').forEach(display => {
+        const rating = parseInt(display.textContent);
+        let stars = '';
+
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                stars += '<span class="star-selected">&#9733;</span>'; // 선택된 별
+            } else {
+                stars += '<span class="star">&#9734;</span>'; // 선택되지 않은 별
+            }
+        }
+
+        display.innerHTML = stars; // 별 모양으로 업데이트
+    });
+
+
+    let currentIndex = 0; // 현재 보여주는 이미지 인덱스
+    const images = document.querySelector('.review-images');
+    const totalImages = document.querySelectorAll('.reviewImg').length; // 전체 이미지 수
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const reviewImagesContainer = document.querySelector(".review-images");
+        const leftArrow = document.getElementById("leftArrow");
+        const rightArrow = document.getElementById("rightArrow");
+
+        // 이미지가 있을 때만 화살표를 표시
+        if (reviewImagesContainer && reviewImagesContainer.querySelector(".reviewImg")) {
+            leftArrow.style.display = "block";
+            rightArrow.style.display = "block";
+        }
+    });
+
+// 왼쪽 화살표 클릭 이벤트
+    document.getElementById('leftArrow').addEventListener('click', function() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSlide();
+        }
+    });
+
+// 오른쪽 화살표 클릭 이벤트
+    document.getElementById('rightArrow').addEventListener('click', function() {
+        if (currentIndex < totalImages - 5 ) {
+            currentIndex++;
+            updateSlide();
+        }
+    });
+
+// 슬라이드 업데이트 함수
+    function updateSlide() {
+        const offset = currentIndex * (152 + 10); // 이미지 너비 + 마진을 고려 (150px + 10px)
+        images.style.transform = `translateX(${-offset}px)`; // 이미지 슬라이드
+
+        // 오른쪽 화살표 비활성화 효과
+        if (currentIndex === totalImages - 5) {
+            document.getElementById('rightArrow').classList.add('disabled');
+        } else {
+            document.getElementById('rightArrow').classList.remove('disabled');
+        }
+
+        // 왼쪽 화살표 비활성화 효과
+        if (currentIndex === 0) {
+            document.getElementById('leftArrow').classList.add('disabled');
+        } else {
+            document.getElementById('leftArrow').classList.remove('disabled');
+        }
+    }
+
+// 초기 버튼 상태 설정
+    updateSlide();
 
 
 // 초기화 및 각 상품 선택 이벤트에 따른 업데이트 실행

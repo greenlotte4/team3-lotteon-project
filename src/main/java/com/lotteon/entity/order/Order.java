@@ -39,6 +39,7 @@ public class Order {
     private String addr2;
     private String shippingInfo;
     private long usedPoint;   //사용 포인트
+    private long usedCoupon;   //사용 포인트
 
     @CreationTimestamp
     private LocalDateTime orderDate;

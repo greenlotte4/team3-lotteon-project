@@ -2,6 +2,8 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
+import com.lotteon.dto.order.OrderCompletedResponseDTO;
+import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderResponseDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.dto.product.cart.CartSummary;
@@ -49,7 +51,7 @@ public class MarketController {
         ProductCategoryDTO categoryDTOs =  productCategoryService.getCategoryById(category);
         log.info(categoryDTOs);
         model.addAttribute("categoryDTOs",categoryDTOs);
-
+        model.addAttribute("active",category);
         model.addAttribute("content", "main");
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
     }
@@ -90,13 +92,16 @@ public class MarketController {
         log.info(categoryId);
 
         pageRequestDTO.setSize(6);
+        //선택시 hit update
+        productService.updatehit(productId);
+
 
        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
        log.info("categories LLLLL "+ categoryDTOs);
        ProductDTO productdto = productService.getProduct(productId);
         log.info("productVIew Controller:::::"+productdto);
 
-        PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewss(pageRequestDTO);
+        PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
         List<Review> ReviewImgs = reviewService.getAllReviews();
@@ -206,9 +211,14 @@ public class MarketController {
 
     }
 
-    @GetMapping("/completed")
-    public String marketOrderCompleted(Model model) {
+    @GetMapping("/completed/{orderId}")
+    public String marketOrderCompleted(@PathVariable long orderId,Model model) {
         model.addAttribute("content", "completed");
+        OrderCompletedResponseDTO orderDTO = orderService.selectOrderById(orderId);
+        log.info("여기!!!!!!!!!!!!!!!! : "+orderDTO);
+        model.addAttribute("orderDTO",orderDTO);
+
+
         return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template
     }
 

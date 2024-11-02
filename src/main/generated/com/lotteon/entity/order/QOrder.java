@@ -60,6 +60,8 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final StringPath uid = createString("uid");
 
+    public final NumberPath<Long> usedCoupon = createNumber("usedCoupon", Long.class);
+
     public final NumberPath<Long> usedPoint = createNumber("usedPoint", Long.class);
 
     public QOrder(String variable) {

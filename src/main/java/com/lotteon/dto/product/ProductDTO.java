@@ -41,7 +41,7 @@ public class ProductDTO{
     private Boolean isSaled; // 판매가능여부
     private String sellerId;
     private String productCode;
-    private int hit;
+    private long hit;
 
     private String file190;
     private String file230;
@@ -62,6 +62,7 @@ public class ProductDTO{
     //리뷰 추가
     private List<Review> reviews;
     private List<ReviewDTO> reviewDTOs;
+
 
 
     public void addFileDescriptions(List<String> files) {

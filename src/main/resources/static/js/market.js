@@ -91,27 +91,27 @@ document.addEventListener('DOMContentLoaded', function () {
     let isExpanded = false;  // 더보기 상태를 저장하는 변수
 
     // 리뷰 더보기 버튼 클릭 시
-    if(moreReviewsBtn !=null){
+    if (moreReviewsBtn != null) {
         moreReviewsBtn.addEventListener('click', function (e) {
-            e.preventDefault();
+            e.preventDefault(); // 기본 동작 방지
             if (!isExpanded) {
-                // 더보기를 눌렀을 때: 3개 이상의 리뷰 표시 + 페이지네이션 활성화
+                // 더보기를 눌렀을 때: 3개 이상의 리뷰 표시
                 isExpanded = true;
                 reviews.forEach((review, index) => {
                     if (index >= 3) {
-                        review.classList.add('show');
-                        pagination.classList.add('show');
+                        review.classList.add('show'); // 추가 리뷰 표시
                     }
                 });
-                moreReviewsBtn.textContent = '더보기 닫기';  // 더보기 버튼 텍스트 변경
+                moreReviewsBtn.textContent = '더보기 닫기'; // 버튼 텍스트 변경
+                pagination.classList.add('show'); // 페이지네이션 표시
             } else {
-                // 더보기 닫기를 눌렀을 때: 첫 3개의 리뷰만 표시 + 페이지네이션 숨김
+                // 더보기 닫기를 눌렀을 때: 첫 3개의 리뷰만 표시
                 isExpanded = false;
                 reviews.forEach((review, index) => {
-                    review.classList.remove('show');
+                    review.classList.remove('show'); // 숨김
                 });
-                pagination.classList.remove('show');
-                moreReviewsBtn.textContent = '더보기';  // 더보기 버튼 텍스트 복구
+                moreReviewsBtn.textContent = '더보기'; // 버튼 텍스트 복구
+                pagination.classList.remove('show'); // 페이지네이션 숨김
             }
         });
     }
@@ -178,59 +178,121 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
 
-
-    // Submenu functionality for lnb-items
     const lnbItems = document.querySelectorAll('.lnb-item > a');
+    const subCategoryLinks = document.querySelectorAll('.lnb-sub-menu a');
 
+    // 로컬 스토리지에서 activeSubChildId를 가져와서 해당 항목 열기
+    const activeSubChildId = localStorage.getItem('activeSubChildId');
+    if (activeSubChildId) {
+        const activeLink = document.querySelector(`.lnb-sub-menu a[href='/market/list/${activeSubChildId}']`);
+        if (activeLink) {
+            activeLink.classList.add('cateactive');
+            let parentItem = activeLink.closest('.lnb-item');
+            while (parentItem) {
+                parentItem.classList.add('open');
+                const subMenu = parentItem.querySelector('.lnb-sub-menu');
+                if (subMenu) {
+                    subMenu.classList.remove('hidden');
+                }
+                parentItem = parentItem.parentElement.closest('.lnb-item');
+            }
+        }
+    }
+
+    // 메뉴 항목 클릭 시 상태 저장 및 토글
     lnbItems.forEach(function (lnbItem) {
         lnbItem.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default anchor behavior
+            e.preventDefault();
 
-            // Remove 'open' and 'active' from all lnb-items
+            // 모든 메뉴 항목의 open, active 초기화
             lnbItems.forEach(item => {
                 const parent = item.parentElement;
                 const subMenu = parent.querySelector('.lnb-sub-menu');
-
-                // Close the sub-menu of any other lnb-items
-                if (parent !== this.parentElement) {
-                    parent.classList.remove('open');
-                    if (subMenu) {
-                        subMenu.classList.add('hidden');
-                    }
-                }
-
-                // Remove active class from other links
-                item.classList.remove('active');
-
-                // Remove active from all li inside sub-menus
+                parent.classList.remove('open');
                 if (subMenu) {
-                    subMenu.querySelectorAll('li').forEach(li => {
-                        li.classList.remove('active');
-                    });
+                    subMenu.classList.add('hidden');
                 }
+                item.classList.remove('active');
             });
 
-            // Toggle the current item
+            // 현재 항목 열기 및 active로 설정
             const parentItem = this.parentElement;
             const subMenu = parentItem.querySelector('.lnb-sub-menu');
             parentItem.classList.toggle('open');
             if (subMenu) {
                 subMenu.classList.toggle('hidden');
-
-                // Add 'active' class to the clicked sub-menu's li items (if desired)
-                subMenu.querySelectorAll('li').forEach(li => {
-                    li.addEventListener('click', function () {
-                        // Remove 'active' from all other li in the sub-menu
-                        subMenu.querySelectorAll('li').forEach(el => el.classList.remove('active'));
-                        // Add 'active' to the clicked li
-                        this.classList.add('active');
-                    });
-                });
             }
-            // Add active class to the clicked link
-            this.classList.add('active');
+
+            // 클릭된 서브카테고리의 ID를 로컬 스토리지에 저장
+            const subChildId = this.getAttribute('href').split('/').pop();
+            localStorage.setItem('activeSubChildId', subChildId);
+
+            // 클릭한 항목에 cateactive 클래스 추가
+            this.classList.add('cateactive');
         });
     });
+
+    // 서브카테고리 클릭 시 cateactive 상태 업데이트
+    subCategoryLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+            subCategoryLinks.forEach(el => el.classList.remove('cateactive'));
+            this.classList.add('cateactive');
+            localStorage.setItem('activeSubChildId', this.getAttribute('href').split('/').pop());
+        });
+    });
+    //
+    // // Submenu functionality for lnb-items
+    // const lnbItems = document.querySelectorAll('.lnb-item > a');
+    //
+    // lnbItems.forEach(function (lnbItem) {
+    //     lnbItem.addEventListener('click', function (e) {
+    //         e.preventDefault(); // Prevent default anchor behavior
+    //
+    //         // Remove 'open' and 'active' from all lnb-items
+    //         lnbItems.forEach(item => {
+    //             const parent = item.parentElement;
+    //             const subMenu = parent.querySelector('.lnb-sub-menu');
+    //
+    //             // Close the sub-menu of any other lnb-items
+    //             if (parent !== this.parentElement) {
+    //                 parent.classList.remove('open');
+    //                 if (subMenu) {
+    //                     subMenu.classList.add('hidden');
+    //                 }
+    //             }
+    //
+    //             // Remove active class from other links
+    //             item.classList.remove('active');
+    //
+    //             // Remove active from all li inside sub-menus
+    //             if (subMenu) {
+    //                 subMenu.querySelectorAll('li').forEach(li => {
+    //                     li.classList.remove('active');
+    //                 });
+    //             }
+    //         });
+    //
+    //         // Toggle the current item
+    //         const parentItem = this.parentElement;
+    //         const subMenu = parentItem.querySelector('.lnb-sub-menu');
+    //         parentItem.classList.toggle('open');
+    //         if (subMenu) {
+    //             subMenu.classList.toggle('hidden');
+    //
+    //             // Add 'active' class to the clicked sub-menu's li items (if desired)
+    //             subMenu.querySelectorAll('li').forEach(li => {
+    //                 li.addEventListener('click', function () {
+    //                     // Remove 'active' from all other li in the sub-menu
+    //                     subMenu.querySelectorAll('li').forEach(el => el.classList.remove('active'));
+    //                     // Add 'active' to the clicked li
+    //                     this.classList.add('active');
+    //                 });
+    //             });
+    //         }
+    //         // Add active class to the clicked link
+    //         this.classList.add('active');
+    //     });
+    // });
 
 
 

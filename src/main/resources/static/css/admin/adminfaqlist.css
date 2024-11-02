@@ -80,3 +80,8 @@ button{cursor: pointer; color: white; border-radius: 4px;}
 .faqnum , .faqcurrent,.faqprev,.faqnext {padding: 10px; border: none; border-radius: 8px; background: #afc8e6; color:white}
 .faqprev,.faqnext {background: #8EB4E3;}
 .faqcurrent {background: #6681a3}
+
+
+.faqnums , .faqcurrents,.faqprevs,.faqnexts {padding: 10px; border: none; border-radius: 8px; background: #afc8e6; color:white; margin-left: 5px}
+.faqprevs,.faqnexts {background: #8EB4E3;}
+.faqcurrents {background: #6681a3}

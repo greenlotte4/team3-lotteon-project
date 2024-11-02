@@ -2,7 +2,6 @@ package com.lotteon.service.user;
 
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.entity.User.Member;
-import com.lotteon.entity.User.Seller;
 import com.lotteon.repository.user.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -25,8 +24,8 @@ public class MemberService {
     }
 
     // id로 특정 회원 조회
-    public Optional<Member> getMemberByUid(String uid) {
-        return memberRepository.findByUser_Uid(uid);
+    public Optional<Member> getMemberByUid(Long id) {
+        return memberRepository.findById(id);
     }
 
     // uid로 특정회원 조회
@@ -36,7 +35,7 @@ public class MemberService {
 
     // 회원 정보 수정
     @Transactional
-    public Member updateMember(Long id, Member updatedMember) {
+    public void updateMember(Long id, Member updatedMember) {
         Optional<Member> existingMemberOpt = memberRepository.findById(id);
         if (existingMemberOpt.isPresent()) {
             Member existingMember = existingMemberOpt.get();
@@ -49,11 +48,14 @@ public class MemberService {
             existingMember.setAddr(updatedMember.getAddr());
             existingMember.setAddr2(updatedMember.getAddr2());
             existingMember.setUserinfocol(updatedMember.getUserinfocol());
+
+
+//            existingMember.setStatus(updatedMember.getStatus());
+//            existingMember.setGrade(updatedMember.getGrade());
             // 기타 필드 업데이트...
 
-            return memberRepository.save(existingMember);
+            memberRepository.save(existingMember);
         }
-        return null; // 회원이 존재하지 않는 경우
     }
 
     // 회원 삭제

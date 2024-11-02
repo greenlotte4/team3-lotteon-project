@@ -41,14 +41,14 @@ button{cursor: pointer;}
 .status{
     text-align: right;
 }
-.status-icon-running, .status-text-running{
+.status-icon-in-operation, .status-text-in-operation{
     color: #00B050;
 }
-.status-icon-paused, .status-text-paused{
-    color: #FF0000;
-}
-.status-icon-standby, .status-text-standby{
+.status-icon-ready, .status-text-readyd{
     color: #0070C0;
+}
+.status-icon-stop-operation, .status-text-stop-operation{
+    color: #FF0000;
 }
 #shopsearch {
     width: 95px;
@@ -65,9 +65,6 @@ button{cursor: pointer;}
     background: #BFBFBF;
     border: none;
 }
-
-
-
 
 /*footer*/
 #admin_footer {

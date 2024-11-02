@@ -48,6 +48,14 @@ public class ProductService {
     private final SellerService sellerService;
     private final ReviewFileRepository reviewFileRepository;
 
+
+    public void updatehit(long productId){
+       Product product =  productRepository.findByProductId(productId);
+       product.setHit();
+       productRepository.save(product);
+
+    }
+
     public Long insertProduct(ProductResponseDTO insertProduct) {
 
         ProductDTO productDTO = insertProduct.getProduct();
@@ -125,10 +133,14 @@ public class ProductService {
     public ProductDTO selectProduct(long productId) {
         Product product = productRepository.findByProductId(productId);
         log.info("옵션이 있을까?????????? : " +product.getOptions());
-        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
-        log.info("변경해도 있을까?????????ㅣ:"+productDTO.getOptions());
 
-        return modelMapper.map(product, ProductDTO.class);
+        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+        SellerDTO sellerDTO = sellerService.getSeller(product.getSellerId());
+        productDTO.setSeller(sellerDTO);
+
+        log.info("변경해도 있을까?????????ㅣ:"+productDTO.getSeller());
+
+        return productDTO;
 
     }
     public  List<ProductDTO> selectProducts() {

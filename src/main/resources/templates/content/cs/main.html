@@ -102,8 +102,11 @@
                             </tr>
                         </th:block>
                     </table>
-                    <a class="inquiry" th:if="${#authentication.name != 'anonymousUser'}" href="/cs/qna/list"
-                       style="color: rgb(17, 86, 165); font-weight: bold;" ;>문의글 작성 ></a>
+                    <th:block th:if="${#authentication.name != 'anonymousUser'}" >
+                        <input type="hidden" name="uid" id="uid" th:value="${#authentication.getName()}">
+                    </th:block>
+                    <a class="inquiry"
+                       style="color: rgb(17, 86, 165); font-weight: bold; cursor: pointer" onclick="loginredirect('/cs/qna/list')">문의글 작성 ></a>
                 </div>
                 <div class="onecounsel">
                     <h2>1:1 상담안내</h2>
@@ -126,4 +129,23 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            function loginredirect(url) {
+                const uidElement = document.getElementById("uid");
+                const uid = uidElement ? uidElement.value : null;
+
+                if (!uid) {
+                    alert('로그인 후 이용해 주세요');
+                    window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+                } else {
+                    window.location.href = url;
+                }
+            }
+
+            // loginredirect 함수가 전역에서 접근 가능하도록 window 객체에 바인딩
+            window.loginredirect = loginredirect;
+        });
+    </script>
 </th:block>
