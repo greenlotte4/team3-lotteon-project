@@ -12,6 +12,7 @@
     <link rel="stylesheet" th:href="@{/css/market/marketReviewModal.css}">
 
 
+
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -111,6 +112,52 @@
                                     </div>
 
 
+
+                                    <div class="couponArea">
+                                        <button id="couponBtn">할인 쿠폰을 받아보세요</button>
+                                    </div>
+
+                                    <div id="coupon-myModal" class="coupon-modal">
+                                        <div class="coupon-modal-content">
+                                            <span class="coupon-close">&times;</span>
+                                            <h2>발급된 쿠폰</h2>
+                                            <div class="coupon-item">
+                                                <div class="coupon-info">
+                                                    <div class="coupon-discount-amount">10% 할인</div>
+                                                    <div class="coupon-discount-description">모든 상품에 적용</div>
+                                                </div>
+                                                <button class="coupon-apply-button">적용</button>
+                                            </div>
+                                            <div class="coupon-item">
+                                                <div class="coupon-info">
+                                                    <div class="coupon-discount-amount">5,000원 할인</div>
+                                                    <div class="coupon-discount-description">30,000원 이상 구매 시</div>
+                                                </div>
+                                                <button class="coupon-apply-button">쿠폰받기</button>
+                                            </div>
+                                            <div class="coupon-item">
+                                                <div class="coupon-info">
+                                                    <div class="coupon-discount-amount">무료 배송</div>
+                                                    <div class="coupon-discount-description">모든 상품에 적용</div>
+                                                </div>
+                                                <button class="coupon-apply-button">적용</button>
+                                            </div>
+                                            <div class="coupon-item">
+                                                <div class="coupon-info">
+                                                    <div class="coupon-discount-amount">20% 할인</div>
+                                                    <div class="coupon-discount-description">특정 브랜드 상품</div>
+                                                </div>
+                                                <button class="coupon-apply-button">적용</button>
+                                            </div>
+                                            <div class="coupon-item">
+                                                <div class="coupon-info">
+                                                    <div class="coupon-discount-amount">1,000원 할인</div>
+                                                    <div class="coupon-discount-description">신규 가입 시</div>
+                                                </div>
+                                                <button class="coupon-apply-button">쿠폰받기</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="bannerArea">
                                         <img src="" alt="">
                                     </div>
@@ -122,9 +169,7 @@
                                         <div><label for="totalShippingFee" class="totalShippingFee">└ 배송비 :</label><span class="totalShippingFee" id="totalShippingFee"></span></div>
                                         <div><label for="expectedPrice" class="expectedPrice">결제 예상금액 : </label><span class="expectedPrice" id="expectedPrice"> </span></div>
                                     </div>
-                                    <div class="couponArea">
-                                        <button id="couponBtn">할인 쿠폰을 받아보세요</button>
-                                    </div>
+
 
                                     <div class="buttons">
                                         <button class="add-to-cart" id="add-to-cart">장바구니</button>

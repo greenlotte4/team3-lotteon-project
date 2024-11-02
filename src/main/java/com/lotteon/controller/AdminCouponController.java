@@ -11,6 +11,7 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.admin.CouponDTO;
 import com.lotteon.dto.admin.CouponListRequestDTO;
+import com.lotteon.dto.admin.CouponListResponseDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.repository.admin.CouponRepository;
@@ -26,7 +27,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,54 +45,52 @@ public class AdminCouponController {
     public String adminCouponList(
             @ModelAttribute CouponListRequestDTO requestDTO,
             Model model) {
-
+        if (requestDTO.getPage() < 1) {
+            requestDTO.setPage(1);
+        }
         // 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        log.info("userDetails  :: "+userDetails.getAuthorities());
         Seller seller = userDetails.getSeller();
-        Long sellerId = seller.getId();
-        String grade2 = userDetails.getAuthorities().toString();
 
-        log.info("3324234234234234234 : "+grade2);
+        List<String> userRoles = couponService.getUserRoles();
+
+        Pageable pageable = requestDTO.getPageable(); // 정렬 기준 없이 호출
+
         model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
         model.addAttribute("sellerGrade", seller.getGrade());
+        Page<CouponDTO> couponPage = couponService.selectCouponsPagination(requestDTO, seller.getId(), pageable);
 
-        log.info("여기는???????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-        Page<CouponDTO> couponPage = couponService.selectCouponsPagination(requestDTO, grade2, seller.getId());
+        log.info("페이징: {}", pageable); // Pageable 로그 추가
 
-        // 등급에 따라 쿠폰 목록 조회
-        if (grade2.contains("ADMIN")) {
-            log.info("어드민!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            couponPage = couponService.selectCouponsPagination(requestDTO,grade2,0); // adminRequest를 사용하여 모든 쿠폰 조회
-        } else if (grade2.contains("SELLER")) {
-            couponPage = couponService.selectCouponsPagination(requestDTO,grade2,sellerId);
-            log.info("else??????????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        // CouponListResponseDTO 생성
+        CouponListResponseDTO responseDTO = CouponListResponseDTO.builder()
+                .couponDTOList(couponPage.getContent())
+                .total((int) couponPage.getTotalElements())
+                .pg(requestDTO.getPage()) // 요청 DTO에서 현재 페이지 번호 가져오기
+                .size(requestDTO.getSize()) // 요청 DTO에서 페이지 크기 가져오기
+                .build();
 
-        }
+        log.info("요청 DTO: {}", responseDTO); // 응답 DTO 로그 추가
 
+        // 페이지 정보 계산
+        responseDTO.setStartNo(responseDTO.getTotal() - ((responseDTO.getPg() - 1) * responseDTO.getSize()));
+        responseDTO.setStart(Math.max(1, responseDTO.getEnd() - (responseDTO.getSize() - 1)));
+        responseDTO.setEnd(Math.min((int) (Math.ceil(responseDTO.getPg() / (double) responseDTO.getSize()) * responseDTO.getSize()), responseDTO.getTotal()));
+        responseDTO.setPrev(responseDTO.getStart() > 1);
+        responseDTO.setNext(responseDTO.getTotal() > responseDTO.getEnd());
+
+        model.addAttribute("responseDTO", responseDTO);
+        model.addAttribute("userRoles", userRoles);
         model.addAttribute("couponList", couponPage.getContent());
         model.addAttribute("totalPages", couponPage.getTotalPages());
         model.addAttribute("currentPage", couponPage.getNumber());
-        log.info("쿠폰 목록 조회 성공: {}", couponPage);
-        log.info("등급!!!!!!!!!!!!!!!!"+seller.getGrade() );
-
 
         return "content/admin/coupon/list";
     }
 
-    @GetMapping("/coupons")
-    public String listCoupons(@RequestParam(defaultValue = "0") int page, Model model) {
 
-        Pageable pageable = PageRequest.of(page, 10); // 한 페이지에 10개
-        Page<Coupon> couponPage = couponRepository.findAll(pageable);
-
-        log.info("호출됫따!!!!!!!!!!!!!!!!!!" + page);
-        log.info("호출됫따!!!!!!!!!!!!!!!!!!");
-
-        return "content/admin/coupon/list";  // Thymeleaf 뷰
-    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerCoupon(@RequestBody CouponDTO couponDTO) {
@@ -126,11 +124,15 @@ public class AdminCouponController {
 
     }
 
-
     @GetMapping("/issued")
     public String adminIssuedModify(Model model) {
 
         return "content/admin/coupon/issued";
     }
 
+    @GetMapping("/coupons")
+    public String couponList(Model model) {
+
+        return "content/admin/coupon/list";
+    }
 }
