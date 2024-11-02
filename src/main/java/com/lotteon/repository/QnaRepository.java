@@ -14,17 +14,20 @@ import java.util.List;
    날짜 : 2024/00/00
    이름 : 박수정
    내용 : Qna 레퍼지토리 생성
-
-   추가내역
-   -------------
-
  */
 
 @Repository
 public interface QnaRepository extends JpaRepository<QnA, Integer> {
-     @Query("SELECT q FROM QnA q WHERE q.qna_writer = :writer")
-     List<QnA> findByQnaWriter(@Param("writer") String writer);
+//     @Query("SELECT q FROM  QnA q WHERE q.qna_writer = :writer")
+//     List<QnA> findByQnaWriter(@Param("writer") String writer);
+//
+//     @Query("SELECT q FROM QnA q WHERE q.qna_writer = :writer")
+//     Page<QnA> findByQnaWriter(@Param("writer") String writer, Pageable pageable);
 
-     @Query("SELECT q FROM QnA q WHERE q.qna_writer = :writer")
+     @Query("SELECT q FROM  QnA q WHERE q.qna_writer = :writer")
      Page<QnA> findByQnaWriter(@Param("writer") String writer, Pageable pageable);
+
+//     카테고리 조회
+@Query("SELECT q FROM  QnA q WHERE q.qna_type1 = :type1")
+Page<QnA> findByQna_type1(String type1, Pageable pageable);
 }

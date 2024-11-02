@@ -131,6 +131,7 @@ function confirmGradeChange(selectElement) {
 }
 
 
+// 로그인 확인 후, 로그인 페이지 또는 주어진 URL로 리디렉션
 function loginredirect(url){
     const uidElement = document.getElementById("uid");
     const uid = uidElement ? uidElement.value : null;
@@ -143,4 +144,3 @@ function loginredirect(url){
         return;
     }
 }
-
