@@ -21,8 +21,11 @@ server:
         context-path: /
 
 spring:
+    devtools:
+        restart:
+            enabled: false
     profiles:
-        active: prod
+        active: default
         include: local
     application:
         name: LotteOnProject-3조
