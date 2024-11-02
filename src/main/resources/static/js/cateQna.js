@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const links = document.querySelectorAll('#aside .aside_list ul li a');
     const titleElement = document.querySelector('#service .title h2');
     const descriptionElement = document.querySelector('#service .title p');
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 링크 클릭 이벤트 처리
     links.forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             // 모든 링크에서 active 클래스 제거
             links.forEach(item => item.classList.remove('active'));
             // 클릭한 링크에 active 클래스 추가
@@ -22,6 +22,20 @@ document.addEventListener('DOMContentLoaded', function() {
             const selectedCategory = this.textContent;
             titleElement.textContent = selectedCategory;
             descriptionElement.textContent = `${selectedCategory} 관련 문의내용 입니다.`;
+
+            // '1:1' 카테고리의 경우 '>' 제외
+            if (selectedCategory.startsWith('1:1')) {
+                titleElement.textContent = selectedCategory.replace('>', '').trim();
+            } else {
+                titleElement.textContent = selectedCategory;
+            }
+
+            // 카테고리에 따라 설명 업데이트
+            if (selectedCategory.startsWith('1:1')) {
+                descriptionElement.textContent = `오후 4시 이후 접수 건은 다음날 (평일) 오전 9시 이후 답변드리겠습니다. (단, 롯데마트 고객센터는 주말/공휴일에도 운영)`;
+            } else {
+                descriptionElement.textContent = `${selectedCategory} 관련 문의내용 입니다.`;
+            }
         });
     });
 
@@ -50,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         secondChoice.innerHTML = '<option value="">선택하세요</option>';
 
         if (options[selectedValue]) {
-            options[selectedValue].forEach(function(item) {
+            options[selectedValue].forEach(function (item) {
                 const option = document.createElement('option');
                 option.value = item;
                 option.textContent = item;
