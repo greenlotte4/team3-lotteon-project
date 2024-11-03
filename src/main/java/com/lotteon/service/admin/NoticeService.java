@@ -6,6 +6,7 @@ import com.lotteon.dto.page.FaqPageResponseDTO;
 import com.lotteon.dto.page.NoticePageResponseDTO;
 import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.entity.Notice;
+import com.lotteon.entity.NoticeType;
 import com.lotteon.repository.admin.NoticeRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,6 @@ public class NoticeService {
     }
 
 
-
     // 전체 공지사항을 페이지 형태로 가져오는 메서드 추가
     public Page<Notice> getNotices(Pageable pageable) {
         // 정렬된 Pageable 객체를 전달하여 최신순으로 데이터 가져오기
@@ -64,13 +64,14 @@ public class NoticeService {
     }
 
     //전체글목록조회
-    public List<NoticeDTO> selectAllNotice(){
+    public List<NoticeDTO> selectAllNotice() {
         List<Notice> noticeList = noticeRepository.findAll();
-        return  noticeList.stream()
+        return noticeList.stream()
                 .map(notice -> modelMapper.map(notice, NoticeDTO.class)) // 엔티티를 DTO로 변환
                 .collect(Collectors.toList());
 
     }
+
     //체크된 글 삭제
     public void deleteCheck(List<Long> data) {
         for (Long id : data) {
@@ -78,18 +79,20 @@ public class NoticeService {
         }
 
     }
+
     //단일 삭제
-    public void deleteNotice(Long no){
+    public void deleteNotice(Long no) {
         Optional<Notice> optNotice = noticeRepository.findById(no);
-        if(optNotice.isPresent()){
+        if (optNotice.isPresent()) {
             Notice notice = optNotice.get();
             noticeRepository.delete(notice);
         }
     }
+
     //글보기
-    public NoticeDTO selectNotice(Long no){
+    public NoticeDTO selectNotice(Long no) {
         Optional<Notice> notice = noticeRepository.findById(no);
-        if(notice.isPresent()){
+        if (notice.isPresent()) {
             NoticeDTO noticeDTO = modelMapper.map(notice.get(), NoticeDTO.class);
             return noticeDTO;
         }
@@ -100,12 +103,12 @@ public class NoticeService {
     public Notice UpdateNotice(NoticeDTO noticeDTO) {
         Optional<Notice> notice = noticeRepository.findById(noticeDTO.getNoticeNo());
         log.info("notice :" + notice);
-        if(notice.isPresent()){
+        if (notice.isPresent()) {
             Notice notice1 = notice.get();
 
-            if(noticeDTO.getNoticetype() == null){
+            if (noticeDTO.getNoticetype() == null) {
                 notice1.setNoticetype(notice1.getNoticetype());
-            }else {
+            } else {
                 notice1.setNoticetype(noticeDTO.getNoticetype());
             }
             notice1.setNoticetitle(noticeDTO.getNoticetitle());
@@ -116,13 +119,14 @@ public class NoticeService {
         }
         return null;
     }
+
     //페이징 1
     public NoticePageResponseDTO selectNoticeListAll(PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("no");
         Page<Tuple> pagenotice = null;
-        if(pageRequestDTO.getNoticeType() == null){
+        if (pageRequestDTO.getNoticeType() == null) {
             pagenotice = noticeRepository.selectNoticeAllForList(pageRequestDTO, pageable);
-        }else {
+        } else {
             pagenotice = noticeRepository.selectNoticeTypeList(pageRequestDTO, pageable);
         }
 
@@ -142,5 +146,9 @@ public class NoticeService {
                 .build();
     }
 
+    public Page<Notice> getNoticesByType(NoticeType noticeType, Pageable pageable) {
+        // 해당 noticetype에 맞는 공지사항을 가져옴
+        return noticeRepository.findAllByNoticetype(noticeType, pageable);
+    }
 
 }
