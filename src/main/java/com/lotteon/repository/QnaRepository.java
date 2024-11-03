@@ -18,16 +18,17 @@ import java.util.List;
 
 @Repository
 public interface QnaRepository extends JpaRepository<QnA, Integer> {
-//     @Query("SELECT q FROM  QnA q WHERE q.qna_writer = :writer")
-//     List<QnA> findByQnaWriter(@Param("writer") String writer);
-//
-//     @Query("SELECT q FROM QnA q WHERE q.qna_writer = :writer")
-//     Page<QnA> findByQnaWriter(@Param("writer") String writer, Pageable pageable);
 
-     @Query("SELECT q FROM  QnA q WHERE q.qna_writer = :writer")
-     Page<QnA> findByQnaWriter(@Param("writer") String writer, Pageable pageable);
+    // 특정 작성자(qna_writer)로 QnA 조회
+    @Query("SELECT q FROM  QnA q WHERE q.qna_writer = :writer")
+    List<QnA> findByQnaWriter(@Param("writer") String writer);
 
-//     카테고리 조회
-@Query("SELECT q FROM  QnA q WHERE q.qna_type1 = :type1")
-Page<QnA> findByQna_type1(String type1, Pageable pageable);
+    // 특정 작성자(qna_writer)로 페이징 처리된 QnA 조회
+    @Query("SELECT q FROM QnA q WHERE q.qna_writer = :writer")
+    Page<QnA> findByQnaWriter(@Param("writer") String writer, Pageable pageable);
+
+    // 특정 카테고리(qna_type1)로 페이징 처리된 QnA 조회
+    @Query("SELECT q FROM  QnA q WHERE q.qna_type1 = :type1")
+    Page<QnA> findByQna_type1(String type1, Pageable pageable);
+
 }
