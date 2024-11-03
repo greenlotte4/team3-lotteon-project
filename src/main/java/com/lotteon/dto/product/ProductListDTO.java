@@ -12,11 +12,11 @@ import java.util.List;
 @ToString
 public class ProductListDTO {
 
-    private long productId;
-    private long categoryId;
+    private Long productId;
+    private Long categoryId;
     private String productName;
-    private int price;
-    private int stock;
+    private Long price;
+    private Long stock;
     private int discount;
     private int shippingFee;
     private int shippingTerms; //무료배송 조건
@@ -38,8 +38,8 @@ public class ProductListDTO {
     private List<String> filedesc;
 
     // 생성자
-    public ProductListDTO(Long productId, Long categoryId, String productName, Integer price,
-                          Integer stock, Integer discount, Integer shippingFee, Integer shippingTerms,
+    public ProductListDTO(Long productId, Long categoryId, String productName, Long price,
+                          Long stock, Integer discount, Integer shippingFee, Integer shippingTerms,
                           LocalDateTime rdate, String productDesc, String sellerId, String productCode,
                           Integer hit, List<ProductFileDTO> productFiles) {
         this.productId = productId;
@@ -57,6 +57,8 @@ public class ProductListDTO {
         this.hit = hit;
         this.productFiles = productFiles;
     }
+
+
 }
 //
 //    // Ensure the constructor matches the parameters expected by QueryDSL

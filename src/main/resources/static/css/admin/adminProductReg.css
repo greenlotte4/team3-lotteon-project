@@ -11,6 +11,10 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.addOption >div{
+    display: flex;
+}
+
 .option-group {
     margin-bottom: 15px;
     border-bottom: 0.5px solid #cccccc;
@@ -47,9 +51,9 @@
 
 .option-group input[type="text"],
 .option-group input[type="number"] {
-    width: 300px;
+    width: 250px;
     height: 30px;
-    /*margin: 5px 0;*/
+    /* margin: 5px 0; */
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -87,10 +91,10 @@ button[type="button"] {
     background-color: #5c9ded;
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 3px 4px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;;
 }
 
 button[type="button"]:hover {

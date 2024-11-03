@@ -18,9 +18,11 @@ public class ProductOptionCombinationDTO {
 
 
     private Long combinationId;
-    private String combinationName;
+    private String combination;
     private String optionCode;
+    private Long productId; // 상품 id
+    private String combination_name;
+    private Long additionalPrice;
     private Long stock;
-
     private Long  product;
 }

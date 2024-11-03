@@ -21,7 +21,7 @@ public class PageRequestDTO {
     @Builder.Default
     private int size=10;
 
-    private long categoryId;
+    private Long categoryId;
 
     //검색
     private String type;

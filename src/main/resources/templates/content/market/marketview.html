@@ -83,20 +83,25 @@
                                     </div>
                                     <div class="purchase-options">
                                         <div>
-                                            <select name="option" id="option" required>
-                                                <option disabled selected>옵션을 선택하세요</option>
-                                                <th:block th:each="option,i :${products.getOptions()}">
-
-                                                    <!-- 옵션 선택 항목 -->
-                                                    <option th:value="${option.getId()}">
-                                                        [[${option.optionName}]] - [[${option.optionDesc}]]
-                                                    </option>
-
-                                                </th:block>
-                                            </select>
+                                            <span th:text="${products}"></span>
+                                            <th:block th:each="group : ${products.optionGroups}">
+                                                <select name="option" id="option" required>
+                                                    <option disabled selected>[[${group.groupName}]] 옵션을 선택하세요</option>
+                                                        <!-- Loop through each OptionItem in the current OptionGroup -->
+                                                    <th:block th:each="combination : ${products.optionCombinations}">
+                                                        <option
+                                                                th:value="${combination.combinationId}"
+                                                                th:data-combination-name="${combination.combination}"
+                                                                th:data-additional-price="${combination.additionalPrice}">
+                                                            [[${combination.combination}]]
+                                                            <th:block th:if="${combination.additionalPrice > 0}">
+                                                                - 추가금액: [[${combination.additionalPrice}]]
+                                                            </th:block>
+                                                        </option>
+                                                    </th:block>
+                                                </select>
+                                            </th:block>
                                         </div>
-
-
                                     </div>
                                     <div class="selectedProduct">
                                         <span class="selectResult">선택된 내용</span>

@@ -14,13 +14,16 @@ package com.lotteon.service.product;
 
 import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.product.*;
+import com.lotteon.dto.product.request.ProductViewResponseDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.product.*;
 import com.lotteon.repository.ReviewFileRepository;
 import com.lotteon.repository.product.OptionRepository;
+import com.lotteon.repository.product.ProductCategoryRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.repository.user.SellerRepository;
 import com.lotteon.service.FileService;
+import com.lotteon.service.ReviewService;
 import com.lotteon.service.user.SellerService;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +32,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,60 +54,120 @@ public class ProductService {
     private final SellerRepository sellerRepository;
     private final SellerService sellerService;
     private final ReviewFileRepository reviewFileRepository;
+    private final ProductCategoryService productCategoryService;
+    private final ProductCategoryRepository productCategoryRepository;
+    private final ReviewService reviewService;
 
+    public void updatehit(Long productId){
+       Optional<Product> opt =  productRepository.findByProductId(productId);
+       if(opt.isPresent()){
+           Product product = opt.get();
+           product.setHit();
+           productRepository.save(product);
+       }
 
-    public void updatehit(long productId){
-       Product product =  productRepository.findByProductId(productId);
-       product.setHit();
-       productRepository.save(product);
 
     }
 
+    @Transactional
+    public int deleteProducts(List<Long> productIds) {
+        log.info("delete들어왔다");
+//        List<Product> products = productRepository.findAllById(productIds);
+//        for (Product product : products) {
+//            try {
+//                // Assuming each product has a method to get its associated file paths
+//                List<ProductFile> files = product.getFiles(); // e.g., file190 path or other file paths
+//                for(ProductFile file : files){
+//                  String filePath = file.getPath();
+//                  Files.delete(Paths.get(file.getPath()));
+//                }
+//
+//            } catch (Exception e) {
+//                // Log and handle any exceptions, like files not found or permission issues
+//                log.error("Error deleting file for product {}: {}", product.getProductId(), e.getMessage());
+//            }
+//        }
+        int result = 0;
+        for(Long productId : productIds){
+
+            Optional<Product> product = productRepository.findByProductId(productId);
+            if(product.isPresent()){
+                log.info("product!!!!!"+product);
+                productRepository.deleteById(productId);
+                result++;
+            }
+
+        }
+
+
+        log.info("result가 있나?????:"+result);
+        return result;
+    }
+
+    @Transactional
     public Long insertProduct(ProductResponseDTO insertProduct) {
-
+        log.info("insert들어왔다!!!!");
         ProductDTO productDTO = insertProduct.getProduct();
-        //product insert
-
-
-
-       Optional<Seller> opt = sellerRepository.findByUserUid(productDTO.getSellerId());
-        log.info("seller opt /////////"+opt);
-        long sellerNo=0;
-        if(opt.isPresent()) {
-            Seller seller = opt.get();
-            log.info("seller seller /////////"+seller);
-
-            sellerNo = seller.getId();
-        }
-        productDTO.setSellerNo(sellerNo);
-
         Product product= modelMapper.map(productDTO, Product.class);
+        Optional<ProductCategory> opt = productCategoryRepository.findById(product.getCategoryId());
+        ProductCategory productCategory=null;
+        if(opt.isPresent()){
+            log.info("22222222222!!!!");
 
-        //file upload & insert
-        List<ProductFileDTO> fileDTOS=  fileService.uploadFile(insertProduct.getImages());
-        List<ProductFile> files= new ArrayList<>();
-        for(ProductFileDTO productFileDTO : fileDTOS) {
-            log.info("produtFileDTO : "+ productFileDTO);
-            ProductFile file = productFileService.insertFile(productFileDTO);
-            files.add(file);
-        }
-        log.info("filessssssssssssssssss:"+files);
-        product.setFiles(files);
-
-        //option 저장로직
-        List<OptionDTO> options = insertProduct.getOptions();
-
-
-        //option insert
-        List<Option> savedOptions = new ArrayList<Option>();
-        for(OptionDTO option : options) {
-            log.info("option : "+ option);
-            Option toEntity = modelMapper.map(option, Option.class);
-           Option savedOption =  optionRepository.save(toEntity);
-           savedOptions.add(savedOption);
+            productCategory= opt.get();
+            //file upload & insert
+            List<ProductFileDTO> fileDTOS=  fileService.uploadFile(insertProduct.getImages(),productCategory);
+            Set<ProductFile> files= new HashSet<>();
+            for(ProductFileDTO productFileDTO : fileDTOS) {
+                log.info("produtFileDTO : "+ productFileDTO);
+                ProductFile file = productFileService.insertFile(productFileDTO);
+                files.add(file);
+            }
+            log.info("filessssssssssssssssss:"+files);
+            product.setFiles(files);
         }
 
-        product.setOptions(savedOptions);
+
+
+        // OptionGroup 및 Option 저장 로직
+        List<OptionGroupDTO> optionGroupDTOS = insertProduct.getOptionGroups();
+
+
+        //OptionGroup insert
+        Set<OptionGroup> savedOptions = new HashSet<>();
+        log.info("333333333333!!!!");
+
+        for(OptionGroupDTO optionGroupDTO : optionGroupDTOS) {
+
+            OptionGroup optionGroup = modelMapper.map(optionGroupDTO, OptionGroup.class);
+            optionGroup.setProduct(product);  // Product와 연관 설정
+            List<OptionItem> optionItems = new ArrayList<>();
+            List<OptionItemDTO> optionItemDTOS =  optionGroupDTO.getOptionItems();
+            for(OptionItemDTO optionItemDTO : optionItemDTOS) {
+                OptionItem optionItem = modelMapper.map(optionItemDTO, OptionItem.class);
+                optionItem.setOptionGroup(optionGroup);
+                optionItems.add(optionItem);
+            }
+            optionGroup.setOptionItems(optionItems);
+            savedOptions.add(optionGroup);
+
+        }
+
+        product.setOptionGroups(savedOptions);
+        log.info("44444444444444!!!!");
+
+
+        // ProductOptionCombination 설정
+        Set<ProductOptionCombination> combinations = new HashSet<>();
+        for (ProductOptionCombinationDTO combinationDTO :  insertProduct.getProductOptionCombinations()) {
+            ProductOptionCombination combination = modelMapper.map(combinationDTO, ProductOptionCombination.class);
+            combination.setProduct(product); // Product와 연관 설정
+            combinations.add(combination);
+        }
+
+        // Product에 OptionCombinations 설정
+        product.setOptionCombinations(combinations);
+        log.info("55555555555555!!!!");
 
         ProductDetailsDTO details = insertProduct.getProductDetails();
         ProductDetails productDetails = modelMapper.map(details, ProductDetails.class);
@@ -116,7 +183,6 @@ public class ProductService {
         Page<Product> products = productRepository.findBySellerId(sellerId,pageable);
         if(products.isEmpty()) {
             return ProductListPageResponseDTO.builder()
-                    .productDTOs(Collections.emptyList())
                     .pageRequestDTO(pageRequestDTO)
                     .total(0)
                     .build();
@@ -125,15 +191,33 @@ public class ProductService {
 
         return ProductListPageResponseDTO.builder()
                 .total(productDTOs.size())
-                .productDTOs(productDTOs)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+    public ProductListPageResponseDTO selectProductAll(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable("hit",10);
+        Page<Product> products = productRepository.findAll(pageable);
+        if(products.isEmpty()) {
+            return ProductListPageResponseDTO.builder()
+                    .pageRequestDTO(pageRequestDTO)
+                    .total(0)
+                    .build();
+        }
+        List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+
+        return ProductListPageResponseDTO.builder()
+                .total(productDTOs.size())
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
 
     public ProductDTO selectProduct(long productId) {
-        Product product = productRepository.findByProductId(productId);
-        log.info("옵션이 있을까?????????? : " +product.getOptions());
-
+        Optional<Product> optionalProduct = productRepository.findByProductId(productId);
+        Product product = null;
+        if(optionalProduct.isPresent()){
+            product = optionalProduct.get();
+        }
         ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
         SellerDTO sellerDTO = sellerService.getSeller(product.getSellerId());
         productDTO.setSeller(sellerDTO);
@@ -166,76 +250,120 @@ public class ProductService {
 
     //main list
     public ProductListPageResponseDTO getProductList(PageRequestDTO pageRequestDTO) {
+       log.info("일단 들어와"+pageRequestDTO);
+
         Pageable pageable = pageRequestDTO.getPageable("hit",10);
 
-        Page<Tuple> tuples = productRepository.selectProductByCategory(pageRequestDTO,pageable);
+        Page<ProductSummaryDTO> tuples = productRepository.selectProductByCategory(pageRequestDTO,pageable);
+
+        log.info("PageRequestDTO: " + pageRequestDTO);
+        log.info("Pageable: " + pageable.getPageSize());
+        log.info("Tuples result: " + tuples.getContent());
         log.info("disldksldkfsd: "+tuples.getContent().toString());
 
         if(tuples.isEmpty()) {
+            log.info("여기는아니잖아");
             return ProductListPageResponseDTO.builder()
-                    .productDTOs(Collections.emptyList())
+                    .productSummaryDTOs(tuples.getContent())
                     .pageRequestDTO(pageRequestDTO)
                     .total(0)
                     .build();
         }
+        try{
+            log.info("여기깢!!");
+            ProductListPageResponseDTO list=  ProductListPageResponseDTO.builder()
+                    .total((int) tuples.getTotalElements())
+                    .productSummaryDTOs(tuples.getContent())
+                    .pageRequestDTO(pageRequestDTO)
+                    .build();
 
-        List<ProductDTO> productDTOs = tuples.stream().map(tuple -> {
-            Product product = tuple.get(0,Product.class);  // qProduct 엔티티 객체를 가져옴
-            Seller seller = tuple.get(1,Seller.class);    // qSeller 엔티티 객체를 가져옴
+            log.info("List!!!!"+list);
+            return list;
 
-            // `ProductDTO`와 `SellerDTO`로 매핑
-            ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
-            SellerDTO sellerDTO = modelMapper.map(seller, SellerDTO.class);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
-            // `ProductDTO`에 `SellerDTO`를 설정 (ProductDTO가 SellerDTO 필드를 가정)
-            productDTO.setCompany(sellerDTO.getCompany());
-
-            return productDTO;
-        }).collect(Collectors.toList());
-
-        return ProductListPageResponseDTO.builder()
-                .total((int) tuples.getTotalElements())
-                .productDTOs(productDTOs)
-                .pageRequestDTO(pageRequestDTO)
-                .build();
     }
-
+    public static class ProductNotFoundException extends RuntimeException {
+        public ProductNotFoundException(String message) {
+            super(message);
+        }
+    }
 //////////////////////////////////////////////////////////
 //
+
+
+    public ProductDTO selectByProductId(Long productId) {
+        Product product = productRepository.findByProductId(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        return product.toDTO(product); // Convert to DTO
+    }
+
+
     //view page select
     public ProductDTO getProduct(Long ProductID) {
 
-        Product product = productRepository.findByProductId(ProductID);
-        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
-
-        List<OptionDTO> optionDTOs = product.getOptions().stream().map(option -> modelMapper.map(option, OptionDTO.class)).collect(Collectors.toList());
-        List<ProductFileDTO> productFileDTOs = product.getFiles().stream().map(file -> modelMapper.map(file, ProductFileDTO.class)).collect(Collectors.toList());
-
-        List<Review> reviews = product.getReviews();
-        List<ReviewDTO> reviewDTOs = new ArrayList<>();
-        for(Review review : reviews) {
-           List<ReviewFileDTO> fileDTOS = productFileDTOs.stream().map(file -> modelMapper.map(file, ReviewFileDTO.class)).collect(Collectors.toList());
-           ReviewDTO reviewDTO = modelMapper.map(review, ReviewDTO.class);
-           reviewDTO.setReviewFileDTOS(fileDTOS);
-           reviewDTOs.add(reviewDTO);
+        Optional<Product> opt = productRepository.findByProductId(ProductID);
+        Product product=null;
+        if(opt.isPresent()){
+            product  = opt.get();
         }
 
+        log.info("여기!!!1");
+        if (product == null) {
+            throw new ProductNotFoundException("Product with ID " + ProductID + " not found");
+        }
+        log.info("여기!!!2");
 
+        ProductDTO productDTO = product.toDTO(product);
+        log.info("여기!!!333"+productDTO);
 
-        productDTO.setReviewDTOs(reviewDTOs);
-        productDTO.setOptions(optionDTOs);
+        List<OptionGroupDTO> optionGroupDTOS = product.getOptionGroups().stream().map(
+                optionGroup -> {
+                    List<OptionItem> optionItems =  optionGroup.getOptionItems();
+
+                    OptionGroupDTO optionGroupDTO = modelMapper.map(optionGroup,OptionGroupDTO.class);
+                    optionGroupDTO.setOptionItems(optionItems.stream().map(t-> modelMapper.map(t,OptionItemDTO.class)).collect(Collectors.toList()));
+                    return optionGroupDTO;
+                }).collect(Collectors.toList());
+        productDTO.setOptionGroups(optionGroupDTOS);
+        log.info("여기3!!"+optionGroupDTOS);
+
+        // Map Product Option Combinations
+        List<ProductOptionCombinationDTO> optionCombinationDTOs = product.getOptionCombinations().stream()
+                .map(combo -> modelMapper.map(combo, ProductOptionCombinationDTO.class))
+                .collect(Collectors.toList());
+        productDTO.setOptionCombinations(optionCombinationDTOs);
+        log.info("여기4!!"+optionCombinationDTOs);
+
+        // Map Product Files
+        List<ProductFileDTO> productFileDTOs = product.getFiles().stream()
+                .map(file -> modelMapper.map(file, ProductFileDTO.class))
+                .collect(Collectors.toList());
         productDTO.setProductFiles(productFileDTOs);
-        List<String> filedesc= new ArrayList<>();
-        if(!productFileDTOs.isEmpty()){
-            for(ProductFileDTO productFileDTO : productFileDTOs){
-                if(productFileDTO.getType().equals("940")){
-                    filedesc.add(productFileDTO.getSName());
-                }
-            }
-        }
+        log.info("여기5!!"+optionCombinationDTOs);
+
+
+        // Map Reviews and Review Files
+        List<ReviewDTO> reviewDTOs = product.getReviews().stream().map(review -> {
+            ReviewDTO reviewDTO = review.ToDTO(review);
+            return reviewDTO;
+        }).collect(Collectors.toList());
+        productDTO.setReviewDTOs(reviewDTOs);
+
+
+        // Filter Specific File Descriptions
+        List<String> filedesc = productFileDTOs.stream()
+                .filter(file -> "940".equals(file.getType()))
+                .map(ProductFileDTO::getSName)
+                .collect(Collectors.toList());
         productDTO.setFiledesc(filedesc);
 
 
+
+      // Set Seller Information
         SellerDTO sellerDTO = sellerService.getSeller(product.getSellerId());
         productDTO.setSeller(sellerDTO);
 

@@ -4,6 +4,7 @@ package com.lotteon.entity.product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.dto.product.ReviewDTO;
+import com.lotteon.dto.product.ReviewFileDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -48,9 +50,13 @@ public class Review {
             productDTO = ProductDTO.builder()
                     .productId(review.getProduct().getProductId())
                     .productName(review.getProduct().getProductName())
-                    // 필요한 다른 필드도 설정
                     .build();
         }
+
+        // Map ReviewFile to ReviewFileDTO
+        List<ReviewFileDTO> reviewFileDTOS = review.getPReviewFiles().stream()
+                .map(file -> new ReviewFileDTO(file.getFileId(), file.getSname(), file.getPath(),file.getFileId()))
+                .collect(Collectors.toList());
 
         return ReviewDTO.builder()
                 .reviewId(review.getReviewId())
@@ -58,12 +64,11 @@ public class Review {
                 .rdate(review.getRdate())
                 .content(review.getContent())
                 .rating(review.getRating())
-                .savedReviewFiles(review.getPReviewFiles() != null ? review.getPReviewFiles() : Collections.emptyList()) // ReviewFile 리스트 설정
-                .productId(review.getProduct() != null ? review.getProduct().getProductId() : null) // ProductId null 체크
-                .product(productDTO) // ProductDTO 설정
+                .reviewFileDTOS(reviewFileDTOS) // Use ReviewFileDTO list
+                .productId(review.getProduct() != null ? review.getProduct().getProductId() : null)
+                .product(productDTO)
                 .build();
     }
-
 
     @Override
     public String toString() {

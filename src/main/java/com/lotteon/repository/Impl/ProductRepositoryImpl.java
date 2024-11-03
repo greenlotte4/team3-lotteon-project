@@ -10,13 +10,16 @@ package com.lotteon.repository.Impl;
 
 
 import com.lotteon.dto.product.*;
+import com.lotteon.dto.product.request.ProductViewResponseDTO;
 import com.lotteon.entity.User.QSeller;
 import com.lotteon.entity.User.QUser;
 import com.lotteon.entity.product.*;
 import com.lotteon.repository.custom.ProductRepositoryCustom;
 import com.lotteon.repository.user.SellerRepository;
+import com.querydsl.core.QueryFactory;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.annotations.QueryProjection;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,7 +28,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberTemplate;
+
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.querydsl.jpa.JPAExpressions.select;
 
@@ -42,10 +50,14 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private QUser qUser = QUser.user;
     private QProductFile qProductFile = QProductFile.productFile;
     private QSeller qSeller = QSeller.seller;
-
-
+    private QReview qReview = QReview.review;
+    private QueryProjection queryProjection;
+    private QProductSummaryDTO qProductSummaryDTO;
+    private QProductOptionCombination qProductOptionCombination=QProductOptionCombination.productOptionCombination;
+    private QOptionGroup qOptionGroup = QOptionGroup.optionGroup;
+    private QOptionItem qOptionItem = QOptionItem.optionItem;
     //admin product list에서 사용
-    @Override
+    ;@Override
     public Page<Product> selectProductBySellerIdForList(String sellerId, PageRequestDTO pageRequest, Pageable pageable) {
 
         List<Product> products = queryFactory.select(qProduct)
@@ -72,16 +84,45 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     //main 3차 카테고리 선택시
     @Override
-    public Page<Tuple> selectProductByCategory(PageRequestDTO pageRequest, Pageable pageable) {
+    public Page<ProductSummaryDTO> selectProductByCategory(PageRequestDTO pageRequest, Pageable pageable) {
 
-        List<Tuple> products = queryFactory.select(qProduct,qSeller)
-                .from(qProduct)
-                .leftJoin(qSeller)
-                .on(qSeller.user.uid.eq(qProduct.sellerId))
-                .where(qProduct.categoryId.eq(pageRequest.getCategoryId()))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+      List<ProductSummaryDTO> products =  queryFactory.select(
+                      new QProductSummaryDTO(
+                              qProduct.categoryId,
+                              qProduct.productId,
+                              qProduct.productName,
+                              qProduct.price,
+                              qProduct.discount,
+                              qProduct.shippingFee,
+                              qProduct.shippingTerms,
+                              qProduct.productDesc,
+                              qProduct.file230,
+                              qProduct.file190,
+                              qSeller.id,
+                              qSeller.user.uid,
+                              qSeller.company
+                      ))
+              .from(qProduct)
+              .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId))
+              .leftJoin(qProduct.reviews, qReview)
+              .where(qProduct.categoryId.eq(pageRequest.getCategoryId()))
+              .groupBy(qProduct.productId, qSeller.user.uid)
+              .offset(pageable.getOffset())
+              .limit(pageable.getPageSize())
+              .fetch();
+
+        // 2. 각 상품에 대해 리뷰 리스트를 별도로 조회하여 DTO에 추가
+        for (ProductSummaryDTO product : products) {
+            List<Review> reviews = queryFactory.select(
+                            new QReview(
+                                    String.valueOf(qReview.rating)
+                            ))
+                    .from(qReview)
+                    .where(qReview.product.productId.eq(product.getProductId()))
+                    .fetch();
+
+            product.setRating(reviews);  // 리뷰 리스트를 DTO에 설정
+        }
 
 
         log.info("did=dosidjflskdjfls : "+products);
@@ -94,6 +135,44 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return new PageImpl<>(products, pageable,total);
 
+    }
+
+    @Override
+    public ProductViewResponseDTO selectByProductId(Long productId) {
+        log.info("Attempting to fetch product with ID: " + productId);
+        // 필수 정보만 fetch join
+        Product product = queryFactory.selectFrom(qProduct)
+                .leftJoin(qProduct.productDetails, qProductDetails).fetchJoin()
+                .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId)).fetchJoin()
+                .where(qProduct.productId.eq(productId))
+                .fetchOne();
+
+        if (product == null) {
+            log.warn("Product not found for ID: " + productId);
+            return ProductViewResponseDTO.builder()
+                    .build();
+        }
+
+        log.info("Product loaded successfully: " + product);
+
+        // 필요할 때 각 컬렉션 로드
+        Set<ProductFile> files = product.getFiles();  // 지연 로딩으로 별도 쿼리 발생
+        Set<ProductOptionCombination> optionCombinations = product.getOptionCombinations();
+        Set<OptionGroup> optionGroups = product.getOptionGroups();
+        List<Review> reviews = product.getReviews();
+
+        log.info("Product loaded successfully: " + product);
+
+        log.info("producttttttttttttt"+product);
+
+
+
+        return  ProductViewResponseDTO.builder()
+                .files(files)
+                .optionCombinations(optionCombinations)
+                .optionGroups(optionGroups)
+                .reviews(reviews)
+                .build();
     }
 
 

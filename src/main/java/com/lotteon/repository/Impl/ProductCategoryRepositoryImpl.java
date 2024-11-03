@@ -36,6 +36,7 @@ public class ProductCategoryRepositoryImpl implements ProductCategoryRepositoryC
         //자신의 현재 카테고리 정보 가져오기
         ProductCategory currentCategory = queryFactory
                 .selectFrom(category)
+                .leftJoin(category.parent).fetchJoin()  // fetch join으로 parent를 즉시 로딩
                 .where(category.id.eq(id))
                 .fetchOne();
 

@@ -58,10 +58,15 @@ public class MarketController {
     @GetMapping("/list/{category}")
     public String marketList(PageRequestDTO pageRequestDTO,@PathVariable long category,Model model) {
         pageRequestDTO.setCategoryId(category);
+        log.debug("Debugging category: " + category);
+
+        log.info("11111111111111"+pageRequestDTO.getCategoryId());
+        log.info("category:"+category);
         List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(category);
         log.info("dsdsdsdsd"+categoryDTOs);
+//        log.info("dsdsdsdsd2222"+pageRequestDTO);
         ProductListPageResponseDTO responseDTO =  productService.getProductList(pageRequestDTO);
-        log.info("controlllermarket::::"+responseDTO.getProductDTOs());
+        log.info("controlllermarket::::"+responseDTO.getProductSummaryDTOs());
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("responseDTO",responseDTO);
 
@@ -86,7 +91,7 @@ public class MarketController {
 
 
     @GetMapping("/view/{categoryId}/{productId}")
-    public String marketView(@PathVariable long productId,@PathVariable long categoryId,Model model, com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
+    public String marketView(@PathVariable Long productId,@PathVariable Long categoryId,Model model, com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
         log.info(productId);
         log.info(categoryId);
 
@@ -95,9 +100,9 @@ public class MarketController {
         productService.updatehit(productId);
 
 
-       List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
-       log.info("categories LLLLL "+ categoryDTOs);
-       ProductDTO productdto = productService.getProduct(productId);
+        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
+        log.info("categories LLLLL "+ categoryDTOs);
+        ProductDTO productdto = productService.selectByProductId(productId);
         log.info("productVIew Controller:::::"+productdto);
 
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);
