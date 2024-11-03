@@ -96,7 +96,7 @@ function addOptionItemField(button) {
     const newItem = document.createElement("div");
     newItem.className = "option-item";
     newItem.innerHTML = `
-        <input type="text" placeholder="옵션 항목을 입력하세요" onblur="addOptionItem(this)">
+        <input type="text" name="optionItems" placeholder="옵션 항목을 입력하세요" onblur="addOptionItem(this)">
         <button type="button" onclick="removeOptionItem(this)">삭제</button>
     `;
 
@@ -385,45 +385,7 @@ function generateCombinations() {
 //     hiddenField.value = productJson;
 // }
 
-function collectAllData() {
-    // 기본 상품 정보 수집
-    collectProductData();
 
-    // 옵션 데이터 수집
-    collectOptionData();
-
-    // 로컬 저장된 JSON 데이터 가져오기
-    const productJson = JSON.parse(localStorage.getItem("productData"));
-    const optionsJson = JSON.parse(localStorage.getItem("optionsData"));
-
-    // 전체 데이터를 하나의 객체로 병합
-    const allData = {
-        ...productJson,
-        options: optionsJson.options,
-        combinations: optionsJson.combinations
-    };
-
-    // 최종 JSON으로 변환
-    const allDataJson = JSON.stringify(allData);
-    console.log("All Data JSON:", allDataJson);
-
-    // 히든 필드 업데이트
-    const form = document.getElementById("productForm");
-    let hiddenField = document.getElementById("allDataJson");
-    if (!hiddenField) {
-        hiddenField = document.createElement("input");
-        hiddenField.type = "hidden";
-        hiddenField.name = "allDataJson";
-        hiddenField.id = "allDataJson";
-        form.appendChild(hiddenField);
-    }
-    hiddenField.value = allDataJson;
-}
-
-// 폼 제출 시 collectAllData 호출
-// document.getElementById("productForm").addEventListener("submit", function(event) {
-//     collectAllData();
-// });
 
 
 
@@ -507,38 +469,69 @@ document.querySelectorAll("#stock-input-area").forEach(inputArea => {
 });
 
 document.getElementById("productForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // 기본 폼 제출 방지
+    event.preventDefault();
 
-    // 전체 데이터를 수집하여 JSON으로 변환
-    const productJson = JSON.stringify(collectProductData());
-    const optionsJson = JSON.stringify(collectOptionData());
-    console.log("Options JSON to send:", optionsJson);
-    // FormData 생성
+    // // Collect product and option data
+    // const productData = {
+    //     firstLevelCategory: document.querySelector("select[name='firstLevelCategory']").value,
+    //     secondLevelCategory: document.querySelector("select[name='secondLevelCategory']").value,
+    //     thirdLevelCategory: document.querySelector("select[name='thirdLevelCategory']").value,
+    //     productName: document.querySelector("input[name='productName']").value.trim(),
+    //     productDesc: document.querySelector("input[name='productDesc']").value.trim(),
+    //     madeIn: document.querySelector("input[name='madeIn']").value.trim(),
+    //     sellerId: document.querySelector("input[name='sellerId']").value.trim(),
+    //     price: parseFloat(document.querySelector("input[name='price']").value.trim()),
+    //     discount: parseInt(document.querySelector("input[name='discount']").value.trim(), 10),
+    //     stock: parseInt(document.querySelector("input[name='stock']").value.trim(), 10),
+    //     shippingFee: parseInt(document.querySelector("input[name='shippingFee']").value.trim(), 10),
+    //     shippingTerms: parseInt(document.querySelector("input[name='shippingTerms']").value.trim(), 10),
+    //     condition: document.querySelector("input[name='condition']").value.trim(),
+    //     tax: document.querySelector("input[name='tax']").value.trim(),
+    //     receiptIssuance: document.querySelector("input[name='receiptIssuance']").value.trim(),
+    //     busniesstype: document.querySelector("input[name='busniesstype']").value.trim(),
+    //     manufactureCountry: document.querySelector("input[name='manufactureCountry']").value.trim(),
+    // }
+    // const optionsData = collectOptionData();
+    // const options = optionsData.options;
+    // const combinations = optionsData.combinations;
+    //
+    //
+    //
+    // // Create FormData to hold both JSON data and files
+    // const formData = new FormData();
+    // formData.append("productData", JSON.stringify(productData)); // Append JSON data as "productData"
+    // formData.append("options", JSON.stringify(options));
+    // formData.append("combinations", JSON.stringify(combinations));
+
+    const productData = collectProductData();
     const formData = new FormData();
-    formData.append("productJson", productJson);  // JSON 형식으로 추가
-    formData.append("optionsJson", optionsJson);  // JSON 형식으로 추가
 
-    // 파일 데이터 추가
+    formData.append("productData", JSON.stringify(productData)); // Main product data with options and combinations
+
+
+    // Append files to FormData
     const fileInputs = document.querySelectorAll("input[type='file']");
-    fileInputs.forEach((fileInput, index) => {
+    fileInputs.forEach((fileInput) => {
         if (fileInput.files.length > 0) {
-            formData.append("files", fileInput.files[0]); // 파일을 추가합니다.
+            formData.append("files", fileInput.files[0]); // Append each file
         }
     });
 
-    // 서버로 데이터 전송
+    // Send FormData to the server
     fetch("/seller/product/register", {
         method: "POST",
-        body: formData,
+        body: formData
     })
-        .then(response => {
-            if (!response.ok) throw new Error("Network response was not ok");
-            return response.text();
-        })
+        .then(response => response.json())
         .then(data => {
-            console.log("Form submitted successfully:", data);
-            alert("Product registration successful");
-            window.location.href = "/seller/product/list"; // 등록 성공 시 리다이렉트
+            if(data.result>0){
+                alert("Product registration successful");
+                window.location.href = "/seller/product/list";
+            }else{
+                alert("등록 실패!")
+                window.location.href = "/seller/product/register";
+            }
+
         })
         .catch(error => {
             console.error("Error:", error);
@@ -546,51 +539,12 @@ document.getElementById("productForm").addEventListener("submit", function (even
         });
 });
 
-
-// Function to collect option data for `optionsJson`
-function collectOptionData() {
-    const options = [];
-    const optionGroups = document.querySelectorAll("#option-container .option-group");
-
-    optionGroups.forEach(group => {
-        const groupName = group.querySelector("input[name='optionGroupName[]']").value.trim();
-        const items = Array.from(group.querySelectorAll(".addOption input"))
-            .map(input => input.value.trim())
-            .filter(value => value);
-
-        if (groupName && items.length > 0) {
-            options.push({ groupName, items }); // 배열 형태로 추가
-        }
-    });
-
-    const combinations = [];
-    const combinationRows = document.querySelectorAll("#stock-input-area tbody tr");
-    combinationRows.forEach(row => {
-        const combination = row.querySelector("td").textContent.trim();
-        const optionCode = row.querySelector("input[name='optionCode']").value.trim();
-        const stock = row.querySelector("input[type='number']").value.trim();
-
-        if (combination && optionCode && stock) {
-            combinations.push({
-                combination,
-                optionCode,
-                stock: parseInt(stock, 10)
-            });
-        }
-    });
-
-    return { options, combinations };
-}
-
-// FormData 생성 부분
-collectOptionData();
-console.log("collectOptionData",collectOptionData());
-
+// Function to collect product data
 function collectProductData() {
-    return {
-        thirdLevelCategory: document.querySelector("select[name='thirdLevelCategory']").value,
+    const productData = {
         firstLevelCategory: document.querySelector("select[name='firstLevelCategory']").value,
         secondLevelCategory: document.querySelector("select[name='secondLevelCategory']").value,
+        thirdLevelCategory: document.querySelector("select[name='thirdLevelCategory']").value,
         productName: document.querySelector("input[name='productName']").value.trim(),
         productDesc: document.querySelector("input[name='productDesc']").value.trim(),
         madeIn: document.querySelector("input[name='madeIn']").value.trim(),
@@ -606,90 +560,53 @@ function collectProductData() {
         busniesstype: document.querySelector("input[name='busniesstype']").value.trim(),
         manufactureCountry: document.querySelector("input[name='manufactureCountry']").value.trim(),
     };
+
+    const optionData = collectOptionData();
+    productData.options = optionData.options;
+    productData.combinations = optionData.combinations;
+
+    return productData;
 }
-    // Collect options data as an object
-    const optionsData = {
-        options: [],  // Replace this with actual data collection logic
-        combinations: []  // Replace this with actual data collection logic
-    };
 
-    collectOptionData();
+// Function to collect option data
+function collectOptionData() {
+    const options = [];
+    const combinations = [];
 
-    // Convert both product and options data to JSON
-    const productJson = JSON.stringify(collectProductData());
-    const optionsJson = JSON.stringify(collectOptionData().options); // 배열로 전송
-
-
-    // Create FormData and append JSON data
-    const formData = new FormData();
-    formData.append("productJson", productJson);  // Add product JSON data
-    formData.append("optionsJson", optionsJson);
-
-
-    // Add files to FormData
-    const fileInputs = document.querySelectorAll("input[type='file']");
-    fileInputs.forEach((fileInput, index) => {
-        if (fileInput.files.length > 0) {
-            formData.append(`files[${index}]`, fileInput.files[0]);  // Add each file to FormData
+    document.querySelectorAll("#option-container .option-group").forEach(group => {
+        const groupName = group.querySelector("input[name='optionGroupName[]']").value.trim();
+        const items = Array.from(group.querySelectorAll(".addOption input"))
+            .map(input => input.value.trim())
+            .filter(value => value);
+        if (groupName && items.length > 0) {
+            options.push({ groupName, items });
         }
     });
 
+    document.querySelectorAll("#stock-input-area tbody tr").forEach(row => {
+        const combination = row.querySelector("td").textContent.trim();
+        const optionCode = row.querySelector("input[name='optionCode']").value.trim();
 
+        // Default additionalPrice and stock to 0 if empty
+        const additionalPrice = parseInt(row.querySelector("input[name='additionalPrice']").value.trim(), 10) || 0;
+        const stockElement = row.querySelector("input[name^='stockMap']");
+        const stock = stockElement ? parseInt(stockElement.value.trim(), 10) || 0 : 0;
 
-
-
-function validateNumericFields() {
-    const numericFields = ['price', 'discount', 'stock', 'shippingFee', 'shippingTerms'];
-
-    for (let field of numericFields) {
-        const value = document.querySelector(`input[name='${field}']`).value.trim();
-        if (isNaN(value) || value === "") {
-            alert(`Please enter a valid number for ${field}`);
-            return false;
+        if (combination && optionCode) {
+            combinations.push({ combination, optionCode, additionalPrice, stock });
         }
-    }
-    return true;
+    });
+
+    return { options, combinations };
+
+
+
 }
 
 
 
 
-document.getElementById("productForm").addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    // JSON으로 변환
-    // const productJson = JSON.stringify(collectProductData());
-    // const optionsJson = JSON.stringify(collectOptionData());
 
 
-    // FormData 생성 및 데이터 추가
-    const formData = new FormData();
-    formData.append("productJson", JSON.stringify(collectProductData()));
-    formData.append("optionsJson", JSON.stringify(collectOptionData().options)); // 옵션 그룹만 전송
-    formData.append("combinationsJson", JSON.stringify(collectOptionData().combinations));
-
-    // 파일 추가
-    const fileInputs = document.querySelectorAll("input[type='file']");
-    fileInputs.forEach((fileInput, index) => {
-        if (fileInput.files.length > 0) {
-            formData.append("files", fileInput.files[0]); // 다중 파일일 경우 각 파일 추가
-        }
-    });
-
-    // Fetch API로 전송
-    fetch("/seller/product/register", {
-        method: "POST",
-        body: formData
-    })
-        .then(response => response.text()) // JSON이면 response.json()으로
-        .then(data => {
-            console.log("서버 응답:", data);
-            alert("Product registration successful");
-        })
-        .catch(error => {
-            console.error("에러 발생:", error);
-            alert("Product registration failed");
-        });
-});
 
 

@@ -30,7 +30,7 @@ public class Option {
     private String optionCode;
     private String parentCode;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "option_group_id")
     private OptionGroup optionGroup;
     private String name;

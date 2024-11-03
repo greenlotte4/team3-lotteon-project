@@ -1,12 +1,15 @@
 package com.lotteon.entity.product;
 
 
+import com.lotteon.dto.product.OptionGroupDTO;
+import com.lotteon.dto.product.OptionItemDTO;
 import com.lotteon.entity.product.test.OptionTest;
 import com.lotteon.entity.product.test.ProductTest;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -20,16 +23,33 @@ public class OptionGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long optionGroupId;
+    private Long optionGroupId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
+    private String groupName;
     private String name;
     private boolean isRequired;
 
-    @OneToMany(mappedBy = "optionGroup")
-    private List<Option> options;
+    @ToString.Exclude
+    @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OptionItem> optionItems;
+    // In OptionGroup
+    public OptionGroupDTO toDTO() {
+        // Map OptionItems to OptionItemDTOs
+        List<OptionItemDTO> optionItemDTOs = this.optionItems.stream()
+                .map(OptionItem::toDTO)  // Assuming OptionItem has a toDTO() method
+                .collect(Collectors.toList());
 
+        return OptionGroupDTO.builder()
+                .optionGroupId(this.optionGroupId)
+                .groupName(this.groupName)
+                .name(this.name)
+                .isRequired(this.isRequired)
+                .optionItems(optionItemDTOs)  // Add mapped OptionItemDTOs
+                .build();
+
+    }
 }

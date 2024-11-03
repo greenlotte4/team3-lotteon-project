@@ -12,10 +12,14 @@ package com.lotteon.repository.custom;
 import com.lotteon.dto.product.PageRequestDTO;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.dto.product.ProductListDTO;
+import com.lotteon.dto.product.ProductSummaryDTO;
+import com.lotteon.dto.product.request.ProductViewResponseDTO;
 import com.lotteon.entity.product.Product;
 import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
 
 
 public interface ProductRepositoryCustom {
@@ -24,7 +28,8 @@ public interface ProductRepositoryCustom {
 
     //main list
     public Page<Tuple> selectProductForList( PageRequestDTO pageRequest,Pageable pageable );
-    public Page<Tuple> selectProductByCategory(PageRequestDTO pageRequest,Pageable pageable);
+    public Page<ProductSummaryDTO> selectProductByCategory(PageRequestDTO pageRequest, Pageable pageable);
+    public ProductViewResponseDTO selectByProductId(Long productId);
 
 
     //main view

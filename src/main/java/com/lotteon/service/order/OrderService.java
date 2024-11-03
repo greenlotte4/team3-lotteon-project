@@ -118,16 +118,15 @@ public class OrderService {
        for(OrderItem orderItem : orderItems) {
            OrderItemDTO orderItemDTO = getModelMapper.map(orderItem,OrderItemDTO.class);
            String sellerid= orderItem.getProduct().getSellerId();
-           List<Option> optiondtos = orderItem.getProduct().getOptions();
-           for(Option option : optiondtos) {
-               log.info("여긴오녀???"+option);
-
-               if(option.getId() == orderItem.getOptionId()) {
-                   log.info("일치!!!!!!!!!"+option);
-                   orderItemDTO.setSelectOption(getModelMapper.map(option, OptionDTO.class));
-                   break;
-               }
-           }
+//           for(Option option : optiondtos) {
+//               log.info("여긴오녀???"+option);
+//
+//               if(option.getId() == orderItem.getOptionId()) {
+//                   log.info("일치!!!!!!!!!"+option);
+//                   orderItemDTO.setSelectOption(getModelMapper.map(option, OptionDTO.class));
+//                   break;
+//               }
+//           }
            orderItemDtos.add(orderItemDTO);
 
            SellerDTO seller = sellerService.getSeller(sellerid);

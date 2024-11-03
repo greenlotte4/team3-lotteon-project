@@ -2,17 +2,22 @@ package com.lotteon.entity.product;
 
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.dto.product.*;
 import com.lotteon.entity.User.Seller;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
@@ -28,18 +33,18 @@ public class Product {
     private Long productId;
 
     private String productCode;
-    private long categoryId;
+    private Long categoryId;
 
     private String productName;
-    private long price;
-    private long stock;
+    private Long price;
+    private Long stock;
     private int discount;
     private int shippingFee;
     private int shippingTerms; //무료배송 조건
 
     @CreationTimestamp
     private LocalDateTime rdate;
-    private String ProductDesc; //상품설명
+    private String productDesc; //상품설명
 
     @Builder.Default
     private int point=0;
@@ -50,30 +55,36 @@ public class Product {
     @Builder.Default
     private Boolean isSaled = true; // 판매가능여부
 
-    private long sellerNo;
+    private Long sellerNo;
     private String sellerId;
 
     @Builder.Default
-    private long sold=0; //판매량
+    private Long sold=0L; //판매량
     @Builder.Default
-    private long hit=0; //보는수
+    private Long hit=0L; //보는수
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @ToString.Exclude  // 외래키는 자식 테이블에 생성
-    private List<ProductFile> files;
+    @BatchSize(size = 10)
+    private Set<ProductFile> files;
 
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="product_id")
-    @ToString.Exclude
-    private List<Option> options;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="detail_id")
     @ToString.Exclude
     private ProductDetails productDetails;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="product_id")
+    @ToString.Exclude
+    @JsonManagedReference // 순환 참조 방지를 위해 사용
+    private Set<OptionGroup> optionGroups;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @BatchSize(size = 30)
+    private Set<ProductOptionCombination> optionCombinations;
 
 
 
@@ -84,6 +95,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Exclude
+    @Fetch(FetchMode.SUBSELECT)
     @JsonManagedReference // 순환 참조 방지를 위해 사용
     private List<Review> reviews = new ArrayList<>();
 
@@ -100,8 +112,8 @@ public class Product {
         this.productCode = "C"+categoryId+"-P"+productId;
     }
 
-
-    public void setFiles(List<ProductFile> files) {
+    // `setFiles` 메서드
+    public void setFiles(Set<ProductFile> files) {
         this.files = files;
         if (files != null) {
             if (this.fileDescs == null) {
@@ -109,10 +121,10 @@ public class Product {
             }
             for (ProductFile file : files) {
                 switch (file.getType()) {
-                    case "190" -> this.file190 = file.getSName();
-                    case "230" -> this.file230 = file.getSName();
-                    case "456" -> this.file456 = file.getSName();
-                    default -> this.fileDescs.add(file.getSName());
+                    case "190" -> this.file190 = file.getPath();
+                    case "230" -> this.file230 = file.getPath();
+                    case "456" -> this.file456 = file.getPath();
+                    default -> this.fileDescs.add(file.getPath());
                 }
             }
         }
@@ -121,37 +133,68 @@ public class Product {
         this.hit++;
     }
 
-    public void setOptions(List<Option> options) {
-        this.options=options;
+
+
+    public void setOptionGroups(Set<OptionGroup> optionGroups) {
+        this.optionGroups = optionGroups;
+    }
+
+    public void setOptionCombinations(Set<ProductOptionCombination> optionCombinations) {
+        this.optionCombinations = optionCombinations;
     }
 
     public void setProductDetails(ProductDetails productDetails) {
         this.productDetails=productDetails;
     }
 
+
     public ProductDTO toDTO(Product product) {
-        ProductDTO dto = ProductDTO.builder()
-                .productId(product.getProductId())
-                .productCode(product.getProductCode())
-                .categoryId(product.getCategoryId())
-                .productName(product.getProductName())
-                .price(product.getPrice())
-                .stock(product.getStock())
-                .discount(product.getDiscount())
-                .shippingFee(product.getShippingFee())
-                .shippingTerms(product.getShippingTerms())
-                .hit(product.getHit())
-                .ProductDesc(product.getProductDesc())
-                .file190(product.getFile190())
-                .file230(product.getFile230())
-                .file456(product.getFile456())
-                .point(product.getPoint())
-                .isCoupon(product.getIsCoupon())
-                .isSaled(product.getIsSaled())
-                .productDetails(product.getProductDetails())
-                .rdate(String.valueOf(product.getRdate()))
+        // Convert ProductDetails to DTO if not null
+        ProductDetailsDTO dto = product.getProductDetails() != null ? product.getProductDetails().toDTO() : null;
+
+        // Map OptionGroups to OptionGroupDTOs
+        List<OptionGroupDTO> optionGroupDTOs = product.getOptionGroups().stream()
+                .map(OptionGroup::toDTO) // Assuming OptionGroup has a toDTO() method
+                .collect(Collectors.toList());
+
+        // Map OptionCombinations to OptionCombinationDTOs
+        List<ProductOptionCombinationDTO> optionCombinationDTOs = product.getOptionCombinations().stream()
+                .map(ProductOptionCombination::toDTO) // Assuming OptionCombination has a toDTO() method
+                .collect(Collectors.toList());
+
+        return ProductDTO.builder()
+                .file190(this.file190)
+                .file230(this.file230)
+                .file456(this.file456)
+                .productId(this.getProductId())
+                .productRating(this.productRating)
+                .productCode(this.productCode)
+                .productName(this.productName)
+                .hit(this.hit)
+                .point(this.point)
+                .discount(this.discount)
+                .sellerId(this.sellerId)
+                .sellerNo(this.sellerNo)
+                .shippingFee(this.shippingFee)
+                .shippingTerms(this.shippingTerms)
+                .rdate(String.valueOf(this.rdate))
+                .categoryId(this.categoryId)
+                .filedesc(this.fileDescs)
+                .price(this.price)
+                .stock(this.stock)
+                .productDesc(this.productDesc)
+                .isSaled(this.isSaled)
+                .isCoupon(this.isCoupon)
+                .sold(this.sold)
+                .productDetails(dto)
+                .optionGroups(optionGroupDTOs)
+                .optionCombinations(optionCombinationDTOs)
+
+                // 추가: ProductDetails가 null이 아닐 때 DTO로 변환
+                .productDetails(this.productDetails != null ? this.productDetails.toDTO() : null)
                 .build();
-        return dto;
     }
+
+
 
 }
