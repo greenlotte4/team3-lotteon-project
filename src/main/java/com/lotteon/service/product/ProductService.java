@@ -333,7 +333,8 @@ public class ProductService {
                     OptionGroupDTO optionGroupDTO = modelMapper.map(optionGroup,OptionGroupDTO.class);
                     optionGroupDTO.setOptionItems(optionItems.stream().map(t-> modelMapper.map(t,OptionItemDTO.class)).collect(Collectors.toList()));
                     return optionGroupDTO;
-                }).collect(Collectors.toList());
+                }).sorted(Comparator.comparing(OptionGroupDTO::getOptionGroupId))
+                .collect(Collectors.toList());
         productDTO.setOptionGroups(optionGroupDTOS);
         log.info("여기3!!"+optionGroupDTOS);
 
@@ -346,6 +347,7 @@ public class ProductService {
         }
         log.info("여기4!!"+productOptionCombinationDTOS);
 
+        productDTO.setOptionCombinations(productOptionCombinationDTOS);
         // Map Product Files
         List<ProductFileDTO> productFileDTOs = product.getFiles().stream()
                 .map(file -> modelMapper.map(file, ProductFileDTO.class))

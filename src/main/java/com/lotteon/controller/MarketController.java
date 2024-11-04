@@ -28,6 +28,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 /*
     2024.10.28 하진희 - marketorder => 구매하기 버튼 기능 추가 (/buynow)
  */
@@ -89,7 +90,6 @@ public class MarketController {
         return "content/market/marketview"; // Points to the "content/market/marketview" template
     }
 
-
     @GetMapping("/view/{categoryId}/{productId}")
     public String marketView(@PathVariable Long productId,@PathVariable Long categoryId,Model model, com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
         log.info(productId);
@@ -99,16 +99,17 @@ public class MarketController {
         //선택시 hit update
         productService.updatehit(productId);
 
-
         List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
         log.info("categories LLLLL "+ categoryDTOs);
         ProductDTO productdto = productService.getProduct(productId);
         log.info("productVIew Controller:::::"+productdto);
 
+
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
         List<Review> ReviewImgs = reviewService.getAllReviews();
+
 
         model.addAttribute("reviewImgs", ReviewImgs);
 

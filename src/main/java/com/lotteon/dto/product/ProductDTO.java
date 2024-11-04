@@ -69,5 +69,14 @@ public class ProductDTO{
         }
     }
 
+    public Long getAdditionalPriceForOption(String optionName, Set<ProductOptionCombinationDTO> optionCombinationDto) {
+        return optionCombinationDto.stream()
+                .filter(comb -> comb.getCombination().contains(optionName) && comb.getAdditionalPrice() > 0)
+                .findFirst()
+                .map(ProductOptionCombinationDTO::getAdditionalPrice)
+                .orElse(0L);
+    }
+
+
 
 }
