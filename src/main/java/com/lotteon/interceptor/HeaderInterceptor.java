@@ -2,7 +2,6 @@ package com.lotteon.interceptor;
 
 import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.admin.HeaderInfoDTO;
-import com.lotteon.entity.HeaderInfo;
 import com.lotteon.service.HeaderInfoService;
 import com.lotteon.service.user.SellerService;
 import com.lotteon.service.user.UserService;

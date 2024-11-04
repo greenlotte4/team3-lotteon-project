@@ -1,6 +1,7 @@
 package com.lotteon.service.product;
 
 import com.lotteon.config.RedirectToLoginException;
+import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.dto.product.cart.CartRequestDTO;
 import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.entity.User.User;
@@ -55,6 +56,7 @@ public class MarketCartService {
             throw new RedirectToLoginException("사용자가 인증되지 않았습니다.");
         }
     }
+
     public CartItem insertCartItem(CartRequestDTO cartRequestDTO) {
 
         if (cartRequestDTO.getQuantity() <= 0) {

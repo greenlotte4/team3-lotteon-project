@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,12 @@ public class CouponService {
         return couponId;
     }
 
+    public List<String> getUserRoles(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+    }
 
     public void insertCoupon(CouponDTO couponDTO) {
         // 현재 인증된 사용자의 정보를 가져옴
@@ -97,22 +104,25 @@ public class CouponService {
         }
     }
     // 페이징 기능 추가
-    public Page<CouponDTO> selectCouponsPagination(CouponListRequestDTO request,String grade,long sellerId) {
-        // 요청 DTO에서 페이지 정보와 사용자 UID 추출
-        int page = request.getPage() > 0 ? request.getPage() - 1 : 0; // 1-based to 0-based
-        int size = request.getSize();
-        Pageable pageable = PageRequest.of(page, size); // Pageable 생성
+    public Page<CouponDTO> selectCouponsPagination(CouponListRequestDTO request,long sellerId, Pageable pageable) {
 
+        List<String> roles = getUserRoles();
         // 쿠폰 페이지 조회
         Page<Coupon> couponPage = null;
-        if(grade.contains("ADMIN")){
+
+        if(roles.contains("ROLE_ADMIN")){
             couponPage = couponRepository.findAll(pageable);
-            log.info("관리자 쿠폰: " + couponPage);
-        }else if(grade.contains("SELLER")){
+//            log.info("관리자 쿠폰: " + couponPage);
+        }else if(roles.contains("ROLE_SELLER")){
             // 일반 셀러는 자신의 쿠폰만 조회
             couponPage = couponRepository.findBySellerId(sellerId, pageable);
             log.info("일반인 쿠폰: " + couponPage);
         }
+
+        int total = (int) Objects.requireNonNull(couponPage).getTotalElements();
+        int totalPages = (int) Math.ceil((double) total / request.getSize());
+        log.info("총 쿠폰 수: {}, 총 페이지 수: {}", total, totalPages);
+
         return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
     }
     //    // 모든 쿠폰 조회 메소드

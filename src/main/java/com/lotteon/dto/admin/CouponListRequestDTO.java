@@ -1,6 +1,5 @@
 package com.lotteon.dto.admin;
 
-import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +24,11 @@ public class CouponListRequestDTO {
     @Builder.Default
     private int size = 10;
     private long sellerId; // 사용자 ID (선택적)
-    private String grade; // 사용자 등급 (선택적)
 
+    private String keyword;
+
+    private String grp;
+    private String cateNo;
 
     public Pageable getPageable() {
         return  PageRequest.of(page - 1, size); // Spring Data는 0부터 시작하므로 page - 1

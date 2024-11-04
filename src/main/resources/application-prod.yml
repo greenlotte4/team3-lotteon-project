@@ -79,11 +79,13 @@ spring:
                 enabled: false
             lettuce:
                 pool:
-                    max-wait: 5000ms  # adjust based on network latency
-
+                    max-wait: 5000ms
 management:
     endpoint:
         caches:
             enabled: true
         metrics:
             enabled: true
+
+
+

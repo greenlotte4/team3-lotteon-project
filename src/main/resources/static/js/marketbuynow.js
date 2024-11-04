@@ -720,5 +720,45 @@ function updateExpectedTotal(totalPrice, totalShippingFee) {
     const expectedPrice = totalPrice + totalShippingFee;
     document.getElementById("expectedPrice").innerText = `${expectedPrice.toLocaleString()}원`;
 }
+/*document.addEventListener("DOMContentLoaded", function () {
+    fetch("/seller/coupon/coupons")
+        .then(resp => {
+            if(!resp.ok){
+                throw new Error("네트워크 응답 오류")
+            }
+            return
+        })
+        .then(data =>{
+            console.log("쿠폰 목록:"data);
+            const couponSelect = document.getElementById()
+        })
+})*/
 
+/*document.getElementById("couponBtn").addEventListener("click", function () {
 
+    alert("클릭됨")
+    const couponData ={
+        couponType
+    }
+})*/
+// 모달 엘리먼트와 버튼, 닫기 버튼 가져오기
+const modal = document.getElementById("coupon-myModal");
+const btn = document.getElementById("coupon-couponBtn");
+const span = document.getElementsByClassName("coupon-close")[0];
+
+// 버튼을 클릭하면 모달 표시
+btn.onclick = function() {
+    modal.style.display = "flex";
+}
+
+// 닫기 버튼을 클릭하면 모달 숨기기
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// 모달 바깥을 클릭하면 모달 숨기기
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}

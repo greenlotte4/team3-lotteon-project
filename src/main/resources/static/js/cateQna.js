@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const links = document.querySelectorAll('#aside .aside_list ul li a');
     const titleElement = document.querySelector('#service .title h2');
     const descriptionElement = document.querySelector('#service .title p');
@@ -10,9 +10,19 @@ document.addEventListener('DOMContentLoaded', function() {
         descriptionElement.textContent = `${links[0].textContent} 관련 문의내용 입니다.`;
     }
 
+    // 현재 URL에서 cate 파라미터를 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentCate = urlParams.get('cate');
+
+    // qnaList에 들어왔을 때 자동으로 cate=1로 리다이렉트
+    if (window.location.pathname.includes('/cs/qna/list') && currentCate === null) {
+        window.location.href = 'http://127.0.0.1:8085/cs/qna/list?cate=1';
+        return; // 이후 코드 실행 방지
+    }
+
     // 링크 클릭 이벤트 처리
     links.forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             // 모든 링크에서 active 클래스 제거
             links.forEach(item => item.classList.remove('active'));
             // 클릭한 링크에 active 클래스 추가
@@ -20,8 +30,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // 클릭한 카테고리명으로 제목 및 설명 업데이트
             const selectedCategory = this.textContent;
-            titleElement.textContent = selectedCategory;
-            descriptionElement.textContent = `${selectedCategory} 관련 문의내용 입니다.`;
+
+            // '1:1' 카테고리의 경우 '>' 제외 및 설명 업데이트
+            if (selectedCategory.startsWith('1:1')) {
+                titleElement.textContent = selectedCategory.replace('>', '').trim();
+                descriptionElement.textContent = `오후 4시 이후 접수 건은 다음날 (평일) 오전 9시 이후 답변드리겠습니다. (단, 롯데마트 고객센터는 주말/공휴일에도 운영)`;
+            } else {
+                titleElement.textContent = selectedCategory;
+                descriptionElement.textContent = `${selectedCategory} 관련 문의내용 입니다.`;
+            }
         });
     });
 
@@ -50,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
         secondChoice.innerHTML = '<option value="">선택하세요</option>';
 
         if (options[selectedValue]) {
-            options[selectedValue].forEach(function(item) {
+            options[selectedValue].forEach(function (item) {
                 const option = document.createElement('option');
                 option.value = item;
                 option.textContent = item;

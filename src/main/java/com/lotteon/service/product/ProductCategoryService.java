@@ -3,7 +3,6 @@ package com.lotteon.service.product;
 
 import com.lotteon.dto.product.CreateCategoryRequestDTO;
 import com.lotteon.dto.product.ProductCategoryDTO;
-import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.repository.Impl.ProductCategoryRepositoryImpl;
 import com.lotteon.repository.product.ProductCategoryRepository;
@@ -14,10 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -8,7 +8,7 @@ h2 {
 .first_list {
     border: 1px solid rgb(197, 197, 197);
     border-radius: 7px;
-    margin: 20px 40px;
+    margin: 40px;
 }
 
 .first_li {
@@ -49,11 +49,11 @@ h2 {
     color: rgb(17, 86, 165);
     font-weight: bold;
     margin-left: 20px;
-    width: 3%;
+    width: 10%;
 }
 
 .first_li span:nth-child(2) {
-    width: 45%;
+    width: 40%;
 }
 
 .first_li span:nth-child(3) {
@@ -77,9 +77,9 @@ h2 {
 }
 
 /*hover 추가*/
-.first_li a:hover {
-    background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);
-}
+/*.first_li a:hover {*/
+/*    background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);*/
+/*}*/
 
 .qna-write-btn {
     display: flex;
@@ -158,7 +158,8 @@ h2 {
     letter-spacing: 1px;
 }
 
-.myqna {
+/* 추가 */
+.myqna, .myqnaList{
     border: 1px solid rgb(197, 197, 197);
     border-radius: 7px;
     margin: 20px 0;
@@ -168,12 +169,16 @@ h2 {
     cursor: pointer;
 }
 
-.myqna a {
+.myqna a, .myqnaList a {
     font-weight: bold;
 }
 
-.myqna p {
+.myqnaList p {
     font-weight: 400;
     padding-top: 5px;
     color: rgb(117, 117, 117);
+}
+
+.myqna {
+    margin-bottom: 70%;
 }

@@ -8,6 +8,7 @@ import net.minidev.json.annotate.JsonIgnore;
 import org.w3c.dom.Text;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Setter
 @Getter
@@ -40,5 +41,8 @@ public class Coupon {
     @JsonIgnore
     private Seller seller; // 발급자
 
+    @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<CouponIssued> issuedCoupons;
 
 }

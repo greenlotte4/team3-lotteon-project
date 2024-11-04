@@ -1,7 +1,6 @@
 package com.lotteon.interceptor;
 
 import com.lotteon.dto.VersionDTO;
-import com.lotteon.entity.Version;
 import com.lotteon.service.VersionService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

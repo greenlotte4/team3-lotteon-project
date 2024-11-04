@@ -162,7 +162,8 @@ textarea:focus {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.myqna {
+/* 추가 */
+.myqna, .myqnaList{
     border: 1px solid rgb(197, 197, 197);
     border-radius: 7px;
     margin: 20px 0;
@@ -172,12 +173,16 @@ textarea:focus {
     cursor: pointer;
 }
 
-.myqna a {
+.myqna a, .myqnaList a {
     font-weight: bold;
 }
 
-.myqna p {
+.myqnaList p {
     font-weight: 400;
     padding-top: 5px;
     color: rgb(117, 117, 117);
+}
+
+.myqna {
+    margin-bottom: 70%;
 }

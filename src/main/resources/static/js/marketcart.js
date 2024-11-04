@@ -238,7 +238,7 @@ document.querySelector('.selected-delete').addEventListener('click', function() 
             cartItemIds.push(cartItemId)
         })
 
-        if (confirm(`정말로 ${cartItemIds.length}개의 항목을 삭제 할기가?`)) {
+        if (confirm(`정말로 삭제 하시겠습니까?`)) {
             const deletionPromises = cartItemIds.map(cartItemId => {
                 return fetch(`/api/delete/${cartItemId}`, { // cartItemId를 URL에 추가
                     method: `DELETE`
@@ -350,49 +350,73 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-        // 주문 버튼 이벤트
-        document.querySelector('.order-Btn').addEventListener('click', function (event) {
-            // event.preventDefault(); // 기본 동작 방지
-            console.log('주문 버튼 클릭');
+    // 주문 버튼 이벤트
+    document.querySelector('.order-Btn').addEventListener('click', function (event) {
+        event.preventDefault(); // 기본 동작 방지
+        console.log('주문 버튼 클릭');
 
-            const checkedItems = document.querySelectorAll('input[name="select"]:checked');
-            if (checkedItems.length === 0) {
-                alert("주문할 상품을 선택해 주세요")
-                return;
-            }
-            const isConfirmed = confirm("구매하시겠습니까?");
-            if (isConfirmed) {
-                const productDataArray = selectedOptions.map(option => ({
-                    productId: productId,
-                    productName: productName,
-                    originalPrice: originalPrice,
-                    finalPrice: Math.floor(originalPrice * (100 - discount) / 100),
-                    quantity: option.quantity,
-                    file190: file190,
-                    optionId: option.optionId,
-                    optionName: option.optionText,
-                    optionDesc: option.optionDesc,
-                    point: point,
-                    discount: discount,
-                    shippingFee: shippingFee,
-                    shippingTerms: shippingTerms
-                }))
-                console.log("Product ID:", productId);
-                console.log("Product Name:", productName);
-                console.log("Original Price:", originalPrice);
-                console.log("Final Price:", Math.floor(originalPrice * (100 - discount) / 100));
-                console.log("Quantity:", quantity);
-                console.log("File 190:", file190);
-                console.log("Option ID:", optionId);
-                console.log("Option Name:", optionText);
-                console.log("Point:", point);
-                console.log("Discount:", discount);
-                console.log("Shipping Fee:", shippingFee);
-                console.log("Shipping Terms:", shippingTerms);
-            }
-        })
+        const userId = document.getElementById('uid').value;
+        const selectedOptions = [];
 
-})
+        const checkedItems = document.querySelectorAll('input[name="select"]:checked');
+        if (checkedItems.length === 0) {
+            alert("주문할 상품을 선택해 주세요")
+            return;
+        }
+
+        const isConfirmed = confirm("구매하시겠습니까?");
+        if (isConfirmed) {
+            checkedItems.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                const cartItemId = row.getAttribute('data-cart-item-id'); // 상품 ID
+                const cartId = row.getAttribute('data-cart-id'); // 카트 ID
+                const quantityInput = row.querySelector('input[name="quantity"]'); // 수량 input 요소
+
+                // 미리 설정된 수량 값을 가져오기
+                const quantity = parseInt(quantityInput.value, 10); // 수량 값을 숫자로 변환
+
+                // 선택한 옵션을 배열에 추가
+                selectedOptions.push({cartItemId, cartId, quantity, userId});
+            });
+
+            console.log("Selected options:", selectedOptions); // 확인용 로그
+
+            // API 호출을 위한 데이터 배열 준비
+            const productDataArray = selectedOptions.map(option => ({
+                cartItemId: option.cartItemId,
+                quantity: option.quantity
+            }));
+
+            // 주문 API 호출
+            fetch(`api/cart/cartOrder/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(productDataArray)
+            })
+                .then(resp => {
+                    console.log("Response status:", resp.status);
+                    if (!resp.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return resp.json();
+                })
+                .then(data => {
+                    console.log("Response data:", data);
+                    if (data.success) {
+                        alert("구매가 완료되었습니다.");
+                    } else {
+                        alert("오류가 발생했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("오류가 발생했습니다.");
+                });
+        }
+    });
+});
 
 
     // 추가적인 주문 처리 로직...

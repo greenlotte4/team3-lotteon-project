@@ -1,10 +1,8 @@
 package com.lotteon.service;
 
 import com.lotteon.dto.admin.HeaderInfoDTO;
-import com.lotteon.entity.FooterInfo;
 import com.lotteon.entity.HeaderInfo;
 import com.lotteon.repository.HeaderInfoRepository;
-import groovy.util.logging.Log;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -12,8 +10,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.util.logging.Logger;
 
 @Log4j2
 @RequiredArgsConstructor

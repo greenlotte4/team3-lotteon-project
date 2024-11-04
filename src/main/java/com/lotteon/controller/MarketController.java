@@ -10,6 +10,7 @@ import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.dto.order.OrderRequestDTO;
 import com.lotteon.entity.User.User;
+import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.Review;
 import com.lotteon.service.ReviewService;
@@ -227,4 +228,16 @@ public class MarketController {
         return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template
     }
 
+    @PostMapping("/cart/cartOrder/{cartId}")
+    public ResponseEntity<Cart> cartOrder(
+            @PathVariable long cartId,
+            @RequestBody List<BuyNowRequestDTO> cartOrders
+    ){
+        log.info("상품 주문 오더 들어왔다");
+        for (BuyNowRequestDTO cartOrder : cartOrders) {
+            log.info("오더들"+cartOrder);
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }

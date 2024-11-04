@@ -1,7 +1,6 @@
 package com.lotteon.interceptor;
 
 import com.lotteon.dto.product.ProductCategoryDTO;
-import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.service.product.ProductCategoryService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

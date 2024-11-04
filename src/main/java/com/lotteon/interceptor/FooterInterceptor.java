@@ -1,11 +1,9 @@
 package com.lotteon.interceptor;
 
 import com.lotteon.dto.FooterInfoDTO;
-import com.lotteon.entity.FooterInfo;
 import com.lotteon.service.FooterInfoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
