@@ -4,8 +4,11 @@ package com.lotteon.controller;
 import com.lotteon.dto.FaqDTO;
 import com.lotteon.dto.NoticeDTO;
 import com.lotteon.dto.QnaDTO;
+import com.lotteon.entity.BoardCate;
 import com.lotteon.entity.Notice;
+import com.lotteon.entity.NoticeType;
 import com.lotteon.entity.QnA;
+import com.lotteon.repository.BoardRepository;
 import com.lotteon.repository.QnaRepository;
 import com.lotteon.repository.admin.NoticeRepository;
 import com.lotteon.service.CsService;
@@ -48,6 +51,7 @@ public class CsController {
     private final NoticeService noticeService;
     private final NoticeRepository noticeRepository;
     private final ModelMapper getModelMapper;
+    private final BoardRepository boardRepository;
 
     @GetMapping("/main")
     public String main(Model model, @PageableDefault(size = 5) Pageable pageable) {
@@ -88,14 +92,19 @@ public class CsController {
 
 
     @GetMapping("/notice/list")
-    public String noticeList(Model model, @PageableDefault(size = 10) Pageable pageable) {
-        // 데이터베이스에서 모든 공지사항을 페이지 형태로 가져옴
-        Page<Notice> noticePage = noticeService.getNotices(pageable);
+    public String noticeList(Model model, @PageableDefault(size = 10) Pageable pageable,
+                             @RequestParam(required = false) NoticeType cate) {
+        Page<Notice> noticePage;
+        if (cate != null) {
+            noticePage = noticeService.getNoticesByType(cate, pageable);
+            model.addAttribute("selectedCategory", cate); // 선택된 카테고리를 모델에 추가
+        } else {
+            noticePage = noticeService.getNotices(pageable);
+            model.addAttribute("selectedCategory", "전체"); // cate가 없으면 "전체"로 설정
+        }
 
-        // 모델에 공지사항 페이지 추가
-        model.addAttribute("noticePage", noticePage); // Page 객체 추가
-
-        return "content/cs/notice/noticeList"; // 뷰 이름 반환
+        model.addAttribute("noticePage", noticePage);
+        return "content/cs/notice/noticeList";
     }
 
 
@@ -115,20 +124,30 @@ public class CsController {
 
     // 문의하기 전체 내역 조회
     @GetMapping("/qna/list")
-    public String qnaList(Model model, @PageableDefault(size = 10, sort = "rdate", direction = Sort.Direction.DESC) Pageable pageable) {
-        // 페이지가 첫 번째 페이지일 경우 1페이지로 리다이렉트
-        if (pageable.getPageNumber() == 0) {
-            pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "rdate"));
+    public String qnaList(
+            @RequestParam(value = "cate", required = false) String category,
+            Authentication authentication, Model model,
+            @PageableDefault(size = 10, sort = "rdate", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<QnA> qnaPage;
+
+        if ("8".equals(category)) {  // cate=8 일 때
+            String uid = authentication.getName();  // 현재 사용자의 아이디를 가져옴
+            qnaPage = qnaRepository.findByQnaWriter(uid, pageable);  // 사용자 게시물만 조회
+        } else if (category != null) {
+            qnaPage = qnaRepository.findByQna_type1(category, pageable);
+        } else {
+            qnaPage = qnaRepository.findAll(pageable);
         }
 
-        Page<QnA> qnaPage = qnaRepository.findAll(pageable);
-
-        // QnA 목록의 작성자 아이디를 마스킹 처리
+        // 작성자 이름 마스킹
         qnaPage.forEach(qna -> qna.setQna_writer(maskUsername(qna.getQna_writer())));
 
         model.addAttribute("qnaPage", qnaPage);
+        model.addAttribute("selectedCategory", category);
         return "content/cs/qna/qnaList";
     }
+
 
     // 아이디 마스킹 메소드
     public String maskUsername(String username) {
@@ -160,36 +179,6 @@ public class CsController {
         return "content/cs/qna/qnaView";
     }
 
-
-
-    // 사용자 본인의 게시물만 확인할 수 있도록
-//    @GetMapping("/qna/list")
-//    public String qnaList(Authentication authentication, Model model,
-//                          @PageableDefault(size = 10, sort = "rdate", direction = Sort.Direction.DESC) Pageable pageable) {
-//        try {
-//            // 현재 사용자의 아이디를 가져옴
-//            String uid = authentication.getName();
-//
-//            // 해당 사용자가 작성한 QnA 목록을 가져옴
-//            Page<QnaDTO> qnaPage = csService.getQnaWriter(uid, pageable);
-//
-//            // 모델에 QnA 페이지를 추가
-//            model.addAttribute("qnaPage", qnaPage);
-//
-//            return "content/cs/qna/qnaList";
-//        } catch (Exception e) {
-//            log.error("Error fetching QnA list: ", e);
-//            return "error"; // error.html로 리다이렉트
-//        }
-//    }
-//
-//    @GetMapping("/qna/detail/{id}")
-//    public String qnaView(@PathVariable("id") int id, Model model) {
-//        QnA qna = qnaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid QnA ID: " + id));
-//        model.addAttribute("qna", qna);
-//        return "content/cs/qna/qnaView";
-//    }
-
     @GetMapping("/qna/write")
     public String qnaWrite(Model model) {
         return "content/cs/qna/qnaWrite";
@@ -202,7 +191,7 @@ public class CsController {
         qnaDTO.setQna_writer(writer);
 
         csService.writeQnA(qnaDTO);
-        return "redirect:/cs/qna/list";
+        return "redirect:/cs/qna/list?cate=8";
     }
 
 

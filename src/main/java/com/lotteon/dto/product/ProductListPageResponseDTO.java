@@ -13,7 +13,7 @@ import java.util.List;
 public class ProductListPageResponseDTO {
 
     private List<ProductDTO> productDTOs;
-
+    private List<ProductSummaryDTO> productSummaryDTOs;
     private String type;
     private int pg;
     private int size;
@@ -25,29 +25,35 @@ public class ProductListPageResponseDTO {
 
 
     @Builder
-    public ProductListPageResponseDTO(PageRequestDTO pageRequestDTO,List<ProductDTO> productDTOs,int total) {
+    public ProductListPageResponseDTO(PageRequestDTO pageRequestDTO, List<ProductSummaryDTO> productSummaryDTOs, List<ProductDTO> ProductDTOs, int total) {
 
         this.type = pageRequestDTO.getType();
         this.pg = pageRequestDTO.getPage();
         this.size = pageRequestDTO.getSize();
         this.total = total;
-        this.productDTOs = (productDTOs != null) ? productDTOs : new ArrayList<>();
 
+        // `ProductDTOs`가 `null`일 경우 빈 리스트로 초기화
+        this.productDTOs = (ProductDTOs == null || ProductDTOs.isEmpty()) ? new ArrayList<>() : ProductDTOs;
 
-        this.startNo = total - ((pg-1)*size);
-        this.end=(int)(Math.ceil(this.pg/ (double)size))*size;
-        this.start= this.end - size-1;
-
-        int last=(int)(Math.ceil(total/(double)size))*size;
-
-        this.end = end > last ? last : end;
-        if(this.start>this.end){
-            this.end=this.start;
+        // `productSummaryDTOs`가 비어 있지 않으면 초기화
+        if (productSummaryDTOs != null && !productSummaryDTOs.isEmpty()) {
+            this.productSummaryDTOs = productSummaryDTOs;
+        } else {
+            this.productSummaryDTOs = new ArrayList<>();
         }
 
-        this.prev = this.start> 1;
+        this.startNo = total - ((pg - 1) * size);
+        this.end = (int) (Math.ceil(this.pg / (double) size)) * size;
+        this.start = this.end - size - 1;
+
+        int last = (int) (Math.ceil(total / (double) size)) * size;
+
+        this.end = Math.min(end, last);
+        if (this.start > this.end) {
+            this.end = this.start;
+        }
+
+        this.prev = this.start > 1;
         this.next = total > this.end * this.size;
-
     }
-
 }

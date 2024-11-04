@@ -6,7 +6,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Builder
@@ -19,4 +18,10 @@ public class ReviewFileDTO {
     private long reviewId;
 
 
+    public ReviewFileDTO(long fileId, String sname, String path, long reviewId) {
+        this.fileId = fileId;
+        this.sname = sname;
+        this.path = path;
+        this.reviewId = reviewId;
+    }
 }

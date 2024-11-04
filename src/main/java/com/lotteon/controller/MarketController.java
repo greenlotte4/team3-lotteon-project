@@ -10,6 +10,7 @@ import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.dto.order.OrderRequestDTO;
 import com.lotteon.entity.User.User;
+import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.Review;
 import com.lotteon.service.ReviewService;
@@ -28,6 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 /*
     2024.10.28 하진희 - marketorder => 구매하기 버튼 기능 추가 (/buynow)
  */
@@ -58,10 +60,15 @@ public class MarketController {
     @GetMapping("/list/{category}")
     public String marketList(PageRequestDTO pageRequestDTO,@PathVariable long category,Model model) {
         pageRequestDTO.setCategoryId(category);
+        log.debug("Debugging category: " + category);
+
+        log.info("11111111111111"+pageRequestDTO.getCategoryId());
+        log.info("category:"+category);
         List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(category);
         log.info("dsdsdsdsd"+categoryDTOs);
+//        log.info("dsdsdsdsd2222"+pageRequestDTO);
         ProductListPageResponseDTO responseDTO =  productService.getProductList(pageRequestDTO);
-        log.info("controlllermarket::::"+responseDTO.getProductDTOs());
+        log.info("controlllermarket::::"+responseDTO.getProductSummaryDTOs());
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("responseDTO",responseDTO);
 
@@ -84,9 +91,8 @@ public class MarketController {
         return "content/market/marketview"; // Points to the "content/market/marketview" template
     }
 
-
     @GetMapping("/view/{categoryId}/{productId}")
-    public String marketView(@PathVariable long productId,@PathVariable long categoryId,Model model, com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
+    public String marketView(@PathVariable Long productId,@PathVariable Long categoryId,Model model, com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
         log.info(productId);
         log.info(categoryId);
 
@@ -94,16 +100,17 @@ public class MarketController {
         //선택시 hit update
         productService.updatehit(productId);
 
-
-       List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
-       log.info("categories LLLLL "+ categoryDTOs);
-       ProductDTO productdto = productService.getProduct(productId);
+        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
+        log.info("categories LLLLL "+ categoryDTOs);
+        ProductDTO productdto = productService.getProduct(productId);
         log.info("productVIew Controller:::::"+productdto);
+
 
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
         List<Review> ReviewImgs = reviewService.getAllReviews();
+
 
         model.addAttribute("reviewImgs", ReviewImgs);
 
@@ -221,4 +228,16 @@ public class MarketController {
         return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template
     }
 
+    @PostMapping("/cart/cartOrder/{cartId}")
+    public ResponseEntity<Cart> cartOrder(
+            @PathVariable long cartId,
+            @RequestBody List<BuyNowRequestDTO> cartOrders
+    ){
+        log.info("상품 주문 오더 들어왔다");
+        for (BuyNowRequestDTO cartOrder : cartOrders) {
+            log.info("오더들"+cartOrder);
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }

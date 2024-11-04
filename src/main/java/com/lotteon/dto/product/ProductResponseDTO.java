@@ -1,6 +1,7 @@
 package com.lotteon.dto.product;
 
 import com.lotteon.entity.product.Option;
+import com.lotteon.entity.product.OptionItem;
 import com.lotteon.entity.product.Product;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
@@ -21,43 +22,68 @@ public class ProductResponseDTO{
     private ProductDTO product;
     private List<OptionDTO> options;
     private ProductDetailsDTO productDetails;
+
+    private List<OptionItemDTO> optionItems;
+    private List<OptionGroupDTO> optionGroups;
+    private List<ProductOptionCombinationDTO> productOptionCombinations;
     private MultiValueMap<String, MultipartFile> images;
 
 
     @Builder
-    public ProductResponseDTO(ProductRequestDTO productRequest) {
+    public ProductResponseDTO(ProductRequestDTO productRequest,List<MultipartFile> files) {
         log.info("여기 ");
         this.product = ProductDTO.builder()
-                .categoryId(productRequest.getThirdLevelCategory())
-                .ProductDesc(productRequest.getProductDesc())
+                .categoryId(Long.parseLong(productRequest.getThirdLevelCategory()))
                 .productName(productRequest.getProductName())
+                .productDesc(productRequest.getProductDesc())
                 .price(productRequest.getPrice())
                 .stock(productRequest.getStock())
                 .discount(productRequest.getDiscount())
                 .shippingFee(productRequest.getShippingFee())
                 .shippingTerms(productRequest.getShippingTerms())
-                .point(productRequest.getPoint())
                 .sellerId(productRequest.getSellerId())
                 .build();
+        this.optionGroups = new ArrayList<>();
 
-        log.info("여기2");
-        this.options= new ArrayList<>();
-        List<String> optionNames = productRequest.getOptionName();
-        List<String> optionDesc = productRequest.getOptionDesc();
-        List<Integer> optionStocks = productRequest.getOptionStock();
-        for(int i=0; i<optionNames.size(); i++) {
-            if(optionNames.get(i)==null){
-                continue;
-            }
-            OptionDTO optionDTO = new OptionDTO();
-            optionDTO.setOptionName(optionNames.get(i));
-            optionDTO.setOptionDesc(optionDesc.get(i));
-            optionDTO.setOptionStock(optionStocks.get(i));
-
-            this.options.add(optionDTO);
+        List<OptionGroupDTO> optionGroupDTOS = productRequest.getOptions();
+        for(OptionGroupDTO optionGroupDTO : optionGroupDTOS){
+            log.info("optionGroup setting,,,");
+            List<OptionItemDTO> optionItemDTOS = new ArrayList<>();
+           for(String optionItem : optionGroupDTO.getItems()){
+               OptionItemDTO optionItemDTO = OptionItemDTO.builder()
+                       .optionName(optionItem)
+                       .build();
+               optionItemDTOS.add(optionItemDTO);
+           }
+           optionGroupDTO.setOptionItems(optionItemDTOS);
+           this.optionGroups.add(optionGroupDTO);
         }
-        if (productRequest.getFiles() != null) {
-            List<MultipartFile> files = productRequest.getFiles();
+
+        this.productOptionCombinations = productRequest.getCombinations();
+
+        List<ProductOptionCombinationDTO> productOptionCombinationDTOS = productRequest.getCombinations();
+
+
+
+
+
+//        log.info("여기2");
+//        this.options= new ArrayList<>();
+//        List<String> optionNames = productRequest.getOptionName();
+//        List<String> optionDesc = productRequest.getOptionDesc();
+//        List<Integer> optionStocks = productRequest.getOptionStock();
+//        for(int i=0; i<optionNames.size(); i++) {
+//            if(optionNames.get(i)==null){
+//                continue;
+//            }
+//            OptionDTO optionDTO = new OptionDTO();
+//            optionDTO.setOptionName(optionNames.get(i));
+//            optionDTO.setOptionDesc(optionDesc.get(i));
+//            optionDTO.setOptionStock(optionStocks.get(i));
+//
+//            this.options.add(optionDTO);
+//        }
+        if (files != null) {
             int size = files.size();
             if(size !=0 ){
                 this.images = new LinkedMultiValueMap<>();

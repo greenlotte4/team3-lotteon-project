@@ -26,7 +26,8 @@ public class CouponDTO {
     private String notes;
     private LocalDate rdate; // 발급일
 
-    private long seller_id;
+    private Long productId;
+    private Long sellerId;
 
     private String sellerCompany; // 발급자
 

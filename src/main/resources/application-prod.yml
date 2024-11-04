@@ -33,6 +33,12 @@ spring:
         password: Qwe123~!
         url: jdbc:mysql://43.202.32.28:3306/lotteProject
         username: lotte
+        hikari:
+            maximum-pool-size: 10
+            connection-timeout: 30000
+            idle-timeout: 600000
+            max-lifetime: 1800000
+            validation-timeout: 3000
     jpa:
         database: mysql
         hibernate:
@@ -61,6 +67,10 @@ spring:
         enabled: true
         prefix: classpath:/templates/
         suffix: .html
+    cache:
+        type: redis
+        redis:
+            time-to-live: 86400s
     data:
         redis:
             host: 43.202.32.28
@@ -69,13 +79,13 @@ spring:
                 enabled: false
             lettuce:
                 pool:
-                    max-wait: 5000ms  # adjust based on network latency
-    cache:
-        redis:
-            time-to-live: 3600s
+                    max-wait: 5000ms
 management:
     endpoint:
         caches:
             enabled: true
         metrics:
             enabled: true
+
+
+

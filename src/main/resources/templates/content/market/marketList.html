@@ -94,11 +94,11 @@
                                 <!-- 여기에 하위 카테고리 리스트가 동적으로 추가될 예정 -->
                             </ul>
                         </div>
-                        <article class="product-list" th:if="${!responseDTO.getProductDTOs().isEmpty()}">
-                            <div class="product-item" th:each="product:${responseDTO.getProductDTOs()}">
+                        <article class="product-list" th:if="${!responseDTO.getProductSummaryDTOs().isEmpty()}">
+                            <div class="product-item" th:each="product:${responseDTO.getProductSummaryDTOs()}">
                                 <a th:href="@{/market/view/{category}/{id}(category=${product.getCategoryId()},id=${product.productId})}">
                                 <div class="product-image">
-                                    <img th:src="@{'/uploads/productImg/'+${product.getFile230()}}" alt="상품 이미지">
+                                    <img th:src="@{'/uploads/'+${product.getFile230()}}" alt="상품 이미지">
                                 </div>
                                 <div class="product-details">
                                     <h4 class="product-name">[[${product.productName}]]</h4>
@@ -106,7 +106,7 @@
                                 </div>
                                 <div class="price-seller-info">
                                     <div class="product-price">
-                                        <span class="final-price">[[${product.price*(100-product.discount)/100}]]원</span>
+                                        <span class="final-price">[[${product.finalPrice}]]원</span>
                                         <span class="original-price">[[${product.price}]]원</span>
                                         <span class="discount">[[${product.discount}]]% ↓</span>
 
@@ -118,7 +118,7 @@
                                 <div class="product-seller">
                                     <span class="seller-name">[[${product.company}]]</span>
                                     <span >고객만족우수</span>
-                                    <div class="seller-rating" th:data-rating="${product.productRating}"></div>
+                                    <div class="seller-rating" th:data-rating="${product.getRating()}"></div>
                                 </div>
                                 </a>
                             </div>

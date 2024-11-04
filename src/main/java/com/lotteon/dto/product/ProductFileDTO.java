@@ -10,19 +10,14 @@ import lombok.*;
 @ToString
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProductFileDTO {
 
-
-
     private int p_fno;
+    private String oName;
     private String sName;
     private String type;  //사이즈
 
-    public ProductFileDTO(int p_fno, String sName, String type) {
-        this.p_fno = p_fno;
-        this.sName = sName;
-        this.type = type;
-    }
-
+    private String path;
 
 }
