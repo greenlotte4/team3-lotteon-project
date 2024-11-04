@@ -34,15 +34,15 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cartItemId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cartId", nullable = false)
     private Cart cart;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="option_id")
     private Option option;
 

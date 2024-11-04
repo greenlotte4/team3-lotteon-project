@@ -289,6 +289,9 @@ select::-ms-expand {
     overflow: hidden;
     align-items: center;
 }
+.quantity-control.hidden{
+    display: none;
+}
 
 .quantity-control input[type="number"] {
     width: 50px;

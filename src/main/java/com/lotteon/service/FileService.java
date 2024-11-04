@@ -7,6 +7,7 @@ import com.lotteon.dto.admin.HeaderInfoDTO;
 import com.lotteon.dto.product.ProductFileDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
+import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.entity.product.ReviewFile;
 import com.lotteon.repository.BannerRepository;
 import com.lotteon.repository.FileRepository;
@@ -85,10 +86,34 @@ public class FileService {
         return newBannerDTO;
     }
 
+    public List<String> getFilesByCategory(ProductCategory category) {
+        String categoryPath = uploadPath + category.getFullPath();
+        File directory = new File(categoryPath);
+
+        // 디렉터리가 없으면 생성
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        List<String> files = new ArrayList<>();
+        if (directory.exists() && directory.isDirectory()) {
+            for (File file : directory.listFiles()) {
+                if (file.isFile()) {
+                    files.add(file.getName());
+                }
+            }
+        }
+        return files;
+    }
+
     //productFile upload;
-    public List<ProductFileDTO> uploadFile(MultiValueMap<String, MultipartFile> images) {
+    public List<ProductFileDTO> uploadFile(MultiValueMap<String, MultipartFile> images,ProductCategory category) {
         //파일 시스템 경로 구하기
-        File fileuploadpath = new File(uploadPath + "productImg/");
+        String categoryPath = uploadPath + "productImg/"+ category.getFullPath();
+        String savedPth= "productImg/"+ category.getFullPath();
+        File fileuploadpath = new File(categoryPath);
+
+
         if (!fileuploadpath.exists()) {
             fileuploadpath.mkdirs();
         }
@@ -110,10 +135,12 @@ public class FileService {
                         // 파일 저장
                         try {
                             file.transferTo(new File(path, savedName));
-
+                            savedPth = savedPth+"/"+savedName;
                             // 업로드된 파일 정보를 DTO로 변환하여 저장
                             ProductFileDTO productFileDTO = ProductFileDTO.builder()
+                                    .oName(originalName)
                                     .sName(savedName)
+                                    .path(savedPth)
                                     .type(key) // 파일의 MIME 타입 저장
                                     .build();
 
@@ -291,5 +318,30 @@ public class FileService {
         reviewDTO.setSavedReviewFiles(reviewFiles);
 
         return reviewDTO;
+    }
+
+
+    public void deleteFile(int fileNo,String filePath){
+
+
+
+        File file = new File(filePath);
+        if(file.exists()){
+            if (file.delete()) {
+                System.out.println("File deleted successfully: " + filePath);
+            } else {
+                System.out.println("Failed to delete the file: " + filePath);
+            }
+        } else {
+            String productPath = uploadPath+"productImg/";
+            File file1 = new File(productPath);
+            if (file.delete()) {
+                System.out.println("File deleted successfully: " + filePath);
+            } else {
+                System.out.println("File not found: " + filePath);
+            }
+        }
+
+
     }
 }

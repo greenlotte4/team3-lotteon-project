@@ -1,159 +1,488 @@
-// Global variables for product details
-let selectedOptionValue = "";
-let selectedOptionText = "";
-let selectedOptionDesc = "";
-let selectedOptions = []; // Array to store selected options
+document.addEventListener('DOMContentLoaded', function () {
+    // 필요한 요소들 정의
+    const optionSelectElements = document.querySelectorAll('.option-select');
+    const quantityInput = document.getElementById('quantity');
+    const selectResult = document.querySelector('.selectResult');
+    const originalTotalPriceElement = document.getElementById('originalTotalPrice');
+    const additionalPriceElement = document.getElementById('additionalPrice');
+    const totalPriceElement = document.getElementById('totalPrice');
+    const totalShippingFeeElement = document.getElementById('totalShippingFee');
+    const expectedPriceElement = document.getElementById('expectedPrice');
 
-const productId = document.getElementById("productId").value;
-const point = parseInt(document.getElementById("point").value, 10) || 0;
-const productName = document.getElementById("productName").value;
-const originalPrice = parseFloat(document.getElementById("originalPrice").innerText.replace(/,/g, "")) || 0;
-const discount = parseInt(document.getElementById("discount").value, 10) || 0;
-const file190 = document.getElementById("file190").value;
-const shippingFee = parseInt(document.getElementById("shippingFee").getAttribute("data-shippingfee")) || 0;
-let quantity = parseInt(document.getElementById("quantity").value, 10) || 1;
-const shippingTerms = document.getElementById("shippingTerms").value;
+    let selectedOptions = []; // Array to store selected options
+    let additionalPriceMatch = 0; // 추가 금액 초기화
+    let additionalPrice = 0;
+    let quantity = parseInt(quantityInput.value, 10) || 1;
 
-const byCart = document.getElementById('buyCart');
-console.log("byCart:", byCart);
-console.log("shippingFee:", shippingFee);
-console.log("shippingTerms:",shippingTerms)
-
-// Function to add a new selection or update an existing one
-function addOrUpdateSelection(optionId, optionText, optionDesc, quantity) {
-    const existingOption = selectedOptions.find(option => option.optionId === optionId);
-    if (existingOption) {
-        existingOption.quantity = quantity;
-    } else {
-        selectedOptions.push({ optionId, optionText, optionDesc, quantity });
-    }
-    updateSelectedResult(); // Refresh the display
-}
-
-// Function to update the selectResult section with all selected options, including quantity controls and a remove button
-function updateSelectedResult() {
-    const selectResult = document.querySelector(".selectResult");
-    selectResult.innerHTML = ""; // Clear previous content
-
-    selectedOptions.forEach((option, index) => {
-        const optionDetail = document.createElement("div");
-        optionDetail.classList.add("option-detail");
-
-        optionDetail.innerHTML = `
-            ${option.optionId} ${option.optionText} ${option.optionDesc}
-            <div class="btnArea">
-                <div class="quantity-control">
-                    <button type="button" class="decrease" data-index="${index}">-</button>
-                    <input type="number" class="quantity" value="${option.quantity}" min="1" data-index="${index}">
-                    <button type="button" class="increase" data-index="${index}">+</button>
-                </div>
-            </div>
-        `;
-
-        // Create a remove button for each option
-        const removeButton = document.createElement("button");
-        removeButton.innerText = "제거";
-        removeButton.classList.add("remove-option");
-        removeButton.addEventListener("click", () => removeOption(index));
-
-        // Append the remove button to the option detail
-        const btnArea = optionDetail.querySelector(".btnArea");
-        btnArea.appendChild(removeButton);
-
-        selectResult.appendChild(optionDetail);
+    // 수량 증가/감소 버튼 이벤트
+    document.getElementById('increase').addEventListener('click', () => {
+        quantity++;
+        quantityInput.value = quantity;
+        updatePrices();
     });
 
-    updateTotalPrice(); // Recalculate the total price
-    addQuantityListeners(); // Add event listeners to new quantity controls
-}
-
-// Function to add event listeners to quantity controls
-function addQuantityListeners() {
-    document.querySelectorAll('.increase').forEach(button => {
-        button.addEventListener('click', (event) => {
-            const index = event.target.dataset.index;
-            selectedOptions[index].quantity += 1;
-            updateSelectedResult(); // Refresh the display
-        });
-    });
-
-    document.querySelectorAll('.decrease').forEach(button => {
-        button.addEventListener('click', (event) => {
-            const index = event.target.dataset.index;
-            if (selectedOptions[index].quantity > 1) {
-                selectedOptions[index].quantity -= 1;
-                updateSelectedResult(); // Refresh the display
-            }
-        });
-    });
-
-    document.querySelectorAll('.quantity').forEach(input => {
-        input.addEventListener('input', (event) => {
-            const index = event.target.dataset.index;
-            selectedOptions[index].quantity = parseInt(event.target.value) || 1;
-            updateTotalPrice(); // Recalculate the total price
-        });
-    });
-}
-
-// Function to calculate and update the total price for all selected options
-function updateTotalPrice() {
-    let totalOriginalPrice = 0; // 총 상품 금액 (할인 전)
-    let totalDiscountedPrice = 0; // 할인 적용 금액 (할인 후)
-    let totalDiscount = 0;
-    // 기본 상품 1개의 가격 반영 (할인 전)
-    if (selectedOptions.length === 0) {
-        totalOriginalPrice = originalPrice * quantity;
-        totalDiscount = Math.floor((originalPrice * discount) / 100) * quantity;
-        totalDiscountedPrice = Math.floor(originalPrice * (100 - discount) / 100) * quantity;
-    } else {
-        // 선택된 옵션에 따라 가격 계산
-        selectedOptions.forEach(option => {
-            const discountedPricePerItem = Math.floor(originalPrice * (100 - discount) / 100);
-            totalDiscount += Math.floor((originalPrice * discount) / 100) * option.quantity;
-            totalOriginalPrice += originalPrice * option.quantity;
-            totalDiscountedPrice += discountedPricePerItem * option.quantity;
-        });
-    }
-
-    // Update HTML elements with calculated prices
-    document.getElementById("originalTotalPrice").innerText = `${totalOriginalPrice.toLocaleString()}원`;
-    document.getElementById("totalPrice").innerText = `-${totalDiscount.toLocaleString()}원`;
-
-    // 배송비 계산 및 결제 예상금액 업데이트
-    const totalShippingFee = calculateShippingFee(totalDiscountedPrice);
-    updateExpectedTotal(totalDiscountedPrice, totalShippingFee);
-}
-
-// Option change listener for dropdown selection
-document.getElementById("option").addEventListener("change", function() {
-    selectedOptionValue = this.value;
-    selectedOptionText = this.options[this.selectedIndex].text.split(" - ")[0];
-    selectedOptionDesc = this.options[this.selectedIndex].text.split(" - ")[1] || "No description";
-    addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
-});
-
-// Initial setup for total price and selected options display
-updateTotalPrice();
-updateSelectedResult();
-
-// Function to remove an option from selectedOptions by index
-function removeOption(index) {
-    selectedOptions.splice(index, 1); // Remove option from array
-    updateSelectedResult(); // Refresh the display
-    updateTotalPrice(); // Update the total price
-}
-
-// Event listeners for the increase and decrease buttons
-document.getElementById('decrease').addEventListener('click', function () {
-    if (quantity > 1) {
-        quantity -= 1;
-        document.getElementById("quantity").value = quantity;
-        if (selectedOptionValue) {
-            addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
+    document.getElementById('decrease').addEventListener('click', () => {
+        if (quantity > 1) {
+            quantity--;
+            quantityInput.value = quantity;
+            updatePrices();
         }
+    });
+
+    // 옵션 선택 시마다 추가 금액을 업데이트
+    document.querySelectorAll('.option-select').forEach((select, index) => {
+        select.addEventListener('change', function () {
+            const selectedOptionName = this.options[this.selectedIndex].value;
+            const optionAdditionalPrice = parseInt(this.options[this.selectedIndex].getAttribute('data-additionalprice')) || 0;
+
+            // 선택된 옵션을 배열에 저장
+            selectedOptions[index] = selectedOptionName;
+
+            // 모든 옵션이 선택되었는지 확인하고 추가 금액을 업데이트
+            if (selectedOptions.length === optionSelectElements.length && selectedOptions.every(opt => opt)) {
+                console.log(`선택된 옵션 (${index}):`, selectedOptionName);
+
+                // optionCombination에서 선택된 옵션들과 일치하는 추가 금액 검색
+                const matchingCombination = optionCombinations.find(combination => {
+                    const [option1, option2] = combination.combination.split(":").map(opt => opt.trim());
+                    return (option1 === selectedOptions[0] && option2 === selectedOptions[1]) ||
+                        (option1 === selectedOptions[1] && option2 === selectedOptions[0]); // 순서 관계없이 비교
+                });
+
+                if (matchingCombination) {
+                    additionalPriceMatch = parseInt(matchingCombination.additionalPrice) || 0;
+                    console.log("추가 금액:", additionalPriceMatch);
+                    additionalPrice = additionalPriceMatch;
+                    applyAdditionalPrice(additionalPriceMatch);
+                } else {
+                    console.log("선택한 옵션 조합을 찾을 수 없습니다.");
+                }
+            }
+
+
+            // 현재 선택된 모든 옵션의 추가 금액 합계 업데이트
+            additionalPrice = Array.from(optionSelectElements).reduce((total, selectElement) => {
+                const price = parseInt(selectElement.options[selectElement.selectedIndex]?.getAttribute('data-additionalprice')) || 0;
+                return total + price;
+            }, 0);
+
+            updatePrices();
+        });
+    });
+
+    // 추가 금액을 표시하는 함수
+    function applyAdditionalPrice(price) {
+        console.log('적용된 추가 금액:', price);
+        additionalPrice = parseFloat(price);
+        console.log(additionalPrice);
+        additionalPriceElement.textContent = `${additionalPrice.toLocaleString()}원`;
     }
+
+    // 가격 계산 및 업데이트 함수
+    function updatePrices() {
+        const originalPrice = parseFloat(document.getElementById('originalPrice').innerText.replace(/,/g, "")) || 0;
+        const discount = parseInt(document.getElementById('discount').value, 10) || 0;
+
+        const totalOriginalPrice = originalPrice * quantity;
+        const discountAmount = Math.floor(((discount) * totalOriginalPrice) / 100/100)*100; // 100원 단위 절삭
+        console.log("discountAmount",discountAmount);
+        console.log("additionalPrice!!!",additionalPrice);
+        const finalTotalPrice = totalOriginalPrice + (additionalPrice * quantity) - discountAmount;
+
+        // 배송비 계산 (예시로 3000원을 사용)
+        const shippingTerms = parseInt(document.getElementById("shippingTerms").value, 10) || 0;
+        const shippingFee = finalTotalPrice >= shippingTerms ? 0 : parseInt(document.getElementById('shippingFee').getAttribute('data-shippingfee')) || 3000;
+
+        // 결제 예상금액 계산
+        const expectedPrice = finalTotalPrice + shippingFee;
+
+        // 각 <span> 요소에 값을 업데이트
+        originalTotalPriceElement.textContent = `${totalOriginalPrice.toLocaleString()}원`;
+        additionalPriceElement.textContent = `${(additionalPrice * quantity).toLocaleString()}원`;
+        totalPriceElement.textContent = `-${discountAmount.toLocaleString()}원`;
+        totalShippingFeeElement.textContent = `${shippingFee.toLocaleString()}원`;
+        expectedPriceElement.textContent = `${expectedPrice.toLocaleString()}원`;
+    }
+
+    // 초기 가격 계산
+    updatePrices();
 });
+// // Global variables for product details
+// let selectedOptionValue = "";
+// let selectedOptionText = "";
+// let selectedOptionDesc = "";
+// let selectedOptions = []; // Array to store selected options
+// let additionalPriceMatch =0; // 추가 금액을 초기화
+//
+// const productId = document.getElementById("productId").value;
+// const point = parseInt(document.getElementById("point").value, 10) || 0;
+// const productName = document.getElementById("productName").value;
+// const originalPrice = parseFloat(document.getElementById("originalPrice").innerText.replace(/,/g, "")) || 0;
+// console.log("originalPrice", originalPrice);
+// const discount = parseInt(document.getElementById("discount").value, 10) || 0;
+// console.log("discount", discount);
+// const finalPrice = parseFloat(document.getElementById("finalPrice").innerText.replace(/,/g, ""));
+// console.log("finalPrice", finalPrice);
+// const file190 = document.getElementById("file190").value;
+// const shippingFee = parseInt(document.getElementById("shippingFee").getAttribute("data-shippingfee")) || 0;
+// let quantity = parseInt(document.getElementById("quantity").value, 10) || 1;
+// const shippingTerms = document.getElementById("shippingTerms").value;
+//
+// const byCart = document.getElementById('buyCart');
+// console.log("byCart:", byCart);
+// console.log("shippingFee:", shippingFee);
+// console.log("shippingTerms:",shippingTerms)
+//
+//
+// // product.getOptionCombination() 데이터를 JSON 형식으로 JavaScript로 전달
+//
+// // const optionCombinations = /*[[${product.getOptionCombinations()}]]*/ [];
+// // const optionCombinationObject = /*[[${#objects.toJson(product.getOptionCombinations())}]]*/ [];
+// console.log(optionCombinations);
+// // console.log(optionCombinationObject);
+//
+//
+// // 옵션이 존재하는 경우 옵션 선택에 따라 동작을 설정합니다.
+// document.addEventListener('DOMContentLoaded', function () {
+//     const optionSelectElements = document.querySelectorAll('.option-select');
+//     const quantityInput = document.getElementById('quantity');
+//     const selectResult = document.querySelector('.selectResult');
+//
+//     // 수량 입력이 변경될 때 결과 업데이트
+//     // quantityInput.addEventListener('input', updateSelectResult);
+//
+//
+//
+//     // 수량 증가/감소 버튼 이벤트
+//     document.getElementById('increase').addEventListener('click', () => {
+//         quantityInput.value = parseInt(quantityInput.value) + 1;
+//         updateSelectResult();
+//     });
+//
+//     document.getElementById('decrease').addEventListener('click', () => {
+//         if (quantityInput.value > 1) {
+//             quantityInput.value = parseInt(quantityInput.value) - 1;
+//             updateSelectResult();
+//         }
+//     });
+//
+//     updateTotalPrice();
+//
+//     const selectedOptions = [];
+//
+//     document.querySelectorAll('.option-select').forEach((select, index) => {
+//         select.addEventListener('change', function () {
+//             const selectedOptionName = this.options[this.selectedIndex].value;
+//             const additionalPriceElement = document.getElementById('additionalPrice');
+//             const additionalPrice = this.options[this.selectedIndex].getAttribute('data-additionalprice');
+//
+//
+//             // 선택된 옵션을 저장
+//             selectedOptions[index] = selectedOptionName;
+//
+//             // 모든 옵션이 선택되었는지 확인
+//             if (selectedOptions.length === 2 && selectedOptions.every(opt => opt)) {
+//                 // optionCombination에서 선택된 옵션들과 일치하는 추가 금액 검색
+//                 const matchingCombination = optionCombinations.find(combination => {
+//                     const [option1, option2] = combination.combination.split(":").map(opt => opt.trim());
+//                     return (option1 === selectedOptions[0] && option2 === selectedOptions[1]) ||
+//                         (option1 === selectedOptions[1] && option2 === selectedOptions[0]); // 순서 관계없이 비교
+//                 });
+//
+//                 if (matchingCombination) {
+//                     console.log("추가 금액:", matchingCombination.additionalPrice);
+//                     additionalPriceMatch = matchingCombination.additionalPrice;
+//                     // 필요한 경우 추가 금액을 화면에 표시하거나 다른 로직에 적용
+//                 } else {
+//                     console.log("선택한 옵션 조합을 찾을 수 없습니다.");
+//                 }
+//
+//                 if (matchingCombination) {
+//                     applyAdditionalPrice(matchingCombination.additionalPrice);
+//                 }
+//
+//
+//             }
+//         });
+//     });
+//
+//     function applyAdditionalPrice(price) {
+//         console.log('적용된 추가 금액:', price);
+//         // 추가 금액을 화면에 표시하는 로직 작성
+//     }
+//
+//
+//
+//     let originalTotalPrice = originalPrice; // 예시로 기본 상품 금액 설정
+//
+//     // 옵션 선택 시마다 추가 금액을 업데이트
+//     document.querySelectorAll('.option-select').forEach(select => {
+//         select.addEventListener('change', function () {
+//             // 선택된 옵션의 추가 금액 가져오기
+//             const selectedAdditionalPrice = parseInt(this.options[this.selectedIndex].getAttribute('data-additionalprice')) || 0;
+//
+//             // 총 추가 금액 업데이트
+//             additionalPrice += selectedAdditionalPrice;
+//
+//             // 총 상품 금액 업데이트 (기본 상품 금액 + 추가 금액)
+//             updatePrices();
+//         });
+//     });
+//
+//     updateTotalPrice();
+//
+//     // 초기 가격 계산
+//     updatePrices();
+//
+//
+// });
+// // 모든 옵션 그룹이 선택되었을 때만 결과를 표시하는 함수
+// function updatePrices() {
+//     const additional = isNaN(additionalPrice)? 0 :additionalPrice;
+//     const additionalDiscountAmount = Math.floor((discount * additional) / 100) * 100; // 예시 할인 금액
+//     console.log("할인 금액:", additionalDiscountAmount + "원");
+//
+//     const expectedPrice = expectedPrice+additionalDiscountAmount;
+//
+//     // 각 <span> 요소에 값을 업데이트
+//     document.getElementById('additionalPrice').textContent = additional.toLocaleString() + '원';
+//     document.getElementById('totalPrice').textContent = '-' + additionalDiscountAmount + '원';
+//     document.getElementById('expectedPrice').textContent = expectedPrice+ '원';
+// }
+//
+// function updateTotalPrice() {
+//     let totalOriginalPrice = 0; // 총 상품 금액 (할인 전)
+//     let totalDiscountedPrice = 0; // 할인 적용 금액 (할인 후)
+//     let totalDiscount = 0;
+//     // 기본 상품 1개의 가격 반영 (할인 전)
+//     if (selectedOptions.length === 0) {
+//         totalOriginalPrice = originalPrice * quantity;
+//         totalDiscount = Math.floor((originalPrice * discount) / 100) * quantity;
+//         totalDiscountedPrice = Math.floor(originalPrice * (100 - discount) / 100) * quantity;
+//     } else {
+//         updatePrices();
+//     }
+//
+//     // Update HTML elements with calculated prices
+//     document.getElementById("originalTotalPrice").innerText = `${totalOriginalPrice.toLocaleString()}원`;
+//     document.getElementById("totalPrice").innerText = `-${totalDiscount.toLocaleString()}원`;
+//
+//     // 배송비 계산 및 결제 예상금액 업데이트
+//     const totalShippingFee = calculateShippingFee(totalDiscountedPrice);
+//     updateExpectedTotal(totalDiscountedPrice, totalShippingFee);
+// }
+//
+//
+// function updateSelectResult() {
+//     const allSelected = Array.from(optionSelectElements).every(select => select.value !== '');
+//
+//     if (allSelected) {
+//         const selectedOptions = Array.from(optionSelectElements).map(select => {
+//             const selectedOption = select.options[select.selectedIndex];
+//             return {
+//                 optionName: selectedOption.getAttribute('data-optionname'),
+//                 combination: selectedOption.getAttribute('data-combination') || '',
+//                 additionalPrice: selectedOption.getAttribute('data-additional-price') || '0'
+//             };
+//         });
+//
+//         const quantity = quantityInput.value;
+//
+//         // 선택 결과 표시
+//         const resultText = selectedOptions.map(opt =>
+//             `${opt.optionName} (${opt.combination}) - 추가금액: ${opt.additionalPrice}`
+//         ).join(' / ');
+//         selectResult.textContent = `선택한 옵션: ${resultText}, 수량: ${quantity}`;
+//     } else {
+//         // 모든 옵션이 선택되지 않은 경우 결과를 초기화
+//         selectResult.textContent = '';
+//     }
+// }
+//
+// // document.addEventListener('DOMContentLoaded', function () {
+// //     const optionSelectElements = document.querySelectorAll('.option-select');
+// //     const quantityInput = document.getElementById('quantity');
+// //     const selectResult = document.querySelector('.selectResult');
+// //
+// //     optionSelectElements.forEach((select, index) => {
+// //         // 첫 번째 옵션을 제외하고 모두 비활성화 설정
+// //         if (index > 0) {
+// //             select.disabled = true;
+// //         }
+// //
+// //         // 옵션 변경 시 이후 옵션 초기화 및 추가금액 조건 설정
+// //         select.addEventListener('change', function () {
+// //             // 이후 옵션 초기화
+// //             for (let i = index + 1; i < optionSelectElements.length; i++) {
+// //                 optionSelectElements[i].value = '';
+// //                 optionSelectElements[i].disabled = true;
+// //                 optionSelectElements[i].querySelectorAll('option').forEach(option => {
+// //                     option.style.display = 'none';
+// //                 });
+// //             }
+// //
+// //             // 다음 옵션 활성화
+// //             if (index < optionSelectElements.length - 1) {
+// //                 const nextSelect = optionSelectElements[index + 1];
+// //                 nextSelect.disabled = false;
+// //
+// //                 const selectedValue = select.value;
+// //                 nextSelect.querySelectorAll('option').forEach(option => {
+// //                     const combination = option.getAttribute('data-combination').split(':')[1];
+// //                     if (combination === selectedValue) {
+// //                         option.style.display = 'block';
+// //                     } else {
+// //                         option.style.display = 'none';
+// //                     }
+// //                 });
+// //             }
+// //
+// //             updateSelectResult();
+// //         });
+// //     });
+// //
+// //     // 수량 변경 시 결과 업데이트
+// //     quantityInput.addEventListener('input', updateSelectResult);
+// //
+// //     // 선택 결과를 업데이트하는 함수
+// //     function updateSelectResult() {
+// //         const selectedOptions = Array.from(optionSelectElements)
+// //             .filter(select => select.value !== '')
+// //             .map(select => {
+// //                 const selectedOption = select.options[select.selectedIndex];
+// //                 return {
+// //                     optionName: selectedOption.getAttribute('data-optionname'),
+// //                     combination: selectedOption.getAttribute('data-combination'),
+// //                 };
+// //             });
+// //
+// //         const quantity = quantityInput.value;
+// //
+// //         // 선택 결과 표시
+// //         if (selectedOptions.length > 0) {
+// //             const resultText = selectedOptions.map(opt =>
+// //                 `${opt.optionName} (${opt.combination})`
+// //             ).join(' / ');
+// //             selectResult.textContent = `선택한 옵션: ${resultText}, 수량: ${quantity}`;
+// //         } else {
+// //             selectResult.textContent = '';
+// //         }
+// //     }
+// //
+// //     // 수량 증가/감소 버튼 이벤트
+// //     document.getElementById('increase').addEventListener('click', () => {
+// //         quantityInput.value = parseInt(quantityInput.value) + 1;
+// //         updateSelectResult();
+// //     });
+// //
+// //     document.getElementById('decrease').addEventListener('click', () => {
+// //         if (quantityInput.value > 1) {
+// //             quantityInput.value = parseInt(quantityInput.value) - 1;
+// //             updateSelectResult();
+// //         }
+// //     });
+// // });
+//
+//
+//
+// // Function to update the selectResult section with all selected options, including quantity controls and a remove button
+// // function updateSelectedResult() {
+// //     const selectResult = document.querySelector(".selectResult");
+// //     selectResult.innerHTML = ""; // Clear previous content
+// //
+// //     selectedOptions.forEach((option, index) => {
+// //         const optionDetail = document.createElement("div");
+// //         optionDetail.classList.add("option-detail");
+// //
+// //         optionDetail.innerHTML = `
+// //             ${option.optionId} ${option.optionText} ${option.optionDesc}
+// //             <div class="btnArea">
+// //                 <div class="quantity-control">
+// //                     <button type="button" class="decrease" data-index="${index}">-</button>
+// //                     <input type="number" class="quantity" value="${option.quantity}" min="1" data-index="${index}">
+// //                     <button type="button" class="increase" data-index="${index}">+</button>
+// //                 </div>
+// //             </div>
+// //         `;
+// //
+// //         // Create a remove button for each option
+// //         const removeButton = document.createElement("button");
+// //         removeButton.innerText = "제거";
+// //         removeButton.classList.add("remove-option");
+// //         removeButton.addEventListener("click", () => removeOption(index));
+// //
+// //         // Append the remove button to the option detail
+// //         const btnArea = optionDetail.querySelector(".btnArea");
+// //         btnArea.appendChild(removeButton);
+// //
+// //         selectResult.appendChild(optionDetail);
+// //     });
+// //
+// //     updateTotalPrice(); // Recalculate the total price
+// //     addQuantityListeners(); // Add event listeners to new quantity controls
+// // }
+// //
+// // // Function to add event listeners to quantity controls
+// // function addQuantityListeners() {
+// //     document.querySelectorAll('.increase').forEach(button => {
+// //         button.addEventListener('click', (event) => {
+// //             const index = event.target.dataset.index;
+// //             selectedOptions[index].quantity += 1;
+// //             updateSelectedResult(); // Refresh the display
+// //         });
+// //     });
+// //
+// //     document.querySelectorAll('.decrease').forEach(button => {
+// //         button.addEventListener('click', (event) => {
+// //             const index = event.target.dataset.index;
+// //             if (selectedOptions[index].quantity > 1) {
+// //                 selectedOptions[index].quantity -= 1;
+// //                 updateSelectedResult(); // Refresh the display
+// //             }
+// //         });
+// //     });
+// //
+// //     document.querySelectorAll('.quantity').forEach(input => {
+// //         input.addEventListener('input', (event) => {
+// //             const index = event.target.dataset.index;
+// //             selectedOptions[index].quantity = parseInt(event.target.value) || 1;
+// //             updateTotalPrice(); // Recalculate the total price
+// //         });
+// //     });
+// // }
+//
+// // Function to calculate and update the total price for all selected options
+//
+//
+//
+// // Function to remove an option from selectedOptions by index
+// function removeOption(index) {
+//     selectedOptions.splice(index, 1); // Remove option from array
+//     updateSelectedResult(); // Refresh the display
+//     updateTotalPrice(); // Update the total price
+// }
+//
+// const totalQuantityElement=   document.getElementById('totalQuantity');
+// if(totalQuantityElement != null){
+//     // Event listeners for the increase and decrease buttons
+//     document.getElementById('decrease').addEventListener('click', function () {
+//         if (quantity > 1) {
+//             quantity -= 1;
+//             document.getElementById("quantity").value = quantity;
+//             if (selectedOptionValue) {
+//                 addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
+//             }
+//         }
+//     });
+//     document.getElementById('increase').addEventListener('click', function () {
+//         quantity += 1;
+//         document.getElementById("quantity").value = quantity;
+//         if (selectedOptionValue) {
+//             addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
+//         }
+//     });
+// }
+
 
 // price 클래스를 가진 모든 요소를 선택
 const priceElements = document.querySelectorAll('.price');
@@ -168,26 +497,18 @@ priceElements.forEach(priceElement => {
     }
 });
 
-document.getElementById('increase').addEventListener('click', function () {
-    quantity += 1;
-    document.getElementById("quantity").value = quantity;
-    if (selectedOptionValue) {
-        addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
-    }
-});
+
 
 // Update total price and selected result if user manually changes quantity
-document.getElementById("quantity").addEventListener("input", function () {
-    quantity = parseInt(this.value, 10) || 1; // Set to 1 if invalid input
-    this.value = quantity; // Correct the input if needed
-    if (selectedOptionValue) {
-        addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
-    }
-});
+// document.getElementById("quantity").addEventListener("input", function () {
+//     quantity = parseInt(this.value, 10) || 1; // Set to 1 if invalid input
+//     this.value = quantity; // Correct the input if needed
+//     if (selectedOptionValue) {
+//         addOrUpdateSelection(selectedOptionValue, selectedOptionText, selectedOptionDesc, quantity);
+//     }
+// });
 
-// Initial total price calculation on page load
-updateTotalPrice();
-updateSelectedResult();
+
 const uidElement = document.getElementById("uid");
 const uid = uidElement ? uidElement.value : null;
 
@@ -384,9 +705,7 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     updateSlide();
 
 
-// 초기화 및 각 상품 선택 이벤트에 따른 업데이트 실행
-    updateTotalPrice();
-    updateSelectedResult();
+
 
 });
 function calculateShippingFee(totalPrice) {

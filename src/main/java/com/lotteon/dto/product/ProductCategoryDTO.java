@@ -15,8 +15,8 @@ public class ProductCategoryDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private long id;
-    private long parent_id;
+    private Long id;
+    private Long parent_id;
     private String name;
     private int level;
     private String subcategory;

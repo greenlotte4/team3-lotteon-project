@@ -102,9 +102,10 @@
 
 /* Product image */
 .product-image {
-    width: 100px;
-    height: 100px;
+    width: 230px;
+    height: 230px;
     border: 1px solid #ddd;
+    box-sizing: border-box;
 }
 
 .product-image img {
@@ -117,7 +118,7 @@
 .product-details {
     flex-grow: 1;
     margin-left: 20px;
-    width: 80%;
+    width: 40%;
 }
 
 .product-name {
@@ -188,6 +189,7 @@
     padding: 3px 10px;
     border-radius: 5px;
     font-size: 12px;
+    text-align: center;
 }
 
 .shipping-info .shipping-fee:before{

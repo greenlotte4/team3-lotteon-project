@@ -1,6 +1,7 @@
 package com.lotteon.dto.product;
 
 
+import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.ReviewFile;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +45,7 @@ public class ReviewDTO {
         }
         return maskedId.toString();
     }
+
 
 
 

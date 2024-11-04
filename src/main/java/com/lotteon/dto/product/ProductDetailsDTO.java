@@ -1,5 +1,6 @@
 package com.lotteon.dto.product;
 
+import com.lotteon.entity.product.Product;
 import lombok.*;
 
 @Getter
@@ -22,6 +23,8 @@ public class ProductDetailsDTO {
     private String afterSalseManager;
     private String phoneNumber;
     private String shippingType;
+
+
 
 
 
