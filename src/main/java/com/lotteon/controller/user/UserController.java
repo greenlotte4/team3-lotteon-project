@@ -1,5 +1,7 @@
 package com.lotteon.controller.user;
 
+import com.lotteon.dto.admin.BannerDTO;
+import com.lotteon.service.AdminService;
 import com.lotteon.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -30,6 +33,7 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager; // AuthenticationManager로 수정
     private final PasswordEncoder passwordEncoder;
+    private final AdminService adminService;
 
     @GetMapping("/join")
     public String userJoin(Model model) {
@@ -43,6 +47,9 @@ public class UserController {
             request.getSession().setAttribute("redirectUrl", redirectUrl);
 
         }
+        List<BannerDTO> banners = adminService.selectAllbanner();
+        model.addAttribute("banners", banners);
+
         model.addAttribute("content", "login");
         return "content/user/login"; // Points to "content/user/login"
     }

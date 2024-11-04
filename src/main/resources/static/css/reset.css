@@ -19,7 +19,7 @@ table{
 .cf::after {content: ""; display: block; clear: both;}
 
 /* hyper link */
-a, a:link, a:visited, a:active, a:hover{text-decoration: none; color: inherit;}
+a, a:link, a:visited, a:active, a:hover{text-decoration: none;}
 
 /* input outline */
 input:active{outline: none;}

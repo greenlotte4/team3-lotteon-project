@@ -172,9 +172,9 @@
 
                 <!-- 폼 태그 닫기 -->
             </div>
-            <div class="adWrap">
-                <a href="#">
-                    <img src="https://real-lotteon-adv-image-public.s3.amazonaws.com/upload/img/81878899742.jpg">
+            <div class="adWrap" th:each="banner : ${banners}" th:if="${banner.ban_location} == '회원 로그인 배너'">
+                <a th:href="${banner.ban_link}" target="_blank">
+                    <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
                 </a>
             </div>
         </div>
