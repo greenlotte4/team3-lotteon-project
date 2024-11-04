@@ -1,5 +1,6 @@
 package com.lotteon.service;
 
+import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.dto.VersionDTO;
 import com.lotteon.entity.Version;
 import com.lotteon.repository.VersionRepository;

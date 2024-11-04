@@ -30,6 +30,12 @@ public class Option {
     private String optionCode;
     private String parentCode;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "option_group_id")
+    private OptionGroup optionGroup;
+    private String name;
+    private int additionalPrice;
+
     @PostPersist
     public void generateOptionCode(){
         this.optionCode = parentCode+optionName;

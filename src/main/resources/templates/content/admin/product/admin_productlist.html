@@ -52,7 +52,7 @@
                                 </div>
 
                                 <tr>
-                                    <th><input type="checkbox"></th>
+                                    <th><input type="checkbox" id="selectAll"> </th>
                                     <th>사진</th>
                                     <th>상품코드</th>
                                     <th>상품명</th>
@@ -66,15 +66,15 @@
                                 </tr>
                                 <th:block th:if="${productPageResponseDTO.getProductDTOs().isEmpty()}">
                                     <tr>
-                                       <th  th:colspan="11">등록하신 상품이 없습니다.</th>
+                                        <th th:colspan="11">등록하신 상품이 없습니다.</th>
                                     </tr>
                                 </th:block>
                                 <th:block th:unless="${productPageResponseDTO.getProductDTOs().isEmpty()}">
                                     <tr th:each="product:${productPageResponseDTO.getProductDTOs()}">
-                                        <td><input type="checkbox">
-                                            <input type="hidden" name="productId" th:value="${product.productId}">
+                                        <td>
+                                            <input type="checkbox" class="product-checkbox"  th:data-product-id="${product.productId}">
                                         </td>
-                                        <td><img th:src="@{'/uploads/productImg/' + ${product.file190}}"></td>
+                                        <td><img th:src="@{'/' + ${product.file190}}"></td>
                                         <td>[[${product.productCode}]]</td>
                                         <td>[[${product.productName}]]</td>
                                         <td>[[${product.price}]]</td>
@@ -93,7 +93,11 @@
                         </div>
                     </article>
                     <div class="list_button">
-                        <button>선택삭제</button>
+                        <button id="deleteSelectedButton">선택삭제</button>
                         <button><a th:href="@{/seller/product/register}">상품등록</a></button>
                     </div>
                 </section>
+
+                <script th:src="@{/js/productList.js}"></script>
+</th:block>
+</body>

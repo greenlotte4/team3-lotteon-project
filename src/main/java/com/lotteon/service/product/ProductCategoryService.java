@@ -6,6 +6,7 @@ import com.lotteon.dto.product.ProductCategoryDTO;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.repository.Impl.ProductCategoryRepositoryImpl;
 import com.lotteon.repository.product.ProductCategoryRepository;
+import com.lotteon.service.CacheableService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class ProductCategoryService {
 
     private final ProductCategoryRepository productCategoryRepository;
+    private final CacheableService cacheableService;
 
     private final ModelMapper modelMapper;
     private final ProductCategoryRepositoryImpl productCategoryRepositoryImpl;
