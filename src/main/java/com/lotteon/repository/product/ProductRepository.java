@@ -23,18 +23,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> , Produc
 
     public Page<Product> findBySellerId(String sellerId, Pageable pageable);
 
-//    public Optional<Product> findByProductId(Long productId);
+    public Optional<Product> findByProductId(Long productId);
 
     Optional<Product> findById(long productId);
 
-    @EntityGraph(attributePaths = {
-            "productDetails",
-            "optionGroups.optionItems",
-            "optionCombinations",
-            "files",
-            "reviews"
-    })
-    Optional<Product> findByProductId(Long productId);
+//    @EntityGraph(attributePaths = {
+//            "productDetails",
+//            "optionGroups.optionItems",
+//            "optionCombinations",
+//            "files",
+//            "reviews"
+//    })
+//    Optional<Product> findByProductId(Long productId);
 
 //    //    int deleteAllByProductIdIn(List<Long> productIds);
 //    @Query("SELECT p FROM Product p " +

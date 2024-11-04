@@ -102,7 +102,7 @@ public class MarketController {
 
         List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
         log.info("categories LLLLL "+ categoryDTOs);
-        ProductDTO productdto = productService.selectByProductId(productId);
+        ProductDTO productdto = productService.getProduct(productId);
         log.info("productVIew Controller:::::"+productdto);
 
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);

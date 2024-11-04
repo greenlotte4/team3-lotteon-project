@@ -88,15 +88,10 @@
                                                 <select name="option" id="option" required>
                                                     <option disabled selected>[[${group.groupName}]] 옵션을 선택하세요</option>
                                                         <!-- Loop through each OptionItem in the current OptionGroup -->
-                                                    <th:block th:each="combination : ${products.optionCombinations}">
+                                                    <th:block th:each="optionItem : ${group}">
                                                         <option
-                                                                th:value="${combination.combinationId}"
-                                                                th:data-combination-name="${combination.combination}"
-                                                                th:data-additional-price="${combination.additionalPrice}">
-                                                            [[${combination.combination}]]
-                                                            <th:block th:if="${combination.additionalPrice > 0}">
+                                                            [[${optionItem.optionName}]]
                                                                 - 추가금액: [[${combination.additionalPrice}]]
-                                                            </th:block>
                                                         </option>
                                                     </th:block>
                                                 </select>

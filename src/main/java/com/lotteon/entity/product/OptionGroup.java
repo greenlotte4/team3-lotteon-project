@@ -1,6 +1,8 @@
 package com.lotteon.entity.product;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lotteon.dto.product.OptionGroupDTO;
 import com.lotteon.dto.product.OptionItemDTO;
 import com.lotteon.entity.product.test.OptionTest;
@@ -34,6 +36,7 @@ public class OptionGroup {
     private boolean isRequired;
 
     @ToString.Exclude
+    @JsonManagedReference // 순환 참조 방지를 위해 사용
     @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OptionItem> optionItems;
     // In OptionGroup

@@ -150,17 +150,17 @@ public class Product {
 
     public ProductDTO toDTO(Product product) {
         // Convert ProductDetails to DTO if not null
-        ProductDetailsDTO dto = product.getProductDetails() != null ? product.getProductDetails().toDTO() : null;
+//        ProductDetailsDTO dto = product.getProductDetails() != null ? product.getProductDetails().toDTO() : null;
 
-        // Map OptionGroups to OptionGroupDTOs
-        List<OptionGroupDTO> optionGroupDTOs = product.getOptionGroups().stream()
-                .map(OptionGroup::toDTO) // Assuming OptionGroup has a toDTO() method
-                .collect(Collectors.toList());
-
-        // Map OptionCombinations to OptionCombinationDTOs
-        List<ProductOptionCombinationDTO> optionCombinationDTOs = product.getOptionCombinations().stream()
-                .map(ProductOptionCombination::toDTO) // Assuming OptionCombination has a toDTO() method
-                .collect(Collectors.toList());
+//        // Map OptionGroups to OptionGroupDTOs
+//        List<OptionGroupDTO> optionGroupDTOs = product.getOptionGroups().stream()
+//                .map(OptionGroup::toDTO) // Assuming OptionGroup has a toDTO() method
+//                .collect(Collectors.toList());
+//
+//        // Map OptionCombinations to OptionCombinationDTOs
+//        List<ProductOptionCombinationDTO> optionCombinationDTOs = product.getOptionCombinations().stream()
+//                .map(ProductOptionCombination::toDTO) // Assuming OptionCombination has a toDTO() method
+//                .collect(Collectors.toList());
 
         return ProductDTO.builder()
                 .file190(this.file190)
@@ -186,12 +186,12 @@ public class Product {
                 .isSaled(this.isSaled)
                 .isCoupon(this.isCoupon)
                 .sold(this.sold)
-                .productDetails(dto)
-                .optionGroups(optionGroupDTOs)
-                .optionCombinations(optionCombinationDTOs)
+                .productDetails(null)
+                .optionGroups(null)
+                .optionCombinations(null)
 
                 // 추가: ProductDetails가 null이 아닐 때 DTO로 변환
-                .productDetails(this.productDetails != null ? this.productDetails.toDTO() : null)
+                .productDetails(product.getProductDetails() != null ? this.productDetails.toDTO() : null)
                 .build();
     }
 

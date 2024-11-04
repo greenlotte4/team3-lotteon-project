@@ -108,6 +108,8 @@ public class ProductService {
     public Long insertProduct(ProductResponseDTO insertProduct) {
         log.info("insert들어왔다!!!!");
         ProductDTO productDTO = insertProduct.getProduct();
+        SellerDTO seller = sellerService.getSeller(productDTO.getSellerId());
+        productDTO.setSellerNo(seller.getId());
         Product product= modelMapper.map(productDTO, Product.class);
         Optional<ProductCategory> opt = productCategoryRepository.findById(product.getCategoryId());
         ProductCategory productCategory=null;
@@ -126,6 +128,7 @@ public class ProductService {
             log.info("filessssssssssssssssss:"+files);
             product.setFiles(files);
         }
+
 
 
 
@@ -299,6 +302,8 @@ public class ProductService {
         Product product = productRepository.findByProductId(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
         return product.toDTO(product); // Convert to DTO
+
+
     }
 
 
@@ -306,9 +311,9 @@ public class ProductService {
     public ProductDTO getProduct(Long ProductID) {
 
         Optional<Product> opt = productRepository.findByProductId(ProductID);
-        Product product=null;
-        if(opt.isPresent()){
-            product  = opt.get();
+        Product product = null;
+        if (opt.isPresent()) {
+            product = opt.get();
         }
 
         log.info("여기!!!1");
@@ -319,6 +324,7 @@ public class ProductService {
 
         ProductDTO productDTO = product.toDTO(product);
         log.info("여기!!!333"+productDTO);
+
 
         List<OptionGroupDTO> optionGroupDTOS = product.getOptionGroups().stream().map(
                 optionGroup -> {
@@ -332,18 +338,20 @@ public class ProductService {
         log.info("여기3!!"+optionGroupDTOS);
 
         // Map Product Option Combinations
-        List<ProductOptionCombinationDTO> optionCombinationDTOs = product.getOptionCombinations().stream()
-                .map(combo -> modelMapper.map(combo, ProductOptionCombinationDTO.class))
-                .collect(Collectors.toList());
-        productDTO.setOptionCombinations(optionCombinationDTOs);
-        log.info("여기4!!"+optionCombinationDTOs);
+        Set<ProductOptionCombination> productOptionCombinations =product.getOptionCombinations();
+        Set<ProductOptionCombinationDTO> productOptionCombinationDTOS = new HashSet<>();
+        for (ProductOptionCombination productOptionCombination : productOptionCombinations) {
+            ProductOptionCombinationDTO productOptionCombinationDTO = productOptionCombination.toDTO();
+            productOptionCombinationDTOS.add(productOptionCombinationDTO);
+        }
+        log.info("여기4!!"+productOptionCombinationDTOS);
 
         // Map Product Files
         List<ProductFileDTO> productFileDTOs = product.getFiles().stream()
                 .map(file -> modelMapper.map(file, ProductFileDTO.class))
                 .collect(Collectors.toList());
         productDTO.setProductFiles(productFileDTOs);
-        log.info("여기5!!"+optionCombinationDTOs);
+        log.info("여기5!!"+productOptionCombinationDTOS);
 
 
         // Map Reviews and Review Files
