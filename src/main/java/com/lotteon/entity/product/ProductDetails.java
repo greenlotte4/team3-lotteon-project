@@ -28,6 +28,7 @@ public class ProductDetails {
     private String afterSalseManager;
     private String phoneNumber;
     private String shippingType;
+
     public ProductDetailsDTO toDTO(){
         return ProductDetailsDTO.builder()
                 .detailId(detailId)
@@ -36,7 +37,6 @@ public class ProductDetails {
                 .manufactureImporter(manufactureImporter)
                 .manufactureCountry(manufactureCountry)
                 .handlingPrecautions(handlingPrecautions)
-                .productId(toDTO().getProductId())
                 .busniesstype(busniesstype)
                 .condition(Productcondition)
                 .tax(tax)

@@ -35,7 +35,7 @@ public class Review {
     private String content;
     private String rating;  //상품평점
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonBackReference // 순환 참조 방지를 위해 사용
     private List<ReviewFile> pReviewFiles = new ArrayList<>();
 

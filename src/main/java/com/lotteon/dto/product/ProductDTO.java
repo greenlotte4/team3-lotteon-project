@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -59,7 +60,7 @@ public class ProductDTO{
     private List<Review> reviews;
     private List<ReviewDTO> reviewDTOs;
 
-    private List<ProductOptionCombinationDTO> optionCombinations;
+    private Set<ProductOptionCombinationDTO> optionCombinations;
 
 
     public void addFileDescriptions(List<String> files) {
@@ -67,6 +68,15 @@ public class ProductDTO{
             this.filedesc.addAll(files);
         }
     }
+
+    public Long getAdditionalPriceForOption(String optionName, Set<ProductOptionCombinationDTO> optionCombinationDto) {
+        return optionCombinationDto.stream()
+                .filter(comb -> comb.getCombination().contains(optionName) && comb.getAdditionalPrice() > 0)
+                .findFirst()
+                .map(ProductOptionCombinationDTO::getAdditionalPrice)
+                .orElse(0L);
+    }
+
 
 
 }

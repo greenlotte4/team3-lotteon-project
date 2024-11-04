@@ -2,9 +2,12 @@ package com.lotteon.entity.product;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lotteon.dto.product.ProductOptionCombinationDTO;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,11 +31,13 @@ public class ProductOptionCombination {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    @JsonBackReference // Prevents cyclic serialization back to Product
+    @JsonIgnore
     private Product product;
 
 
     public ProductOptionCombinationDTO toDTO() {
+        System.out.println("여기바로 그지점");
+        
         return ProductOptionCombinationDTO.builder()
                 .combinationId(this.combinationId)
                 .combination(this.combination)
@@ -41,6 +46,8 @@ public class ProductOptionCombination {
                 .additionalPrice(this.additionalPrice)
                 .build();
     }
+
+
 
 
 }

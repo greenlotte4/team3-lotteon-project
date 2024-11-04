@@ -157,21 +157,22 @@ function addNewOptionGroup() {
     // 새로운 옵션 그룹을 버튼 위쪽에 삽입
     optionContainer.insertBefore(newGroup, addButton);
 }
+
 function generateCombinations() {
     const stockInputArea = document.getElementById("stock-input-area");
     const codeArea = document.getElementById("codeArea");
-    stockInputArea.innerHTML = ""; // 기존 내용을 초기화
+    stockInputArea.innerHTML = ""; // Clear previous content
 
-    // 옵션 그룹 유효성 검사
+    // Validate option groups
     if (Object.keys(optionGroups).length === 0) {
-        alert("옵션 그룹과 항목을 먼저 추가해 주세요.");
+        alert("Please add option groups and items first.");
         return;
     }
 
-    // 옵션 그룹의 모든 조합 생성
+    // Generate all combinations of options
     let combinations = [[]];
     Object.keys(optionGroups).forEach(groupName => {
-        const values = optionGroups[groupName].filter(value => value); // 빈 값 제외
+        const values = optionGroups[groupName].filter(value => value); // Filter out empty values
         if (values.length === 0) {
             return;
         }
@@ -180,47 +181,130 @@ function generateCombinations() {
         );
     });
 
-    // 중복되지 않은 조합이 예상대로 생성됐는지 확인
     if (combinations.length === 0) {
-        alert("유효한 옵션 조합이 없습니다.");
+        alert("No valid option combinations found.");
         return;
     }
 
-    // 테이블 생성
+    // Create table
     const table = document.createElement("table");
     table.className = "option-stock-table";
 
-    // 테이블 헤더 생성
+    // Create table header
     const thead = document.createElement("thead");
     thead.innerHTML = `
         <tr>
-            <th>옵션 조합</th>
-            <th>개별상품코드</th>
-            <th>추가금액</th>
-            <th>재고 수량</th>
+            <th>Option Combination</th>
+            <th>Product Code</th>
+            <th>Additional Price</th>
+            <th>Stock Quantity</th>
         </tr>
     `;
     table.appendChild(thead);
 
-    // 테이블 본문 생성
+    // Create table body
     const tbody = document.createElement("tbody");
 
-    // 옵션 조합별로 행 추가
+    // Loop through combinations and create rows
     combinations.forEach(combo => {
         const row = document.createElement("tr");
+        const comboText = combo.join(" / ");
         row.innerHTML = `
-            <td>${combo.join(" / ")}</td>
-            <td><input type="text" name="optionCode" placeholder="개별상품코드" ></td>
-            <td><input type="number" name="additionalPrice" placeholder="추가금액" min="0" value="0"></td>
-            <td><input type="number" name="stockMap[${combo.join("-")}]" id="optionStock" placeholder="재고 수량" min="0"></td>
+            <td>${comboText}</td>
+            <td><input type="text" name="optionCode" placeholder="Product Code"></td>
+            <td><input type="number" name="additionalPrice" placeholder="Additional Price" min="0" value="0"></td>
+            <td><input type="number" name="stockMap[${comboText}]" id="optionStock" placeholder="Stock Quantity" min="0"></td>
         `;
         tbody.appendChild(row);
+
+        // Event listener to apply the same `additionalPrice` to rows with matching parts
+        row.querySelector("input[name='additionalPrice']").addEventListener("input", function () {
+            const newPrice = this.value;
+            const partialComboText = combo[0]; // Use the first part (e.g., "234: 23")
+
+            // Apply the price to all rows that contain the same first part of the combination
+            Array.from(tbody.querySelectorAll("tr")).forEach(otherRow => {
+                const otherComboText = otherRow.querySelector("td").textContent;
+                if (otherComboText.startsWith(partialComboText)) {
+                    otherRow.querySelector("input[name='additionalPrice']").value = newPrice;
+                }
+            });
+        });
     });
 
     table.appendChild(tbody);
     stockInputArea.appendChild(table);
     codeArea.classList.remove('hidden');
 }
+//기존꺼
+// function generateCombinations() {
+//     const stockInputArea = document.getElementById("stock-input-area");
+//     const codeArea = document.getElementById("codeArea");
+//     stockInputArea.innerHTML = ""; // 기존 내용을 초기화
+//
+//     // 옵션 그룹 유효성 검사
+//     if (Object.keys(optionGroups).length === 0) {
+//         alert("옵션 그룹과 항목을 먼저 추가해 주세요.");
+//         return;
+//     }
+//
+//     // 옵션 그룹의 모든 조합 생성
+//     let combinations = [[]];
+//     Object.keys(optionGroups).forEach(groupName => {
+//         const values = optionGroups[groupName].filter(value => value); // 빈 값 제외
+//         if (values.length === 0) {
+//             return;
+//         }
+//         combinations = combinations.flatMap(combo =>
+//             values.map(value => [...combo, `${groupName}: ${value}`])
+//         );
+//     });
+//
+//     // 중복되지 않은 조합이 예상대로 생성됐는지 확인
+//     if (combinations.length === 0) {
+//         alert("유효한 옵션 조합이 없습니다.");
+//         return;
+//     }
+//
+//     // 테이블 생성
+//     const table = document.createElement("table");
+//     table.className = "option-stock-table";
+//
+//     // 테이블 헤더 생성
+//     const thead = document.createElement("thead");
+//     thead.innerHTML = `
+//         <tr>
+//             <th>옵션 조합</th>
+//             <th>개별상품코드</th>
+//             <th>추가금액</th>
+//             <th>재고 수량</th>
+//         </tr>
+//     `;
+//     table.appendChild(thead);
+//
+//     // 테이블 본문 생성
+//     const tbody = document.createElement("tbody");
+//
+//     // 옵션 조합별로 행 추가
+//     combinations.forEach(combo => {
+//         const row = document.createElement("tr");
+//         row.innerHTML = `
+//             <td>${combo.join(" / ")}</td>
+//             <td><input type="text" name="optionCode" placeholder="개별상품코드" ></td>
+//             <td><input type="number" name="additionalPrice" placeholder="추가금액" min="0" value="0"></td>
+//             <td><input type="number" name="stockMap[${combo.join("-")}]" id="optionStock" placeholder="재고 수량" min="0"></td>
+//         `;
+//         tbody.appendChild(row);
+//     });
+//
+//     table.appendChild(tbody);
+//     stockInputArea.appendChild(table);
+//     codeArea.classList.remove('hidden');
+// }
+
+
+
+//////////////////////////
 // function generateCombinations() {
 //     const stockInputArea = document.getElementById("stock-input-area");
 //     const codeArea = document.getElementById("codeArea");

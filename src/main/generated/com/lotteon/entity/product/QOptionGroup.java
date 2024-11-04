@@ -22,13 +22,15 @@ public class QOptionGroup extends EntityPathBase<OptionGroup> {
 
     public static final QOptionGroup optionGroup = new QOptionGroup("optionGroup");
 
+    public final StringPath groupName = createString("groupName");
+
     public final BooleanPath isRequired = createBoolean("isRequired");
 
     public final StringPath name = createString("name");
 
     public final NumberPath<Long> optionGroupId = createNumber("optionGroupId", Long.class);
 
-    public final ListPath<Option, QOption> options = this.<Option, QOption>createList("options", Option.class, QOption.class, PathInits.DIRECT2);
+    public final ListPath<OptionItem, QOptionItem> optionItems = this.<OptionItem, QOptionItem>createList("optionItems", OptionItem.class, QOptionItem.class, PathInits.DIRECT2);
 
     public final QProduct product;
 
