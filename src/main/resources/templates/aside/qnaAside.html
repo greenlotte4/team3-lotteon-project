@@ -34,7 +34,7 @@
 
             if (!uid) {
                 alert('로그인 후 이용해 주세요');
-                window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+                window.location.href = `/user/login?redirect=${encodeURIComponent('/cs/qna/list?cate=8')}`;
             } else {
                 window.location.href = url;
             }

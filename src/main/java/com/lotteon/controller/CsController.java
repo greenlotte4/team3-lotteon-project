@@ -97,8 +97,10 @@ public class CsController {
         Page<Notice> noticePage;
         if (cate != null) {
             noticePage = noticeService.getNoticesByType(cate, pageable);
+            model.addAttribute("selectedCategory", cate); // 선택된 카테고리를 모델에 추가
         } else {
             noticePage = noticeService.getNotices(pageable);
+            model.addAttribute("selectedCategory", "전체"); // cate가 없으면 "전체"로 설정
         }
 
         model.addAttribute("noticePage", noticePage);
