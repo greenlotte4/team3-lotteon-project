@@ -27,13 +27,18 @@ public class UserService {
     private final SellerRepository sellerRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper getModelMapper;
+    private final PointService pointService;
 
     public Optional<User> findUserByUid(String uid) {
 
         return userRepository.findByUid(uid); // 아이디로 사용자 검색
     }
 
-
+    public Optional<List<User>> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        log.info("Found " + users.size() + " users");
+        return users.isEmpty() ? Optional.empty() : Optional.of(users);
+    }
 
     public boolean login(String uid, String password) {
         Optional<User> optionalUser = findUserByUid(uid); // 아이디로 사용자 검색
@@ -78,8 +83,13 @@ public class UserService {
     public void registerMember(User user, Member member) {
         user.setRole(User.Role.MEMBER); // 역할 설정
         userRepository.save(user); // User 저장
+
         member.setUser(user); // Member에 User 연결
         memberRepository.save(member); // Member 저장
+
+        int congratulatoryPoints = 1000; // 지급할 포인트 수량
+        pointService.createPoint(member.getId(), congratulatoryPoints, "회원가입 축하 포인트"); // 포인트 지급
+
     }
 
     public void registerSeller(User user, Seller seller) {
@@ -121,4 +131,7 @@ public class UserService {
         return memberRepository.existsByHp(hp); // hp로 존재 여부 확인
     }
 
+    public Optional<User> findById(String uid) {
+        return userRepository.findById(uid); //uid를 사용하여 User조회
+    }
 }

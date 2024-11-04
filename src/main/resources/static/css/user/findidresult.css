@@ -1,0 +1,86 @@
+.find-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+    margin-bottom:149px;
+}
+
+.find-section h4{
+    height: 14px;
+    font-size: 12px;
+    line-height: 14.52px;
+    margin-bottom: 8px;
+    margin-top: 17px;
+}
+
+
+h3 {
+    margin-bottom: 15px;
+}
+form {
+    width: 600px;
+    height: 193px;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    border-top: 3px solid black;
+    height: 170px;
+    margin-bottom: 12px;
+}
+.find-section table th{
+    width: 120px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid #ddd;
+}
+
+td {
+    border-left: 1px dotted #ddd;
+    font-weight: bolder;
+}
+
+p {
+    font-weight: normal;
+    float: left;
+}
+
+.find-section h5{
+    margin-bottom: 22px;
+}
+
+button {
+    justify-content: right;
+    border: 1px solid #BEBEBE;
+    background-color: white;
+    cursor: pointer;
+    padding: 6px;
+    /* margin-right: 5px; */
+}
+
+.btn-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+#blogin{
+    width: 54px;
+    height: 35px;
+
+}
+
+#find-pass{
+    width: 93px;
+    height: 35px;
+}

@@ -3,10 +3,12 @@ package com.lotteon.controller;
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.User.UserDTO;
 import com.lotteon.entity.User.Member;
+import com.lotteon.entity.User.Point;
 import com.lotteon.entity.User.User;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.repository.user.UserRepository;
 import com.lotteon.service.user.MemberService;
+import com.lotteon.service.user.PointService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,6 +33,7 @@ public class AdminUserController {
 
     private final MemberService memberService;
     private final UserService userService;
+    private final PointService pointService;
 
     @GetMapping("/list")
     public String adminUserList(Model model) {
@@ -147,11 +150,40 @@ public class AdminUserController {
     }
 
 
-
     @GetMapping("/point")
     public String adminUserPoint(Model model) {
+        List<Member> members = memberService.findAllWithPoints();
+
+        model.addAttribute("members", members);
+        log.info("Members with points: {}", members);
+
+        for (Member member : members) {
+            if (member.getPoints().isEmpty()) {
+                Point defaultPoint = new Point();
+                defaultPoint.setAmount(0);
+                defaultPoint.setRemainingPoints(0);
+                defaultPoint.setDescription("사용할 포인트가 없습니다.");
+                member.getPoints().add(defaultPoint);
+            }
+        }
         model.addAttribute("cate", "user");
-        model.addAttribute("content", "point");
+        model.addAttribute("content", "list");
+
         return "content/admin/user/memberpoint";
+    }
+
+    @PostMapping("/point/add")
+    public ResponseEntity<Point> addPoint(@RequestParam Long memberId,
+                                          @RequestParam int amount,
+                                          @RequestParam String description) {
+
+        log.info("Creating point for memberId: {}, amount: {}, description: {}", memberId, amount, description);
+
+        Point newPoint = pointService.createPoint(memberId, amount, description);
+
+        log.info("newPoint: " +newPoint);
+        System.out.println("newPoint: " + newPoint);
+
+        return ResponseEntity.ok(newPoint);
     }
 }
