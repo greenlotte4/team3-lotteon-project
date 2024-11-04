@@ -42,6 +42,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<java.math.BigDecimal> point = createNumber("point", java.math.BigDecimal.class);
 
+    public final ListPath<Point, QPoint> points = this.<Point, QPoint>createList("points", Point.class, QPoint.class, PathInits.DIRECT2);
+
     public final StringPath postcode = createString("postcode");
 
     public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);

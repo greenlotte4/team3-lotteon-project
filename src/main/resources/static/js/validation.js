@@ -102,7 +102,7 @@ window.onload = function () {
                     isEmailOk = false;
                 } else {
                     emailResult.innerText = '이메일 인증 코드를 확인하세요.';
-                    emailResult.style.color='green';
+                    emailResult.style.color = 'green';
                 }
             })
             .catch(err => {
@@ -115,7 +115,7 @@ window.onload = function () {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email: email }),
+            body: JSON.stringify({email: email}),
         })
             .then(response => response.text())
             .then(data => {
@@ -130,14 +130,13 @@ window.onload = function () {
         const code = document.getElementById('emailCode').value;
         const codeResult = document.getElementById('codeValidation');
 
-        console.log("인증코드: ",code);
 
         fetch('/api/verifyCode', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ code: code }),
+            body: JSON.stringify({code: code}),
         })
             .then(response => response.text())
             .then(data => {
@@ -221,8 +220,7 @@ window.onload = function () {
                     // 회원가입 성공 시 alert 및 리다이렉트
                     alert('회원가입 되셨습니다.');
                     window.location.href = '/user/login'; // 로그인 페이지로 리다이렉트
-                }
-                else {
+                } else {
                     // 회원가입 실패 시 메시지 표시
                     alert('가입 오류.');
                     return response.text(); // 실패 시 메시지 반환

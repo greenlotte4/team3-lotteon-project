@@ -25,6 +25,8 @@ public class EmailService {
         message.setSubject("이메일 인증 코드");
         message.setText("다음 인증 코드를 입력하세요: " + code);
 
+        logger.info("code: " + code);
+
         try {
             emailSender.send(message);
             logger.info("인증 코드 이메일이 성공적으로 발송되었습니다: {}", toEmail);
