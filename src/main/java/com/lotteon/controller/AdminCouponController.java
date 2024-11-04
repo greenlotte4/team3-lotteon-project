@@ -10,18 +10,25 @@ package com.lotteon.controller;
  */
 
 import com.lotteon.dto.admin.CouponDTO;
+import com.lotteon.dto.admin.CouponIssuedDTO;
 import com.lotteon.dto.admin.CouponListRequestDTO;
 import com.lotteon.dto.admin.CouponListResponseDTO;
+import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.admin.Coupon;
+import com.lotteon.entity.admin.CouponIssued;
+import com.lotteon.entity.product.Product;
 import com.lotteon.repository.admin.CouponRepository;
 import com.lotteon.security.MyUserDetails;
+import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.CouponService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +36,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Controller
@@ -39,7 +49,9 @@ public class AdminCouponController {
 
     private final CouponService couponService;
     private final CouponRepository couponRepository;
-
+    private final CouponIssuedService couponIssuedService;
+    private final ModelMapper modelMapper;
+    ;
 
     @GetMapping("/list")
     public String adminCouponList(
@@ -58,7 +70,7 @@ public class AdminCouponController {
         Pageable pageable = requestDTO.getPageable(); // 정렬 기준 없이 호출
 
         model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
-        model.addAttribute("sellerGrade", seller.getGrade());
+
         Page<CouponDTO> couponPage = couponService.selectCouponsPagination(requestDTO, seller.getId(), pageable);
 
 
@@ -91,7 +103,6 @@ public class AdminCouponController {
     }
 
 
-
     @PostMapping("/register")
     public ResponseEntity<?> registerCoupon(@RequestBody CouponDTO couponDTO) {
 
@@ -101,7 +112,7 @@ public class AdminCouponController {
         Seller seller = userDetails.getSeller();
         log.info("Seller from user details-----------------------: {}", seller);
 
-        if(seller == null) {
+        if (seller == null) {
             return ResponseEntity.badRequest().body("셀러 정보를 찾을 수 없습니다.");
 
         }
@@ -119,7 +130,7 @@ public class AdminCouponController {
     public ResponseEntity<CouponDTO> endCoupon(@PathVariable("couponId") String couponId) {
         CouponDTO updatedCoupon = couponService.endCoupon(couponId);
 
-        log.info("---------쿠폰 상태------------"+updatedCoupon);
+        log.info("---------쿠폰 상태------------" + updatedCoupon);
         return ResponseEntity.ok(updatedCoupon);
 
     }
@@ -130,9 +141,53 @@ public class AdminCouponController {
         return "content/admin/coupon/issued";
     }
 
-    @GetMapping("/coupons")
-    public String couponList(Model model) {
+    @GetMapping("/{productId}")
+    public ResponseEntity<List<CouponDTO>> getCouponsForProduct(@PathVariable Long productId) {
+        List<Coupon> coupons = couponService.selectCouponIssued(productId);
+        // Coupon 리스트를 CouponDTO 리스트로 변환
+        List<CouponDTO> couponDTOs = coupons.stream()
+                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(couponDTOs);
+    }
 
-        return "content/admin/coupon/list";
+    @GetMapping("/all/coupons")
+    public ResponseEntity<List<CouponDTO>> getAllCoupons() {
+        List<Coupon> coupons = couponService.selectCouponIssued(null);
+        // Coupon 리스트를 CouponDTO 리스트로 변환
+        List<CouponDTO> couponDTOs = coupons.stream()
+                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(couponDTOs);
+    }
+
+    @GetMapping(value = "/products", produces = "application/json")
+    public ResponseEntity<List<Map<String, Object>>> getProductsForCoupons() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUserId = authentication.getName(); // 로그인한 사용자 ID
+
+        log.info("로그인한 사용자 ID: {}", loggedInUserId);
+
+        // 로그인한 사용자 ID로 상품 조회
+        List<ProductDTO> products = couponService.getProductsBySellerId(loggedInUserId);
+        // 셀러 ID와 상품명만 담는 리스트 생성
+        List<Map<String, Object>> productInfoList = products.stream()
+                .map(product -> {
+                    Map<String, Object> productInfo = new HashMap<>();
+                    productInfo.put("sellerId", product.getSellerId());
+                    productInfo.put("productId", product.getProductId());
+                    productInfo.put("productName", product.getProductName());
+                    return productInfo;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(productInfoList);
+
     }
 }
+
+
+
+
+

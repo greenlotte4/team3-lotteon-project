@@ -21,7 +21,9 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> , ProductRepositoryCustom {
 
-    public Page<Product> findBySellerId(String sellerId, Pageable pageable);
+    Page<Product> findBySellerId(String sellerId, Pageable pageable);
+
+    List<Product> findAllBySellerId(String sellerId); // 페이지 없이 모든 상품 반환
 
     public Optional<Product> findByProductId(Long productId);
 

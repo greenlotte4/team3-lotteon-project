@@ -742,13 +742,16 @@ function updateExpectedTotal(totalPrice, totalShippingFee) {
     }
 })*/
 // 모달 엘리먼트와 버튼, 닫기 버튼 가져오기
-const modal = document.getElementById("coupon-myModal");
-const btn = document.getElementById("coupon-couponBtn");
-const span = document.getElementsByClassName("coupon-close")[0];
+const modal = document.getElementById("discountModal");
+const btn = document.getElementById("openDiscountModalBtn");
+const span = document.getElementsByClassName("discount-modal-close")[0];
 
 // 버튼을 클릭하면 모달 표시
 btn.onclick = function() {
     modal.style.display = "flex";
+    const productId = document.getElementById('productId').value;
+    fetchCoupons(productId);
+
 }
 
 // 닫기 버튼을 클릭하면 모달 숨기기
@@ -760,5 +763,61 @@ span.onclick = function() {
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
+    }
+}
+
+
+function fetchCoupons(productId) {
+
+    let url = productId ? `/seller/coupon/${productId}` : '/seller/coupon/all/coupons';
+
+    fetch(url)
+        .then(resp => {
+            if(!resp.ok){
+                throw  new Error('인터넷연결 문제')
+            }
+            return resp.json()
+        })
+        .then(data => {
+            displayCoupons(data);
+        })
+        .catch(err => {
+            console.error(err,'요청중 문제 발생함')
+        })
+}
+
+
+
+
+
+
+
+
+// 쿠폰 목록 표시하기
+function displayCoupons(coupons) {
+    const couponContainer = document.getElementById('discountCouponItems');
+    couponContainer.innerHTML = '';
+
+    if (coupons.length === 0) {
+        const noCoupon = document.createElement('div');
+        noCoupon.className = 'no-coupon';
+        noCoupon.textContent = '등록된 쿠폰이 없습니다.';
+        couponContainer.appendChild(noCoupon);
+    } else {
+        coupons.forEach(coupon => {
+            const couponItem = document.createElement('div');
+            couponItem.className = 'discount-coupon-item';
+            couponItem.innerHTML = `
+               <div class="discount-coupon-info">
+                    <div class="discount-amount">${coupon.couponName} (${coupon.benefit})</div>
+                    <div class="discount-description">${coupon.notes}</div> <!-- notes로 변경 -->
+                    <div class="discount-dates">
+                        <span>유효기간: ${coupon.startDate} ~ ${coupon.endDate}</span>
+                    </div>
+                </div>
+                <button class="discount-apply-btn" onclick="applyCoupon('${coupon.couponId}')">발급받기</button>
+            `;
+            couponContainer.appendChild(couponItem);
+        });
     }
 }

@@ -60,10 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = addCouponModal.querySelector('.close');
     const cancelBtn = document.getElementById('cancelBtn');
     const submitBtn = document.getElementById('submitBtn');
+    const productSelect = document.getElementById("productSelect"); // 상품 선택 요소
 
     // 쿠폰 등록 모달 열기
     addCouponBtn.addEventListener('click', () => {
         addCouponModal.style.display = 'block';
+        loadProducts(); // 상품 불러오기 호출
+
     });
 
     // 모달 닫기 함수
@@ -88,10 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const inpitstartDate = couponForm.startDate.value;
         const inpitendDate = couponForm.endDate.value;
         const inpitnotes = couponForm.notes.value;
-
+        // 상품 아이디 들고오기
+        const selectedProductId = productSelect.value; // 여기가 중요합니다.
+        console.log(selectedProductId,"상품아이디")
         // 모든 필드가 입력되었는지 확인
         if (!inpitcouponName || !inpitcouponType || !inpitbenefit || !inpitstartDate || !inpitendDate || !inpitnotes) {
             alert("모든 필드를 입력해 주세요.");
+            return; // 폼 제출 방지
+        }
+        // 쿠폰 타입이 '개별상품할인'일 때 상품 선택 유효성 검사
+        if (inpitcouponType === "discount" && !selectedProductId) {
+            alert("상품을 선택해 주세요.");
             return; // 폼 제출 방지
         }
         if (startDate > endDate) {
@@ -111,11 +121,14 @@ document.addEventListener('DOMContentLoaded', () => {
             endDate: endDate,
             notes: document.getElementById("notes").value,
             rdate: new Date().toISOString().split('T')[0], // 현재 날짜
+            productId: selectedProductId, // 선택된 상품 ID 추가
             sellerDTO: {
                 // 필요한 SellerDTO 필드 추가
                 company   : sellerCompany
             }
         };
+        console.log("Selected Product ID:", selectedProductId);
+
 
         console.log("쿠폰데이터:", couponData)
 
@@ -143,6 +156,43 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error("Error------------" + error))
     });
 
+    function loadProducts(){
+        const addCouponModal = document.getElementById("addCouponModal");
+        const sellerCompany = addCouponModal.getAttribute("data-seller-company");
+
+        console.log("Seller Company:", sellerCompany);
+
+
+        fetch(`/seller/coupon/products`)
+            .then(resp => {
+                if (!resp.ok) {
+                    throw new Error("상품을 불러오는 데 실패했습니다."); // 400 오류가 발생했을 때 처리
+                }
+                return resp.json();
+            })
+            .then(products => {
+                console.log("불러온 상품 데이터:", products); // 전체 제품 데이터 로그
+
+                productSelect.innerHTML = '<option value="" disabled selected>쿠폰 적용상품</option>'; // 기본 옵션 추가
+
+                if (products.length === 0) {
+                    alert("등록된 상품이 없습니다."); // 상품이 없을 때 알림
+                    return; // 더 이상 진행하지 않음
+                }
+
+                products.forEach(product => {
+                    console.log("상품 ID:", product.productId, "상품명:", product.productName); // 로그 추가
+                    const option = document.createElement('option');
+                    option.value = product.productId; // 상품 ID로 설정
+                    option.textContent = product.productName; // 상품명
+                    productSelect.appendChild(option);
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                alert("오류가 발생했습니다: " + err.message);
+        });
+    }
     // 모달 외부 클릭 시 모달 닫기
     window.addEventListener('click', (event) => {
         if (event.target === addCouponModal) {
