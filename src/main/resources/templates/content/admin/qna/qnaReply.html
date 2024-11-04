@@ -52,13 +52,13 @@
                         <td>
                             <textarea oninput="autoResize(this)" name="qnareply" placeholder="내용을 입력하세요"></textarea>
                         </td>
-<!--                        <input class="hidden" th:value="${qna.qnaNo}" name="qnaNo" id="qnaNo">-->
+                        <input class="hidden" th:value="${qna.qnaNo}" name="qnaNo" id="qnaNo">
                     </tr>
                 </table>
             </div>
             <div class="qna_view_button">
                 <a class="admin_qna_delete_a" th:href="@{/admin/qna/delete(no=${qna.qnaNo})}">삭제</a>
-                <a class="qna_reply-btn" id="qna_reply_btn" th:href="@{/admin/qna/delete(no=${qna.qnaNo})}">답변등록</a>
+                <a class="qna_reply-btn" id="qna_reply_btn" th:href="@{/admin/qna/reply(no=${qna.qnaNo})}">답변등록</a>
                 <a class="qna_list-btn" th:href="@{/admin/qna/list}">목록</a>
             </div>
             <div th:if="${message}" class="hidden" th:text="${message}" id="messageDiv"></div>
@@ -83,33 +83,33 @@
                 }
             });
         </script>
-<!--        <script>-->
-<!--            replybtn = document.getElementById('qna_reply_btn');-->
-<!--            replybtn.addEventListener('click' , function(e){-->
-<!--                e.preventDefault();-->
+        <script>
+            replybtn = document.getElementById('qna_reply_btn');
+            replybtn.addEventListener('click' , function(e){
+                e.preventDefault();
 
-<!--                const replyContent = document.querySelector('textarea[name="qnareply"]').value;-->
-<!--                const qnaNo = document.getElementById('qnaNo').value;-->
+                const replyContent = document.querySelector('textarea[name="qnareply"]').value;
+                const qnaNo = document.getElementById('qnaNo').value;
 
-<!--                fetch(`/admin/qna/reply?no=${qnaNo}`, {-->
-<!--                    method : 'POST',-->
-<!--                    headers: {-->
-<!--                        'Content-Type': 'application/json',  // JSON 형식으로 설정-->
-<!--                    },-->
-<!--                    body: JSON.stringify({-->
-<!--                        qnareply: replyContent  // reply 내용만 포함-->
-<!--                    })-->
-<!--                })-->
-<!--                    .then(resp => resp.json())-->
-<!--                    .then(data => {-->
-<!--                        console.log(data);-->
-<!--                        if(data != null){-->
-<!--                            alert('답변이 등록되었습니다.')-->
-<!--                        }-->
-<!--                    })-->
-<!--                    .catch(err => {-->
-<!--                        console.log(err);-->
-<!--                    });-->
-<!--            })-->
-<!--        </script>-->
+                fetch(`/admin/qna/reply?no=${qnaNo}`, {
+                    method : 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',  // JSON 형식으로 설정
+                    },
+                    body: JSON.stringify({
+                        qnareply: replyContent  // reply 내용만 포함
+                    })
+                })
+                    .then(resp => resp.json())
+                    .then(data => {
+                        console.log(data);
+                        if(data != null){
+                            alert('답변이 등록되었습니다.')
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            })
+        </script>
 </th:block>

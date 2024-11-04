@@ -35,12 +35,13 @@ public class AdminQnaController {
 
         List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
         log.info(boardCateDTOS);
-        model.addAttribute("boardCate",boardCateDTOS);
+        model.addAttribute("boardCate", boardCateDTOS);
         return "content/admin/qna/qnaList";
     }
+
     @ResponseBody
     @GetMapping("/list/page")
-    public ResponseEntity<?> adminQnaListPage(@RequestParam(required = false) Long childId, @RequestParam(required = false) Long parentId, PageRequestDTO pageRequestDTO){
+    public ResponseEntity<?> adminQnaListPage(@RequestParam(required = false) Long childId, @RequestParam(required = false) Long parentId, PageRequestDTO pageRequestDTO) {
         pageRequestDTO.setParentId(parentId);
         pageRequestDTO.setChildId(childId);
 
@@ -62,32 +63,36 @@ public class AdminQnaController {
 
     @ResponseBody
     @DeleteMapping("/delete/check")
-    public ResponseEntity<?> adminQnaDeleteCheck(@RequestBody List<Integer> data){
-        if(data == null || data.isEmpty()){
+    public ResponseEntity<?> adminQnaDeleteCheck(@RequestBody List<Integer> data) {
+        if (data == null || data.isEmpty()) {
             return ResponseEntity.badRequest().body("삭제할 항목이 없습니다.");
         }
         qnaService.deleteCheck(data);
         return ResponseEntity.ok().build();
     }
 
-//    @GetMapping("/reply")
-//    public String adminQnaReply(Model model, int no){
-//        adminQnaDTO  adminQnaDTO = qnaService.selectQna(no);
-//        if(adminQnaDTO.getQnareply() == null){
-//            model.addAttribute("qna",adminQnaDTO);
-//            return "content/admin/qna/qnaReply";
-//        }else {
-//            model.addAttribute("adminQnaDTO",adminQnaDTO);
-//            return "content/admin/qna/qnaView";
-//        }
-//    }
-//    @ResponseBody
-//    @PostMapping("/reply")
-//    public ResponseEntity<?> adminQnaReply(@RequestParam int no , @RequestBody adminQnaDTO adminQnaDTO){
-//        adminQnaDTO qnadto= qnaService.selectQna(no);
-//        qnadto.setQnareply(adminQnaDTO.getQnacontent());
-//        log.info("와랄 : " + qnadto);
-//        return ResponseEntity.ok().body(qnadto);
-//    }
+    @GetMapping("/reply")
+    public String adminQnaReply(Model model, int no) {
+        adminQnaDTO adminQnaDTO = qnaService.selectQna(no);
+        if (adminQnaDTO.getQnareply() == null) {
+            model.addAttribute("qna", adminQnaDTO);
+            return "content/admin/qna/qnaReply";
+        } else {
+            model.addAttribute("adminQnaDTO", adminQnaDTO);
+            return "content/admin/qna/qnaView";
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/reply")
+    public ResponseEntity<?> adminQnaReply(@RequestParam int no , @RequestBody adminQnaDTO adminQnaDTO){
+        adminQnaDTO qnadto= qnaService.selectQna(no);
+        qnadto.setQnareply(adminQnaDTO.getQnareply());
+
+        log.info("와랄 : " + qnadto);
+        return ResponseEntity.ok().body(qnadto);
+    }
+
 }
+
 

@@ -86,4 +86,7 @@ public class QnaService {
         }
         return null;
     }
+//    public adminQnaDTO replyQna(adminQnaDTO adminQnaDTO){
+//
+//    }
 }
