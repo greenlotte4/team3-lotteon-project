@@ -1,7 +1,9 @@
 package com.lotteon.entity.admin;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lotteon.entity.User.Seller;
+import com.lotteon.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
@@ -41,8 +43,18 @@ public class Coupon {
     @JsonIgnore
     private Seller seller; // 발급자
 
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    @JsonBackReference
+    private Product product;
+
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<CouponIssued> issuedCoupons;
+
+    // 새로운 메서드 추가
+    public Long getProductId() {
+        return product != null ? product.getProductId() : null;
+    }
 
 }

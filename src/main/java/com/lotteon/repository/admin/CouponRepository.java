@@ -1,6 +1,7 @@
 package com.lotteon.repository.admin;
 
 import com.lotteon.entity.admin.Coupon;
+import com.lotteon.entity.product.Product;
 import com.lotteon.repository.custom.CouponRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,5 +14,8 @@ import java.util.List;
 public interface CouponRepository extends JpaRepository<Coupon, String>, CouponRepositoryCustom  {
 
     Page<Coupon> findBySellerId(Long sellerId, Pageable pageable);
+    List<Coupon> findByProduct_productId(Long productId);
+
+    List<Coupon> findByProductIsNull();
 
 }

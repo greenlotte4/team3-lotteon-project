@@ -5,7 +5,6 @@ package com.lotteon.repository.product;
 */
 import com.lotteon.entity.product.Product;
 import com.lotteon.repository.custom.ProductRepositoryCustom;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,9 +16,11 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> , ProductRepositoryCustom {
 
-    public Page<Product> findBySellerId(String sellerId, Pageable pageable);
+    Page<Product> findBySellerId(String sellerId, Pageable pageable);
 
-    public Product findByProductId(Long productId);
+    List<Product> findAllBySellerId(String sellerId); // 페이지 없이 모든 상품 반환
 
-    Optional<Product> findById(long productId);
+    Product findByProductId(Long productId);
+
+    Optional<Product> findById(Long productId);
 }
