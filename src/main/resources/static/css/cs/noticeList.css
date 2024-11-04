@@ -1,3 +1,7 @@
+#container {
+    height: 770.5px !important;
+}
+
 .article-div {
     width: 900px;
     height: auto;
