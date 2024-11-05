@@ -1,6 +1,7 @@
 package com.lotteon.dto.User;
 
 
+import com.lotteon.entity.User.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +25,7 @@ public class MemberDTO {
     private String addr;        // Member의 addr
     private String addr2;       // Member의 addr2
     private BigDecimal point;   // Member의 point
-    private String grade;       // Member의 grade
+    private Grade grade;       // Member의 grade
     private String uid;         // User의 uid
     private LocalDate regDate; // Member의 regDate
     private LocalDate lastDate;
@@ -32,7 +33,7 @@ public class MemberDTO {
 
     // 쿼리에서 사용하는 순서대로 생성자 작성
     public MemberDTO(long id, String name, String gender, String email, String hp, String postcode,
-                     String addr, String addr2, BigDecimal point, String grade, String uid, LocalDate regDate, LocalDate lastDate) {
+                     String addr, String addr2, BigDecimal point, Grade grade, String uid, LocalDate regDate, LocalDate lastDate) {
         this.id = id;
         this.name = name;
         this.gender = gender;

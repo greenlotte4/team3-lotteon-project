@@ -69,7 +69,18 @@
 /* 이미지 스타일 */
 .slide img {
     width: 100%; /* 슬라이드 너비에 맞춰 이미지가 늘어남 */
-    height: auto; /* 세로 크기는 자동으로 조정하여 비율 유지 */
+    height: 300px; /* 세로 크기는 자동으로 조정하여 비율 유지 */
+    display: block; /* 이미지가 블록 요소로 처리되어 아래 여백이 생기지 않음 */
+}
+.headerslide{
+    width: 1200px;
+    height: 80px;
+    box-sizing: border-box;
+}
+
+.headerslide img{
+    width: 100%; /* 슬라이드 너비에 맞춰 이미지가 늘어남 */
+    height: 80px; /* 세로 크기는 자동으로 조정하여 비율 유지 */
     display: block; /* 이미지가 블록 요소로 처리되어 아래 여백이 생기지 않음 */
 }
 

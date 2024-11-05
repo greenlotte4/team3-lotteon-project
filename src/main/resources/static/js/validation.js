@@ -68,6 +68,7 @@ window.onload = function () {
             isPassOk = true;
         } else {
             passResult.innerText = '비밀번호가 일치하지 않습니다.';
+            passResult.style.color = 'red';
             isPassOk = false;
         }
     });
@@ -202,11 +203,30 @@ window.onload = function () {
         console.log(isNameOk);
         console.log(isEmailOk);
 
-        // 모든 유효성 검사 통과 여부 확인
-        if (!isUidOk || !isPassOk || !isNameOk || !isEmailOk) {
-            alert('유효성 검사를 통과 하셔야합니다.');
-            return; // 유효성 검사가 통과되지 않으면 회원가입 중단
+        // UID 유효성 검사
+        if (!isUidOk) {
+            alert('아이디가 유효하지 않습니다.');
+            return; // UID 유효성 검사 실패 시 회원가입 중단
         }
+
+        // 비밀번호 유효성 검사
+                if (!isPassOk) {
+                    alert('비밀번호가 유효하지 않습니다.');
+                    return; // 비밀번호 유효성 검사 실패 시 회원가입 중단
+                }
+
+        // 이름 유효성 검사
+                if (!isNameOk) {
+                    alert('이름이 유효하지 않습니다.');
+                    return; // 이름 유효성 검사 실패 시 회원가입 중단
+                }
+
+        // 이메일 유효성 검사
+                if (!isEmailOk) {
+                    alert('이메일이 유효하지 않습니다.');
+                    return; // 이메일 유효성 검사 실패 시 회원가입 중단
+                }
+
 
         const formData = new FormData(event.target); // 폼 데이터 가져오기
 

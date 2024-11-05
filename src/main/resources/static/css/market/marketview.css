@@ -278,8 +278,11 @@ select::-ms-expand {
     height: 30px;
     width: 443px;
     font-size: 13px;
-    text-indent: 6px;
-    border-radius: 2px;
+    text-indent: 10px;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+    border: 0.5px solid #ddd;
+    border-radius: 6px
 }
 
 .quantity-control {
@@ -337,7 +340,7 @@ select::-ms-expand {
     border-radius: 5px;
     background: linear-gradient(to top, #f8f8f8 35%, transparent 30%);
 }
-.total-price,.expectedPrice,.totalShippingFee,.originalTotalPrice,.totalPrice {
+.total-price,.expectedPrice,.totalShippingFee,.originalTotalPrice,.totalPrice,.additionalPrice {
 
     display: flex;
     justify-content: flex-end;
@@ -356,6 +359,9 @@ select::-ms-expand {
 }
 .expectedTotal{
     margin-bottom:20px;
+}
+#additionalPrice:before{
+    content: '+';
 }
 
 .expectedTotal > div{
@@ -1136,7 +1142,10 @@ select::-ms-expand {
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
-    width: 300px;
+    width: 400px;
+    max-height: 500px; /* 최대 높이 500px */
+    overflow-y: auto; /* Y축 방향으로 스크롤 가능 */
+
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
@@ -1170,6 +1179,7 @@ select::-ms-expand {
 }
 
 .discount-coupon-info {
+    width: 300px; /* 고정 너비 300px */
     display: flex;
     flex-direction: column;
 }
@@ -1186,6 +1196,7 @@ select::-ms-expand {
 }
 
 .discount-apply-btn {
+    width: 80px; /* 고정 너비 60px */
     padding: 5px 10px;
     background-color: #007bff;
     color: #fff;

@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelBtn = document.getElementById('cancelBtn');
     const submitBtn = document.getElementById('submitBtn');
     const productSelect = document.getElementById("productSelect"); // 상품 선택 요소
+    const couponTypeSelect = document.getElementById("couponType"); // 쿠폰 타입 선택 박스
 
     // 쿠폰 등록 모달 열기
     addCouponBtn.addEventListener('click', () => {
@@ -85,22 +86,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const startDate = document.getElementById("startDate").value;
         const endDate = document.getElementById("endDate").value;
 
-        const inpitcouponName = couponForm.couponName.value;
-        const inpitcouponType = couponForm.couponType.value;
-        const inpitbenefit = couponForm.benefit.value;
-        const inpitstartDate = couponForm.startDate.value;
-        const inpitendDate = couponForm.endDate.value;
-        const inpitnotes = couponForm.notes.value;
+        const inputcouponName = couponForm.couponName.value;
+        const inputcouponType = couponForm.couponType.value;
+        const inputbenefit = couponForm.benefit.value;
+        const inputstartDate = couponForm.startDate.value;
+        const inputendDate = couponForm.endDate.value;
+        const inputnotes = couponForm.notes.value;
+        const inputrestrictions = couponForm.restrictions.value;
+
         // 상품 아이디 들고오기
         const selectedProductId = productSelect.value; // 여기가 중요합니다.
         console.log(selectedProductId,"상품아이디")
+
         // 모든 필드가 입력되었는지 확인
-        if (!inpitcouponName || !inpitcouponType || !inpitbenefit || !inpitstartDate || !inpitendDate || !inpitnotes) {
+        if (!inputcouponName || !inputcouponType || !inputbenefit || !inputstartDate || !inputendDate || !inputnotes || !inputrestrictions) {
             alert("모든 필드를 입력해 주세요.");
             return; // 폼 제출 방지
         }
         // 쿠폰 타입이 '개별상품할인'일 때 상품 선택 유효성 검사
-        if (inpitcouponType === "discount" && !selectedProductId) {
+        if (inputcouponType === "discount" && !selectedProductId) {
             alert("상품을 선택해 주세요.");
             return; // 폼 제출 방지
         }
@@ -116,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             couponId: 0,
             couponName: document.getElementById("couponName").value,
             couponType: document.getElementById("couponType").value,
+            restrictions: document.getElementById("restrictions").value,
             benefit: benefit ? benefit.value : '',
             startDate: startDate,
             endDate: endDate,
@@ -129,8 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         console.log("Selected Product ID:", selectedProductId);
 
-
-        console.log("쿠폰데이터:", couponData)
+        console.log("쿠폰 데이터 전송:", JSON.stringify(couponData)); // JSON 데이터 확인
 
         fetch('/seller/coupon/register', {
             method: 'POST',
@@ -155,14 +159,22 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => console.error("Error------------" + error))
     });
+    // 쿠폰 종류 변경 시 상품 선택 박스 상태 변경
+    couponTypeSelect.addEventListener('change', () => {
+        loadProducts(); // 쿠폰 타입에 따라 상품 목록 다시 로딩
+    });
 
     function loadProducts(){
-        const addCouponModal = document.getElementById("addCouponModal");
         const sellerCompany = addCouponModal.getAttribute("data-seller-company");
+        const selectedCouponType = couponTypeSelect.value; // 현재 선택된 쿠폰 타입
+
 
         console.log("Seller Company:", sellerCompany);
 
 
+        if (selectedCouponType === 'discount') {
+            productSelect.style.visibility = 'visible'; // 상품 선택 박스를 보이게 함
+            productSelect.style.position = 'relative'; // 레이아웃 위치를 고정시킴
         fetch(`/seller/coupon/products`)
             .then(resp => {
                 if (!resp.ok) {
@@ -191,7 +203,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => {
                 console.error(err);
                 alert("오류가 발생했습니다: " + err.message);
+
         });
+        } else {
+            productSelect.style.visibility = 'hidden'; // 'discount' 이외의 쿠폰 타입일 경우 상품 선택 박스를 숨김
+        }
     }
     // 모달 외부 클릭 시 모달 닫기
     window.addEventListener('click', (event) => {
@@ -199,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }
     });
+
 });
 
 
@@ -305,4 +322,8 @@ document.querySelectorAll('.end-button').forEach(button => {
 });
 
 
+
+// 쿠폰 발급현황 리스트
+document.addEventListener("DOMContentLoaded", function () {
+})
 

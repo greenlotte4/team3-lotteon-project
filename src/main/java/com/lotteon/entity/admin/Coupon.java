@@ -37,24 +37,23 @@ public class Coupon {
     private int usedCount; // 사용수
     private String status; // 상태
     private LocalDate rdate; // 발급일
+    private String restrictions;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
     @JsonIgnore
     private Seller seller; // 발급자
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @JsonBackReference
     private Product product;
 
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<CouponIssued> issuedCoupons;
+    private List<CouponIssued> CouponIssued;
 
     // 새로운 메서드 추가
-    public Long getProductId() {
-        return product != null ? product.getProductId() : null;
-    }
 
 }
