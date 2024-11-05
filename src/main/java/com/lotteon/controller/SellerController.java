@@ -45,21 +45,45 @@ public class SellerController {
 
 
     @GetMapping("/product/list")
-    public String productList(Model model, PageRequestDTO pageRequestDTO, Authentication authentication) {
-
+    public String productList(Model model, PageRequestDTO pageRequestDTO, Authentication authentication,
+                              @RequestParam(value="page",required=false,defaultValue = "1") int page,
+                              @RequestParam(value = "type",required = false) String type,
+                              @RequestParam(value = "keyword",required = false) String keyword) {
+        log.info("일단 여기!!!");
         String user = authentication.getName();
         String role = authentication.getAuthorities().toString();
-        ProductListPageResponseDTO productPageResponseDTO = null;
+        log.info("type, keyword : "+type+keyword);
+        pageRequestDTO.setPage(page);
+        pageRequestDTO.setType(type);
+        pageRequestDTO.setKeyword(keyword);
+
+        ProductListPageResponseDTO productPageResponseDTO =new ProductListPageResponseDTO();
         if(role.contains("ROLE_ADMIN")) {
-            productPageResponseDTO = productService.selectProductAll(pageRequestDTO);
+
+                productPageResponseDTO = productService.selectProductAll(pageRequestDTO);
+
+
+            log.info("ROLE!!!! : "+productPageResponseDTO);
         }else if(role.contains("ROLE_SELLER")){
             productPageResponseDTO = productService.selectProductBySellerId(user, pageRequestDTO);
+            log.info("ROLE_SELLER!!!! : "+productPageResponseDTO);
+
         }
          
         model.addAttribute("productPageResponseDTO", productPageResponseDTO);
         model.addAttribute("productList", "productList");
 
         return "content/admin/product/admin_productlist"; // Points to the "content/sellerDynamic" template for product listing
+    }
+
+
+    @GetMapping("/product/search")
+    public String productSearch(Model model, PageRequestDTO pageRequestDTO, Authentication authentication,
+                                @RequestParam(value="type",required=false,defaultValue = "1") int page,
+                                @RequestParam(value = "type",required = false) String type,
+                                @RequestParam(value = "keyword",required = false) String keyword){
+
+        return null;
     }
 
     @GetMapping("/product/register")

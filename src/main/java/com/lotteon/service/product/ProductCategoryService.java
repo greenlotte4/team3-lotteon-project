@@ -15,6 +15,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,6 @@ public class ProductCategoryService {
     private final CacheManager cacheManager;
 
 
-    @Cacheable("categories")
     public List<ProductCategoryDTO> populateCategories() {
         List<ProductCategory> categories = getCategoryHierarchy();
         List<ProductCategoryDTO> categoryDTOs = new ArrayList<>();
@@ -52,6 +52,28 @@ public class ProductCategoryService {
             categoryDTO.setChildren(childrenDTOs);
         }
         return categoryDTO;
+    }
+
+    // 3차 카테고리로부터 2차, 1차 카테고리를 가져오는 메서드
+    @Transactional(readOnly = true)
+    public List<ProductCategoryDTO> getAllParentCategoryDTOs(Long categoryId) {
+        List<ProductCategoryDTO> parentCategoryDTOs = new ArrayList<>();
+        ProductCategory category = productCategoryRepository.findById(categoryId).orElse(null);
+
+        while (category != null ) {
+
+            ProductCategoryDTO dto =ProductCategoryDTO.builder()
+                    .id(category.getId())
+                    .name(category.getName())
+                    .level(category.getLevel())
+                    .subcategory(category.getSubcategory())
+                    .build();
+
+            parentCategoryDTOs.add(dto);
+            category = category.getParent();
+        }
+
+        return parentCategoryDTOs;
     }
 
 //    public List<ProductCategoryDTO> populateCategories() {
@@ -162,17 +184,19 @@ public class ProductCategoryService {
         return categories;
     }
 
-
+    @Cacheable(value = "categories", key = "'categoryList'")
     public List<ProductCategoryDTO> getCategoriesWithCacheCheck() {
-        Cache cache = cacheManager.getCache("categories");
-        List<ProductCategoryDTO> cachedCategories = cache != null ? cache.get(0, List.class) : null;
-
-        if (cachedCategories == null) {
-            log.info("Cache miss - Fetching categories from the database");
-            return populateCategories(); // 캐시 갱신
-        } else {
-            log.info("Cache hit - Returning cached categories");
-            return cachedCategories;
-        }
+        log.info("Cache miss - Fetching categories from the database");
+        return populateCategories();
+//        Cache cache = cacheManager.getCache("categories");
+//        List<ProductCategoryDTO> cachedCategories = cache != null ? cache.get(0, List.class) : null;
+//
+//        if (cachedCategories == null) {
+//            log.info("Cache miss - Fetching categories from the database");
+//            return populateCategories(); // 캐시 갱신
+//        } else {
+//            log.info("Cache hit - Returning cached categories");
+//            return cachedCategories;
+//        }
     }
 }

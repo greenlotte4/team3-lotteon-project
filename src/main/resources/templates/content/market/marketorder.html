@@ -143,11 +143,13 @@
                             <div class="point_info">
                                 <input type="hidden" id="memberUid" th:value="${memberDTO.getUid()}">
                                 <input type="hidden" id="memberGrade" th:value="${memberDTO.getGrade()}">
+                                <input type="hidden" id="memberName" th:value="${memberDTO.getName()}">
+                                <input type="hidden" id="memberHp" th:value="${memberDTO.getHp()}">
                                 <input type="hidden" id="currentPoint" th:value="${memberDTO.point != null ? memberDTO.point.intValue() : 0}">
                                 <span>현재 포인트 :
                                 <span class="price"  id="currentIn" th:text="${memberDTO.point != null ? memberDTO.point.intValue() : 0}"></span>
                                 <p>
-                                    포인트 : 2,000점이상이면
+                                    포인트 : 5,000점이상이면
                                     현금처럼 사용가능
                                 </p>
 

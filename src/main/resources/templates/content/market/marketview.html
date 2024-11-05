@@ -84,7 +84,7 @@
 
 
                                     <div class="purchase-options">
-                                        <div th:if="${!products.optionGroups.isEmpty()}">
+                                        <div th:if="${!products.optionGroups.isEmpty()}" id="optionGroupContainer">
                                             <!-- 옵션 그룹 반복 -->
                                             <th:block th:each="group, iter : ${products.optionGroups}">
                                                 <select name="option" th:id="'option-'+${iter.index}" class="option-select" required

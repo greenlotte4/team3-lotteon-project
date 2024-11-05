@@ -19,7 +19,8 @@ import com.lotteon.repository.user.SellerRepository;
 import com.querydsl.core.QueryFactory;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.annotations.QueryProjection;
-import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +30,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -84,7 +84,33 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     //main 3차 카테고리 선택시
     @Override
-    public Page<ProductSummaryDTO> selectProductByCategory(PageRequestDTO pageRequest, Pageable pageable) {
+    public Page<ProductSummaryDTO> selectProductByCategory(PageRequestDTO pageRequest, Pageable pageable,String sort) {
+
+        NumberExpression<Long> finalPrice = qProduct.price.subtract(qProduct.price.multiply(qProduct.discount).divide(100));
+
+        // 정렬 조건 추가
+        OrderSpecifier<?> orderSpecifier;
+        switch (sort) {
+            case "lowPrice":
+                orderSpecifier = finalPrice.asc();
+                break;
+            case "highPrice":
+                orderSpecifier = finalPrice.desc();
+                break;
+            case "rating":
+                NumberExpression<Double> avgRating = Expressions.numberTemplate(Double.class, "CAST({0} AS DOUBLE)", qReview.rating).avg();
+                orderSpecifier = avgRating.desc();
+                break;
+            case "reviews":
+                orderSpecifier = qReview.count().desc(); // 리뷰 개수 내림차순
+                break;
+            case "recent":
+                orderSpecifier = qProduct.rdate.desc();
+                break;
+            default: // 판매많은순 (popularity)
+                orderSpecifier = qProduct.sold.desc(); // 판매량 내림차순
+                break;
+        }
 
       List<ProductSummaryDTO> products =  queryFactory.select(
                       new QProductSummaryDTO(
@@ -107,21 +133,19 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
               .leftJoin(qProduct.reviews, qReview)
               .where(qProduct.categoryId.eq(pageRequest.getCategoryId()))
               .groupBy(qProduct.productId, qSeller.user.uid)
+              .orderBy(orderSpecifier) // 정렬 조건 추가
               .offset(pageable.getOffset())
               .limit(pageable.getPageSize())
               .fetch();
 
         // 2. 각 상품에 대해 리뷰 리스트를 별도로 조회하여 DTO에 추가
         for (ProductSummaryDTO product : products) {
-            List<Review> reviews = queryFactory.select(
-                            new QReview(
-                                    String.valueOf(qReview.rating)
-                            ))
+            List<String> ratings = queryFactory.select(qReview.rating)
                     .from(qReview)
                     .where(qReview.product.productId.eq(product.getProductId()))
                     .fetch();
 
-            product.setRating(reviews);  // 리뷰 리스트를 DTO에 설정
+            product.setRating(ratings);  // 리뷰 리스트를 DTO에 설정
         }
 
 

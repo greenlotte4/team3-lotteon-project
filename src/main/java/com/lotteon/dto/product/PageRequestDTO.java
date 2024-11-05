@@ -33,7 +33,8 @@ public class PageRequestDTO {
 
     public Pageable getPageable(String sort, int size) {
         this.size=size;
-        return PageRequest.of(this.page-1,this.size, Sort.by(sort).descending());
+            return PageRequest.of(this.page-1,this.size, Sort.by("sold").descending());
+
     }
 
 }

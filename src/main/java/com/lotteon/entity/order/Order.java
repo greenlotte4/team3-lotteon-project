@@ -32,6 +32,9 @@ public class Order {
     private long totalShipping;
     @Builder.Default
     private long expectedPoint=0;
+    @Builder.Default
+    private long productDiscount=0;
+
     private String receiver;
     private String hp;
     private String postcode;
@@ -40,6 +43,8 @@ public class Order {
     private String shippingInfo;
     private long usedPoint;   //사용 포인트
     private long usedCoupon;   //사용 포인트
+    private String memberName;
+    private String memberHp;
 
     @CreationTimestamp
     private LocalDateTime orderDate;
