@@ -14,9 +14,12 @@ import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
 import com.lotteon.entity.product.Option;
 import com.lotteon.entity.product.Product;
+import com.lotteon.entity.product.ProductOptionCombination;
 import com.lotteon.entity.product.QOption;
 import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.repository.order.OrderRepository;
+import com.lotteon.repository.product.ProductOptionCombinationRepository;
+import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.service.product.OptionService;
 import com.lotteon.service.product.ProductService;
 import com.lotteon.service.user.SellerService;
@@ -29,10 +32,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +47,8 @@ public class OrderService {
     private final OptionService optionService;
     private final SellerService sellerService;
     private final SellerController sellerController;
+    private final ProductOptionCombinationRepository productOptionCombinationRepository;
+    private final ProductRepository productRepository;
 
 
     @Transactional
@@ -56,11 +58,16 @@ public class OrderService {
         log.info("구매중 uid : "+uid);
         long result =0;
         OrderDTO orderDTO = orderResponseDTO.getOrder();
+        log.info("orderDTO!!!!!!!!!:"+orderDTO);
         orderDTO.setUid(uid);
-        Order order =  orderDTO.toEntity();
+        Order order =  getModelMapper.map(orderDTO, Order.class);
+        log.info("orderEntity!!!!!!!!!:"+orderDTO);
+
         Order savedOrder = orderRepository.save(order);
+        log.info("productDicount!!! "+ savedOrder.getProductDiscount());
 
         result=savedOrder.getOrderId();
+
 
         List<OrderItemDTO> orderItems = orderResponseDTO.getOrderItems();
         for(OrderItemDTO orderItemDTO : orderItems) {
@@ -74,23 +81,24 @@ public class OrderService {
             orderItemDTO.setSellerUid(product.getSellerId());
             orderItemDTO.setProduct(product);
             orderItemDTO.setSavedPrice(product.getPrice());
-            orderItemDTO.setOptionId(orderItemDTO.getOptionId());
 
-            // option재고 업데이트
-            List<OptionDTO>  options = product.getOptions();
-            for(OptionDTO optionDTO : options) {
-                if(optionDTO.getId() == orderItemDTO.getOptionId()) {
-                    long currentStock = optionDTO.getOptionStock();
-                    long orderStock = orderItemDTO.getStock();
-                    long resultStock = currentStock - orderStock;
-                    if(resultStock < 0) {
-                        result=0;
-                    }
-                    optionDTO.setOptionStock(resultStock);
-                    optionService.updateStock(optionDTO);
-                    log.info("option stock update!");
+
+            if(orderItemDTO.getSelectOption()!=null){
+                orderItemDTO.setOptionId(orderItemDTO.getOptionId());
+
+                // option재고 업데이트
+                Optional<ProductOptionCombination> productOptionCombination = productOptionCombinationRepository.findById(orderItemDTO.getOptionId());
+                if(productOptionCombination.isPresent()) {
+                    long savestock=productOptionCombination.get().getStock() - orderItemDTO.getStock() ;
+                    productOptionCombinationRepository.updateQuantity(savestock,orderItemDTO.getCombinationId());
+                    log.info("업데이트 재고 : "+savestock);
                 }
             }
+            long saveStock = product.getStock() - orderItemDTO.getStock() ;
+            productRepository.updateProductQuantity(saveStock,orderItemDTO.getProductId());
+            log.info("업데이트 재고 : "+saveStock);
+
+
 
             //각각의 오더아이템 저장
             OrderItem OrderItem = getModelMapper.map(orderItemDTO,OrderItem.class);
@@ -118,15 +126,18 @@ public class OrderService {
        for(OrderItem orderItem : orderItems) {
            OrderItemDTO orderItemDTO = getModelMapper.map(orderItem,OrderItemDTO.class);
            String sellerid= orderItem.getProduct().getSellerId();
-//           for(Option option : optiondtos) {
-//               log.info("여긴오녀???"+option);
-//
-//               if(option.getId() == orderItem.getOptionId()) {
-//                   log.info("일치!!!!!!!!!"+option);
-//                   orderItemDTO.setSelectOption(getModelMapper.map(option, OptionDTO.class));
-//                   break;
-//               }
-//           }
+
+           if(orderItem.getOptionId()!=0){
+              Optional<ProductOptionCombination> opt= productOptionCombinationRepository.findById(orderItem.getOptionId());
+              if(opt.isPresent()) {
+                  ProductOptionCombination optionCombination = opt.get();
+                  orderItemDTO.setCombination(optionCombination.getCombination());
+                  orderItemDTO.setCombinationId(optionCombination.getCombinationId());
+                  orderItemDTO.setOrderItemId(orderItem.getOrderItemId());
+
+              }
+           }
+
            orderItemDtos.add(orderItemDTO);
 
            SellerDTO seller = sellerService.getSeller(sellerid);

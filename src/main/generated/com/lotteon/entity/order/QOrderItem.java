@@ -22,6 +22,10 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public static final QOrderItem orderItem = new QOrderItem("orderItem");
 
+    public final StringPath combination = createString("combination");
+
+    public final NumberPath<Long> combinationId = createNumber("combinationId", Long.class);
+
     public final StringPath optionDesc = createString("optionDesc");
 
     public final NumberPath<Long> optionId = createNumber("optionId", Long.class);
@@ -44,7 +48,9 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public final StringPath sellerUid = createString("sellerUid");
 
-    public final StringPath status = createString("status");
+    public final NumberPath<Long> shippingFees = createNumber("shippingFees", Long.class);
+
+    public final EnumPath<com.lotteon.dto.order.DeliveryStatus> status = createEnum("status", com.lotteon.dto.order.DeliveryStatus.class);
 
     public final NumberPath<Long> stock = createNumber("stock", Long.class);
 

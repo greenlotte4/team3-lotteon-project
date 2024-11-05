@@ -1,13 +1,10 @@
 package com.lotteon.entity.product;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lotteon.dto.product.ProductOptionCombinationDTO;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Set;
 
 @Getter
 @Setter

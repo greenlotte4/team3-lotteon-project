@@ -49,3 +49,30 @@
                 });
         }
     });
+
+    document.getElementById("searchbtn").addEventListener("click", function() {
+        const searchType = document.getElementById("shopsearch").value;
+        const keyword = document.getElementById("search").value;
+
+        // Ajax 요청으로 검색 결과 가져오기
+        fetch(`/seller/product/list?type=${searchType}&keyword=${keyword}`)
+            .then(response => response.text())
+            .then(html => {
+                // Parse the HTML response
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Get the new rows from the response
+                const newRows = doc.querySelectorAll('.product-item-row');
+
+                // Select the table body and clear the current rows
+                const productTable = document.querySelector('.admin_banner_table tbody');
+                productTable.innerHTML = '';  // Remove existing rows
+
+                // Append the new rows to the table
+                newRows.forEach(row => {
+                    productTable.appendChild(row);  // Add each new row
+                });
+            })
+            .catch(error => console.error('Error fetching products:', error));
+    });

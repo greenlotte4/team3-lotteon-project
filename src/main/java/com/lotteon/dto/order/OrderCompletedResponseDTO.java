@@ -30,6 +30,7 @@ public class OrderCompletedResponseDTO {
     private long finalPaymentAmount;
 
 
+
     @Builder
     public OrderCompletedResponseDTO(OrderDTO order, Set<SellerDTO> sellerDTOs) {
         List<OrderItemDTO> orderItems = order.getOrderItems() != null ? order.getOrderItems() : new ArrayList<>();
@@ -43,12 +44,15 @@ public class OrderCompletedResponseDTO {
         this.expectedPoint=0;
 
         for (SellerDTO seller : sellerDTOs) {
+            log.info("Processing seller: " + seller.getUid()); // Log each seller
+
             long sellerTotalPrice = 0;
             long sellerTotalDiscount = 0;
             long sellerShippingFee = 0;
             List<OrderItemDTO> sellerOrderItems = new ArrayList<>();
 
             for (OrderItemDTO orderItem : orderItems) {
+
                 ProductDTO product = orderItem.getProduct();
                 long productTotalPrice = product.getPrice() * orderItem.getStock();
                 long productDiscount = (product.getPrice() * product.getDiscount()) / 100;
@@ -69,6 +73,7 @@ public class OrderCompletedResponseDTO {
 
                 // Add item to seller's list if seller matches
                 if (seller.getUid().equals(orderItem.getSellerUid())) {
+                    log.info("Seller " + seller.getUid() + " - Total Price: " + sellerTotalPrice + ", Total Discount: " + sellerTotalDiscount + ", Shipping Fee: " + sellerShippingFee);
                     sellerOrderItems.add(orderItem);
                 }
             }
@@ -76,14 +81,13 @@ public class OrderCompletedResponseDTO {
             // Finalize shipping fee for each seller
             seller.setTotalShipping(sellerShippingFee);
             this.totalShippingFee += sellerShippingFee;
-
             seller.setTotalPrice(sellerTotalPrice);
             seller.setTotalDiscount(sellerTotalDiscount);
             seller.setOrderItems(sellerOrderItems);
             this.sellers.add(seller);
             log.info("Seller Order Items: " + seller.getOrderItems());
         }
-
+        this.totalDiscount = order.getTotalDiscount();
         // Calculate final payment amount
         this.finalPaymentAmount = this.originalTotalPrice - this.totalDiscount + this.totalShippingFee;
         log.info("Original Total Price: " + originalTotalPrice);

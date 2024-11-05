@@ -1,11 +1,12 @@
 package com.lotteon.dto.product;
 
-import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
+import net.minidev.json.annotate.JsonIgnore;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,7 +16,10 @@ import java.util.Objects;
 @NoArgsConstructor
 @Log4j2
 
-public class ProductSummaryDTO  {
+public class ProductSummaryDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long categoryId;
     private Long productId;
     private String productName;
@@ -29,10 +33,12 @@ public class ProductSummaryDTO  {
     private Long sellerId;
     private String sellerName;
     private String company;
+    @JsonIgnore
     private List<Review> reviews;
-    private Double rating;
+    private Double rating = 0.0; // rating이 null일 경우 기본값 설정
     private long discountPrice;
     private long finalPrice;
+    private double productRating;
 
 
     @Builder
@@ -52,30 +58,31 @@ public class ProductSummaryDTO  {
         this.sellerName = sellerName;
         this.company = company;
 
-        this.discountPrice = Math.round(price * (100 - discount) / 100.0 / 100) * 100;
-        this.finalPrice =price- Math.round(price * (100 - discount) / 100.0 / 100) * 100;
+        this.discountPrice = Math.round(price * discount / 100.0 / 100) * 100;
+        this.finalPrice = price - this.discountPrice;
 
     }
 
-    public Double setRating(List<Review> reviews) {
+    public void setRating(List<String> ratings) {
+        this.rating = calculateAverageRating(ratings);
+    }
 
-        if (reviews == null || reviews.isEmpty()) return 0.0;
-        return reviews.stream()
-                .map(Review::getRating)              // `rating` 값을 가져옴
-                .filter(Objects::nonNull)               // `null` 값 제외
-                .mapToDouble(Double::parseDouble)       // `String`을 `Double`로 변환
+    public double calculateAverageRating(List<String> ratings) {
+        if (ratings == null || ratings.isEmpty()) {
+            return 0.0;
+        }
+        return ratings.stream()
+                .filter(Objects::nonNull)
+                .mapToDouble(rating -> {
+                    try {
+                        return Double.parseDouble(rating);
+                    } catch (NumberFormatException e) {
+                        log.warn("Failed to parse rating: " + rating);
+                        return 0.0;
+                    }
+                })
                 .average()
                 .orElse(0.0);
-
     }
 
-    public Double getAverageRating() {
-        if (reviews == null || reviews.isEmpty()) return 0.0;
-        return reviews.stream()
-                .map(Review::getRating)              // `rating` 값을 가져옴
-                .filter(Objects::nonNull)               // `null` 값 제외
-                .mapToDouble(Double::parseDouble)       // `String`을 `Double`로 변환
-                .average()
-                .orElse(0.0);                           // 평균이 없으면 0.0 반환
-    }
 }
