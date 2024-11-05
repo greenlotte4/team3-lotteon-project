@@ -28,6 +28,7 @@ public class QnaService {
     private final ModelMapper modelMapper;
     private final BoardRepository boardRepository;
 
+
     public QnaPageResponseDTO selectQnaListAll(PageRequestDTO pageRequestDTO){
 
         Pageable pageable = pageRequestDTO.getPageable("no");
