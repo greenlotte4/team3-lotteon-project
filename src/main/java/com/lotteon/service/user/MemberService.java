@@ -112,4 +112,8 @@ public class MemberService {
 
         return member;  // 유저의 아이디 반환
     }
+
+    public Optional<Member> findById(Long memberId) {
+        return memberRepository.findById(memberId);
+    }
 }
