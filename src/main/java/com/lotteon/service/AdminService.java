@@ -44,6 +44,12 @@ public class AdminService {
 
         return bannerRepository.findAll().stream()
                 .filter(banner -> {
+                    // 배너의 날짜 및 시간 값이 null인지 확인
+                    if (banner.getBan_sdate() == null || banner.getBan_edate() == null ||
+                            banner.getBan_stime() == null || banner.getBan_etime() == null) {
+                        return false; // 하나라도 null이면 필터링
+                    }
+
                     // 배너가 표시될 날짜 범위를 설정
                     LocalDate startDate = LocalDate.parse(banner.getBan_sdate());
                     LocalDate endDate = LocalDate.parse(banner.getBan_edate());
