@@ -1,6 +1,6 @@
 package com.lotteon.repository.admin;
 
-import com.lotteon.dto.FaqDTO;
+
 import com.lotteon.entity.Faq;
 import com.lotteon.repository.custom.FaqRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;

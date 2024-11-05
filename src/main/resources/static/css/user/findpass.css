@@ -1,0 +1,172 @@
+section {
+    width: 600px;
+    height: 306px;
+    margin: 0 auto;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    box-sizing: border-box;
+}
+
+.findpass{
+}
+h2 {
+    height: 12px;
+    font-size: 12px;
+    padding-top: 16px;
+    padding-bottom: 8px;
+    font-weight: bold;
+}
+hr {
+    border: solid 1px black;
+}
+#findPassForm{
+    height:306px ;
+    bottom: 200px;
+    margin-bottom: 200px;
+
+}
+.table {
+    width: 600px;
+    height: 138px;
+    margin-bottom: 15px;
+}
+.table > div:nth-child(1){
+    width: 120px;
+    height: 49px;
+    border : 1px solid #E9E9E9;
+    box-sizing: border-box;
+    position: relative;
+}
+.table > div:nth-child(2) {
+    width: 479px;
+    height: 49px;
+    border : 1px solid #E9E9E9;
+    box-sizing: border-box;
+    position: relative; left: 120px; bottom: 49px;
+}
+.table > div:nth-child(3) {
+    width: 120px;
+    height: 87px;
+    border : 1px solid #E9E9E9;
+    box-sizing: border-box;
+    position: relative;
+    bottom: 49.5px;
+}
+.table > div:nth-child(4) {
+    width: 479px;
+    height: 87px;
+    border : 1px solid #E9E9E9;
+    box-sizing: border-box;
+    position: relative;
+    left:120px;
+    bottom: 136.5px;
+}
+.id {
+    width: 40px;
+    height: 14px;
+    position: absolute;
+    top: 16px;
+    left: 14px;
+    font-weight: bold;
+}
+.idtext {
+    width: 164px;
+    height: 24px;
+    position: absolute;
+    top: 10px;
+    left: 14px;
+    padding-left: 7px;
+    font-weight: bold;
+    background-color: #F7F7F7;
+    border: 1px solid #E4EAEC;
+}
+.email {
+    width: 36px;
+    height: 14px;
+    position: absolute;
+    top: 33px;
+    left: 14px;
+    box-sizing: border-box;
+    font-weight: bold;
+}
+.emailtext {
+    width: 164px;
+    height: 24px;
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    padding-left: 7px;
+    font-weight: bold;
+    background-color: #F7F7F7;
+    border: 1px solid #E4EAEC;
+}
+.getCodeBtn {
+    width: 85px;
+    height: 26px;
+    position: absolute;
+    top: 12px;
+    left: 190px;
+    font-weight: bold;
+    border: 1px solid #BEBEBE;
+}
+.verificationCodetext {
+    width: 164px;
+    height: 24px;
+    position: absolute;
+    top: 45px;
+    left: 14px;
+    padding-left: 7px;
+    font-weight: bold;
+    background-color: #F7F7F7;
+    border: 1px solid #E4EAEC;
+}
+.verificationCode {
+    width: 34px;
+    height: 26px;
+    position: absolute;
+    top: 45px;
+    left: 190px;
+    font-weight: bold;
+    border: 1px solid #BEBEBE;
+}
+#resultEmail{
+    position: absolute;
+    left: 284px;
+    top: 15px;
+
+
+}
+.note{
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.bottom {
+    position: relative;
+    top: 20px;
+    width: 100%;
+    height: -5px;
+}
+.cancelBtn {
+    width: 42px;
+    height: 35px;
+    font-size: 12px;
+    position: absolute;
+    right: 44px;
+    bottom: 0px;
+    justify-content: center;
+    border: 1px solid #BEBEBE;
+    background-color: white;
+    cursor: pointer;
+    margin-right: 2px;
+}
+.nextBtn {
+    width: 42px;
+    height: 35px;
+    position: absolute;
+    right: 1px;
+    bottom: 0px;
+    justify-content: center;
+    border: 1px solid #BEBEBE;
+    background-color: white;
+    cursor: pointer;
+}

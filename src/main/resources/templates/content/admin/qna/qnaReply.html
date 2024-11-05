@@ -6,116 +6,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin QnA Page</title>
+    <title>Admin::qna</title>
+    <link rel="stylesheet" th:href="@{/css/admin/adminqnareply.css}">
 
 </head>
 <body>
 <th:block layout:fragment="content">
-            <div id="admin_service">    
-                <section>
-                    <th:block th:replace="~{content/admin/admin_gate}"></th:block>
+    <div id="admin_service">
+        <section>
+            <th:block th:replace="~{content/admin/admin_gate}"></th:block>
 
-                    <section id="admin_navi">
-                            <p>관리자 메인</p>
-                            <p><a href="#">HOME</a> > 관리자 메인</p>
-                    </section>
-
-                    <div class="reply-box">
-                        <aside id="aside">  </aside>
-                        <div class="coment-box">
-                            <div class="navi-container">
-                                <h3>자주묻는질문 목록</h3>
-                                <div class="navi">
-                                    <a href="">HOME</a> > <a href="">고객센터</a> > <a href="">공지상황</a>
-                                </div>
-                            </div>
-                            <form class="reply-coment">
-                                <div class="reply-table">
-                                    <div class="reply-type">
-                                        <div>유형</div>
-                                        <div>
-                                            회원 - 가입
-                                        </div>
-                                    </div>
-                                    <div class="reply-title">
-                                        <div>제목</div>
-                                        <div>
-                                            개인 회원과 법인회원은 다르다.
-                                        </div>
-                                    </div>
-                                    <div class="reply-content">
-                                        <div>내용</div>
-                                        <div>
-                                            대충 내용 이 어쩌고 저쩌고 個人介入と法事介入何が違いますか<br>
-                                            대충 내용 이 어쩌고 저쩌고 個人介入と法事介入何が違いますか<br>
-                                            대충 내용 이 어쩌고 저쩌고 個人介入と法事介入何が違いますか<br>
-                                            대충 내용 이 어쩌고 저쩌고 個人介入と法事介入何が違いますか<br>
-                                        </div>
-                                    </div>
-                                    <div class="reply-answer">
-                                        <div>답변</div>
-                                        <div style="display: flex; justify-content: space-between; ">
-                                            <textarea class="reply-contents" oninput="autoResize(this)"></textarea>
-                                        </div>
-                                    </div>
-                            </form>
-                            <div class="reoly-btn-controoler">
-                                <a class="replt-btn-delete" href="#">삭제</a>
-                                <a class="replt-btn-ok" href="#">답변등록</a>
-                                <a class="replt-btn-list" href="#">목록</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </section>
-</th:block>
-
-<script>
-    document.querySelectorAll('.admin_menu > li').forEach(menu => {
-        const submenu = menu.querySelector('.admin_sub_menu');
-        
-        menu.addEventListener('click', function(e) {
-            e.stopPropagation();
-
-            
-            if(submenu) {
-                submenu.classList.toggle('open');
-
-            }
-        });
-
-        // 서브 메뉴 항목 클릭 이벤트
-        if(submenu){
-            submenu.querySelectorAll('li').forEach(subLi => {
-                subLi.addEventListener('click', function(e){
-                    e.stopPropagation();       
+            <section id="admin_navi">
+                <p>고객센터</p>
+                <p>
+                    <a href="#">HOME</a>
+                    <span>></span>
+                    <a href="#">고객센터</a>
+                    <span>></span>
+                    <a href="#">자주묻는질문</a>
+                </p>
+            </section>
+            <div id="admin_qna_view">
+                <table class="admin_qna_view_table">
+                    <colgroup>
+                        <col style="width: 10%">
+                        <col style="width: 90%">
+                    </colgroup>
+                    <tr>
+                        <td>유형</td>
+                        <td th:text="${qna.category.getParent().name} + ' - ' + ${qna.category.getName()}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>제목</td>
+                        <td th:text="${qna.qnatitle}"></td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td>
+                            <p th:text="${qna.qnacontent}"></p><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>답변</td>
+                        <td>
+                            <textarea oninput="autoResize(this)" name="qnareply" placeholder="내용을 입력하세요"></textarea>
+                        </td>
+                        <input class="hidden" th:value="${qna.qnaNo}" name="qnaNo" id="qnaNo">
+                    </tr>
+                </table>
+            </div>
+            <div class="qna_view_button">
+                <a class="admin_qna_delete_a" th:href="@{/admin/qna/delete(no=${qna.qnaNo})}">삭제</a>
+                <a class="qna_reply-btn" id="qna_reply_btn" th:href="@{/admin/qna/reply(no=${qna.qnaNo})}">답변등록</a>
+                <a class="qna_list-btn" th:href="@{/admin/qna/list}">목록</a>
+            </div>
+            <div th:if="${message}" class="hidden" th:text="${message}" id="messageDiv"></div>
+        </section>
+        <!--삭제스크립트-->
+        <script>
+            document.querySelectorAll('.admin_qna_delete_a').forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('href');
+                    const deleteconfirm = confirm('정말 삭제하시겠습니까?');
+                    if (deleteconfirm) {
+                        window.location.href = url;
+                    }
                 })
             })
-        }
+            document.addEventListener('DOMContentLoaded', function() {
+                const messageDiv = document.getElementById('messageDiv');
+                const message = messageDiv.textContent;
+                if (message) {
+                    alert(message);
+                }
+            });
+        </script>
+        <script>
+            replybtn = document.getElementById('qna_reply_btn');
+            replybtn.addEventListener('click' , function(e){
+                e.preventDefault();
 
+                const replyContent = document.querySelector('textarea[name="qnareply"]').value;
+                const qnaNo = document.getElementById('qnaNo').value;
 
-    })
-
-
-</script>
-<script>
-document.getElementById('toggle-aside').addEventListener('click', function(e) {
-    e.preventDefault(); // 기본 링크 동작 방지
-    
-    const aside = document.getElementById('admin_aside');
-    const main = document.getElementById('admin_service');
-    const gate = document.getElementById('admin_gate'); // admin_gate 추가
-    
-    // aside가 숨겨져 있는지 여부에 따라 클래스 조정
-    if (aside.classList.contains('hidden')) {
-        aside.classList.remove('hidden'); // aside 보이기
-        main.classList.remove('expanded'); // main 원래 너비로
-        gate.classList.remove('expanded'); // gate도 원래 너비로
-    } else {
-        aside.classList.add('hidden'); // aside 숨기기
-        main.classList.add('expanded'); // main 너비 늘리기
-        gate.classList.add('expanded'); // gate도 너비 늘리기
-    }
-});
-</script>
-</html>
+                fetch(`/admin/qna/reply?no=${qnaNo}`, {
+                    method : 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',  // JSON 형식으로 설정
+                    },
+                    body: JSON.stringify({
+                        qnareply: replyContent  // reply 내용만 포함
+                    })
+                })
+                    .then(resp => resp.json())
+                    .then(data => {
+                        console.log(data);
+                        if(data != null){
+                            alert('답변이 등록되었습니다.')
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            })
+        </script>
+</th:block>

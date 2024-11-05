@@ -49,7 +49,11 @@
         </aside>
 
         <div class="center">
-            <div class="ad">900x86 배너광고</div>
+            <div class="ad" th:each="banner : ${banners}" th:if="${banner.ban_location} == '마이페이지 배너'">
+                <a th:href="${banner.ban_link}" target="_blank">
+                    <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
+                </a>
+            </div>
 
             <div class="details">
                 <p>최근주문내역</p>
@@ -154,7 +158,6 @@
                     <tr class="font">
                         <th>번호</th>
                         <th>상품명</th>
-                        <th>내용</th>
                         <th>평점</th>
                         <th>작성일</th>
 
@@ -163,23 +166,31 @@
                     <tr class="tr3">
                         <td th:text="${review.reviewId}"><data value="">1</data></td>
                         <td>
-                            <data value="">
-                                <div class="product-container">
-                                    <div class="eximg2">
-                                        <!-- 첫 번째 ReviewFile의 sname을 사용하여 이미지 표시 -->
-                                        <img th:if="${review.getPReviewFiles().size() > 0}"
-                                             th:src="@{'/uploads/ReviewImg/' + ${review.getPReviewFiles()[0].sname}}"
-                                             alt="상품 이미지">
-                                        <span th:if="${review.getPReviewFiles().size() == 0}" class="no-image-text">이미지 없음</span>
+                            <div class="product-container">
+                                <div class="eximg2">
+                                    <!-- 첫 번째 ReviewFile의 sname을 사용하여 이미지 표시 -->
+                                    <img th:if="${review.getPReviewFiles().size() > 0}"
+                                         th:src="@{'/uploads/ReviewImg/' + ${review.getPReviewFiles()[0].sname}}"
+                                         alt="상품 이미지">
+                                    <!-- 이미지가 없는 경우 "이미지 없음" 텍스트 표시 -->
+                                    <span th:if="${review.getPReviewFiles().size() == 0}" class="no-image-text">이미지 없음</span>
+                                </div>
+
+                                <div class="product-info">
+                                    <div>
+                                        <p>상품번호</p><br>
+                                        <span class="truncate" th:text="${review.product.productId}">123456</span>
                                     </div>
-                                    <div class="Pinf2">
-                                        <p>상품번호<br> <span th:text="${review.product.productId}">123456</span></p>
-                                        <p>상품명<br> <span th:text="${review.product.productName}">치킨</span></p>
+                                    <div>
+                                        <p>상품명</p><br>
+                                        <span class="truncate" th:text="${review.product.productName}">치킨</span>
+                                    </div>
+                                    <div>
+                                        <p>리뷰</p><br>
+                                        <span class="truncate" th:text="${review.content}">배송이 빠릅니다. 잘 사용하겠습니다.</span>
                                     </div>
                                 </div>
-                            </data>
-                        </td>
-                        <td><data th:text="${review.content}">배송이 빠릅니다. 잘 사용하겠습니다.</data></td>
+                            </div>
                         <td>
                             <data class="rating-display" th:text="${review.rating}">평점</data>
                         </td>

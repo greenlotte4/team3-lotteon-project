@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/userLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[${headerInfo.hd_title}]]:[[${headerInfo.hd_subtitle}]]</title>
+    <link  rel="stylesheet" th:href="@{/css/user/findid.css}">
+
+</head>
+<body>
+<th:block layout:fragment="content">
+    <main>
+        <section class="findid-section">
+            <h2>아이디 찾기</h2>
+            <hr>
+            <form method="post" th:action="@{/user/findid}" id="findIdForm">
+                <div class="table">
+                    <table>
+                        <div>
+                            <label class="name" name="name">이름</label>
+                        </div>
+                        <div>
+                            <input class="nametext" type="text" name="name" id="name" placeholder="이름 입력" required>
+                        </div>
+                        <div>
+                            <label class="email" name="email">이메일</label>
+                        </div>
+                        <div>
+                            <input class="emailtext" id="email" type="email" placeholder="이메일 입력">
+                            <button type="button" class="getCodeBtn" id="sendCodeBtn">인증번호 받기</button>
+
+                            <input class="verificationCodetext" id="verificationCode" type="text" placeholder="인증번호 입력">
+                            <button type="button" class="verificationCode" id="verifyCodeBtn">확인</button>
+                            <span id="resultEmail" class="validationMessage"></span>
+
+                        </div>
+                    </table>
+                </div>
+                <div class="note">
+                    회원가입시 이메일 주소와 입력한 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.
+                    <br>인증번호를 입력 후 확인 버튼을 누르세요.
+                </div>
+                <div class="bottom">
+                    <button type="button" class="cancelBtn">취소</button>
+                    <button type="button" class="nextBtn" id="nextBtn" disabled>다음</button>  <!-- 기본적으로 비활성화 -->
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('sendCodeBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            console.log("AAAA")
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const resultEmail = document.getElementById('resultEmail'); // 결과 메시지를 표시할 span
+
+            console.log('name:' + name)
+            console.log('email:' + email)
+            if (name && email) {
+                fetch('/api/sendVerifyCode', {  // 정적 경로가 아닌 API 경로로 수정
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({name: name, email: email})
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error("인증코드 보내기 실패")
+                    }else{
+                        showResultValid(resultEmail, '인증코드가 발송되었습니다.');
+
+                    }
+
+                    document.getElementById('verificationCode').style.display = 'block';
+                    document.getElementById('verifyCodeBtn').style.display = 'block';
+
+                })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('인증번호 발송 중 오류가 발생했습니다.');
+                    });
+            } else {
+                alert('이름과 이메일을 입력하세요.');
+            }
+        });
+
+        document.getElementById('verifyCodeBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const resultEmail = document.getElementById('resultEmail'); // 결과 메시지를 표시할 span
+
+            const code = document.getElementById('verificationCode').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            if (code) {
+                fetch('/api/verifyCode', {  // 정적 경로가 아닌 API 경로로 수정
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({code: code, name: name, email: email})
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error("인증코드 검증 실패")
+                    }
+                    showResultValid(resultEmail, '인증이 완료되었습니다.');
+
+                    document.getElementById('nextBtn').disabled = false;  // "다음" 버튼 활성화
+                    document.getElementById('nextBtn').addEventListener('click', function () {
+                        const name = document.getElementById('name').value;
+                        const email = document.getElementById('email').value;
+
+                        console.log('이름:', name);
+                        console.log('이메일:', email);
+
+                        // POST 요청 보내기
+                        fetch('/user/findid', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ name: name, email: email }) // JSON 형식으로 전송
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("HTTP 에러: " + response.status);
+                                }
+                                return response.json(); // JSON으로 응답 처리
+                            })
+                            .then(member => {
+                                console.log('찾은 사용자:', member);
+                                // 결과 페이지로 이동
+                                window.location.href = '/user/findresult'; // 결과 페이지로 이동
+                            })
+                            .catch(error => {
+                                console.error('에러 발생:', error);
+                                alert('사용자 정보를 찾는 중 오류가 발생했습니다. ' + error.message);
+                            });
+                    });
+                }).catch(error => {
+                    console.error(error)
+                    alert('인증번호가 일치하지 않습니다.');
+                })
+            } else {
+                alert('인증번호를 입력하세요.');
+            }
+        });
+
+        // 유효성 검사 메시지 출력 함수
+        function showResultInvalid(element, message) {
+            element.textContent = message;
+            element.style.color = 'red';
+        }
+
+        function showResultValid(element, message) {
+            element.textContent = message;
+            element.style.color = 'green';
+        }
+
+
+        document.querySelector(".cancelBtn").addEventListener("click", function () {
+            window.location.href = "/login";  // 로그인 페이지로 리다이렉트
+        });
+
+
+    </script>
+</th:block>
