@@ -24,7 +24,7 @@
             <div class="slider-wrapper">
                 <div class="slide" th:each="banner : ${banners}" th:if="${banner.ban_location} == '상품 상세보기 배너'">
                     <a th:href="${banner.ban_link}" target="_blank">
-                       <!-- <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt=""> css 수정필요 -->
+                        <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
                     </a>
                 </div>
             </div>

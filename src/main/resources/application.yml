@@ -25,7 +25,7 @@ spring:
         restart:
             enabled: false
     profiles:
-        active: default
+        active: prod
         include: local
     application:
         name: LotteOnProject-3조

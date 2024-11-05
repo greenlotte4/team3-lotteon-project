@@ -4,6 +4,13 @@
 
 <header id="header">
     <div class="headerIn">
+        <div class="headerBanner">
+            <div class="headerslide" th:each="banner : ${banners}" th:if="${banner.ban_location} == '메인 상단 배너'">
+                <a th:href="${banner.ban_link}" target="_blank">
+                    <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
+                </a>
+            </div>
+        </div>
         <div class="util innerContent">
             <div class="accountArea">
                 <ul>
