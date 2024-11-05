@@ -5,6 +5,7 @@ import com.lotteon.dto.adminQnaDTO;
 import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.entity.BoardCate;
+import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.service.BoardService;
 import com.lotteon.service.admin.QnaService;
 import lombok.AllArgsConstructor;
@@ -78,7 +79,7 @@ public class AdminQnaController {
             model.addAttribute("qna", adminQnaDTO);
             return "content/admin/qna/qnaReply";
         } else {
-            model.addAttribute("adminQnaDTO", adminQnaDTO);
+            model.addAttribute("qna", adminQnaDTO);
             return "content/admin/qna/qnaView";
         }
     }
@@ -86,11 +87,10 @@ public class AdminQnaController {
     @ResponseBody
     @PostMapping("/reply")
     public ResponseEntity<?> adminQnaReply(@RequestParam int no , @RequestBody adminQnaDTO adminQnaDTO){
-        adminQnaDTO qnadto= qnaService.selectQna(no);
-        qnadto.setQnareply(adminQnaDTO.getQnareply());
+        Adminqna adminqna = qnaService.replyQna(no,adminQnaDTO);
 
-        log.info("와랄 : " + qnadto);
-        return ResponseEntity.ok().body(qnadto);
+        log.info("와랄 : " + adminqna);
+        return ResponseEntity.ok().body(adminqna);
     }
 
 }
