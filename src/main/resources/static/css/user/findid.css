@@ -1,3 +1,10 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
 .findid-section {
     width: 520px;
     margin: 76px auto 60px;
@@ -9,13 +16,19 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.findid-section > img {
+    display: block;
+    margin: 0 auto;
+}
+
 .findid-section > h2 {
     font-size: 24px;
-    margin-bottom: 16px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     text-align: center;
     color: #333;
-    background: url("/static/images/common/footer-img-logo-1-2023.png");
 }
+
 
 hr {
     border: none;
