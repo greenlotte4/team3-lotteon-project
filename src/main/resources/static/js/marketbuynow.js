@@ -802,6 +802,7 @@ function displayCoupons(coupons) {
                <div class="discount-coupon-info">
                     <div class="discount-amount">${coupon.couponName} (${coupon.benefit})</div>
                     <div class="discount-description">${coupon.notes}</div>
+                    <div class="discount-restrictions">${coupon.restrictions}</div>
                     <div class="discount-dates">
                         <span>유효기간: ${coupon.startDate} ~ ${coupon.endDate}</span>
                     </div>

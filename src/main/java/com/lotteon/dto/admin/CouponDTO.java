@@ -25,6 +25,7 @@ public class CouponDTO {
     private String status; // 상태
     private String notes;
     private LocalDate rdate; // 발급일
+    private String restrictions;
 
     private Long productId;
     private Long sellerId;

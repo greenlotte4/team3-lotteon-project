@@ -31,104 +31,34 @@
     <table class="coupon-table">
         <thead>
             <tr>
-                <th>발급번호</th>
-                <th>쿠폰번호</th>
-                <th>쿠폰종류</th>
-                <th>쿠폰명</th>
-                <th>사용자</th>
-                <th>상태</th>
-                <th>사용일</th>
-                <th>관리</th>
+                <th style="text-align: center;">발급번호</th>
+                <th style="text-align: center;">쿠폰번호</th>
+                <th style="text-align: center;">쿠폰종류</th>
+                <th style="text-align: center;">쿠폰명</th>
+                <th style="text-align: center;">사용자</th>
+                <th style="text-align: center;">상태</th>
+                <th style="text-align: center;">사용일</th>
+                <th style="text-align: center;">관리</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><a href="#" class="order-link">6942147241</a></td>
-                <td>9042037249</td>
-                <td>상품 할인</td>
-                <td>배송비 무료 쿠폰</td>
-                <td>poooodoooo</td>
-                <td class="status-ongoing">미사용</td>
-                <td>2024.10.18 10:00:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-            
-            <tr>
-                <td><a href="#" class="order-link">6942147241</a></td>
-                <td>9042037249</td>
-                <td>상품 할인</td>
-                <td>배송비 무료 쿠폰</td>
-                <td>newjeans</td>
-                <td class="status-ongoing">미사용</td>
-                <td>2024.10.18 10:00:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
+        <!-- 쿠폰 리스트 출력 -->
+        <tr th:if="${#lists.isEmpty(IssuedList)}">
+            <td colspan="8" style="text-align: center;">발급된 쿠폰이 없습니다.</td>
+        </tr>
+        <tr th:each="Issued : ${IssuedList}">
+            <td><a href="#" class="order-link" th:text="${Issued.issuanceNumber}"></a></td>
+            <td th:text="${Issued.couponId}"></td>
+            <td th:text="${Issued.couponType}"></td>
+            <td th:text="${Issued.couponName}"></td>
+            <td th:text="${Issued.memberName}"></td>
+            <td th:text="${Issued.status}"></td>
+            <td th:text="${Issued.usageDate != null ? Issued.usageDate : '미사용'}"></td>
+            <td>
+                <button class="end-button" th:attr="data-id=${Issued.issuanceNumber}">종료</button>
+            </td>
+        </tr>
 
-            <tr>
-                <td><a href="#" class="order-link">6942147241</a></td>
-                <td>9042037249</td>
-                <td>상품 할인</td>
-                <td>배송비 무료 쿠폰</td>
-                <td>soogooood</td>
-                <td class="status-ongoing">미사용</td>
-                <td>2024.10.18 10:00:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-
-            <tr>
-                <td><a href="#" class="order-link">6942147241</a></td>
-                <td>9042037249</td>
-                <td>상품 할인</td>
-                <td>배송비 무료 쿠폰</td>
-                <td>boogi</td>
-                <td class="status-ongoing">미사용</td>
-                <td>2024.10.18 10:00:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-
-            <tr>
-                <td><a href="#" class="order-link">6942147241</a></td>
-                <td>9042037249</td>
-                <td>상품 할인</td>
-                <td>배송비 무료 쿠폰</td>
-                <td>boogi</td>
-                <td class="status-ongoing">미사용</td>
-                <td>2024.10.18 10:00:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-
-            <tr>
-                <td><a href="#" class="order-link">6942147241</a></td>
-                <td>9042037249</td>
-                <td>상품 할인</td>
-                <td>배송비 무료 쿠폰</td>
-                <td>boogi</td>
-                <td class="status-ending">사용</td>
-                <td>2024.10.18 10:00:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-
-            <tr>
-                <td><a href="#" class="order-link">6942147241</a></td>
-                <td>9042037249</td>
-                <td>상품 할인</td>
-                <td>배송비 무료 쿠폰</td>
-                <td>qwer1212</td>
-                <td class="status-ending">사용</td>
-                <td>2024.10.18 10:00:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
-            
-            <tr>
-                <td><a href="#" class="order-link">6942147241</a></td>
-                <td>9042037249</td>
-                <td>상품 할인</td>
-                <td>배송비 무료 쿠폰</td>
-                <td>kikiki7</td>
-                <td class="status-ending">사용</td>
-                <td>2024.10.18 10:00:00</td>
-                <td><button class="end-button">종료</button></td>
-            </tr>
         </tbody>
     </table>
 

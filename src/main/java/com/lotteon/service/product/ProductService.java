@@ -110,6 +110,9 @@ public class ProductService {
         ProductDTO productDTO = insertProduct.getProduct();
         SellerDTO seller = sellerService.getSeller(productDTO.getSellerId());
         productDTO.setSellerNo(seller.getId());
+        productDTO.setHit(0L);
+        productDTO.setPoint(0);
+        productDTO.setSold(0L);
         Product product= modelMapper.map(productDTO, Product.class);
         Optional<ProductCategory> opt = productCategoryRepository.findById(product.getCategoryId());
         ProductCategory productCategory=null;

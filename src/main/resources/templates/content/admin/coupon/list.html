@@ -36,17 +36,17 @@
     <table class="coupon-table">
         <thead>
             <tr>
-                <th>쿠폰번호</th>
-                <th>쿠폰종류</th>
-                <th>쿠폰명</th>
-                <th>혜택</th>
-                <th>사용기간</th>
-                <th>발급자</th>
-                <th>발급수</th>
-                <th>사용수</th>
-                <th>상태</th>
-                <th>발급일</th>
-                <th>관리</th>
+                <th style="text-align: center;">쿠폰번호</th>
+                <th style="text-align: center;">쿠폰종류</th>
+                <th style="text-align: center;">쿠폰명</th>
+                <th style="text-align: center;">혜택</th>
+                <th style="text-align: center;">사용기간</th>
+                <th style="text-align: center;">발급자</th>
+                <th style="text-align: center;">발급수</th>
+                <th style="text-align: center;">사용수</th>
+                <th style="text-align: center;">상태</th>
+                <th style="text-align: center;">발급일</th>
+                <th style="text-align: center;">관리</th>
             </tr>
         </thead>
         <tbody>
@@ -180,7 +180,7 @@
                                                 <option value="gift" th:if="${userRoles.contains('ROLE_ADMIN')}">주문상품할인</option>
                                                 <option value="free" th:if="${userRoles.contains('ROLE_ADMIN')}">배송비 무료</option>
                                             </select>
-                                            <select id="productSelect">
+                                            <select id="productSelect" >
                                                 <option value="" disabled selected>쿠폰 적용상품</option>
                                             </select>
                                         </td>
@@ -190,6 +190,7 @@
                                         <td><input type="text" id="couponName" name="couponName"
                                                    placeholder="쿠폰명 입력"></td>
                                     </tr>
+
                                     <tr>
                                         <td><label>혜택</label></td>
                                         <td>
@@ -217,6 +218,12 @@
                                                 <label><input type="radio" name="benefit"
                                                               value="freeShipping"> 배송비 무료</label>
                                             </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="restrictions">적용 기준</label></td>
+                                        <td>
+                                            <input type="text" id="restrictions" name="restrictions" placeholder="1000원 단위로 입력해 주세요(숫자만 입력해 주세요)"/>
                                         </td>
                                     </tr>
                                     <tr>

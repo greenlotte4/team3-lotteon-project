@@ -40,6 +40,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,9 +147,18 @@ public class AdminCouponController {
 
     @GetMapping("/issued")
     public String adminIssuedModify(Model model) {
+        log.info("쿠폰 발급 목록을 요청했습니다.");
 
+        // 모든 발급된 쿠폰 목록 조회
+        List<CouponIssued> issuedList = couponIssuedService.couponIssuedList();
+
+        log.info("발급 된 쿠폰 목록: {}", issuedList);
+
+        // 모델에 발급된 쿠폰 리스트 담기
+        model.addAttribute("IssuedList", issuedList);
         return "content/admin/coupon/issued";
     }
+
 
     @GetMapping("/{productId}")
     public ResponseEntity<List<CouponDTO>> getCouponsForProduct(@PathVariable Long productId) {
@@ -211,6 +221,8 @@ public class AdminCouponController {
         Product product = coupon.getProduct();
 
         couponIssuedService.insertCouponIssued(member, coupon, product);
+
+        couponIssuedService.useCoupon(couponId);
 
         CouponDTO couponDTO = new CouponDTO();
         couponDTO.setCouponId(coupon.getCouponId());

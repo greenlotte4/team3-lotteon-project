@@ -79,6 +79,7 @@ public class CouponService {
                 .couponType(couponDTO.getCouponType())
                 .benefit(couponDTO.getBenefit())
                 .startDate(couponDTO.getStartDate())
+                .restrictions(couponDTO.getRestrictions() + "원 이상적용가능")
                 .endDate(couponDTO.getEndDate())
                 .notes(couponDTO.getNotes())
                 .issuedCount(0) // 발급수 초기화
