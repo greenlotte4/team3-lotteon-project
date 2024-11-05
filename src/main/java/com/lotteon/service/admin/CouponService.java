@@ -64,13 +64,18 @@ public class CouponService {
                 .orElseThrow(() -> new RuntimeException("Seller not found for username: " + loggedInUserUid));
 
         Product product = null;
-        if ("individual".equals(couponDTO.getCouponType()) && couponDTO.getProductId() != null) {
+        if ("discount".equals(couponDTO.getCouponType()) && couponDTO.getProductId() != null) {
             product = productRepository.findById(couponDTO.getProductId())
                     .orElseThrow(() -> new RuntimeException("Product not found for ID: " + couponDTO.getProductId()));
         }
+        String couponName = couponDTO.getCouponName();
+            // 상품이 null일 경우, 쿠폰 이름에 "전체상품 적용"을 추가
+        if (product == null) {
+           couponName = "[전체상품 적용]" + couponName;
+        }
         Coupon coupon = Coupon.builder()
                 .couponId(randomCouponId())
-                .couponName(couponDTO.getCouponName())
+                .couponName(couponName)
                 .couponType(couponDTO.getCouponType())
                 .benefit(couponDTO.getBenefit())
                 .startDate(couponDTO.getStartDate())

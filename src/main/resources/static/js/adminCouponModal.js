@@ -129,8 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         console.log("Selected Product ID:", selectedProductId);
 
-
-        console.log("쿠폰데이터:", couponData)
+        console.log("쿠폰 데이터 전송:", JSON.stringify(couponData)); // JSON 데이터 확인
 
         fetch('/seller/coupon/register', {
             method: 'POST',

@@ -43,7 +43,7 @@ public class Coupon {
     @JsonIgnore
     private Seller seller; // 발급자
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @JsonBackReference
     private Product product;
@@ -53,8 +53,5 @@ public class Coupon {
     private List<CouponIssued> issuedCoupons;
 
     // 새로운 메서드 추가
-    public Long getProductId() {
-        return product != null ? product.getProductId() : null;
-    }
 
 }
