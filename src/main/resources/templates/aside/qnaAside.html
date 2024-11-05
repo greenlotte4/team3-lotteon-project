@@ -2,13 +2,9 @@
     <h1>문의하기</h1>
     <div class="aside_list">
         <ul>
-            <li><a th:href="@{/cs/qna/list(cate='1')}">회원</a></li>
-            <li><a th:href="@{/cs/qna/list(cate='2')}">쿠폰/이벤트</a></li>
-            <li><a th:href="@{/cs/qna/list(cate='3')}">주문/결제</a></li>
-            <li><a th:href="@{/cs/qna/list(cate='4')}">배송</a></li>
-            <li><a th:href="@{/cs/qna/list(cate='5')}">취소/반품/교환</a></li>
-            <li><a th:href="@{/cs/qna/list(cate='6')}">여행/숙박/항공</a></li>
-            <li><a th:href="@{/cs/qna/list(cate='7')}">안전거래</a></li>
+            <li th:each="board : ${boardCate}">
+                <a href="#" class="selectOption" th:data-id="${board.boardCateId}" th:text="${board.name}"></a>
+            </li>
             <li class="myqnaList">
                 <th:block th:if="${#authentication.name != 'anonymousUser'}">
                     <input type="hidden" name="uid" id="uid" th:value="${#authentication.getName()}">

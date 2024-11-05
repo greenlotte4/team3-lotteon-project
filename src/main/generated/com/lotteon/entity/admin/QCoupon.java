@@ -26,6 +26,8 @@ public class QCoupon extends EntityPathBase<Coupon> {
 
     public final StringPath couponId = createString("couponId");
 
+    public final ListPath<CouponIssued, QCouponIssued> CouponIssued = this.<CouponIssued, QCouponIssued>createList("CouponIssued", CouponIssued.class, QCouponIssued.class, PathInits.DIRECT2);
+
     public final StringPath couponName = createString("couponName");
 
     public final StringPath couponType = createString("couponType");
@@ -34,13 +36,13 @@ public class QCoupon extends EntityPathBase<Coupon> {
 
     public final NumberPath<Integer> issuedCount = createNumber("issuedCount", Integer.class);
 
-    public final ListPath<CouponIssued, QCouponIssued> issuedCoupons = this.<CouponIssued, QCouponIssued>createList("issuedCoupons", CouponIssued.class, QCouponIssued.class, PathInits.DIRECT2);
-
     public final StringPath notes = createString("notes");
 
     public final com.lotteon.entity.product.QProduct product;
 
     public final DatePath<java.time.LocalDate> rdate = createDate("rdate", java.time.LocalDate.class);
+
+    public final StringPath restrictions = createString("restrictions");
 
     public final com.lotteon.entity.User.QSeller seller;
 

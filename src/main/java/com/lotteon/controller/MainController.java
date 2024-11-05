@@ -22,8 +22,9 @@ public class MainController {
     public String index(Model model){
 
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         log.info("gdgd :" + banners);
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "mainIndex";
     }
 
