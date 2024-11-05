@@ -52,34 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
             updateSelectResult();
         }
     });
-    // Listen for changes in the first option group
-    optionSelectElements[0].addEventListener('change', function () {
-        const selectedOptionValue = this.options[this.selectedIndex].value;
 
-        // Filter combinations based on the selected option in the first group
-        const matchingCombinations = optionCombinations.filter(combination =>
-            combination.options.some(option => option.groupName === 'Group1' && option.optionName === selectedOptionValue)
-        );
-
-        // For each subsequent option group, update the additional price
-        optionSelectElements.forEach((select, index) => {
-            if (index === 0) return; // Skip the first group
-
-            // Loop through each option in the current group and update additionalPrice based on matching combinations
-            Array.from(select.options).forEach(option => {
-                const matchingOption = matchingCombinations.find(combination =>
-                    combination.options.some(opt => opt.groupName === select.getAttribute('data-groupname') && opt.optionName === option.value)
-                );
-
-                // Set the additionalPrice if a matching option is found
-                if (matchingOption) {
-                    const additionalPrice = matchingOption.options.find(opt => opt.optionName === option.value)?.additionalPrice || 0;
-                    option.setAttribute('data-additionalprice', additionalPrice);
-                    option.textContent = `${option.value} (+${additionalPrice}원)`;
-                }
-            });
-        });
-    });
 
     optionSelectElements.forEach((select, index) => {
         select.addEventListener('change', function () {
@@ -583,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.style.display = "none";
     }
 
-}
+});
 
 
 function fetchCoupons(productId) {
@@ -652,7 +625,7 @@ function displayErrorMessage(message) {
         }
     }
 
-}
+
 
 function applyCoupon(couponId){
 

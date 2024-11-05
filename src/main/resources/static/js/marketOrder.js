@@ -255,6 +255,8 @@ document.addEventListener('DOMContentLoaded', function () {
         usedPointResultspan.innerText = limitedUsedPoint;
         usedCouponResult.textContent = couponDiscount;
 
+
+
         // Total discount including product discounts, coupon, and used points
         totalDiscount = totalProductDiscount();   // 상품 할인금액
         totalDiscountPandC = limitedUsedPoint + couponDiscount;   // 쿠폰 및 포인트 사용금액
@@ -409,12 +411,34 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Product Data Array Before Order Submission:", productDataArray);
 
 
+    const orderBtn = document.querySelector('.order-Btn');
+    const receiverInput = document.getElementById('receiver');
+    const hpInput = document.getElementById('hp');
+// Function to validate all required fields
+    function validateOrderForm() {
+        const address = addressElement.getAttribute("data-addr") || '';
+        const shippingInfo = getSelectedShippingInfo();
+        const paymentSelected = Array.from(paymentOptions).some(option => option.checked);
+        const receiver = receiverInput.value.trim();
+        const hp = hpInput.value.trim();
+        const postcode = postcodeElement.getAttribute("data-postcode") || '';
+
+        // Check if any required fields are empty
+        if (!address || !shippingInfo || !paymentSelected || !receiver || !hp || !postcode) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
     updateOrderItem();
     console.log(orderItem);
     document.querySelector('.order-Btn').addEventListener('click', function (event) {
         event.preventDefault();  // 기본 제출 동작 방지
 
-        if (productDataArray.length > 0) {
+        if (productDataArray.length > 0 && validateOrderForm()) {
             const isConfirm = confirm("주문하시겠습니까?");
             if(isConfirm){
                 updateOrderItem();
@@ -435,6 +459,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             window.location.href = '/market/completed/'+data.result; // 완료 후 페이지 이동
                         } else {
                             alert('주문 처리 중 오류가 발생했습니다.');
+                            alert("모든 필수 항목을 채워주세요: 수령자 정보, 주소, 배송 요청사항, 결제수단");
+
                         }
                     })
                     .catch(error => {
@@ -442,7 +468,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         alert('서버와의 통신 중 오류가 발생했습니다.');
                     });
             }
-        }else {
+        }else if(!validateOrderForm()){
+            alert('주문정보를 확인해주세요');
+        } else {
             alert('주문할 상품이 없습니다.');
         }
     });
