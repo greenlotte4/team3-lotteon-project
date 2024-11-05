@@ -224,6 +224,7 @@ public class AdminCouponController {
 
         couponIssuedService.useCoupon(couponId);
 
+
         CouponDTO couponDTO = new CouponDTO();
         couponDTO.setCouponId(coupon.getCouponId());
         couponDTO.setCouponName(coupon.getCouponName());

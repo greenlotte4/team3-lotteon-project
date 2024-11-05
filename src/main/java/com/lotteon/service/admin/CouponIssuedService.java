@@ -89,6 +89,7 @@ public void useCoupon(String issuanceNumber){
                     .couponId(coupon.getCouponId())
                     .couponName(couponName)
                     .restrictions(coupon.getRestrictions())
+
                     .couponType(coupon.getCouponType())
                     .memberName(member.getName())
                     .member(member)
@@ -96,7 +97,6 @@ public void useCoupon(String issuanceNumber){
                     .build();
         log.info("널인 쿠폰 저장되는 값들" + couponIssued);
         couponIssuedRepository.save(couponIssued); // 엔티티 저장
-
         coupon.setIssuedCount(coupon.getIssuedCount() + 1);
         couponRepository.save(coupon);
     } else{

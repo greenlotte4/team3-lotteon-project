@@ -32,7 +32,7 @@
                                 <!-- Product Image -->
                                 <div class="product-image">
                                         <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
-                                    <img th:src="@{'/uploads/productImg/'+${products.file456}}" alt="상품 이미지">
+                                    <img th:src="@{'/uploads/'+${products.file456}}" alt="상품 이미지">
                                     <input type="hidden" th:value="${products.file190}" id="file190">
                                 </div>
 
@@ -82,6 +82,7 @@
 
                                     </div>
 
+
                                     <div class="purchase-options">
                                         <div th:if="${!products.optionGroups.isEmpty()}">
                                             <!-- 옵션 그룹 반복 -->
@@ -93,8 +94,8 @@
                                                     <!-- 옵션 항목 반복 -->
                                                     <!-- 각 OptionItem을 반복 -->
                                                     <th:block th:each="optionItem : ${group.getOptionItems()}">
-                                                        <option th:value="${optionItem.optionName}" th:data-additionalprice="${optionItem.additionalPrice}">
-                                                            [[${optionItem.optionName}]]
+                                                        <option th:value="${optionItem.optionName}" th:data-additionalprice="${optionItem.additionalPrice}" th:data-item-id="${optionItem.getItem_id()}">
+                                                            [[${optionItem.optionName}]] <th:block th:if="${optionItem.additionalPrice >0}"> (추가금액 : [[${optionItem.additionalPrice}]])</th:block>
                                                         </option>
                                                     </th:block>
                                                 </select>
@@ -102,9 +103,14 @@
                                             </th:block>
                                         </div>
                                     </div>
+                                    <div id="stockStatus"></div>
 
                                     <!-- 수량 선택 및 선택된 옵션 표시 -->
                                     <div class="total" id="totalQuantity">
+                                        <span class="selectResult">
+
+
+                                        </span>
                                         <div class="quantity-control">
                                             <button type="button" id="decrease">-</button>
                                             <input type="number" id="quantity" value="1" min="1">
@@ -112,9 +118,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="selectedProduct">
-                                        <span class="selectResult"></span>
-                                    </div>
 
 
 
@@ -122,7 +125,7 @@
                                         <button id="couponBtn">할인 쿠폰을 받아보세요</button>
                                     </div>-->
 
-                                    <div class="coupon-area">
+                                    <div class="coupon-area" >
                                         <button id="openDiscountModalBtn">할인 쿠폰을 받아보세요</button>
                                     </div>
 
@@ -144,7 +147,7 @@
                                     <div class="expectedTotal">
 
                                         <div><label for="originalTotalPrice" class="originalTotalPrice">총 상품금액:</label><span id="originalTotalPrice" class="originalTotalPrice"></span></div>
-                                        <div><label for="additionalPrice"  class="additionalPrice">└ 추가 금액:</label><span id="additionalPrice" class="additional-Price"></span></div>
+                                        <div><label for="additionalPrice"  class="additionalPrice">└ 추가 금액:</label><span id="additionalPrice" class="additionalPrice"></span></div>
                                         <div><label for="totalPrice"  class="totalPrice">└ 할인 금액:</label><span id="totalPrice" class="total-price"></span></div>
                                         <div><label for="totalShippingFee" class="totalShippingFee">└ 배송비 :</label><span class="totalShippingFee" id="totalShippingFee"></span></div>
                                         <div><label for="expectedPrice" class="expectedPrice">결제 예상금액 : </label><span class="expectedPrice" id="expectedPrice"> </span></div>

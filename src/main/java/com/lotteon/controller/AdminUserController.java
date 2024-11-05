@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.User.Grade;
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.User.UserDTO;
 import com.lotteon.entity.User.Member;
@@ -104,9 +105,11 @@ public class AdminUserController {
     @PostMapping("/member/updateGrade")
     public ResponseEntity<Map<String, String>> updateGrade(@RequestBody Map<String, String> request) {
         String uid = request.get("uid"); // UID 가져오기
-        String grade = request.get("grade"); // 새 등급 가져오기
+        Grade grade = Grade.valueOf(request.get("grade")); // 새 등급 가져오기
 
         log.info("uid: " + uid + " grade: " + grade);
+
+
 
         Optional<Member> existingMemberOpt = memberService.findByUserId(uid);
         if (existingMemberOpt.isPresent()) {

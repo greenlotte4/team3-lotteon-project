@@ -4,6 +4,13 @@
 
 <header id="header">
     <div class="headerIn">
+        <div class="headerBanner">
+            <div class="headerslide" th:each="banner : ${banners}" th:if="${banner.ban_location} == '메인 상단 배너'">
+                <a th:href="${banner.ban_link}" target="_blank">
+                    <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
+                </a>
+            </div>
+        </div>
         <div class="util innerContent">
             <div class="accountArea">
                 <ul>
@@ -13,12 +20,7 @@
 
                     <!-- 로그인된 경우 -->
                     <li th:if="${#authentication.name != 'anonymousUser'}">
-                        <!-- 판매자 로그인 시 -->
-                        <span th:if="${#authorization.expression('hasRole(''ROLE_SELLER'')')}">
-                        <span style="margin-right: 10px;">관리자님 환영합니다!</span>
-                        </span>
 
-                        <!-- 일반 사용자 로그인 시 -->
                         <span th:elseif="${#authorization.expression('hasRole(''ROLE_MEMBER'')')}">
 <!--                         + ${userName} + -->
                           <span style="margin-right: 10px;" >[[${memberName}]]님 환영합니다!</span>
