@@ -15,6 +15,10 @@ public class CouponDetailsController {
     @GetMapping
     public String getCouponDetails() {
         // 단순히 couponDetail.html을 반환
+
+
+
+
         return "content/user/coupondetails"; // HTML 경로 (확장자 제외)
     }
 }

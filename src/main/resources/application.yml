@@ -4,17 +4,17 @@ logging:
 
     level:
         jdbc:
-            resultsettable: debug
-            sqlonly: debug
-            sqltiming: debug
+            resultsettable: info
+            sqlonly: info
+            sqltiming: info
         org:
             hibernate:
                 orm:
                     jdbc:
                         bind: trace
-                sql: debug
+                sql: info
         root: info
-        org.springframework.web: DEBUG
+        org.springframework.web: info
 server:
     port: 8085
     servlet:
@@ -25,7 +25,7 @@ spring:
         restart:
             enabled: false
     profiles:
-        active: prod
+        active: default
         include: local
     application:
         name: LotteOnProject-3조
