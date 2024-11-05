@@ -51,8 +51,9 @@ public class AdminController {
     @GetMapping("/config/banner")
     public String bannerList(Model model) {
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         log.info("gdgd :" + banners);
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/admin/config/admin_Banner";
     }
 

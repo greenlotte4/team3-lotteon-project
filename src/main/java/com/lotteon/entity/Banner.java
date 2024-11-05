@@ -28,10 +28,10 @@ public class Banner {
     private String ban_location;
     private String ban_oname;
 
-    private LocalDate ban_sdate;
-    private LocalDate ban_edate;
-    private LocalTime ban_stime;
-    private LocalTime ban_etime;
+    private String ban_sdate;
+    private String ban_edate;
+    private String ban_stime;
+    private String ban_etime;
 
     private int status;
 

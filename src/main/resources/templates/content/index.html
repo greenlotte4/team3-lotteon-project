@@ -7,7 +7,7 @@
                     </span>
                 <div class="slider-container">
                     <div class="slider-wrapper">
-                        <div class="slide" th:each="banner : ${banners}">
+                        <div class="slide" th:each="banner : ${banners}" th:if="${banner.ban_location} == '메인 슬라이더 배너'">
                             <a th:href="${banner.ban_link}" target="_blank">
                                 <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
                             </a>

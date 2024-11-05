@@ -48,7 +48,8 @@ public class UserController {
 
         }
         List<BannerDTO> banners = adminService.selectAllbanner();
-        model.addAttribute("banners", banners);
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
+        model.addAttribute("banners", banners2);
 
         model.addAttribute("content", "login");
         return "content/user/login"; // Points to "content/user/login"

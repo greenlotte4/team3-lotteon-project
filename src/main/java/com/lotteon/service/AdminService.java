@@ -9,8 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,6 +38,39 @@ public class AdminService {
 
         return bannerDTOs;
     }
+
+    public List<BannerDTO> getActiveBanners() {
+        LocalDateTime now = LocalDateTime.now();
+
+        return bannerRepository.findAll().stream()
+                .filter(banner -> {
+                    // 배너의 날짜 및 시간 값이 null인지 확인
+                    if (banner.getBan_sdate() == null || banner.getBan_edate() == null ||
+                            banner.getBan_stime() == null || banner.getBan_etime() == null) {
+                        return false; // 하나라도 null이면 필터링
+                    }
+
+                    // 배너가 표시될 날짜 범위를 설정
+                    LocalDate startDate = LocalDate.parse(banner.getBan_sdate());
+                    LocalDate endDate = LocalDate.parse(banner.getBan_edate());
+
+                    // 배너가 표시될 시간 범위를 설정
+                    LocalTime startTime = LocalTime.parse(banner.getBan_stime());
+                    LocalTime endTime = LocalTime.parse(banner.getBan_etime());
+
+                    // 현재 날짜가 시작 날짜와 종료 날짜 사이에 있는지 확인
+                    boolean isDateInRange = !now.toLocalDate().isBefore(startDate) && !now.toLocalDate().isAfter(endDate);
+
+                    // 현재 시간이 지정된 시간대에 있는지 확인
+                    boolean isTimeInRange = (now.toLocalTime().isAfter(startTime) || now.toLocalTime().equals(startTime)) &&
+                            (now.toLocalTime().isBefore(endTime) || now.toLocalTime().equals(endTime));
+
+                    return isDateInRange && isTimeInRange;
+                })
+                .map(banner -> modelMapper.map(banner, BannerDTO.class))
+                .collect(Collectors.toList());
+    }
+
 
     public void deleteCheck(List<Integer> data){
         for (Integer id : data) {

@@ -63,8 +63,8 @@
         <section class="terms">
             <div class="articles">
                 <div th:each="term : ${termsList}">
-                    <h3 th:text="${term.title}">약관 제목</h3>
-                    <p th:text="${term.content}">약관 내용</p>
+<!--                    <h3 th:text="${term.title}">약관 제목</h3>-->
+                    <p th:utext="${term.content}">약관 내용</p>
                 </div>
             </div>
         </section>
