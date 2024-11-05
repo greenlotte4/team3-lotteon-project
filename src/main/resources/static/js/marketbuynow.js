@@ -516,27 +516,13 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById("expectedPrice").innerText = `${expectedPrice.toLocaleString()}원`;
     }
 
-    /*document.addEventListener("DOMContentLoaded", function () {
-        fetch("/seller/coupon/coupons")
-            .then(resp => {
-                if(!resp.ok){
-                    throw new Error("네트워크 응답 오류")
-                }
-                return
-            })
-            .then(data =>{
-                console.log("쿠폰 목록:"data);
-                const couponSelect = document.getElementById()
-            })
-    })*/
 
-    /*document.getElementById("couponBtn").addEventListener("click", function () {
+function updateExpectedTotal(totalPrice, totalShippingFee) {
+    // totalPrice와 totalShippingFee 합산하여 결제 예상금액 설정
+    const expectedPrice = totalPrice + totalShippingFee;
+    document.getElementById("expectedPrice").innerText = `${expectedPrice.toLocaleString()}원`;
+}
 
-        alert("클릭됨")
-        const couponData ={
-            couponType
-        }
-    })*/
 
 // 모달 엘리먼트와 버튼, 닫기 버튼 가져오기
     const modal = document.getElementById("discountModal");
@@ -614,6 +600,8 @@ function displayErrorMessage(message) {
                <div class="discount-coupon-info">
                     <div class="discount-amount">${coupon.couponName} (${coupon.benefit})</div>
                     <div class="discount-description">${coupon.notes}</div>
+                    <div class="discount-restrictions">${coupon.restrictions}</div>
+
                     <div class="discount-dates">
                         <span>유효기간: ${coupon.startDate} ~ ${coupon.endDate}</span>
                     </div>
@@ -624,6 +612,7 @@ function displayErrorMessage(message) {
             });
         }
     }
+
 
 
 

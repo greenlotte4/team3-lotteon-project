@@ -20,4 +20,6 @@ public class CouponIssuedDTO {
     private String UsageDate;
     private String status;
     private Long productId; // 등록된 상품 아이디
+    private int restrictions;
+
 }
