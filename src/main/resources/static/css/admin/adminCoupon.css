@@ -82,6 +82,16 @@
 .order-link:hover {
     color: #888;
 }
+/* 링크 스타일 */
+.issued-order-link {
+    text-decoration: underline;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.issued-order-link:hover {
+    color: #888;
+}
 
 /* 페이지네이션 스타일 */
 .pagination {
@@ -129,8 +139,22 @@
     margin: 0 5px;
     transition: background-color 0.3s, color 0.3s;
 }
+.issued-end-button {
+    padding: 5px 10px;
+    border: 1px solid #777;
+    background-color: #fff;
+    color: #777;
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
 
 .end-button:hover {
+    background-color: #888;
+    color: white;
+    cursor: pointer;
+}
+.issued-end-button:hover {
     background-color: #888;
     color: white;
     cursor: pointer;

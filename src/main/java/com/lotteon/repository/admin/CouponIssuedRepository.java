@@ -13,4 +13,7 @@ import java.util.List;
 @Repository
 public interface CouponIssuedRepository extends JpaRepository<CouponIssued, String>{
 
+
+    Page<CouponIssued> findByCoupon_Seller_Id(Long sellerId, Pageable pageable);
+
 }
