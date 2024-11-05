@@ -56,7 +56,6 @@ public class AdminCouponController {
     private final CouponRepository couponRepository;
     private final CouponIssuedService couponIssuedService;
     private final ModelMapper modelMapper;
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
     ;
 
@@ -144,20 +143,46 @@ public class AdminCouponController {
         return ResponseEntity.ok(updatedCoupon);
 
     }
+    @PutMapping("/issued/{issuanceNumber}/end")
+    public ResponseEntity<CouponIssuedDTO> endIssuedCoupon(@PathVariable("issuanceNumber") String issuanceNumber) {
+        log.info("발행된 쿠폰 종료 요청");
+        CouponIssuedDTO updatedCoupon = couponIssuedService.endCouponIssued(issuanceNumber);
+
+        log.info("---------쿠폰 상태------------" + updatedCoupon);
+        return ResponseEntity.ok(updatedCoupon);
+
+    }
 
     @GetMapping("/issued")
-    public String adminIssuedModify(Model model) {
+    public String adminIssuedModify(CouponListRequestDTO requestDTO, Model model) {
         log.info("쿠폰 발급 목록을 요청했습니다.");
+        log.info("셀러 ID: {}", requestDTO.getSellerId());
 
-        // 모든 발급된 쿠폰 목록 조회
-        List<CouponIssued> issuedList = couponIssuedService.couponIssuedList();
+        // 로그인한 셀러의 이름을 얻기 위해 SecurityContext 사용
+        if (requestDTO.getPage() < 1) {
+            requestDTO.setPage(1);
+        }
+        // 인증된 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        Seller seller = userDetails.getSeller();
 
-        log.info("발급 된 쿠폰 목록: {}", issuedList);
+
+        // 셀러 이름을 이용해 발급된 쿠폰 목록 조회
+        Page<CouponIssuedDTO> issuedPage = couponIssuedService.selectIssuedCouponsPagination(requestDTO, seller.getId(), requestDTO.getPageable());
+
+        log.info("잇슈드페이지: {}", issuedPage);
 
         // 모델에 발급된 쿠폰 리스트 담기
-        model.addAttribute("IssuedList", issuedList);
+        model.addAttribute("IssuedList", issuedPage.getContent());  // 실제 발급된 쿠폰 리스트
+        model.addAttribute("totalPages", issuedPage.getTotalPages());  // 전체 페이지 수
+        model.addAttribute("currentPage", issuedPage.getNumber() + 1); // 현재 페이지 (1-based)
+        model.addAttribute("totalItems", issuedPage.getTotalElements());  // 전체 아이템 수
+        model.addAttribute("size", issuedPage.getSize());  // 페이지당 아이템 수
+
         return "content/admin/coupon/issued";
     }
+
 
 
     @GetMapping("/{productId}")

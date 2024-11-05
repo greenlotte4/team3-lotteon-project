@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -33,6 +34,11 @@ public class CouponIssued {
     private String productName;
     private Long productId;
     private String restrictions;
+    private String benefit; // 혜택
+    private String sellerCompany;
+    private LocalDate startDate; // 시작 날짜
+    private LocalDate endDate; // 종료 날짜
+
 
     @JsonFormat(pattern = "MM월 dd일") // 원하는 형식으로 지정
     private LocalDateTime usedDate;
@@ -78,5 +84,6 @@ public class CouponIssued {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일");
         return this.usedDate.format(formatter);
     }
+
 
 }
