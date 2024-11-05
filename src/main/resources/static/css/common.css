@@ -287,6 +287,7 @@ input[type=search] {
 #header .main .buttonArea li a.chat,#header .main .buttonArea li button.chat {
     overflow: visible;
     position: relative;
+    background-image: url(/images/common/ico_chatbot.svg);
 }
 
 
