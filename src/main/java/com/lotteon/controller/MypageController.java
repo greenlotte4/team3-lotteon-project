@@ -1,11 +1,13 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
+import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
 import com.lotteon.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -29,18 +31,23 @@ public class MypageController {
 
     private final ReviewService reviewService;
     private final FileService fileService;
+    private final AdminService adminService;
 
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
+        List<BannerDTO> banners = adminService.selectAllbanner();
         model.addAttribute("content", "coupondetails");
+        model.addAttribute("banners", banners);
         return "content/user/coupondetails"; // Points to "content/user/coupondetails"
     }
 
     @GetMapping("/myInfo")
     public String myInfo(Model model) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
+        List<BannerDTO> banners = adminService.selectAllbanner();
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
+        model.addAttribute("banners", banners);
         return "content/user/mypageMain"; // Points to "content/user/mypageMain"
     }
 
@@ -66,37 +73,46 @@ public class MypageController {
 
     @GetMapping("/mysettings")
     public String mySettings(Model model) {
+        List<BannerDTO> banners = adminService.selectAllbanner();
         model.addAttribute("content", "mysettings");
+        model.addAttribute("banners", banners);
         return "content/user/mysettings"; // Points to "content/user/mysettings"
     }
 
     @GetMapping("/orderdetails")
     public String orderDetails(Model model) {
+        List<BannerDTO> banners = adminService.selectAllbanner();
         model.addAttribute("content", "orderdetails");
+        model.addAttribute("banners", banners);
         return "content/user/orderdetails"; // Points to "content/user/orderdetails"
     }
 
     @GetMapping("/pointdetails")
     public String pointDetails(Model model) {
+        List<BannerDTO> banners = adminService.selectAllbanner();
         model.addAttribute("content", "pointdetails");
+        model.addAttribute("banners", banners);
         return "content/user/pointdetails"; // Points to "content/user/pointdetails"
     }
 
     @GetMapping("/qnadetails")
     public String qnaDetails(Model model) {
+        List<BannerDTO> banners = adminService.selectAllbanner();
         model.addAttribute("content", "qnadetails");
+        model.addAttribute("banners", banners);
         return "content/user/qnadetails"; // Points to "content/user/qnadetails"
     }
 
     @GetMapping("/reviewdetails")
     public String reviewDetails(Model model, PageRequestDTO pageRequestDTO) {
-
+        List<BannerDTO> banners = adminService.selectAllbanner();
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewss(pageRequestDTO);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
         List<Review> recentReviews = reviewService.getAllReviews();
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "reviewdetails");
+        model.addAttribute("banners", banners);
         return "content/user/reviewdetails"; // Points to "content/user/reviewdetails"
     }
 

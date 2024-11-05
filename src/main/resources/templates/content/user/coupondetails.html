@@ -7,79 +7,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[[${headerInfo.hd_title}]]:[[${headerInfo.hd_subtitle}]]</title>
-    <link  rel="stylesheet" th:href="@{/css/user/couponDetail.css}">
-
+    <link rel="stylesheet" th:href="@{/css/user/couponDetail.css}">
 </head>
 <body>
 <th:block layout:fragment="content">
     <main>
-            <div class="info">
-                <p class="info-title">나의 쇼핑정보</p>
-                <div class="summary-table">
-                    <div class="summary-item">
-                        <span>주문</span><br>
-                        <span class="summary-value">2</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>쿠폰</span><br>
-                        <span class="summary-value">1</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>포인트</span><br>
-                        <span class="summary-value">1,000</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>문의</span><br>
-                        <span class="summary-value">1</span>
-                    </div>
+        <div class="info">
+            <p class="info-title">나의 쇼핑정보</p>
+            <div class="summary-table">
+                <div class="summary-item">
+                    <span>주문</span><br>
+                    <span class="summary-value">2</span>
+                </div>
+                <div class="summary-item">
+                    <span>쿠폰</span><br>
+                    <span class="summary-value">1</span>
+                </div>
+                <div class="summary-item">
+                    <span>포인트</span><br>
+                    <span class="summary-value">1,000</span>
+                </div>
+                <div class="summary-item">
+                    <span>문의</span><br>
+                    <span class="summary-value">1</span>
                 </div>
             </div>
+        </div>
 
-   
+
         <div id="container">
             <aside>
                 <ul>
-                    <li><a href="">전체주문내역</a></li>
-                    <li><a href="">포인트내역</a></li>
-                    <li><a href="">쿠폰</a></li>
-                    <li><a href="">나의리뷰</a></li>
-                    <li><a href="">문의하기</a></li>
-                    <li><a href="">나의설정</a></li>
+                    <li><a th:href="@{/order/history}">전체주문내역</a></li>
+                    <li><a th:href="@{/point/details}">포인트내역</a></li>
+                    <li><a th:href="@{/coupon/details}">쿠폰</a></li>
+                    <li><a th:href="@{/mypage/reviewdetails}">나의리뷰</a></li>
+                    <li><a th:href="@{/inquiry}">문의하기</a></li>
+                    <li><a th:href="@{/settings/my}">나의설정</a></li>
                 </ul>
             </aside>
 
+
             <div class="center">
-                <div class="ad">900x86 배너광고</div>               
+                <div class="slider-wrapper">
+                    <div class="ad" th:each="banner : ${banners}" th:if="${banner.ban_location} == '마이페이지 배너'">
+                        <a th:href="${banner.ban_link}" target="_blank">
+                            <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
+                        </a>
+                    </div>
+                </div>
                 <div>
                     <div class="details">
                         <p>쿠폰내역</p>
                     </div>
-    
+
                     <table class="coupon-table">
-                        <tbody>      
-                            <tr class="font">
-                                <th>쿠폰명</th>
-                                <th>할인금액</th>  
-                                <th>적용기준/제한조건</th>  
-                                <th>상태</th>
-                                <th>유효기간</th>
-    
-                            </tr>
-                            <tr class="tr3">
-                                <td><data value="">1만원 할인 중복 쿠폰</data></td>
-                                <td><data value="">10,000원</data></td>
-                                <td><data value="">10,000원 이상 구매시</data></td>    
-                                <td><data value="">사용가능</data></td> 
-                                <td><data value="">~ 12/31</data></td> 
-                            </tr>
-                            <tr class="tr3">
-                                <td><data value="">회원가입 축하 5천원 할인쿠폰</data></td>
-                                <td><data value="">5,000원</data></td>
-                                <td><data value="">5,000원 이상 구매시</data></td>    
-                                <td><data value="">사용가능</data></td> 
-                                <td><data value="">~ 12/31</data></td> 
-                            </tr>
-                            
+                        <tbody>
+                        <tr class="font">
+                            <th>쿠폰명</th>
+                            <th>할인금액</th>
+                            <th>적용기준/제한조건</th>
+                            <th>상태</th>
+                            <th>유효기간</th>
+
+                        </tr>
+                        <tr class="tr3">
+                            <td><data value="">1만원 할인 중복 쿠폰</data></td>
+                            <td><data value="">10,000원</data></td>
+                            <td><data value="">10,000원 이상 구매시</data></td>
+                            <td><data value="">사용가능</data></td>
+                            <td><data value="">~ 12/31</data></td>
+                        </tr>
+                        <tr class="tr3">
+                            <td><data value="">회원가입 축하 5천원 할인쿠폰</data></td>
+                            <td><data value="">5,000원</data></td>
+                            <td><data value="">5,000원 이상 구매시</data></td>
+                            <td><data value="">사용가능</data></td>
+                            <td><data value="">~ 12/31</data></td>
+                        </tr>
+
                         </tbody>
                     </table>
                 </div>
@@ -94,10 +100,11 @@
 
                 </div>
 
-               
+
             </div>
         </div>
-        </main>
-    </div>
+    </main>
+    <script th:src="@{/js/couponDetails.js}"></script>
+</th:block>
 </body>
 </html>

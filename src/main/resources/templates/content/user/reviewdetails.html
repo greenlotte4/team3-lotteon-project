@@ -49,7 +49,13 @@
         </aside>
 
         <div class="center">
-            <div class="ad">900x86 배너광고</div>
+            <div class="slider-wrapper">
+                <div class="ad" th:each="banner : ${banners}" th:if="${banner.ban_location} == '마이페이지 배너'">
+                    <a th:href="${banner.ban_link}" target="_blank">
+                        <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
+                    </a>
+                </div>
+            </div>
 
             <div>
                 <div class="details">
@@ -72,7 +78,7 @@
                         <td>
 
                             <data value="">
-
+                                <div class="product-container">
                                 <div class="eximg2">
                                     <img th:if="${review.savedReviewFiles.size() > 0}"
                                          th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
@@ -82,6 +88,7 @@
                                 <div class="Pinf2">
                                     <p>상품번호<br> <span th:text="${review.productId}">123456</span></p>
                                     <p>상품명<br> <span th:text="${review.product.productName}">치킨</span></p>
+                                </div>
                                 </div>
                             </data>
 

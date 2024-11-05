@@ -564,6 +564,7 @@ document.addEventListener('DOMContentLoaded', function () {
             couponType
         }
     })*/
+
 // 모달 엘리먼트와 버튼, 닫기 버튼 가져오기
     const modal = document.getElementById("discountModal");
     const btn = document.getElementById("openDiscountModalBtn");
@@ -582,33 +583,45 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.style.display = "none";
     }
 
-// 모달 바깥을 클릭하면 모달 숨기기
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+}
 
 
-    function fetchCoupons(productId) {
+function fetchCoupons(productId) {
 
-        let url = productId ? `/seller/coupon/${productId}` : '/seller/coupon/all/coupons';
+    let url = productId ? `/seller/coupon/${productId}` : '/seller/coupon/all/coupons';
 
-        fetch(url)
-            .then(resp => {
-                if (!resp.ok) {
-                    throw new Error('인터넷연결 문제')
-                }
-                return resp.json()
-            })
-            .then(data => {
-                displayCoupons(data);
-            })
-            .catch(err => {
-                console.error(err, '요청중 문제 발생함')
-            })
-    }
+    fetch(url)
+        .then(resp => {
+            if (!resp.ok) {
+                throw new Error('인터넷연결 문제');
+            }
+            // 응답의 Content-Type이 JSON인지 확인
+            const contentType = resp.headers.get("Content-Type");
+            if (!contentType || !contentType.includes("application/json")) {
+                return resp.text().then(text => {
+                    displayErrorMessage('로그인 후 이용해 주세요.'); // 메시지 수정
+                    throw new Error('응답이 JSON이 아닙니다');
+                });
+            }
+            return resp.json();
+        })
+        .then(data => {
+            displayCoupons(data);
+        })
+        .catch(err => {
+            console.error(err,'요청중 문제 발생함')
+        })
+}
 
+function displayErrorMessage(message) {
+    const couponContainer = document.getElementById('discountCouponItems');
+    couponContainer.innerHTML = ''; // 이전 내용 제거
+
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message'; // CSS 클래스를 추가하여 스타일링 가능
+    errorDiv.textContent = message;
+    couponContainer.appendChild(errorDiv);
+}
 
 // 쿠폰 목록 표시하기
     function displayCoupons(coupons) {
@@ -627,7 +640,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 couponItem.innerHTML = `
                <div class="discount-coupon-info">
                     <div class="discount-amount">${coupon.couponName} (${coupon.benefit})</div>
-                    <div class="discount-description">${coupon.notes}</div> <!-- notes로 변경 -->
+                    <div class="discount-description">${coupon.notes}</div>
                     <div class="discount-dates">
                         <span>유효기간: ${coupon.startDate} ~ ${coupon.endDate}</span>
                     </div>
@@ -638,4 +651,37 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
-});
+
+}
+
+function applyCoupon(couponId){
+
+    if (!uid) {
+        alert('로그인 후 이용해 주세요');
+        window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+        return;
+    }
+    if(!confirm("이 쿠폰을 발급 받으시겠습니까?")){
+        return;
+    }
+
+    fetch(`/seller/coupon/apply/${couponId}`,{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',},
+    })
+        .then(resp => {
+            if(resp.ok){
+                return resp.json()
+            }else {
+                throw  new Error("쿠폰 적용에 실패함 ㅋ")
+            }
+        })
+        .then(data => {
+            alert(`쿠폰이 성공적으로 적용되었습니다.: ${data.message}`);
+
+        })
+        .catch(err => {
+            console.error(err)
+        })
+
+}

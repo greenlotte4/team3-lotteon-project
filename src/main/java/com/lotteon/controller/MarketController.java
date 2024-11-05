@@ -1,6 +1,7 @@
 package com.lotteon.controller;
 
 import com.lotteon.dto.User.MemberDTO;
+import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.order.OrderCompletedResponseDTO;
 import com.lotteon.dto.order.OrderDTO;
@@ -13,6 +14,7 @@ import com.lotteon.entity.User.User;
 import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.Review;
+import com.lotteon.service.AdminService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.MarketCartService;
@@ -46,14 +48,18 @@ public class MarketController {
     private final MarketCartService marketCartService;
     private final ReviewService reviewService;
     private final OrderService orderService;
+    private final AdminService adminService;
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
         ProductCategoryDTO categoryDTOs =  productCategoryService.getCategoryById(category);
+        List<BannerDTO> banners = adminService.selectAllbanner();
         log.info(categoryDTOs);
+        log.info("Banners: {}", banners);
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("active",category);
         model.addAttribute("content", "main");
+        model.addAttribute("banners", banners);
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
     }
 

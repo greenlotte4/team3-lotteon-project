@@ -79,7 +79,7 @@
                         <td th:text="${qna.qnawriter}">300</td>
                         <td>[[${#strings.substring(qna.date,0,10)}]]</td>
                         <td>
-                           <span class="qna-status" th:value="${qna.status}">검토중</span>
+                           <span class="qna-status" th:text="${qna.qna_status.name() == 'review' ? '검토중' : '답변완료'}"></span>
                         </td>
                     </tr>
                 <tbody>
@@ -231,17 +231,18 @@
                                     <td>${qna.category.parent.name}</td>
                                     <td>${qna.category.name}</td>
                                     <td>
-                                        <a href="/admin/qna/view?no=${qna.qnaNo}">${qna.qnatitle}</a>
+                                        <a href="/admin/qna/reply?no=${qna.qnaNo}">${qna.qnatitle}</a>
                                     </td>
                                     <td>${qna.qnawriter}</td>
                                     <td>${qna.date.substring(0, 10)}</td>
                                     <td>
-                                       <span class="qna-status" value="${qna.status}">검토중</span>
+                                       <span class="qna-status">${qna.qna_status === 'review' ? '검토중' : '답변완료'}</span>
                                     </td>
                                     <td>${qnaPageResponseDTO.parentId}</td>
 
                               </tr>`;
                     qnaListElement.innerHTML += row;
+                    console.log("아니니니니니니니니니ㅣㄴ니 : " + qna.status);
                 });
 
                 // 페이지네이션 요소 선택
@@ -299,12 +300,12 @@
                                     <td>${qna.category.parent.name}</td>
                                     <td>${qna.category.name}</td>
                                     <td>
-                                        <a href="/admin/qna/view?no=${qna.qnaNo}">${qna.qnatitle}</a>
+                                        <a href="/admin/qna/reply?no=${qna.qnaNo}">${qna.qnatitle}</a>
                                     </td>
                                     <td>${qna.qnawriter}</td>
                                     <td>${qna.date.substring(0, 10)}</td>
                                     <td>
-                                       <span class="qna-status" value="${qna.status}">검토중</span>
+                                       <span class="qna-status">${qna.qna_status === 'review' ? '검토중' : '답변완료'}</span>
                                     </td>
                               </tr>`;
                         qnaListElement.innerHTML += row;

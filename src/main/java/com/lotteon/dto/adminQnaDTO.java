@@ -17,7 +17,7 @@ public class adminQnaDTO {
     private String qnacontent;
     private String date;
     private String qnawriter;
-    private Adminqna.Status status;
+    private Adminqna.Status qna_status;
     private String qnareply;
 
     private Long categoryid;

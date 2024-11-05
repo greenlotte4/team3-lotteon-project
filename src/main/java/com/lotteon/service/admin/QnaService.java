@@ -86,7 +86,14 @@ public class QnaService {
         }
         return null;
     }
-//    public adminQnaDTO replyQna(adminQnaDTO adminQnaDTO){
-//
-//    }
+    public Adminqna replyQna(int no, adminQnaDTO qnadto){
+        Optional<Adminqna> optqna = adminQnaRepository.findById(no);
+        if(optqna.isPresent()){
+            Adminqna qna = optqna.get();
+            qna.setQnareply(qnadto.getQnareply());
+            qna.setQna_status(Adminqna.Status.completed);
+            return adminQnaRepository.save(qna);
+        }
+        return null;
+    }
 }

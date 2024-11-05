@@ -93,17 +93,23 @@ aside > ul > li:nth-child(1){
 
 }
 
+.slider-wrapper {
+    overflow: hidden;
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
 .ad{
     width: 900px;
     height: 86px;
-    margin: 10px auto;
-    border: 1px solid red;
-    background-color: beige;
-    display: flex;
-    justify-content: center; /* 수평 정렬: flex-start, flex-end, center */
-    align-items: center; /* 수직 정렬: flex-start, flex-end, center */
-    font-size: large;
+    margin: 20px auto;
+    box-sizing: border-box;
 
+}
+.ad img{
+    width: 900px; /* 고정 너비 */
+    height: 86px; /* 고정 높이 */
+    display: block; /* 이미지가 블록 요소로 처리되어 아래 여백이 생기지 않음 */
 }
 .details{
     width: 880px;

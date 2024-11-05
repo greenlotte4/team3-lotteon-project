@@ -101,23 +101,28 @@ aside > ul > li {
     width: 91%;
 }
 
+.slider-wrapper {
+    overflow: hidden;
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
 .ad{
     width: 900px;
     height: 86px;
-    margin: 10px auto;
-    border: 1px solid red;
-    background-color: beige;
-    display: flex;
-    justify-content: center; /* 수평 정렬: flex-start, flex-end, center */
-    align-items: center; /* 수직 정렬: flex-start, flex-end, center */
-    font-size: large;
+    margin: 20px auto;
+    box-sizing: border-box;
 
+}
+.ad img{
+    width: 900px; /* 고정 너비 */
+    height: 86px; /* 고정 높이 */
+    display: block; /* 이미지가 블록 요소로 처리되어 아래 여백이 생기지 않음 */
 }
 .details{
     height: 20px;
     margin: 0 46px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 
 }
 .center p{
@@ -162,8 +167,7 @@ th:nth-child(4) {width: 15%;}  /* 115px / 930px */
 
 
 .Review-table th:nth-child(1) {width: 10%;}   /* 80px / 850px */
-.Review-table th:nth-child(2) {width: 28%;}  /* 210px / 850px */
-.Review-table th:nth-child(3) {width: 32%;}  /* 300px / 850px */
+.Review-table th:nth-child(2) {width: 60%;}  /* 210px / 850px */
 .Review-table th:nth-child(4) {width: 15%;}  /* 130px / 850px */
 .Review-table th:nth-child(5) {width: 15%;}  /* 130px / 850px */
 
@@ -186,6 +190,9 @@ th:nth-child(4) {width: 15%;}  /* 115px / 930px */
     height: 170px;
 
 }
+tr{
+    border-bottom: 1px solid #ddd;
+}
 
 
 td {
@@ -197,8 +204,8 @@ td {
 }
 
 .product-container {
-    display: flex;            /* eximg2와 Pinf2를 가로로 배치 */
-    align-items: center;      /* 세로 중앙 정렬 */
+    display: flex; /* 가로 방향으로 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
 }
 
 .eximg > img{
@@ -208,17 +215,19 @@ td {
     margin-left: 50px   ;
 }
 .eximg2 {
-    width: 100px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;        /* 이미지와 상품 정보 사이 간격 */
+    width: 100px; /* 이미지 박스 너비 */
+    height: 100px; /* 이미지 박스 높이 */
+    display: flex; /* flex 사용 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-right: 10px; /* 상품 정보와의 간격 */
+    background-color: #f0f0f0; /* 선택 사항: 배경색 */
 }
 
-.eximg2 > img {
-    width: 110px;
-    height: 100px;
+.eximg2 img {
+    max-width: 100%; /* 이미지가 박스를 넘지 않게 설정 */
+    max-height: 100%; /* 이미지가 박스를 넘지 않게 설정 */
+    object-fit: cover; /* 비율 유지하면서 잘라내기 */
 }
 .Pinf {
     display: flex;               /* Flexbox 사용 */
@@ -253,10 +262,44 @@ td {
     margin: 5px 0;
 }
 .no-image-text {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: #f2f2f2;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 14px;
-    color: #777;
-    text-align: center;
 }
+
+.product-info {
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+}
+
+.product-info > div {
+    margin-bottom: 10px; /* 각 항목 간의 여백 */
+}
+
+.product-info p {
+    margin: 0; /* p 태그의 기본 마진 제거 */
+    font-weight: bold; /* 제목 강조 */
+}
+
+.product-info span {
+    display: block; /* span을 블록으로 만들어 줄바꿈되게 함 */
+    margin-top: 5px; /* 상단 여백 추가 */
+    text-align: left; /* 왼쪽 정렬 */
+}
+.truncate {
+    display: inline-block;
+    max-width: 200px;    /* 최대 너비 설정 */
+    white-space: nowrap; /* 한 줄로 표시 */
+    overflow: hidden;    /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 넘칠 때 생략 부호(...) 표시 */
+}
+
 td button{
     position: relative;
     width: 100px;
