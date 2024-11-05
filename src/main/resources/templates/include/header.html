@@ -20,12 +20,7 @@
 
                     <!-- 로그인된 경우 -->
                     <li th:if="${#authentication.name != 'anonymousUser'}">
-                        <!-- 판매자 로그인 시 -->
-                        <span th:if="${#authorization.expression('hasRole(''ROLE_SELLER'')')}">
-                        <span style="margin-right: 10px;">관리자님 환영합니다!</span>
-                        </span>
 
-                        <!-- 일반 사용자 로그인 시 -->
                         <span th:elseif="${#authorization.expression('hasRole(''ROLE_MEMBER'')')}">
 <!--                         + ${userName} + -->
                           <span style="margin-right: 10px;" >[[${memberName}]]님 환영합니다!</span>

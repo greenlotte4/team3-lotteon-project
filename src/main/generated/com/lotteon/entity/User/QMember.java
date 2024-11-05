@@ -30,7 +30,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath gender = createString("gender");
 
-    public final StringPath grade = createString("grade");
+    public final EnumPath<com.lotteon.dto.User.Grade> grade = createEnum("grade", com.lotteon.dto.User.Grade.class);
 
     public final StringPath hp = createString("hp");
 
@@ -49,6 +49,8 @@ public class QMember extends EntityPathBase<Member> {
     public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
 
     public final EnumPath<Member.MemberStatus> status = createEnum("status", Member.MemberStatus.class);
+
+    public final NumberPath<Long> totalOrder = createNumber("totalOrder", Long.class);
 
     public final QUser user;
 

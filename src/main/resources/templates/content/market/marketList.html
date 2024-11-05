@@ -108,7 +108,7 @@
                                     <div class="product-price">
                                         <span class="final-price">[[${product.finalPrice}]]원</span>
                                         <span class="original-price">[[${product.price}]]원</span>
-                                        <span class="discount">[[${product.discount}]]% ↓</span>
+                                        <span class="discount">[[${product.discount}]]%↓</span>
 
                                     </div>
                                     <div class="shipping-info">
@@ -118,7 +118,7 @@
                                 <div class="product-seller">
                                     <span class="seller-name">[[${product.company}]]</span>
                                     <span >고객만족우수</span>
-                                    <div class="seller-rating" th:data-rating="${product.getRating()}"></div>
+                                    <div class="seller-rating" th:data-rating="${product.getAverageRating()}"></div>
                                 </div>
                                 </a>
                             </div>

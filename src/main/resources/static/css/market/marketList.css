@@ -102,8 +102,8 @@
 
 /* Product image */
 .product-image {
-    width: 230px;
-    height: 230px;
+    width: 150px;
+    height: 150px;
     border: 1px solid #ddd;
     box-sizing: border-box;
 }
@@ -148,7 +148,7 @@
 /* Product pricing */
 .product-price {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0px;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -156,7 +156,7 @@
 }
 
 .final-price {
-    font-size: 18px;
+    font-size: 23px;
     font-weight: bold;
     color: #000;
 }

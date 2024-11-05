@@ -125,13 +125,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const shippingFees = calculateShippingFee(productDataArray);
         const shippingFee = shippingFees[data.productId].shippingFee;
 
+        const totalAdditionalPrice = data.options[0].additionalPrice;
+        const calcPrice= data.originalPrice+ totalAdditionalPrice;
         return `
         <tr class="order-row">
             <td>
-                <div><img src="/uploads/productImg/${data.file190}" alt="${data.productName}"></div>
+                <div><img src="/uploads/${data.file190}" alt="${data.productName}"></div>
                 <div>
                     <span>${data.productName}</span>
-                    <p class="product_option"> [ 옵션 : ${data.optionName} ]</p>
+                    <p class="product_option"> [ 옵션 : ${data.options[0].combinationString} ]</p>
                 </div>
             </td>
             <td>
@@ -139,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="number" class="T_quantity" value="${data.quantity}" readonly>
                 </div>
             </td>
-            <td><span class="T_originalPrice price" data-original="${data.originalPrice}">${(data.originalPrice).toLocaleString()}</span></td>
+            <td><span class="T_originalPrice price" data-original="${data.originalPrice}" data-additional="${calcPrice}">${calcPrice.toLocaleString()}</span></td>
             <td><span class="T_discount">${data.discount}</span>%</td>
             <td><span class="T_point">${data.point}</span></td>
             <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
@@ -169,6 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const finalOrderDeliveryFee = document.getElementById("finalOrderDeliveryFee");
     const finalOrderTotal = document.getElementById("finalOrderTotal");
     const finalOrderPoint = document.getElementById("finalOrderPoint");
+    const memberGrade = document.getElementById("memberGrade").value;
     // Retrieve the elements
     const postcodeElement = document.getElementById("M_postcode");
     const addressElement = document.querySelector(".totalAddress");
@@ -181,7 +184,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const hp = document.getElementById('hp').value;
     console.log(hp);
 
+    const gradePercentages = {
+        "VVIP": 5,
+        "VIP": 4,
+        "GOLD": 3,
+        "SILVER": 2,
+        "FAMILY": 1
+    };
 
+    const pointPercentage = gradePercentages[memberGrade] || 0; // Default to 0 if grade not found
+    console.log(`Grade: ${memberGrade}, Point Percentage: ${pointPercentage}%`);
 
 // Get the values from data attributes
     const postcode = postcodeElement.getAttribute("data-postcode");
@@ -256,8 +268,15 @@ document.addEventListener('DOMContentLoaded', function () {
         finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
 
         orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
+        let pointsEarned=0;
+        if(couponDiscount === 0){
+            pointsEarned =  Math.floor((( orderTotal -totalShippingFee())* pointPercentage) / 100);
+
+        }
+        console.log(pointsEarned);
+        finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
         finalOrderTotal.textContent = orderTotal.toLocaleString();
-        finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
+        // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
     }
 
     function totalProductDiscount() {
@@ -280,7 +299,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function totalProductPrice() {
         return Array.from(document.querySelectorAll('.T_originalPrice'))
-            .reduce((total, elem) => total + parseInt(elem.dataset.original || 0), 0);
+            .reduce((total, elem) => {
+                const originalPrice = parseInt(elem.dataset.original || 0);
+                const additionalPrice = parseInt(elem.dataset.additional || 0); // Assuming additionalPrice is stored here
+                const quantity = parseInt(elem.closest('.order-row').querySelector('.T_quantity').value || 1); // Get the quantity
+                return total + (additionalPrice) * quantity;
+            }, 0);
     }
 
     function totalShippingFee() {
@@ -299,9 +323,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // Update final result display
         finalOrderQuantity.textContent = totalQuantity;
         finalOrderProductPrice.textContent = totalProductPrice.toLocaleString();
+        console.log(totalProductPrice);
+
         finalOrderDiscount.textContent = (totalDiscountAmount + totalDiscount).toLocaleString();
+        console.log((totalDiscountAmount + totalDiscount));
+
         finalOrderDeliveryFee.textContent = totalShippingFee.toLocaleString();
-        finalOrderPoint.textContent = Math.floor((totalProductPrice - totalDiscountAmount) * 0.01).toLocaleString();
+
+
     }
 
     // Call updateDiscountResult on page load to initialize totals
@@ -377,6 +406,8 @@ document.addEventListener('DOMContentLoaded', function () {
             finalOrderPoint: finalOrderPoint.textContent
         };
     }
+    console.log("Product Data Array Before Order Submission:", productDataArray);
+
 
     updateOrderItem();
     console.log(orderItem);
