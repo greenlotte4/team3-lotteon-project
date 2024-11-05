@@ -1,6 +1,8 @@
 package com.lotteon.service.user;
 
+import com.lotteon.entity.User.Delivery;
 import com.lotteon.entity.User.Member;
+import com.lotteon.repository.user.DeliveryRepository;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.service.EmailService;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final DeliveryRepository deliveryRepository;
     private final EmailService emailService;
     private final HttpSession session;
 
@@ -115,5 +118,16 @@ public class MemberService {
 
     public Optional<Member> findById(Long memberId) {
         return memberRepository.findById(memberId);
+    }
+
+    public List<Delivery> getDeliveryByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
+        return member.getDeliveryList();
+    }
+
+    public Delivery addDeliveryToMember(Long memberId, Delivery delivery) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
+        member.addDelivery(delivery);
+        return deliveryRepository.save(delivery);
     }
 }

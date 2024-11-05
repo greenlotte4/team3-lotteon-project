@@ -24,6 +24,17 @@ public class PolicyController {
 
     private final TermsService termsService;
 
+    private String convertContentToHtml(String content) {
+        if (content != null) {
+            // HTML 변환 로직을 추가합니다.
+            content = content
+                    .replaceAll("제(\\d+)조 \\((.*?)\\)", "<h2>제$1조 ($2)</h2>")
+                    .replaceAll("제\\s*(\\d+)장\\s*(\\((.*?)\\))?\\s*(.*)", "<h3>제 $1장$2 $4</h3>")
+                    .replace("\n", "<br>");  // 줄 바꿈 처리
+        }
+        return content;
+    }
+
     @GetMapping("/buyer")
     public String buyerPolicy(Model model) {
         List<Terms> allTerms = termsService.findAllTerms();
@@ -32,6 +43,13 @@ public class PolicyController {
         List<Terms> buyerTerms = allTerms.stream()
                 .filter(terms -> Objects.equals("BUYER", terms.getType()))
                 .collect(Collectors.toList());
+
+        // 약관 내용을 HTML로 변환
+        for (Terms term : buyerTerms) {
+            term.setContent(convertContentToHtml(term.getContent()));
+        }
+
+        log.info(buyerTerms);
 
         model.addAttribute("termsList", buyerTerms); // 필터링된 termsList 추가
         model.addAttribute("content", "buyer");
@@ -48,6 +66,10 @@ public class PolicyController {
                 .filter(terms -> Objects.equals("SELLER", terms.getType()))
                 .collect(Collectors.toList());
 
+        for (Terms term : sellerTerms) {
+            term.setContent(convertContentToHtml(term.getContent()));
+        }
+
         model.addAttribute("termsList", sellerTerms);
         model.addAttribute("content", "seller");
 
@@ -62,6 +84,10 @@ public class PolicyController {
         List<Terms> locationTerms = allTerms.stream()
                 .filter(terms -> Objects.equals("LOCATION_INFO", terms.getType()))
                 .collect(Collectors.toList());
+
+        for (Terms term : locationTerms) {
+            term.setContent(convertContentToHtml(term.getContent()));
+        }
 
         model.addAttribute("termsList", locationTerms);
         model.addAttribute("content", "location");
@@ -78,6 +104,9 @@ public class PolicyController {
                 .filter(terms -> Objects.equals("PRIVACY_POLICY", terms.getType()))
                 .collect(Collectors.toList());
 
+        for (Terms term : privacyTerms) {
+            term.setContent(convertContentToHtml(term.getContent()));
+        }
         model.addAttribute("termsList", privacyTerms);
         model.addAttribute("content", "privacy");
 
@@ -93,11 +122,16 @@ public class PolicyController {
                 .filter(terms ->Objects.equals("ELECTRONIC_FINANCE", terms.getType()))
                 .collect(Collectors.toList());
 
+        for (Terms term : financeTerms) {
+            term.setContent(convertContentToHtml(term.getContent()));
+        }
+
         model.addAttribute("termsList", financeTerms);
         model.addAttribute("content", "finance");
 
         return "content/policy/finance";
     }
+
 }
 
 
