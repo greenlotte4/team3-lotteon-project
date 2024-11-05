@@ -54,12 +54,12 @@ public class MarketController {
     public String marketMain(Model model,@PathVariable long category) {
         ProductCategoryDTO categoryDTOs =  productCategoryService.getCategoryById(category);
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         log.info(categoryDTOs);
-        log.info("Banners: {}", banners);
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("active",category);
         model.addAttribute("content", "main");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
     }
 
