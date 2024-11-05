@@ -165,6 +165,7 @@ public class CsController {
         log.info(boardCateDTOS);
         model.addAttribute("boardCate", boardCateDTOS);
         return "content/cs/qna/qnaList";
+
     }
 
     // 아이디 마스킹 메소드
