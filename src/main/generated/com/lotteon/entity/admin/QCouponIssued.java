@@ -40,11 +40,15 @@ public class QCouponIssued extends EntityPathBase<CouponIssued> {
 
     public final StringPath productName = createString("productName");
 
+    public final StringPath restrictions = createString("restrictions");
+
     public final StringPath status = createString("status");
 
     public final DateTimePath<java.time.LocalDateTime> usageDate = createDateTime("usageDate", java.time.LocalDateTime.class);
 
     public final StringPath usageStatus = createString("usageStatus");
+
+    public final DateTimePath<java.time.LocalDateTime> usedDate = createDateTime("usedDate", java.time.LocalDateTime.class);
 
     public QCouponIssued(String variable) {
         this(CouponIssued.class, forVariable(variable), INITS);
