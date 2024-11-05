@@ -61,15 +61,16 @@ hr {
     left:120px;
     bottom: 136.5px;
 }
-.id {
-    width: 40px;
+.name {
+    width: 24px;
     height: 14px;
     position: absolute;
     top: 16px;
     left: 14px;
     font-weight: bold;
 }
-.idtext {
+
+.nametext {
     width: 164px;
     height: 24px;
     position: absolute;
@@ -77,8 +78,8 @@ hr {
     left: 14px;
     padding-left: 7px;
     font-weight: bold;
-    background-color: #F7F7F7;
-    border: 1px solid #E4EAEC;
+    background-color: #f7f7f7;
+    border: 1px solid #e4eaec;
 }
 .email {
     width: 36px;
