@@ -1,11 +1,13 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
+import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
 import com.lotteon.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class MypageController {
 
     private final ReviewService reviewService;
     private final FileService fileService;
+    private final AdminService adminService;
 
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
@@ -39,8 +42,10 @@ public class MypageController {
     @GetMapping("/myInfo")
     public String myInfo(Model model) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
+        List<BannerDTO> banners = adminService.selectAllbanner();
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
+        model.addAttribute("banners", banners);
         return "content/user/mypageMain"; // Points to "content/user/mypageMain"
     }
 
