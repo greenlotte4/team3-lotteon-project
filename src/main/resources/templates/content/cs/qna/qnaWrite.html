@@ -20,7 +20,7 @@
             <p>회원 관련 문의내용 입니다.</p>
         </div>
         <form th:action="@{/cs/qna/write}" method="post" enctype="multipart/form-data">
-            <input  type="hidden" name="qna_writer" th:value="${#authentication.name == 'anonymousUser' && #authentication.principal.user.uid}">
+            <input  type="hidden" name="qnawriter" th:value="${#authentication.name == 'anonymousUser' && #authentication.principal.user.uid}">
 
             <div class="qna-section">
                 <table class="qna-table">
@@ -29,31 +29,28 @@
                         <col style="width: 750px">
                     </colgroup>
                     <tr class="type">
-                        <td><label for="inquiry-type">문의유형</label></td>
-                        <td>
-                            <select id="inquiry-type" name="qna_type1" class="first_choice">
-                                <option value="1">회원</option>
-                                <option value="2">쿠폰/이벤트</option>
-                                <option value="3">주문/결제</option>
-                                <option value="4">배송</option>
-                                <option value="5">취소/반품/교환</option>
-                                <option value="6">여행/숙박/항공</option>
-                                <option value="7">안전거래</option>
-                            </select>
-                            <select name="qna_type2" class="second_choice"></select>
-                        </td>
+                        <td><label for="selectOption1">문의유형</label></td>
+                        <select class="first_choice" id="selectOption1">
+                            <option value="" disabled selected>1차 선택</option>
+                            <th:block th:each="board : ${boardCate}">
+                                <option th:value="${board.boardCateId}" th:text="${board.name}"></option>
+                            </th:block>
+                        </select>
+                        <select class="second_choice" name="categoryid" id="selectOption2">
+                            <option value="2차 선택" disabled selected>2차 선택</option>
+                        </select>
                     </tr>
                     <tr class="title">
                         <td><label for="subject">제목</label></td>
                         <td>
-                            <input id="subject" type="text" name="qna_title" class="texts" placeholder="제목을 입력하세요">
+                            <input id="subject" type="text" name="qnatitle" class="texts" placeholder="제목을 입력하세요">
 
                         </td>
                     </tr>
                     <tr class="content">
                         <td><label for="content">내용</label></td>
                         <td>
-                            <textarea id="content" name="qna_content" class="texts" placeholder="내용을 입력하세요" rows="5" style="height: 200px"></textarea>
+                            <textarea id="content" name="qnacontent" class="texts" placeholder="내용을 입력하세요" rows="5" style="height: 200px"></textarea>
                         </td>
                     </tr>
                 </table>
@@ -65,6 +62,35 @@
             </div>
         </form>
     </div>
+
+    <script>
+        const selectOption1 = document.getElementById('selectOption1');
+        const selectOption2 = document.getElementById('selectOption2');
+
+        selectOption1.addEventListener('change',function(){
+            const parentId = this.value;
+
+            selectOption2.innerHTML = '<option value="2차 선택" disabled selected>2차 선택</option>';
+
+            fetch(`/admin/qna/subcate/${parentId}`)
+                .then(resp => resp.json())
+                .then(data => {
+                    console.log(data);
+                    data.forEach(boardsubCate => {
+                        const option = document.createElement('option');
+                        option.value = boardsubCate.boardCateId;
+                        option.text = boardsubCate.name;
+                        selectOption2.appendChild(option)
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+
+
+        })
+
+    </script>
 </th:block>
 </body>
 </html>
