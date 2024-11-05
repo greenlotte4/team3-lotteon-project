@@ -39,7 +39,7 @@ public class CouponIssued {
 
 
     @Builder.Default
-    private String status = "발급중";
+    private String status = "사용가능";
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
