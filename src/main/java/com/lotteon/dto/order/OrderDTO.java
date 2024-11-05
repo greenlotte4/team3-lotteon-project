@@ -41,6 +41,7 @@ public class OrderDTO {
     private long couponDiscount;
     private SellerDTO seller;
     private List<OrderItemDTO> orderItems;
+    private long totalPoint;
 
 
     public Order toEntity() {

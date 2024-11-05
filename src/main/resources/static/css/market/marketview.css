@@ -278,8 +278,11 @@ select::-ms-expand {
     height: 30px;
     width: 443px;
     font-size: 13px;
-    text-indent: 6px;
-    border-radius: 2px;
+    text-indent: 10px;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+    border: 0.5px solid #ddd;
+    border-radius: 6px
 }
 
 .quantity-control {
@@ -337,7 +340,7 @@ select::-ms-expand {
     border-radius: 5px;
     background: linear-gradient(to top, #f8f8f8 35%, transparent 30%);
 }
-.total-price,.expectedPrice,.totalShippingFee,.originalTotalPrice,.totalPrice {
+.total-price,.expectedPrice,.totalShippingFee,.originalTotalPrice,.totalPrice,.additionalPrice {
 
     display: flex;
     justify-content: flex-end;
@@ -356,6 +359,9 @@ select::-ms-expand {
 }
 .expectedTotal{
     margin-bottom:20px;
+}
+#additionalPrice:before{
+    content: '+';
 }
 
 .expectedTotal > div{

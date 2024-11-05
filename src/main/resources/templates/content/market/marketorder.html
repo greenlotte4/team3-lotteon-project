@@ -142,6 +142,7 @@
                         <div class="point_wrap">
                             <div class="point_info">
                                 <input type="hidden" id="memberUid" th:value="${memberDTO.getUid()}">
+                                <input type="hidden" id="memberGrade" th:value="${memberDTO.getGrade()}">
                                 <input type="hidden" id="currentPoint" th:value="${memberDTO.point != null ? memberDTO.point.intValue() : 0}">
                                 <span>현재 포인트 :
                                 <span class="price"  id="currentIn" th:text="${memberDTO.point != null ? memberDTO.point.intValue() : 0}"></span>
