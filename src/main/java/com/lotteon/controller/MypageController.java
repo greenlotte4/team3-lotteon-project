@@ -5,15 +5,22 @@ import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
+import com.lotteon.entity.User.Member;
+import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
+import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
 import com.lotteon.service.ReviewService;
+import com.lotteon.service.admin.CouponIssuedService;
+import com.lotteon.service.user.CouponDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +39,35 @@ public class MypageController {
     private final ReviewService reviewService;
     private final FileService fileService;
     private final AdminService adminService;
+    private final CouponDetailsService couponDetailsService;
+    private final CouponIssuedService couponIssuedService;
 
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
+        log.info("쿠폰디테일 요청");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        String memberId = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
+
+        log.info("멤버아이디다"+memberId);
+        log.info("로그인한 사용자 정보: {}", memberId);
+
+        // 해당 멤버의 발급된 쿠폰 목록 조회
+       /* if (memberId != null) {
+            List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
+            log.info("발급받은 쿠폰: {}", issuedCoupons);
+
+            model.addAttribute("IssuedList", issuedCoupons);
+            model.addAttribute("totalItems", issuedCoupons.size());
+        } else {
+            log.warn("회원 정보가 없습니다.");
+            model.addAttribute("IssuedList", Collections.emptyList());
+            model.addAttribute("totalItems", 0);
+        }*/
+
         model.addAttribute("content", "coupondetails");
         model.addAttribute("banners", banners);
         return "content/user/coupondetails"; // Points to "content/user/coupondetails"

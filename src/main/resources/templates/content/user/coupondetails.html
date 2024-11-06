@@ -40,7 +40,7 @@
                 <ul>
                     <li><a th:href="@{/order/history}">전체주문내역</a></li>
                     <li><a th:href="@{/point/details}">포인트내역</a></li>
-                    <li><a th:href="@{/coupon/details}">쿠폰</a></li>
+                    <li><a th:href="@{/mypage/coupondetails}">쿠폰</a></li>
                     <li><a th:href="@{/mypage/reviewdetails}">나의리뷰</a></li>
                     <li><a th:href="@{/inquiry}">문의하기</a></li>
                     <li><a th:href="@{/settings/my}">나의설정</a></li>
@@ -70,23 +70,18 @@
                             <th>적용기준/제한조건</th>
                             <th>상태</th>
                             <th>유효기간</th>
-
                         </tr>
-                        <tr class="tr3">
-                            <td><data value="">1만원 할인 중복 쿠폰</data></td>
-                            <td><data value="">10,000원</data></td>
-                            <td><data value="">10,000원 이상 구매시</data></td>
-                            <td><data value="">사용가능</data></td>
-                            <td><data value="">~ 12/31</data></td>
+                        <tr th:if="${#lists.isEmpty(IssuedList)}">
+                            <td colspan="6" style="text-align: center;">발급된 쿠폰이 없습니다.</td>
                         </tr>
-                        <tr class="tr3">
-                            <td><data value="">회원가입 축하 5천원 할인쿠폰</data></td>
-                            <td><data value="">5,000원</data></td>
-                            <td><data value="">5,000원 이상 구매시</data></td>
-                            <td><data value="">사용가능</data></td>
-                            <td><data value="">~ 12/31</data></td>
+                        <!-- 발급된 쿠폰이 있을 경우 -->
+                        <tr th:each="issued : ${IssuedList}">
+                            <td th:text="${issued.couponName}"></td>
+                            <td th:text="${issued.benefit}"></td> <!-- 할인금액에 해당하는 필드 -->
+                            <td th:text="${issued.restrictions}"></td> <!-- 제한조건에 해당하는 필드 -->
+                            <td th:text="${issued.status != null ? issued.status : '미사용'}"></td>
+                            <td th:text="${issued.startDate} + ' ~ ' + ${issued.endDate}"></td> <!-- 유효기간 -->
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
