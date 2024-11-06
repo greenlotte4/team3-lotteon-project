@@ -28,7 +28,7 @@
             </section>
             <article class="admin_terms">
                 <div th:each="terms : ${termsList}">
-                    <form th:action="@{/terms}" method="post" class="admin_terms_form">
+                    <form th:action="@{/admin/config/terms}" method="post" class="admin_terms_form">
                         <article class="admin_terms">
                             <div class="top1" th:text="${terms.title}"></div>
                             <div><span class="top2">회원가입 및 정책 페이지 노출 약관입니다.</span></div>
@@ -39,19 +39,28 @@
                                 </colgroup>
                                 <tr>
                                     <td>약관내용</td>
-                                    <td><textarea th:name="'content'" placeholder="약관 내용을 입력하세요"
-                                                  th:text="${terms.content}"></textarea></td>
+                                    <td>
+                            <textarea th:name="'content'" placeholder="약관 내용을 입력하세요"
+                                      th:text="${terms.content}"></textarea>
+                                    </td>
                                 </tr>
                             </table>
                             <input type="hidden" th:name="'id'" th:value="${terms.id}"/>
                             <input type="hidden" th:name="'type'" th:value="${terms.type}"/>
                             <div class="admin_term_button">
-                                <button type="submit">수정하기</button>
+                                <button type="submit" onclick="showAlert()" >수정하기</button>
                             </div>
                         </article>
                     </form>
                 </div>
             </article>
+
+            <script>
+                function showAlert() {
+                    alert('약관이 수정되었습니다.'); // 버튼 클릭 시 alert 띄우기
+                }
+            </script>
+
 </th:block>
 
 
