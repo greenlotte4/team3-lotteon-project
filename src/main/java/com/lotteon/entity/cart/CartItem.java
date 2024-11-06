@@ -10,8 +10,12 @@ package com.lotteon.entity.cart;
 
  */
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.lotteon.dto.product.OptionItemDTO;
 import com.lotteon.entity.product.Option;
+import com.lotteon.entity.product.OptionGroup;
 import com.lotteon.entity.product.Product;
+import com.lotteon.entity.product.ProductOptionCombination;
+import com.mongodb.lang.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,7 +36,7 @@ public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cartItemId;
+    private long cartItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cartId", nullable = false)
@@ -42,19 +46,29 @@ public class CartItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
+
+    @Nullable// or `@Nullable` annotation if using validation
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="option_id")
     private Option option;
 
-    private String optionName;
 
+    @Nullable// or `@Nullable` annotation if using validation
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="combinationId")
+    private ProductOptionCombination productOptionCombination;
+
+    private long optionGroupId;
+
+
+    private String optionName;
     private String productName;
-    private int price;
+    private long price;
     private int quantity;
     private long totalPrice;
     private int points;
     private int discount;
-    private int deliveryFee;
+    private long deliveryFee;
     private String imageUrl;
 
 
