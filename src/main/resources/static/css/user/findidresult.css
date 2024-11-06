@@ -27,7 +27,7 @@ body {
 .idresult {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-bottom: 35px;
 }
 
 .idresult th,
@@ -88,4 +88,8 @@ body {
 
 h5 {
     text-align: center;
+    height: 32px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #999;
 }
