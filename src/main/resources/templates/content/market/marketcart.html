@@ -40,7 +40,9 @@
                 </colgroup>
 
                 <tr>
-                    <th><input type="checkbox" id="checkBoxAll" name="select" ></th>
+                    <th><input type="checkbox" id="checkBoxAll" name="select" >
+                        <input type="hidden" name="skip" id="skip">
+                    </th>
                     <th>상품</th>
                     <th>수량</th>
                     <th>판매가</th>
@@ -57,17 +59,26 @@
                      <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
                      <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">
                         <tr th:each="item : ${cartItems}"
-                            th:data-cart-item-id="${item.getCartItemId()}" style="border-bottom: 1px solid #dddddd">
-<!--                            th:data-cart-deliveryFee="${item.getDeliveryFee()}"-->
-<!--                            th:data-cart-discount="${item.discount()}"-->
-<!--                            th:data-cart-img="${item.imageUrl}"-->
-<!--                            th:data-cart-productName="${item.productName}"-->
-<!--                            th:data-cart-totalPrice="${item.getTotalPrice()}"-->
-<!--                            th:data-cart-productId="${item.getProduct().getProductId()}"-->
+                            th:data-cartietmId="${item.cartItemId}"
+                            th:data-product-id="${item.getProduct().getProductId()}"
+                            th:data-product-name="${item.getProduct().getProductName()}"
+                            th:data-discount="${item.getDiscount()}"
+                            th:data-original-price="${item.product.getPrice()}"
+                            th:data-final-price="${item.getTotalPrice()}"
+                            th:data-quantity="${item.quantity}"
+                            th:data-file190="${item.getImageUrl()}"
+                            th:data-point="${item.getPoints()}"
+                            th:data-shipping-fee="${item.getDeliveryFee()}"
+                            th:data-shipping-terms="${item.product.shippingTerms}"
+                            style="border-bottom: 1px solid #dddddd">
 
-                            <input type="hidden" th:if="${item.getProductOptionCombination()!=null}" th:value="${item.getProductOptionCombination()}">
                         <td><input type="checkbox" name="select"></td>
                         <td>
+                            <th:block th:if="${item.getProductOptionCombination() != null}">
+                                <input type="hidden" th:class="additionalPrice-Input" th:value="${item.getProductOptionCombination().getAdditionalPrice()}">
+                                <input type="hidden" th:class="combinationString" th:value="${item.getProductOptionCombination().getCombination()}">
+                                <input type="hidden" th:class="combinationId" th:value="${item.getProductOptionCombination().getCombinationId()}">
+                            </th:block>
                             <div>
                                 <img th:src="${'uploads/productImg'+item.getImageUrl()}" alt="">
                             </div>
@@ -79,7 +90,8 @@
                         </td>
                         <td>
                             <div class="qnt">
-                                <input type="number" name="quantity" th:value="${item.quantity}" min="1" readonly>
+                                <input type="number" name="quantity" class="quantity" th:value="${item.quantity}" min="1" readonly>
+
                                 <div class="countModify">
                                     <a class="countModifyBtn" href="#">수정하기</a>
                                     <div class="number-controls" style="display: none;">
