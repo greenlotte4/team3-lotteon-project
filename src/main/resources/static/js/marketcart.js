@@ -194,7 +194,7 @@ applyButtons.forEach(button => {
                 console.log('error', error)
                 alert('수량 오류')
             })
-
+    })
 
 });
 
