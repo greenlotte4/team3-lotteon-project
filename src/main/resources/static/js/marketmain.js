@@ -45,6 +45,10 @@ function showSlide(pageIndex) {
 prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
 nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
 
+const autoSlideInterval = setInterval(() => {
+    showSlide(currentSlide + 1);
+}, 3000); // 3000ms = 3초
+
 // Event listeners for pagination dots
 dots.forEach((dot, index) => {
     dot.addEventListener('click', () => showSlide(index));

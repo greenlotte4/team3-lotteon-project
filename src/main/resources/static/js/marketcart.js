@@ -368,14 +368,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const checkedItems = document.querySelectorAll('input[name="select"]:checked');
 
         if (checkedItems.length === 0) {
-            alert("Please select items to order.");
+            alert("주문할 상품을 선택해 주세요");
+
             return;
         }
 
         const isConfirmed = confirm("Do you want to proceed with the purchase?");
         if (isConfirmed) {
+
+            const cartId = document.getElementById('cartId').value;
             checkedItems.forEach(checkbox => {
                 const row = checkbox.closest('tr');
+
                 const cartItemId = row.getAttribute('data-cart-item-id'); // Product ID
 
                 const quantityInput = row.querySelector('input[name="quantity"]'); // Quantity input element
@@ -397,6 +401,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     quantity: option.quantity
                 }))
             };
+
 
             console.log("Order Request Data:", orderRequestData); // Confirmation log
             console.log("userID",userId);

@@ -7,278 +7,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[[${headerInfo.hd_title}]]:[[${headerInfo.hd_subtitle}]]</title>
-    <link  rel="stylesheet" th:href="@{/css/user/qnadetails.css}">
-
+    <link rel="stylesheet" th:href="@{/css/user/qnadetails.css}">
 </head>
 <body>
 <th:block layout:fragment="content">
-<main>
-    <div class="info">
-        <p class="info-title">나의 쇼핑정보</p>
-        <div class="summary-table">
-            <div class="summary-item">
-                <span>주문</span><br>
-                <span class="summary-value">2</span>
-            </div>
-            <div class="summary-item">
-                <span>쿠폰</span><br>
-                <span class="summary-value">1</span>
-            </div>
-            <div class="summary-item">
-                <span>포인트</span><br>
-                <span class="summary-value">1,000</span>
-            </div>
-            <div class="summary-item">
-                <span>문의</span><br>
-                <span class="summary-value">1</span>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="container">
-        <aside>
-            <ul>
-                <li><a th:href="@{/mypage/orderdetails}">전체주문내역</a></li>
-                <li><a th:href="@{/mypage/pointdetails}">포인트내역</a></li>
-                <li><a th:href="@{/mypage/coupondetails}">쿠폰</a></li>
-                <li><a th:href="@{/mypage/reviewdetails}">나의리뷰</a></li>
-                <li><a th:href="@{/mypage/qnadetails}">문의하기</a></li>
-                <li><a th:href="@{/mypage/mysettings}">나의설정</a></li>
-            </ul>
-        </aside>
-
-        <div class="center">
-            <div class="slider-wrapper">
-                <div class="ad" th:each="banner : ${banners}" th:if="${banner.ban_location} == '마이페이지 배너'">
-                    <a th:href="${banner.ban_link}" target="_blank">
-                        <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
-                    </a>
+    <main>
+        <div class="info">
+            <p class="info-title">나의 쇼핑정보</p>
+            <div class="summary-table">
+                <div class="summary-item">
+                    <span>주문</span><br>
+                    <span class="summary-value">2</span>
+                </div>
+                <div class="summary-item">
+                    <span>쿠폰</span><br>
+                    <span class="summary-value">1</span>
+                </div>
+                <div class="summary-item">
+                    <span>포인트</span><br>
+                    <span class="summary-value">1,000</span>
+                </div>
+                <div class="summary-item">
+                    <span>문의</span><br>
+                    <span class="summary-value">1</span>
                 </div>
             </div>
-            <div>
-                <div class="details">
-                    <p>문의하기</p>
-                </div>
-
-                <table class="inquiry-table">
-                    <tbody>
-                    <tr class="font">
-                        <th>번호</th>
-                        <th>문의채널</th>
-                        <th>문의유형</th>
-                        <th>제목</th>
-                        <th>작성일</th>
-                        <th>상태</th>
-
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">1</data>
-                        </td>
-                        <td>
-                            <data value="">고객센터</data>
-                        </td>
-                        <td>
-                            <data value="">주문 /결제</data>
-                        </td>
-                        <td>
-                            <data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-pending">
-                            <data value="">검토중</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">2</data>
-                        </td>
-                        <td>
-                            <data value="">고객센터</data>
-                        </td>
-                        <td>
-                            <data value="">주문 /결제</data>
-                        </td>
-                        <td>
-                            <data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-complete">
-                            <data value="">답변완료</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">3</data>
-                        </td>
-                        <td>
-                            <data value="">판매자 게시판</data>
-                        </td>
-                        <td>
-                            <data value="">배송</data>
-                        </td>
-                        <td>
-                            <data value="">배송기간이 보통 얼마나 걸리나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-complete">
-                            <data value="">답변완료</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">1</data>
-                        </td>
-                        <td>
-                            <data value="">고객센터</data>
-                        </td>
-                        <td>
-                            <data value="">주문 /결제</data>
-                        </td>
-                        <td>
-                            <data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-pending">
-                            <data value="">검토중</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">2</data>
-                        </td>
-                        <td>
-                            <data value="">고객센터</data>
-                        </td>
-                        <td>
-                            <data value="">주문 /결제</data>
-                        </td>
-                        <td>
-                            <data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-complete">
-                            <data value="">답변완료</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">3</data>
-                        </td>
-                        <td>
-                            <data value="">판매자 게시판</data>
-                        </td>
-                        <td>
-                            <data value="">배송</data>
-                        </td>
-                        <td>
-                            <data value="">배송기간이 보통 얼마나 걸리나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-complete">
-                            <data value="">답변완료</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">1</data>
-                        </td>
-                        <td>
-                            <data value="">고객센터</data>
-                        </td>
-                        <td>
-                            <data value="">주문 /결제</data>
-                        </td>
-                        <td>
-                            <data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-pending">
-                            <data value="">검토중</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">2</data>
-                        </td>
-                        <td>
-                            <data value="">고객센터</data>
-                        </td>
-                        <td>
-                            <data value="">주문 /결제</data>
-                        </td>
-                        <td>
-                            <data value="">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-complete">
-                            <data value="">답변완료</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">3</data>
-                        </td>
-                        <td>
-                            <data value="">판매자 게시판</data>
-                        </td>
-                        <td>
-                            <data value="">배송</data>
-                        </td>
-                        <td>
-                            <data value="">배송기간이 보통 얼마나 걸리나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-complete">
-                            <data value="">답변완료</data>
-                        </td>
-                    </tr>
-                    <tr class="tr3">
-                        <td>
-                            <data value="">3</data>
-                        </td>
-                        <td>
-                            <data value="">판매자 게시판</data>
-                        </td>
-                        <td>
-                            <data value="">배송</data>
-                        </td>
-                        <td>
-                            <data value="">배송기간이 보통 얼마나 걸리나요?</data>
-                        </td>
-                        <td>
-                            <data value="">2022-12-12</data>
-                        </td>
-                        <td class="status-complete">
-                            <data value="">답변완료</data>
-                        </td>
-                    </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
         </div>
-    </div>
-</main>
 
+
+        <div id="container">
+            <aside>
+                <ul>
+                    <li><a th:href="@{/mypage/orderdetails}">전체주문내역</a></li>
+                    <li><a th:href="@{/mypage/pointdetails}">포인트내역</a></li>
+                    <li><a th:href="@{/mypage/coupondetails}">쿠폰</a></li>
+                    <li><a th:href="@{/mypage/reviewdetails}">나의리뷰</a></li>
+                    <li><a th:href="@{/mypage/qnadetails}">문의하기</a></li>
+                    <li><a th:href="@{/mypage/mysettings}">나의설정</a></li>
+                </ul>
+            </aside>
+
+            <div class="center">
+                <div class="slider-wrapper">
+                    <div class="ad" th:each="banner : ${banners}" th:if="${banner.ban_location} == '마이페이지 배너'">
+                        <a th:href="${banner.ban_link}" target="_blank">
+                            <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <div class="details">
+                        <p>문의하기</p>
+                        <a class="inquiry"
+                           style="color: rgb(17, 86, 165); font-weight: bold; cursor: pointer" th:href='@{/cs/qna/write}'>문의글 작성 ></a>
+                    </div>
+
+                    <table class="inquiry-table">
+                        <th:block>
+                            <input type="hidden" name="uid" id="uid" th:value="${#authentication.getName()}">
+                        </th:block>
+
+                        <tbody>
+                        <tr class="font">
+                            <th>번호</th>
+                            <th>문의채널</th>
+                            <th>문의유형</th>
+                            <th>제목</th>
+                            <th>작성일</th>
+                            <th>상태</th>
+                        </tr>
+
+                        <tr class="tr3" th:each="qna : ${qnaPage.content}">
+                            <td>
+                                <span th:text="${qna.qna_id}"></span>
+                            </td>
+                            <td>
+                                <th:block th:if="${qna.qna_type1== '1'}"><span>회원</span></th:block>
+                                <th:block th:if="${qna.qna_type1== '2'}"><span>쿠폰/이벤트</span></th:block>
+                                <th:block th:if="${qna.qna_type1== '3'}"><span>주문/결제</span></th:block>
+                                <th:block th:if="${qna.qna_type1== '4'}"><span>배송</span></th:block>
+                                <th:block th:if="${qna.qna_type1== '5'}"><span>취소/반품/교환</span></th:block>
+                                <th:block th:if="${qna.qna_type1== '6'}"><span>여행/숙박/항공</span></th:block>
+                                <th:block th:if="${qna.qna_type1== '7'}"><span>안전거래</span></th:block>
+                            </td>
+                            <td>
+                                <span th:text="${qna.qna_type2}"></span>
+                            </td>
+                            <td class="titles">
+                                <a th:href="@{/cs/qna/detail?id={id}(id=${qna.qna_id})}">
+                                    <span th:text="${qna.qna_title}"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <span th:text="${#strings.substring(qna.rdate,0,10)}"></span>
+                            </td>
+                            <td class="status-pending">
+                                <span th:text="${qna.qna_status.name() == 'review' ? '검토중' : '답변완료'}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
 </th:block>
