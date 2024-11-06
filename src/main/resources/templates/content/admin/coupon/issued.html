@@ -80,14 +80,19 @@
     </table>
 
     <div class="pagination">
-        <span class="page-btn"><</span>
-        <span class="page-btn">1</span>
-        <span class="page-btn">2</span>
-        <span class="page-btn">3</span>
-        <span class="page-btn">4</span>
-        <span class="page-btn">></span>
+        <!-- 이전 페이지 버튼 -->
+        <span class="page-btn" th:if="${currentPage > 1}" th:href="@{'/seller/coupon/issued?page=' + ${currentPage - 1}}">◀</span>
+
+        <!-- 페이지 번호 -->
+        <span class="page-btn" th:each="i : ${#numbers.sequence(1, totalPages)}"
+              th:href="@{'/seller/coupon/issued?page=' + ${i}}" th:text="${i}"
+              th:classappend="${i == currentPage ? 'active' : ''}"></span>
+
+        <!-- 다음 페이지 버튼 -->
+        <span class="page-btn" th:if="${currentPage < totalPages}" th:href="@{'/seller/coupon/issued?page=' + ${currentPage + 1}}">▶</span>
     </div>
-    
+
+
 </div>
 </section>
 <!--모달 추가-->
