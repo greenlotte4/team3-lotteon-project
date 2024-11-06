@@ -339,11 +339,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(data => {
                         if (data.status === 200) {
                             const Isconfirm = confirm('장바구니에 추가 되었습니다! 장바구니로 이동하시겠습니까?');
-                             if(Isconfirm) {
-                                 window.location.href = `/market/cart`;
-                             }else{
-                                 window.reload();
-                             }
+
+                            if(Isconfirm) {
+                                window.location.href = `/market/cart`;
+                            }else{
+                                window.reload();
+                            }
 
                         } else if (data.status === 401) {
                             alert('로그인 없이 이곳은 접근 금지! 빨리 로그인해 주세요');
@@ -459,11 +460,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-function updateExpectedTotal(totalPrice, totalShippingFee) {
-    // totalPrice와 totalShippingFee 합산하여 결제 예상금액 설정
-    const expectedPrice = totalPrice + totalShippingFee;
-    document.getElementById("expectedPrice").innerText = `${expectedPrice.toLocaleString()}원`;
-}
+    function updateExpectedTotal(totalPrice, totalShippingFee) {
+        // totalPrice와 totalShippingFee 합산하여 결제 예상금액 설정
+        const expectedPrice = totalPrice + totalShippingFee;
+        document.getElementById("expectedPrice").innerText = `${expectedPrice.toLocaleString()}원`;
+    }
 
 
 // 모달 엘리먼트와 버튼, 닫기 버튼 가져오기
@@ -535,20 +536,20 @@ function displayErrorMessage(message) {
 }
 
 // 쿠폰 목록 표시하기
-    function displayCoupons(coupons) {
-        const couponContainer = document.getElementById('discountCouponItems');
-        couponContainer.innerHTML = '';
+function displayCoupons(coupons) {
+    const couponContainer = document.getElementById('discountCouponItems');
+    couponContainer.innerHTML = '';
 
-        if (coupons.length === 0) {
-            const noCoupon = document.createElement('div');
-            noCoupon.className = 'no-coupon';
-            noCoupon.textContent = '등록된 쿠폰이 없습니다.';
-            couponContainer.appendChild(noCoupon);
-        } else {
-            coupons.forEach(coupon => {
-                const couponItem = document.createElement('div');
-                couponItem.className = 'discount-coupon-item';
-                couponItem.innerHTML = `
+    if (coupons.length === 0) {
+        const noCoupon = document.createElement('div');
+        noCoupon.className = 'no-coupon';
+        noCoupon.textContent = '등록된 쿠폰이 없습니다.';
+        couponContainer.appendChild(noCoupon);
+    } else {
+        coupons.forEach(coupon => {
+            const couponItem = document.createElement('div');
+            couponItem.className = 'discount-coupon-item';
+            couponItem.innerHTML = `
                <div class="discount-coupon-info">
                     <div class="discount-amount">${coupon.couponName} (${coupon.benefit})</div>
                     <div class="discount-description">${coupon.notes}</div>
@@ -560,10 +561,10 @@ function displayErrorMessage(message) {
                 </div>
                 <button class="discount-apply-btn" onclick="applyCoupon('${coupon.couponId}')">발급받기</button>
             `;
-                couponContainer.appendChild(couponItem);
-            });
-        }
+            couponContainer.appendChild(couponItem);
+        });
     }
+}
 
 
 

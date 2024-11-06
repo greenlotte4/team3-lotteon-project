@@ -55,10 +55,18 @@
                 <!-- 반복부분 -->
                 <th:block th:unless="${cartItems.size() < 0}" th:data-cart-id="${item.cart.cartId}">
                      <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
-                     <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">
+
+                     <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">\
                         <tr th:each="item : ${cartItems}"
                             th:data-cart-item-id="${item.getCartItemId()}"
+                            th:data-cart-deliveryFee="${item.getDeliveryFee()}"
+                            th:data-cart-discount="${item.discount()}"
+                            th:data-cart-img="${item.imageUrl}"
+                            th:data-cart-productName="${item.productName}"
+                             th:data-cart-totalPrice="${item.getTotalPrice()}"
+                            th:data-cart-productId="${item.getProduct().getProductId()}"
                         style="border-bottom: 1px solid #dddddd">
+                            <input type="hidden" th:if="${item.getProductOptionCombination()!=null}" th:value="${item.getProductOptionCombination()}">
                         <td><input type="checkbox" name="select"></td>
                         <td>
                             <div>
@@ -77,7 +85,9 @@
                                     <a class="countModifyBtn" href="#">수정하기</a>
                                     <div class="number-controls" style="display: none;">
                                         <button type="button" class="qnt-decrease">-</button>
-                                        <input type="number" class="quantity-input" value="1">
+
+                                        <input type="number" class="quantity-input"  value="1">
+
                                         <button type="button" class="qnt-increase">+</button>
                                     </div>
                                 </div>

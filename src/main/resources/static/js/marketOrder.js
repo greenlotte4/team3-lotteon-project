@@ -296,8 +296,10 @@ document.addEventListener('DOMContentLoaded', function () {
             couponDiscount = findCouponValue; // 고정 금액 할인
             console.log("고정 금액 할인 적용:", couponDiscount);
 
-        }
 
+        if (selectedCouponValue === "1") {
+            couponDiscount = Math.floor(totalProductPrice() * 0.03); // Example: 3% discount
+        }
 
         // Calculate the initial total before applying points
         const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
@@ -333,10 +335,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (couponDiscount === 0) {
             pointsEarned = Math.floor(((orderTotal - totalShippingFee()) * pointPercentage) / 100);
 
+
             finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
             finalOrderTotal.textContent = orderTotal.toLocaleString();
             // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
         }
+
+        console.log(pointsEarned);
+        finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
+        finalOrderTotal.textContent = orderTotal.toLocaleString();
+        // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
+    }
+
 
 
         function totalProductDiscount() {
@@ -445,6 +455,7 @@ document.addEventListener('DOMContentLoaded', function () {
             /*console.log("쿠폰 값 (value):", couponValue);
             console.log("쿠폰 사용 금액 (text):", couponText);*/
         });
+
 
 
         function updateOrderItem() {

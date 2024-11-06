@@ -48,9 +48,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // 화면 크기가 변경될 때도 실행
     window.addEventListener('resize', handleAsideScroll);
 
-});
+// });
 
-document.addEventListener("DOMContentLoaded", function () {
+// document.addEventListener("DOMContentLoaded", function () {
     const checkBoxAll = document.getElementById('checkBoxAll');
     const itemCheckBoxes = document.querySelectorAll('input[name="select"]'); // 'checkBox' 대신 여러 체크박스를 선택
 
@@ -351,32 +351,46 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 주문 버튼 이벤트
     document.querySelector('.order-Btn').addEventListener('click', function (event) {
-        event.preventDefault(); // 기본 동작 방지
-        console.log('주문 버튼 클릭');
+        event.preventDefault(); // Prevent default action
+        console.log('Order button clicked');
 
-        const userId = document.getElementById('uid').value;
-        const selectedOptions = [];
+        // Get user and cart IDs
+        const userId = document.getElementById('uid')?.value;
+        const cartId = document.getElementById('cartId')?.value;
 
-        const checkedItems = document.querySelectorAll('input[name="select"]:checked');
-        if (checkedItems.length === 0) {
-            alert("주문할 상품을 선택해 주세요");
+        if (!userId || !cartId) {
+            alert("User ID or Cart ID is missing.");
             return;
         }
 
-        const isConfirmed = confirm("구매하시겠습니까?");
+        const selectedOptions = [];
+        const checkedItems = document.querySelectorAll('input[name="select"]:checked');
+
+        if (checkedItems.length === 0) {
+            alert("주문할 상품을 선택해 주세요");
+
+            return;
+        }
+
+        const isConfirmed = confirm("Do you want to proceed with the purchase?");
         if (isConfirmed) {
 
             const cartId = document.getElementById('cartId').value;
             checkedItems.forEach(checkbox => {
                 const row = checkbox.closest('tr');
-                const cartItemId = row.getAttribute('data-cart-item-id'); // 상품 ID
-                const quantityInput = row.querySelector('input[name="quantity"]'); // 수량 input 요소
-                const quantity = parseInt(quantityInput.value, 10); // 수량 값을 숫자로 변환
+
+                const cartItemId = row.getAttribute('data-cart-item-id'); // Product ID
+
+                const quantityInput = row.querySelector('input[name="quantity"]'); // Quantity input element
+                const quantity = parseInt(quantityInput?.value, 10) || 1; // Parse quantity or default to 1
 
                 // Add to selected options in the structure of CartItemDTO
-                selectedOptions.push({ cartItemId, quantity });
+                if (cartItemId && quantity) {
+                    selectedOptions.push({ cartItemId, quantity });
+                } else {
+                    console.warn("Missing cartItemId or invalid quantity for item:", cartItemId);
+                }
             });
 
             // Create CartOrderRequestDTO structure
@@ -388,8 +402,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }))
             };
 
-            console.log("Order Request Data:", orderRequestData); // 확인용 로그
 
+            console.log("Order Request Data:", orderRequestData); // Confirmation log
+            console.log("userID",userId);
             // Send API request
             fetch(`/api/cart/cartOrder/${userId}`, {
                 method: 'POST',
@@ -408,14 +423,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(data => {
                     console.log("Response data:", data);
                     if (data.success) {
-                        alert("구매가 완료되었습니다.");
+                        alert("Purchase completed successfully.");
                     } else {
-                        alert("오류가 발생했습니다.");
+                        alert("An error occurred during the purchase process.");
                     }
                 })
                 .catch(error => {
                     console.error("Error:", error);
-                    alert("오류가 발생했습니다.");
+                    alert("An error occurred.");
                 });
         }
     });
