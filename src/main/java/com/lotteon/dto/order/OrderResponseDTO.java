@@ -1,6 +1,7 @@
 package com.lotteon.dto.order;
 
 import com.lotteon.dto.product.OptionItemDTO;
+import com.lotteon.dto.product.cart.CartItemDTO;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import lombok.*;
 
@@ -18,6 +19,8 @@ public class OrderResponseDTO {
     private List<OrderItemDTO> orderItems;
     private long usePoint;
     private long couponResult;
+    private long cartId;
+    private List<Long> cartItems;
 
 
     @Builder
@@ -38,13 +41,15 @@ public class OrderResponseDTO {
         this.orderItems = new ArrayList<>();
         long point=0;
         long totaldiscount= usePoint + couponResult;
-
-
+        long cartid = products.get(0).getCartId() == 0  ? 0 : products.get(0).getCartId();
+        List<Long> cartItemIds = new ArrayList<>();
 
         for (BuyNowRequestDTO buyNowRequestDTO : products) {
 
             long originalQuantity = buyNowRequestDTO.getQuantity();
-
+            if(cartid>0){
+                cartItemIds.add(buyNowRequestDTO.getCartItemId());
+            }
             List<OptionItemDTO> optionItemDTOS = buyNowRequestDTO.getOptions();
             long additionalPrice=0;
             long combinationId=0;
@@ -74,8 +79,8 @@ public class OrderResponseDTO {
                     .orderPrice(finalPrice)
                     .point(point)
                     .savedDiscount(savedDiscount)
-                    .shippingFees(Long.parseLong(buyNowRequestDTO.getShippingFee()))
-                    .shippingTerms(Long.parseLong(buyNowRequestDTO.getShippingTerms()))
+                    .shippingFees(parseLongOrDefault(buyNowRequestDTO.getShippingFee(),0))
+                    .shippingTerms(parseLongOrDefault(buyNowRequestDTO.getShippingTerms(),0))
                     .stock(originalQuantity)
                     .status(DeliveryStatus.PREPARING)
                     .build();
@@ -110,6 +115,7 @@ public class OrderResponseDTO {
                 .totalPrice(totalFinalPrice)
                 .build();
 
+        this.cartItems=cartItemIds;
 
     }
 

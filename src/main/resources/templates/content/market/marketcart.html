@@ -55,7 +55,7 @@
 
 
                 <!-- 반복부분 -->
-                <th:block th:unless="${cartItems.size() < 0}" th:data-cart-id="${item.cart.cartId}">
+                <th:block th:if="${cartItems != null and cartItems.size() > 0}" th:data-cart-id="${item.cart.cartId}">
                      <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
                      <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">
                         <tr th:each="item : ${cartItems}"
@@ -117,7 +117,7 @@
 
                 </th:block>
 
-                <th:block th:if="${cartItems.size() < 0}" >
+                <th:block th:unless="${cartItems != null and cartItems.size() > 0}" >
                     <tr>
                         <td colspan="8" style="text-align: center; font-size: 25px">장바구니가 비어있습니다.</td>
                     </tr>
