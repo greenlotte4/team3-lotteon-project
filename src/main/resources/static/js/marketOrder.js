@@ -319,12 +319,20 @@ document.addEventListener('DOMContentLoaded', function () {
         finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
 
         orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
-        let pointsEarned=0;
-        if(couponDiscount === 0){
-            pointsEarned =  Math.floor((( orderTotal -totalShippingFee())* pointPercentage) / 100);
+        let couponDiscount =0;
+
+        if (couponValue <= 100) {
+            // 쿠폰 값이 100 이하일 경우 -> 퍼센트 할인
+            couponDiscount  = Math.floor(totalProductPrice() * (couponValue / 100)); // 퍼센트 할인
+            console.log("퍼센트 할인 적용:", couponDiscount);
+
+        } else {
+            // 쿠폰 값이 100보다 클 경우 -> 고정 금액 할인
+            couponDiscount  = couponValue; // 고정 금액 할인
+            console.log("고정 금액 할인 적용:", couponDiscount);
 
         }
-        console.log("결과 값",pointsEarned);
+        console.log("결과 값",couponDiscount );
         finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
         finalOrderTotal.textContent = orderTotal.toLocaleString();
         // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
