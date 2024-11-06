@@ -46,9 +46,10 @@ public class MypageController {
     public String myInfo(Model model) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/user/mypageMain"; // Points to "content/user/mypageMain"
     }
 
