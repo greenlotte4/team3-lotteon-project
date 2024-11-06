@@ -18,8 +18,17 @@ public class CartOrderRequestDTO {
 
 
     private long cartId;
-    private List<CartItemDTO> cartItemDTO;
+    private List<CartItemRequest> cartItems;  // Renamed to "cartItems" for clarity
 
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CartItemRequest {
+        private long cartItemId;   // Cart item ID
+        private int quantity;      // Quantity of the item
+    }
 
 
 

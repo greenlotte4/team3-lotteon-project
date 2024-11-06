@@ -34,7 +34,7 @@ public class ProductCategoryService {
     private final ProductCategoryRepositoryImpl productCategoryRepositoryImpl;
     private final CacheManager cacheManager;
 
-
+    @Cacheable(value = "categories", key = "'categoryList'")
     public List<ProductCategoryDTO> populateCategories() {
         List<ProductCategory> categories = getCategoryHierarchy();
         List<ProductCategoryDTO> categoryDTOs = new ArrayList<>();
@@ -184,7 +184,6 @@ public class ProductCategoryService {
         return categories;
     }
 
-    @Cacheable(value = "categories", key = "'categoryList'")
     public List<ProductCategoryDTO> getCategoriesWithCacheCheck() {
         log.info("Cache miss - Fetching categories from the database");
         return populateCategories();
