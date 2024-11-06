@@ -143,15 +143,7 @@ public class CouponService {
         return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
     }
 
-    //    // 모든 쿠폰 조회 메소드
-//    public Page<CouponPageDTO> selectCouponsPagination(CouponListRequestDTO requestDTO, Pageable pageable) {
-//        return couponRepository.selectCouponByUserIdForList(Seller.getId(), pageable);
-//    }
-//
-//    // 검색 기능을 위한 메소드
-//    public Page<CouponPageDTO> searchCoupons(String uid, Pageable pageable, String searchType, String searchValue) {
-//        return couponRepository.searchCoupons(uid, pageable, searchType, searchValue);
-//    }
+
     // 검색 기능
     public Page<CouponDTO> searchCoupons(long sellerId, String searchType, String searchValue, Pageable pageable) {
         Page<CouponListResponseDTO> couponPage = couponRepository.searchCoupons(sellerId, pageable, searchType, searchValue);
@@ -188,4 +180,25 @@ public class CouponService {
                 .map(product -> modelMapper.map(product, ProductDTO.class))
                 .collect(Collectors.toList());
     }
-}
+
+
+    public List<CouponDTO> searchByCouponNumber(String couponId) {
+        List<Coupon> coupons = couponRepository.findByCouponIdContaining(couponId);
+        return coupons.stream()
+                .map(CouponDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<CouponDTO> searchByCouponName(String couponName) {
+        List<Coupon> coupons = couponRepository.findByCouponNameContaining(couponName);
+        return coupons.stream()
+                .map(CouponDTO::new)
+                .collect(Collectors.toList());
+    }
+    public List<CouponDTO> searchBySellerCompany(String sellerCompany) {
+        List<Coupon> coupons = couponRepository.findBySellerCompanyContaining(sellerCompany);
+        return coupons.stream()
+                .map(CouponDTO::new)
+                .collect(Collectors.toList());
+    }
+    }
