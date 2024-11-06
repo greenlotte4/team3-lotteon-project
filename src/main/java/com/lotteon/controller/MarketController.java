@@ -17,6 +17,7 @@ import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.entity.product.Review;
+import com.lotteon.repository.cart.CartItemRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.security.MyUserDetails;
@@ -24,6 +25,7 @@ import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.admin.CouponIssuedService;
+import com.lotteon.service.order.CartItemService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
@@ -63,6 +65,7 @@ public class MarketController {
     private final AdminService adminService;
     private final ProductOptionCombinationRepository productOptionCombinationRepository;
     private final DeliveryService deliveryService;
+    private final CartItemService cartItemService;
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
@@ -205,6 +208,14 @@ public class MarketController {
         response.put("result", 0L);
         log.info("요기!!!!!!!!!!!!!!!!!"+orderRequestDTO);
         OrderResponseDTO orderResponseDTO  = new OrderResponseDTO(orderRequestDTO);
+        if(orderResponseDTO.getCartId()>0){
+            List<Long> cartItems= orderResponseDTO.getCartItems();
+            boolean result=cartItemService.deleteCartItems(cartItems,orderResponseDTO.getCartId());
+            if(!result){
+                response.put("result", 0L);
+                return ResponseEntity.ok(response);
+            }
+        }
         long orderId = orderService.saveOrder(orderResponseDTO);
 
 

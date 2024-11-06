@@ -407,8 +407,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 const productData = {
-                    cartItemId: parseInt(row.getAttribute('data-cartItemId'))||0,
-                    cartId: parseInt(row.getAttribute('data-cartId'))||0,
+                    cartItemId: parseInt(row.getAttribute('data-cartItemId')) || 0,
+                    cartId: cartId,
                     productId: row.getAttribute('data-product-id'),
                     productName: row.getAttribute('data-product-name'),
                     discount: row.getAttribute('data-discount'),
@@ -464,9 +464,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // Redirect to the order confirmation page or process further as needed
             console.log("userID", userId);
         }
+
     });
+});
 });
 
 
-    // 추가적인 주문 처리 로직...
 

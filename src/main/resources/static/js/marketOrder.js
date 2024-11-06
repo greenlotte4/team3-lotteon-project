@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     sessionStorage.setItem("page_reload", "true");
+    // 페이지 로드 시 초기값 설정
+
 
     // Format prices with thousands separator for all elements with class 'price'
     const priceElements = document.querySelectorAll('.price');
@@ -47,14 +49,23 @@ document.addEventListener('DOMContentLoaded', function () {
     let totalDiscountPandC=0;
     let orderTotal=0;
     let couponDiscount = 0;
-    const currentPoint = parseInt(document.getElementById("currentPoint").value);
-    const usedPointInput = document.getElementById("used_point");
+    const currentPoint = isNaN(parseInt(document.getElementById("currentPoint").value)) ? 0 : parseInt(document.getElementById("currentPoint").value);
+    const currentIn = document.getElementById("currentIn");
+    currentIn.textContent = currentPoint.toLocaleString();
+    document.getElementById("usedPointResult").textContent = "0";
+    // updateDiscountResult(); // 기본값 초기화
+
+    console.log("CURRENTPOINT",currentPoint);
+    const usedPointInput= document.getElementById('used_point');
+    const usedPoint = isNaN(parseInt(document.getElementById("used_point").value)) ? 0 : parseInt(document.getElementById("used_point").value);
+    console.log("usedPoint!!!!!!",usedPoint);
+
     const couponSelect = document.querySelector("select[name='coupons']");
     const usedPointResult = document.querySelector(".usedPointResult");
     const usedPointResultspan = document.getElementById("usedPointResult");
     const usedCouponResult = document.querySelector(".usedCouponResult");
     const discountResult = document.querySelector(".DiscountResult");
-    const DiscountResult = document.getElementById("finalDiscountResult");
+    const finalDiscountResult = document.getElementById("finalDiscountResult");
     const finalOrderQuantity = document.getElementById("finalOrderQuantity");
     const finalOrderProductPrice = document.getElementById("finalOrderProductPrice");
     const finalOrderDiscount = document.getElementById("finalOrderDiscount");
@@ -77,6 +88,11 @@ document.addEventListener('DOMContentLoaded', function () {
         "FAMILY": 1
     };
     const pointPercentage = gradePercentages[memberGrade] || 0; // Default to 0 if grade not found
+
+    usedCouponResult.textContent = "0";
+    usedPointResult.textContent = "0";
+    finalDiscountResult.textContent = "0";
+    finalOrderTotal.textContent = totalProductPrice().toLocaleString();
 
     //수령자
     console.log(receiver);
@@ -113,6 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeAddressSelect = addressSelectModal.querySelector(".close");
     const closeAddressRegister = addressRegisterModal.querySelector(".close");
     const editButtons = document.querySelectorAll(".edit-btn");
+    let totalExpectedPoint=0;
 
     document.querySelector('.address_change').addEventListener('click', () => {
         console.log("Address change button clicked"); // Confirm the click event
@@ -211,16 +228,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return groupedShippingFees;
     }
+    let t_expectPoint =0;
 
     // Function to create a new product row in the table
     function createProductRow(data) {
         // Get grouped shipping fees for all products
         const shippingFees = calculateShippingFee(productDataArray);
         const shippingFee = shippingFees[data.productId].shippingFee;
+        console.log("data.finalPrice",data.finalPrice );
+        console.log("data.originalPrice",data.originalPrice);
+
+        let Original = data.originalPrice;
+        let discountAmount =( data.originalPrice * data.discount /100)* 10/10
+        let Quantity  = data.quantity;
+        let final = (Original-discountAmount)*Quantity;
+        let expectPoint= Math.floor(data.originalPrice*pointPercentage/100/10)*10;
+
 
         if (data.options && data.options.length > 0) {
             const totalAdditionalPrice = data.options[0].additionalPrice;
-            const calcPrice= data.originalPrice+ totalAdditionalPrice;
+            const calcPrice= Original + totalAdditionalPrice;
+            discountAmount = (calcPrice * data.discount/100) *10 /10;
+            final = (calcPrice - discountAmount)*Quantity;
+            expectPoint =Math.floor( calcPrice*pointPercentage/100/10 )*10;
+            totalExpectedPoint += expectPoint;
+
+
+
+            console.log("data.calcPrice",calcPrice );
             return `
         <tr class="order-row">
             <td>
@@ -237,13 +272,14 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
             <td><span class="T_originalPrice price" data-original="${calcPrice}" data-additional="${calcPrice}">${calcPrice.toLocaleString()}</span></td>
             <td><span class="T_discount">${data.discount}</span>%</td>
-            <td><span class="T_point">${(data.calcPrice * pointPercentage)/100}</span></td>
+            <td><span class="T_point">${expectPoint}</span></td>
             <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
-            <td><span class="T_finalPrice price">${(data.finalPrice * data.quantity).toLocaleString()}</span></td>
+            <td><span class="T_finalPrice price">${final}</span></td>
             <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
         </tr>
     `;
         }else{
+            totalExpectedPoint += expectPoint;
 
             return `
         <tr class="order-row">
@@ -259,11 +295,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="number" class="T_quantity" value="${data.quantity}" readonly>
                 </div>
             </td>
-            <td><span class="T_originalPrice price" data-original="${data.originalPrice}">${(data.originalPrice).toLocaleString()}</span></td>
+            <td><span class="T_originalPrice price" data-original="${Original}">${Original}</span></td>
             <td><span class="T_discount">${data.discount}</span>%</td>
-            <td><span class="T_point">${data.finalPrice * pointPercentage/100}</span></td>
+            <td><span class="T_point">${expectPoint}</span></td>
             <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
-            <td><span class="T_finalPrice price">${(data.finalPrice * data.quantity).toLocaleString()}</span></td>
+            <td><span class="T_finalPrice price">${final}</span></td>
             <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
         </tr>
     `;
@@ -278,7 +314,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     pointuseBtn.addEventListener("click", function () {
         const usedPoint = parseInt(usedPointInput.value) || 0;
-        if (usedPoint > currentPoint) {
+
+        if(currentPoint < 5000){
+            alert('5000원 이상부터 사용가능합니다.');
+        }else if (usedPoint > currentPoint) {
             alert("사용가능한 포인트가 부족합니다.");
             usedPointInput.value = 0;
         } else {
@@ -301,79 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
     couponSelect.addEventListener("change", updateDiscountResult);
 
 
-    // Function to update discount and calculate final order details
-    function updateDiscountResult() {
-        const usedPoint = parseInt(usedPointInput.value) || 0;
-
-        // Get coupon discount based on the selected coupon
-        const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex]?.value || "0";
-        const selectedCoupon = couponSelect.options[couponSelect.selectedIndex];
-
-        console.log("쿠폰!!:", selectedCouponValue);
-
-        const findCouponType = selectedCoupon.getAttribute('data-coupon-type');
-        const findCouponValue = parseFloat(selectedCoupon.getAttribute('data-discount-value'));
-
-        let couponDiscount = 0;
-        console.log("선택된 상품 쿠폰 타입:", findCouponType);
-        console.log("선택된 상품 쿠폰 값:", findCouponValue);
-
-        // Calculate coupon discount
-        if (findCouponValue <= 100) {
-            // If coupon value is 100 or less, apply percentage discount
-            couponDiscount = Math.floor(totalProductPrice() * (findCouponValue / 100));
-            console.log("퍼센트 할인 적용:", couponDiscount);
-        } else {
-            // If coupon value is more than 100, apply fixed discount
-            couponDiscount = findCouponValue;
-            console.log("고정 금액 할인 적용:", couponDiscount);
-        }
-
-        // Apply an additional 3% discount for specific coupon value if needed
-        if (selectedCouponValue === "1") {
-            couponDiscount = Math.floor(totalProductPrice() * 0.03);
-        }
-
-        // Calculate the initial total before applying points
-        const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
-
-        // Apply the points, limiting them to the total order amount
-        const limitedUsedPoint = Math.min(usedPoint, initialTotalOrderAmount);
-        usedPointInput.value = limitedUsedPoint;
-        currentIn.textContent = currentPoint - limitedUsedPoint;
-
-        // Update each discount and display the final results
-        usedPointResult.textContent = limitedUsedPoint;
-        usedPointResultspan.innerText = limitedUsedPoint;
-        usedCouponResult.textContent = couponDiscount;
-
-        // Total discount, including product discounts, coupon, and used points
-        totalDiscount = totalProductDiscount(); // 상품 할인금액
-        totalDiscountPandC = limitedUsedPoint + couponDiscount; // 쿠폰 및 포인트 사용금액
-        discountResult.textContent = totalDiscountPandC;
-        DiscountResult.textContent = totalDiscountPandC;
-
-        // Update final order information
-        finalOrderQuantity.textContent = totalQuantity();
-        finalOrderProductPrice.textContent = totalProductPrice().toLocaleString();
-        finalOrderDiscount.textContent = totalDiscount.toLocaleString();
-        finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
-
-        // Calculate final order total
-        orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
-
-        console.log("결과 값", couponDiscount);
-        let pointsEarned = 0;
-
-        // Calculate points if no coupon discount is applied
-        if (couponDiscount === 0) {
-            pointsEarned = Math.floor(((orderTotal - totalShippingFee()) * pointPercentage) / 100);
-        }
-
-        finalOrderPoint.textContent = pointsEarned.toLocaleString();
-        finalOrderTotal.textContent = orderTotal.toLocaleString();
-    }
-
+    // // Function to update discount and calculate final order details
     // function updateDiscountResult() {
     //     const usedPoint = parseInt(usedPointInput.value) || 0;
     //
@@ -389,67 +356,160 @@ document.addEventListener('DOMContentLoaded', function () {
     //     let couponDiscount = 0;
     //     console.log("선택된 상품 쿠폰 타입:", findCouponType);
     //     console.log("선택된 상품 쿠폰 값:", findCouponValue);
-    //     // 쿠폰 계산
+    //
+    //     // Calculate coupon discount
     //     if (findCouponValue <= 100) {
-    //         // 쿠폰 값이 100 이하일 경우 -> 퍼센트 할인
-    //         couponDiscount = Math.floor(totalProductPrice() * (findCouponValue / 100)); // 퍼센트 할인
+    //         // If coupon value is 100 or less, apply percentage discount
+    //         couponDiscount = Math.floor(totalProductPrice() * (findCouponValue / 100));
     //         console.log("퍼센트 할인 적용:", couponDiscount);
-    //
     //     } else {
-    //         // 쿠폰 값이 100보다 클 경우 -> 고정 금액 할인
-    //         couponDiscount = findCouponValue; // 고정 금액 할인
+    //         // If coupon value is more than 100, apply fixed discount
+    //         couponDiscount = findCouponValue;
     //         console.log("고정 금액 할인 적용:", couponDiscount);
-    //
-    //
-    //         if (selectedCouponValue === "1") {
-    //             couponDiscount = Math.floor(totalProductPrice() * 0.03); // Example: 3% discount
-    //         }
-    //
-    //         // Calculate the initial total before applying points
-    //         const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
-    //
-    //         // Apply the points but limit them to the total order amount
-    //         const limitedUsedPoint = Math.min(usedPoint, initialTotalOrderAmount);
-    //         usedPointInput.value = limitedUsedPoint;
-    //         currentIn.textContent = currentPoint - limitedUsedPoint;
-    //
-    //         // Update each discount and display the final results
-    //         usedPointResult.textContent = limitedUsedPoint;
-    //         usedPointResultspan.innerText = limitedUsedPoint;
-    //         usedCouponResult.textContent = couponDiscount;
-    //
-    //
-    //         // Total discount including product discounts, coupon, and used points
-    //         totalDiscount = totalProductDiscount();   // 상품 할인금액
-    //         totalDiscountPandC = limitedUsedPoint + couponDiscount;   // 쿠폰 및 포인트 사용금액
-    //         discountResult.textContent = totalDiscountPandC;
-    //         DiscountResult.textContent = totalDiscountPandC;
-    //
-    //         // Update final order information
-    //         finalOrderQuantity.textContent = totalQuantity();
-    //         finalOrderProductPrice.textContent = totalProductPrice().toLocaleString();
-    //         finalOrderDiscount.textContent = totalDiscount.toLocaleString();
-    //         finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
-    //
-    //         orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
-    //
-    //
-    //         console.log("결과 값", couponDiscount);
-    //         let pointsEarned = 0;
-    //         if (couponDiscount === 0) {
-    //             pointsEarned = Math.floor(((orderTotal - totalShippingFee()) * pointPercentage) / 100);
-    //
-    //
-    //             finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
-    //             finalOrderTotal.textContent = orderTotal.toLocaleString();
-    //             // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
-    //         }
-    //
-    //         console.log(pointsEarned);
-    //         finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
-    //         finalOrderTotal.textContent = orderTotal.toLocaleString();
-    //         // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
     //     }
+    //
+    //     // Apply an additional 3% discount for specific coupon value if needed
+    //     if (selectedCouponValue === "1") {
+    //         couponDiscount = Math.floor(totalProductPrice() * 0.03);
+    //     }
+    //
+    //     // Calculate the initial total before applying points
+    //     const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
+    //
+    //     // Apply the points, limiting them to the total order amount
+    //     const limitedUsedPoint = Math.min(usedPoint, initialTotalOrderAmount);
+    //     usedPointInput.value = limitedUsedPoint;
+    //     currentIn.textContent = currentPoint - limitedUsedPoint;
+    //
+    //     // Update each discount and display the final results
+    //     usedPointResult.textContent = limitedUsedPoint;
+    //     usedPointResultspan.innerText = limitedUsedPoint;
+    //     usedCouponResult.textContent = couponDiscount;
+    //
+    //     // Total discount, including product discounts, coupon, and used points
+    //     totalDiscount = totalProductDiscount(); // 상품 할인금액
+    //     totalDiscountPandC = limitedUsedPoint + couponDiscount; // 쿠폰 및 포인트 사용금액
+    //     discountResult.textContent = totalDiscountPandC;
+    //     DiscountResult.textContent = totalDiscountPandC;
+    //
+    //     // Update final order information
+    //     finalOrderQuantity.textContent = totalQuantity();
+    //     finalOrderProductPrice.textContent = totalProductPrice().toLocaleString();
+    //     finalOrderDiscount.textContent = totalDiscount.toLocaleString();
+    //     finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
+    //
+    //     // Calculate final order total
+    //     orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
+    //
+    //     console.log("결과 값", couponDiscount);
+    //     let pointsEarned = 0;
+    //
+    //     // Calculate points if no coupon discount is applied
+    //     if (couponDiscount === 0) {
+    //         pointsEarned = Math.floor(((orderTotal - totalShippingFee()) * pointPercentage) / 100);
+    //     }
+    //
+    //     finalOrderPoint.textContent = pointsEarned.toLocaleString();
+    //     finalOrderTotal.textContent = orderTotal.toLocaleString();
+    // }
+
+
+
+
+
+
+    //쿠폰 및 포인트
+    function updateDiscountResult() {
+        const usedPoint = parseInt(usedPointInput.value) || 0;
+
+        // Get coupon discount based on the selected coupon
+        // const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex]?.value || "0";
+        const selectedCoupon = couponSelect.options[couponSelect.selectedIndex];
+
+        if (selectedCoupon) {
+            const findCouponType = selectedCoupon.getAttribute('data-coupon-type');
+            const findCouponValue = parseFloat(selectedCoupon.getAttribute('data-discount-value'));
+
+            // 선택된 쿠폰에 따라 할인 금액 계산
+            if (!isNaN(findCouponValue)) {
+                if (findCouponValue <= 100) {
+                    // 쿠폰 값이 100 이하일 경우 -> 퍼센트 할인
+                    couponDiscount = Math.floor(totalProductPrice() * (findCouponValue / 100)); // 퍼센트 할인
+                    console.log("퍼센트 할인 적용:", couponDiscount);
+                } else {
+                    // 쿠폰 값이 100보다 클 경우 -> 고정 금액 할인
+                    couponDiscount = findCouponValue; // 고정 금액 할인
+                    console.log("고정 금액 할인 적용:", couponDiscount);
+                }
+            }
+        }
+        // 업데이트: 쿠폰이 선택되지 않은 경우에도 쿠폰 할인금액이 0으로 표시
+        usedCouponResult.textContent = couponDiscount.toLocaleString();
+
+
+        // console.log("쿠폰!!:", selectedCouponValue);
+        //
+        // const findCouponType = selectedCoupon.getAttribute('data-coupon-type');
+        // const findCouponValue = parseFloat(selectedCoupon.getAttribute('data-discount-value'));
+        //
+        //
+        // console.log("선택된 상품 쿠폰 타입:", findCouponType);
+        // console.log("선택된 상품 쿠폰 값:", findCouponValue);
+
+        // 쿠폰 계산
+
+
+            // if (selectedCouponValue === "1") {
+            //     couponDiscount = Math.floor(totalProductPrice() * 0.03); // Example: 3% discount
+            // }
+
+            // Calculate the initial total before applying points
+            const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
+
+            // Apply the points but limit them to the total order amount
+             const limitedUsedPoint = Math.min(usedPoint, totalProductPrice() - couponDiscount + totalShippingFee());
+            usedPointResult.textContent = isNaN(limitedUsedPoint) ? 0 : limitedUsedPoint;
+            usedPointResultspan.innerText = isNaN(limitedUsedPoint) ? 0 : limitedUsedPoint;
+
+
+        // Update each discount and display the final results
+            usedPointResult.textContent = limitedUsedPoint;
+            usedPointResultspan.innerText = limitedUsedPoint;
+            usedCouponResult.textContent = couponDiscount;
+
+
+            // Total discount including product discounts, coupon, and used points
+            totalDiscount = totalProductDiscount();   // 상품 할인금액
+            totalDiscountPandC = limitedUsedPoint + couponDiscount;   // 쿠폰 및 포인트 사용금액
+            discountResult.textContent = totalDiscountPandC;
+            finalDiscountResult.textContent = totalDiscountPandC;
+
+            // Update final order information
+            finalOrderQuantity.textContent = totalQuantity();
+            finalOrderProductPrice.textContent = totalProductPrice().toLocaleString();
+        finalOrderDiscount.textContent = totalDiscount.toLocaleString();
+            finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
+
+            orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
+             finalOrderTotal.textContent = (totalProductPrice() - totalDiscountPandC + totalShippingFee()).toLocaleString();
+
+
+            console.log("결과 값", couponDiscount);
+            let pointsEarned = 0;
+            if (couponDiscount === 0) {
+                pointsEarned = Math.floor(((orderTotal - totalShippingFee()) * pointPercentage) / 100);
+
+
+                finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
+                finalOrderTotal.textContent = orderTotal.toLocaleString();
+                // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
+            }
+
+            console.log(pointsEarned);
+            finalOrderPoint.textContent = totalExpectedPoint; // Display with thousands separator
+            finalOrderTotal.textContent = orderTotal.toLocaleString();
+            // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
+    }
 
 
 

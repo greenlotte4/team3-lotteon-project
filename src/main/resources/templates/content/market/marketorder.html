@@ -150,6 +150,7 @@
                                 <input type="hidden" id="memberGrade" th:value="${memberDTO.getGrade()}">
                                 <input type="hidden" id="memberName" th:value="${memberDTO.getName()}">
                                 <input type="hidden" id="memberHp" th:value="${memberDTO.getHp()}">
+                                <p th:text="${memberDTO.getPoint()}"></p>
                                 <input type="hidden" id="currentPoint"
                                        th:value="${memberDTO.point != null ? memberDTO.point.intValue() : 0}">
                                 <span>현재 포인트 :

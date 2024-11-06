@@ -187,7 +187,7 @@ public class MarketCartService {
         }
     }
 
-    private void updateCartSummary(Cart cart) {
+    public void updateCartSummary(Cart cart) {
 
         int totalItemCount = (int) cart.getCartItems().stream()
                 .map(item -> item.getProductOptionCombination() != null && item.getProductOptionCombination().getCombinationId() != null
