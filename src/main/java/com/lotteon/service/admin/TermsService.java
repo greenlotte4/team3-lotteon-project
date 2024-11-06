@@ -95,4 +95,20 @@ public class TermsService {
     public List<Terms> getAllTerms() {
         return termsRepository.findAll();
     }
+
+    public String getTermsDetails(Long termsId) {
+        String termsDetail = termsRepository.findById(termsId)
+                .map(Terms::getContent) // Terms 엔티티에서 내용 가져오기
+                .orElse(null);
+
+        // 여기서 변환 처리
+        if (termsDetail != null) {
+            termsDetail = termsDetail.replaceAll("제(\\d+)조 \\((.*?)\\)", "<h2>제$1조 ($2)</h2>");
+            termsDetail = termsDetail.replaceAll("제\\s*(\\d+)장\\s*(\\((.*?)\\))?\\s*(.*)", "<h3>제 $1장$2 $4</h3>");
+            termsDetail = termsDetail.replaceAll("(?<=</h2>|</h3>)(\\n|\\r)?", "<p></p>");
+            termsDetail = termsDetail.replace("\n", "<br>");
+            termsDetail = termsDetail.replaceAll("(?<=</p>)(\\n|\\r)?", "<p></p>");
+        }
+        return termsDetail;
+    }
 }

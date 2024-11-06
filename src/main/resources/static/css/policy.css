@@ -50,7 +50,6 @@
 .terms {
     display: flex; /* 플렉스 박스를 사용하여 이미지와 텍스트를 나란히 배치 */
     align-items: center; /* 세로 정렬을 가운데로 */
-    margin-bottom: 20px; /* 이미지와 글 사이 여백 */
 }
 
 .image-row {
@@ -74,27 +73,21 @@
     text-align: center; /* 추가 이미지 센터 정렬 */
 }
 
-
-/* 본문 스타일 */
-.articles h3 {
-    margin-top: 15px;
-}
-
-.articles p {
-    margin: 5px 0;
-}
+/*.articles p {*/
+/*    margin: 5px 0;*/
+/*}*/
 
 
 h2 {
     font-size: 1.5em;
     font-weight: bold;
-    margin: 0.5em 0;
+    margin: 0.5em !important; /* 강제로 적용 */
 }
 
 h3 {
     font-size: 1.17em;
     font-weight: bold;
-    margin: 0.83em 0;
+    margin: 0.83em;
 }
 
 /* 기본 이미지 밑 텍스트 스타일 */

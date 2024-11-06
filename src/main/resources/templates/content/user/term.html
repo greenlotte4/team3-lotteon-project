@@ -59,49 +59,43 @@
 
         <button type="button" class="submit-btn" id="agreeBtn">동의하기</button> <!-- type="button"으로 수정 -->
     </main>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const userType = new URLSearchParams(window.location.search).get('type'); // URL 파라미터에서 userType 가져오기
-            const termsList = /*[[${termsList}]]*/ []; // 모든 약관 리스트
 
-            const filteredTerms = termsList.filter(term => {
-                if (userType === "member") {
-                    return ["BUYER", "ELECTRONIC_FINANCE", "LOCATION_INFO", "PRIVACY_POLICY"].includes(term.type);
-                } else if (userType === "seller") {
-                    return ["SELLER", "ELECTRONIC_FINANCE", "PRIVACY_POLICY"].includes(term.type);
+            // 약관 내용 설정을 위한 비동기 함수
+            async function loadTerms() {
+                try {
+                    const response = await fetch('/api/terms'); // API에서 약관 데이터 가져오기
+                    const termsList = await response.json(); // JSON 형식으로 파싱
+
+                    // 사용자 타입에 따른 필터링
+                    const filteredTerms = termsList.filter(term => {
+                        if (userType === "member") {
+                            return ["BUYER", "ELECTRONIC_FINANCE", "LOCATION_INFO", "PRIVACY_POLICY"].includes(term.type);
+                        } else if (userType === "seller") {
+                            return ["SELLER", "ELECTRONIC_FINANCE", "PRIVACY_POLICY"].includes(term.type);
+                        }
+                        return false;
+                    });
+
+                    // 각 textarea에 내용 할당
+                    filteredTerms.forEach((term, index) => {
+                        const termId = `term${index + 1}`; // term1, term2, term3 등으로 ID 생성
+                        document.getElementById(termId).value = term.content; // 약관 내용을 텍스트에 설정
+                    });
+
+                    // seller일 경우 term4 섹션 숨김
+                    if (userType === "seller" && filteredTerms.length < 4) {
+                        document.getElementById('termMain4').style.display = 'none'; // seller일 때 term4 섹션 숨김
+                    }
+                } catch (error) {
+                    console.error('약관을 불러오는 데 오류가 발생했습니다:', error);
                 }
-                return false;
-            });
-
-            // 약관 내용 설정
-            const termsContent = {
-                member: {
-                    term1: "member 회원을 위한 이용약관 내용입니다.",
-                    term2: "전자금융 이용약관 내용입니다.",
-                    term3: "개인정보 수집 동의 내용입니다.",
-                    term4: "위치정보 이용약관 내용입니다."
-                },
-                seller: {
-                    term1: "seller 회원을 위한 이용약관 내용입니다.",
-                    term2: "전자금융 이용약관 내용입니다.",
-                    term3: "개인정보 수집 동의 내용입니다.",
-                    term4: "위치정보 이용약관 내용입니다."
-                }
-            };
-
-            // 각 textarea에 내용 할당
-            if (userType === "member") {
-                document.getElementById('term1').value = termsContent.member.term1;
-                document.getElementById('term2').value = termsContent.member.term2;
-                document.getElementById('term3').value = termsContent.member.term3;
-                document.getElementById('term4').value = termsContent.member.term4;
-            } else if (userType === "seller") {
-                document.getElementById('term1').value = termsContent.seller.term1;
-                document.getElementById('term2').value = termsContent.seller.term2;
-                document.getElementById('term3').value = termsContent.seller.term3;
-                document.getElementById('termMain4').style.display = 'none'; // seller일 때 term4 섹션 숨김
             }
+
+            // 약관 내용 로드
+            loadTerms();
 
             // 동의 버튼 클릭 시 동작
             document.getElementById('agreeBtn').addEventListener('click', function () {
@@ -124,4 +118,5 @@
             });
         });
     </script>
+
 </th:block>

@@ -287,6 +287,7 @@ input[type=search] {
 #header .main .buttonArea li a.chat,#header .main .buttonArea li button.chat {
     overflow: visible;
     position: relative;
+    background-image: url(/images/common/ico_chatbot.svg);
 }
 
 
@@ -330,6 +331,18 @@ input[type=search] {
     margin: 0px;
     border: none;
     background-color: #eee;
+}
+
+.headerslide{
+    width: 1200px;
+    height: 80px;
+    box-sizing: border-box;
+}
+
+.headerslide img{
+    width: 100%; /* 슬라이드 너비에 맞춰 이미지가 늘어남 */
+    height: 80px; /* 세로 크기는 자동으로 조정하여 비율 유지 */
+    display: block; /* 이미지가 블록 요소로 처리되어 아래 여백이 생기지 않음 */
 }
 
 /* nav */

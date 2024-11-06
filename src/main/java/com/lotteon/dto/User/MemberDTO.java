@@ -48,6 +48,10 @@ public class MemberDTO {
         this.regDate = regDate;
         this.lastDate = lastDate;
     }
+
+    public Long getMemberId() {
+        return this.id;
+    }
 }
 
 

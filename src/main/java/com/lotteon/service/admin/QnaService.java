@@ -28,6 +28,7 @@ public class QnaService {
     private final ModelMapper modelMapper;
     private final BoardRepository boardRepository;
 
+
     public QnaPageResponseDTO selectQnaListAll(PageRequestDTO pageRequestDTO){
 
         Pageable pageable = pageRequestDTO.getPageable("no");
@@ -37,9 +38,12 @@ public class QnaService {
             pageqna = adminQnaRepository.selectAdminqnaForOption2(pageRequestDTO, pageable);
         }else if(pageRequestDTO.getParentId() != null){
             pageqna = adminQnaRepository.selectAdminqnaForOption1(pageRequestDTO, pageable);
-        }else {
+        }else if(pageRequestDTO.getQnawriter() != null){
+            pageqna = adminQnaRepository.selectAdminqnaForQnaWriter(pageRequestDTO, pageable);
+        } else{
             pageqna = adminQnaRepository.selectAdminqnaAllForList(pageRequestDTO, pageable);
         }
+
         List<adminQnaDTO> qnaList = pageqna.getContent().stream().map(tuple -> {
             Integer id = tuple.get(0, Integer.class); // Get the ID
             Adminqna qna = adminQnaRepository.findById(id)

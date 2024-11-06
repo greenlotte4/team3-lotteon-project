@@ -1,22 +1,31 @@
 package com.lotteon.service.product;
 
 import com.lotteon.config.RedirectToLoginException;
+import com.lotteon.dto.order.DeliveryStatus;
+import com.lotteon.dto.order.OrderItemDTO;
+import com.lotteon.dto.product.OptionItemDTO;
 import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.dto.product.ProductOptionCombinationDTO;
+import com.lotteon.dto.product.cart.CartItemDTO;
 import com.lotteon.dto.product.cart.CartRequestDTO;
 import com.lotteon.dto.product.cart.CartSummary;
+import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.entity.User.User;
 import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.Option;
 import com.lotteon.entity.product.Product;
+import com.lotteon.entity.product.ProductOptionCombination;
 import com.lotteon.repository.cart.CartItemRepository;
 import com.lotteon.repository.cart.CartRepository;
 import com.lotteon.repository.product.OptionRepository;
+import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,12 +41,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Log4j2
 public class MarketCartService {
+    private final ModelMapper modelMapper;
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final OptionRepository optionRepository;
+    private final ProductOptionCombinationRepository productOptionCombinationRepository;
 
 
     public User getUser() {
@@ -57,11 +68,34 @@ public class MarketCartService {
         }
     }
 
-    public CartItem insertCartItem(CartRequestDTO cartRequestDTO) {
+    public CartItem insertCartItem(BuyNowRequestDTO cartRequestDTO) {
+
+
+        Optional<Product> opt = productRepository.findByProductId(Long.valueOf(cartRequestDTO.getProductId()));
+        ProductDTO productDTO = new ProductDTO();
+        if(opt.isPresent()) {
+            Product product =opt.get();
+            productDTO = product.toDTO(product);
+
+        }
+        List<OptionItemDTO> options = cartRequestDTO.getOptions();
+
+        ProductOptionCombination optionCombination = ProductOptionCombination.builder().build();
+        if(options != null && !options.isEmpty()) {
+            Optional<ProductOptionCombination> optC = productOptionCombinationRepository.findById(options.get(0).getCombinationId());
+            if(optC.isPresent()) {
+                optionCombination = optC.get();
+            }
+        }
+
+
 
         if (cartRequestDTO.getQuantity() <= 0) {
             throw new RuntimeException("수량은 1 이상이어야 합니다,.");
         }
+
+
+
 
         User user = getUser();
 
@@ -74,70 +108,91 @@ public class MarketCartService {
 
         log.info("현재 카트 ID: {}", cart.getCartId());
 
-        Product product = productRepository.findById(cartRequestDTO.getProductId())
+        Product product = productRepository.findById(Long.parseLong(cartRequestDTO.getProductId()))
                 .orElseThrow(() -> new RuntimeException("상품이 없습니다."));
 
-        Option option = optionRepository.findById(cartRequestDTO.getOptionId())
-                .orElseThrow(() -> {
-                    log.error("옵션 ID가 유효하지 않습니다: {}", cartRequestDTO.getOptionId());
-                    return new RuntimeException("옵션이 없습니다.");
-                });
-        Optional<CartItem> existingItem = cartItemRepository
-                .findByCart_CartIdAndProduct_ProductIdAndOption_Id
-                        (cart.getCartId(), product.getProductId(), cartRequestDTO.getOptionId());
+//        Option option = optionRepository.findById(Long.valueOf(cartRequestDTO.()))
+//                .orElseThrow(() -> {
+//                    log.error("옵션 ID가 유효하지 않습니다: {}", cartRequestDTO.getOptionId());
+//                    return new RuntimeException("옵션이 없습니다.");
+//                });
 
-        CartItem cartItem = null;
+        Optional<CartItem> existingItem;
+        if (optionCombination != null && optionCombination.getCombinationId() != null) {
+            existingItem = cartItemRepository.findByCart_CartIdAndProduct_ProductIdAndOptionCombination_CombinationId(
+                    cart.getCartId(), product.getProductId(), optionCombination.getCombinationId()
+            );
+        } else {
+            existingItem = cartItemRepository.findByCart_CartIdAndProduct_ProductId(cart.getCartId(), product.getProductId());
+        }
 
+        CartItem SaveItem = null;
+//
         if (existingItem.isPresent()) {
             // 아이템이 이미 존재하는 경우 수량 업데이트
-            cartItem = existingItem.get();
-            int newQuantity = cartItem.getQuantity() + cartRequestDTO.getQuantity();
-            long newTotalPrice = cartItem.getTotalPrice() + (cartRequestDTO.getFinalPrice() * cartRequestDTO.getQuantity());
+            SaveItem = existingItem.get();
+            long finalprice = parseLongOrDefault(cartRequestDTO.getFinalPrice(),0);
+            long quantity =cartRequestDTO.getQuantity();
+            int newQuantity = SaveItem.getQuantity() + cartRequestDTO.getQuantity();
+            long newTotalPrice = SaveItem.getTotalPrice() + (finalprice * quantity);
 
-            cartItem.setQuantity(newQuantity); // 수량 업데이트
-            cartItem.setTotalPrice(newTotalPrice); // 총 가격 업데이트
-            cartItemRepository.save(cartItem);
+            SaveItem.setQuantity(newQuantity); // 수량 업데이트
+            SaveItem.setTotalPrice(newTotalPrice); // 총 가격 업데이트
+            cartItemRepository.save(SaveItem);
 
-            log.info("기존 아이템 업데이트: {}, 새로운 수량: {}", cartItem.getProduct().getProductName(), newQuantity);
+            log.info("기존 아이템 업데이트: {}, 새로운 수량: {}", SaveItem.getProduct().getProductName(), newQuantity);
 
-            return cartItem; // 업데이트된 아이템 반환
+            return SaveItem; // 업데이트된 아이템 반환
         } else {
             // 새로운 아이템 생성 및 저장
+
+
             CartItem newCartItem = CartItem.builder()
-                    .cart(cart)
                     .product(product)
+                    .cart(cart)
+                    .price(product.getPrice())
                     .productName(product.getProductName())
-                    .imageUrl(product.getFile190())
                     .quantity(cartRequestDTO.getQuantity())
-                    .points(product.getPoint())
-                    .deliveryFee(product.getShippingFee())
-                    .price(cartRequestDTO.getOriginalPrice())
-                    .totalPrice((int) cartRequestDTO.getFinalPrice())
-                    .discount((int) cartRequestDTO.getDiscount())
-                    .deliveryFee(cartRequestDTO.getShippingFee())
-                    .optionName(option.getOptionName())
-                    .option(option)
+                    .deliveryFee(parseLongOrDefault(cartRequestDTO.getShippingFee(),0))
+                    .discount(product.getDiscount())
+                    .deliveryFee(Integer.parseInt(cartRequestDTO.getShippingFee()))
+                    .price( parseLongOrDefault(cartRequestDTO.getFinalPrice(),0))
+                    .imageUrl(cartRequestDTO.getFile190())
                     .build();
 
+            // Conditionally add option combination if available
+            if (optionCombination != null && optionCombination.getCombinationId() != null) {
+                newCartItem.setProductOptionCombination(optionCombination);
+            }
+
+            newCartItem.totalPrice();
             cartItemRepository.save(newCartItem);
             cart.getCartItems().add(newCartItem); // 카트에 새 아이템 추가
 
             log.info("새로운 아이템 추가: {}, 수량: {}", newCartItem.getProductName(), newCartItem.getQuantity());
+                // 카트의 총 수량과 총 가격 업데이트
+                updateCartSummary(cart);
+            return null;
 
         }
 
-        // 카트의 총 수량과 총 가격 업데이트
-        updateCartSummary(cart);
 
-        return cartItem; // 카트 아이템 반환
 
     }
-
+    private long parseLongOrDefault(String value, long defaultValue) {
+        try {
+            return value != null ? Long.parseLong(value.replaceAll(",", "")) : defaultValue;
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
 
     private void updateCartSummary(Cart cart) {
 
         int totalItemCount = (int) cart.getCartItems().stream()
-                .map(item -> item.getOption().getId())
+                .map(item -> item.getProductOptionCombination() != null && item.getProductOptionCombination().getCombinationId() != null
+                        ? item.getProductOptionCombination().getCombinationId()
+                        : item.getProduct().getProductId())
                 .distinct()
                 .count();
 

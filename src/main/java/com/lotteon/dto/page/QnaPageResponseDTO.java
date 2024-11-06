@@ -24,6 +24,7 @@ public class QnaPageResponseDTO {
 
     private Long childId;
     private Long parentId;
+    private String qnawriter;
 
     @Builder
     public QnaPageResponseDTO(PageRequestDTO pageRequestDTO, List<adminQnaDTO> qnadtoList, int total) {
@@ -33,6 +34,7 @@ public class QnaPageResponseDTO {
         this.qnadtoList = qnadtoList;
         this.childId = pageRequestDTO.getChildId();
         this.parentId = pageRequestDTO.getParentId();
+        this.qnawriter = pageRequestDTO.getQnawriter();
 
 
         this.startNo = total - ((pg - 1) * size); //첫번째 글 번호

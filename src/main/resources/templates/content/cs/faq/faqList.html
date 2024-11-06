@@ -12,17 +12,18 @@
 </head>
 <body>
 <th:block layout:fragment="content">
-    <th:block th:replace="~{aside/faqAside}"></th:block>
+    <th:block th:replace="~{aside/faqAside}" th:with="boardCate=${boardCate}"></th:block>
+
 
     <div id="service">
         <div class="title">
             <h2>회원</h2>   <!-- 여기에 카테고리명 -->
             <p>회원관련 자주 묻는 질문입니다</p> <!-- 여기에 카테고리명 -->
         </div>
+        <div id="faq_container" class="faq_container"></div>
         <div class="first container">
             <h2>가입</h2>
             <ul class="first_list">
-                <!-- FAQ 목록을 반복하여 출력 -->
                 <li class="first_li" th:each="faq : ${faqList}">
                     <a th:href="@{/cs/faq/view/{id}(id=${faq.faqNo})}">
                         <span>Q .</span>
@@ -39,7 +40,6 @@
         <div class="second container">
             <h2>탈퇴</h2>
             <ul class="second_list">
-                <!-- FAQ 목록을 반복하여 출력 -->
                 <li class="second_li" th:each="faq : ${faqList}">
                     <a th:href="@{/cs/faq/view/{id}(id=${faq.faqNo})}">
                         <span>Q .</span>
@@ -71,7 +71,44 @@
             </ul>
         </div>
     </div>
+    <script>
+        document.querySelectorAll('.selectOptions').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
 
+                const faqcontainer = document.getElementById('faq_container');
+
+                const parentId = this.getAttribute('data-id');
+                const title = this.textContent;
+
+                //subCategoryId -> pageing 받아와서 처리해야할듯 list/page로 보내어서 정보만 가져오기
+                fetch(`/admin/faq/subcate/${parentId}`)
+                    .then(resp => resp.json())
+                    .then(boardsubCate => {
+                        console.log(boardsubCate);
+                        boardsubCate.forEach((category, index) => {
+
+                            //카테고리 컨체이너
+                            const categoryContainer = document.createElement('div');
+                            categoryContainer.classList.add(`faq_container`);
+                            //카테고리 제목추가
+                            const categoryTitle = document.createElement('h2');
+                            categoryTitle.textContent = category.name;
+                            categoryContainer.appendChild(categoryTitle);
+
+                            //FAQ 리스트 추가하기
+                            const faqList = document.createElement('ul');
+                            faqList.classList.add('faq_List');
+
+
+
+
+                        })
+                    })
+                    .catch();
+            })
+        })
+    </script>
 </th:block>
 </body>
 </html>

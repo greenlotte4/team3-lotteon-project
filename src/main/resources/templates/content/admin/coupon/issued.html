@@ -47,15 +47,32 @@
             <td colspan="8" style="text-align: center;">발급된 쿠폰이 없습니다.</td>
         </tr>
         <tr th:each="Issued : ${IssuedList}">
-            <td><a href="#" class="order-link" th:text="${Issued.issuanceNumber}"></a></td>
+            <td>
+                <a href="#" class="issued-order-link"
+            th:text="${Issued.issuanceNumber}"
+            th:data-issued-couponId="${Issued.couponId}"
+            th:data-issued-id="${Issued.issuanceNumber}"
+            th:data-issued-couponType="${Issued.couponType}"
+            th:data-issued-usageStatus="${Issued.usageStatus}"
+            th:data-issued-memberName="${Issued.memberName}"
+            th:data-issued-couponName="${Issued.couponName}"
+            th:data-issued-restrictions="${Issued.restrictions}"
+            th:data-issued-benefit="${Issued.benefit}"
+            th:data-period="${Issued.startDate} + ' ~ ' + ${Issued.endDate}"
+            th:data-issued-issuer="${Issued.sellerCompany}"
+
+
+
+                ></a>
+            </td>
             <td th:text="${Issued.couponId}"></td>
             <td th:text="${Issued.couponType}"></td>
             <td th:text="${Issued.couponName}"></td>
             <td th:text="${Issued.memberName}"></td>
-            <td th:text="${Issued.status}"></td>
+            <td class="coupon-status" th:text="${Issued.status}"></td>
             <td th:text="${Issued.usageDate != null ? Issued.usageDate : '미사용'}"></td>
             <td>
-                <button class="end-button" th:attr="data-id=${Issued.issuanceNumber}">종료</button>
+                <button class="issued-end-button" th:attr="data-id=${Issued.issuanceNumber}">종료</button>
             </td>
         </tr>
 
@@ -63,14 +80,19 @@
     </table>
 
     <div class="pagination">
-        <span class="page-btn"><</span>
-        <span class="page-btn">1</span>
-        <span class="page-btn">2</span>
-        <span class="page-btn">3</span>
-        <span class="page-btn">4</span>
-        <span class="page-btn">></span>
+        <!-- 이전 페이지 버튼 -->
+        <span class="page-btn" th:if="${currentPage > 1}" th:href="@{'/seller/coupon/issued?page=' + ${currentPage - 1}}">◀</span>
+
+        <!-- 페이지 번호 -->
+        <span class="page-btn" th:each="i : ${#numbers.sequence(1, totalPages)}"
+              th:href="@{'/seller/coupon/issued?page=' + ${i}}" th:text="${i}"
+              th:classappend="${i == currentPage ? 'active' : ''}"></span>
+
+        <!-- 다음 페이지 버튼 -->
+        <span class="page-btn" th:if="${currentPage < totalPages}" th:href="@{'/seller/coupon/issued?page=' + ${currentPage + 1}}">▶</span>
     </div>
-    
+
+
 </div>
 </section>
 <!--모달 추가-->

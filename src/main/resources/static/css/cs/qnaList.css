@@ -34,6 +34,7 @@ h2 {
     font-size: 13px;
 }
 
+
 .first_li span {
     font-weight: 500;
     font-size: 13px;
@@ -130,7 +131,7 @@ h2 {
     text-indent: -1px;
 }
 
-.pagination a.active, .pagination button.active, .pagination span.active {
+.pagination a.active, .pagination button.active, .pagination span.active , .qnacurrent{
     margin: 0 4px;
     background-color: #343b4d;
     border: 1px solid #343b4d;

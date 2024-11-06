@@ -16,8 +16,8 @@
     <th:block th:replace="~{aside/qnaAside}"></th:block>
     <div id="service">
         <div class="title">
-            <h2>회원</h2>
-            <p>회원 관련 자주 묻는 질문입니다.</p>
+            <h2 th:text="${qna.category.getParent().name}"></h2>
+            <p th:text = "${qna.category.getParent().name} + '관련 자주 묻는 질문입니다.'"></p>
         </div>
 
         <div class="qna-section">
@@ -28,23 +28,23 @@
                 </colgroup>
                 <tr>
                     <th colspan="2" class="signup-title">
-                        <span th:text="${qna.qna_title}" style="font-weight: bold; color: #333; font-size: 16px;"></span>
+                        <span th:text="${qna.qnatitle}" style="font-weight: bold; color: #333; font-size: 16px;"></span>
                         <div class="qinfo-container">
-                            <span class="qinfo-label" th:text="${qna.qna_writer}"></span>
-                            <span class="qinfo-label" th:text="${#temporals.format(qna.rdate, 'yyyy-MM-dd')}"></span>
+                            <span class="qinfo-label" th:text="${qna.qnawriter}"></span>
+                            <span class="qinfo-label">[[${#strings.substring(qna.date,0,10)}]]</span>
                         </div>
                     </th>
                 </tr>
                 <tr>
                     <td class="qcontent-label">[내용]</td>
-                    <td th:text="${qna.qna_content}">질문 내용</td>
+                    <td th:text="${qna.qnacontent}">질문 내용</td>
                 </tr>
                 <tr>
                     <th colspan="2">답변</th>
                 </tr>
                 <tr>
                     <td class="acontent-label">[답변]</td>
-                    <td th:text="${qna.qna_status == 'completed' ? qna.qna_answer : '아직 답변이 완료되지 않았습니다.'}">답변 내용</td>
+                    <td th:text="${qna.qna_status.name() == 'completed' ? qna.qnareply : '아직 답변이 완료되지 않았습니다.'}">답변 내용</td>
                 </tr>
             </table>
 

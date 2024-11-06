@@ -30,7 +30,6 @@ public class UserService {
     private final PointService pointService;
 
     public Optional<User> findUserByUid(String uid) {
-
         return userRepository.findByUid(uid); // 아이디로 사용자 검색
     }
 
@@ -133,5 +132,9 @@ public class UserService {
 
     public Optional<User> findById(String uid) {
         return userRepository.findById(uid); //uid를 사용하여 User조회
+    }
+
+    public User save(User user) {
+        return userRepository.save(user); // 사용자 저장
     }
 }

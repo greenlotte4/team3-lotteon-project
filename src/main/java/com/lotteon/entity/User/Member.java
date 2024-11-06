@@ -45,7 +45,7 @@ public class Member {
 
     private String addr2;
 
-    private BigDecimal point;
+    private BigDecimal point = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonIgnore // 이 필드는 JSON 직렬화에서 제외됨
@@ -85,7 +85,7 @@ public class Member {
         //'VVIP','VIP','GOLD','SILVER','FAMILY'
     }
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_uid") // 외래 키
     @JsonBackReference
     private User user; // User와의 관계
@@ -95,6 +95,15 @@ public class Member {
 
     public String getUid() {
         return user != null ? user.getUid() : null; // User가 null이 아닐 경우 uid 반환
+    }
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonIgnore // 이 필드는 JSON 직렬화에서 제외됨
+    private List<Delivery> deliveryList = new ArrayList<>();
+
+    public void addDelivery(Delivery delivery) {
+        deliveryList.add(delivery);
+        delivery.setMember(this);  // 연관 관계 설정
     }
 
 }

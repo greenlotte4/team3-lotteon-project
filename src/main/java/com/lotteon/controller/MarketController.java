@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.User.DeliveryDTO;
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
@@ -11,22 +12,30 @@ import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.dto.order.OrderRequestDTO;
 import com.lotteon.entity.User.User;
+import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.entity.product.Review;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
+import com.lotteon.repository.product.ProductOptionCombinationRepository;
+import com.lotteon.security.MyUserDetails;
+import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.ReviewService;
+import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
+import com.lotteon.service.user.DeliveryService;
+import com.lotteon.service.user.CouponDetailsService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -47,22 +56,24 @@ public class MarketController {
     private final ProductService productService;
     private final ProductCategoryService productCategoryService;
     private final UserService userService;
+    private final CouponDetailsService couponDetailsService;
     private final MarketCartService marketCartService;
     private final ReviewService reviewService;
     private final OrderService orderService;
     private final AdminService adminService;
     private final ProductOptionCombinationRepository productOptionCombinationRepository;
+    private final DeliveryService deliveryService;
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
         ProductCategoryDTO categoryDTOs =  productCategoryService.getCategoryById(category);
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         log.info(categoryDTOs);
-        log.info("Banners: {}", banners);
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("active",category);
         model.addAttribute("content", "main");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
     }
 
@@ -153,13 +164,36 @@ public class MarketController {
 
 
     @GetMapping("/order/{uid}")
-    public String marketOrder(@PathVariable String uid,Model model) {
+    public String marketOrder(@PathVariable String uid,Model model, String productId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        String memberUid = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
 
         log.info("uid ::::::::::"+uid);
         MemberDTO memberDTO = userService.getByUsername(uid);
+
+
+
+        log.info("멤버 아이디다"+memberUid);
+
+        // 해당 멤버의 발급된 쿠폰 목록 조회
+
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberOrderCouponList(memberUid, productId); // 서비스에서 발급된 쿠폰 조회
+        log.info("발급받은 쿠폰: {}", issuedCoupons);
+
+        model.addAttribute("issuedList", issuedCoupons);
+
+
+
         log.info(memberDTO);
         model.addAttribute("memberDTO",memberDTO);
 
+        Long memberId = memberDTO.getMemberId(); // memberId가 MemberDTO에 있다고 가정
+        List<DeliveryDTO> deliveryDTOList = deliveryService.getByMemberId(memberId);; // memberId로 DeliveryDTO 가져옴
+        log.info("deliveryDTO ::::::::::" + deliveryDTOList);
+        model.addAttribute("deliveryDTO", deliveryDTOList);
+
+        model.addAttribute("productId", productId);
 
         return "content/market/marketorder"; // Points to the "content/market/marketorder" template
     }
@@ -244,16 +278,16 @@ public class MarketController {
         return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template
     }
 
-    @PostMapping("/cart/cartOrder/{cartId}")
-    public ResponseEntity<Cart> cartOrder(
-            @PathVariable long cartId,
-            @RequestBody List<BuyNowRequestDTO> cartOrders
-    ){
-        log.info("상품 주문 오더 들어왔다");
-        for (BuyNowRequestDTO cartOrder : cartOrders) {
-            log.info("오더들"+cartOrder);
-        }
-
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/cart/cartOrder/{cartId}")
+//    public ResponseEntity<Cart> cartOrder(
+//            @PathVariable long cartId,
+//            @RequestBody List<BuyNowRequestDTO> cartOrders
+//    ){
+//        log.info("상품 주문 오더 들어왔다");
+//        for (BuyNowRequestDTO cartOrder : cartOrders) {
+//            log.info("오더들"+cartOrder);
+//        }
+//
+//        return ResponseEntity.ok().build();
+//    }
 }

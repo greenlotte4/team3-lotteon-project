@@ -51,16 +51,20 @@ public class AdminConfigController {
         List<Terms> termsList = termsService.findAllTerms();
         model.addAttribute("termsList", termsList);
 
-        return "content/admin/config/admin_Terms";
+        return "content/admin/config/terms";
     }
-
     @PostMapping("/terms")
     public String updateTerms(@ModelAttribute TermsDto termsDto, Model model) {
+        // 약관 수정
         termsService.updateTermsContent(termsDto);
-        model.addAttribute("message", "약관이 수정되었습니다."); // 메시지 추가
-        model.addAttribute("termsList", termsService.findAllTerms()); // 약관 목록을 다시 가져오는 로직 추가
-        return "content/admin/config/admin_Terms"; // 약관 관리 페이지로 리다이렉트
+        // 사용자에게 수정 완료 메시지 추가
+        model.addAttribute("message", "약관이 수정되었습니다.");
+        // 약관 목록을 다시 가져와서 모델에 추가
+        model.addAttribute("termsList", termsService.findAllTerms());
+        // 약관 관리 페이지로 리다이렉트
+        return "content/admin/config/terms";
     }
+
 
 
 

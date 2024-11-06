@@ -1,19 +1,23 @@
 package com.lotteon.controller;
 
 
-import com.lotteon.dto.FaqDTO;
-import com.lotteon.dto.NoticeDTO;
-import com.lotteon.dto.QnaDTO;
+import com.lotteon.dto.*;
+import com.lotteon.dto.page.PageRequestDTO;
+import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.entity.BoardCate;
 import com.lotteon.entity.Notice;
 import com.lotteon.entity.NoticeType;
 import com.lotteon.entity.QnA;
+import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.repository.BoardRepository;
 import com.lotteon.repository.QnaRepository;
+import com.lotteon.repository.admin.AdminQnaRepository;
 import com.lotteon.repository.admin.NoticeRepository;
+import com.lotteon.service.BoardService;
 import com.lotteon.service.CsService;
 import com.lotteon.service.admin.FaqService;
 import com.lotteon.service.admin.NoticeService;
+import com.lotteon.service.admin.QnaService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -52,6 +56,9 @@ public class CsController {
     private final NoticeRepository noticeRepository;
     private final ModelMapper getModelMapper;
     private final BoardRepository boardRepository;
+    private final BoardService boardService;
+    private final QnaService qnaService;
+    private final AdminQnaRepository adminQnaRepository;
 
     @GetMapping("/main")
     public String main(Model model, @PageableDefault(size = 5) Pageable pageable) {
@@ -70,11 +77,18 @@ public class CsController {
     }
 
 
+
+    //FAQ
     @GetMapping("/faq/list")
     public String faqList(Model model) {
+
         // FAQ 목록을 조회하여 모델에 추가
         List<FaqDTO> faqList = faqService.selectAllfaq();
         model.addAttribute("faqList", faqList);
+
+        List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
+        log.info("11111111111111111"+boardCateDTOS);
+        model.addAttribute("boardCate", boardCateDTOS);
         return "content/cs/faq/faqList";
     }
 
@@ -89,6 +103,9 @@ public class CsController {
         }
         return "content/cs/faq/faqView"; // faqView.html로 이동
     }
+
+
+
 
 
     @GetMapping("/notice/list")
@@ -120,78 +137,61 @@ public class CsController {
             return "redirect:/notice/list"; // 공지사항이 없으면 목록으로 리다이렉트
         }
     }
-
-
-    // 문의하기 전체 내역 조회
+    //QNA
     @GetMapping("/qna/list")
-    public String qnaList(
-            @RequestParam(value = "cate", required = false) String category,
-            Authentication authentication, Model model,
-            @PageableDefault(size = 10, sort = "rdate", direction = Sort.Direction.DESC) Pageable pageable
-    ) {
-        Page<QnA> qnaPage;
+    public String qnaList(Model model, PageRequestDTO pageRequestDTO) {
 
-        if ("8".equals(category)) {  // cate=8 일 때
-            String uid = authentication.getName();  // 현재 사용자의 아이디를 가져옴
-            qnaPage = qnaRepository.findByQnaWriter(uid, pageable);  // 사용자 게시물만 조회
-        } else if (category != null) {
-            qnaPage = qnaRepository.findByQna_type1(category, pageable);
-        } else {
-            qnaPage = qnaRepository.findAll(pageable);
-        }
+        QnaPageResponseDTO qnaPageResponseDTO = qnaService.selectQnaListAll(pageRequestDTO);
+        model.addAttribute(qnaPageResponseDTO);
+        log.info("ssssssssss : " + qnaPageResponseDTO);
 
-        // 작성자 이름 마스킹
-        qnaPage.forEach(qna -> qna.setQna_writer(maskUsername(qna.getQna_writer())));
-
-        model.addAttribute("qnaPage", qnaPage);
-        model.addAttribute("selectedCategory", category);
+        List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
+        log.info(boardCateDTOS);
+        model.addAttribute("boardCate", boardCateDTOS);
         return "content/cs/qna/qnaList";
-    }
 
-
-    // 아이디 마스킹 메소드
-    public String maskUsername(String username) {
-        if (username.length() <= 3) {
-            return username; // 아이디가 3자 이하일 경우 그대로 반환
-        }
-        // 앞의 3자는 그대로 두고 나머지는 마스킹 처리
-        return username.substring(0, 3) + "****";
     }
 
     // 문의하기 상세 조회
-    @GetMapping("/qna/detail/{id}")
-    public String qnaView(@PathVariable("id") int id, Model model, Principal principal) {
-        QnA qna = qnaRepository.findById(id)
+    @GetMapping("/qna/detail")
+    public String qnaView(int id, Model model, Principal principal) {
+        adminQnaDTO qnaDTO =  qnaService.selectQna(id);
+        Adminqna qna = adminQnaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid QnA ID: " + id));
+        log.info("aaaaaaaaaaaaaaaaaa: "+ qnaDTO);
 
         // 현재 사용자의 이름을 가져옴
         String username = (principal != null) ? principal.getName() : null;
 
         // 작성자와 현재 사용자가 다를 경우 팝업 메시지 표시
-        if (username == null || !qna.getQna_writer().equals(username)) {
+        if (username == null || !qna.getQnawriter().equals(username)) {
             model.addAttribute("popupMessage", "다른 사용자의 게시물입니다.<br>해당 게시물에 접근할 수 없습니다.");
             model.addAttribute("isPopup", true);
         } else {
             model.addAttribute("isPopup", false);
         }
 
-        model.addAttribute("qna", qna);
+        model.addAttribute("qna", qnaDTO);
         return "content/cs/qna/qnaView";
     }
 
+    //카테고리 id
     @GetMapping("/qna/write")
     public String qnaWrite(Model model) {
+
+        List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
+        log.info(boardCateDTOS);
+        model.addAttribute("boardCate",boardCateDTOS);
         return "content/cs/qna/qnaWrite";
     }
 
     @PostMapping("/qna/write")
-    public String qnaWrite(@ModelAttribute QnaDTO qnaDTO, Principal principal) {
+    public String qnaWrite(@ModelAttribute adminQnaDTO adminqnaDTO, Principal principal) {
         String writer = principal.getName();
+        adminqnaDTO.setQnawriter(writer);
 
-        qnaDTO.setQna_writer(writer);
-
-        csService.writeQnA(qnaDTO);
-        return "redirect:/cs/qna/list?cate=8";
+        csService.writeQnA(adminqnaDTO);
+        return "redirect:/cs/qna/list";
     }
 
 
