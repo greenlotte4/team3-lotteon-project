@@ -24,6 +24,8 @@ public class OrderItemDTO {
     private long orderId;
     private long optionId;
     private String optionDesc;
+    private String combination;
+    private long combinationId;
     private long stock;
     private long price;
     private String traceNumber;
@@ -31,7 +33,7 @@ public class OrderItemDTO {
     private long shippingTerms;
     private long shippingFees;
     private long point;
-
+    private DeliveryStatus status;
     @Transient
     private Seller seller;
 

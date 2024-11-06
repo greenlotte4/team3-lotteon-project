@@ -1,3 +1,10 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
 .findid-section {
     width: 520px;
     margin: 76px auto 60px;
@@ -9,13 +16,19 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.findid-section > img {
+    display: block;
+    margin: 0 auto;
+}
+
 .findid-section > h2 {
     font-size: 24px;
-    margin-bottom: 16px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     text-align: center;
     color: #333;
-    background: url("/static/images/common/footer-img-logo-1-2023.png");
 }
+
 
 hr {
     border: none;
@@ -47,7 +60,7 @@ hr {
 }
 
 .nametext {
-    width: 100%;
+    width: 95%;
     height: 48px;
     padding-left: 8px;
     font-size: 14px;
@@ -69,7 +82,7 @@ hr {
 }
 
 .emailtext {
-    width: calc(75% - 10px); /* 왼쪽 입력 필드 너비 증가 */
+    width: calc(72% - 10px); /* 왼쪽 입력 필드 너비 증가 */
     height: 48px;
     padding-left: 8px;
     font-size: 14px;
@@ -91,7 +104,7 @@ hr {
 }
 
 .verificationCodetext {
-    width: calc(75% - 10px); /* 인증번호 입력 필드 너비 증가 */
+    width: calc(72% - 10px); /* 인증번호 입력 필드 너비 증가 */
     height: 48px;
     padding-left: 8px;
     font-size: 14px;
@@ -121,6 +134,7 @@ hr {
 }
 
 .note {
+    height: 58.5px;
     margin-top: 20px;
     font-size: 13px;
     line-height: 1.5;

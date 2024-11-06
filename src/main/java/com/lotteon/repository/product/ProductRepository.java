@@ -5,12 +5,10 @@ package com.lotteon.repository.product;
 */
 import com.lotteon.entity.product.Product;
 import com.lotteon.repository.custom.ProductRepositoryCustom;
-import groovy.lang.Tuple;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -28,6 +26,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> , Produc
     public Optional<Product> findByProductId(Long productId);
 
     Optional<Product> findById(long productId);
+    Page<Product> findByProductNameContaining(String keyword,Pageable pageable);
+    Page<Product> findByProductNameContainingAndSellerId(String keyword,String sellerUid,Pageable pageable);
+    Page<Product> findByProductCodeContaining(String keyword,Pageable pageable);
+    Page<Product> findByProductCodeContainingAndSellerId(String keyword,String sellerUid,Pageable pageable);
+    Page<Product> findBySellerIdContaining(String keyword,Pageable pageable);
+    Page<Product> findBySellerIdContainingAndSellerId(String keyword,String sellerUid,Pageable pageable);
+    Page<Product> findByProductDetailsContaining(String keyword,Pageable pageable);
+    Page<Product> findByProductDetailsContainingAndSellerId(String keyword,String sellerUid,Pageable pageable);
+
+    @Modifying
+    @Query("UPDATE Product p SET p.stock = :stock WHERE p.productId = :productId")
+    void updateProductQuantity(@Param("stock") long stock, @Param("productId") long productId);
 
 //    @EntityGraph(attributePaths = {
 //            "productDetails",

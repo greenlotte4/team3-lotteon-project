@@ -15,7 +15,6 @@ const buyNowBtn = document.getElementById("buy-now-btn");
 const addToCartBtn = document.getElementById("add-to-cart");
 
 const byCart = document.getElementById('buyCart');
-
 document.addEventListener('DOMContentLoaded', function () {
     // 필요한 요소들 정의
     const optionSelectElements = document.querySelectorAll('.option-select');
@@ -29,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const uidElement = document.getElementById("uid");
     const uid = uidElement ? uidElement.value : null;
     const stockStatusElement = document.getElementById("stockStatus"); // Element to show stock status
-
+    const isOptionRequired = optionSelectElements.length > 0; // Checks if options are required
 
     let selectOptionGroup = [];
     let selectedOptions = []; // Array to store selected options
@@ -191,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('로그인 후 이용해 주세요');
             window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
             return;
-        } else if (selectedOptions.length === 0) {
+        } else if (isOptionRequired && selectedOptions.length === 0) {
             alert("옵션을 선택해주세요.");
             return;
         }
@@ -220,11 +219,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     shippingFee: shippingFee,
                     shippingTerms: shippingTerms
                 });
-            } else if (optionSelectElements.length === 0) {
+            } else {
                 // If no options, just send productId and quantity
                 productDataArray.push({
                     productId: productId,
                     productName: productName,
+                    originalPrice: originalPrice,
                     file190: file190,
                     finalPrice: Math.floor(originalPrice * (100 - discount) / 100),
                     discount: discount,
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (quantity <= 0) {
                 alert('수량을 1 이상으로 설정해 주세요.');
                 return;
-            } else if (!selectedOptionValue) {
+            } else if (isOptionRequired && selectedOptions.length === 0) {
                 alert("옵션을 선택해 주세요");
                 return;
             }
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         shippingFee: shippingFee,
                         shippingTerms: shippingTerms
                     });
-                } else if (optionSelectElements.length === 0) {
+                } else {
                     // If no options, just send productId and quantity
                     productDataArray.push({
                         productId: productId,
@@ -379,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (quantity <= 0) {
                 alert('수량을 1 이상으로 설정해 주세요.');
                 return;
-            } else if (!selectedOptionValue) {
+            } else if (isOptionRequired && selectedOptions.length === 0) {
                 alert("옵션을 선택해 주세요");
                 return;
             }

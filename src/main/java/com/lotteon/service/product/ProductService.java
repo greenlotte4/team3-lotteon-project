@@ -29,8 +29,10 @@ import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -186,34 +188,85 @@ public class ProductService {
     //사용자별 productlist
     public ProductListPageResponseDTO selectProductBySellerId(String sellerId,PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("sold",10);
-        Page<Product> products = productRepository.findBySellerId(sellerId,pageable);
-        if(products.isEmpty()) {
-            return ProductListPageResponseDTO.builder()
-                    .pageRequestDTO(pageRequestDTO)
-                    .total(0)
-                    .build();
+        Page<Product> products;
+        if(pageRequestDTO.getType()==null || pageRequestDTO.getKeyword()==null) {
+            products = productRepository.findBySellerId(sellerId, pageable);
+            if (products.isEmpty()) {
+                return ProductListPageResponseDTO.builder()
+                        .pageRequestDTO(pageRequestDTO)
+                        .total(0)
+                        .build();
+            }
+        }else{
+            String type=pageRequestDTO.getType();
+            String keyword=pageRequestDTO.getKeyword();
+            switch (type) {
+                case "productName":
+                    products= productRepository.findByProductNameContainingAndSellerId(keyword,sellerId,pageable);
+                    break;
+                case "productCode":
+                    products= productRepository.findByProductCodeContainingAndSellerId(keyword,sellerId,pageable);
+                    break;
+                case "seller":
+                    products= productRepository.findBySellerIdContainingAndSellerId(keyword,sellerId,pageable);
+                    break;
+                case "manufacturer":
+                    products= productRepository.findByProductDetailsContainingAndSellerId(keyword,sellerId,pageable);
+                    break;
+                default:
+                    return null;
+            }
         }
        List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
 
         return ProductListPageResponseDTO.builder()
                 .total(productDTOs.size())
+                .ProductDTOs(productDTOs)
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
 
     public ProductListPageResponseDTO selectProductAll(PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("hit",10);
-        Page<Product> products = productRepository.findAll(pageable);
-        if(products.isEmpty()) {
-            return ProductListPageResponseDTO.builder()
-                    .pageRequestDTO(pageRequestDTO)
-                    .total(0)
-                    .build();
+        Page<Product> products;
+        if(pageRequestDTO.getType()==null || pageRequestDTO.getKeyword()==null){
+            products = productRepository.findAll(pageable);
+            if(products.isEmpty()) {
+                return ProductListPageResponseDTO.builder()
+                        .pageRequestDTO(pageRequestDTO)
+                        .total(0)
+                        .build();
+            }
+        }else{
+            String type=pageRequestDTO.getType();
+            String keyword=pageRequestDTO.getKeyword();
+            switch (type) {
+                case "productName":
+                   products= productRepository.findByProductNameContaining(keyword,pageable);
+                   break;
+                case "productCode":
+                    products= productRepository.findByProductCodeContaining(keyword,pageable);
+                    break;
+                case "seller":
+                    products= productRepository.findBySellerIdContaining(keyword,pageable);
+                    break;
+                case "manufacturer":
+                    products= productRepository.findByProductDetailsContaining(keyword,pageable);
+                    break;
+                default: return  ProductListPageResponseDTO.builder()
+                        .pageRequestDTO(pageRequestDTO)
+                        .total(0)
+                        .build();
+            }
         }
+
+
+
         List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
 
         return ProductListPageResponseDTO.builder()
                 .total(productDTOs.size())
+                .ProductDTOs(productDTOs)
                 .pageRequestDTO(pageRequestDTO)
                 .build();
     }
@@ -255,12 +308,12 @@ public class ProductService {
 
 
     //main list
-    public ProductListPageResponseDTO getProductList(PageRequestDTO pageRequestDTO) {
+//    @Cacheable(value = "productListCache", key = "#pageRequestDTO.categoryId + '-' + #sort + '-' + #pageRequestDTO.page")
+    public ProductListPageResponseDTO getSortProductList(PageRequestDTO pageRequestDTO,String sort ) {
        log.info("일단 들어와"+pageRequestDTO);
+        Pageable pageable = pageRequestDTO.getPageable(sort,10);
 
-        Pageable pageable = pageRequestDTO.getPageable("hit",10);
-
-        Page<ProductSummaryDTO> tuples = productRepository.selectProductByCategory(pageRequestDTO,pageable);
+        Page<ProductSummaryDTO> tuples = productRepository.selectProductByCategory(pageRequestDTO,pageable,sort);
 
         log.info("PageRequestDTO: " + pageRequestDTO);
         log.info("Pageable: " + pageable.getPageSize());
@@ -292,6 +345,8 @@ public class ProductService {
         }
 
     }
+
+
     public static class ProductNotFoundException extends RuntimeException {
         public ProductNotFoundException(String message) {
             super(message);
@@ -327,6 +382,13 @@ public class ProductService {
 
         ProductDTO productDTO = product.toDTO(product);
         log.info("여기!!!333"+productDTO);
+        List<Option> options = product.getOptions();
+        log.info("option!!!!!!:"+options);
+        List<OptionDTO> optionDTOS = new ArrayList<>();
+        if(!options.isEmpty() || options != null){
+            optionDTOS = product.getOptions().stream().map(option -> modelMapper.map(option, OptionDTO.class)).collect(Collectors.toList());
+        }
+        productDTO.setOptions(optionDTOS);
 
 
         List<OptionGroupDTO> optionGroupDTOS = product.getOptionGroups().stream().map(

@@ -36,7 +36,9 @@ public class OrderRequestDTO {
   private String shippingInfo;              // Shipping information or notes
   private String finalOrderPoint;
   private long point;   // totalpoint(적립예정금액)
-
+  private int gradePercentage;
+  private String memberName;
+  private String memberHp;
 
 
 

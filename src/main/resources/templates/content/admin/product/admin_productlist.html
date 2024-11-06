@@ -42,13 +42,13 @@
                                 </colgroup>
                                 <div>
                                 <select id="shopsearch" >
-                                    <option value="">상품명</option>
-                                    <option value="">상품번호</option>
-                                    <option value="">판매자</option>
-                                    <option value="">제조사</option>
+                                    <option value="productName">상품명</option>
+                                    <option value="productCode">상품번호</option>
+                                    <option th:if="${#authentication.getAuthorities().contains('ROLE_ADMIN')}" value="sellerId">판매자</option>
+                                    <option value="manufacturer">제조사</option>
                                 </select>
                                 <input id="search" type="text" placeholder="키워드 입력">
-                                <button id="serachbtn" type="button">검색</button>
+                                <button id="searchbtn" type="button">검색</button>
                                 </div>
 
                                 <tr>
@@ -64,6 +64,18 @@
                                     <th>조회</th>
                                     <th>관리</th>
                                 </tr>
+                                <th:block th:fragment="productTableRows">
+                                    <th:block th:if="${productPageResponseDTO.getProductDTOs().isEmpty()}">
+                                        <tr>
+                                            <td th:colspan="11">등록하신 상품이 없습니다.</td>
+                                        </tr>
+                                    </th:block>
+                                    <th:block th:unless="${productPageResponseDTO.getProductDTOs().isEmpty()}">
+                                        <tr class="product-item-row" th:each="product:${productPageResponseDTO.getProductDTOs()}">
+                                            <!-- Table row contents here -->
+                                        </tr>
+                                    </th:block>
+                                </th:block>
                                 <th:block th:if="${productPageResponseDTO.getProductDTOs().isEmpty()}">
                                     <tr>
                                         <th th:colspan="11">등록하신 상품이 없습니다.</th>

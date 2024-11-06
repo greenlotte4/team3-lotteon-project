@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    sessionStorage.setItem("page_reload", "true");
+
     // Format prices with thousands separator for all elements with class 'price'
     const priceElements = document.querySelectorAll('.price');
     priceElements.forEach(priceElement => {
@@ -9,6 +11,57 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+
+
+    // Elements for final order calculations
+
+    let orderItem= {};
+    let totalDiscount = 0;
+    let totalDiscountPandC=0;
+    let orderTotal=0;
+    let couponDiscount = 0;
+    const currentPoint = parseInt(document.getElementById("currentPoint").value);
+    const usedPointInput = document.getElementById("used_point");
+    const couponSelect = document.querySelector("select[name='coupons']");
+    const usedPointResult = document.querySelector(".usedPointResult");
+    const usedPointResultspan = document.getElementById("usedPointResult");
+    const usedCouponResult = document.querySelector(".usedCouponResult");
+    const discountResult = document.querySelector(".DiscountResult");
+    const DiscountResult = document.getElementById("finalDiscountResult");
+    const finalOrderQuantity = document.getElementById("finalOrderQuantity");
+    const finalOrderProductPrice = document.getElementById("finalOrderProductPrice");
+    const finalOrderDiscount = document.getElementById("finalOrderDiscount");
+    const finalOrderDeliveryFee = document.getElementById("finalOrderDeliveryFee");
+    const finalOrderTotal = document.getElementById("finalOrderTotal");
+    const finalOrderPoint = document.getElementById("finalOrderPoint");
+    const memberGrade = document.getElementById("memberGrade").value;
+    const memberName=document.getElementById('memberName').value;
+    const memberHp = document.getElementById('memberHp').value;
+    // Retrieve the elements
+    const postcodeElement = document.getElementById("M_postcode");
+    const addressElement = document.querySelector(".totalAddress");
+
+    //수령자
+    const receiver = document.getElementById('receiver').value;
+    console.log(receiver);
+
+    //핸드폰
+    const hp = document.getElementById('hp').value;
+    console.log(hp);
+
+
+    const gradePercentages = {
+        "VVIP": 5,
+        "VIP": 4,
+        "GOLD": 3,
+        "SILVER": 2,
+        "FAMILY": 1
+    };
+
+    const pointPercentage = gradePercentages[memberGrade] || 0; // Default to 0 if grade not found
+    console.log(`Grade: ${memberGrade}, Point Percentage: ${pointPercentage}%`);
+
+
     // Define necessary elements for scrolling functionality
     const aside = document.querySelector('aside');
     const sectionWrapper = document.querySelector('.sectionWrapper');
@@ -17,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const asideHeight = aside.offsetHeight;
     const sectionHeight = sectionWrapper.offsetHeight;
     const topHeight = headerHeight + sectionHeight;
+
 
     function handleAsideScroll() {
         const scrollPosition = window.scrollY;
@@ -125,9 +179,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const shippingFees = calculateShippingFee(productDataArray);
         const shippingFee = shippingFees[data.productId].shippingFee;
 
-        const totalAdditionalPrice = data.options[0].additionalPrice;
-        const calcPrice= data.originalPrice+ totalAdditionalPrice;
-        return `
+        if (data.options && data.options.length > 0) {
+            const totalAdditionalPrice = data.options[0].additionalPrice;
+            const calcPrice= data.originalPrice+ totalAdditionalPrice;
+            return `
         <tr class="order-row">
             <td>
                 <div><img src="/uploads/${data.file190}" alt="${data.productName}"></div>
@@ -141,59 +196,42 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="number" class="T_quantity" value="${data.quantity}" readonly>
                 </div>
             </td>
-            <td><span class="T_originalPrice price" data-original="${data.originalPrice}" data-additional="${calcPrice}">${calcPrice.toLocaleString()}</span></td>
+            <td><span class="T_originalPrice price" data-original="${calcPrice}" data-additional="${calcPrice}">${calcPrice.toLocaleString()}</span></td>
             <td><span class="T_discount">${data.discount}</span>%</td>
-            <td><span class="T_point">${data.point}</span></td>
+            <td><span class="T_point">${data.calcPrice * pointPercentage}</span></td>
             <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
             <td><span class="T_finalPrice price">${(data.finalPrice * data.quantity).toLocaleString()}</span></td>
             <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
         </tr>
     `;
+        }else{
+
+            return `
+        <tr class="order-row">
+            <td>
+                <div><img src="/uploads/productImg/${data.file190}" alt="${data.productName}"></div>
+                <div>
+                    <span>${data.productName}</span>
+
+                </div>
+            </td>
+            <td>
+                <div class="qnt">
+                    <input type="number" class="T_quantity" value="${data.quantity}" readonly>
+                </div>
+            </td>
+            <td><span class="T_originalPrice price" data-original="${data.originalPrice}">${(data.originalPrice).toLocaleString()}</span></td>
+            <td><span class="T_discount">${data.discount}</span>%</td>
+            <td><span class="T_point">${data.finalPrice * pointPercentage}</span></td>
+            <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
+            <td><span class="T_finalPrice price">${(data.finalPrice * data.quantity).toLocaleString()}</span></td>
+            <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
+        </tr>
+    `;
+        }
+
     }
 
-    // Elements for final order calculations
-
-    let orderItem= {};
-    let totalDiscount = 0;
-    let totalDiscountPandC=0;
-    let orderTotal=0;
-    const currentPoint = parseInt(document.getElementById("currentPoint").value);
-    const usedPointInput = document.getElementById("used_point");
-    const couponSelect = document.querySelector("select[name='coupons']");
-    const usedPointResult = document.querySelector(".usedPointResult");
-    const usedPointResultspan = document.getElementById("usedPointResult");
-    const usedCouponResult = document.querySelector(".usedCouponResult");
-    const discountResult = document.querySelector(".DiscountResult");
-    const DiscountResult = document.getElementById("finalDiscountResult");
-    const finalOrderQuantity = document.getElementById("finalOrderQuantity");
-    const finalOrderProductPrice = document.getElementById("finalOrderProductPrice");
-    const finalOrderDiscount = document.getElementById("finalOrderDiscount");
-    const finalOrderDeliveryFee = document.getElementById("finalOrderDeliveryFee");
-    const finalOrderTotal = document.getElementById("finalOrderTotal");
-    const finalOrderPoint = document.getElementById("finalOrderPoint");
-    const memberGrade = document.getElementById("memberGrade").value;
-    // Retrieve the elements
-    const postcodeElement = document.getElementById("M_postcode");
-    const addressElement = document.querySelector(".totalAddress");
-
-    //수령자
-    const receiver = document.getElementById('receiver').value;
-    console.log(receiver);
-
-    //핸드폰
-    const hp = document.getElementById('hp').value;
-    console.log(hp);
-
-    const gradePercentages = {
-        "VVIP": 5,
-        "VIP": 4,
-        "GOLD": 3,
-        "SILVER": 2,
-        "FAMILY": 1
-    };
-
-    const pointPercentage = gradePercentages[memberGrade] || 0; // Default to 0 if grade not found
-    console.log(`Grade: ${memberGrade}, Point Percentage: ${pointPercentage}%`);
 
 // Get the values from data attributes
     const postcode = postcodeElement.getAttribute("data-postcode");
@@ -237,7 +275,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get coupon discount based on the selected coupon
         const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex]?.value || "0";
-        let couponDiscount = 0;
+        console.log("쿠폰!!:",selectedCouponValue);
+
+
         if (selectedCouponValue === "1") {
             couponDiscount = Math.floor(totalProductPrice() * 0.03); // Example: 3% discount
         }
@@ -281,12 +321,25 @@ document.addEventListener('DOMContentLoaded', function () {
         // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
     }
 
+
+    //기존꺼
+    // function totalProductDiscount() {
+    //     return Array.from(document.querySelectorAll('.T_discount')).reduce((total, elem, index) => {
+    //         const originalPrice = parseInt(document.querySelectorAll('.T_originalPrice')[index].dataset.original || 0);
+    //         const quantity = document.querySelectorAll('.T_quantity')[index].value || 0;
+    //         const discountPercentage = parseInt(elem.innerText || 0);
+    //
+    //         return total + Math.floor((originalPrice * discountPercentage) / 100) * quantity;
+    //     }, 0);
+    // }
+
     function totalProductDiscount() {
         return Array.from(document.querySelectorAll('.T_discount')).reduce((total, elem, index) => {
             const originalPrice = parseInt(document.querySelectorAll('.T_originalPrice')[index].dataset.original || 0);
-            const quantity = document.querySelectorAll('.T_quantity')[index].value || 0;
+            const quantity = parseInt(document.querySelectorAll('.T_quantity')[index].value || 1);
             const discountPercentage = parseInt(elem.innerText || 0);
 
+            // Calculate discount based on the original price, quantity, and discount percentage
             return total + Math.floor((originalPrice * discountPercentage) / 100) * quantity;
         }, 0);
     }
@@ -299,13 +352,26 @@ document.addEventListener('DOMContentLoaded', function () {
             .reduce((total, elem) => total + parseInt(elem.value || 0), 0);
     }
 
+    //기존꺼
+    // function totalProductPrice() {
+    //     return Array.from(document.querySelectorAll('.T_originalPrice'))
+    //         .reduce((total, elem) => {
+    //             const originalPrice = parseInt(elem.dataset.original || 0);
+    //             const additionalPrice = parseInt(elem.dataset.additional || 0); // Assuming additionalPrice is stored here
+    //             const quantity = parseInt(elem.closest('.order-row').querySelector('.T_quantity').value || 1); // Get the quantity
+    //             return total + (additionalPrice) * quantity;
+    //         }, 0);
+    // }
+    // Function to calculate total product price
     function totalProductPrice() {
         return Array.from(document.querySelectorAll('.T_originalPrice'))
             .reduce((total, elem) => {
                 const originalPrice = parseInt(elem.dataset.original || 0);
-                const additionalPrice = parseInt(elem.dataset.additional || 0); // Assuming additionalPrice is stored here
+                const additionalPrice = elem.dataset.additional ? parseInt(elem.dataset.additional) : 0; // Check if additional price exists
                 const quantity = parseInt(elem.closest('.order-row').querySelector('.T_quantity').value || 1); // Get the quantity
-                return total + (additionalPrice) * quantity;
+
+                // Sum total based on original price and any additional price if options exist
+                return total + (originalPrice + additionalPrice) * quantity;
             }, 0);
     }
 
@@ -396,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function () {
             productDiscount: finalOrderDiscount.textContent,
             totalPointandCoupon:  totalDiscountPandC,
             usedPointResult: Number(usedPointResult.textContent),  // 일치
-            usedCouponResult: Number(couponValue),         // usedCoupon -> usedCouponResult로 매핑
+            usedCouponResult: Number(couponDiscount),         // usedCoupon -> usedCouponResult로 매핑
             usedCouponName:couponText,
             totalOrderQuantity: finalOrderQuantity.textContent,
             totalOriginalPrice:finalOrderProductPrice.textContent,
@@ -405,7 +471,10 @@ document.addEventListener('DOMContentLoaded', function () {
             credit: selectedPayment,                       // 일치
             couponId: Number(couponValue),            // couponValue를 couponId로 매핑 (확인 필요)
             shippingInfo: getSelectedShippingInfo(),
-            finalOrderPoint: finalOrderPoint.textContent
+            finalOrderPoint: finalOrderPoint.textContent,
+            gradePercentage: pointPercentage,
+            memberName:memberName,
+            memberHp:memberHp
         };
     }
     console.log("Product Data Array Before Order Submission:", productDataArray);
@@ -476,15 +545,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    window.addEventListener("beforeunload", (event) => {
-        if (!sessionStorage.getItem("page_reload")) {
-            localStorage.removeItem("productDataArray");
-        }
-    });
 
-    sessionStorage.setItem("page_reload", "true");
-
-    window.addEventListener("load", () => {
-        sessionStorage.removeItem("page_reload");
-    });
 });
+
+

@@ -44,6 +44,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final SetPath<OptionGroup, QOptionGroup> optionGroups = this.<OptionGroup, QOptionGroup>createSet("optionGroups", OptionGroup.class, QOptionGroup.class, PathInits.DIRECT2);
 
+    public final ListPath<Option, QOption> options = this.<Option, QOption>createList("options", Option.class, QOption.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> point = createNumber("point", Integer.class);
 
     public final NumberPath<Long> price = createNumber("price", Long.class);
