@@ -984,6 +984,7 @@ select::-ms-expand {
     font-weight: bold;
     color: white;
 }
+     /*여긴 모달 관련*/
      /* 모달 배경 */
  .coupon-modal {
      display: none; /* 기본적으로 숨김 */
@@ -994,7 +995,6 @@ select::-ms-expand {
      width: 100%;
      height: 100%;
      background-color: rgba(0, 0, 0, 0.5);
-     display: flex;
      justify-content: center;
      align-items: center;
  }
@@ -1025,105 +1025,6 @@ select::-ms-expand {
 }
 
 
-
-/* 모달 오버레이 */
-.discount-modal-overlay {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.discount-modal-content {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.discount-modal-content h2 {
-    font-size: 1.2em;
-    margin-bottom: 15px;
-    font-weight: bold;
-}
-
-/* 닫기 버튼 */
-.discount-modal-close {
-    color: #aaa;
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-}
-.discount-modal-close:hover {
-    color: #000;
-}
-
-/* 쿠폰 항목 스타일 */
-.discount-coupon-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.discount-coupon-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.discount-amount {
-    font-size: 1.2em;
-    color: #d10000;
-    font-weight: bold;
-}
-
-.discount-description {
-    font-size: 0.9em;
-    color: #555;
-}
-
-.discount-apply-btn {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-}
-.discount-apply-btn:hover {
-    background-color: #0056b3;
-}
-
-/* 버튼 스타일 */
-#openDiscountModalBtn {
-    padding: 10px 20px;
-    background-color: #d10000;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-}
-
-
-
-
-
-
-/* 쿠폰 모달 서버스 스타일*/
 /* 모달 오버레이 */
 .discount-modal-overlay {
     display: none;
@@ -1138,17 +1039,21 @@ select::-ms-expand {
     align-items: center;
 }
 
+/* 모달 내용 */
 .discount-modal-content {
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
     width: 400px;
     max-height: 500px; /* 최대 높이 500px */
-    overflow-y: auto; /* Y축 방향으로 스크롤 가능 */
-
+    overflow-y: scroll; /* Y축 방향으로 스크롤 가능 */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
+.discount-modal-content::-webkit-scrollbar{
+    display: none;
+}
 
+/* 모달 제목 */
 .discount-modal-content h2 {
     font-size: 1.2em;
     margin-bottom: 15px;
@@ -1163,6 +1068,7 @@ select::-ms-expand {
     font-weight: bold;
     cursor: pointer;
 }
+
 .discount-modal-close:hover {
     color: #000;
 }
@@ -1195,8 +1101,9 @@ select::-ms-expand {
     color: #555;
 }
 
+/* 쿠폰 적용 버튼 */
 .discount-apply-btn {
-    width: 80px; /* 고정 너비 60px */
+    width: 80px; /* 고정 너비 80px */
     padding: 5px 10px;
     background-color: #007bff;
     color: #fff;
@@ -1205,6 +1112,7 @@ select::-ms-expand {
     cursor: pointer;
     font-size: 0.9em;
 }
+
 .discount-apply-btn:hover {
     background-color: #0056b3;
 }
@@ -1219,3 +1127,4 @@ select::-ms-expand {
     font-size: 1em;
     cursor: pointer;
 }
+

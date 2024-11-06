@@ -10,6 +10,7 @@ import com.lotteon.repository.admin.CouponIssuedRepository;
 import com.lotteon.repository.admin.CouponRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.repository.user.MemberRepository;
+import com.lotteon.security.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -39,6 +40,11 @@ public class CouponIssuedService {
             issuedId = UUID.randomUUID().toString().replaceAll("-","").substring(0,10);
         }while (couponRepository.existsById(issuedId));
         return issuedId;
+    }
+    public String getLoggedInSellerCompany() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        return userDetails.getSeller().getCompany(); // 로그인한 셀러의 회사명을 반환
     }
     public List<String> getUserRoles() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -159,7 +165,7 @@ public class CouponIssuedService {
         return couponIssuedList;
     }
     // 페이징 기능 추가
-    public Page<CouponIssuedDTO> selectIssuedCouponsPagination(CouponListRequestDTO request, Long sellerId, Pageable pageable) {
+    public Page<CouponIssued> selectIssuedCouponsPagination(CouponListRequestDTO request, String sellerCompany, Pageable pageable) {
 
         List<String> roles = getUserRoles();
         // 쿠폰 페이지 조회
@@ -170,16 +176,17 @@ public class CouponIssuedService {
 //            log.info("관리자 쿠폰: " + couponPage);
         } else if (roles.contains("ROLE_SELLER")) {
             // 일반 셀러는 자신의 쿠폰만 조회
-            couponPage = couponIssuedRepository.findByCoupon_Seller_Id(sellerId, pageable);
+            couponPage = couponIssuedRepository.findBySellerCompany(sellerCompany, pageable);
             log.info("셀러 발급 쿠폰: " + couponPage);
-            log.info("셀러 아이디 : " + sellerId );
+            log.info("셀러 아이디 : " + sellerCompany );
+            log.info("셀러 등급 : " + roles );
         }
 
         int total = (int) Objects.requireNonNull(couponPage).getTotalElements();
         int totalPages = (int) Math.ceil((double) total / request.getSize());
         log.info("총 쿠폰 수: {}, 총 페이지 수: {}", total, totalPages);
 
-        return couponPage.map(couponIssued -> modelMapper.map(couponIssued, CouponIssuedDTO.class));
+        return couponPage.map(couponIssued -> modelMapper.map(couponIssued, CouponIssued.class));
     }
 
 

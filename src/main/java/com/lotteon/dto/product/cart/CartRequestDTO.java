@@ -27,4 +27,5 @@ public class CartRequestDTO {
     private int shippingFee;
     private long discount;
 
+
 }

@@ -60,7 +60,7 @@ hr {
 }
 
 .nametext {
-    width: 100%;
+    width: 95%;
     height: 48px;
     padding-left: 8px;
     font-size: 14px;
@@ -82,7 +82,7 @@ hr {
 }
 
 .emailtext {
-    width: calc(75% - 10px); /* 왼쪽 입력 필드 너비 증가 */
+    width: calc(72% - 10px); /* 왼쪽 입력 필드 너비 증가 */
     height: 48px;
     padding-left: 8px;
     font-size: 14px;
@@ -104,7 +104,7 @@ hr {
 }
 
 .verificationCodetext {
-    width: calc(75% - 10px); /* 인증번호 입력 필드 너비 증가 */
+    width: calc(72% - 10px); /* 인증번호 입력 필드 너비 증가 */
     height: 48px;
     padding-left: 8px;
     font-size: 14px;
@@ -134,6 +134,7 @@ hr {
 }
 
 .note {
+    height: 58.5px;
     margin-top: 20px;
     font-size: 13px;
     line-height: 1.5;

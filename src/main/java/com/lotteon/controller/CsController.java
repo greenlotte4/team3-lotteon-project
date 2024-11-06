@@ -77,11 +77,18 @@ public class CsController {
     }
 
 
+
+    //FAQ
     @GetMapping("/faq/list")
     public String faqList(Model model) {
+
         // FAQ 목록을 조회하여 모델에 추가
         List<FaqDTO> faqList = faqService.selectAllfaq();
         model.addAttribute("faqList", faqList);
+
+        List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
+        log.info("11111111111111111"+boardCateDTOS);
+        model.addAttribute("boardCate", boardCateDTOS);
         return "content/cs/faq/faqList";
     }
 
@@ -96,6 +103,9 @@ public class CsController {
         }
         return "content/cs/faq/faqView"; // faqView.html로 이동
     }
+
+
+
 
 
     @GetMapping("/notice/list")
@@ -127,33 +137,7 @@ public class CsController {
             return "redirect:/notice/list"; // 공지사항이 없으면 목록으로 리다이렉트
         }
     }
-
-
-//    // 문의하기 전체 내역 조회
-//    @GetMapping("/qna/list")
-//    public String qnaList(
-//            @RequestParam(value = "cate", required = false) String category,
-//            Authentication authentication, Model model,
-//            @PageableDefault(size = 10, sort = "rdate", direction = Sort.Direction.DESC) Pageable pageable
-//    ) {
-//        Page<QnA> qnaPage;
-//
-//        if ("8".equals(category)) {  // cate=8 일 때
-//            String uid = authentication.getName();  // 현재 사용자의 아이디를 가져옴
-//            qnaPage = qnaRepository.findByQnaWriter(uid, pageable);  // 사용자 게시물만 조회
-//        } else if (category != null) {
-//            qnaPage = qnaRepository.findByQna_type1(category, pageable);
-//        } else {
-//            qnaPage = qnaRepository.findAll(pageable);
-//        }
-//
-//        // 작성자 이름 마스킹
-//        qnaPage.forEach(qna -> qna.setQna_writer(maskUsername(qna.getQna_writer())));
-//
-//        model.addAttribute("qnaPage", qnaPage);
-//        model.addAttribute("selectedCategory", category);
-//        return "content/cs/qna/qnaList";
-//    }
+    //QNA
     @GetMapping("/qna/list")
     public String qnaList(Model model, PageRequestDTO pageRequestDTO) {
 
@@ -165,15 +149,7 @@ public class CsController {
         log.info(boardCateDTOS);
         model.addAttribute("boardCate", boardCateDTOS);
         return "content/cs/qna/qnaList";
-    }
 
-    // 아이디 마스킹 메소드
-    public String maskUsername(String username) {
-        if (username.length() <= 3) {
-            return username; // 아이디가 3자 이하일 경우 그대로 반환
-        }
-        // 앞의 3자는 그대로 두고 나머지는 마스킹 처리
-        return username.substring(0, 3) + "****";
     }
 
     // 문의하기 상세 조회
