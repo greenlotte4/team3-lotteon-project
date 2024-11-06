@@ -146,10 +146,11 @@ cancelButtons.forEach(button => {
 applyButtons.forEach(button => {
     button.addEventListener('click', function () {
         const row = this.closest('tr');
+        const cartItemId = row.getAttribute('data-cartItemId'); // Product ID
+
         const inputField = row.querySelector('input[name="quantity"]');
         const newQuantity = row.querySelector('.quantity-input').value.trim(); // 공백 제거
 
-        const cartItemId = row.dataset.cartItemId;
         if (!cartItemId) {
             console.log("아이디가 읍댜")
             return;
@@ -185,17 +186,15 @@ applyButtons.forEach(button => {
             })
             .then(data => {
                 inputField.value = newQuantity;
-                updateOrderSummary();
                 alert('수정되었습니다');
                 toggleEditMode(row, false); // 수정 모드 해제
-
 
             })
             .catch(error => {
                 console.log('error', error)
                 alert('수량 오류')
             })
-    })
+
 
 });
 
