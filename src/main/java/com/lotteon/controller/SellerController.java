@@ -3,6 +3,7 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.product.*;
+import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.user.UserService;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Log4j2
 @RequiredArgsConstructor
 @Controller
@@ -27,6 +30,7 @@ public class SellerController {
     private final AuthenticationManager authenticationManager; // AuthenticationManager로 수정
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final ProductCategoryService productCategoryService;
 
 
     @GetMapping("/product/list")
@@ -43,6 +47,20 @@ public class SellerController {
     @GetMapping("/product/register")
     public String productRegister(Model model) {
         return "content/admin/product/admin_productReg"; // Points to the "content/sellerDynamic" template for product registration
+    }
+
+
+    @GetMapping("/product/modify")
+    public String productModify(@RequestParam long id, Model model) {
+
+        ProductDTO productdto = productService.getProduct(id);
+        log.info("여기야여기!!!!!!"+productdto);
+        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.getAllParentCategoryDTOs(productdto.getCategoryId());
+        log.info("dsdsdsdsd"+categoryDTOs);
+
+        model.addAttribute("productDTO", productdto);
+        model.addAttribute("categoryDTOs", categoryDTOs);
+        return "content/admin/product/admin_productmodify"; // Points to the "content/sellerDynamic" template for product registration
     }
 
 
