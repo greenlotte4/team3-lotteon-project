@@ -168,14 +168,7 @@ public class CsController {
 
     }
 
-    // 아이디 마스킹 메소드
-    public String maskUsername(String username) {
-        if (username.length() <= 3) {
-            return username; // 아이디가 3자 이하일 경우 그대로 반환
-        }
-        // 앞의 3자는 그대로 두고 나머지는 마스킹 처리
-        return username.substring(0, 3) + "****";
-    }
+
 
     // 문의하기 상세 조회
     @GetMapping("/qna/detail")

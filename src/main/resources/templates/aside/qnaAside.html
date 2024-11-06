@@ -10,7 +10,7 @@
                 <th:block th:if="${#authentication.name != 'anonymousUser'}">
                     <input type="hidden" name="uid" id="uid" th:value="${#authentication.getName()}">
                 </th:block>
-                <a id="listLink" onclick="loginredirect('/cs/qna/list?uid=' + document.getElementById('uid').value + '&cate=8')">1:1 문의내역 ></a><br>
+                <a id="listLink" th:text="'1:1문의내역'"></a><br>
                 <p>나의 문의 내역을<br>보고싶다면?</p>
             </li>
             <li class="myqna">
@@ -44,10 +44,10 @@
         });
 
         // 1:1 문의내역 로그인 처리
-        document.getElementById('listLink').addEventListener('click', function (event) {
-            event.preventDefault();
-            loginredirect('/cs/qna/list?cate=8');
-        });
+        // document.getElementById('listLink').addEventListener('click', function (event) {
+        //     event.preventDefault();
+        //     loginredirect('/cs/qna/list');
+        // });
 
         window.loginredirect = loginredirect;
     });

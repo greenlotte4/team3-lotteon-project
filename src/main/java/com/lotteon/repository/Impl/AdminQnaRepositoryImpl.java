@@ -86,4 +86,27 @@ public class AdminQnaRepositoryImpl implements AdminQnaRepositoryCustom {
         return new PageImpl<Tuple>(content, pageable, total); //pageable : 요청한 페이지의 정보 ( 개수, 크기, 번호 정렬 방식을 위해 필요)
 
     }
+
+    @Override
+    public Page<Tuple> selectAdminqnaForQnaWriter(PageRequestDTO pageRequestDTO, Pageable pageable) {
+        BooleanExpression condition = adminqna.qnawriter.eq(pageRequestDTO.getQnawriter());
+
+        List<Tuple> content = queryFactory
+                .select(adminqna.qnaNo, adminqna.qnatitle, adminqna.qnacontent, adminqna.qnawriter, adminqna.qna_status)
+                .from(adminqna)
+                .where(condition)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(adminqna.qnaNo.desc())
+                .fetch();
+        long total = queryFactory
+                .select(adminqna.count())
+                .from(adminqna)
+                .where(condition)
+                .fetchOne();
+
+        //페이징 처리를 위해 page 객체 리턴 , 페이지 형태로 데이터를 반환 , 1. 한페이지에 보여지는 리스트,모든 데이터,pg-1,size,no내림차순
+        return new PageImpl<Tuple>(content, pageable, total); //pageable : 요청한 페이지의 정보 ( 개수, 크기, 번호 정렬 방식을 위해 필요)
+
+    }
 }
