@@ -144,6 +144,7 @@ public class MypageController {
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewss(pageRequestDTO);
+        log.info("aaaaaaa{}", pageResponseReviewDTO);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
         List<Review> recentReviews = reviewService.getAllReviews();

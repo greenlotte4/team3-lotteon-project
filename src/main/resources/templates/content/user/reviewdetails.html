@@ -79,11 +79,11 @@
 
                             <data value="">
                                 <div class="product-container">
-                                <div class="eximg2">
-                                    <img th:if="${review.savedReviewFiles.size() > 0}"
-                                         th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
-                                         alt="상품 이미지">
-                                </div>
+                                    <div class="eximg2">
+                                        <img th:if="${review.reviewFileDTOS.size() > 0}"
+                                             th:src="@{'/uploads/ReviewImg/' + ${review.reviewFileDTOS[0].sname}}"
+                                             alt="상품 이미지">
+                                    </div>
 
                                 <div class="Pinf2">
                                     <p>상품번호<br> <span th:text="${review.productId}">123456</span></p>
