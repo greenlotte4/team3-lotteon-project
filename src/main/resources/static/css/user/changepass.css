@@ -27,6 +27,7 @@ body {
 .pwChange {
     width: 100%;
     border-collapse: collapse;
+
     margin-bottom: 35px;
 }
 
@@ -46,11 +47,13 @@ body {
 }
 
 .pwChange td {
+
     padding-left: 20px;
     height: 35px;
     border-top: 1px solid #ddd;
     color: #666;
 }
+
 
 .pwChange td:nth-child(1) {
     padding-left: 20px;
@@ -60,6 +63,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-top: 32px;
+
 }
 
 .btnCancel,
@@ -92,6 +96,7 @@ body {
 }
 
 h5 {
+
     height: 32px;
     text-align: center;
     margin-top: 20px;
@@ -106,4 +111,5 @@ h5 {
     border-radius: 4px;
     padding-left: 10px;
     font-size: 12.5px;
+
 }
