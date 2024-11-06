@@ -29,6 +29,8 @@ public class PageRequestDTO {
 
     private Long childId;
 
+    private String qnawriter;
+
     public Pageable getPageable(String sort) {
         return PageRequest.of(this.pg - 1, this.size, Sort.by(sort).descending()); // 페이지네이션 정렬정보 담고 있음
     }

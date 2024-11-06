@@ -18,6 +18,7 @@ public class CartOrderRequestDTO {
 
 
     private long cartId;
+
     private List<CartItemRequest> cartItems;  // Renamed to "cartItems" for clarity
 
     @Getter

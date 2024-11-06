@@ -167,25 +167,9 @@ public class AdminCouponController {
 
 
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<List<CouponDTO>> getCouponsForProduct(@PathVariable Long productId) {
-        List<Coupon> coupons = couponService.selectCouponIssued(productId);
-        // Coupon 리스트를 CouponDTO 리스트로 변환
-        List<CouponDTO> couponDTOs = coupons.stream()
-                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(couponDTOs);
-    }
 
-    @GetMapping("/all/coupons")
-    public ResponseEntity<List<CouponDTO>> getAllCoupons() {
-        List<Coupon> coupons = couponService.selectCouponIssued(null);
-        // Coupon 리스트를 CouponDTO 리스트로 변환
-        List<CouponDTO> couponDTOs = coupons.stream()
-                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(couponDTOs);
-    }
+
+
 
     @GetMapping(value = "/products", produces = "application/json")
     public ResponseEntity<List<Map<String, Object>>> getProductsForCoupons() {
@@ -211,33 +195,7 @@ public class AdminCouponController {
 
     }
 
-    @PostMapping("/apply/{couponId}")
-    public ResponseEntity<CouponDTO> applyCoupon(@PathVariable("couponId") String couponId, Principal principal) {
-        log.info("쿠폰 발금 버튼 클릭되서 요청왔다");
 
-        String userUid = principal.getName();
-
-        Member member = memberRepository.findByUser_Uid(userUid)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-        log.info("사용자 가 누군가"+ member);
-
-        Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new RuntimeException("쿠폰을 찾을 수 없습니다."));
-        log.info("어떤 쿠폰인가 "+coupon);
-        Product product = coupon.getProduct();
-
-        couponIssuedService.insertCouponIssued(member, coupon, product);
-
-        couponIssuedService.useCoupon(couponId);
-
-
-        CouponDTO couponDTO = new CouponDTO();
-        couponDTO.setCouponId(coupon.getCouponId());
-        couponDTO.setCouponName(coupon.getCouponName());
-        couponDTO.setCouponType(coupon.getCouponType());
-
-        return ResponseEntity.ok(couponDTO);
-    }
 
 
 

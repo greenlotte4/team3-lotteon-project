@@ -12,4 +12,6 @@ public interface AdminQnaRepositoryCustom {
     public Page<Tuple> selectAdminqnaForOption1(PageRequestDTO pagerequestDTO, Pageable pageable);
 
     public Page<Tuple> selectAdminqnaForOption2(PageRequestDTO pageRequestDTO, Pageable pageable);
+
+    public Page<Tuple> selectAdminqnaForQnaWriter(PageRequestDTO pageRequestDTO, Pageable pageable);
 }
