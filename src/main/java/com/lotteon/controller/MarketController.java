@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.User.DeliveryDTO;
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
@@ -22,6 +23,7 @@ import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
+import com.lotteon.service.user.DeliveryService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -52,6 +54,7 @@ public class MarketController {
     private final OrderService orderService;
     private final AdminService adminService;
     private final ProductOptionCombinationRepository productOptionCombinationRepository;
+    private final DeliveryService deliveryService;
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
@@ -159,6 +162,11 @@ public class MarketController {
         MemberDTO memberDTO = userService.getByUsername(uid);
         log.info(memberDTO);
         model.addAttribute("memberDTO",memberDTO);
+
+        Long memberId = memberDTO.getMemberId(); // memberId가 MemberDTO에 있다고 가정
+        List<DeliveryDTO> deliveryDTOList = deliveryService.getByMemberId(memberId);; // memberId로 DeliveryDTO 가져옴
+        log.info("deliveryDTO ::::::::::" + deliveryDTOList);
+        model.addAttribute("deliveryDTO", deliveryDTOList);
 
 
         return "content/market/marketorder"; // Points to the "content/market/marketorder" template
