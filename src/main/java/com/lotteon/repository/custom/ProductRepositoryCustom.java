@@ -28,7 +28,7 @@ public interface ProductRepositoryCustom {
 
     //main list
     public Page<Tuple> selectProductForList( PageRequestDTO pageRequest,Pageable pageable );
-    public Page<ProductSummaryDTO> selectProductByCategory(PageRequestDTO pageRequest, Pageable pageable);
+    public Page<ProductSummaryDTO> selectProductByCategory(PageRequestDTO pageRequest, Pageable pageable,String sort);
     public ProductViewResponseDTO selectByProductId(Long productId);
 
 
