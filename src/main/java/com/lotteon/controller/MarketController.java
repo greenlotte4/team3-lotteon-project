@@ -167,18 +167,18 @@ public class MarketController {
     public String marketOrder(@PathVariable String uid,Model model, String productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        String memberId = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
+        String memberUid = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
 
         log.info("uid ::::::::::"+uid);
         MemberDTO memberDTO = userService.getByUsername(uid);
 
 
 
-        log.info("멤버 아이디다"+memberId);
+        log.info("멤버 아이디다"+memberUid);
 
         // 해당 멤버의 발급된 쿠폰 목록 조회
 
-        List<CouponIssued> issuedCoupons = couponDetailsService.memberOrderCouponList(memberId, productId); // 서비스에서 발급된 쿠폰 조회
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberOrderCouponList(memberUid, productId); // 서비스에서 발급된 쿠폰 조회
         log.info("발급받은 쿠폰: {}", issuedCoupons);
 
         model.addAttribute("issuedList", issuedCoupons);
