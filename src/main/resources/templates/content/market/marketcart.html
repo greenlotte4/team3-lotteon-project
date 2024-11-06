@@ -59,7 +59,7 @@
                      <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
                      <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">
                         <tr th:each="item : ${cartItems}"
-                            th:data-cartietmId="${item.cartItemId}"
+                            th:data-cartItemId="${item.cartItemId}"
                             th:data-product-id="${item.getProduct().getProductId()}"
                             th:data-product-name="${item.getProduct().getProductName()}"
                             th:data-discount="${item.getDiscount()}"
@@ -108,11 +108,11 @@
                                 </div>
                             </div>
                         </td>
-                        <td th:text="${item.price}">판매가</td>
-                        <td th:text="${item.discount}">할인</td>
-                        <td th:text="${item.getPoints()}">포인트</td>
-                        <td th:text="${item.getDeliveryFee()}">배송비</td>
-                        <td th:text="${item.getTotalPrice()}">총합</td>
+                        <td class="price" th:text="${item.getProduct().getPrice()}">판매가</td>
+                        <td class="price" th:text="${item.discount}">할인</td>
+                        <td class="price" th:text="${item.getPoints()}">포인트</td>
+                        <td class="price" th:text="${item.getDeliveryFee()}">배송비</td>
+                        <td class="price" th:text="${(item.getProduct().getPrice()- (item.getProduct().getPrice()*item.getProduct().getDiscount()/100)/10*10)*item.getQuantity()}">총합</td>
                     </tr>
 
                 </th:block>

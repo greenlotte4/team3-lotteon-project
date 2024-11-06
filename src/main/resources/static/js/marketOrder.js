@@ -13,6 +13,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+    // Define necessary elements for scrolling functionality  화면 스크롤
+    const aside = document.querySelector('aside');
+    const sectionWrapper = document.querySelector('.sectionWrapper');
+    const headerHeight = 188;
+    const footer = document.querySelector('footer');
+    const asideHeight = aside.offsetHeight;
+    const sectionHeight = sectionWrapper.offsetHeight;
+    const topHeight = headerHeight + sectionHeight;
+    function handleAsideScroll() {
+        const scrollPosition = window.scrollY;
+        const footerTop = footer.getBoundingClientRect().top + window.scrollY;
+        if (scrollPosition <= topHeight && (scrollPosition + asideHeight + 50) < footerTop) {
+            aside.classList.remove('scroll');
+            aside.style.bottom = '';
+        } else if ((scrollPosition + asideHeight + 50) >= footerTop) {
+            aside.classList.add('scroll');
+            aside.style.top = `${footerTop - asideHeight - 50}px`;
+        } else {
+            aside.classList.add('scroll');
+            aside.style.position = '';
+            aside.style.top = '';
+        }
+    }
+
+    window.addEventListener('scroll', handleAsideScroll);
+    window.addEventListener('resize', handleAsideScroll);
+
     // Elements for final order calculations
 
     let orderItem= {};
@@ -40,16 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Retrieve the elements
     const postcodeElement = document.getElementById("M_postcode");
     const addressElement = document.querySelector(".totalAddress");
-
-    //수령자
     const receiver = document.getElementById('receiver').value;
-    console.log(receiver);
-
-    //핸드폰
     const hp = document.getElementById('hp').value;
-    console.log(hp);
-
-
     const gradePercentages = {
         "VVIP": 5,
         "VIP": 4,
@@ -57,41 +76,38 @@ document.addEventListener('DOMContentLoaded', function () {
         "SILVER": 2,
         "FAMILY": 1
     };
-
     const pointPercentage = gradePercentages[memberGrade] || 0; // Default to 0 if grade not found
+
+    //수령자
+    console.log(receiver);
+
+    //핸드폰
+    console.log(hp);
+
+    // Get the values from data attributes
+    const postcode = postcodeElement.getAttribute("data-postcode");
+    const addr = addressElement.getAttribute("data-addr");
+    const addr2 = addressElement.getAttribute("data-addr2");
+    // Log or use the values as needed
+    console.log("Postcode:", postcode);
+    console.log("Address Line 1:", addr);
+    console.log("Address Line 2:", addr2);
+
+
+
+
+
     console.log(`Grade: ${memberGrade}, Point Percentage: ${pointPercentage}%`);
 
 
-    // Define necessary elements for scrolling functionality
-    const aside = document.querySelector('aside');
-    const sectionWrapper = document.querySelector('.sectionWrapper');
-    const headerHeight = 188;
-    const footer = document.querySelector('footer');
-    const asideHeight = aside.offsetHeight;
-    const sectionHeight = sectionWrapper.offsetHeight;
-    const topHeight = headerHeight + sectionHeight;
 
 
-    function handleAsideScroll() {
-        const scrollPosition = window.scrollY;
-        const footerTop = footer.getBoundingClientRect().top + window.scrollY;
-        if (scrollPosition <= topHeight && (scrollPosition + asideHeight + 50) < footerTop) {
-            aside.classList.remove('scroll');
-            aside.style.bottom = '';
-        } else if ((scrollPosition + asideHeight + 50) >= footerTop) {
-            aside.classList.add('scroll');
-            aside.style.top = `${footerTop - asideHeight - 50}px`;
-        } else {
-            aside.classList.add('scroll');
-            aside.style.position = '';
-            aside.style.top = '';
-        }
-    }
 
-    window.addEventListener('scroll', handleAsideScroll);
-    window.addEventListener('resize', handleAsideScroll);
 
-    // Modal control for address selection
+
+    // Modal control for address selection  화면 모달
+    console.log(document.getElementById("addressSelectModal")); // Should log the modal element
+    console.log(document.getElementById("addressRegisterModal")); // Should log the modal element
     const addressSelectModal = document.getElementById("addressSelectModal");
     const addressRegisterModal = document.getElementById("addressRegisterModal");
     const closeAddressSelect = addressSelectModal.querySelector(".close");
@@ -99,10 +115,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const editButtons = document.querySelectorAll(".edit-btn");
 
     document.querySelector('.address_change').addEventListener('click', () => {
+        console.log("Address change button clicked"); // Confirm the click event
         addressSelectModal.style.display = "block";
     });
 
     closeAddressSelect.addEventListener('click', () => {
+        console.log("Close button in address select modal clicked"); // For testing
+
         addressSelectModal.style.display = "none";
     });
 
@@ -122,11 +141,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.querySelector('.new-address-btn').addEventListener('click', () => {
-        addressSelectModal.style.display = "none";
-        addressRegisterModal.style.display = "block";
-    });
+    const newAddressBtn=document.querySelector('.new-address-btn');
+    if(newAddressBtn){
+        newAddressBtn.addEventListener('click', () => {
+            addressSelectModal.style.display = "none";
+            addressRegisterModal.style.display = "block";
+        });
+    }
 
+
+    //상품 전환
     // Retrieve product data from localStorage and display
     const productDataArray = JSON.parse(localStorage.getItem("productDataArray")) || [];
     const productDataCartArray = JSON.parse(localStorage.getItem("ProductDataCartArray")) || [];
@@ -156,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    // Function to calculate total shipping fee based on grouped product data
+    // 배송비 계산
     function calculateShippingFee(dataArray) {
         const groupedShippingFees = {};
 
@@ -213,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
             <td><span class="T_originalPrice price" data-original="${calcPrice}" data-additional="${calcPrice}">${calcPrice.toLocaleString()}</span></td>
             <td><span class="T_discount">${data.discount}</span>%</td>
-            <td><span class="T_point">${data.calcPrice * pointPercentage}</span></td>
+            <td><span class="T_point">${(data.calcPrice * pointPercentage)/100}</span></td>
             <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
             <td><span class="T_finalPrice price">${(data.finalPrice * data.quantity).toLocaleString()}</span></td>
             <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
@@ -237,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
             <td><span class="T_originalPrice price" data-original="${data.originalPrice}">${(data.originalPrice).toLocaleString()}</span></td>
             <td><span class="T_discount">${data.discount}</span>%</td>
-            <td><span class="T_point">${data.finalPrice * pointPercentage}</span></td>
+            <td><span class="T_point">${data.finalPrice * pointPercentage/100}</span></td>
             <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
             <td><span class="T_finalPrice price">${(data.finalPrice * data.quantity).toLocaleString()}</span></td>
             <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
@@ -248,14 +272,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-// Get the values from data attributes
-    const postcode = postcodeElement.getAttribute("data-postcode");
-    const addr = addressElement.getAttribute("data-addr");
-    const addr2 = addressElement.getAttribute("data-addr2");
-    // Log or use the values as needed
-    console.log("Postcode:", postcode);
-    console.log("Address Line 1:", addr);
-    console.log("Address Line 2:", addr2);
 
 // Calculate and display discount results based on used points and coupons
     const pointuseBtn = document.getElementById("pointuseBtn");
@@ -270,16 +286,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // // Calculate and display discount results based on used points and coupons
-    // usedPointInput.addEventListener("input", function () {
-    //     const usedPoint = parseInt(usedPointInput.value) || 0;
-    //     if (usedPoint > currentPoint) {
-    //         alert("사용가능한 포인트가 부족합니다.");
-    //         usedPointInput.value = 0;
-    //     } else {
-    //         updateDiscountResult();
-    //     }
-    // });
+
+    function totalProductDiscount() {
+        return Array.from(document.querySelectorAll('.T_discount')).reduce((total, elem, index) => {
+            const originalPrice = parseInt(document.querySelectorAll('.T_originalPrice')[index].dataset.original || 0);
+            const quantity = parseInt(document.querySelectorAll('.T_quantity')[index].value || 1);
+            const discountPercentage = parseInt(elem.innerText || 0);
+
+            // Calculate discount based on the original price, quantity, and discount percentage
+            return total + Math.floor((originalPrice * discountPercentage) / 100) * quantity;
+        }, 0);
+    }
 
     couponSelect.addEventListener("change", updateDiscountResult);
 
@@ -300,26 +317,27 @@ document.addEventListener('DOMContentLoaded', function () {
         let couponDiscount = 0;
         console.log("선택된 상품 쿠폰 타입:", findCouponType);
         console.log("선택된 상품 쿠폰 값:", findCouponValue);
-        // 쿠폰 계산
+
+        // Calculate coupon discount
         if (findCouponValue <= 100) {
-            // 쿠폰 값이 100 이하일 경우 -> 퍼센트 할인
-            couponDiscount = Math.floor(totalProductPrice() * (findCouponValue / 100)); // 퍼센트 할인
+            // If coupon value is 100 or less, apply percentage discount
+            couponDiscount = Math.floor(totalProductPrice() * (findCouponValue / 100));
             console.log("퍼센트 할인 적용:", couponDiscount);
-
         } else {
-            // 쿠폰 값이 100보다 클 경우 -> 고정 금액 할인
-            couponDiscount = findCouponValue; // 고정 금액 할인
+            // If coupon value is more than 100, apply fixed discount
+            couponDiscount = findCouponValue;
             console.log("고정 금액 할인 적용:", couponDiscount);
+        }
 
-
+        // Apply an additional 3% discount for specific coupon value if needed
         if (selectedCouponValue === "1") {
-            couponDiscount = Math.floor(totalProductPrice() * 0.03); // Example: 3% discount
+            couponDiscount = Math.floor(totalProductPrice() * 0.03);
         }
 
         // Calculate the initial total before applying points
         const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
 
-        // Apply the points but limit them to the total order amount
+        // Apply the points, limiting them to the total order amount
         const limitedUsedPoint = Math.min(usedPoint, initialTotalOrderAmount);
         usedPointInput.value = limitedUsedPoint;
         currentIn.textContent = currentPoint - limitedUsedPoint;
@@ -329,10 +347,9 @@ document.addEventListener('DOMContentLoaded', function () {
         usedPointResultspan.innerText = limitedUsedPoint;
         usedCouponResult.textContent = couponDiscount;
 
-
-        // Total discount including product discounts, coupon, and used points
-        totalDiscount = totalProductDiscount();   // 상품 할인금액
-        totalDiscountPandC = limitedUsedPoint + couponDiscount;   // 쿠폰 및 포인트 사용금액
+        // Total discount, including product discounts, coupon, and used points
+        totalDiscount = totalProductDiscount(); // 상품 할인금액
+        totalDiscountPandC = limitedUsedPoint + couponDiscount; // 쿠폰 및 포인트 사용금액
         discountResult.textContent = totalDiscountPandC;
         DiscountResult.textContent = totalDiscountPandC;
 
@@ -342,38 +359,100 @@ document.addEventListener('DOMContentLoaded', function () {
         finalOrderDiscount.textContent = totalDiscount.toLocaleString();
         finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
 
+        // Calculate final order total
         orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
-
 
         console.log("결과 값", couponDiscount);
         let pointsEarned = 0;
+
+        // Calculate points if no coupon discount is applied
         if (couponDiscount === 0) {
             pointsEarned = Math.floor(((orderTotal - totalShippingFee()) * pointPercentage) / 100);
-
-
-            finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
-            finalOrderTotal.textContent = orderTotal.toLocaleString();
-            // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
         }
 
-        console.log(pointsEarned);
-        finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
+        finalOrderPoint.textContent = pointsEarned.toLocaleString();
         finalOrderTotal.textContent = orderTotal.toLocaleString();
-        // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
     }
 
+    // function updateDiscountResult() {
+    //     const usedPoint = parseInt(usedPointInput.value) || 0;
+    //
+    //     // Get coupon discount based on the selected coupon
+    //     const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex]?.value || "0";
+    //     const selectedCoupon = couponSelect.options[couponSelect.selectedIndex];
+    //
+    //     console.log("쿠폰!!:", selectedCouponValue);
+    //
+    //     const findCouponType = selectedCoupon.getAttribute('data-coupon-type');
+    //     const findCouponValue = parseFloat(selectedCoupon.getAttribute('data-discount-value'));
+    //
+    //     let couponDiscount = 0;
+    //     console.log("선택된 상품 쿠폰 타입:", findCouponType);
+    //     console.log("선택된 상품 쿠폰 값:", findCouponValue);
+    //     // 쿠폰 계산
+    //     if (findCouponValue <= 100) {
+    //         // 쿠폰 값이 100 이하일 경우 -> 퍼센트 할인
+    //         couponDiscount = Math.floor(totalProductPrice() * (findCouponValue / 100)); // 퍼센트 할인
+    //         console.log("퍼센트 할인 적용:", couponDiscount);
+    //
+    //     } else {
+    //         // 쿠폰 값이 100보다 클 경우 -> 고정 금액 할인
+    //         couponDiscount = findCouponValue; // 고정 금액 할인
+    //         console.log("고정 금액 할인 적용:", couponDiscount);
+    //
+    //
+    //         if (selectedCouponValue === "1") {
+    //             couponDiscount = Math.floor(totalProductPrice() * 0.03); // Example: 3% discount
+    //         }
+    //
+    //         // Calculate the initial total before applying points
+    //         const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
+    //
+    //         // Apply the points but limit them to the total order amount
+    //         const limitedUsedPoint = Math.min(usedPoint, initialTotalOrderAmount);
+    //         usedPointInput.value = limitedUsedPoint;
+    //         currentIn.textContent = currentPoint - limitedUsedPoint;
+    //
+    //         // Update each discount and display the final results
+    //         usedPointResult.textContent = limitedUsedPoint;
+    //         usedPointResultspan.innerText = limitedUsedPoint;
+    //         usedCouponResult.textContent = couponDiscount;
+    //
+    //
+    //         // Total discount including product discounts, coupon, and used points
+    //         totalDiscount = totalProductDiscount();   // 상품 할인금액
+    //         totalDiscountPandC = limitedUsedPoint + couponDiscount;   // 쿠폰 및 포인트 사용금액
+    //         discountResult.textContent = totalDiscountPandC;
+    //         DiscountResult.textContent = totalDiscountPandC;
+    //
+    //         // Update final order information
+    //         finalOrderQuantity.textContent = totalQuantity();
+    //         finalOrderProductPrice.textContent = totalProductPrice().toLocaleString();
+    //         finalOrderDiscount.textContent = totalDiscount.toLocaleString();
+    //         finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
+    //
+    //         orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
+    //
+    //
+    //         console.log("결과 값", couponDiscount);
+    //         let pointsEarned = 0;
+    //         if (couponDiscount === 0) {
+    //             pointsEarned = Math.floor(((orderTotal - totalShippingFee()) * pointPercentage) / 100);
+    //
+    //
+    //             finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
+    //             finalOrderTotal.textContent = orderTotal.toLocaleString();
+    //             // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
+    //         }
+    //
+    //         console.log(pointsEarned);
+    //         finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
+    //         finalOrderTotal.textContent = orderTotal.toLocaleString();
+    //         // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
+    //     }
 
 
-        function totalProductDiscount() {
-            return Array.from(document.querySelectorAll('.T_discount')).reduce((total, elem, index) => {
-                const originalPrice = parseInt(document.querySelectorAll('.T_originalPrice')[index].dataset.original || 0);
-                const quantity = parseInt(document.querySelectorAll('.T_quantity')[index].value || 1);
-                const discountPercentage = parseInt(elem.innerText || 0);
 
-                // Calculate discount based on the original price, quantity, and discount percentage
-                return total + Math.floor((originalPrice * discountPercentage) / 100) * quantity;
-            }, 0);
-        }
 
         calculateTotals();
 
@@ -569,7 +648,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 
-    }
+
 });
 
 
