@@ -15,6 +15,7 @@ const buyNowBtn = document.getElementById("buy-now-btn");
 const addToCartBtn = document.getElementById("add-to-cart");
 
 const byCart = document.getElementById('buyCart');
+
 document.addEventListener('DOMContentLoaded', function () {
     // 필요한 요소들 정의
     const optionSelectElements = document.querySelectorAll('.option-select');
@@ -284,43 +285,43 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (confirm("장바구니에 추가 하시겠습니까.")) {
-            const productDataArray = [];
+                const finalPrice = Math.floor(originalPrice * (100 - discount) / 100);
+                const productDataArray = [];
 
-            if (optionSelectElements.length > 0 && selectedOptions.every(opt => opt)) {
-                // Include options in the data if options are selected
-                productDataArray.push({
-                    productId: productId,
-                    productName: productName,
-                    originalPrice: originalPrice,
-                    finalPrice: Math.floor(originalPrice * (100 - discount) / 100),
-                    quantity: quantity,
-                    file190: file190,
-                    options: selectedOptions.map(opt => ({
-                        itemId: opt.itemId,
-                        combinationId: opt.combinationId,
-                        combinationString: opt.combinationString, // Include combinationString here
-                        optionName: opt.value,
-                        additionalPrice: additionalPrice
-                    })),
-                    point: point,
-                    discount: discount,
-                    shippingFee: shippingFee,
-                    shippingTerms: shippingTerms
-                });
-            } else {
-                // If no options, just send productId and quantity
-                productDataArray.push({
-                    productId: productId,
-                    productName: productName,
-                    originalPrice: originalPrice,
-                    file190: file190,
-                    finalPrice: Math.floor(originalPrice * (100 - discount) / 100),
-                    discount: discount,
-                    quantity: quantity,
-                    shippingFee: shippingFee,
-                    shippingTerms: shippingTerms
-                });
-            }
+                if (optionSelectElements.length > 0 && selectedOptions.every(opt => opt)) {
+                    // Include options in the data if options are selected
+                    productDataArray.push({
+                        productId: productId,
+                        productName: productName,
+                        originalPrice: originalPrice,
+                        finalPrice: Math.floor(originalPrice * (100 - discount) / 100),
+                        quantity: quantity,
+                        file190: file190,
+                        options: selectedOptions.map(opt => ({
+                            itemId: opt.itemId,
+                            combinationId: opt.combinationId,
+                            combinationString: opt.combinationString, // Include combinationString here
+                            optionName: opt.value,
+                            additionalPrice: additionalPrice
+                        })),
+                        point: point,
+                        discount: discount,
+                        shippingFee: shippingFee,
+                        shippingTerms: shippingTerms
+                    });
+                } else {
+                    // If no options, just send productId and quantity
+                    productDataArray.push({
+                        productId: productId,
+                        productName: productName,
+                        file190: file190,
+                        finalPrice: Math.floor(originalPrice * (100 - discount) / 100),
+                        discount: discount,
+                        quantity: quantity,
+                        shippingFee: shippingFee,
+                        shippingTerms: shippingTerms
+                    });
+                }
 
                 console.log("productDataArray", productDataArray);
 

@@ -26,7 +26,7 @@ public class QCoupon extends EntityPathBase<Coupon> {
 
     public final StringPath couponId = createString("couponId");
 
-    public final ListPath<CouponIssued, QCouponIssued> couponIssued = this.<CouponIssued, QCouponIssued>createList("couponIssued", CouponIssued.class, QCouponIssued.class, PathInits.DIRECT2);
+    public final ListPath<CouponIssued, QCouponIssued> CouponIssued = this.<CouponIssued, QCouponIssued>createList("CouponIssued", CouponIssued.class, QCouponIssued.class, PathInits.DIRECT2);
 
     public final StringPath couponName = createString("couponName");
 

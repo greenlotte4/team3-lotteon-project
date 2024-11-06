@@ -22,8 +22,6 @@ public class QCouponIssued extends EntityPathBase<CouponIssued> {
 
     public static final QCouponIssued couponIssued = new QCouponIssued("couponIssued");
 
-    public final StringPath benefit = createString("benefit");
-
     public final QCoupon coupon;
 
     public final StringPath couponId = createString("couponId");
@@ -31,8 +29,6 @@ public class QCouponIssued extends EntityPathBase<CouponIssued> {
     public final StringPath couponName = createString("couponName");
 
     public final StringPath couponType = createString("couponType");
-
-    public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
 
     public final StringPath issuanceNumber = createString("issuanceNumber");
 
@@ -45,10 +41,6 @@ public class QCouponIssued extends EntityPathBase<CouponIssued> {
     public final StringPath productName = createString("productName");
 
     public final StringPath restrictions = createString("restrictions");
-
-    public final StringPath sellerCompany = createString("sellerCompany");
-
-    public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 
     public final StringPath status = createString("status");
 
