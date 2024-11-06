@@ -16,13 +16,15 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     String findByUser_memberName(String uid);
 
-
     boolean existsByEmail(String email);
 
     boolean existsByHp(String hp);
 
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.points")
     List<Member> findAllWithPoints();
+
+    @Query("SELECT m FROM Member m WHERE m.user.uid = :uid")
+    Optional<Member> findByUid(@Param("uid") String uid);
 
     Optional<Member> findByNameAndEmail(String name, String email);
 }

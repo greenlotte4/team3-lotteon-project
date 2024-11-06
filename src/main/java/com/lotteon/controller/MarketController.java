@@ -11,22 +11,27 @@ import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.dto.order.OrderRequestDTO;
 import com.lotteon.entity.User.User;
+import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.entity.product.Review;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
+import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.ReviewService;
+import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
+import com.lotteon.service.user.CouponDetailsService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -47,6 +52,7 @@ public class MarketController {
     private final ProductService productService;
     private final ProductCategoryService productCategoryService;
     private final UserService userService;
+    private final CouponDetailsService couponDetailsService;
     private final MarketCartService marketCartService;
     private final ReviewService reviewService;
     private final OrderService orderService;
@@ -153,13 +159,30 @@ public class MarketController {
 
 
     @GetMapping("/order/{uid}")
-    public String marketOrder(@PathVariable String uid,Model model) {
+    public String marketOrder(@PathVariable String uid,Model model, String productId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        String memberId = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
 
         log.info("uid ::::::::::"+uid);
         MemberDTO memberDTO = userService.getByUsername(uid);
+
+
+
+        log.info("멤버 아이디다"+memberId);
+
+        // 해당 멤버의 발급된 쿠폰 목록 조회
+
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberOrderCouponList(memberId, productId); // 서비스에서 발급된 쿠폰 조회
+        log.info("발급받은 쿠폰: {}", issuedCoupons);
+
+        model.addAttribute("issuedList", issuedCoupons);
+
+
+
         log.info(memberDTO);
         model.addAttribute("memberDTO",memberDTO);
-
+        model.addAttribute("productId", productId);
 
         return "content/market/marketorder"; // Points to the "content/market/marketorder" template
     }
