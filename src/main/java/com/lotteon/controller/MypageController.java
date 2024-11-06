@@ -36,6 +36,7 @@ public class MypageController {
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         model.addAttribute("content", "coupondetails");
         model.addAttribute("banners", banners);
         return "content/user/coupondetails"; // Points to "content/user/coupondetails"
@@ -74,45 +75,50 @@ public class MypageController {
     @GetMapping("/mysettings")
     public String mySettings(Model model) {
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         model.addAttribute("content", "mysettings");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/user/mysettings"; // Points to "content/user/mysettings"
     }
 
     @GetMapping("/orderdetails")
     public String orderDetails(Model model) {
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         model.addAttribute("content", "orderdetails");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/user/orderdetails"; // Points to "content/user/orderdetails"
     }
 
     @GetMapping("/pointdetails")
     public String pointDetails(Model model) {
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         model.addAttribute("content", "pointdetails");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/user/pointdetails"; // Points to "content/user/pointdetails"
     }
 
     @GetMapping("/qnadetails")
     public String qnaDetails(Model model) {
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         model.addAttribute("content", "qnadetails");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/user/qnadetails"; // Points to "content/user/qnadetails"
     }
 
     @GetMapping("/reviewdetails")
     public String reviewDetails(Model model, PageRequestDTO pageRequestDTO) {
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewss(pageRequestDTO);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
         List<Review> recentReviews = reviewService.getAllReviews();
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "reviewdetails");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/user/reviewdetails"; // Points to "content/user/reviewdetails"
     }
 

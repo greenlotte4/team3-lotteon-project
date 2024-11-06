@@ -87,6 +87,10 @@ public class Product {
     private Set<ProductOptionCombination> optionCombinations;
 
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="product_id")
+    @ToString.Exclude
+    private List<Option> options;
 
     private String file190;
     private String file230;
@@ -137,6 +141,9 @@ public class Product {
 
     public void setOptionGroups(Set<OptionGroup> optionGroups) {
         this.optionGroups = optionGroups;
+    }
+    public void setOptions(List<Option> options) {
+        this.options=options;
     }
 
     public void setOptionCombinations(Set<ProductOptionCombination> optionCombinations) {

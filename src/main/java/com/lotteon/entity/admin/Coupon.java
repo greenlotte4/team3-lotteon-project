@@ -39,7 +39,6 @@ public class Coupon {
     private LocalDate rdate; // 발급일
     private String restrictions;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
     @JsonIgnore
@@ -52,8 +51,11 @@ public class Coupon {
 
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<CouponIssued> CouponIssued;
+    private List<CouponIssued> couponIssued;
 
     // 새로운 메서드 추가
-
+// 모든 발급된 쿠폰 조회
+    public List<CouponIssued> getCouponIssuedList() {
+        return this.couponIssued;
+    }
 }

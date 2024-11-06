@@ -19,9 +19,9 @@ public class QBanner extends EntityPathBase<Banner> {
 
     public static final QBanner banner = new QBanner("banner");
 
-    public final DatePath<java.time.LocalDate> ban_edate = createDate("ban_edate", java.time.LocalDate.class);
+    public final StringPath ban_edate = createString("ban_edate");
 
-    public final TimePath<java.time.LocalTime> ban_etime = createTime("ban_etime", java.time.LocalTime.class);
+    public final StringPath ban_etime = createString("ban_etime");
 
     public final NumberPath<Integer> ban_id = createNumber("ban_id", Integer.class);
 
@@ -35,11 +35,11 @@ public class QBanner extends EntityPathBase<Banner> {
 
     public final StringPath ban_oname = createString("ban_oname");
 
-    public final DatePath<java.time.LocalDate> ban_sdate = createDate("ban_sdate", java.time.LocalDate.class);
+    public final StringPath ban_sdate = createString("ban_sdate");
 
     public final StringPath ban_size = createString("ban_size");
 
-    public final TimePath<java.time.LocalTime> ban_stime = createTime("ban_stime", java.time.LocalTime.class);
+    public final StringPath ban_stime = createString("ban_stime");
 
     public final NumberPath<Integer> status = createNumber("status", Integer.class);
 

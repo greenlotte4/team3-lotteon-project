@@ -11,24 +11,26 @@
     <script src="/js/cateQna.js"></script>
 </head>
 <body>
-<th:block layout:fragment="content">0.
-        <th:block th:replace="~{aside/qnaAside}"></th:block>
+
+
+<th:block layout:fragment="content">
+        <th:block th:replace="~{aside/qnaAside}" th:with="boardCate=${boardCate}"></th:block>
 
     <div id="service">
         <div class="title">
-            <h2>회원</h2>
-            <p>회원관련 문의내용 입니다.</p>
+            <h2 id="titlename">전체</h2>
+            <p id="titlecontent">전체관련 문의내용 입니다.</p>
         </div>
-        <div class="first container">
-            <ul class="first_list">
-                <li class="first_li" th:each="qna : ${qnaPage.getContent()}">
-                    <a th:href="@{/cs/qna/detail/{id}(id=${qna.qna_id})}">
-                        <span th:text="'[' + ${qna.qna_type2} + ']'">Q .</span> <!-- 카테고리 이름을 가져옵니다. -->
-                        <span th:text="${qna.qna_title}">질문 제목</span>
+        <div class="first container" >
+            <ul class="first_list"  id="qnaList">
+                <li class="first_li" th:each="qna, i:${qnaPageResponseDTO.getQnadtoList()}">
+                    <a th:href="@{/cs/qna/detail(id=${qna.qnaNo})}">
+                        <span th:text="'[' + ${qna.category.getName} + ']'">Q .</span> <!-- 카테고리 이름을 가져옵니다. -->
+                        <span th:text="${qna.qnatitle}">질문 제목</span>
                         <span class="review-status"
                               th:text="${qna.qna_status.name() == 'review' ? '검토중' : '답변완료'}"></span>
-                        <span class="author-id" th:text="${qna.qna_writer}"></span>
-                        <span class="date" th:text="${#strings.substring(qna.rdate,0,10)}"></span>
+                        <span class="author-id" th:text="${qna.qnawriter}"></span>
+                        <span class="date" th:text="${#strings.substring(qna.date,0,10)}"></span>
                     </a>
                 </li>
             </ul>
@@ -39,32 +41,103 @@
                    href="/cs/qna/write" type="button" class="btn-Write">작성하기</a>
             </div>
         </div>
-
-        <!-- 페이지네이션 -->
         <div class="pagination">
-            <div class="qna-pagination">
-                <!-- 이전 페이지 링크: 첫 페이지에서는 비활성화 및 숨김 -->
-                <span th:if="${qnaPage.totalPages > 1 && !qnaPage.first}">
-                    <a th:href="@{/cs/qna/list(page=${qnaPage.number - 1})}" class="prev">이전</a>
-                </span>
-                <span th:if="${qnaPage.first && qnaPage.totalPages > 1}" class="disabled"
-                      style="display:none;">이전</span>
+            <th:block th:if="${qnaPageResponseDTO.prev}">
+                <a th:if="${qnaPageResponseDTO.getParentId() == null}" th:href="@{/cs/qna/list(pg=${(qnaPageResponseDTO.start)-1})}" class="prev">이전</a>
+                <a th:if="${qnaPageResponseDTO.getParentId() != null}" th:href="@{/cs/qna/list(pg=${qnaPageResponseDTO.start - 1}, parentId=${qnaPageResponseDTO.getParentId()})}" class="prev">이전</a>
+            </th:block>
 
-                <!-- 페이지 번호 반복 -->
-                <span th:each="pageNum : ${#numbers.sequence(0, qnaPage.totalPages - 1)}">
-                    <a th:href="@{/cs/qna/list(page=${pageNum})}"
-                       th:classappend="${qnaPage.number == pageNum} ? 'active'">
-                        <span th:text="${pageNum + 1}"></span>
-                    </a>
-                </span>
+            <th:block th:each="num:${#numbers.sequence(qnaPageResponseDTO.start,qnaPageResponseDTO.end)}">
+                <a th:if="${qnaPageResponseDTO.getParentId() == null}" th:href="@{/cs/qna/list(pg=${num})}" th:class="${num == qnaPageResponseDTO.pg} ? 'qnacurrent' : 'qnanum'">[[${num}]]</a>
+                <a th:if="${qnaPageResponseDTO.getParentId() != null}" th:href="@{/cs/qna/list(pg=${num}, parentId=${qnaPageResponseDTO.getParentId()})}" th:class="${num == qnaPageResponseDTO.pg} ? 'qnacurrent' : 'qnanum'">[[${num}]]</a>
+            </th:block>
 
-                <!-- 다음 페이지 링크: 마지막 페이지에서는 비활성화 및 숨김 -->
-                <span th:if="${qnaPage.totalPages > 1 && !qnaPage.last}">
-                    <a th:href="@{/cs/qna/list(page=${qnaPage.number + 1})}" class="next">다음</a>
-                </span>
-                <span th:if="${qnaPage.last && qnaPage.totalPages > 1}" class="disabled" style="display:none;">다음</span>
-            </div>
+            <th:block th:if="${qnaPageResponseDTO.next}">
+                <a th:if="${qnaPageResponseDTO.getParentId() == null}" th:href="@{/cs/qna/list(pg=${(qnaPageResponseDTO.end)+1})}" class="next">다음</a>
+                <a th:if="${qnaPageResponseDTO.getParentId() != null}" th:href="@{/cs/qna/list(pg=${(qnaPageResponseDTO.end)+1}, parentId=${qnaPageResponseDTO.getParentId()})}" class="next">다음</a>
+            </th:block>
         </div>
-    </div>
+
+    <script>
+
+            document.querySelectorAll('.selectOption').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const parentId = this.getAttribute('data-id');
+                    const title = this.textContent;
+                    console.log("정마요귀여웡:" + parentId);
+
+                    fetch(`/admin/qna/list/page?parentId=${parentId}`)
+                        .then(resp => resp.json())
+                        .then(qnaPageResponseDTO => {
+                            console.log("마요는 맨날 야옹야옹하고 울어:", qnaPageResponseDTO);
+
+                            const qnaList = document.getElementById('qnaList');
+                            qnaList.innerHTML = '';
+
+                            document.getElementById('titlename').textContent = title;
+                            document.getElementById('titlecontent').textContent = title + ` 관련문의입니다`;
+
+                            // 모든 링크에서 active 클래스 제거
+                            document.querySelectorAll('.selectOption').forEach(l => {
+                                l.classList.remove('active');
+                            });
+                            // 현재 클릭한 링크에 active 클래스 추가
+                            this.classList.add('active');
+
+
+                            qnaPageResponseDTO.qnadtoList.forEach(qna => {
+                                const row = `
+                                    <li class="first_li">
+                                        <a href="/cs/qna/detail?id=${qna.qnaNo}">
+                                            <span>[${qna.category.name}]</span>
+                                            <span>${qna.qnatitle}</span>
+                                            <span class="review-status">${qna.qna_status === 'review' ? '검토중' : '답변완료'}</span>
+                                            <span class="author-id">${qna.qnawriter}</span>
+                                            <span class="date">${qna.date.substring(0, 10)}</span>
+                                        </a>
+                                    </li>`;
+
+                                qnaList.innerHTML += row;
+
+                                const paginationElement = document.querySelector('.pagination');
+                                paginationElement.innerHTML = ''; // 기존 내용 초기화
+
+                                // 이전 버튼
+                                if (qnaPageResponseDTO.prev) {
+                                    const prevLink = qnaPageResponseDTO.parentId == null
+                                        ? `<a href="/cs/qna/list?pg=${qnaPageResponseDTO.start - 1}" class="prev">이전</a>`
+                                        : `<a href="/cs/qna/list?pg=${qnaPageResponseDTO.start - 1}&parentId=${qnaPageResponseDTO.parentId}" class="prev">이전</a>`;
+                                    paginationElement.innerHTML += prevLink;
+                                }
+
+                                // 페이지 번호
+                                for (let num = qnaPageResponseDTO.start; num <= qnaPageResponseDTO.end; num++) {
+                                    const pageLink = qnaPageResponseDTO.parentId == null
+                                        ? `<a href="/cs/qna/list?pg=${num}" class="${num === qnaPageResponseDTO.pg ? 'qnacurrent' : 'qnanum'}">${num}</a>`
+                                        : `<a href="/cs/qna/list?pg=${num}&parentId=${qnaPageResponseDTO.parentId}" class="${num === qnaPageResponseDTO.pg && qnaPageResponseDTO.childId === qnaPageResponseDTO.childId ? 'qnacurrent' : 'qnanum'}">${num}</a>`;
+                                    paginationElement.innerHTML += pageLink;
+                                }
+
+                                // 다음 버튼
+                                if (qnaPageResponseDTO.next) {
+                                    const nextLink = qnaPageResponseDTO.parentId == null
+                                        ? `<a href="/cs/qna/list?pg=${qnaPageResponseDTO.end + 1}" class="next">다음</a>`
+                                        : `<a href="/cs/qna/list?pg=${qnaPageResponseDTO.end + 1}&parentId=${qnaPageResponseDTO.parentId}" class="next">다음</a>`;
+                                    paginationElement.innerHTML += nextLink;
+                                }
+
+                            })
+
+                                .catch(err => {
+                                    console.log(err);
+                                });
+                        })
+                })
+            })
+
+
+    </script>
 </th:block>
 </body>

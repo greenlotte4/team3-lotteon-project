@@ -14,29 +14,40 @@
 <th:block layout:fragment="content">
     <main>
         <section class="findid-section">
-            <h2>아이디 찾기</h2>
+            <img src="/images/common/smallLogo.svg">
+            <h2>아이디 찾기/비밀번호 찾기</h2>
             <hr>
+
+            <div class="button-container">
+                <a th:href="@{/user/findid}" class="idBtn">아이디 찾기</a>
+                <a th:href="@{/user/findpass}" class="pwBtn">비밀번호 찾기</a>
+            </div>
+
+
             <form method="post" th:action="@{/user/findid}" id="findIdForm">
                 <div class="table">
                     <table>
-                        <div>
-                            <label class="name" name="name">이름</label>
+                        <div class="nameArea">
+                            <div>
+                                <label class="name" name="name">이름</label>
+                            </div>
+                            <div>
+                                <input class="nametext" type="text" name="name" id="name" placeholder="이름 입력" required>
+                            </div>
                         </div>
-                        <div>
-                            <input class="nametext" type="text" name="name" id="name" placeholder="이름 입력" required>
-                        </div>
-                        <div>
+
+                        <div class="emailArea">
                             <label class="email" name="email">이메일</label>
-                        </div>
-                        <div>
-                            <input class="emailtext" id="email" type="email" placeholder="이메일 입력">
-                            <button type="button" class="getCodeBtn" id="sendCodeBtn">인증번호 받기</button>
+                            <div class="emailzone">
+                                <input class="emailtext" id="email" type="email" placeholder="이메일 입력">
+                                <button type="button" class="getCodeBtn" id="sendCodeBtn">인증번호 받기</button>
 
-                            <input class="verificationCodetext" id="verificationCode" type="text" placeholder="인증번호 입력">
-                            <button type="button" class="verificationCode" id="verifyCodeBtn">확인</button>
-                            <span id="resultEmail" class="validationMessage"></span>
-
+                                <input class="verificationCodetext" id="verificationCode" type="text" placeholder="인증번호 입력">
+                                <button type="button" class="verificationCode" id="verifyCodeBtn">확인</button>
+                                <span id="resultEmail" class="validationMessage"></span>
+                            </div>
                         </div>
+
                     </table>
                 </div>
                 <div class="note">
