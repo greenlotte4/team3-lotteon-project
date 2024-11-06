@@ -532,23 +532,34 @@ function updateExpectedTotal(totalPrice, totalShippingFee) {
 // 버튼을 클릭하면 모달 표시
     btn.onclick = function () {
         modal.style.display = "flex";
+        document.body.style.overflow = 'hidden';
+
         const productId = document.getElementById('productId').value;
         fetchCoupons(productId);
+
 
     }
 
 // 닫기 버튼을 클릭하면 모달 숨기기
     span.onclick = function () {
         modal.style.display = "none";
-    }
+        document.body.style.overflow = ''; // 모달 닫을 때 배경 스크롤 복구
 
+    }
+    modal.onclick = function (event) {
+        // 모달 밖을 클릭한 경우
+        if (event.target === modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = ''; // 모달 닫을 때 배경 스크롤 복구
+        }
+    }
 });
 
 
 function fetchCoupons(productId) {
 
-    let url = productId ? `/seller/coupon/${productId}` : '/seller/coupon/all/coupons';
-
+    let url = productId ? `/api/coupon/${productId}` : '/api/coupon/all/coupons';
+    console.log("프로덕트 아이디 : ", productId);
     fetch(url)
         .then(resp => {
             if (!resp.ok) {
@@ -558,7 +569,6 @@ function fetchCoupons(productId) {
             const contentType = resp.headers.get("Content-Type");
             if (!contentType || !contentType.includes("application/json")) {
                 return resp.text().then(text => {
-                    displayErrorMessage('로그인 후 이용해 주세요.'); // 메시지 수정
                     throw new Error('응답이 JSON이 아닙니다');
                 });
             }
@@ -617,17 +627,19 @@ function displayErrorMessage(message) {
 
 
 function applyCoupon(couponId){
+    const uid = sessionStorage.getItem('uid');  // 또는 localStorage.getItem('uid') 사용
 
     if (!uid) {
         alert('로그인 후 이용해 주세요');
         window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
         return;
     }
+
     if(!confirm("이 쿠폰을 발급 받으시겠습니까?")){
         return;
     }
 
-    fetch(`/seller/coupon/apply/${couponId}`,{
+    fetch(`/api/coupon/apply/${couponId}`,{
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
     })
