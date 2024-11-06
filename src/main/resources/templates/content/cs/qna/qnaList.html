@@ -86,57 +86,6 @@
                         document.querySelectorAll('.selectOption').forEach(l => l.classList.remove('active'));
                         this.classList.add('active');
 
-
-
-                            qnaPageResponseDTO.qnadtoList.forEach(qna => {
-                                const row = `
-                                    <li class="first_li">
-                                        <a href="/cs/qna/detail?id=${qna.qnaNo}">
-                                            <span>[${qna.category.name}]</span>
-                                            <span>${qna.qnatitle}</span>
-                                            <span class="review-status">${qna.qna_status === 'review' ? '검토중' : '답변완료'}</span>
-                                            <span class="author-id">${qna.qnawriter}</span>
-                                            <span class="date">${qna.date.substring(0, 10)}</span>
-                                        </a>
-                                    </li>`;
-
-                                qnaList.innerHTML += row;
-
-                                const paginationElement = document.querySelector('.pagination');
-                                paginationElement.innerHTML = ''; // 기존 내용 초기화
-
-                                // 이전 버튼
-                                if (qnaPageResponseDTO.prev) {
-                                    const prevLink = qnaPageResponseDTO.parentId == null
-                                        ? `<a href="/cs/qna/list?pg=${qnaPageResponseDTO.start - 1}" class="prev">이전</a>`
-                                        : `<a href="/cs/qna/list?pg=${qnaPageResponseDTO.start - 1}&parentId=${qnaPageResponseDTO.parentId}" class="prev">이전</a>`;
-                                    paginationElement.innerHTML += prevLink;
-                                }
-
-                                // 페이지 번호
-                                for (let num = qnaPageResponseDTO.start; num <= qnaPageResponseDTO.end; num++) {
-                                    const pageLink = qnaPageResponseDTO.parentId == null
-                                        ? `<a href="/cs/qna/list?pg=${num}" class="${num === qnaPageResponseDTO.pg ? 'qnacurrent' : 'qnanum'}">${num}</a>`
-                                        : `<a href="/cs/qna/list?pg=${num}&parentId=${qnaPageResponseDTO.parentId}" class="${num === qnaPageResponseDTO.pg && qnaPageResponseDTO.childId === qnaPageResponseDTO.childId ? 'qnacurrent' : 'qnanum'}">${num}</a>`;
-                                    paginationElement.innerHTML += pageLink;
-                                }
-
-                                // 다음 버튼
-                                if (qnaPageResponseDTO.next) {
-                                    const nextLink = qnaPageResponseDTO.parentId == null
-                                        ? `<a href="/cs/qna/list?pg=${qnaPageResponseDTO.end + 1}" class="next">다음</a>`
-                                        : `<a href="/cs/qna/list?pg=${qnaPageResponseDTO.end + 1}&parentId=${qnaPageResponseDTO.parentId}" class="next">다음</a>`;
-                                    paginationElement.innerHTML += nextLink;
-                                }
-
-                            })
-                                .catch(err => {
-                                    console.log(err);
-                                });
-                        })
-                })
-            })
-
                         updateQnaList(qnaPageResponseDTO.qnadtoList);
                         updatePagination(qnaPageResponseDTO, parentId, null, title); // 여기에서 parentId를 넘겨야 함
                     })
