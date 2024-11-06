@@ -55,17 +55,16 @@
                 <!-- 반복부분 -->
                 <th:block th:unless="${cartItems.size() < 0}" th:data-cart-id="${item.cart.cartId}">
                      <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
-
-                     <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">\
+                     <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">
                         <tr th:each="item : ${cartItems}"
-                            th:data-cart-item-id="${item.getCartItemId()}"
-                            th:data-cart-deliveryFee="${item.getDeliveryFee()}"
-                            th:data-cart-discount="${item.discount()}"
-                            th:data-cart-img="${item.imageUrl}"
-                            th:data-cart-productName="${item.productName}"
-                             th:data-cart-totalPrice="${item.getTotalPrice()}"
-                            th:data-cart-productId="${item.getProduct().getProductId()}"
-                        style="border-bottom: 1px solid #dddddd">
+                            th:data-cart-item-id="${item.getCartItemId()}" style="border-bottom: 1px solid #dddddd">
+<!--                            th:data-cart-deliveryFee="${item.getDeliveryFee()}"-->
+<!--                            th:data-cart-discount="${item.discount()}"-->
+<!--                            th:data-cart-img="${item.imageUrl}"-->
+<!--                            th:data-cart-productName="${item.productName}"-->
+<!--                            th:data-cart-totalPrice="${item.getTotalPrice()}"-->
+<!--                            th:data-cart-productId="${item.getProduct().getProductId()}"-->
+
                             <input type="hidden" th:if="${item.getProductOptionCombination()!=null}" th:value="${item.getProductOptionCombination()}">
                         <td><input type="checkbox" name="select"></td>
                         <td>
