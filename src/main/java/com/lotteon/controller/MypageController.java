@@ -70,9 +70,10 @@ public class MypageController {
     public String myInfo(Model model) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/user/mypageMain"; // Points to "content/user/mypageMain"
     }
 
@@ -137,6 +138,7 @@ public class MypageController {
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewss(pageRequestDTO);
+        log.info("aaaaaaa{}", pageResponseReviewDTO);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
         List<Review> recentReviews = reviewService.getAllReviews();

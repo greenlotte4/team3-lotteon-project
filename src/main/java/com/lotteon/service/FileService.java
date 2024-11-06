@@ -271,38 +271,33 @@ public class FileService {
     public ReviewRequestDTO uploadReviewFiles(ReviewRequestDTO reviewDTO) {
         File fileUploadPath = new File(uploadPath + "ReviewImg/");
 
-        // 업로드할 디렉토리가 없으면 생성
         if (!fileUploadPath.exists()) {
             fileUploadPath.mkdirs();
         }
 
-        List<MultipartFile> files = reviewDTO.getPReviewFiles(); // 업로드할 파일 리스트
-        List<ReviewFile> reviewFiles = new ArrayList<>(); // ReviewFile 리스트 생성
+        List<MultipartFile> files = reviewDTO.getPReviewFiles();
+        List<ReviewFile> reviewFiles = new ArrayList<>();
 
-        // 파일 리스트가 null이 아니고 비어있지 않은 경우 처리 시작
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
-                // 각 파일 이름 로깅
                 log.debug("Processing file: " + file.getOriginalFilename());
                 if (!file.isEmpty()) {
                     String originalName = file.getOriginalFilename();
-                    String ext = originalName.substring(originalName.lastIndexOf(".")).toLowerCase(); // 확장자를 소문자로 변환
-                    String savedName = UUID.randomUUID().toString() + ext; // UUID로 파일 이름 생성
-                    String filePath = fileUploadPath.getAbsolutePath() + File.separator + savedName; // 파일 저장 경로
+                    String ext = originalName.substring(originalName.lastIndexOf(".")).toLowerCase();
+                    String savedName = UUID.randomUUID().toString() + ext;
+                    String filePath = fileUploadPath.getAbsolutePath() + File.separator + savedName;
 
-                    // 허용된 확장자 체크
                     List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
                     if (!allowedExtensions.contains(ext)) {
                         throw new IllegalArgumentException("허용되지 않는 파일 형식입니다. JPG, JPEG, PNG만 업로드할 수 있습니다.");
                     }
 
                     try {
-                        // 파일을 지정된 경로에 저장
                         file.transferTo(new File(filePath));
-                        // ReviewFile 객체 생성 및 리스트에 추가
                         ReviewFile reviewFile = new ReviewFile();
                         reviewFile.setSname(savedName);
                         reviewFile.setPath(filePath);
+                        log.debug("File saved: " + savedName + " at " + filePath);
                         reviewFiles.add(reviewFile);
                     } catch (IOException e) {
                         log.error("파일 업로드 오류: ", e);
@@ -313,9 +308,8 @@ public class FileService {
             }
         }
 
-        // 새로 업로드된 파일 리스트를 reviewDTO에 추가
-        log.debug("Saved review files: " + reviewFiles.size());
-        reviewDTO.setSavedReviewFiles(reviewFiles);
+        log.debug("Total saved review files: " + reviewFiles.size());
+        reviewDTO.setSavedReviewFiles(reviewFiles); // DTO에 파일 리스트 설정
 
         return reviewDTO;
     }
