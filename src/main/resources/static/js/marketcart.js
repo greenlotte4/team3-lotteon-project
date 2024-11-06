@@ -185,6 +185,7 @@ applyButtons.forEach(button => {
             })
             .then(data => {
                 inputField.value = newQuantity;
+                updateOrderSummary();
                 alert('수정되었습니다');
                 toggleEditMode(row, false); // 수정 모드 해제
 
@@ -272,15 +273,59 @@ document.querySelector('.selected-delete').addEventListener('click', function() 
 
 
 
-let initialQuantity = parseInt(document.querySelector('.orderQnt span').innerText.trim()) || 0;
-let initialPrice = parseInt(document.querySelector('.orderOriginPrice .price').innerText.replace(/,/g, '')) || 0;
-let initialDiscount = parseInt(document.querySelector('.orderSalePrice .price').innerText.replace(/,/g, '')) || 0;
-let initialDelivery = parseInt(document.querySelector('.delivery-fee .price').innerText.replace(/,/g, '')) || 0;
-let initialPoints = parseInt(document.querySelector('.orderPoint .price').innerText.replace(/,/g, '')) || 0;
+        let initialQuantity = parseInt(document.querySelector('.orderQnt span').innerText.trim()) || 0;
+        let initialPrice = parseInt(document.querySelector('.orderOriginPrice .price').innerText.replace(/,/g, '')) || 0;
+        let initialDiscount = parseInt(document.querySelector('.orderSalePrice .price').innerText.replace(/,/g, '')) || 0;
+        let initialDelivery = parseInt(document.querySelector('.delivery-fee .price').innerText.replace(/,/g, '')) || 0;
+        let initialPoints = parseInt(document.querySelector('.orderPoint .price').innerText.replace(/,/g, '')) || 0;
 
 
+        const quantityInputs = document.querySelectorAll('.quantity');
+        quantityInputs.forEach(input => {
+        console.log(input.value); // Ensure all quantity fields are accessible
+        });
 
+function updateOrderSummary() {
+    let totalQuantity = 0;
+    let totalPrice = 0;
+    let totalDiscount = 0;
+    let totalDelivery = 0;
+    let totalPoints = 0;
 
+    // 체크된 항목을 순회
+    const checkedCheck = document.querySelectorAll('input[name="select"]:checked');
+    if (checkedCheck.length > 0) {
+        checkedCheck.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+
+            // 수량, 가격, 할인, 배송비, 포인트 가져오기
+            totalQuantity += parseInt(row.querySelector('input[name="quantity"]').value);
+            totalPrice += parseInt(row.querySelector('td:nth-child(4)').innerText.replace(/,/g, ''));
+            totalDiscount += parseInt(row.querySelector('td:nth-child(5)').innerText.replace(/,/g, ''));
+            totalDelivery += parseInt(row.querySelector('td:nth-child(7)').innerText.replace(/,/g, ''));
+            totalPoints += parseInt(row.querySelector('td:nth-child(6)').innerText.replace(/,/g, ''));
+        });
+
+        // 전체 주문 금액 계산
+        const totalOrderPrice = totalPrice - totalDiscount + totalDelivery;
+
+        // 화면에 값 업데이트
+        document.querySelector('.orderQnt span').innerText = totalQuantity;
+        document.querySelector('.orderOriginPrice .price').innerText = totalPrice.toLocaleString();
+        document.querySelector('.orderSalePrice .price').innerText = totalDiscount.toLocaleString();
+        document.querySelector('.delivery-fee .price').innerText = totalDelivery.toLocaleString();
+        document.querySelector('.orderTotalPrice .price').innerText = totalOrderPrice.toLocaleString();
+        document.querySelector('.orderPoint .price').innerText = totalPoints.toLocaleString();
+    } else {
+        // 체크박스가 하나도 체크되지 않은 경우 기본값으로 되돌리기
+        document.querySelector('.orderQnt span').innerText = initialQuantity;
+        document.querySelector('.orderOriginPrice .price').innerText = initialPrice.toLocaleString();
+        document.querySelector('.orderSalePrice .price').innerText = initialDiscount.toLocaleString();
+        document.querySelector('.delivery-fee .price').innerText = initialDelivery.toLocaleString();
+        document.querySelector('.orderTotalPrice .price').innerText = (initialPrice - initialDiscount + initialDelivery).toLocaleString();
+        document.querySelector('.orderPoint .price').innerText = initialPoints.toLocaleString();
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     const checkBoxAll = document.getElementById('checkBoxAll');
@@ -309,47 +354,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 // 주문 요약 업데이트 함수
-    function updateOrderSummary() {
-        let totalQuantity = 0;
-        let totalPrice = 0;
-        let totalDiscount = 0;
-        let totalDelivery = 0;
-        let totalPoints = 0;
 
-        // 체크된 항목을 순회
-        const checkedCheck = document.querySelectorAll('input[name="select"]:checked');
-        if (checkedCheck.length > 0) {
-            checkedCheck.forEach(checkbox => {
-                const row = checkbox.closest('tr');
-
-                // 수량, 가격, 할인, 배송비, 포인트 가져오기
-                totalQuantity += parseInt(row.querySelector('input[name="quantity"]').value);
-                totalPrice += parseInt(row.querySelector('td:nth-child(4)').innerText.replace(/,/g, ''));
-                totalDiscount += parseInt(row.querySelector('td:nth-child(5)').innerText.replace(/,/g, ''));
-                totalDelivery += parseInt(row.querySelector('td:nth-child(7)').innerText.replace(/,/g, ''));
-                totalPoints += parseInt(row.querySelector('td:nth-child(6)').innerText.replace(/,/g, ''));
-            });
-
-            // 전체 주문 금액 계산
-            const totalOrderPrice = totalPrice - totalDiscount + totalDelivery;
-
-            // 화면에 값 업데이트
-            document.querySelector('.orderQnt span').innerText = totalQuantity;
-            document.querySelector('.orderOriginPrice .price').innerText = totalPrice.toLocaleString();
-            document.querySelector('.orderSalePrice .price').innerText = totalDiscount.toLocaleString();
-            document.querySelector('.delivery-fee .price').innerText = totalDelivery.toLocaleString();
-            document.querySelector('.orderTotalPrice .price').innerText = totalOrderPrice.toLocaleString();
-            document.querySelector('.orderPoint .price').innerText = totalPoints.toLocaleString();
-        } else {
-            // 체크박스가 하나도 체크되지 않은 경우 기본값으로 되돌리기
-            document.querySelector('.orderQnt span').innerText = initialQuantity;
-            document.querySelector('.orderOriginPrice .price').innerText = initialPrice.toLocaleString();
-            document.querySelector('.orderSalePrice .price').innerText = initialDiscount.toLocaleString();
-            document.querySelector('.delivery-fee .price').innerText = initialDelivery.toLocaleString();
-            document.querySelector('.orderTotalPrice .price').innerText = (initialPrice - initialDiscount + initialDelivery).toLocaleString();
-            document.querySelector('.orderPoint .price').innerText = initialPoints.toLocaleString();
-        }
-    }
 
     document.querySelector('.order-Btn').addEventListener('click', function (event) {
         event.preventDefault(); // Prevent default action
@@ -364,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const selectedOptions = [];
+        const productDataArray = [];
         const checkedItems = document.querySelectorAll('input[name="select"]:checked');
 
         if (checkedItems.length === 0) {
@@ -373,65 +378,92 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const isConfirmed = confirm("Do you want to proceed with the purchase?");
+        const isConfirmed = confirm("주문하시겠습니까?");
         if (isConfirmed) {
-
-            const cartId = document.getElementById('cartId').value;
             checkedItems.forEach(checkbox => {
                 const row = checkbox.closest('tr');
 
-                const cartItemId = row.getAttribute('data-cart-item-id'); // Product ID
-
-                const quantityInput = row.querySelector('input[name="quantity"]'); // Quantity input element
-                const quantity = parseInt(quantityInput?.value, 10) || 1; // Parse quantity or default to 1
-
-                // Add to selected options in the structure of CartItemDTO
-                if (cartItemId && quantity) {
-                    selectedOptions.push({ cartItemId, quantity });
-                } else {
-                    console.warn("Missing cartItemId or invalid quantity for item:", cartItemId);
+                // Skip rows that contain the 'skip' ID input
+                if (row.querySelector('#skip')) {
+                    return; // Skip this iteration if 'skip' element is found
                 }
+
+                // Get the quantity and handle undefined/null cases
+                const quantityInput = row.querySelector('.quantity');
+                if (!quantityInput || quantityInput.value === "") {
+                    return; // Exit this iteration if quantity is null or empty
+                }
+
+                let additionalPrice = 0;
+                let combinationId = 0;
+                let combinationString = "";
+                const additionalPriceInput = row.querySelector('.additionalPrice-Input');
+                const combinationIdInput = row.querySelector('.combinationId');
+                const combinationStringInput = row.querySelector('.combinationString');
+
+                if (additionalPriceInput) {
+                    combinationId = parseInt(combinationIdInput.value, 10) || 0;
+                    additionalPrice = parseFloat(additionalPriceInput.value) || 0;
+                    combinationString = combinationStringInput.value || "";
+                }
+
+                const productData = {
+                    cartItemId: parseInt(row.getAttribute('data-cartItemId'))||0,
+                    cartId: parseInt(row.getAttribute('data-cartId'))||0,
+                    productId: row.getAttribute('data-product-id'),
+                    productName: row.getAttribute('data-product-name'),
+                    discount: row.getAttribute('data-discount'),
+                    originalPrice: row.getAttribute('data-original-price'),
+                    finalPrice: row.getAttribute('data-final-price'),
+                    quantity: parseInt(quantityInput.value) || 1,
+                    file190: row.getAttribute('data-file190'),
+                    point: row.getAttribute('data-point'),
+                    shippingFee: row.getAttribute('data-shipping-fee'),
+                    ShippingTerms: row.getAttribute('data-shipping-terms'),
+                    expectedPoint: row.getAttribute('data-expected-point'),
+                    additionalPrice: additionalPrice,
+                    combinationId: combinationId,
+                    combinationString: combinationString
+
+                };
+
+                productDataArray.push(productData);
             });
 
-            // Create CartOrderRequestDTO structure
-            const orderRequestData = {
-                cartId: cartId, // Assuming all items belong to the same cart
-                cartItemDTO: selectedOptions.map(option => ({
-                    cartItemId: option.cartItemId,
-                    quantity: option.quantity
-                }))
-            };
+            console.log("Selected items:", productDataArray);
+            // Save selected items to localStorage
+            localStorage.setItem('productDataArray', JSON.stringify(productDataArray));
+            console.log("Saved product data to localStorage:", productDataArray);
 
-
-            console.log("Order Request Data:", orderRequestData); // Confirmation log
-            console.log("userID",userId);
-            // Send API request
-            fetch(`/api/cart/cartOrder/${userId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderRequestData)
+            fetch("/market/buyNow", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(productDataArray)
             })
-                .then(resp => {
-                    console.log("Response status:", resp.status);
-                    if (!resp.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return resp.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log("Response data:", data);
-                    if (data.success) {
-                        alert("Purchase completed successfully.");
+                    if (data.result === "success") {
+                        localStorage.setItem("productDataCartArray", JSON.stringify(productDataArray));
+                        window.location.href = `/market/order/${userId}`;
+                    } else if (data.result === "login_required") {
+                        if (confirm("로그인이 필요합니다. 로그인 하시겠습니까?")) {
+                            window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
+                        } else {
+                            location.reload();
+                        }
+                    } else if (data.result === "auth") {
+                        alert("구매 권한이 없는 계정입니다. 관리자 또는 판매자는 구매할 수 없습니다.");
                     } else {
-                        alert("An error occurred during the purchase process.");
+                        alert("구매 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
                     }
                 })
                 .catch(error => {
                     console.error("Error:", error);
-                    alert("An error occurred.");
+                    alert("구매 처리 중 오류가 발생했습니다.");
                 });
+
+            // Redirect to the order confirmation page or process further as needed
+            console.log("userID", userId);
         }
     });
 });

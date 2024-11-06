@@ -129,17 +129,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Retrieve product data from localStorage and display
     const productDataArray = JSON.parse(localStorage.getItem("productDataArray")) || [];
+    const productDataCartArray = JSON.parse(localStorage.getItem("ProductDataCartArray")) || [];
+    let orderSource = '';
+
 
     try {
+        const orderTable = document.querySelector(".productOrder");
         if (productDataArray.length > 0) {
-            const orderTable = document.querySelector(".productOrder");
+            // Data from direct purchase (productDataArray)
+            orderSource = 'directPurchase';
             productDataArray.forEach(data => {
                 orderTable.insertAdjacentHTML("beforeend", createProductRow(data));
             });
+        } else if (productDataCartArray.length > 0) {
+            // Data from cart (productDataCartArray)
+            orderSource = 'cartPurchase';
+            productDataCartArray.forEach(data => {
+                orderTable.insertAdjacentHTML("beforeend", createProductRow(data));
+            });
+        } else {
+            alert('No products selected for order.');
+            return;
         }
     } catch (error) {
         console.error("Error parsing product data:", error);
     }
+
 
     // Function to calculate total shipping fee based on grouped product data
     function calculateShippingFee(dataArray) {
