@@ -26,6 +26,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath addr2 = createString("addr2");
 
+    public final ListPath<Delivery, QDelivery> deliveryList = this.<Delivery, QDelivery>createList("deliveryList", Delivery.class, QDelivery.class, PathInits.DIRECT2);
+
     public final StringPath email = createString("email");
 
     public final StringPath gender = createString("gender");
