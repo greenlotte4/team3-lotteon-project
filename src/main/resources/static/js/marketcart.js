@@ -167,6 +167,7 @@ applyButtons.forEach(button => {
         };
         console.log("전송할 requestBody:", requestBody);
 
+
         fetch(`/api/cart/${cartItemId}`, {
             method: 'PUT',
             headers: {
@@ -184,14 +185,14 @@ applyButtons.forEach(button => {
             })
             .then(data => {
                 inputField.value = newQuantity;
+                alert('수정되었습니다');
                 toggleEditMode(row, false); // 수정 모드 해제
-                window.location.reload();
 
 
             })
             .catch(error => {
                 console.log('error', error)
-                alert('수량 업뎃중 오류닭')
+                alert('수량 오류')
             })
     })
 
@@ -360,40 +361,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const checkedItems = document.querySelectorAll('input[name="select"]:checked');
         if (checkedItems.length === 0) {
-            alert("주문할 상품을 선택해 주세요")
+            alert("주문할 상품을 선택해 주세요");
             return;
         }
 
         const isConfirmed = confirm("구매하시겠습니까?");
         if (isConfirmed) {
+
+            const cartId = document.getElementById('cartId').value;
             checkedItems.forEach(checkbox => {
                 const row = checkbox.closest('tr');
                 const cartItemId = row.getAttribute('data-cart-item-id'); // 상품 ID
-                const cartId = row.getAttribute('data-cart-id'); // 카트 ID
                 const quantityInput = row.querySelector('input[name="quantity"]'); // 수량 input 요소
-
-                // 미리 설정된 수량 값을 가져오기
                 const quantity = parseInt(quantityInput.value, 10); // 수량 값을 숫자로 변환
 
-                // 선택한 옵션을 배열에 추가
-                selectedOptions.push({cartItemId, cartId, quantity, userId});
+                // Add to selected options in the structure of CartItemDTO
+                selectedOptions.push({ cartItemId, quantity });
             });
 
-            console.log("Selected options:", selectedOptions); // 확인용 로그
+            // Create CartOrderRequestDTO structure
+            const orderRequestData = {
+                cartId: cartId, // Assuming all items belong to the same cart
+                cartItemDTO: selectedOptions.map(option => ({
+                    cartItemId: option.cartItemId,
+                    quantity: option.quantity
+                }))
+            };
 
-            // API 호출을 위한 데이터 배열 준비
-            const productDataArray = selectedOptions.map(option => ({
-                cartItemId: option.cartItemId,
-                quantity: option.quantity
-            }));
+            console.log("Order Request Data:", orderRequestData); // 확인용 로그
 
-            // 주문 API 호출
-            fetch(`api/cart/cartOrder/${userId}`, {
+            // Send API request
+            fetch(`/api/cart/cartOrder/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(productDataArray)
+                body: JSON.stringify(orderRequestData)
             })
                 .then(resp => {
                     console.log("Response status:", resp.status);

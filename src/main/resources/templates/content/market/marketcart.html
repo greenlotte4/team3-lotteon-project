@@ -53,49 +53,50 @@
 
 
                 <!-- 반복부분 -->
-                <th:block th:unless="${cartItems.size() <= 0}" th:data-cart-id="${item.cart.cartId}">
-                <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
-                    <tr th:each="item : ${cartItems}"
-                    th:data-cart-item-id="${item.getCartItemId()}"
-                    style="border-bottom: 1px solid #dddddd">
-                    <td><input type="checkbox" name="select"></td>
-                    <td>
-                        <div>
-                            <img th:src="${'uploads/productImg'+item.getImageUrl()}" alt="">
-                        </div>
-                        <div>
-                            <span th:text="${item.getProduct().productName}">상품명</span>
-                            <p class="product_option" th:text="${item.getOption().getOptionName()}">[ 옵션 ]</p>
+                <th:block th:unless="${cartItems.size() < 0}" th:data-cart-id="${item.cart.cartId}">
+                     <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
+                     <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">
+                        <tr th:each="item : ${cartItems}"
+                            th:data-cart-item-id="${item.getCartItemId()}"
+                        style="border-bottom: 1px solid #dddddd">
+                        <td><input type="checkbox" name="select"></td>
+                        <td>
+                            <div>
+                                <img th:src="${'uploads/productImg'+item.getImageUrl()}" alt="">
+                            </div>
+                            <div>
+                                <span th:text="${item.getProduct().productName}">상품명</span>
+                                <p class="product_option" th:if="${item.getOptionGroupId()>0}" th:text="${item.getOption().getOptionName()}">[ 옵션 ]</p>
 
-                        </div>
-                    </td>
-                    <td>
-                        <div class="qnt">
-                            <input type="number" name="quantity" th:value="${item.quantity}" min="1" readonly>
-                            <div class="countModify">
-                                <a class="countModifyBtn" href="#">수정하기</a>
-                                <div class="number-controls" style="display: none;">
-                                    <button type="button" class="qnt-decrease">-</button>
-                                    <input type="number" class="quantity-input" value="1">
-                                    <button type="button" class="qnt-increase">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="qnt">
+                                <input type="number" name="quantity" th:value="${item.quantity}" min="1" readonly>
+                                <div class="countModify">
+                                    <a class="countModifyBtn" href="#">수정하기</a>
+                                    <div class="number-controls" style="display: none;">
+                                        <button type="button" class="qnt-decrease">-</button>
+                                        <input type="number" class="quantity-input" value="1">
+                                        <button type="button" class="qnt-increase">+</button>
+                                    </div>
+                                </div>
+                                <div class="edit-buttons" style="display: none;">
+                                    <button type="button" class="apply-btn">변경하기</button>
+                                    <button type="button" class="cancel-btn">취소</button>
                                 </div>
                             </div>
-                            <div class="edit-buttons" style="display: none;">
-                                <button type="button" class="apply-btn">변경하기</button>
-                                <button type="button" class="cancel-btn">취소</button>
-                            </div>
-                        </div>
-                    </td>
-                    <td th:text="${item.price}">판매가</td>
-                    <td th:text="${item.discount}">할인</td>
-                    <td th:text="${item.getPoints()}">포인트</td>
-                    <td th:text="${item.getDeliveryFee()}">배송비</td>
-                    <td th:text="${item.getTotalPrice()}">총합</td>
-                </tr>
+                        </td>
+                        <td th:text="${item.price}">판매가</td>
+                        <td th:text="${item.discount}">할인</td>
+                        <td th:text="${item.getPoints()}">포인트</td>
+                        <td th:text="${item.getDeliveryFee()}">배송비</td>
+                        <td th:text="${item.getTotalPrice()}">총합</td>
+                    </tr>
 
                 </th:block>
 
-                <th:block th:if="${cartItems.size() <= 0}" >
+                <th:block th:if="${cartItems.size() < 0}" >
                     <tr>
                         <td colspan="8" style="text-align: center; font-size: 25px">장바구니가 비어있습니다.</td>
                     </tr>

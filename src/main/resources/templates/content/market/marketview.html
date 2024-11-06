@@ -301,9 +301,9 @@
                                                     <div class="review-body">
                                                         <h5 th:text="${review.product.productName}">상품명</h5>
                                                         <div>
-                                                            <div class="rimg" th:if="${!#lists.isEmpty(review.savedReviewFiles)}">
+                                                            <div class="rimg" th:if="${!#lists.isEmpty(review.reviewFileDTOS)}">
                                                                 <!-- 리뷰 이미지가 있을 경우에만 이미지 태그를 출력 -->
-                                                                <img th:src="@{'/uploads/ReviewImg/' + ${review.savedReviewFiles[0].sname}}"
+                                                                <img th:src="@{'/uploads/ReviewImg/' + ${review.reviewFileDTOS[0].sname}}"
                                                                      alt="review-image" class="review_img">
                                                             </div>
                                                             <div th:if="${#lists.isEmpty(review.savedReviewFiles)}" class="no-image-message">

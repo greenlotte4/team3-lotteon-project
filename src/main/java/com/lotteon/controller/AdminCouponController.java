@@ -90,7 +90,6 @@ public class AdminCouponController {
                 .size(requestDTO.getSize()) // 요청 DTO에서 페이지 크기 가져오기
                 .build();
 
-        log.info("요청 DTO: {}", responseDTO); // 응답 DTO 로그 추가
 
         // 페이지 정보 계산
         responseDTO.setStartNo(responseDTO.getTotal() - ((responseDTO.getPg() - 1) * responseDTO.getSize()));
@@ -115,16 +114,7 @@ public class AdminCouponController {
         log.info("쿠폰 디티어"+ couponDTO);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        log.info("User details-----------------------: {}", userDetails);
         Seller seller = userDetails.getSeller();
-        log.info("Seller from user details-----------------------: {}", seller);
-        log.info("추가된 상품 아이디!Product ID: " + couponDTO.getProductId()); // 추가된 로그
-
-
-        if (seller == null) {
-            return ResponseEntity.badRequest().body("셀러 정보를 찾을 수 없습니다.");
-
-        }
 
         try {
             couponService.insertCoupon(couponDTO);
@@ -139,46 +129,38 @@ public class AdminCouponController {
     public ResponseEntity<CouponDTO> endCoupon(@PathVariable("couponId") String couponId) {
         CouponDTO updatedCoupon = couponService.endCoupon(couponId);
 
-        log.info("---------쿠폰 상태------------" + updatedCoupon);
         return ResponseEntity.ok(updatedCoupon);
 
     }
     @PutMapping("/issued/{issuanceNumber}/end")
     public ResponseEntity<CouponIssuedDTO> endIssuedCoupon(@PathVariable("issuanceNumber") String issuanceNumber) {
-        log.info("발행된 쿠폰 종료 요청");
         CouponIssuedDTO updatedCoupon = couponIssuedService.endCouponIssued(issuanceNumber);
-
-        log.info("---------쿠폰 상태------------" + updatedCoupon);
         return ResponseEntity.ok(updatedCoupon);
-
     }
 
     @GetMapping("/issued")
     public String adminIssuedModify(CouponListRequestDTO requestDTO, Model model) {
         log.info("쿠폰 발급 목록을 요청했습니다.");
-        log.info("셀러 ID: {}", requestDTO.getSellerId());
 
-        // 로그인한 셀러의 이름을 얻기 위해 SecurityContext 사용
-        if (requestDTO.getPage() < 1) {
-            requestDTO.setPage(1);
-        }
-        // 인증된 사용자 정보 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        Seller seller = userDetails.getSeller();
+        String sellerCompany = couponIssuedService.getLoggedInSellerCompany(); // 셀러 회사명을 가져오는 로직 필요
+        Pageable pageable = PageRequest.of(requestDTO.getPage() - 1, requestDTO.getSize());
 
+        Page<CouponIssued> issuedPage = couponIssuedService.selectIssuedCouponsPagination(requestDTO, sellerCompany, pageable);
 
         // 셀러 이름을 이용해 발급된 쿠폰 목록 조회
-        Page<CouponIssuedDTO> issuedPage = couponIssuedService.selectIssuedCouponsPagination(requestDTO, seller.getId(), requestDTO.getPageable());
-
-        log.info("잇슈드페이지: {}", issuedPage);
-
+        // 셀러 이름을 이용해 발급된 쿠폰 목록 조회 (엔티티를 직접 조회)
+        if (issuedPage == null || issuedPage.getContent().isEmpty()) {
+            log.info("발급된 쿠폰 목록이 없습니다.");
+        } else {
+            log.info("잇슈드페이지: {}", issuedPage);
+        }
         // 모델에 발급된 쿠폰 리스트 담기
         model.addAttribute("IssuedList", issuedPage.getContent());  // 실제 발급된 쿠폰 리스트
         model.addAttribute("totalPages", issuedPage.getTotalPages());  // 전체 페이지 수
         model.addAttribute("currentPage", issuedPage.getNumber() + 1); // 현재 페이지 (1-based)
         model.addAttribute("totalItems", issuedPage.getTotalElements());  // 전체 아이템 수
         model.addAttribute("size", issuedPage.getSize());  // 페이지당 아이템 수
+//        model.addAttribute("IssuedList", IssuedList);  // 페이지당 아이템 수
 
         return "content/admin/coupon/issued";
     }
@@ -211,7 +193,6 @@ public class AdminCouponController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedInUserId = authentication.getName(); // 로그인한 사용자 ID
 
-        log.info("로그인한 사용자 ID: {}", loggedInUserId);
 
         // 로그인한 사용자 ID로 상품 조회
         List<ProductDTO> products = couponService.getProductsBySellerId(loggedInUserId);

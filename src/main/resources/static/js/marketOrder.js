@@ -275,12 +275,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get coupon discount based on the selected coupon
         const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex]?.value || "0";
+        const selectedCoupon = couponSelect.options[couponSelect.selectedIndex];
+
         console.log("쿠폰!!:",selectedCouponValue);
 
+        const couponType = selectedCoupon.getAttribute('data-coupon-type');
+        const couponValue = parseFloat(selectedCoupon.getAttribute('data-discount-value'));
 
-        if (selectedCouponValue === "1") {
-            couponDiscount = Math.floor(totalProductPrice() * 0.03); // Example: 3% discount
+        let couponDiscount = 0;
+        console.log("선택된 상품 쿠폰 타입:", couponType);
+        console.log("선택된 상품 쿠폰 값:", couponValue);
+        // 쿠폰 계산
+        if(couponValue <= 100){
+
         }
+
 
         // Calculate the initial total before applying points
         const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
@@ -310,12 +319,20 @@ document.addEventListener('DOMContentLoaded', function () {
         finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
 
         orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
-        let pointsEarned=0;
-        if(couponDiscount === 0){
-            pointsEarned =  Math.floor((( orderTotal -totalShippingFee())* pointPercentage) / 100);
+        let couponDiscount =0;
+
+        if (couponValue <= 100) {
+            // 쿠폰 값이 100 이하일 경우 -> 퍼센트 할인
+            couponDiscount  = Math.floor(totalProductPrice() * (couponValue / 100)); // 퍼센트 할인
+            console.log("퍼센트 할인 적용:", couponDiscount);
+
+        } else {
+            // 쿠폰 값이 100보다 클 경우 -> 고정 금액 할인
+            couponDiscount  = couponValue; // 고정 금액 할인
+            console.log("고정 금액 할인 적용:", couponDiscount);
 
         }
-        console.log(pointsEarned);
+        console.log("결과 값",couponDiscount );
         finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
         finalOrderTotal.textContent = orderTotal.toLocaleString();
         // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
@@ -445,8 +462,8 @@ document.addEventListener('DOMContentLoaded', function () {
         couponValue = selectedOption.value ||1;
         couponText = selectedOption.text || 1;
 
-        console.log("쿠폰 값 (value):", couponValue);
-        console.log("쿠폰 사용 금액 (text):", couponText);
+        /*console.log("쿠폰 값 (value):", couponValue);
+        console.log("쿠폰 사용 금액 (text):", couponText);*/
     });
 
 
