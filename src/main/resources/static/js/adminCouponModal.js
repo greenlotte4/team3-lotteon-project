@@ -421,3 +421,47 @@ document.querySelectorAll('.issued-end-button').forEach(button => {
     }
 
 });
+
+
+// 검색 기능
+function searchCoupon() {
+    const category = document.getElementById('searchCategory').value;
+    const query = document.getElementById('searchQuery').value;
+    console.log('Request URL:', `/seller/coupon/search?category=${category}&query=${encodeURIComponent(query)}`);
+
+    const url = `/seller/coupon/search?category=${category}&query=${encodeURIComponent(query)}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response received:', data);  // 변수명 수정
+            displayCoupons(data); // 결과를 화면에 표시
+        })
+        .catch(error => {
+            console.error('검색 중 오류 발생:', error);
+        });
+}
+
+// 검색 결과를 화면에 표시
+function displayCoupons(data) {
+    const couponContainer = document.getElementById('couponList');
+    couponContainer.innerHTML = ''; // 이전 검색 결과를 지움
+
+    if (data && data.length > 0) {
+        data.forEach(coupon => {
+            const couponElement = document.createElement('div');
+            couponElement.classList.add('coupon-item');
+            couponElement.innerHTML = `
+                <div>쿠폰번호: ${coupon.couponId}</div>
+                <div>쿠폰명: ${coupon.couponName}</div>
+                <div>발급자: ${coupon.sellerCompany}</div>
+            `;
+            couponContainer.appendChild(couponElement);
+        });
+    } else {
+        couponContainer.innerHTML = '검색 결과가 없습니다.';
+    }
+}
+
+// 검색 버튼 클릭 이벤트 리스너
+document.getElementById('searchBtn').addEventListener('click', searchCoupon);
