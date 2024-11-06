@@ -9,7 +9,7 @@
                 <th class="id" name="id">아이디</th>
 
                 <td id="uid" th:text="${member.uid}"> </td> <!-- 동적 데이터 -->
-                <input type="hidden" name="userId" value="${member.uid}" /> <!-- hidden 필드로 사용자 ID 전송 -->
+                <input type="hidden" name="uid" value="${member.uid}" /> <!-- hidden 필드로 사용자 ID 전송 -->
 
             </tr>
             <tr>
@@ -47,11 +47,11 @@
 
                 // 비밀번호가 일치하는지 확인
                 if (newPassword !== confirmPassword) {
-                    resultPass.textContent = '비밀번호가 일치하지 않습니다.'; // 오류 메시지 설정
-                    resultPass.style.color = 'red'; // 오류 메시지 색상 설정
-                    event.preventDefault(); // 폼 제출 방지
+                    resultPass.textContent = "비밀번호가 일치하지 않습니다.";
+                    resultPass.style.color = "red";
                 } else {
-                    resultPass.textContent = ''; // 오류 메시지 초기화
+                    resultPass.textContent = "비밀번호가 일치합니다.";
+                    resultPass.style.color = "green";
                 }
             });
         }
