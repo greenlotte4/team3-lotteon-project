@@ -19,7 +19,7 @@ import java.util.Optional;
 @Log4j2
 public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
 
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

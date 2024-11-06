@@ -1,7 +1,9 @@
 package com.lotteon.controller;
 
 
+import com.lotteon.dto.order.CartOrderRequestDTO;
 import com.lotteon.dto.product.cart.CartRequestDTO;
+import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.repository.cart.CartRepository;
 import com.lotteon.repository.product.ProductRepository;
@@ -54,10 +56,11 @@ public class ProductCartController {
 
 
     @PostMapping("/cart")
-    public ResponseEntity<Map<String, Object>> insertCart(@RequestBody CartRequestDTO cartRequestDTO) {
+    public ResponseEntity<Map<String, Object>> insertCart(@RequestBody List<BuyNowRequestDTO> productDataList) {
         log.info("호출됨0000000000000000000000000000");
 
         Map<String, Object> resp = new HashMap<>();
+        BuyNowRequestDTO cartRequestDTO = productDataList.get(0);
 
         try {
 
@@ -115,6 +118,14 @@ public class ProductCartController {
             response.put("error", e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
+    }
+
+
+    @PostMapping("/api/cart/cartOrder/{userId}")
+    public ResponseEntity<Map<String,String>> CartOrder(@PathVariable String userId, @RequestBody CartOrderRequestDTO orderRequestData) {
+
+        log.info("orderRequestData "+ orderRequestData);
+        return null;
     }
 
 

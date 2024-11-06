@@ -17,7 +17,9 @@ import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.entity.product.Review;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
+import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.security.MyUserDetails;
+import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.admin.CouponIssuedService;
@@ -267,16 +269,16 @@ public class MarketController {
         return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template
     }
 
-    @PostMapping("/cart/cartOrder/{cartId}")
-    public ResponseEntity<Cart> cartOrder(
-            @PathVariable long cartId,
-            @RequestBody List<BuyNowRequestDTO> cartOrders
-    ){
-        log.info("상품 주문 오더 들어왔다");
-        for (BuyNowRequestDTO cartOrder : cartOrders) {
-            log.info("오더들"+cartOrder);
-        }
-
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/cart/cartOrder/{cartId}")
+//    public ResponseEntity<Cart> cartOrder(
+//            @PathVariable long cartId,
+//            @RequestBody List<BuyNowRequestDTO> cartOrders
+//    ){
+//        log.info("상품 주문 오더 들어왔다");
+//        for (BuyNowRequestDTO cartOrder : cartOrders) {
+//            log.info("오더들"+cartOrder);
+//        }
+//
+//        return ResponseEntity.ok().build();
+//    }
 }
