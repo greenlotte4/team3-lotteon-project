@@ -71,6 +71,7 @@ spring:
         type: redis
         redis:
             time-to-live: 86400s
+
     data:
         redis:
             host: 43.202.32.28
@@ -80,6 +81,8 @@ spring:
             lettuce:
                 pool:
                     max-wait: 5000ms
+
+
 management:
     endpoint:
         caches:

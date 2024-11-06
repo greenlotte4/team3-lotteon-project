@@ -16,5 +16,9 @@ public class OptionItemDTO {
     private Long additionalPrice;   //추가금액
     private String itemName;
 
+    //추가필드
+    private  String combinationString;
+    private long combinationId;
+
 
 }

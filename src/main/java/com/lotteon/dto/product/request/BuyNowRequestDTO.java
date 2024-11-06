@@ -1,8 +1,12 @@
 package com.lotteon.dto.product.request;
 
 
+import com.lotteon.dto.product.OptionDTO;
+import com.lotteon.dto.product.OptionItemDTO;
 import com.lotteon.entity.User.Member;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,5 +30,6 @@ public class BuyNowRequestDTO {
     private String ShippingTerms;
     private int expectedPoint;
     private Member member;
+    private List<OptionItemDTO> options;  // Use List<OptionDTO> for options
 
 }

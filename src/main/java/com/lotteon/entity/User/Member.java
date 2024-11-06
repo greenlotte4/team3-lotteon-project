@@ -4,6 +4,8 @@ package com.lotteon.entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.lotteon.dto.User.Grade;
+import com.lotteon.dto.User.MemberDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -49,7 +51,9 @@ public class Member {
     @JsonIgnore // 이 필드는 JSON 직렬화에서 제외됨
     private List<Point> points = new ArrayList<>();
 
-    private String grade;
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private Grade grade= Grade.FAMILY;
 
     private String userinfocol;
 
@@ -77,6 +81,8 @@ public class Member {
         public String getDisplayName() {
             return displayName;
         }
+
+        //'VVIP','VIP','GOLD','SILVER','FAMILY'
     }
 
     @OneToOne(cascade = CascadeType.REMOVE)
@@ -85,9 +91,19 @@ public class Member {
     private User user; // User와의 관계
 
 
+    private long totalOrder;
 
     public String getUid() {
         return user != null ? user.getUid() : null; // User가 null이 아닐 경우 uid 반환
+    }
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonIgnore // 이 필드는 JSON 직렬화에서 제외됨
+    private List<Delivery> deliveryList = new ArrayList<>();
+
+    public void addDelivery(Delivery delivery) {
+        deliveryList.add(delivery);
+        delivery.setMember(this);  // 연관 관계 설정
     }
 
 }

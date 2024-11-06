@@ -23,6 +23,7 @@ public class OrderDTO {
     private long totalQuantity;
     private long totalDiscount;
     private long totalShipping;
+    private long productDiscount=0;
     private long expectedPoint;
     private String receiver;
     private String hp;
@@ -41,6 +42,9 @@ public class OrderDTO {
     private long couponDiscount;
     private SellerDTO seller;
     private List<OrderItemDTO> orderItems;
+    private long totalPoint;
+    private String memberName;
+    private String memberHp;
 
 
     public Order toEntity() {
@@ -62,6 +66,13 @@ public class OrderDTO {
                 .orderDate(this.orderDate)
                 .orderStatus(this.orderStatus)
                 .pay(this.pay)
+                .memberHp(this.memberHp)
+                .memberName(this.memberName)
+                .couponId(this.couponId)
+                .usedCoupon(this.usedCoupon)
+                .productDiscount(this.productDiscount)
+                .addr1(this.addr1)
+                .addr2(this.addr2)
                 .build();
     }
 

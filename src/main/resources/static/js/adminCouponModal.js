@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     var modal = document.getElementById("couponModal");
+    var issuedModal = document.getElementById("couponInfoModal");
     var closeBtn = document.querySelector(".close"); // X 버튼
     var closeFooterBtn = document.querySelector(".modal-close-btn"); // 하단 '닫기' 버튼
     var orderLinks = document.querySelectorAll(".order-link");
+    var issuedOrderLink = document.querySelectorAll(".issued-order-link");
 
     // 링크 클릭 시 모달 열기 및 데이터 로드
     orderLinks.forEach(function (link) {
@@ -29,10 +31,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
+
             // 모달 보이기
             modal.style.display = "block";
         });
     });
+
+    issuedOrderLink.forEach(function (link) {
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            // 데이터 속성 가져오기
+            const issuedCouponId = this.getAttribute('data-issued-couponId');
+            const issuedIssuanceNumber = this.getAttribute('data-issued-id');
+            const issuedCouponType = this.getAttribute('data-issued-couponType');
+            const issuedUsageStatus = this.getAttribute('data-issued-usageStatus');
+            const issuedMemberName = this.getAttribute('data-issued-memberName');
+            const issuedCouponName = this.getAttribute('data-issued-couponName');
+            const issuedRestrictions = this.getAttribute('data-issued-restrictions');
+            const issuedBenefit = this.getAttribute('data-issued-benefit');
+            const issuedPeriod = this.getAttribute('data-period');
+            const issuedIssuer = this.getAttribute('data-issued-issuer');
+
+            // 모달에 데이터 채우기
+            document.getElementById('modalCouponNumber').innerText = issuedCouponId;
+            document.getElementById('modalIssueNumber').innerText = issuedIssuanceNumber;
+            document.getElementById('modalCouponType').innerText = issuedCouponType;
+            document.getElementById('modalUsageStatus').innerText = issuedUsageStatus;
+            document.getElementById('modalTarget').innerText = issuedMemberName;
+            document.getElementById('modalCouponName').innerText = issuedCouponName;
+            document.getElementById('modalBenefit').innerText = issuedBenefit;
+            document.getElementById('modalPeriod').innerText = issuedPeriod;
+            document.getElementById('modalNotes').innerText = issuedRestrictions;
+            document.getElementById('modalIssuer').innerText = issuedIssuer;
+
+
+            // 모달 보이기
+            issuedModal.style.display = "block";
+        });
+    });
+
 
     // 모달 X 버튼 클릭 시 닫기
     closeBtn.onclick = function () {
@@ -61,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelBtn = document.getElementById('cancelBtn');
     const submitBtn = document.getElementById('submitBtn');
     const productSelect = document.getElementById("productSelect"); // 상품 선택 요소
+    const couponTypeSelect = document.getElementById("couponType"); // 쿠폰 타입 선택 박스
 
     // 쿠폰 등록 모달 열기
     addCouponBtn.addEventListener('click', () => {
@@ -85,22 +125,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const startDate = document.getElementById("startDate").value;
         const endDate = document.getElementById("endDate").value;
 
-        const inpitcouponName = couponForm.couponName.value;
-        const inpitcouponType = couponForm.couponType.value;
-        const inpitbenefit = couponForm.benefit.value;
-        const inpitstartDate = couponForm.startDate.value;
-        const inpitendDate = couponForm.endDate.value;
-        const inpitnotes = couponForm.notes.value;
+        const inputcouponName = couponForm.couponName.value;
+        const inputcouponType = couponForm.couponType.value;
+        const inputbenefit = couponForm.benefit.value;
+        const inputstartDate = couponForm.startDate.value;
+        const inputendDate = couponForm.endDate.value;
+        const inputnotes = couponForm.notes.value;
+        const inputrestrictions = couponForm.restrictions.value;
+
         // 상품 아이디 들고오기
         const selectedProductId = productSelect.value; // 여기가 중요합니다.
         console.log(selectedProductId,"상품아이디")
+
         // 모든 필드가 입력되었는지 확인
-        if (!inpitcouponName || !inpitcouponType || !inpitbenefit || !inpitstartDate || !inpitendDate || !inpitnotes) {
+        if (!inputcouponName || !inputcouponType || !inputbenefit || !inputstartDate || !inputendDate || !inputnotes || !inputrestrictions) {
             alert("모든 필드를 입력해 주세요.");
             return; // 폼 제출 방지
         }
         // 쿠폰 타입이 '개별상품할인'일 때 상품 선택 유효성 검사
-        if (inpitcouponType === "discount" && !selectedProductId) {
+        if (inputcouponType === "discount" && !selectedProductId) {
             alert("상품을 선택해 주세요.");
             return; // 폼 제출 방지
         }
@@ -116,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             couponId: 0,
             couponName: document.getElementById("couponName").value,
             couponType: document.getElementById("couponType").value,
+            restrictions: document.getElementById("restrictions").value,
             benefit: benefit ? benefit.value : '',
             startDate: startDate,
             endDate: endDate,
@@ -129,8 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         console.log("Selected Product ID:", selectedProductId);
 
-
-        console.log("쿠폰데이터:", couponData)
+        console.log("쿠폰 데이터 전송:", JSON.stringify(couponData)); // JSON 데이터 확인
 
         fetch('/seller/coupon/register', {
             method: 'POST',
@@ -155,14 +198,22 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => console.error("Error------------" + error))
     });
+    // 쿠폰 종류 변경 시 상품 선택 박스 상태 변경
+    couponTypeSelect.addEventListener('change', () => {
+        loadProducts(); // 쿠폰 타입에 따라 상품 목록 다시 로딩
+    });
 
     function loadProducts(){
-        const addCouponModal = document.getElementById("addCouponModal");
         const sellerCompany = addCouponModal.getAttribute("data-seller-company");
+        const selectedCouponType = couponTypeSelect.value; // 현재 선택된 쿠폰 타입
+
 
         console.log("Seller Company:", sellerCompany);
 
 
+        if (selectedCouponType === 'discount') {
+            productSelect.style.visibility = 'visible'; // 상품 선택 박스를 보이게 함
+            productSelect.style.position = 'relative'; // 레이아웃 위치를 고정시킴
         fetch(`/seller/coupon/products`)
             .then(resp => {
                 if (!resp.ok) {
@@ -191,7 +242,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => {
                 console.error(err);
                 alert("오류가 발생했습니다: " + err.message);
+
         });
+        } else {
+            productSelect.style.visibility = 'hidden'; // 'discount' 이외의 쿠폰 타입일 경우 상품 선택 박스를 숨김
+        }
     }
     // 모달 외부 클릭 시 모달 닫기
     window.addEventListener('click', (event) => {
@@ -199,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }
     });
+
 });
 
 
@@ -267,8 +323,10 @@ document.addEventListener("DOMContentLoaded", function () {
 // 쿠폰 종료 버튼 처리
 document.querySelectorAll('.end-button').forEach(button => {
     button.addEventListener('click', function () {
+
         if (confirm("정말로 이 쿠폰을 종료하시겠습니까?")) {
-            const couponId = this.closest('tr').querySelector('.order-link').getAttribute('data-coupon-id');
+
+            const couponIsuuedId = this.closest('tr').querySelector('.order-link').getAttribute('data-coupon-id');
             const couponRow = this.closest('tr');
             const statusElement = couponRow.querySelector('.coupon-status');
             const currentStatus = statusElement.innerText.trim(); // 상태 가져오기
@@ -306,3 +364,60 @@ document.querySelectorAll('.end-button').forEach(button => {
 
 
 
+// .issued-end-button 처리
+document.querySelectorAll('.issued-end-button').forEach(button => {
+    button.addEventListener('click', function () {
+        if (confirm("정말로 이 쿠폰을 종료하시겠습니까?")) {
+
+            // 쿠폰 ID를 찾기
+            const issuanceNumber = this.getAttribute('data-id'); // 'data-id'에 저장된 issuanceNumber 사용
+            const couponRow = this.closest('tr');
+            const statusElement = couponRow.querySelector('.coupon-status');
+
+            console.log("발급된 쿠폰 ID(issuanceNumber):", issuanceNumber); // 확인용 로그
+
+            // 요청할 URL 구성 (쿠폰 ID에 맞는 URL로 요청)
+            const requestUrl = `/seller/coupon/issued/${issuanceNumber}/end`; // API 엔드포인트를 변경
+
+            // PUT 요청을 보내서 상태 변경
+            fetch(requestUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(resp => {
+                    if (!resp.ok) throw new Error("Response not OK");
+                    return resp.json(); // 응답을 JSON으로 파싱
+                })
+                .then(updatedCoupon => {
+                    // 상태를 변경한 후 UI 업데이트
+                    this.disabled = true; // 버튼 비활성화
+                    statusElement.innerText = updatedCoupon.status; // 변경된 상태로 업데이트
+                    console.log("업데이트된 쿠폰 상태:", updatedCoupon.status);
+
+                    // 로컬 스토리지에 상태 업데이트 (선택사항)
+                    localStorage.setItem(`issuanceNumber-${issuanceNumber}`, JSON.stringify(updatedCoupon.status));
+
+                    // 페이지 새로 고침 또는 리다이렉트
+                    window.location.reload(); // 페이지를 새로 고침하여 상태를 반영
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+    // 버튼 클릭 외에도 상태에 따른 버튼 활성화/비활성화 및 스타일 변경
+    const couponRow = button.closest('tr');  // 버튼이 포함된 행을 찾음
+    const statusElement = couponRow.querySelector('.coupon-status');  // 상태 텍스트를 가진 요소 찾기
+    const currentStatus = statusElement ? statusElement.innerText.trim() : '';  // 상태 가져오기
+
+    if (currentStatus !== '사용가능') {
+        button.style.backgroundColor = '#888'; // 비활성화된 버튼의 배경을 회색으로 변경
+        button.style.color = 'white';  // 버튼 글자색을 흰색으로 변경
+        button.disabled = true;  // 상태가 '발급 중'이 아닐 경우 버튼 비활성화
+    } else {
+        button.style.backgroundColor = ''; // 기본 배경으로 되돌리기
+        button.style.color = '';  // 기본 글자색으로 되돌리기
+        button.disabled = false;  // 버튼 활성화
+    }
+
+});

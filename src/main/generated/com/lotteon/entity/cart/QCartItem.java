@@ -67,7 +67,7 @@ public class QCartItem extends EntityPathBase<CartItem> {
     public QCartItem(Class<? extends CartItem> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.cart = inits.isInitialized("cart") ? new QCart(forProperty("cart"), inits.get("cart")) : null;
-        this.option = inits.isInitialized("option") ? new com.lotteon.entity.product.QOption(forProperty("option"), inits.get("option")) : null;
+        this.option = inits.isInitialized("option") ? new com.lotteon.entity.product.QOption(forProperty("option")) : null;
         this.product = inits.isInitialized("product") ? new com.lotteon.entity.product.QProduct(forProperty("product"), inits.get("product")) : null;
     }
 

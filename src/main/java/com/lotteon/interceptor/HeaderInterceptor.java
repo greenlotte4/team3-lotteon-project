@@ -45,7 +45,7 @@ public class HeaderInterceptor implements HandlerInterceptor {
             }else if(role.contains("ROLE_MEMBER")){
 
                 memberName= userService.getMemberNameByUsername(uid);
-                log.info("login성공!!!!!!"+memberName);
+                log.info("userInterceptor!!!!!!"+memberName);
             }
 
         }

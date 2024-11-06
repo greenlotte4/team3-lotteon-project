@@ -10,7 +10,38 @@
     <link rel="stylesheet" th:href="@{/css/market/marketList.css}">
     <link rel="stylesheet" th:href="@{/css/market/marketAside.css}">
     <script>
+        let currentPage = 1;
+
         window.onload = function (){
+            const paginationInfo = document.getElementById("paginationInfo");
+            const totalPages = parseInt(paginationInfo.getAttribute("data-total-pages"));
+            const sort = paginationInfo.getAttribute("data-sort"); // sort 조건 가져오기
+
+            window.addEventListener('scroll', function() {
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+                    if (currentPage < totalPages) {
+                        loadMoreProducts(sort);
+                    }
+                }
+            });
+            function loadMoreProducts(sort) {
+                currentPage++;
+
+                // sort 파라미터를 URL에 추가하여 서버로 요청
+                fetch(`/market/list/{{categoryId}}?page=${currentPage}&sort=${sort}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newProducts = doc.querySelectorAll('.product-item');
+
+                        newProducts.forEach(product => {
+                            document.querySelector('.product-list').appendChild(product);
+                        });
+                    })
+                    .catch(error => console.error('Error loading more products:', error));
+            }
+
             document.addEventListener("DOMContentLoaded", function() {
                 document.querySelectorAll('.shipping-fee').forEach(function() {
 
@@ -69,10 +100,13 @@
 <th:block layout:fragment="content">
     <th:block th:replace="~{aside/marketAside}"></th:block>
                 <section class="section list">
+                    <input type="hidden" id="totalPages" th:data-total-pages="${responseDTO.getTotal()}" th:data-sort="${sort}">
+
                     <div class="sectionWrapper">
                         <div class="sub_tit">
                             <h3 id="h3_list">상품목록</h3>
                             <div class="location">
+
                                 <span><a th:href="@{'/market/main/'+${categoryDTOs.get(2).getId()}}">홈&nbsp;</a></span>
                                 <span th:text="${categoryDTOs.get(2).getName()}">&nbsp;</span>
                                 <span th:text="${categoryDTOs.get(1).getName()}"></span>
@@ -81,12 +115,24 @@
                         </div>
                         <div class="sort-options">
                             <ul>
-                                <li class="active"><a href="#">판매많은순</a></li>
-                                <li><a href="#">낮은가격순</a></li>
-                                <li><a href="#">높은가격순</a></li>
-                                <li><a href="#">평점높은순</a></li>
-                                <li><a href="#">후기많은순</a></li>
-                                <li><a href="#">최근등록순</a></li>
+                                <li th:classappend="${sort == 'popularity'} ? 'active' : ''">
+                                    <a th:href="@{'/market/list/' + ${categoryDTOs.get(0).getId()} + '?sort=popularity'}">판매많은순</a>
+                                </li>
+                                <li th:classappend="${sort == 'lowPrice'} ? 'active' : ''">
+                                    <a th:href="@{'/market/list/' +${categoryDTOs.get(0).getId()} + '?sort=lowPrice'}">낮은가격순</a>
+                                </li>
+                                <li th:classappend="${sort == 'highPrice'} ? 'active' : ''">
+                                    <a th:href="@{'/market/list/' + ${categoryDTOs.get(0).getId()} + '?sort=highPrice'}">높은가격순</a>
+                                </li>
+                                <li th:classappend="${sort == 'rating'} ? 'active' : ''">
+                                    <a th:href="@{'/market/list/' + ${categoryDTOs.get(0).getId()} + '?sort=rating'}">평점높은순</a>
+                                </li>
+                                <li th:classappend="${sort == 'reviews'} ? 'active' : ''">
+                                    <a th:href="@{'/market/list/' + ${categoryDTOs.get(0).getId()} + '?sort=reviews'}">후기많은순</a>
+                                </li>
+                                <li th:classappend="${sort == 'recent'} ? 'active' : ''">
+                                    <a th:href="@{'/market/list/' +${categoryDTOs.get(0).getId()}+ '?sort=recent'}">최근등록순</a>
+                                </li>
                             </ul>
                         </div>
                         <div class="sub-category-options">
@@ -108,7 +154,7 @@
                                     <div class="product-price">
                                         <span class="final-price">[[${product.finalPrice}]]원</span>
                                         <span class="original-price">[[${product.price}]]원</span>
-                                        <span class="discount">[[${product.discount}]]% ↓</span>
+                                        <span class="discount">[[${product.discount}]]%↓</span>
 
                                     </div>
                                     <div class="shipping-info">
@@ -118,7 +164,7 @@
                                 <div class="product-seller">
                                     <span class="seller-name">[[${product.company}]]</span>
                                     <span >고객만족우수</span>
-                                    <div class="seller-rating" th:data-rating="${product.getRating()}"></div>
+                                    <div class="seller-rating" th:data-rating="${product.getAverageRating()}"></div>
                                 </div>
                                 </a>
                             </div>

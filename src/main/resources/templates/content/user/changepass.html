@@ -1,36 +1,79 @@
-<script type="text/javascript" defer th:src="@{/js/changepw.js}"></script>
-<section id="changePass">
-    <form id="passwordResetForm">
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/userLayout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" th:href="@{/css/user/changepass.css}">
+</head>
+<body>
+<th:block layout:fragment="content">
+    <main>
+<!--<script type="text/javascript" defer th:src="@{/js/changepw.js}"></script>-->
+        <section id="changePass">
+            <form  action="/user/changepass" method="post" id="passwordResetForm">
 
-        <h2>비밀번호 변경</h2>
+                <h2>비밀번호 변경</h2>
 
-        <table class="pwChange">
-            <tr>
-                <th class="id" name="id">아이디</th>
+                <table class="pwChange">
+                    <tr>
+                        <th class="id" name="id">아이디</th>
 
-                <td id="uid" th:text="${session.uid}"> </td> <!-- 동적 데이터 -->
+                        <td id="uid" th:text="${member.uid}"> </td> <!-- 동적 데이터 -->
+                        <input type="hidden" name="userId" value="${member.uid}" /> <!-- hidden 필드로 사용자 ID 전송 -->
 
-            </tr>
-            <tr>
-                <th>새 비밀번호</th>
-                <td><input type="password" id="newPassword" name="password" placeholder="새 비밀번호 입력"></td>
-            </tr>
-            </tr>
-            <tr>
-                <th>새 비밀번호 확인</th>
-                <td>
-                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="새 비밀번호 확인">
-                    <span id="resultPass"  class="validationMessage"></span>
-                </td>
-            </tr>
-        </table>
-        <h5>비밀번호를 변경해 주세요.<br>
-            영문,숫자,특수문자를 사용하여 8자 이상 입력해 주세요.
-        </h5>
+                    </tr>
+                    <tr>
+                        <th>새 비밀번호</th>
+                        <td><input type="password" id="newPassword" name="password" placeholder="새 비밀번호 입력"></td>
+                    </tr>
+                    </tr>
+                    <tr>
+                        <th>새 비밀번호 확인</th>
+                        <td>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="새 비밀번호 확인">
+                            <span id="resultPass"  class="validationMessage"></span>
+                        </td>
+                    </tr>
+                </table>
+                <h5>비밀번호를 변경해 주세요.<br>
+                    영문,숫자,특수문자를 사용하여 8자 이상 입력해 주세요.
+                </h5>
 
-        <div class="btn-group">
-            <button type="button" class="btnCancel" onclick="history.back();">취소</button>
-            <button type="submit" class="btnNext">다음</button>
-        </div>
-    </form>
-</section>
+                <div class="btn-group">
+                    <button type="button" class="btnCancel" onclick="history.back();">취소</button>
+                    <button type="submit" class="btnNext">변경</button>
+                </div>
+            </form>
+        </section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('passwordChangeForm');
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const resultPass = document.getElementById('resultPass');
+
+                // 비밀번호가 일치하는지 확인
+                if (newPassword !== confirmPassword) {
+                    resultPass.textContent = "비밀번호가 일치하지 않습니다.";
+                    resultPass.style.color = "red";
+                } else {
+                    resultPass.textContent = "비밀번호가 일치합니다.";
+                    resultPass.style.color = "green";
+                }
+            });
+        }
+    });
+</script>
+
+    </main>
+</th:block>
+</body>

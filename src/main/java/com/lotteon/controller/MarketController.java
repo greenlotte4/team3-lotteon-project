@@ -13,7 +13,9 @@ import com.lotteon.dto.order.OrderRequestDTO;
 import com.lotteon.entity.User.User;
 import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
+import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.entity.product.Review;
+import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.order.OrderService;
@@ -49,34 +51,41 @@ public class MarketController {
     private final ReviewService reviewService;
     private final OrderService orderService;
     private final AdminService adminService;
+    private final ProductOptionCombinationRepository productOptionCombinationRepository;
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
         ProductCategoryDTO categoryDTOs =  productCategoryService.getCategoryById(category);
         List<BannerDTO> banners = adminService.selectAllbanner();
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
         log.info(categoryDTOs);
-        log.info("Banners: {}", banners);
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("active",category);
         model.addAttribute("content", "main");
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
     }
 
     @GetMapping("/list/{category}")
-    public String marketList(PageRequestDTO pageRequestDTO,@PathVariable long category,Model model) {
+    public String marketList(PageRequestDTO pageRequestDTO,@PathVariable long category
+            , @RequestParam(required = false, defaultValue = "popularity") String sort
+             ,@RequestParam(required = false,defaultValue = "1") int page
+            ,Model model) {
         pageRequestDTO.setCategoryId(category);
+        pageRequestDTO.setPage(page);
         log.debug("Debugging category: " + category);
+
+        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.getAllParentCategoryDTOs(category);
+        log.info("@222222222222222222222"+categoryDTOs);
 
         log.info("11111111111111"+pageRequestDTO.getCategoryId());
         log.info("category:"+category);
-        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(category);
-        log.info("dsdsdsdsd"+categoryDTOs);
 //        log.info("dsdsdsdsd2222"+pageRequestDTO);
-        ProductListPageResponseDTO responseDTO =  productService.getProductList(pageRequestDTO);
+        ProductListPageResponseDTO responseDTO =  productService.getSortProductList(pageRequestDTO,sort);
         log.info("controlllermarket::::"+responseDTO.getProductSummaryDTOs());
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("responseDTO",responseDTO);
+        model.addAttribute("sort", sort);
 
 
         return "content/market/marketList"; // Points to the "content/market/marketList" template
@@ -163,6 +172,7 @@ public class MarketController {
         log.info("요기!!!!!!!!!!!!!!!!!"+orderRequestDTO);
         OrderResponseDTO orderResponseDTO  = new OrderResponseDTO(orderRequestDTO);
         long orderId = orderService.saveOrder(orderResponseDTO);
+
 
         if(orderId>0){
             response.put("result",orderId);

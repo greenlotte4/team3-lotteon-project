@@ -122,7 +122,6 @@
 
 #product_order .productOrder tr td:nth-child(1){
     text-align: left;
-    text-indent: 10px;
     display: flex;
     align-items: center;
     margin-bottom: 5px;
@@ -132,6 +131,16 @@
     height: 100px;
     overflow: hidden;
     margin-left: 20px;
+}
+#product_order .productOrder tr td:nth-child(1) div:nth-child(2){
+    margin-left: 20px;
+}
+
+#product_order .productOrder tr td:nth-child(1) div:nth-child(2) >span{
+    text-align: left;
+    /* margin-left: 20px; */
+    line-height: 10px;
+    text-indent: 0px;
 }
 #product_order .productOrder tr td:nth-child(1) img{
 

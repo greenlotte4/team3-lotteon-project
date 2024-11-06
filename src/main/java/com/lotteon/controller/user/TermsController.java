@@ -6,6 +6,7 @@ import com.lotteon.service.admin.TermsService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.mongodb.core.query.Term;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,6 +81,11 @@ public class TermsController {
         }
 
         return "redirect:/signup"; // 기본값 (오류 처리용)
+    }
+
+    @GetMapping("/api/terms")
+    public List<Terms> getTerms() {
+        return termsService.getAllTerms();
     }
 
 }

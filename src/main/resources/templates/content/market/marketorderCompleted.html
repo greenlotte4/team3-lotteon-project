@@ -44,7 +44,7 @@
                                             <div><img th:src="@{'uploads/productImg'+${orderItem.getProduct().getFile190()}}" alt=""></div>
                                             <div>
                                                 <span th:text="${orderItem.getProduct().getProductName()}">상품명</span>
-                                                <p id="product_option"> [ 옵션 :[[${orderItem.getSelectOption().optionDesc}]]]</p>
+                                                <p id="product_option" th:if="${orderItem.getCombination()>0}"> [ 옵션 :[[${orderItem.getSelectOption().optionDesc}]]]</p>
                                             </div>
                                         </td>
                                         <td >
@@ -56,8 +56,8 @@
 
                                         <td >
                                             <p>상품금액 :<span class="price" th:text="${orderItem.getProduct().getPrice()*orderItem.getStock()}"></span></p>
-                                            <p>할인금액 : <span class="price" th:text="${(orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount())/100}">-1350</span></p>
-                                            <p>결제금액 : <span class="price" th:text="${orderItem.getProduct().getPrice()*orderItem.getStock()-(orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount())/100}">28500</span></p>
+                                            <p>할인금액 : <span class="price" th:text="${((orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount())/100)*orderItem.getStock()}">-1350</span></p>
+                                            <p>결제금액 : <span class="price" th:text="${orderItem.getProduct().getPrice()*orderItem.getStock()-(((orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount())/100)*orderItem.getStock())}">28500</span></p>
                                         </td>   
                                     </tr>
                                   
@@ -80,20 +80,23 @@
                                 <div class="totalPrice-bar">
                                     <div class="originalPrice">
                                         <span>상품금액</span>
-                                        <p class="price" th:text="${orderDTO.getOriginalTotalPrice()}">69000</p>
+                                        <p class="price" th:text="${orderDTO.order.getTotalOriginalPrice()}">69000</p>
                                     </div>
-                                    <div class="separatorminus">-</div>
                                     <div class="discoutnPrice">
-                                        <span>할인금액</span>
-                                        <p class="price minus" th:text="${orderDTO.getTotalDiscount()}">2000</p>
+                                        <span>총 상품금액할인</span>
+                                        <p class="price minus" th:text="${orderDTO.order.getProductDiscount()}">2000</p>
 
                                     </div>
-                                    <div class="separatorplus">+</div>
+                                    <div class="discoutnPrice2">
+                                        <span>쿠폰 및 포인트 할인 </span>
+                                       <p class="price minus" th:text="${orderDTO.getOrder().getCouponDiscount()+orderDTO.getOrder().getUsedPoint()}">2000</p>
+
+
+                                    </div>
                                     <div class="deliveryPrice">
                                         <span>배송비/포장비</span>
                                         <p class="price" th:text="${orderDTO.getTotalShippingFee()}">0</p>
                                     </div>
-                                    <div class="separatorequal">=</div>
                                     <div class="totalPrice">
                                         <span>총 결제비용</span>
                                         <p class="price red" th:text="${orderDTO.getFinalPaymentAmount()}" >65500</p>
@@ -108,15 +111,15 @@
                                     <table class="creditInfo">
                                         <tr>
                                             <th>주문번호</th>
-                                            <td>1000121121</td>
+                                            <td>[[${orderDTO.getOrder().orderId}]]</td>
                                         </tr>
                                         <tr>
                                             <th>결제방법</th>
-                                            <td>신용카드</td>
+                                            <td>[[${orderDTO.getOrder().pay}]]</td>
                                         </tr>
                                         <tr>
                                             <th>주문자/연락처</th>
-                                            <td>홍길동 / 010-1234-5678</td>
+                                            <td>[[${orderDTO.getOrder().memberName}]] / [[${orderDTO.getOrder().memberHp}]]</td>
                                         </tr>
                                         <tr>
                                             <th>총 결제금액</th>
@@ -143,19 +146,19 @@
                                 <table class="delivery-table">
                                     <tr>
                                         <th>수취인</th>
-                                        <td>1000121121</td>
+                                        <td>[[${orderDTO.getOrder().receiver}]]</td>
                                     </tr>
                                     <tr>
                                         <th>연락처</th>
-                                        <td>신용카드</td>
+                                        <td>[[${orderDTO.getOrder().hp}]]</td>
                                     </tr>
                                     <tr>
                                         <th>배송지주소</th>
-                                        <td>부산 금정구 1234-11 10-층 </td>
+                                        <td>[ [[${orderDTO.getOrder().postcode}]] ] [[${orderDTO.getOrder().addr1}]] [[${orderDTO.getOrder().addr2}]]</td>
                                     </tr>
                                     <tr>
                                         <th>총 결제금액</th>
-                                        <td class="price">29500</td>
+                                        <td class="price" th:text="${orderDTO.getOrder().totalPrice}"></td>
                                     </tr>
                                 </table>
                             </div>
@@ -172,4 +175,5 @@
                         </div><!--sectionWrapper-->
                     </section>
 
+    <script th:src="@{/js/marketOrderCompleted.js}"></script>
 </th:block>

@@ -142,11 +142,14 @@
                         <div class="point_wrap">
                             <div class="point_info">
                                 <input type="hidden" id="memberUid" th:value="${memberDTO.getUid()}">
+                                <input type="hidden" id="memberGrade" th:value="${memberDTO.getGrade()}">
+                                <input type="hidden" id="memberName" th:value="${memberDTO.getName()}">
+                                <input type="hidden" id="memberHp" th:value="${memberDTO.getHp()}">
                                 <input type="hidden" id="currentPoint" th:value="${memberDTO.point != null ? memberDTO.point.intValue() : 0}">
                                 <span>현재 포인트 :
                                 <span class="price"  id="currentIn" th:text="${memberDTO.point != null ? memberDTO.point.intValue() : 0}"></span>
                                 <p>
-                                    포인트 : 2,000점이상이면
+                                    포인트 : 5,000점이상이면
                                     현금처럼 사용가능
                                 </p>
 
@@ -258,8 +261,8 @@
             <div class="address-list">
                 <div class="address-item">
                     <div class="address-info">
-                        <input type="radio" id="address1" name="address" checked>
-                        <label for="address1">하진희</label>
+                        <input type="radio" id="addr" name="address" checked>
+                        <label for="addr">하진희</label>
                         <p>[47566]<br> 부산 연제구 온천천남로 110</p>
                         <p>010-5595-8375</p>
                     </div>
@@ -294,16 +297,20 @@
             <span class="close">&times;</span>
             <h2>배송지 등록</h2>
             <form id="addressForm">
-                <label for="phone">휴대폰 번호</label>
-                <input type="text" id="phone" value="010-5595-8375">
+
+                <label for="name">배송지 이름</label>
+                <input type="text" id="name" value="우리집">
+
+                <label for="phoneNumber">휴대폰 번호</label>
+                <input type="text" id="phoneNumber" value="010-5595-8375">
 
                 <label for="postalCode">주소</label>
                 <div class="address-input">
                     <input type="text" id="postalCode" value="47566" readonly>
                     <button type="button" id="findPostalCode">우편번호 찾기</button>
                 </div>
-                <input type="text" id="addr1" value="부산 연제구 온천천남로" readonly>
-                <input type="text" id="addr2" value="110, 51동 506호(연산동, 한양아파트)" readonly>
+                <input type="text" id="addressLine1" value="부산 연제구 온천천남로" readonly>
+                <input type="text" id="addressLine2" value="110, 51동 506호(연산동, 한양아파트)" readonly>
 
                 <label for="entranceCode">(선택) 공동현관 출입번호</label>
                 <input type="text" id="entranceCode" placeholder="예: #1234">
@@ -322,6 +329,73 @@
     </div>
 
     <script  th:src="@{/js/marketOrder.js}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const memberId = 1; // 실제 Member ID를 사용
+            const addressSelectModal = document.getElementById("addressSelectModal");
+            const addressListDiv = document.querySelector(".address-list");
+
+            // 배송지 목록 불러오기
+            function loadDeliveries() {
+                fetch(`/api/member/${memberId}/deliveries`)
+                    .then(response => response.json())
+                    .then(deliveries => {
+                        addressListDiv.innerHTML = '';
+                        deliveries.forEach((delivery, index) => {
+                            const addressItem = document.createElement("div");
+                            addressItem.classList.add("address-item");
+
+                            addressItem.innerHTML = `
+                        <div class="address-info">
+                            <input type="radio" id="address${index}" name="address">
+                            <label for="address${index}">${delivery.name}</label>
+                            <p>[${delivery.postcode}] ${delivery.addr} ${delivery.addr2}</p>
+                            <p>${delivery.hp}</p>
+                        </div>
+                        <div class="address-btn">
+                            <button class="edit-btn" onclick="editDelivery(${delivery.id})">수정</button>
+                            <button class="delete-btn" onclick="deleteDelivery(${delivery.id})">삭제</button>
+                        </div>
+                    `;
+                            addressListDiv.appendChild(addressItem);
+                        });
+                    });
+            }
+
+            // 새 배송지 추가
+            document.getElementById("addressForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                const deliveryData = {
+                    name: document.getElementById("name").value,
+                    hp: document.getElementById("phoneNumber").value,
+                    postcode: document.getElementById("postalCode").value,
+                    addr: document.getElementById("addressLine1").value,
+                    addr2: document.getElementById("addressLine2").value,
+                    entranceCode: document.getElementById("entranceCode").value,
+                    deliveryMessage: document.getElementById("deliveryMessage").value,
+                };
+
+                fetch(`/api/member/${memberId}/delivery`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(deliveryData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("배송지 추가 성공:", data);
+                        loadDeliveries();
+                    })
+                    .catch(error => console.error("배송지 추가 실패:", error));
+            });
+
+            loadDeliveries();
+        });
+
+
+    </script>
 
 
 
