@@ -58,4 +58,6 @@ public class Coupon {
     public List<CouponIssued> getCouponIssuedList() {
         return this.couponIssued;
     }
+
+
 }

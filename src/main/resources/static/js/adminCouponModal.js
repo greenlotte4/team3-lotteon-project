@@ -421,3 +421,156 @@ document.querySelectorAll('.issued-end-button').forEach(button => {
     }
 
 });
+
+
+//  쿠폰 목록 검색 기능
+function searchCoupon() {
+    const category = document.getElementById('searchCategory').value;
+    const query = document.getElementById('searchQuery').value;
+    console.log('Request URL:', `/seller/coupon/search?category=${category}&query=${encodeURIComponent(query)}`);
+
+    const url = `/seller/coupon/search?category=${category}&query=${encodeURIComponent(query)}`;
+
+    fetch(url)
+        .then(response => {
+            console.log('Response Status:', response.status); // 응답 상태 코드 확인
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response received:', data);
+            displayCoupons(data);
+        })
+        .catch(error => {
+            console.error('검색 중 오류 발생:', error);
+        });
+}
+
+// 검색 결과를 화면에 표시
+function displayCoupons(data) {
+
+    const couponTable = document.getElementById('couponTable');
+    const couponContainer = couponTable.querySelector('#couponTbody');
+
+    couponContainer.innerHTML = ''; // 이전 검색 결과를 지움
+
+    if (data && data.length > 0) {
+        data.forEach(coupon => {
+            const couponElement = document.createElement('tr');
+            couponElement.classList.add('coupon-item');
+            couponElement.innerHTML = `
+               <td><a href="#" class="order-link"
+                       data-coupon-id="${coupon.couponId}"
+                       data-issuer="${coupon.sellerCompany}"
+                       data-type="${coupon.couponType}"
+                       data-name="${coupon.couponName}"
+                       data-benefit="${coupon.benefit}"
+                       data-period="${coupon.startDate} ~ ${coupon.endDate}"
+                       data-notes="${coupon.notes}"
+                       >${coupon.couponId}</a></td>
+                <td>${coupon.couponName}</td>
+                <td>${coupon.couponType}</td>
+                <td>${coupon.benefit}</td>
+                <td>
+                    <span>${coupon.startDate}</span> ~
+                    <span>${coupon.endDate}</span>
+                </td>
+                <td>${coupon.sellerCompany}</td>
+                <td>${coupon.issuedCount}</td>
+                <td>${coupon.usedCount}</td>
+                <td class="coupon-status">${coupon.status}</td>
+                <td>${coupon.rdate}</td>
+                <td><button class="end-button">종료</button></td>
+            `;
+            couponContainer.appendChild(couponElement);
+        });
+    } else {
+        couponContainer.innerHTML = '검색 결과가 없습니다.';
+    }
+}
+
+// 검색 버튼 클릭 이벤트 리스너
+document.getElementById('searchBtnCoupon').addEventListener('click', searchCoupon);
+// 엔터 키 이벤트 리스너 추가
+document.getElementById('searchQuery').addEventListener('keydown', function(event) {
+    // 엔터 키(Enter)는 13번 키코드
+    if (event.key === 'Enter') {
+        searchCoupon();  // 엔터 키가 눌리면 검색 실행
+    }
+});
+
+// 쿠폰발급현황 검색 기능
+function searchIssuedCoupon() {
+    const category = document.getElementById('searchIssuedCategory').value;
+    const query = document.getElementById('searchIssuedQuery').value;
+    console.log('Request URL:', `/seller/coupon/searchIssued?category=${category}&query=${encodeURIComponent(query)}`);
+
+    const url = `/seller/coupon/search?searchIssued=${category}&query=${encodeURIComponent(query)}`;
+
+    fetch(url)
+        .then(response => {
+            console.log('Response Status:', response.status); // 응답 상태 코드 확인
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response received:', data);
+            displayIssuedCoupons(data);
+        })
+        .catch(error => {
+            console.error('검색 중 오류 발생:', error);
+        });
+}
+
+// 검색 결과를 화면에 표시
+function displayIssuedCoupons(data) {
+
+    const issuedTable = document.getElementById('issuedTable');
+    const issuedContainer = issuedTable.querySelector('#issuedTbody'); // tbody 요소 가져오기
+
+    issuedContainer.innerHTML = ''; // 이전 검색 결과를 지움
+
+    if (data && data.length > 0) {
+        data.forEach(coupon => {
+            const couponElement = document.createElement('tr');
+            couponElement.classList.add('coupon-item');
+            couponElement.innerHTML = `
+          <td>
+                    <a href="#" class="issued-order-link"
+                       data-issued-couponId="${coupon.couponId}"
+                       data-issued-id="${coupon.issuanceNumber}"
+                       data-issued-couponType="${coupon.couponType}"
+                       data-issued-usageStatus="${coupon.usageStatus}"
+                       data-issued-memberName="${coupon.memberName}"
+                       data-issued-couponName="${coupon.couponName}"
+                       data-issued-restrictions="${coupon.restrictions}"
+                       data-issued-benefit="${coupon.benefit}"
+                       data-period="${coupon.startDate} ~ ${coupon.endDate}"
+                       data-issued-issuer="${coupon.sellerCompany}">
+                        ${coupon.issuanceNumber}
+                    </a>
+                </td>
+                <td>${coupon.couponId}</td>
+                <td>${coupon.couponType}</td>
+                <td>${coupon.couponName}</td>
+                <td>${coupon.memberName}</td>
+                <td class="coupon-status">${coupon.status}</td>
+                <td>${coupon.usageDate ? coupon.usageDate : '미사용'}</td>
+                <td>
+                    <button class="issued-end-button" data-id="${coupon.issuanceNumber}">종료</button>
+                </td>
+            `;
+            issuedContainer.appendChild(couponElement);
+        });
+    } else {
+        issuedContainer.innerHTML = '검색 결과가 없습니다.';
+    }
+}
+
+// 검색 버튼 클릭 이벤트 리스너
+document.getElementById('searchBtnIssued').addEventListener('click', searchIssuedCoupon);
+// 엔터 키 이벤트 리스너 추가
+document.getElementById('searchIssuedQuery').addEventListener('keydown', function(event) {
+    // 엔터 키(Enter)는 13번 키코드
+    if (event.key === 'Enter') {
+        searchIssuedCoupon();  // 엔터 키가 눌리면 검색 실행
+    }
+});

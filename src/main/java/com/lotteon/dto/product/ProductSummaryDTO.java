@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import net.minidev.json.annotate.JsonIgnore;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,6 +40,7 @@ public class ProductSummaryDTO implements Serializable {
     private long discountPrice;
     private long finalPrice;
     private double productRating;
+    private Integer reviewCount;
 
 
     @Builder
@@ -71,7 +73,8 @@ public class ProductSummaryDTO implements Serializable {
         if (ratings == null || ratings.isEmpty()) {
             return 0.0;
         }
-        return ratings.stream()
+
+        double average = ratings.stream()
                 .filter(Objects::nonNull)
                 .mapToDouble(rating -> {
                     try {
@@ -83,6 +86,11 @@ public class ProductSummaryDTO implements Serializable {
                 })
                 .average()
                 .orElse(0.0);
+
+        // 소수점 첫째 자리까지 반올림
+        return Double.parseDouble(String.format("%.1f", average));
     }
+
+
 
 }

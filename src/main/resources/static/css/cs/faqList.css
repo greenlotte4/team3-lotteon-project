@@ -1,3 +1,6 @@
+.faq_container {
+    margin-left: 25px;
+}
 /*첫번째 자주 묻는 질문*/
 h2 {
     font-weight: bold;
@@ -5,128 +8,49 @@ h2 {
     margin: 30px 40px 0px;
 }
 
-.first_list {
+.faq_List {
     border: 1px solid rgb(197, 197, 197);
     border-radius: 7px;
     margin: 20px 40px;
 }
 
-.first_li {
+.faq_li {
     height: 50px;
     border-bottom: 1px solid rgb(197, 197, 197);
 }
 
-.first_li:last-child {
+.faq_li:last-child {
     border-bottom: none;
 }
 
-.first_list li a {
+.faq_List li a {
     display: inline-block;
     margin: 15px 20px;
     font-weight: 500;
     font-size: 13px;
 }
 
-.first_li span {
+.faq_li span {
     font-weight: 500;
     font-size: 13px;
 }
 
-.first_li span:nth-child(1) {
+.faq_li span:nth-child(1) {
     color: rgb(17, 86, 165);
     font-weight: bold;
 }
 
-.first_show {
+.faq_show {
     text-align: center;
 }
 
-/*hover 추가*/
-.first_li a:hover {
-    background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);
-}
-
-
-/*두번째 자주 묻는 질문*/
-.second_list {
-    border: 1px solid rgb(197, 197, 197);
-    border-radius: 7px;
-    margin: 20px 40px;
-}
-
-.second_li {
-    height: 50px;
-    border-bottom: 1px solid rgb(197, 197, 197);
-}
-
-.second_li:last-child {
-    border-bottom: none;
-}
-
-.second_list li a {
-    display: inline-block;
-    margin: 15px 20px;
-    font-weight: 500;
-    font-size: 13px;
-}
-
-.second_li span {
-    font-weight: 500;
-    font-size: 13px;
-}
-
-.second_li span:nth-child(1) {
-    color: rgb(17, 86, 165);
-    font-weight: bold;
-}
-
-.second_show {
-    text-align: center;
-}
+/*.showMore {*/
+/*    display: block; !* a 태그를 블록 요소로 변경 *!*/
+/*    text-align: center; !* 텍스트를 가운데 정렬 *!*/
+/*    margin: 0 auto; !* 부모 요소 내에서 중앙 정렬 *!*/
+/*}*/
 
 /*hover 추가*/
-.second_li a:hover {
-    background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);
-}
-
-/*세번째 자주 묻는 질문*/
-.third_list {
-    border: 1px solid rgb(197, 197, 197);
-    border-radius: 7px;
-    margin: 20px 40px;
-}
-
-.third_li {
-    height: 50px;
-    border-bottom: 1px solid rgb(197, 197, 197);
-}
-
-.third_li:last-child {
-    border-bottom: none;
-}
-
-.third_list li a {
-    display: inline-block;
-    margin: 15px 20px;
-    font-weight: 500;
-    font-size: 13px;
-}
-
-.third_li span {
-    font-weight: 500;
-    font-size: 13px;
-}
-
-.third_li span:nth-child(1) {
-    color: rgb(17, 86, 165);
-    font-weight: bold;
-}
-
-.third_show {
-    text-align: center;
-}
-
-/*hover 추가*/
-.third_li a:hover {
+.faq_li a:hover {
     background: linear-gradient(to top, #ffe0e0 50%, transparent 50%);
 }

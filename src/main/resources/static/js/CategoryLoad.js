@@ -217,19 +217,19 @@ function generateCombinations() {
         `;
         tbody.appendChild(row);
 
-        // Event listener to apply the same `additionalPrice` to rows with matching parts
-        row.querySelector("input[name='additionalPrice']").addEventListener("input", function () {
-            const newPrice = this.value;
-            const partialComboText = combo[0]; // Use the first part (e.g., "234: 23")
-
-            // Apply the price to all rows that contain the same first part of the combination
-            Array.from(tbody.querySelectorAll("tr")).forEach(otherRow => {
-                const otherComboText = otherRow.querySelector("td").textContent;
-                if (otherComboText.startsWith(partialComboText)) {
-                    otherRow.querySelector("input[name='additionalPrice']").value = newPrice;
-                }
-            });
-        });
+        // // Event listener to apply the same `additionalPrice` to rows with matching parts
+        // row.querySelector("input[name='additionalPrice']").addEventListener("input", function () {
+        //     const newPrice = this.value;
+        //     const partialComboText = combo[0]; // Use the first part (e.g., "234: 23")
+        //
+        //     // Apply the price to all rows that contain the same first part of the combination
+        //     Array.from(tbody.querySelectorAll("tr")).forEach(otherRow => {
+        //         const otherComboText = otherRow.querySelector("td").textContent;
+        //         if (otherComboText.startsWith(partialComboText)) {
+        //             otherRow.querySelector("input[name='additionalPrice']").value = newPrice;
+        //         }
+        //     });
+        // });
     });
 
     table.appendChild(tbody);

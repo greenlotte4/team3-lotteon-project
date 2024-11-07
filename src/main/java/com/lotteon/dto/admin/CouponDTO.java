@@ -2,6 +2,7 @@ package com.lotteon.dto.admin;
 
 
 import com.lotteon.dto.User.SellerDTO;
+import com.lotteon.entity.admin.Coupon;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -32,5 +33,21 @@ public class CouponDTO {
 
     private String sellerCompany; // 발급자
 
-
+    public CouponDTO(Coupon coupon) {
+        this.couponId = coupon.getCouponId();
+        this.couponName = coupon.getCouponName();
+        this.couponType = coupon.getCouponType();
+        this.benefit = coupon.getBenefit();
+        this.startDate = coupon.getStartDate();
+        this.endDate = coupon.getEndDate();
+        this.issuedCount = coupon.getIssuedCount();
+        this.usedCount = coupon.getUsedCount();
+        this.status = coupon.getStatus();
+        this.notes = coupon.getNotes();
+        this.rdate = coupon.getRdate();
+        this.restrictions = coupon.getRestrictions();
+        this.productId = (coupon.getProduct() != null) ? coupon.getProduct().getProductId() : null;
+        this.sellerId = coupon.getSeller().getId();
+        this.sellerCompany = coupon.getSellerCompany();
+    }
 }

@@ -30,6 +30,12 @@ public class BuyNowRequestDTO {
     private String ShippingTerms;
     private int expectedPoint;
     private Member member;
-    private List<OptionItemDTO> options;  // Use List<OptionDTO> for options
+    private List<OptionItemDTO> options;  // Use List<OptionDTO> for options\
+
+    private long additionalPrice;
+    private long combinationId;
+    private String combinationString;
+    private long cartId;
+    private long cartItemId;
 
 }

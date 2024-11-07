@@ -60,3 +60,14 @@ button{cursor: pointer;}
 input[type="text"]{
     padding: 10px;
 }
+
+
+.paging {width: 500px; height: 30px; margin: 20px auto; text-align: center}
+.num , .current,.prev,.next {padding: 10px; border: none; border-radius: 8px; background: #afc8e6; color:white}
+.prev,.next {background: #8EB4E3;}
+.current {background: #6681a3}
+
+
+.faqnums , .faqcurrents,.faqprevs,.faqnexts {padding: 10px; border: none; border-radius: 8px; background: #afc8e6; color:white; margin-left: 5px}
+.faqprevs,.faqnexts {background: #8EB4E3;}
+.faqcurrents {background: #6681a3}
