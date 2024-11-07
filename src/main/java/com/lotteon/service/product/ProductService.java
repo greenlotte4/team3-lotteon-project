@@ -71,6 +71,7 @@ public class ProductService {
 
     }
 
+
     @Transactional
     public int deleteProducts(List<Long> productIds) {
         log.info("delete들어왔다");
@@ -461,5 +462,6 @@ public class ProductService {
     }
 
 
-        public void isSaleProduct() {}
+
+
 }

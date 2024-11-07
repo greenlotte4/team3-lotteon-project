@@ -69,10 +69,14 @@ public class MarketController {
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
-        ProductCategoryDTO categoryDTOs =  productCategoryService.getCategoryById(category);
+        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.getAllParentCategoryDTOs(category);
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
         log.info(categoryDTOs);
+
+
+
+
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("active",category);
         model.addAttribute("content", "main");
