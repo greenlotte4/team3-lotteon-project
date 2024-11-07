@@ -64,7 +64,7 @@ public class ReviewService {
 
         Review review = new Review();
         review.setProduct(product);
-        review.setRating(reviewDTO.getRating()); // DTO에서 rating 가져오기
+        review.setRating(Double.parseDouble(reviewDTO.getRating())); // DTO에서 rating 가져오기
         review.setContent(reviewDTO.getContent()); // DTO에서 content 가져오기
         review.setWriter(currentUsername);
         review.setRdate(LocalDateTime.now());
@@ -152,6 +152,10 @@ public class ReviewService {
                 .dtoList(reviewList)
                 .total(total)
                 .build();
+    }
+
+    public List<Review> getAllReviewsByProductId(Long productId) {
+        return reviewRepository.findAllByProduct_ProductId(productId);
     }
 
 }

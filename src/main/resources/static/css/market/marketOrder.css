@@ -571,13 +571,40 @@
 
 }
 
+.button-type{
+    display: flex;
+    flex-direction: row;
+}
+
+.confirm-btn {
+    background-color: #555;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 25%;
+    right: 0px;
+}
+
+
 .new-address-btn {
     background-color: #555;
     color: white;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
+    width: 25%;
+    right: 0px;
+    margin-left: 10px;
+}
+
+.save-btn{
+    background-color: #555;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 25%;
     right: 0px;
 }
 

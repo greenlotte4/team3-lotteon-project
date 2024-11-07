@@ -6,7 +6,10 @@ import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.entity.BoardCate;
 import com.lotteon.entity.admin.Adminqna;
+import com.lotteon.entity.admin.QAdminqna;
+import com.lotteon.entity.product.Option;
 import com.lotteon.repository.BoardRepository;
+import com.lotteon.repository.QnaRepository;
 import com.lotteon.repository.admin.AdminQnaRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class QnaService {
     private final AdminQnaRepository adminQnaRepository;
     private final ModelMapper modelMapper;
     private final BoardRepository boardRepository;
+    private final QnaRepository qnaRepository;
 
 
     public QnaPageResponseDTO selectQnaListAll(PageRequestDTO pageRequestDTO){
@@ -100,4 +105,23 @@ public class QnaService {
         }
         return null;
     }
+
+    // productId에 따른 Q&A 목록 조회
+    public List<adminQnaDTO> getQnaByProductId(long productId) {
+        List<Adminqna> qnaList = adminQnaRepository.findByProductId(productId);
+
+        // QnA 엔티티를 QnaDTO로 변환하여 반환
+        return qnaList.stream()
+                .map(adminQna -> modelMapper.map(adminQna, adminQnaDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<adminQnaDTO> getQnaByWriterAndProductId(long productId) {
+        List<Adminqna> adminqnaList = adminQnaRepository.findByProductId(productId);
+
+            List<adminQnaDTO> adminQnaDTOS = adminqnaList.stream().map(adminqna -> modelMapper.map(adminqna, adminQnaDTO.class)).collect(Collectors.toList());
+            return adminQnaDTOS;
+
+    }
+
 }
