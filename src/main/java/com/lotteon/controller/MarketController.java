@@ -130,13 +130,8 @@ public class MarketController {
     }
 
     @GetMapping("/view/{categoryId}/{productId}")
-    public String marketView (
-        @PathVariable Long productId,
-        @PathVariable Long categoryId,
-        Model model,
-        Authentication authentication,
-        com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
-
+    public String marketView (@PathVariable Long productId, @PathVariable Long categoryId,
+        Model model, Authentication authentication, com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
         log.info(productId);
         log.info(categoryId);
 
@@ -153,14 +148,12 @@ public class MarketController {
         log.info("productVIew Controller:::::"+productdto);
         List<Review> allReviews = reviewService.getAllReviewsByProductId(productId);
 
-
         // 리뷰 정보 추가
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);
         List<Review> ReviewImgs = reviewService.getAllReviews();
 
         // 현재 사용자 아이디로 Q&A 데이터 필터링
         List<adminQnaDTO> userQnaList = qnaService.getQnaByWriterAndProductId(productId);
-
 
         // 모델에 필요한 데이터 추가
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
