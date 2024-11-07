@@ -33,4 +33,9 @@ public class Delivery {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    // 기본 주소 설정
+    public void setAsDefault() {
+        this.isDefault = true;
+    }
+
 }

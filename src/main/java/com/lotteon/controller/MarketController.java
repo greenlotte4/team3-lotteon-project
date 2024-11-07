@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.User.DeliveryDTO;
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
@@ -16,15 +17,20 @@ import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.entity.product.Review;
+import com.lotteon.repository.cart.CartItemRepository;
+import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.security.MyUserDetails;
+import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.admin.CouponIssuedService;
+import com.lotteon.service.order.CartItemService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
+import com.lotteon.service.user.DeliveryService;
 import com.lotteon.service.user.CouponDetailsService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +64,8 @@ public class MarketController {
     private final OrderService orderService;
     private final AdminService adminService;
     private final ProductOptionCombinationRepository productOptionCombinationRepository;
+    private final DeliveryService deliveryService;
+    private final CartItemService cartItemService;
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
@@ -162,18 +170,18 @@ public class MarketController {
     public String marketOrder(@PathVariable String uid,Model model, String productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        String memberId = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
+        String memberUid = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
 
         log.info("uid ::::::::::"+uid);
         MemberDTO memberDTO = userService.getByUsername(uid);
 
 
 
-        log.info("멤버 아이디다"+memberId);
+        log.info("멤버 아이디다"+memberUid);
 
         // 해당 멤버의 발급된 쿠폰 목록 조회
 
-        List<CouponIssued> issuedCoupons = couponDetailsService.memberOrderCouponList(memberId, productId); // 서비스에서 발급된 쿠폰 조회
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberOrderCouponList(memberUid, productId); // 서비스에서 발급된 쿠폰 조회
         log.info("발급받은 쿠폰: {}", issuedCoupons);
 
         model.addAttribute("issuedList", issuedCoupons);
@@ -182,6 +190,12 @@ public class MarketController {
 
         log.info(memberDTO);
         model.addAttribute("memberDTO",memberDTO);
+
+        Long memberId = memberDTO.getMemberId(); // memberId가 MemberDTO에 있다고 가정
+        List<DeliveryDTO> deliveryDTOList = deliveryService.getByMemberId(memberId);; // memberId로 DeliveryDTO 가져옴
+        log.info("deliveryDTO ::::::::::" + deliveryDTOList);
+        model.addAttribute("deliveryDTO", deliveryDTOList);
+
         model.addAttribute("productId", productId);
 
         return "content/market/marketorder"; // Points to the "content/market/marketorder" template
@@ -194,6 +208,14 @@ public class MarketController {
         response.put("result", 0L);
         log.info("요기!!!!!!!!!!!!!!!!!"+orderRequestDTO);
         OrderResponseDTO orderResponseDTO  = new OrderResponseDTO(orderRequestDTO);
+        if(orderResponseDTO.getCartId()>0){
+            List<Long> cartItems= orderResponseDTO.getCartItems();
+            boolean result=cartItemService.deleteCartItems(cartItems,orderResponseDTO.getCartId());
+            if(!result){
+                response.put("result", 0L);
+                return ResponseEntity.ok(response);
+            }
+        }
         long orderId = orderService.saveOrder(orderResponseDTO);
 
 
@@ -267,16 +289,16 @@ public class MarketController {
         return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template
     }
 
-    @PostMapping("/cart/cartOrder/{cartId}")
-    public ResponseEntity<Cart> cartOrder(
-            @PathVariable long cartId,
-            @RequestBody List<BuyNowRequestDTO> cartOrders
-    ){
-        log.info("상품 주문 오더 들어왔다");
-        for (BuyNowRequestDTO cartOrder : cartOrders) {
-            log.info("오더들"+cartOrder);
-        }
-
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/cart/cartOrder/{cartId}")
+//    public ResponseEntity<Cart> cartOrder(
+//            @PathVariable long cartId,
+//            @RequestBody List<BuyNowRequestDTO> cartOrders
+//    ){
+//        log.info("상품 주문 오더 들어왔다");
+//        for (BuyNowRequestDTO cartOrder : cartOrders) {
+//            log.info("오더들"+cartOrder);
+//        }
+//
+//        return ResponseEntity.ok().build();
+//    }
 }

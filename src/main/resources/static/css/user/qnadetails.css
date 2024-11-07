@@ -1,17 +1,23 @@
-
-*{
+* {
     margin: 0;
     padding: 0;
     font: normal 12px '고딕';
 }
 
-ul,ol{list-style: none;}
-a{text-decoration: none; color: #111;}
+ul, ol {
+    list-style: none;
+}
 
-#wrapper{
+a {
+    text-decoration: none;
+    color: #111;
+}
+
+#wrapper {
     width: 100%;
     height: 100%;
 }
+
 main {
     position: relative;
     width: 1200px;
@@ -20,7 +26,7 @@ main {
 }
 
 
-.info{
+.info {
     width: 1200px;
     height: 75px;
     background-color: antiquewhite;
@@ -28,6 +34,7 @@ main {
     align-items: center; /* 수직 중앙 정렬 */
 
 }
+
 .info-title {
     position: relative;
     width: 101x;
@@ -52,6 +59,7 @@ main {
     text-align: center; /* 항목 중앙 정렬 */
     border-right: 1px solid black;
 }
+
 .summary-item:last-child {
     border-right: none; /* 마지막 항목의 오른쪽 검은 줄 제거 */
 }
@@ -60,7 +68,8 @@ main {
     font-size: 16px; /* 값의 크기 조정 */
     font-weight: bold; /* 값 두껍게 */
 }
-#container{
+
+#container {
     display: flex;
     height: auto;
     flex-wrap: wrap;
@@ -72,7 +81,7 @@ aside {
     height: auto;
     display: flex; /* Flexbox 사용 */
     justify-content: center; /* 수직 중앙 정렬 */
-    border-right:1px solid #ccc;
+    border-right: 1px solid #ccc;
 }
 
 aside > ul {
@@ -84,9 +93,11 @@ aside > ul > li {
     font-size: 16px;
     margin: 15px 0; /* 위아래 간격 조정 */
 }
-aside > ul > li:nth-child(5){
+
+aside > ul > li:nth-child(5) {
     text-decoration: underline;
 }
+
 .center {
     flex-grow: 1;
     width: 994px;
@@ -100,33 +111,36 @@ aside > ul > li:nth-child(5){
     transition: transform 0.5s ease-in-out;
 }
 
-.ad{
+.ad {
     width: 900px;
     height: 86px;
     margin: 20px auto;
     box-sizing: border-box;
 
 }
-.ad img{
+
+.ad img {
     width: 900px; /* 고정 너비 */
     height: 86px; /* 고정 높이 */
     display: block; /* 이미지가 블록 요소로 처리되어 아래 여백이 생기지 않음 */
 }
-.details{
+
+.details {
     width: 880px;
     height: 20px;
     margin: 0 48px;
 
 }
-.center p{
+
+.center p {
     font-size: 14px;
     font-weight: 700;
     float: left;
 }
-.center a{
+
+.center a {
     font-size: 12px;
     font-weight: 400;
-    float: right;
 }
 
 table {
@@ -137,26 +151,43 @@ table {
     border-bottom: 1px solid #b4b0b0;
     border-collapse: collapse;
 }
+
 th {
     background-color: gray;
     height: 42.5px;
 }
 
-.inquiry-table th:nth-child(1) {width: 8.97%}
-.inquiry-table th:nth-child(2) {width: 12.82%}
-.inquiry-table th:nth-child(3) {width: 12.82%}
-.inquiry-table th:nth-child(4) {width: 38.46%}
-.inquiry-table th:nth-child(5) {width: 15.38%}
-.inquiry-table th:nth-child(6) {width: 11.54%}
+.inquiry-table th:nth-child(1) {
+    width: 8.97%
+}
+
+.inquiry-table th:nth-child(2) {
+    width: 12.82%
+}
+
+.inquiry-table th:nth-child(3) {
+    width: 12.82%
+}
+
+.inquiry-table th:nth-child(4) {
+    width: 38.46%
+}
+
+.inquiry-table th:nth-child(5) {
+    width: 15.38%
+}
+
+.inquiry-table th:nth-child(6) {
+    width: 11.54%
+}
 
 
-
-.font{
+.font {
     color: white;
 }
 
 
-.tr1{
+.tr1 {
     width: auto;
     height: 170px;
 
@@ -169,9 +200,11 @@ td {
     text-align: center;
 
 }
-.tr3{
+
+.tr3 {
     border-bottom: 1px solid #b4b0b0;
 }
+
 /* 상태에 따른 색상 지정 */
 .status-complete {
     color: lightgreen;
@@ -179,4 +212,55 @@ td {
 
 .status-pending {
     color: lightgray;
+}
+
+.pagination {
+    text-align: center;
+    font-family: Roboto, NotoSansKR, Malgun Gothic, AppleSDGothicNeo, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.47;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 30px 0;
+}
+
+.pagination a, .pagination button, .pagination span {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #999;
+    line-height: 26px;
+    margin: 2px 2px;
+    text-indent: -1px;
+}
+
+.pagination a.active, .pagination button.active, .pagination span.active , .qnacurrent{
+    margin: 0 4px;
+    background-color: #343b4d;
+    border: 1px solid #343b4d;
+    color: #fff;
+}
+
+.pagination a:hover, .pagination button:hover {
+    color: #333;
+}
+
+.pagination .prev, .pagination .next {
+    width: 28px;
+    height: 28px;
+    background-size: contain;
+}
+
+.pagination .prev.off, .pagination .next.off {
+    pointer-events: none;
+    background-size: contain;
+}
+
+.pagination .skip {
+    margin: 0 7px 0 4px;
+    width: auto;
+    letter-spacing: 1px;
 }

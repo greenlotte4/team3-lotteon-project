@@ -1,6 +1,9 @@
 package com.lotteon.security;
 
+import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.service.user.CustomOAuth2UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,39 +30,38 @@ public class SecurityConfig {
 
     @Bean
 
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, MemberRepository memberRepository) throws Exception {
         http
-            .formLogin()
+                .formLogin()
                 .loginPage("/user/login")
                 .usernameParameter("inId")
                 .passwordParameter("password")
-                .loginProcessingUrl("/user/login") // 로그인 처리 URL
+                .loginProcessingUrl("/user/login")
                 .failureHandler(new CustomAuthFailureHandler())
                 .failureUrl("/user/login?error=true")
 
                 .and()
-            .formLogin()
+                .formLogin()
                 .loginPage("/seller/login")
                 .usernameParameter("inId")
                 .passwordParameter("password")
-                .loginProcessingUrl("/seller/login") // 로그인 처리 URL
-                .successHandler(new CustomAuthSuccessHandler()) // CustomAuthSuccessHandler 사용
-                .failureUrl("/seller/login?error=true") // 로그인 실패 시 이동할 페이지
+                .loginProcessingUrl("/seller/login")
+                .successHandler(customAuthSuccessHandler(memberRepository)) // Use the bean method here
+                .failureUrl("/seller/login?error=true")
 
                 .and()
-            .rememberMe() // rememberMe 설정 추가
-                .key("1234Asd@") // 키 설정
-                .tokenValiditySeconds(60 * 60 * 24 * 3) // 토큰 유효 시간 설정 (3일)
-                .alwaysRemember(true) // 항상 기억
+                .rememberMe()
+                .key("1234Asd@")
+                .tokenValiditySeconds(60 * 60 * 24 * 3)
+                .alwaysRemember(true)
 
                 .and()
-            .oauth2Login(login -> login
-                .loginPage("/user/login") // OAuth2 로그인 페이지 설정
-                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService())) // 사용자 정보 처리
-                .defaultSuccessUrl("/",true)
-                .failureUrl("/user/login?error=true") // OAuth2 로그인 성공 시 이동할 URL
-            ); // 사용자 정의 OAuth2 사용자 서비스
-
+                .oauth2Login(login -> login
+                        .loginPage("/user/login")
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
+                        .defaultSuccessUrl("/",true)
+                        .failureUrl("/user/login?error=true")
+                );
 
         // 세션 설정
         http.sessionManagement(session -> session
@@ -121,9 +124,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationSuccessHandler customAuthSuccessHandler() {
-        return new CustomAuthSuccessHandler();
+    public AuthenticationSuccessHandler customAuthSuccessHandler(MemberRepository memberRepository) {
+        return new CustomAuthSuccessHandler(memberRepository); // Inject MemberRepository here
     }
+
 
     @Bean
     public CustomOAuth2UserService customOAuth2UserService() {

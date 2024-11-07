@@ -25,6 +25,7 @@ import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.CouponService;
 import com.lotteon.service.user.MemberService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -40,10 +41,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -166,27 +165,6 @@ public class AdminCouponController {
     }
 
 
-
-    @GetMapping("/{productId}")
-    public ResponseEntity<List<CouponDTO>> getCouponsForProduct(@PathVariable Long productId) {
-        List<Coupon> coupons = couponService.selectCouponIssued(productId);
-        // Coupon 리스트를 CouponDTO 리스트로 변환
-        List<CouponDTO> couponDTOs = coupons.stream()
-                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(couponDTOs);
-    }
-
-    @GetMapping("/all/coupons")
-    public ResponseEntity<List<CouponDTO>> getAllCoupons() {
-        List<Coupon> coupons = couponService.selectCouponIssued(null);
-        // Coupon 리스트를 CouponDTO 리스트로 변환
-        List<CouponDTO> couponDTOs = coupons.stream()
-                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(couponDTOs);
-    }
-
     @GetMapping(value = "/products", produces = "application/json")
     public ResponseEntity<List<Map<String, Object>>> getProductsForCoupons() {
 
@@ -211,37 +189,33 @@ public class AdminCouponController {
 
     }
 
-    @PostMapping("/apply/{couponId}")
-    public ResponseEntity<CouponDTO> applyCoupon(@PathVariable("couponId") String couponId, Principal principal) {
-        log.info("쿠폰 발금 버튼 클릭되서 요청왔다");
+    private Map<String, Function<String, List<CouponDTO>>> searchMethods;
 
-        String userUid = principal.getName();
-
-        Member member = memberRepository.findByUser_Uid(userUid)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-        log.info("사용자 가 누군가"+ member);
-
-        Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new RuntimeException("쿠폰을 찾을 수 없습니다."));
-        log.info("어떤 쿠폰인가 "+coupon);
-        Product product = coupon.getProduct();
-
-        couponIssuedService.insertCouponIssued(member, coupon, product);
-
-        couponIssuedService.useCoupon(couponId);
-
-
-        CouponDTO couponDTO = new CouponDTO();
-        couponDTO.setCouponId(coupon.getCouponId());
-        couponDTO.setCouponName(coupon.getCouponName());
-        couponDTO.setCouponType(coupon.getCouponType());
-
-        return ResponseEntity.ok(couponDTO);
+    @PostConstruct
+    public void init() {
+        searchMethods = Map.of(
+                "couponId", couponService::searchByCouponNumber,  // 쿠폰번호로 검색
+                "couponName", couponService::searchByCouponName,  // 쿠폰명으로 검색
+                "issuer", couponService::searchBySellerCompany   // 발급자(판매자명)으로 검색
+        );
     }
+    @GetMapping("/cartch")
+    public ResponseEntity<List<CouponDTO>> cartchCoupons(
+            @RequestParam String category,
+            @RequestParam String query) {
 
+        log.info("검색 오청됨");
 
+        Function<String, List<CouponDTO>> searchMethod = searchMethods.get(category.toLowerCase());
 
+        if (searchMethod == null) {
+            return ResponseEntity.badRequest().body(null);  // 잘못된 카테고리 처리
+        }
 
+        // 검색된 쿠폰 목록 반환
+        List<CouponDTO> coupons = searchMethod.apply(query);
+        return ResponseEntity.ok(coupons);
+    }
 
 
 }
