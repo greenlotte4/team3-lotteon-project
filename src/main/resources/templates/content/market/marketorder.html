@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[[${headerInfo.hd_title}]]:[[${headerInfo.hd_subtitle}]]</title>
     <link rel="stylesheet" th:href="@{/css/market/marketOrder.css}">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:src="@{/js/postcode_delivery.js}"></script>
+
 
 
 </head>
@@ -272,34 +275,37 @@
             <h2>배송지 선택</h2>
             <div class="address-list">
                 <div class="address-item">
-<!--                    <div class="address-info">-->
-<!--                        <input type="radio" id="addr" name="address" checked>-->
-<!--                        <label for="addr">하진희</label>-->
-<!--                        <p>[47566]<br> 부산 연제구 온천천남로 110</p>-->
-<!--                        <p>010-5595-8375</p>-->
-<!--                    </div>-->
+                    <div class="address-info">
+                        <input type="radio" id="addr" name="address" checked>
+                        <label for="addr">하진희</label>
+                        <p>[47566]<br> 부산 연제구 온천천남로 110</p>
+                        <p>010-5595-8375</p>
+                    </div>
 
-<!--                    <div class="address-btn">-->
-<!--                        <button class="edit-btn">수정</button>-->
-<!--                        <button class="delete-btn">삭제</button>-->
-<!--                    </div>-->
+                    <div class="address-btn">
+                        <button class="edit-btn">수정</button>
+                        <button class="delete-btn">삭제</button>
+                    </div>
 
-<!--                </div>-->
-<!--                <div class="address-item">-->
-<!--                    <div class="address-info">-->
-<!--                        <input type="radio" id="address2" name="address">-->
-<!--                        <label for="address2">하진희</label>-->
-<!--                        <p>[47566] 부산 연제구 온천천남로 110</p>-->
-<!--                        <p>010-5595-8375</p>-->
-<!--                    </div>-->
-<!--                    <div class="address-btn">-->
-<!--                        <button class="edit-btn">수정</button>-->
-<!--                        <button class="delete-btn">삭제</button>-->
-<!--                    </div>-->
                 </div>
+                <div class="address-item">
+                    <div class="address-info">
+                        <input type="radio" id="address2" name="address">
+                        <label for="address2">하진희</label>
+                        <p>[47566] 부산 연제구 온천천남로 110</p>
+                        <p>010-5595-8375</p>
+                    </div>
+                    <div class="address-btn">
+                        <button class="edit-btn">수정</button>
+                        <button class="delete-btn">삭제</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="button-type">
+                <button class="confirm-btn" onclick="confirmAddressSelection()">확인</button>
                 <button class="new-address-btn">새 배송지 추가</button>
             </div>
-            <button class="confirm-btn">확인</button>
         </div>
     </div>
 
@@ -312,30 +318,30 @@
                 <table>
                     <tr>
                         <th><label for="name">배송지 이름</label></th>
-                        <td><input type="text" id="name" value="우리집"></td>
+                        <td><input type="text" id="name" placeholder="배송지 이름을 입력하세요"></td>
                     </tr>
 
                     <tr>
                         <th><label for="phoneNumber">휴대폰 번호</label></th>
-                        <td><input type="text" id="phoneNumber" value="010-5595-8375"></td>
+                        <td><input type="text" id="phoneNumber" placeholder="휴대폰 번호를 입력하세요"></td>
                     </tr>
 
                     <tr>
                         <th><label for="postalCode">주소</label></th>
                         <td>
                             <div class="address-input">
-                                <input type="text" id="postalCode" value="47566">
-                                <button type="button" id="findPostalCode">우편번호 찾기</button>
+                                <input type="text" id="postalCode" placeholder="우편번호">
+                                <button type="button" id="btnPostCode">우편번호 찾기</button>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input type="text" id="addressLine1" value="부산 연제구 온천천남로"></td>
+                        <td><input type="text" id="addressLine1" placeholder="기본주소"></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input type="text" id="addressLine2" value="110, 51동 506호(연산동, 한양아파트)"></td>
+                        <td><input type="text" id="addressLine2" placeholder="상세주소"></td>
                     </tr>
 
                     <!--                    <tr>-->
@@ -345,12 +351,12 @@
 
                     <tr>
                         <td><label for="deliveryMessage">배송 메시지</label></td>
-                        <td><input type="text" id="deliveryMessage" value="문 앞에 놔주세요"></td>
+                        <td><input type="text" id="deliveryMessage" placeholder="배송 메시지를 입력하세요"></td>
                     </tr>
 
                 </table>
 
-                <div class="checkbox-group">
+                <div class=" checkbox-group">
                     <label><input type="checkbox" checked> (필수) 개인정보 수집 및 이용 동의(수취인정보)</label><br>
                     <label><input type="checkbox"> (선택) 개인정보 수집 및 이용 동의(공동현관 출입정보)</label><br>
                 </div>
