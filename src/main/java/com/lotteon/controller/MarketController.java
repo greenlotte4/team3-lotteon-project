@@ -161,9 +161,8 @@ public class MarketController {
         // 현재 사용자 아이디로 Q&A 데이터 필터링
         List<adminQnaDTO> userQnaList = qnaService.getQnaByWriterAndProductId(productId);
 
-        // 로그인된 사용자의 ID를 가져와 모델에 추가
-        String loggedInUserId = authentication.getName();
-        model.addAttribute("loggedInUserId", loggedInUserId);
+
+
 
         // 모델에 필요한 데이터 추가
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
