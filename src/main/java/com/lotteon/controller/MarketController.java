@@ -80,6 +80,8 @@ public class MarketController {
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
         log.info(categoryDTOs);
+
+        productService.selectProducts();
         model.addAttribute("categoryDTOs", categoryDTOs);
         model.addAttribute("active", category);
         model.addAttribute("content", "main");
@@ -160,8 +162,8 @@ public class MarketController {
         List<adminQnaDTO> userQnaList = qnaService.getQnaByWriterAndProductId(productId);
 
         // 로그인된 사용자의 ID를 가져와 모델에 추가
-        String loggedInUserId = authentication.getName();
-        model.addAttribute("loggedInUserId", loggedInUserId);
+//        String loggedInUserId = authentication.getName();
+//        model.addAttribute("loggedInUserId", loggedInUserId);
 
         // 모델에 필요한 데이터 추가
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
@@ -242,7 +244,9 @@ public class MarketController {
         response.put("result", 0L);
         log.info("요기!!!!!!!!!!!!!!!!!" + orderRequestDTO);
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO(orderRequestDTO);
+
         if (orderResponseDTO.getCartId() > 0) {
+            log.info("cartId 가 없다?"+orderResponseDTO.getOrder());
             List<Long> cartItems = orderResponseDTO.getCartItems();
             boolean result = cartItemService.deleteCartItems(cartItems, orderResponseDTO.getCartId());
             if (!result) {

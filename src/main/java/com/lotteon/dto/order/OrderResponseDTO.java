@@ -42,6 +42,10 @@ public class OrderResponseDTO {
         long point=0;
         long totaldiscount= usePoint + couponResult;
         long cartid = products.get(0).getCartId() == 0  ? 0 : products.get(0).getCartId();
+        if(cartid>0){
+            this.cartId = cartid;
+
+        }
         List<Long> cartItemIds = new ArrayList<>();
 
         for (BuyNowRequestDTO buyNowRequestDTO : products) {

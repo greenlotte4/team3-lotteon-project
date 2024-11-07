@@ -472,5 +472,38 @@ public class ProductService {
     }
 
 
-        public void isSaleProduct() {}
+    public void selectByFirstCategory(long categoryId,String sort){
+
+        if(categoryId ==0L){
+
+        }else{
+            switch (sort){
+                case "hit":
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    break;
+                case "4":
+                    break;
+                case "5":
+                    break;
+                default:
+        }
+
+
+
+        }
+
+
+
+
+    }
+
+
+
+
+
+
+
 }
