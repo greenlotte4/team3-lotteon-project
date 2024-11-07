@@ -159,15 +159,14 @@ public class OrderService {
         return null;
     }
 
-}
 
-    //update Order
+//update Order
 
-    //deleteOrder
+//deleteOrder
 
-    //반품요청
+//반품요청
 
-    //환불요청
+//환불요청
 
     public long getSalesCountBySeller(String sellerUid) {
         return orderItemRepository.countBySellerUid(sellerUid);
@@ -176,6 +175,7 @@ public class OrderService {
     public long getTotalSalesAmountBySeller(String sellerUid) {
         return orderItemRepository.findTotalOrderPriceBySellerUid(sellerUid);
     }
+
     // 모든 판매자의 총 판매 수량을 반환
     public long getTotalSalesCountForAllSellers() {
         return orderItemRepository.findTotalOrderCountForAllSellers();
@@ -207,5 +207,6 @@ public class OrderService {
         Long amount = orderItemRepository.sumSalesAmountByDateRange(start, end);
         return amount != null ? amount : 0;
     }
+}
 
 
