@@ -4,6 +4,9 @@ import com.lotteon.dto.QnaDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
+import com.lotteon.dto.order.OrderCompletedResponseDTO;
+import com.lotteon.dto.order.OrderDTO;
+import com.lotteon.dto.order.OrderWithGroupedItemsDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.QnA;
@@ -17,6 +20,7 @@ import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.admin.CouponIssuedService;
+import com.lotteon.service.order.OrderService;
 import com.lotteon.service.user.CouponDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +57,7 @@ public class MypageController {
     private final CouponDetailsService couponDetailsService;
     private final CouponIssuedService couponIssuedService;
     private final QnaRepository qnaRepository;
+    private final OrderService orderService;
 
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
@@ -79,10 +84,18 @@ public class MypageController {
     }
 
     @GetMapping("/myInfo")
-    public String myInfo(Model model) {
+    public String myInfo(Model model,Authentication authentication) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
+
+        Pageable pageable= PageRequest.of(0,3, Sort.by("orderDate").descending());
+        String uid = authentication.getName();
+
+//        List<OrderWithGroupedItemsDTO> groupDTO =  orderService.getOrdersGroupedBySeller(uid);
+//        log.info("여기여기여기!!!!"+groupDTO);
+//
+//        model.addAttribute("groupDTO", groupDTO);
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
         model.addAttribute("banners", banners2);
