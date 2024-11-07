@@ -72,7 +72,7 @@
                 const parentId = this.getAttribute('data-id');
                 const title = this.textContent;
 
-                fetch(`/admin/qna/list/page?parentId=${parentId}`)
+                fetch(`/api/qna/list/page?parentId=${parentId}`)
                     .then(resp => resp.json())
                     .then(qnaPageResponseDTO => {
                         const qnaList = document.getElementById('qnaList');
