@@ -40,6 +40,9 @@ import com.lotteon.service.user.CouponDetailsService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -76,12 +79,30 @@ public class MarketController {
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
-        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.getAllParentCategoryDTOs(category);
+        ProductCategoryDTO productCategoryDTO =  productCategoryService.getCategoryName(category);
+        String name= productCategoryDTO.getName();
+        log.info("ddddddddddddddd231:"+name);
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
-        log.info(categoryDTOs);
+        log.info(name);
 
-        model.addAttribute("categoryDTOs",categoryDTOs);
+
+        List<ProductDTO> hitProduct =  productService.selectMainList(category,"hit");
+        log.info("hitProduct!!!:"+hitProduct);
+        List<ProductDTO> soldProduct =  productService.selectMainList(category,"sold");
+        List<ProductDTO> rDateProduct =  productService.selectMainList(category,"rdate");
+        List<ProductDTO> discountProduct =  productService.selectMainList(category,"discount");
+        List<ProductDTO> ratingProduct =  productService.selectMainList(category,"rating");
+
+
+        model.addAttribute("hitProduct",hitProduct);
+        model.addAttribute("soldProduct",soldProduct);
+        model.addAttribute("rDateProduct",rDateProduct);
+        model.addAttribute("discountProduct",discountProduct);
+        model.addAttribute("ratingProduct",ratingProduct);
+
+
+        model.addAttribute("categoryName",name);
         model.addAttribute("active",category);
 
         model.addAttribute("content", "main");

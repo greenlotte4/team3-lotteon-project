@@ -98,7 +98,10 @@ public class SecurityConfig {
                 .requestMatchers("/policy/**").permitAll()
                 .requestMatchers("/cs/**").permitAll()
                 .requestMatchers("/cart").authenticated()
+                .requestMatchers("/mypage/**").authenticated()
                 .requestMatchers(HttpMethod.POST,"/market/cart").authenticated()
+                .requestMatchers("/market/order").authenticated()
+                .requestMatchers("/market/completed/").authenticated()
                 .requestMatchers("/article/delete/**").authenticated()
                 .anyRequest().permitAll()
         );

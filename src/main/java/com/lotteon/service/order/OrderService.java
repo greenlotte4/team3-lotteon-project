@@ -3,10 +3,7 @@ package com.lotteon.service.order;
 
 import com.lotteon.controller.SellerController;
 import com.lotteon.dto.User.SellerDTO;
-import com.lotteon.dto.order.OrderCompletedResponseDTO;
-import com.lotteon.dto.order.OrderDTO;
-import com.lotteon.dto.order.OrderItemDTO;
-import com.lotteon.dto.order.OrderResponseDTO;
+import com.lotteon.dto.order.*;
 import com.lotteon.dto.product.OptionDTO;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.entity.User.Seller;
@@ -19,12 +16,17 @@ import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.repository.order.OrderRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.repository.product.ProductRepository;
+import com.lotteon.repository.user.SellerRepository;
 import com.lotteon.service.product.OptionService;
 import com.lotteon.service.product.ProductService;
 import com.lotteon.service.user.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.description.annotation.AnnotationValue;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -149,14 +151,75 @@ public class OrderService {
 
         log.info("sellereeeeeee:" + sellers);
 
+        List<OrderDTO> orderDTOSs = new ArrayList<>();
 
-        return new OrderCompletedResponseDTO(orderDTO, sellers);
+        return new OrderCompletedResponseDTO(orderDTO, sellers,orderDTOSs);
     }
 
     //seller별 orderItem 찾기
     public List<OrderDTO> selectOrderItemsBySeller() {
         return null;
     }
+
+    public List<OrderWithGroupedItemsDTO> getOrdersGroupedBySeller(String uid) {
+        List<Object[]> results = orderRepository.findOrderAndOrderItemsByUid(uid);
+        Map<Long, OrderWithGroupedItemsDTO> orderMap = new HashMap<>();
+
+        for (Object[] row : results) {
+            Order order = (Order) row[0];
+            OrderItem orderItem = (OrderItem) row[1];
+            String sellerUid = orderItem.getSellerUid();
+
+            // OrderWithGroupedItemsDTO가 없으면 생성하여 추가
+            OrderWithGroupedItemsDTO orderDTO = orderMap.computeIfAbsent(order.getOrderId(), id ->
+                    new OrderWithGroupedItemsDTO(order.getOrderId(), order.getUid(), order.getOrderDate(), new ArrayList<>())
+            );
+
+            String company=null;
+            // SellerOrderItemDTO를 찾거나 생성하여 추가
+            SellerOrderItemDTO sellerOrderItemDTO = orderDTO.getGroupedOrderItems().stream()
+                    .filter(s -> s.getSellerUid().equals(sellerUid))
+                    .findFirst()
+                    .orElseGet(() -> {
+                        String companyIn = sellerService.findCompanyByuid(sellerUid);
+                        SellerOrderItemDTO newSellerDTO = new SellerOrderItemDTO(sellerUid,companyIn, new ArrayList<>());
+                        orderDTO.getGroupedOrderItems().add(newSellerDTO);
+                        return newSellerDTO;
+                    });
+
+            // OrderItem을 해당 SellerOrderItemDTO에 추가
+            sellerOrderItemDTO.getOrderItems().add(orderItem);
+        }
+
+        return new ArrayList<>(orderMap.values());
+    }
+
+
+
+//    public List<OrderDTO> selectOrderByuid(String uid,Pageable pageable) {
+//
+//        List<Order> orders =  orderRepository.findByUid(uid,pageable);
+//        List<OrderDTO> orderDTOs = new ArrayList<>();
+//        for(Order order : orders){
+//            OrderDTO orderDTO = order.toDTO(order);
+//
+//            List<OrderItem> items= order.getOrderProducts();
+//            List<OrderItemDTO> itemDTOS = new ArrayList<>();
+//
+//            String path =items.get(0).getProduct().getSavedPath();
+//            String image=items.get(0).getProduct().getFile190();
+//
+//            if(path!=null){
+//                image = path+items.get(0).getProduct().getFile190();
+//            }
+//            orderDTO.setPath(path);
+//            orderDTO.setImage(image);
+//            orderDTO.setOrderItems(itemDTOS);
+//            orderDTOs.add(orderDTO);
+//        }
+//
+//        return orderDTOs;
+//    }
 
 
 //update Order
