@@ -6,21 +6,19 @@ import com.lotteon.service.admin.QnaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Log4j2
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class BoardAPIController {
 
 
     private final QnaService qnaService;
 
     @ResponseBody
-    @GetMapping("/api/qna/list/page")
+    @GetMapping("/qna/list/page")
     public ResponseEntity<?> adminQnaListPage(@RequestParam(required = false) Long childId, @RequestParam(required = false) Long parentId, @RequestParam(required = false) String qnawriter, PageRequestDTO pageRequestDTO) {
         pageRequestDTO.setParentId(parentId);
         pageRequestDTO.setChildId(childId);
