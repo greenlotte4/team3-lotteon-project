@@ -25,6 +25,7 @@ import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.CouponService;
 import com.lotteon.service.user.MemberService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -40,10 +41,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -166,11 +165,6 @@ public class AdminCouponController {
     }
 
 
-
-
-
-
-
     @GetMapping(value = "/products", produces = "application/json")
     public ResponseEntity<List<Map<String, Object>>> getProductsForCoupons() {
 
@@ -195,11 +189,33 @@ public class AdminCouponController {
 
     }
 
+    private Map<String, Function<String, List<CouponDTO>>> searchMethods;
 
+    @PostConstruct
+    public void init() {
+        searchMethods = Map.of(
+                "couponId", couponService::searchByCouponNumber,  // 쿠폰번호로 검색
+                "couponName", couponService::searchByCouponName,  // 쿠폰명으로 검색
+                "issuer", couponService::searchBySellerCompany   // 발급자(판매자명)으로 검색
+        );
+    }
+    @GetMapping("/cartch")
+    public ResponseEntity<List<CouponDTO>> cartchCoupons(
+            @RequestParam String category,
+            @RequestParam String query) {
 
+        log.info("검색 오청됨");
 
+        Function<String, List<CouponDTO>> searchMethod = searchMethods.get(category.toLowerCase());
 
+        if (searchMethod == null) {
+            return ResponseEntity.badRequest().body(null);  // 잘못된 카테고리 처리
+        }
 
+        // 검색된 쿠폰 목록 반환
+        List<CouponDTO> coupons = searchMethod.apply(query);
+        return ResponseEntity.ok(coupons);
+    }
 
 
 }

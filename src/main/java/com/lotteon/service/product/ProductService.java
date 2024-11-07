@@ -18,6 +18,7 @@ import com.lotteon.dto.product.request.ProductViewResponseDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.product.*;
 import com.lotteon.repository.ReviewFileRepository;
+import com.lotteon.repository.ReviewRepository;
 import com.lotteon.repository.product.OptionRepository;
 import com.lotteon.repository.product.ProductCategoryRepository;
 import com.lotteon.repository.product.ProductRepository;
@@ -59,6 +60,7 @@ public class ProductService {
     private final ProductCategoryService productCategoryService;
     private final ProductCategoryRepository productCategoryRepository;
     private final ReviewService reviewService;
+    private final ReviewRepository reviewRepository;
 
     public void updatehit(Long productId){
        Optional<Product> opt =  productRepository.findByProductId(productId);
@@ -330,6 +332,15 @@ public class ProductService {
         }
         try{
             log.info("여기깢!!");
+
+            List<ProductSummaryDTO> productListWithReviews = tuples.getContent().stream()
+                    .map(product -> {
+                        int reviewCount = reviewRepository.countByProduct_ProductId(product.getProductId()); // 리뷰 갯수 조회
+                        product.setReviewCount(reviewCount); // 리뷰 갯수 설정
+                        return product;
+                    })
+                    .collect(Collectors.toList());
+
             ProductListPageResponseDTO list=  ProductListPageResponseDTO.builder()
                     .total((int) tuples.getTotalElements())
                     .productSummaryDTOs(tuples.getContent())

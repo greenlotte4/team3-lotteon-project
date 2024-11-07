@@ -17,6 +17,8 @@ import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.entity.product.Review;
+import com.lotteon.repository.ReviewRepository;
+import com.lotteon.repository.cart.CartItemRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.security.MyUserDetails;
@@ -24,6 +26,7 @@ import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.admin.CouponIssuedService;
+import com.lotteon.service.order.CartItemService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.MarketCartService;
 import com.lotteon.service.product.ProductCategoryService;
@@ -63,6 +66,8 @@ public class MarketController {
     private final AdminService adminService;
     private final ProductOptionCombinationRepository productOptionCombinationRepository;
     private final DeliveryService deliveryService;
+    private final CartItemService cartItemService;
+    private final ReviewRepository reviewRepository;
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
@@ -99,6 +104,7 @@ public class MarketController {
         model.addAttribute("sort", sort);
 
 
+
         return "content/market/marketList"; // Points to the "content/market/marketList" template
     }
 
@@ -131,17 +137,24 @@ public class MarketController {
         ProductDTO productdto = productService.getProduct(productId);
         log.info("productVIew Controller:::::"+productdto);
 
+        List<Review> allReviews = reviewService.getAllReviewsByProductId(productId);
+
 
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
         List<Review> ReviewImgs = reviewService.getAllReviews();
-
+        double averageRating = allReviews.stream()
+                .mapToDouble(Review::getRating) // 각 리뷰의 평점 가져오기
+                .average()
+                .orElse(0.0);  // 리뷰가 없을 경우 0.0으로 설정
+        int reviewCount = allReviews.size(); // Count of reviews
 
         model.addAttribute("reviewImgs", ReviewImgs);
-
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("products",productdto);
+        model.addAttribute("averageRating", String.format("%.1f", averageRating));
+        model.addAttribute("reviewCount", reviewCount);
 
         return "content/market/marketview"; // Points to the "content/market/marketview" template
     }
@@ -167,18 +180,18 @@ public class MarketController {
     public String marketOrder(@PathVariable String uid,Model model, String productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        String memberId = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
+        String memberUid = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
 
         log.info("uid ::::::::::"+uid);
         MemberDTO memberDTO = userService.getByUsername(uid);
 
 
 
-        log.info("멤버 아이디다"+memberId);
+        log.info("멤버 아이디다"+memberUid);
 
         // 해당 멤버의 발급된 쿠폰 목록 조회
 
-        List<CouponIssued> issuedCoupons = couponDetailsService.memberOrderCouponList(memberId, productId); // 서비스에서 발급된 쿠폰 조회
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberOrderCouponList(memberUid, productId); // 서비스에서 발급된 쿠폰 조회
         log.info("발급받은 쿠폰: {}", issuedCoupons);
 
         model.addAttribute("issuedList", issuedCoupons);
@@ -205,6 +218,14 @@ public class MarketController {
         response.put("result", 0L);
         log.info("요기!!!!!!!!!!!!!!!!!"+orderRequestDTO);
         OrderResponseDTO orderResponseDTO  = new OrderResponseDTO(orderRequestDTO);
+        if(orderResponseDTO.getCartId()>0){
+            List<Long> cartItems= orderResponseDTO.getCartItems();
+            boolean result=cartItemService.deleteCartItems(cartItems,orderResponseDTO.getCartId());
+            if(!result){
+                response.put("result", 0L);
+                return ResponseEntity.ok(response);
+            }
+        }
         long orderId = orderService.saveOrder(orderResponseDTO);
 
 

@@ -150,6 +150,7 @@
                                 <input type="hidden" id="memberGrade" th:value="${memberDTO.getGrade()}">
                                 <input type="hidden" id="memberName" th:value="${memberDTO.getName()}">
                                 <input type="hidden" id="memberHp" th:value="${memberDTO.getHp()}">
+                                <p th:text="${memberDTO.getPoint()}"></p>
                                 <input type="hidden" id="currentPoint"
                                        th:value="${memberDTO.point != null ? memberDTO.point.intValue() : 0}">
                                 <span>현재 포인트 :
@@ -272,32 +273,32 @@
             <h2>배송지 선택</h2>
             <div class="address-list">
                 <div class="address-item">
-<!--                    <div class="address-info">-->
-<!--                        <input type="radio" id="addr" name="address" checked>-->
-<!--                        <label for="addr">하진희</label>-->
-<!--                        <p>[47566]<br> 부산 연제구 온천천남로 110</p>-->
-<!--                        <p>010-5595-8375</p>-->
-<!--                    </div>-->
+                    <div class="address-info">
+                        <input type="radio" id="addr" name="address" checked>
+                        <label for="addr">하진희</label>
+                        <p>[47566]<br> 부산 연제구 온천천남로 110</p>
+                        <p>010-5595-8375</p>
+                    </div>
 
-<!--                    <div class="address-btn">-->
-<!--                        <button class="edit-btn">수정</button>-->
-<!--                        <button class="delete-btn">삭제</button>-->
-<!--                    </div>-->
+                    <div class="address-btn">
+                        <button class="edit-btn">수정</button>
+                        <button class="delete-btn">삭제</button>
+                    </div>
 
-<!--                </div>-->
-<!--                <div class="address-item">-->
-<!--                    <div class="address-info">-->
-<!--                        <input type="radio" id="address2" name="address">-->
-<!--                        <label for="address2">하진희</label>-->
-<!--                        <p>[47566] 부산 연제구 온천천남로 110</p>-->
-<!--                        <p>010-5595-8375</p>-->
-<!--                    </div>-->
-<!--                    <div class="address-btn">-->
-<!--                        <button class="edit-btn">수정</button>-->
-<!--                        <button class="delete-btn">삭제</button>-->
-<!--                    </div>-->
                 </div>
-                <button class="new-address-btn">새 배송지 추가</button>
+                <div class="address-item">
+                    <div class="address-info">
+                        <input type="radio" id="address2" name="address">
+                        <label for="address2">하진희</label>
+                        <p>[47566] 부산 연제구 온천천남로 110</p>
+                        <p>010-5595-8375</p>
+                    </div>
+                    <div class="address-btn">
+                        <button class="edit-btn">수정</button>
+                        <button class="delete-btn">삭제</button>
+                    </div>
+                </div>
+                <button class="new-address-btn" id="new-address-btn">새 배송지 추가</button>
             </div>
             <button class="confirm-btn">확인</button>
         </div>

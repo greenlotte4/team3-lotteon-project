@@ -24,14 +24,14 @@
 <!-- 작업 내용 추가 -->
 <div class="coupon-container">
     <div class="coupon-header">
-        <select>
-            <option >쿠폰번호</option>
-            <option >쿠폰명</option>
-            <option >발급자</option>
+        <select id="searchCategory">
+            <option value="couponId">쿠폰번호</option>
+            <option value="couponName">쿠폰명</option>
+            <option value="issuer">발급자</option>
         </select>
 
-        <input type="text" placeholder="검색어 입력" class="search-input">
-        <button class="search-btn">검색</button>
+        <input type="text" id="searchQuery" placeholder="검색어 입력" class="search-input">
+        <button id="searchBtn" class="search-btn">검색</button>
     </div>
     <table class="coupon-table">
         <thead>
