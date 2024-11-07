@@ -34,6 +34,8 @@ public class Product {
 
     private String productCode;
     private Long categoryId;
+    private Long categoryFirstId;
+    private Long categorySecondId;
 
     private String productName;
     private Long price;
@@ -190,6 +192,8 @@ public class Product {
                 .shippingFee(this.shippingFee)
                 .shippingTerms(this.shippingTerms)
                 .rdate(String.valueOf(this.rdate))
+                .categoryFirstId(this.categoryFirstId)
+                .categorySecondId(this.categorySecondId)
                 .categoryId(this.categoryId)
                 .filedesc(this.fileDescs)
                 .price(this.price)

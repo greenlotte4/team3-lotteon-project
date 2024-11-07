@@ -75,13 +75,15 @@ public class MarketController {
     private final ReviewRepository reviewRepository;
 
     @GetMapping("/main/{category}")
-    public String marketMain(Model model, @PathVariable long category) {
-        ProductCategoryDTO categoryDTOs = productCategoryService.getCategoryById(category);
+    public String marketMain(Model model,@PathVariable long category) {
+        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.getAllParentCategoryDTOs(category);
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
         log.info(categoryDTOs);
-        model.addAttribute("categoryDTOs", categoryDTOs);
-        model.addAttribute("active", category);
+
+        model.addAttribute("categoryDTOs",categoryDTOs);
+        model.addAttribute("active",category);
+
         model.addAttribute("content", "main");
         model.addAttribute("banners", banners2);
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
