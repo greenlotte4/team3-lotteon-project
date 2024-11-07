@@ -20,11 +20,12 @@ public interface AdminQnaRepository extends JpaRepository<Adminqna, Integer> , A
     @Query("SELECT q FROM  Adminqna q WHERE q.qnawriter = :writer")
     List<Adminqna> findByQnaWriter(@Param("writer") String writer);
 
-    // 특정 작성자(qna_writer)로 페이징 처리된 QnA 조회
+    // 특정 작성자(qnawriter)로 페이징 처리된 QnA 조회
     @Query("SELECT q FROM Adminqna q WHERE q.qnawriter = :writer")
     Page<Adminqna> findByQnaWriter(@Param("writer") String writer, Pageable pageable);
 
+    // 특정 productId에 해당하는 QnA 조회
     @Query("SELECT q FROM Adminqna q WHERE q.productid = :productId")
-    List<Adminqna> findByProductId(@Param("productId") long productId);
+    Page<Adminqna> findByProductId(@Param("productId") long productId, Pageable pageable);
 
 }
