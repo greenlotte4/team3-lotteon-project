@@ -36,6 +36,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private CategoryInterceptor categoryInterceptor;
 
+    @Autowired
+    private VisitorInterceptor visitorInterceptor;
+
 
     @Autowired
     public WebConfig(FooterInterceptor footerInterceptor, HeaderInterceptor headerInterceptor, VersionInterceptor versionInterceptor, CategoryInterceptor categoryInterceptor) {
@@ -59,6 +62,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**");
         registry.addInterceptor(categoryInterceptor)
                 .addPathPatterns("/**");
+        registry.addInterceptor(visitorInterceptor)
+                .addPathPatterns("/**");
+
     }
 
 
