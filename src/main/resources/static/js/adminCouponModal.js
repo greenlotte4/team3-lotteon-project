@@ -423,7 +423,39 @@ document.querySelectorAll('.issued-end-button').forEach(button => {
 });
 
 
-//  쿠폰 목록 검색 기능
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // 쿠폰 목록 검색 기능
+    const searchBtnCoupon = document.getElementById('searchBtnCoupon');
+    const searchQuery = document.getElementById('searchQuery');
+
+    if (searchBtnCoupon && searchQuery) {
+        searchBtnCoupon.addEventListener('click', searchCoupon);
+        searchQuery.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                searchCoupon();  // 엔터 키가 눌리면 검색 실행
+            }
+        });
+    }
+
+    // 쿠폰발급현황 검색 기능
+    const searchBtnIssued = document.getElementById('searchBtnIssued');
+    const searchIssuedQuery = document.getElementById('searchIssuedQuery');
+
+    if (searchBtnIssued && searchIssuedQuery) {
+        searchBtnIssued.addEventListener('click', searchIssuedCoupon);
+        searchIssuedQuery.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                searchIssuedCoupon();  // 엔터 키가 눌리면 검색 실행
+            }
+        });
+    }
+});
+
+// 쿠폰 목록 검색 기능
 function searchCoupon() {
     const category = document.getElementById('searchCategory').value;
     const query = document.getElementById('searchQuery').value;
@@ -447,7 +479,6 @@ function searchCoupon() {
 
 // 검색 결과를 화면에 표시
 function displayCoupons(data) {
-
     const couponTable = document.getElementById('couponTable');
     const couponContainer = couponTable.querySelector('#couponTbody');
 
@@ -488,23 +519,13 @@ function displayCoupons(data) {
     }
 }
 
-// 검색 버튼 클릭 이벤트 리스너
-document.getElementById('searchBtnCoupon').addEventListener('click', searchCoupon);
-// 엔터 키 이벤트 리스너 추가
-document.getElementById('searchQuery').addEventListener('keydown', function(event) {
-    // 엔터 키(Enter)는 13번 키코드
-    if (event.key === 'Enter') {
-        searchCoupon();  // 엔터 키가 눌리면 검색 실행
-    }
-});
-
 // 쿠폰발급현황 검색 기능
 function searchIssuedCoupon() {
     const category = document.getElementById('searchIssuedCategory').value;
     const query = document.getElementById('searchIssuedQuery').value;
     console.log('Request URL:', `/seller/coupon/searchIssued?category=${category}&query=${encodeURIComponent(query)}`);
 
-    const url = `/seller/coupon/search?searchIssued=${category}&query=${encodeURIComponent(query)}`;
+    const url = `/seller/coupon/searchIssued?category=${category}&query=${encodeURIComponent(query)}`;
 
     fetch(url)
         .then(response => {
@@ -520,57 +541,45 @@ function searchIssuedCoupon() {
         });
 }
 
-// 검색 결과를 화면에 표시
+// 발급된 쿠폰 결과를 화면에 표시
 function displayIssuedCoupons(data) {
-
     const issuedTable = document.getElementById('issuedTable');
-    const issuedContainer = issuedTable.querySelector('#issuedTbody'); // tbody 요소 가져오기
+    const issuedContainer = issuedTable.querySelector('#issuedTbody');
 
     issuedContainer.innerHTML = ''; // 이전 검색 결과를 지움
 
     if (data && data.length > 0) {
-        data.forEach(coupon => {
+        data.forEach(issued => {
             const couponElement = document.createElement('tr');
             couponElement.classList.add('coupon-item');
             couponElement.innerHTML = `
           <td>
                     <a href="#" class="issued-order-link"
-                       data-issued-couponId="${coupon.couponId}"
-                       data-issued-id="${coupon.issuanceNumber}"
-                       data-issued-couponType="${coupon.couponType}"
-                       data-issued-usageStatus="${coupon.usageStatus}"
-                       data-issued-memberName="${coupon.memberName}"
-                       data-issued-couponName="${coupon.couponName}"
-                       data-issued-restrictions="${coupon.restrictions}"
-                       data-issued-benefit="${coupon.benefit}"
-                       data-period="${coupon.startDate} ~ ${coupon.endDate}"
-                       data-issued-issuer="${coupon.sellerCompany}">
-                        ${coupon.issuanceNumber}
+                       data-issued-couponId="${issued.couponId}"
+                       data-issued-id="${issued.sellerCompany}"
+                       data-issued-couponType="${issued.couponType}"
+                       data-issued-usageStatus="${issued.usageStatus}"
+                       data-issued-memberName="${issued.memberName}"
+                       data-issued-couponName="${issued.couponName}"
+                       data-issued-restrictions="${issued.restrictions}"
+                       data-issued-benefit="${issued.benefit}"
+                       data-period="${issued.startDate} ~ ${issued.endDate}"
+                       data-issued-issuer="${issued.sellerCompany}">
                     </a>
                 </td>
-                <td>${coupon.couponId}</td>
-                <td>${coupon.couponType}</td>
-                <td>${coupon.couponName}</td>
-                <td>${coupon.memberName}</td>
-                <td class="coupon-status">${coupon.status}</td>
-                <td>${coupon.usageDate ? coupon.usageDate : '미사용'}</td>
+                <td>${issued.couponId}</td>
+                <td>${issued.couponType}</td>
+                <td>${issued.couponName}</td>
+                <td>${issued.memberName}</td>
+                <td class="coupon-status">${issued.status}</td>
+                <td>${issued.usageDate ? issued.usageDate : '미사용'}</td>
                 <td>
-                    <button class="issued-end-button" data-id="${coupon.issuanceNumber}">종료</button>
+                    <button class="issued-end-button" data-id="${issued.issuanceNumber}">종료</button>
                 </td>
             `;
             issuedContainer.appendChild(couponElement);
         });
     } else {
-        issuedContainer.innerHTML = '검색 결과가 없습니다.';
+        issuedContainer.innerHTML = '<tr><td colspan="8" style="text-align: center;">발급된 쿠폰이 없습니다.</td></tr>';
     }
 }
-
-// 검색 버튼 클릭 이벤트 리스너
-document.getElementById('searchBtnIssued').addEventListener('click', searchIssuedCoupon);
-// 엔터 키 이벤트 리스너 추가
-document.getElementById('searchIssuedQuery').addEventListener('keydown', function(event) {
-    // 엔터 키(Enter)는 13번 키코드
-    if (event.key === 'Enter') {
-        searchIssuedCoupon();  // 엔터 키가 눌리면 검색 실행
-    }
-});
