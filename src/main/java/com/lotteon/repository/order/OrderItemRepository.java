@@ -6,8 +6,8 @@ import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDate;
+import java.util.List;
 import java.time.LocalDateTime;
 
 @Repository
@@ -15,6 +15,8 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     long countBySellerUid(String sellerUid);
 
+    List<OrderItem> findByOrder_OrderId(Long orderId);
+  
     @Query("SELECT SUM(o.orderPrice) FROM OrderItem o WHERE o.sellerUid = :sellerUid")
     Long findTotalOrderPriceBySellerUid(@Param("sellerUid") String sellerUid);
 
@@ -44,3 +46,5 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     long sumSalesAmountByDateRange(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
 }
+
+

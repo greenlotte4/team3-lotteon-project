@@ -46,7 +46,7 @@ public class CouponDTO {
         this.notes = coupon.getNotes();
         this.rdate = coupon.getRdate();
         this.restrictions = coupon.getRestrictions();
-        this.productId = coupon.getProduct().getProductId();
+        this.productId = (coupon.getProduct() != null) ? coupon.getProduct().getProductId() : null;
         this.sellerId = coupon.getSeller().getId();
         this.sellerCompany = coupon.getSellerCompany();
     }

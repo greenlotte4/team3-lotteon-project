@@ -66,6 +66,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final ListPath<Review, QReview> reviews = this.<Review, QReview>createList("reviews", Review.class, QReview.class, PathInits.DIRECT2);
 
+    public final StringPath savedPath = createString("savedPath");
+
     public final StringPath sellerId = createString("sellerId");
 
     public final NumberPath<Long> sellerNo = createNumber("sellerNo", Long.class);

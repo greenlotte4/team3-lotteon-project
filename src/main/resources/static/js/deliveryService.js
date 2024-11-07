@@ -61,44 +61,98 @@ function renderAddressList(deliveryDTOList) {
     });
 }
 
-// // 페이지가 로드될 때 서버에서 전달된 배송지 목록을 렌더링
-// document.addEventListener('DOMContentLoaded', function () {
-//     const deliveryDTOList = /* 서버에서 전달된 배송지 데이터 */ [];
-//     renderAddressList(deliveryDTOList);
-// });
-//
-// document.addEventListener("DOMContentLoaded", function () {
-//     const memberId = 3; // 실제 Member ID 사용
-//     const addressSelectModal = document.getElementById("addressSelectModal");
-//     const addressListDiv = document.querySelector(".address-list");
-//
-//     // 배송지 목록 불러오기
-//     function loadDeliveries() {
-//         fetch(`/api/member/${memberId}/deliveries`)
-//             .then(response => response.json())
-//             .then(deliveries => {
-//                 addressListDiv.innerHTML = '';
-//                 deliveries.forEach((delivery, index) => {
-//                     const addressItem = document.createElement("div");
-//                     addressItem.classList.add("address-item");
-//
-//                     addressItem.innerHTML = `
-//                         <div class="address-info">
-//                             <input type="radio" id="address${index}" name="address">
-//                             <label for="address${index}">${delivery.name}</label>
-//                             <p>[${delivery.postcode}] ${delivery.addr} ${delivery.addr2}</p>
-//                             <p>${delivery.hp}</p>
-//                         </div>
-//                         <div class="address-btn">
-//                             <button class="edit-btn" onclick="editDelivery(${delivery.id})">수정</button>
-//                             <button class="delete-btn" onclick="deleteDelivery(${delivery.id})">삭제</button>
-//                         </div>
-//                     `;
-//                     addressListDiv.appendChild(addressItem);
-//                 });
-//             })
-//             .catch(error => console.error("배송지 목록 불러오기 실패:", error));
-//     }
+document.addEventListener("DOMContentLoaded", function () {
+    const memberId = "${memberId}";
+    console.log(memberId);  // 확인용
+    const addressSelectModal = document.getElementById("addressSelectModal");
+    const addressListDiv = document.querySelector(".address-list");
+
+    // 배송지 목록 불러오기
+    function loadDeliveries() {
+        fetch(`/api/member/${memberId}/deliveries`)
+            .then(response => response.json())
+            .then(data => {
+                const member = data.member;  // 기본 주소
+                const deliveries = data.deliveries;  // 나머지 배송지 목록
+
+                addressListDiv.innerHTML = '';  // 배송지 목록을 지우고 새로 추가
+
+                // 기본 주소 추가
+                if (member) {
+                    const defaultAddress = document.createElement("div");
+                    defaultAddress.classList.add("address-item", "default-address");
+
+                    defaultAddress.innerHTML = `
+                    <div class="address-info">
+                        <input type="radio" id="defaultAddress" name="address" checked
+                               data-postcode="${member.postcode}" 
+                               data-addr="${member.addr}" 
+                               data-addr2="${member.addr2}" 
+                               data-hp="${member.hp}" 
+                               data-name="${member.name}">
+                        <label for="defaultAddress">${member.name}</label>
+                        <p>[${member.postcode}] ${member.addr} ${member.addr2}</p>
+                        <p>${member.hp}</p>
+                    </div>
+                `;
+                    addressListDiv.appendChild(defaultAddress);
+                }
+
+                console.log(deliveries);
+                // 나머지 배송지 목록 추가
+                deliveries.forEach((delivery, index) => {
+                    const addressItem = document.createElement("div");
+                    addressItem.classList.add("address-item");
+
+                    addressItem.innerHTML = `
+                    <div class="address-info">
+                        <input type="radio" id="address${index}" name="address"
+                               data-postcode="${delivery.postcode}" 
+                               data-addr="${delivery.addr}" 
+                               data-addr2="${delivery.addr2}" 
+                               data-hp="${delivery.hp}" 
+                               data-name="${delivery.name}">
+                        <label for="address${index}">${delivery.name}</label>
+                        <p>[${delivery.postcode}] ${delivery.addr} ${delivery.addr2}</p>
+                        <p>${delivery.hp}</p>
+                    </div>
+                    <div class="address-btn">
+                        <button class="edit-btn" data-delivery-id="${delivery.id}" data-member-id="${member.id}">수정</button>
+                        <button class="delete-btn" data-delivery-id="${delivery.id}" data-member-id="${member.id}">삭제</button>
+                    </div>
+                `;
+                    addressListDiv.appendChild(addressItem);
+
+                    // 이제 버튼이 DOM에 추가된 후, deliveryId를 조회할 수 있습니다.
+                    const deleteButton = addressItem.querySelector(".delete-btn");
+                    const editButton = addressItem.querySelector(".edit-btn");
+
+                    // 삭제 버튼에 클릭 이벤트 리스너 추가
+                    deleteButton.addEventListener("click", (event) => {
+                        const deliveryId = event.target.getAttribute("data-delivery-id");
+                        const memberId = event.target.getAttribute("data-member-id");
+
+                        console.log("삭제 버튼 클릭:", deliveryId, memberId);  // deliveryId가 정상적으로 가져와지는지 확인
+                        if (!deliveryId || deliveryId === '0') {
+                            console.error('deliveryId가 잘못 전달되었습니다.');
+                        }
+                        deleteDelivery(deliveryId, memberId);  // deleteDelivery 함수에 deliveryId와 memberId를 전달
+                    });
+
+                    // 수정 버튼에 클릭 이벤트 리스너 추가
+                    editButton.addEventListener("click", (event) => {
+                        const deliveryId = event.target.getAttribute("data-delivery-id");
+                        const memberId = event.target.getAttribute("data-member-id");
+
+                        console.log("수정 버튼 클릭:", deliveryId, memberId);  // deliveryId가 정상적으로 가져와지는지 확인
+                        editDelivery(deliveryId, memberId);  // editDelivery 함수에 deliveryId와 memberId를 전달
+                    });
+
+                });
+            })
+            .catch(error => console.error("배송지 목록 불러오기 실패:", error));
+    }
+
 
     // 새 배송지 추가
     document.getElementById("addressForm").addEventListener("submit", function (event) {
@@ -135,6 +189,78 @@ function renderAddressList(deliveryDTOList) {
             .catch(error => console.error("배송지 추가 실패:", error));
     });
 
-//     loadDeliveries();
-// });
+    loadDeliveries();
+});
 
+
+function confirmAddressSelection() {
+    const selectedAddress = document.querySelector('input[name="address"]:checked');
+
+    if (selectedAddress) {
+        // 선택된 주소에서 정보 추출
+        const postcode = selectedAddress.dataset.postcode;
+        const addr = selectedAddress.dataset.addr;
+        const addr2 = selectedAddress.dataset.addr2;
+        const hp = selectedAddress.dataset.hp;
+        const name = selectedAddress.dataset.name;
+
+        // 배송지 정보 업데이트
+        document.getElementById("M_postcode").innerText = postcode;  // 우편번호 업데이트
+        document.getElementById("M_postcode").setAttribute("data-postcode", postcode);  // 우편번호 data 속성 업데이트
+        document.querySelector(".totalAddress").innerText = `${addr} ${addr2}`;  // 주소 업데이트
+        document.querySelector(".totalAddress").setAttribute("data-addr", addr);  // 주소 data 속성 업데이트
+        document.querySelector(".totalAddress").setAttribute("data-addr2", addr2);  // 추가 주소 data 속성 업데이트
+
+        // 주소 변경 알림
+        alert(`배송지 정보가 변경되었습니다: ${name}, ${addr} ${addr2}`);
+
+        // 모달 창 닫기
+        closeModal();
+    } else {
+        alert("배송지를 선택하세요.");
+    }
+}
+
+function deleteDelivery(deliveryId, memberId) {
+    const confirmation = confirm("정말로 이 배송지를 삭제하시겠습니까?");
+    console.log("de: " +deliveryId)
+    if (confirmation) {
+        fetch(`/api/member/${memberId}/delivery/${deliveryId}`, {
+            method: "DELETE"
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("배송지 삭제 성공");
+                    // loadDeliveries(); // 배송지 목록 새로 불러오기
+
+                    // 모달 창 닫기
+                    closeModal();
+
+                    // 모달을 새로 띄워서 변경된 배송지 목록을 표시
+                    openModal();
+                } else {
+                    alert("배송지 삭제 실패");
+                }
+            })
+            .catch(error => console.error("배송지 삭제 실패:", error));
+    }
+}
+
+
+function closeModal() {
+    const modal = document.getElementById("addressSelectModal");
+    if (modal) {
+        modal.style.display = "none"; // 모달을 숨김
+    }
+}
+
+function openModal(modalElement) {
+    modalElement.style.display = "block"; // 모달을 보임
+}
+
+// DOMContentLoaded를 사용하여 DOM이 완전히 로드된 후에 함수 설정
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('btnPostCode').onclick = function () {
+        postcode(); // postcode 함수 호출
+    };
+});

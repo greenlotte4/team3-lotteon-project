@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 public class DeliveryDTO {
 
-    private long deliveryId;           // Delivery의 id
+    private long id ;           // Delivery의 id
     private long memberId;             // Member의 id
     private String name;               // 배송지 이름
     private String hp;                 // 휴대폰 번호
@@ -21,9 +21,9 @@ public class DeliveryDTO {
     private String entranceCode;       // 출입문 코드
 
     // 생성자
-    public DeliveryDTO(long deliveryId, long memberId, String name, String hp, String postcode,
+    public DeliveryDTO(long id, long memberId, String name, String hp, String postcode,
                        String addr, String addr2, boolean isDefault, String deliveryMessage, String entranceCode) {
-        this.deliveryId = deliveryId;
+        this.id = id;
         this.memberId = memberId;
         this.name = name;
         this.hp = hp;

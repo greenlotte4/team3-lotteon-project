@@ -103,7 +103,7 @@ public class CouponIssuedService {
                     .memberName(member.getName())
                     .sellerCompany(coupon.getSellerCompany())
                     .member(member)
-                    .productId(null) // "전체상품"을 나타내는 값
+                    .productId(-1L) // "전체상품"을 나타내는 값
                     .build();
         log.info("널인 쿠폰 저장되는 값들" + couponIssued);
         couponIssuedRepository.save(couponIssued); // 엔티티 저장

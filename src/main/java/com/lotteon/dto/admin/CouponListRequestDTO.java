@@ -27,8 +27,13 @@ public class CouponListRequestDTO {
 
     private String keyword;
 
+
+
     private String grp;
     private String cateNo;
+
+    private String category;  // 카테고리
+    private String query;     // 검색어
 
     public Pageable getPageable() {
         return  PageRequest.of(page - 1, size); // Spring Data는 0부터 시작하므로 page - 1
