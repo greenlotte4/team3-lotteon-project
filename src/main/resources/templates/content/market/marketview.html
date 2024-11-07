@@ -342,142 +342,59 @@
                                     </div><!--reviewList end-->
 
                                 </div><!--product_review-->
-                                <div class="product_qna" id="product_qna">
+                                <div class="product_qna" id="product_qnas">
                                     <h4>상품문의</h4>
-                                    <div class="qna_Lists">
-                                        <article class="p-qna">
-                                            <div class="qna-header">
-                                                <h5>
-                                                    <p>[문의항목]</p>문의제목
-                                                </h5>
-                                                <div class="qna-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="qna-body">
+                                    <div class="product_qna" id="product_qna">
+                                        <h4>상품문의</h4>
+                                        <div class="services">
+                                            <p class="notice">답변은 <strong>마이롯데 > 나의 문의내역</strong>에서 확인하실 수 있습니다.</p>
+                                            <a type="button" class="btnGoQuestion" th:href="@{/mypage/qnadetails}">문의하기</a>
+                                        </div>
 
-                                                <p class="qna-text">
-                                                    가격대비정 말괜찮 은 옷이라 생각되네요 핏은... 제기억기 엔 어깨선이 맞고 루즈핏 이라하기도 좀힘드네요 . 아주약간
-                                                    루즈한정도 ... 그래도이 만한 옷은없다고 봅니다 깨끗하고포장도 괜찮고다음에도여기서판매하는 제품을구매하고 싶네요정 말만족
-                                                    하고후기 남깁니다많이파시길바래요 ~~~
-                                                </p>
+                                        <th:block th:if="${!qnaList.isEmpty() && qnaList.size() >0 }">
+                                            <div class="qna_Lists">
+                                                <article class="p-qna" th:each="qna : ${qnaList}">
+                                                    <div class="qna-header">
+                                                        <h5>
+                                                            <p th:text="${qna.qnatitle}"></p>
+                                                        </h5>
+                                                        <div class="qna-info">
+                                                            <span th:text="${#authentication.getName() == qna.qnawriter ? qna.qnawriter : #strings.substring(qna.qnawriter, 0, 3) + #strings.repeat('*', qna.qnawriter.length() - 3)}"></span>
+                                                            <span th:text="${#strings.substring(qna.date, 0, 10)}"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="qna-body">
+                                                        <a th:href="@{/mypage/qnadetails/{id}(id=${qna.qnaNo})}">
+                                                            <p th:text="${#authentication.getName() == qna.qnawriter ? qna.qnacontent : '비밀글 입니다.'}"></p>
+                                                        </a>
+                                                        <img src="/images/common/icon_lock.svg">
+                                                    </div>
+                                                    <div class="qna-answer">
+                                                        <p th:text="${#authentication.getName() == qna.qnawriter ? qna.qnareply : '비밀글 입니다.'}"></p>
+                                                        <span class="badge orange">판매자답변</span>
+                                                    </div>
+                                                </article>
                                             </div>
-                                        </article>
 
-                                        <article class="p-qna">
-                                            <div class="qna-header">
-                                                <h5>
-                                                    <p>[문의항목]</p>문의제목
-                                                </h5>
-                                                <div class="qna-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
+                                            <!-- 리뷰 더보기 버튼 -->
+                                            <div class="btnwrapper">
+                                                <button id="moreQnaBtn">더보기</button>
                                             </div>
-                                            <div class="qna-body">
 
-                                                <p class="qna-text">
-                                                    비공개입니다. </p>
+                                            <!-- 페이지네이션 -->
+                                            <div class="pagination" id="qna-pagination">
+                                                <span class="page-link active" data-page="1">1</span>
+                                                <span class="page-link" data-page="2">2</span>
+                                                <span class="page-link" data-page="3">3</span>
                                             </div>
-                                        </article>
-                                        <article class="p-qna">
-                                            <div class="qna-header">
-                                                <h5>
-                                                    <p>[문의항목]</p>문의제목
-                                                </h5>
-                                                <div class="qna-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="qna-body">
+                                        </th:block>
 
-                                                <p class="qna-text">
-                                                    비공개입니다. </p>
-                                            </div>
-                                        </article>
-                                        <article class="p-qna">
-                                            <div class="qna-header">
-                                                <h5>
-                                                    <p>[문의항목]</p>문의제목
-                                                </h5>
-                                                <div class="qna-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="qna-body">
-
-                                                <p class="qna-text">
-                                                    비공개입니다. </p>
-                                            </div>
-                                        </article>
-                                        <article class="p-qna">
-                                            <div class="qna-header">
-                                                <h5>
-                                                    <p>[문의항목]</p>문의제목
-                                                </h5>
-                                                <div class="qna-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="qna-body">
-
-                                                <p class="qna-text">
-                                                    비공개입니다. </p>
-                                            </div>
-                                        </article>
-                                        <article class="p-qna">
-                                            <div class="qna-header">
-                                                <h5>
-                                                    <p>[문의항목]</p>문의제목
-                                                </h5>
-                                                <div class="qna-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="qna-body">
-
-                                                <p class="qna-text">
-                                                    비공개입니다. </p>
-                                            </div>
-                                        </article>
-                                        <article class="p-qna">
-                                            <div class="qna-header">
-                                                <h5>
-                                                    <p>[문의항목]</p>문의제목
-                                                </h5>
-                                                <div class="qna-info">
-                                                    <span class="reviewer-name">seo******</span>
-                                                    <span class="review-date">2018-07-10</span>
-                                                </div>
-                                            </div>
-                                            <div class="qna-body">
-
-                                                <p class="qna-text">
-                                                    비공개입니다. </p>
-                                            </div>
-                                        </article>
-
-                                    </div>
-                                    <!-- 리뷰 더보기 버튼 -->
-                                    <div class="btnwrapper"><button id="moreQnaBtn">더보기</button></div>
-
-
-                                    <div class="pagination" id="qna-pagination">
-                                        <span class="page-link active" data-page="1">1</span>
-                                        <span class="page-link" data-page="2">2</span>
-                                        <span class="page-link" data-page="3">3</span>
+                                        <th:block th:unless="${!qnaList.isEmpty() && qnaList.size() >0 }">
+                                            <div class="qna_Lists">문의내용이 없습니다.</div>
+                                        </th:block>
                                     </div>
                                 </div>
-
-
                             </div>
-
-
                         </div><!--sectionWrapper-->
                     </section>
     <div id="pReviewModal" class="modal pReview">
