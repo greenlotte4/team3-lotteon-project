@@ -128,11 +128,15 @@ public class ProductService {
             for(ProductFileDTO productFileDTO : fileDTOS) {
                 log.info("produtFileDTO : "+ productFileDTO);
                 ProductFile file = productFileService.insertFile(productFileDTO);
+
                 files.add(file);
+                product.setSavedPath(file.getPath());
+
             }
             log.info("filessssssssssssssssss:"+files);
             product.setFiles(files);
         }
+
 
 
 
@@ -231,12 +235,16 @@ public class ProductService {
         Page<Product> products;
         if(pageRequestDTO.getType()==null || pageRequestDTO.getKeyword()==null){
             products = productRepository.findAll(pageable);
+            long size = products.getTotalElements();
+            log.info("size::::total"+size);
             if(products.isEmpty()) {
                 return ProductListPageResponseDTO.builder()
                         .pageRequestDTO(pageRequestDTO)
-                        .total(0)
+                        .total(size)
                         .build();
             }
+
+
         }else{
             String type=pageRequestDTO.getType();
             String keyword=pageRequestDTO.getKeyword();
@@ -253,11 +261,15 @@ public class ProductService {
                 case "manufacturer":
                     products= productRepository.findByProductDetailsContaining(keyword,pageable);
                     break;
-                default: return  ProductListPageResponseDTO.builder()
+                default:
+
+                    return  ProductListPageResponseDTO.builder()
                         .pageRequestDTO(pageRequestDTO)
                         .total(0)
                         .build();
             }
+
+
         }
 
 
@@ -265,7 +277,7 @@ public class ProductService {
         List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
 
         return ProductListPageResponseDTO.builder()
-                .total(productDTOs.size())
+                .total(products.getTotalElements())
                 .ProductDTOs(productDTOs)
                 .pageRequestDTO(pageRequestDTO)
                 .build();

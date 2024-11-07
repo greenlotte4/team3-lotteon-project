@@ -135,7 +135,8 @@ public class FileService {
                         // 파일 저장
                         try {
                             file.transferTo(new File(path, savedName));
-                            savedPth = savedPth+"/"+savedName;
+
+                            log.info("savedPath : "+savedPth);
                             // 업로드된 파일 정보를 DTO로 변환하여 저장
                             ProductFileDTO productFileDTO = ProductFileDTO.builder()
                                     .oName(originalName)

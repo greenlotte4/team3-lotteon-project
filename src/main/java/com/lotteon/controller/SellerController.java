@@ -46,14 +46,15 @@ public class SellerController {
 
     @GetMapping("/product/list")
     public String productList(Model model, PageRequestDTO pageRequestDTO, Authentication authentication,
-                              @RequestParam(value="page",required=false,defaultValue = "1") int page,
+                              @RequestParam(value="pg",required=false,defaultValue = "1") int pg,
                               @RequestParam(value = "type",required = false) String type,
                               @RequestParam(value = "keyword",required = false) String keyword) {
         log.info("일단 여기!!!");
         String user = authentication.getName();
         String role = authentication.getAuthorities().toString();
+        log.info("rolE!!!!!!!!!"+role);
         log.info("type, keyword : "+type+keyword);
-        pageRequestDTO.setPage(page);
+        pageRequestDTO.setPage(pg);
         pageRequestDTO.setType(type);
         pageRequestDTO.setKeyword(keyword);
 
@@ -61,20 +62,24 @@ public class SellerController {
         if(role.contains("ROLE_ADMIN")) {
 
                 productPageResponseDTO = productService.selectProductAll(pageRequestDTO);
+            log.info("확인!!!!!!!!!!!!!!!!!!ADMIN"+productPageResponseDTO);
 
 
             log.info("ROLE!!!! : "+productPageResponseDTO);
         }else if(role.contains("ROLE_SELLER")){
             productPageResponseDTO = productService.selectProductBySellerId(user, pageRequestDTO);
             log.info("ROLE_SELLER!!!! : "+productPageResponseDTO);
+            log.info("확인!!!!!!!!!!!!!!!!!!"+productPageResponseDTO.getKeyword());
 
         }
-         
+
         model.addAttribute("productPageResponseDTO", productPageResponseDTO);
         model.addAttribute("productList", "productList");
 
         return "content/admin/product/admin_productlist"; // Points to the "content/sellerDynamic" template for product listing
     }
+
+
 
 
     @GetMapping("/product/search")
