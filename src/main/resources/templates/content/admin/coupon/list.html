@@ -20,20 +20,19 @@
                             <p>쿠폰목록</p>
                             <p><a href="#">HOME > 쿠폰관리</a> > 쿠폰목록</p>
                     </section>
-
 <!-- 작업 내용 추가 -->
 <div class="coupon-container">
     <div class="coupon-header">
         <select id="searchCategory">
-            <option value="couponId">쿠폰번호</option>
-            <option value="couponName">쿠폰명</option>
-            <option value="issuer">발급자</option>
+            <option value="" disabled selected>선택하세요</option> <!-- 기본 선택 안내 문구 -->
+            <option value="couponName">1.쿠폰명</option>
+            <option value="sellerCompany">2.발급자</option>
         </select>
 
         <input type="text" id="searchQuery" placeholder="검색어 입력" class="search-input">
-        <button id="searchBtn" class="search-btn">검색</button>
+        <button id="searchBtnCoupon" class="search-btn">검색</button>
     </div>
-    <table class="coupon-table">
+    <table class="coupon-table" id="couponTable">
         <thead>
             <tr>
                 <th style="text-align: center;">쿠폰번호</th>
@@ -49,8 +48,8 @@
                 <th style="text-align: center;">관리</th>
             </tr>
         </thead>
-        <tbody>
-        <tr th:each="coupon : ${couponList}">
+        <tbody id="couponTbody">
+        <tr th:each="coupon : ${couponList}" id="couponList">
             <td><a href="#" class="order-link"
                    th:data-coupon-id="${coupon.couponId}"
                    th:data-issuer="${coupon.sellerCompany}"
@@ -75,6 +74,8 @@
             <td th:text="${coupon.rdate}"></td>
             <td><button class="end-button">종료</button></td>
         </tr>
+        </tbody>
+
     </table>
     <button class="add-coupon-btn">쿠폰등록</button>
 

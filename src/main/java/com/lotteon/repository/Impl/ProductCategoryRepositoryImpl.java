@@ -25,6 +25,7 @@ import java.util.List;
 public class ProductCategoryRepositoryImpl implements ProductCategoryRepositoryCustom {
 
 
+
     private final JPAQueryFactory queryFactory;
 
     @Override

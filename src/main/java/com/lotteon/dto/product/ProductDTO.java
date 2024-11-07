@@ -61,6 +61,7 @@ public class ProductDTO{
     private List<ReviewDTO> reviewDTOs;
 
     private Set<ProductOptionCombinationDTO> optionCombinations;
+    private String savedPath;
 
 
     public void addFileDescriptions(List<String> files) {
