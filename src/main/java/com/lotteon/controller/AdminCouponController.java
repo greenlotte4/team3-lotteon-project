@@ -216,9 +216,9 @@ public class AdminCouponController {
         log.info("검색 요청됨 - 카테고리: " + requestDTO.getCategory() + ", 검색어: " + requestDTO.getQuery());
 
         try {
-            List<CouponIssuedDTO> coupons = searchService.executeIssuedSearch(requestDTO.getCategory(), requestDTO.getQuery());
-            log.info("검색 결과: {}", coupons); // 검색 결과 확인
-            return ResponseEntity.ok(coupons);
+            List<CouponIssuedDTO> Issueds = searchService.executeIssuedSearch(requestDTO.getCategory(), requestDTO.getQuery());
+            log.info("검색 결과: {}", Issueds); // 검색 결과 확인
+            return ResponseEntity.ok(Issueds);
         } catch (IllegalArgumentException e) {
             log.error("잘못된 카테고리: {}", requestDTO.getCategory());
             return ResponseEntity.badRequest().build();  // 400 Bad Request 응답 반환

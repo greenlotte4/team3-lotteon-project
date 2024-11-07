@@ -33,7 +33,7 @@
         <button id="searchBtnIssued" class="search-btn">검색</button>
     </div>
 
-    <table class="coupon-table">
+    <table class="coupon-table" id="issuedTable">
         <thead>
             <tr>
                 <th style="text-align: center;">발급번호</th>
@@ -48,9 +48,6 @@
         </thead>
         <tbody id="issuedTbody">
         <!-- 쿠폰 리스트 출력 -->
-        <tr th:if="${#lists.isEmpty(IssuedList)}">
-            <td colspan="8" style="text-align: center;">발급된 쿠폰이 없습니다.</td>
-        </tr>
         <tr th:each="Issued : ${IssuedList}">
             <td>
                 <a href="#" class="issued-order-link"
@@ -76,8 +73,11 @@
             <td>
                 <button class="issued-end-button" th:attr="data-id=${Issued.issuanceNumber}">종료</button>
             </td>
-        </tr>
 
+        </tr>
+        <tr th:if="${#lists.isEmpty(IssuedList)}">
+            <td colspan="8" style="text-align: center;">발급된 쿠폰이 없습니다.</td>
+        </tr>
         </tbody>
     </table>
 
