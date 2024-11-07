@@ -53,7 +53,7 @@
     border-collapse: collapse;
     border-radius: 10px;
     overflow-x: auto;
-    display: block;
+    /*display: block;*/
 }
 
 .coupon-table th,
@@ -402,3 +402,42 @@ table label {
 .benefit-options label input {
     margin-right: 5px;
 }
+
+/* 검색된 테이블에만 스크롤을 추가 */
+#searchCouponTable tbody {
+    max-height: 400px;  /* 높이 지정 (필요시 조절) */
+    overflow-y: auto;   /* 세로 스크롤 */
+    display: block;     /* 블록 레벨로 변경하여 스크롤 처리 */
+    width: 100%;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+}
+
+/* 셀의 크기 고정 및 텍스트 줄 바꿈 */
+#searchCouponTable th, #searchCouponTable td {
+    word-wrap: break-word;
+    padding: 8px; /* 셀 내 여백 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+/* select 박스 스타일링 */
+#searchCategory {
+    appearance: none; /* 기본 select 스타일 제거 (크로스 브라우징을 위한 설정) */
+    background-color: #fff; /* 배경색 */
+    border: 1px solid #ccc; /* 테두리 */
+    border-radius: 5px; /* 둥근 테두리 */
+    padding: 10px 20px; /* 안쪽 여백 */
+    color: #555; /* 글씨 색 */
+    width: 150px; /* 너비 전체 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 너비 계산 */
+    cursor: pointer; /* 커서 변경 */
+    transition: border-color 0.3s ease; /* 호버시 테두리 색 변화 */
+}
+
+/* hover와 focus 상태일 때 스타일 */
+#searchCategory:hover,
+#searchCategory:focus {
+    border-color: #007bff; /* 테두리 색을 파란색으로 변경 */
+    outline: none; /* 포커스 시 외곽선 제거 */
+}
+
+

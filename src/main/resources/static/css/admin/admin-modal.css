@@ -45,7 +45,7 @@
     width: 100%; /* 전체 너비 */
     height: 100%; /* 전체 높이 */
     background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
-    display: flex; /* flexbox로 설정 */
+    display: none; /* flexbox로 설정 */
     justify-content: center; /* 수평 중앙 정렬 */
     align-items: center; /* 수직 중앙 정렬 */
     z-index: 1001; /* 모달이 그림자 위에 있도록 설정 */
@@ -68,7 +68,7 @@
 }
 
 .modal-main {
-    position: relative; /* 상대 위치 */  
+    position: relative; /* 상대 위치 */
     width: 900px; /* 최대 너비 설정 */
     background: white; /* 배경 색상 */
 }
@@ -89,7 +89,7 @@ h3{
     width: auto;
     height: auto;
     max-height: 600px;
-    background-color: black;
+    background-color: rgb(35, 63, 99);;
     color: white;
     padding: 1px 15px;
 }
@@ -110,7 +110,7 @@ h3{
 .product-info{
     width: auto;
     height: auto;
-    
+
 }
 .product-info h3{
     margin: 0;
@@ -169,7 +169,7 @@ h3{
 .payment-flex{
     display: flex;
     border-top: 2.5px solid ;
-   
+
 }
 .pay-total-details {
     display: flex; /* 가로 방향으로 정렬 */
@@ -342,7 +342,7 @@ img{
 
 
 .shipping-main {
-    position: relative; /* 상대 위치 */  
+    position: relative; /* 상대 위치 */
     width: 900px; /* 최대 너비 설정 */
     background: white; /* 배경 색상 */
 }
@@ -367,7 +367,7 @@ img{
     margin: 10px 15px 0px 20px ;
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
-   
+
 }
 .shipping-list * input{
     padding-left: 5px;
@@ -470,7 +470,7 @@ img{
 
 
 .shipping-info-main {
-    position: relative; /* 상대 위치 */  
+    position: relative; /* 상대 위치 */
     width: 900px; /* 최대 너비 설정 */
     background: white; /* 배경 색상 */
 }
@@ -497,7 +497,7 @@ img{
 .shipping-info-items{
     width: auto;
     height: auto;
-    background-color: black;
+    background-color:  rgb(35, 63, 99);
     color: white;
     padding: 1px 15px;
 }
@@ -522,7 +522,7 @@ img{
     display: flex;
     align-items: center;
     padding: 20px 0 10px 20px;
-    background: #e4d2d2;
+    background: #ddd;
     width: 200px;
     height: auto;
     font-weight: bold;
@@ -531,9 +531,9 @@ img{
     padding: 20px;
 }
 .addr2-info{
-    width: 200px; 
+    width: 200px;
     height: 10px;
-    background: #e4d2d2;
+    background: #ddd;
     padding: 20px 0 10px 20px;
 }
 

@@ -10,6 +10,44 @@
     <link rel="stylesheet" th:href="@{/css/market/marketList.css}">
     <link rel="stylesheet" th:href="@{/css/market/marketAside.css}">
     <script>
+        document.querySelectorAll('.seller-rating').forEach(function(ratingElement) {
+            const rating = parseFloat(ratingElement.getAttribute('data-rating'));
+            console.log("Rating:", rating);  // rating 값 확인용 로그
+
+            if (isNaN(rating)) {
+                console.warn("Rating attribute is missing or not a number.");
+                return;  // rating 값이 유효하지 않으면 생성을 중단
+            }
+
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 !== 0;
+
+            // 꽉 찬 별 추가
+            for (let i = 0; i < fullStars; i++) {
+                const star = document.createElement('span');
+                star.classList.add('star', 'full-star');
+                star.innerHTML = '★';
+                ratingElement.appendChild(star);
+            }
+
+            // 반쪽 별 추가
+            if (halfStar) {
+                const star = document.createElement('span');
+                star.classList.add('star', 'half-star');
+                star.innerHTML = '★';
+                ratingElement.appendChild(star);
+            }
+
+            // 빈 별 추가
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                const star = document.createElement('span');
+                star.classList.add('star', 'empty-star');
+                star.innerHTML = '☆'; // 빈 별
+                ratingElement.appendChild(star);
+            }
+        });
+
         let currentPage = 1;
 
         window.onload = function (){
@@ -56,41 +94,6 @@
                     }
                 });
 
-
-                // 모든 seller-rating 요소를 가져옵니다.
-                document.querySelectorAll('.seller-rating').forEach(function(ratingElement) {
-                    // data-rating 속성에서 rating 값을 가져옵니다.
-                    const rating = parseFloat(ratingElement.getAttribute('data-rating'));
-                    console.log(rating);
-                    const fullStars = Math.floor(rating);   // 꽉 찬 별 수
-                    console.log("fullstars"+fullStars);
-                    const halfStar = rating % 1 !== 0;     // 반쪽 별 여부 확인
-
-                    // 꽉 찬 별 추가
-                    for (let i = 0; i < fullStars; i++) {
-                        const star = document.createElement('span');
-                        star.classList.add('star', 'full-star');
-                        star.innerHTML = '★';
-                        ratingElement.appendChild(star);
-                    }
-
-                    // 반쪽 별 추가
-                    if (halfStar) {
-                        const halfStar = document.createElement('span');
-                        halfStar.classList.add('star', 'half-star');
-                        halfStar.innerHTML = '★'; // 반쪽 별을 나타낼 경우, CSS를 추가해 스타일링 가능
-                        ratingElement.appendChild(halfStar);
-                    }
-
-                    // 5개 미만인 경우 빈 별 추가
-                    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-                    for (let i = 0; i < emptyStars; i++) {
-                        const star = document.createElement('span');
-                        star.classList.add( 'empty-star');
-                        star.innerHTML = '&#9733;'; // 빈 별도 CSS를 통해 스타일링 가능
-                        ratingElement.appendChild(star);
-                    }
-                });
             });
         }
     </script>
@@ -164,11 +167,12 @@
                                 <div class="product-seller">
                                     <span class="seller-name">[[${product.company}]]</span>
                                     <span >고객만족우수</span>
-                                    <div class="seller-rating" ></div>
+                                    <div class="seller-rating" th:data-rating="${#numbers.formatDecimal(product.rating, 0, 1)}"></div>
+                                    <p th:text="${product.rating} + ' (' + ${product.reviewCount} + ')'"></p>
                                 </div>
                                 </a>
                             </div>
-                        
+
 
 
                         </article> <!-- Repeat for more products -->

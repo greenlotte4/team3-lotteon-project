@@ -33,7 +33,7 @@ public class Review {
     private LocalDateTime rdate;
     private String title;
     private String content;
-    private String rating;  //상품평점
+    private double rating;  //상품평점
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonBackReference // 순환 참조 방지를 위해 사용
@@ -63,7 +63,7 @@ public class Review {
                 .writer(review.getWriter())
                 .rdate(review.getRdate())
                 .content(review.getContent())
-                .rating(review.getRating())
+                .rating(Double.parseDouble(String.valueOf(review.getRating())))
                 .reviewFileDTOS(reviewFileDTOS) // Use ReviewFileDTO list
                 .productId(review.getProduct() != null ? review.getProduct().getProductId() : null)
                 .product(productDTO)

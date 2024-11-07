@@ -195,94 +195,95 @@
 
             </div>
         </div>
-        <script th:src="@{/js/memberlistmodal.js}"></script>
-        <!--        <script th:src="@{/js/util.js}"></script>-->
-
-        <script>
-            // DOMContentLoaded를 사용하여 DOM이 완전히 로드된 후에 함수 설정
-            document.addEventListener("DOMContentLoaded", function () {
-                document.getElementById('btnPostCode').onclick = function () {
-                    postcode(); // postcode 함수 호출
-                };
-            });
-        </script>
-
-        <script>
-            function confirmGradeChange(selectElement) {
-                const selectedGrade = selectElement.value; // 선택된 등급
-                const row = selectElement.closest('tr'); // select 요소가 속한 tr 찾기
-                const memberUid = row.cells[2].innerText; // 세 번째 td에서 UID 가져오기
-
-                const confirmChange = confirm(`해당 등급으로 변경하시겠습니까? (${selectedGrade})`);
-                if (confirmChange) {
-                    const updatedData = {
-                        uid: memberUid, // uid를 포함
-                        grade: selectedGrade // 새 등급
-                    };
-
-                    console.log("updatedData:", updatedData); // updatedData 값 확인
-
-                    fetch('/admin/user/member/updateGrade', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(updatedData)
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                return response.json();
-                            } else {
-                                throw new Error('네트워크 응답이 좋지 않습니다.');
-                            }
-                        })
-                        .then(data => {
-                            console.log(data.message); // 성공 메시지 출력
-                        })
-                        .catch(error => {
-                            console.error('업데이트 오류:', error);
-                        });
-                }
-            }
-        </script>
-
-        <script>
-            function confirmStatusChange(selectElement) {
-                const selectedStatus = selectElement.value; // 선택된 등급
-                const row = selectElement.closest('tr'); // select 요소가 속한 tr 찾기
-                const memberUid = row.cells[2].innerText; // 세 번째 td에서 UID 가져오기
-
-                const confirmChange = confirm(`해당 상태로 변경하시겠습니까? (${selectedStatus})`);
-                if (confirmChange) {
-                    const updatedData = {
-                        uid: memberUid, // uid를 포함
-                        status: selectedStatus // 새 등급
-                    };
-
-                    console.log("updatedData:", updatedData); // updatedData 값 확인
-
-                    fetch('/admin/user/member/updateStatus', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(updatedData)
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                return response.json();
-                            } else {
-                                throw new Error('네트워크 응답이 좋지 않습니다.');
-                            }
-                        })
-                        .then(data => {
-                            console.log(data.message); // 성공 메시지 출력
-                        })
-                        .catch(error => {
-                            console.error('업데이트 오류:', error);
-                        });
-                }
-            }
-        </script>
 
 </th:block>
+
+<script th:src="@{/js/memberlistmodal.js}"></script>
+<!--        <script th:src="@{/js/util.js}"></script>-->
+
+<script>
+    // DOMContentLoaded를 사용하여 DOM이 완전히 로드된 후에 함수 설정
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById('btnPostCode').onclick = function () {
+            postcode(); // postcode 함수 호출
+        };
+    });
+</script>
+
+<script>
+    function confirmGradeChange(selectElement) {
+        const selectedGrade = selectElement.value; // 선택된 등급
+        const row = selectElement.closest('tr'); // select 요소가 속한 tr 찾기
+        const memberUid = row.cells[2].innerText; // 세 번째 td에서 UID 가져오기
+
+        const confirmChange = confirm(`해당 등급으로 변경하시겠습니까? (${selectedGrade})`);
+        if (confirmChange) {
+            const updatedData = {
+                uid: memberUid, // uid를 포함
+                grade: selectedGrade // 새 등급
+            };
+
+            console.log("updatedData:", updatedData); // updatedData 값 확인
+
+            fetch('/admin/user/member/updateGrade', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('네트워크 응답이 좋지 않습니다.');
+                    }
+                })
+                .then(data => {
+                    console.log(data.message); // 성공 메시지 출력
+                })
+                .catch(error => {
+                    console.error('업데이트 오류:', error);
+                });
+        }
+    }
+</script>
+
+<script>
+    function confirmStatusChange(selectElement) {
+        const selectedStatus = selectElement.value; // 선택된 등급
+        const row = selectElement.closest('tr'); // select 요소가 속한 tr 찾기
+        const memberUid = row.cells[2].innerText; // 세 번째 td에서 UID 가져오기
+
+        const confirmChange = confirm(`해당 상태로 변경하시겠습니까? (${selectedStatus})`);
+        if (confirmChange) {
+            const updatedData = {
+                uid: memberUid, // uid를 포함
+                status: selectedStatus // 새 등급
+            };
+
+            console.log("updatedData:", updatedData); // updatedData 값 확인
+
+            fetch('/admin/user/member/updateStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('네트워크 응답이 좋지 않습니다.');
+                    }
+                })
+                .then(data => {
+                    console.log(data.message); // 성공 메시지 출력
+                })
+                .catch(error => {
+                    console.error('업데이트 오류:', error);
+                });
+        }
+    }
+</script>
