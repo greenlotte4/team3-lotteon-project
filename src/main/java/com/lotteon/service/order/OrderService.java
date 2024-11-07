@@ -206,9 +206,18 @@ public class OrderService {
         Long amount = orderItemRepository.sumSalesAmountByDateRange(start, end);
         return amount != null ? amount : 0;
     }
+
+
+
+
+
+
+
+
+
+
 }
 
 
 
 
-}
