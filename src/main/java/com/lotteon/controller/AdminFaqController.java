@@ -53,7 +53,7 @@ public class AdminFaqController {
         log.info("이건또먼데!!!!!" + pageRequestDTO);
 
         FaqPageResponseDTO faqPageResponseDTO = faqService.selectfaqListAll(pageRequestDTO);
-        log.info("진짜루 여기 확인해!!!! : " + faqPageResponseDTO);
+        log.info("asdfasdf!!!! : " + faqPageResponseDTO);
 
         return ResponseEntity.ok(faqPageResponseDTO);
     }

@@ -142,39 +142,7 @@ public class FaqService {
                 .build();
 
     }
-//    public FaqPageResponseDTO selectFaqOptionList(PageRequestDTO pageRequestDTO){
-//        Pageable pageable = pageRequestDTO.getPageable("no");
-//        Page<Tuple> pagefaq = null;
-//        if(pageRequestDTO.getChildId() != null){
-//            pagefaq = faqRepository.selectFaqForOption2(pageRequestDTO, pageable);
-//        }else if(pageRequestDTO.getParentId() != null){
-//            pagefaq = faqRepository.selectFaqForOption1(pageRequestDTO, pageable);
-//        }
-//
-//        List<FaqDTO> faqLists = pagefaq.getContent().stream().map(tuple -> {
-//            Integer id = tuple.get(0, Integer.class); // Get the ID
-//            Faq faq = faqRepository.findById(id)
-//                    .orElseThrow(() -> new RuntimeException("Faq not found with ID: " + id)); // Handle not found
-//
-//            BoardCate cate = faq.getCate();
-//            if (cate == null) {
-//                throw new RuntimeException("Category not found for Faq with ID: " + id); // Handle null category
-//            }
-//
-//            FaqDTO faqdto = modelMapper.map(faq, FaqDTO.class);
-//            // Ensure the mapping for the category is safe
-//            faqdto.setCategory(modelMapper.map(cate, BoardCateDTO.class));
-//            return faqdto;
-//        }).toList();
-//        log.info("여기확인해!!!!!!!!! : " + faqLists);
-//
-//        int total = (int) pagefaq.getTotalElements();
-//
-//        return FaqPageResponseDTO.builder()
-//                .pageRequestDTO(pageRequestDTO)
-//                .faqdtoList(faqLists)
-//                .total(total)
-//                .build();// Handle not found
+
 
     }
 
