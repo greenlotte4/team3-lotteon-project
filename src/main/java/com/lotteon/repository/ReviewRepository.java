@@ -11,4 +11,6 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> , ReviewRepositoryCustom {
 
     List<Review> findTop3ByOrderByRdateDesc();
+    int countByProduct_ProductId(Long productId);
+    List<Review> findAllByProduct_ProductId(Long productId);
 }

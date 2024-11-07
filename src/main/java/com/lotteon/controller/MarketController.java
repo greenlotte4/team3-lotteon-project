@@ -1,9 +1,11 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.QnaDTO;
 import com.lotteon.dto.User.DeliveryDTO;
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
+import com.lotteon.dto.adminQnaDTO;
 import com.lotteon.dto.order.OrderCompletedResponseDTO;
 import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderResponseDTO;
@@ -12,11 +14,13 @@ import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.dto.order.OrderRequestDTO;
 import com.lotteon.entity.User.User;
+import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.cart.Cart;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.entity.product.Review;
+import com.lotteon.repository.ReviewRepository;
 import com.lotteon.repository.cart.CartItemRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
@@ -25,6 +29,7 @@ import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.admin.CouponIssuedService;
+import com.lotteon.service.admin.QnaService;
 import com.lotteon.service.order.CartItemService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.MarketCartService;
@@ -66,6 +71,8 @@ public class MarketController {
     private final ProductOptionCombinationRepository productOptionCombinationRepository;
     private final DeliveryService deliveryService;
     private final CartItemService cartItemService;
+    private final QnaService qnaService;
+    private final ReviewRepository reviewRepository;
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
@@ -74,36 +81,35 @@ public class MarketController {
         List<BannerDTO> banners2 = adminService.getActiveBanners();
         log.info(categoryDTOs);
 
-
-
-
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("active",category);
+
         model.addAttribute("content", "main");
         model.addAttribute("banners", banners2);
         return "content/market/marketMain"; // Points to the "content/market/marketMain" template
     }
 
     @GetMapping("/list/{category}")
-    public String marketList(PageRequestDTO pageRequestDTO,@PathVariable long category
+    public String marketList(PageRequestDTO pageRequestDTO, @PathVariable long category
             , @RequestParam(required = false, defaultValue = "popularity") String sort
-             ,@RequestParam(required = false,defaultValue = "1") int page
-            ,Model model) {
+            , @RequestParam(required = false, defaultValue = "1") int page
+            , Model model) {
         pageRequestDTO.setCategoryId(category);
         pageRequestDTO.setPage(page);
         log.debug("Debugging category: " + category);
 
-        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.getAllParentCategoryDTOs(category);
-        log.info("@222222222222222222222"+categoryDTOs);
+        List<ProductCategoryDTO> categoryDTOs = productCategoryService.getAllParentCategoryDTOs(category);
+        log.info("@222222222222222222222" + categoryDTOs);
 
-        log.info("11111111111111"+pageRequestDTO.getCategoryId());
-        log.info("category:"+category);
+        log.info("11111111111111" + pageRequestDTO.getCategoryId());
+        log.info("category:" + category);
 //        log.info("dsdsdsdsd2222"+pageRequestDTO);
-        ProductListPageResponseDTO responseDTO =  productService.getSortProductList(pageRequestDTO,sort);
-        log.info("controlllermarket::::"+responseDTO.getProductSummaryDTOs());
-        model.addAttribute("categoryDTOs",categoryDTOs);
-        model.addAttribute("responseDTO",responseDTO);
+        ProductListPageResponseDTO responseDTO = productService.getSortProductList(pageRequestDTO, sort);
+        log.info("controlllermarket::::" + responseDTO.getProductSummaryDTOs());
+        model.addAttribute("categoryDTOs", categoryDTOs);
+        model.addAttribute("responseDTO", responseDTO);
         model.addAttribute("sort", sort);
+
 
 
         return "content/market/marketList"; // Points to the "content/market/marketList" template
@@ -120,35 +126,62 @@ public class MarketController {
         model.addAttribute("content", "view");
 
 
-
         return "content/market/marketview"; // Points to the "content/market/marketview" template
     }
 
     @GetMapping("/view/{categoryId}/{productId}")
-    public String marketView(@PathVariable Long productId,@PathVariable Long categoryId,Model model, com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
+    public String marketView (
+        @PathVariable Long productId,
+        @PathVariable Long categoryId,
+        Model model,
+        Authentication authentication,
+        com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
+
         log.info(productId);
         log.info(categoryId);
 
+        // PageRequest 설정
         pageRequestDTO.setSize(6);
-        //선택시 hit update
+
+        // 조회수 업데이트
         productService.updatehit(productId);
 
-        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.selectCategory(categoryId);
-        log.info("categories LLLLL "+ categoryDTOs);
+        // 카테고리 및 상품 정보 추가
+        List<ProductCategoryDTO> categoryDTOs = productCategoryService.selectCategory(categoryId);
         ProductDTO productdto = productService.getProduct(productId);
+
         log.info("productVIew Controller:::::"+productdto);
+        List<Review> allReviews = reviewService.getAllReviewsByProductId(productId);
 
 
+        // 리뷰 정보 추가
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);
-        model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
-
         List<Review> ReviewImgs = reviewService.getAllReviews();
 
+        // 현재 사용자 아이디로 Q&A 데이터 필터링
+        List<adminQnaDTO> userQnaList = qnaService.getQnaByWriterAndProductId(productId);
+
+        // 로그인된 사용자의 ID를 가져와 모델에 추가
+        String loggedInUserId = authentication.getName();
+        model.addAttribute("loggedInUserId", loggedInUserId);
+
+        // 모델에 필요한 데이터 추가
+        model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
+        model.addAttribute("reviewImgs", ReviewImgs);
+        model.addAttribute("categoryDTOs", categoryDTOs);
+        model.addAttribute("products", productdto);
+        model.addAttribute("qnaList", userQnaList); // Q&A 데이터 추가
+        double averageRating = allReviews.stream()
+                .mapToDouble(Review::getRating) // 각 리뷰의 평점 가져오기
+                .average()
+                .orElse(0.0);  // 리뷰가 없을 경우 0.0으로 설정
+        int reviewCount = allReviews.size(); // Count of reviews
 
         model.addAttribute("reviewImgs", ReviewImgs);
-
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("products",productdto);
+        model.addAttribute("averageRating", String.format("%.1f", averageRating));
+        model.addAttribute("reviewCount", reviewCount);
 
         return "content/market/marketview"; // Points to the "content/market/marketview" template
     }
@@ -162,8 +195,8 @@ public class MarketController {
 
         CartSummary cartSummary = marketCartService.calculateSelectedCartSummary(cartItems);
 
-        model.addAttribute("cartItems",cartItems);
-        model.addAttribute("cartSummary",cartSummary);
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("cartSummary", cartSummary);
         log.info("카트 총집합! cart items: {}", cartItems);
 
         return "content/market/marketcart"; // Points to the "content/market/marketcart" template
@@ -171,17 +204,16 @@ public class MarketController {
 
 
     @GetMapping("/order/{uid}")
-    public String marketOrder(@PathVariable String uid,Model model, String productId) {
+    public String marketOrder(@PathVariable String uid, Model model, String productId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
         String memberUid = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
 
-        log.info("uid ::::::::::"+uid);
+        log.info("uid ::::::::::" + uid);
         MemberDTO memberDTO = userService.getByUsername(uid);
 
 
-
-        log.info("멤버 아이디다"+memberUid);
+        log.info("멤버 아이디다" + memberUid);
 
         // 해당 멤버의 발급된 쿠폰 목록 조회
 
@@ -191,12 +223,12 @@ public class MarketController {
         model.addAttribute("issuedList", issuedCoupons);
 
 
-
         log.info(memberDTO);
-        model.addAttribute("memberDTO",memberDTO);
+        model.addAttribute("memberDTO", memberDTO);
 
         Long memberId = memberDTO.getMemberId(); // memberId가 MemberDTO에 있다고 가정
-        List<DeliveryDTO> deliveryDTOList = deliveryService.getByMemberId(memberId);; // memberId로 DeliveryDTO 가져옴
+        List<DeliveryDTO> deliveryDTOList = deliveryService.getByMemberId(memberId);
+        ; // memberId로 DeliveryDTO 가져옴
         log.info("deliveryDTO ::::::::::" + deliveryDTOList);
         model.addAttribute("deliveryDTO", deliveryDTOList);
 
@@ -207,15 +239,15 @@ public class MarketController {
 
     @PostMapping("/order/saveOrder")
     @ResponseBody
-    public ResponseEntity<Map<String, Long>> saveOrder(@RequestBody OrderRequestDTO orderRequestDTO, Authentication authentication){
+    public ResponseEntity<Map<String, Long>> saveOrder(@RequestBody OrderRequestDTO orderRequestDTO, Authentication authentication) {
         Map<String, Long> response = new HashMap<>();
         response.put("result", 0L);
-        log.info("요기!!!!!!!!!!!!!!!!!"+orderRequestDTO);
-        OrderResponseDTO orderResponseDTO  = new OrderResponseDTO(orderRequestDTO);
-        if(orderResponseDTO.getCartId()>0){
-            List<Long> cartItems= orderResponseDTO.getCartItems();
-            boolean result=cartItemService.deleteCartItems(cartItems,orderResponseDTO.getCartId());
-            if(!result){
+        log.info("요기!!!!!!!!!!!!!!!!!" + orderRequestDTO);
+        OrderResponseDTO orderResponseDTO = new OrderResponseDTO(orderRequestDTO);
+        if (orderResponseDTO.getCartId() > 0) {
+            List<Long> cartItems = orderResponseDTO.getCartItems();
+            boolean result = cartItemService.deleteCartItems(cartItems, orderResponseDTO.getCartId());
+            if (!result) {
                 response.put("result", 0L);
                 return ResponseEntity.ok(response);
             }
@@ -223,8 +255,8 @@ public class MarketController {
         long orderId = orderService.saveOrder(orderResponseDTO);
 
 
-        if(orderId>0){
-            response.put("result",orderId);
+        if (orderId > 0) {
+            response.put("result", orderId);
 
         }
 
@@ -283,11 +315,11 @@ public class MarketController {
     }
 
     @GetMapping("/completed/{orderId}")
-    public String marketOrderCompleted(@PathVariable long orderId,Model model) {
+    public String marketOrderCompleted(@PathVariable long orderId, Model model) {
         model.addAttribute("content", "completed");
         OrderCompletedResponseDTO orderDTO = orderService.selectOrderById(orderId);
-        log.info("여기!!!!!!!!!!!!!!!! : "+orderDTO);
-        model.addAttribute("orderDTO",orderDTO);
+        log.info("여기!!!!!!!!!!!!!!!! : " + orderDTO);
+        model.addAttribute("orderDTO", orderDTO);
 
 
         return "content/market/marketorderCompleted"; // Points to the "content/market/marketorderCompleted" template

@@ -4,6 +4,7 @@ package com.lotteon.service;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.repository.BannerRepository;
 import com.lotteon.entity.Banner;
+import com.lotteon.repository.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -13,7 +14,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,6 +26,7 @@ public class AdminService {
 
     private final BannerRepository bannerRepository;
     private final ModelMapper modelMapper;
+    private final OrderRepository orderRepository;
 
     public Banner insertBanner(BannerDTO bannerDTO){
         Banner banner = bannerRepository.save(modelMapper.map(bannerDTO, Banner.class));
@@ -77,5 +81,6 @@ public class AdminService {
             bannerRepository.deleteById(id);
         }
     }
+
 
 }
