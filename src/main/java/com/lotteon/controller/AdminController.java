@@ -64,11 +64,18 @@ public class AdminController {
             String formattedYesterdayTotalSalesAmount = String.format("%,d", yesterdayTotalSalesAmount);
             String formattedTodayTotalSalesAmount = String.format("%,d", todayTotalSalesAmount);
 
-            long visitorCount = visitorCountService.getVisitorCount(); // 방문자 수 가져오기
-            model.addAttribute("visitorCount", visitorCount);
 
             model.addAttribute("yesterdayNewUserCount", "?");
             model.addAttribute("todayNewUserCount", "?");
+
+            long visitorCount = visitorCountService.getVisitorCount(); // 방문자 수 가져오기
+            model.addAttribute("visitorCount", visitorCount);
+
+            long yesterdayVisitorCount = visitorCountService.getYesterdayVisitorCount(); // 어제 방문자 수
+            long todayVisitorCount = visitorCountService.getTodayVisitorCount(); // 오늘 방문자 수
+
+            model.addAttribute("yesterdayVisitorCount", yesterdayVisitorCount);
+            model.addAttribute("todayVisitorCount", todayVisitorCount);
 
             model.addAttribute("yesterdaySalesCount", yesterdaySalesCount);
             model.addAttribute("todaySalesCount", todaySalesCount);
