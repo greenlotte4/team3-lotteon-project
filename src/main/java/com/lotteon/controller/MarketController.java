@@ -162,8 +162,6 @@ public class MarketController {
         List<adminQnaDTO> userQnaList = qnaService.getQnaByWriterAndProductId(productId);
 
 
-
-
         // 모델에 필요한 데이터 추가
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
         model.addAttribute("reviewImgs", ReviewImgs);
