@@ -24,6 +24,7 @@ import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.CouponService;
+import com.lotteon.service.search.SearchService;
 import com.lotteon.service.user.MemberService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,7 @@ public class AdminCouponController {
     private final CouponIssuedService couponIssuedService;
     private final ModelMapper modelMapper;
     private final MemberRepository memberRepository;
+    private final SearchService searchService;
     ;
 
     @GetMapping("/list")
@@ -189,35 +191,39 @@ public class AdminCouponController {
 
     }
 
-    private Map<String, Function<String, List<CouponDTO>>> searchMethods;
 
-    @PostConstruct
-    public void init() {
-        searchMethods = Map.of(
-                "couponId", couponService::searchByCouponNumber,  // 쿠폰번호로 검색
-                "couponName", couponService::searchByCouponName,  // 쿠폰명으로 검색
-                "issuer", couponService::searchBySellerCompany   // 발급자(판매자명)으로 검색
-        );
-    }
-    @GetMapping("/cartch")
-    public ResponseEntity<List<CouponDTO>> cartchCoupons(
-            @RequestParam String category,
-            @RequestParam String query) {
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CouponDTO>> searchCoupons(CouponListRequestDTO requestDTO)  {
 
         log.info("검색 오청됨");
+        log.info("검색 요청됨 - 카테고리: " + requestDTO.getCategory() + ", 검색어: " + requestDTO.getQuery());
 
-        Function<String, List<CouponDTO>> searchMethod = searchMethods.get(category.toLowerCase());
-
-        if (searchMethod == null) {
-            return ResponseEntity.badRequest().body(null);  // 잘못된 카테고리 처리
+        try {
+            List<CouponDTO> coupons = searchService.executeSearch(requestDTO.getCategory(), requestDTO.getQuery());
+            log.info("검색 결과: {}", coupons); // 검색 결과 확인
+            return ResponseEntity.ok(coupons);
+        } catch (IllegalArgumentException e) {
+            log.error("잘못된 카테고리: {}", requestDTO.getCategory());
+            return ResponseEntity.badRequest().build();  // 400 Bad Request 응답 반환
         }
-
-        // 검색된 쿠폰 목록 반환
-        List<CouponDTO> coupons = searchMethod.apply(query);
-        return ResponseEntity.ok(coupons);
     }
 
+    @GetMapping("/searchIssued")
+    public ResponseEntity<List<CouponIssuedDTO>> searchIssued(CouponListRequestDTO requestDTO)  {
 
+        log.info("검색 오청됨");
+        log.info("검색 요청됨 - 카테고리: " + requestDTO.getCategory() + ", 검색어: " + requestDTO.getQuery());
+
+        try {
+            List<CouponIssuedDTO> coupons = searchService.executeIssuedSearch(requestDTO.getCategory(), requestDTO.getQuery());
+            log.info("검색 결과: {}", coupons); // 검색 결과 확인
+            return ResponseEntity.ok(coupons);
+        } catch (IllegalArgumentException e) {
+            log.error("잘못된 카테고리: {}", requestDTO.getCategory());
+            return ResponseEntity.badRequest().build();  // 400 Bad Request 응답 반환
+        }
+    }
 }
 
 
