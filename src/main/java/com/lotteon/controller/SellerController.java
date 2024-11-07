@@ -4,8 +4,12 @@ package com.lotteon.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.product.*;
+import com.lotteon.entity.order.Order;
 import com.lotteon.entity.product.Product;
+import com.lotteon.service.admin.AdminOrderService;
+import com.lotteon.service.order.OrderService;
 import com.lotteon.service.user.UserService;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +39,7 @@ import java.util.Map;
 @RequestMapping("/seller")
 public class SellerController {
 
-
+    private final AdminOrderService adminOrderService;
     private final ProductService productService;
     private final AuthenticationManager authenticationManager; // AuthenticationManager로 수정
     private final PasswordEncoder passwordEncoder;
@@ -172,7 +176,9 @@ public class SellerController {
 
     @GetMapping("/order/status")
     public String orderStatus(Model model) {
-        model.addAttribute("content", "status");
+          List<OrderDTO> orders = adminOrderService.selectOrdersAll();
+          log.info("허웅우ㅜ우ㅜㅜ :" + orders);
+        model.addAttribute("orders", orders);
         return "content/admin/order/admin_Order"; // Points to the "content/sellerDynamic" template for order status
     }
 
