@@ -34,6 +34,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.querydsl.jpa.JPAExpressions.select;
 
@@ -78,6 +79,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     @Override
     public Page<Tuple> selectProductForList(PageRequestDTO pageRequest, Pageable pageable) {
+
+
+
+
         return null;
     }
 
@@ -140,12 +145,15 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         // 2. 각 상품에 대해 리뷰 리스트를 별도로 조회하여 DTO에 추가
         for (ProductSummaryDTO product : products) {
-            List<String> ratings = queryFactory.select(qReview.rating)
+            List<Double> ratings = queryFactory.select(qReview.rating)
                     .from(qReview)
                     .where(qReview.product.productId.eq(product.getProductId()))
                     .fetch();
 
-            product.setRating(ratings);  // 리뷰 리스트를 DTO에 설정
+            // 필요한 경우 Double을 String으로 변환하여 설정
+            product.setRating(ratings.stream()
+                    .map(String::valueOf)  // Double을 String으로 변환
+                    .collect(Collectors.toList()));  // List<String> 형태로 변환
         }
 
 

@@ -96,15 +96,6 @@ public class CouponService {
         couponRepository.save(coupon);
     }
 
-    // 쿠폰 상세 조회
-    public CouponDTO selectCoupon(String couponId) {
-        return couponRepository.findById(couponId)
-                .map(coupon -> {
-                    log.info("Coupon selected: " + coupon);
-                    return modelMapper.map(coupon, CouponDTO.class);
-                })
-                .orElse(null);
-    }
 
     public CouponDTO endCoupon(String couponId) {
         Coupon coupon = couponRepository.findById(couponId)
@@ -143,13 +134,6 @@ public class CouponService {
         return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
     }
 
-
-    // 검색 기능
-    public Page<CouponDTO> searchCoupons(long sellerId, String searchType, String searchValue, Pageable pageable) {
-        Page<CouponListResponseDTO> couponPage = couponRepository.searchCoupons(sellerId, pageable, searchType, searchValue);
-        return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
-    }
-
     public List<Coupon> selectCouponIssued(Long productId) {
         if (productId == null) {
             // productId가 null인 경우, 모든 상품에 적용 가능한 쿠폰 조회
@@ -181,24 +165,4 @@ public class CouponService {
                 .collect(Collectors.toList());
     }
 
-
-    public List<CouponDTO> searchByCouponNumber(String couponId) {
-        List<Coupon> coupons = couponRepository.findByCouponIdContaining(couponId);
-        return coupons.stream()
-                .map(CouponDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    public List<CouponDTO> searchByCouponName(String couponName) {
-        List<Coupon> coupons = couponRepository.findByCouponNameContaining(couponName);
-        return coupons.stream()
-                .map(CouponDTO::new)
-                .collect(Collectors.toList());
-    }
-    public List<CouponDTO> searchBySellerCompany(String sellerCompany) {
-        List<Coupon> coupons = couponRepository.findBySellerCompanyContaining(sellerCompany);
-        return coupons.stream()
-                .map(CouponDTO::new)
-                .collect(Collectors.toList());
-    }
     }
