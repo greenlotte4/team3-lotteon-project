@@ -95,6 +95,7 @@ public class Product {
     private String file190;
     private String file230;
     private String file456;
+    private String savedPath;
 
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -125,10 +126,10 @@ public class Product {
             }
             for (ProductFile file : files) {
                 switch (file.getType()) {
-                    case "190" -> this.file190 = file.getPath();
-                    case "230" -> this.file230 = file.getPath();
-                    case "456" -> this.file456 = file.getPath();
-                    default -> this.fileDescs.add(file.getPath());
+                    case "190" -> this.file190 = file.getSName();
+                    case "230" -> this.file230 = file.getSName();
+                    case "456" -> this.file456 = file.getSName();
+                    default -> this.fileDescs.add(file.getSName());
                 }
             }
         }
@@ -144,6 +145,10 @@ public class Product {
     }
     public void setOptions(List<Option> options) {
         this.options=options;
+    }
+
+    public void setSavedPath(String savedPath){
+        this.savedPath = savedPath;
     }
 
     public void setOptionCombinations(Set<ProductOptionCombination> optionCombinations) {

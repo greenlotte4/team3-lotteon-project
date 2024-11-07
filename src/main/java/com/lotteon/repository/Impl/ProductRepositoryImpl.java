@@ -79,6 +79,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     @Override
     public Page<Tuple> selectProductForList(PageRequestDTO pageRequest, Pageable pageable) {
+
+
+
+
         return null;
     }
 
