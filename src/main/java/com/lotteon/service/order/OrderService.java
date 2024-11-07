@@ -55,54 +55,53 @@ public class OrderService {
     public long saveOrder(OrderResponseDTO orderResponseDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String uid = authentication.getName();
-        log.info("구매중 uid : "+uid);
-        long result =0;
+        log.info("구매중 uid : " + uid);
+        long result = 0;
         OrderDTO orderDTO = orderResponseDTO.getOrder();
-        log.info("orderDTO!!!!!!!!!:"+orderDTO);
+        log.info("orderDTO!!!!!!!!!:" + orderDTO);
         orderDTO.setUid(uid);
-        Order order =  getModelMapper.map(orderDTO, Order.class);
-        log.info("orderEntity!!!!!!!!!:"+orderDTO);
+        Order order = getModelMapper.map(orderDTO, Order.class);
+        log.info("orderEntity!!!!!!!!!:" + orderDTO);
 
         Order savedOrder = orderRepository.save(order);
-        log.info("productDicount!!! "+ savedOrder.getProductDiscount());
+        log.info("productDicount!!! " + savedOrder.getProductDiscount());
 
-        result=savedOrder.getOrderId();
+        result = savedOrder.getOrderId();
 
 
         List<OrderItemDTO> orderItems = orderResponseDTO.getOrderItems();
-        for(OrderItemDTO orderItemDTO : orderItems) {
+        for (OrderItemDTO orderItemDTO : orderItems) {
             orderItemDTO.setOrderId(savedOrder.getOrderId());
-            orderItemDTO.setOrder(getModelMapper.map(savedOrder,OrderDTO.class));
+            orderItemDTO.setOrder(getModelMapper.map(savedOrder, OrderDTO.class));
 
             ProductDTO product = productService.selectProduct(orderItemDTO.getProductId());
 
 
-            log.info("sellerUid가 안들어와???"+product.getSeller());
+            log.info("sellerUid가 안들어와???" + product.getSeller());
             orderItemDTO.setSellerUid(product.getSellerId());
             orderItemDTO.setProduct(product);
             orderItemDTO.setSavedPrice(product.getPrice());
 
 
-            if(orderItemDTO.getSelectOption()!=null){
+            if (orderItemDTO.getSelectOption() != null) {
                 orderItemDTO.setOptionId(orderItemDTO.getOptionId());
 
                 // option재고 업데이트
                 Optional<ProductOptionCombination> productOptionCombination = productOptionCombinationRepository.findById(orderItemDTO.getOptionId());
-                if(productOptionCombination.isPresent()) {
-                    long savestock=productOptionCombination.get().getStock() - orderItemDTO.getStock() ;
-                    productOptionCombinationRepository.updateQuantity(savestock,orderItemDTO.getCombinationId());
-                    log.info("업데이트 재고 : "+savestock);
+                if (productOptionCombination.isPresent()) {
+                    long savestock = productOptionCombination.get().getStock() - orderItemDTO.getStock();
+                    productOptionCombinationRepository.updateQuantity(savestock, orderItemDTO.getCombinationId());
+                    log.info("업데이트 재고 : " + savestock);
                 }
             }
-            long saveStock = product.getStock() - orderItemDTO.getStock() ;
-            productRepository.updateProductQuantity(saveStock,orderItemDTO.getProductId());
-            log.info("업데이트 재고 : "+saveStock);
-
+            long saveStock = product.getStock() - orderItemDTO.getStock();
+            productRepository.updateProductQuantity(saveStock, orderItemDTO.getProductId());
+            log.info("업데이트 재고 : " + saveStock);
 
 
             //각각의 오더아이템 저장
-            OrderItem OrderItem = getModelMapper.map(orderItemDTO,OrderItem.class);
-           OrderItem savedOrderItem = orderItemRepository.save(OrderItem);
+            OrderItem OrderItem = getModelMapper.map(orderItemDTO, OrderItem.class);
+            OrderItem savedOrderItem = orderItemRepository.save(OrderItem);
 
         }
 
@@ -112,49 +111,52 @@ public class OrderService {
     }
 
     //사용자별 유저 찾기
-    public OrderCompletedResponseDTO selectOrderById(long id){
-       Order order= orderRepository.findByOrderId(id);
-       log.info("order::::::::::::: "+order);
-       //orderDTO에 orderItem이 없다.
-        OrderDTO orderDTO = getModelMapper.map(order,OrderDTO.class);
-        log.info("OrderDTO::::::::::: "+orderDTO);
-        HashSet<SellerDTO> sellers= new HashSet<>();
-       List<OrderItem> orderItems  = order.getOrderProducts();
-       orderDTO.setOrderItems(orderItems.stream().map((element) -> getModelMapper.map(element, OrderItemDTO.class)).collect(Collectors.toList()));
+    public OrderCompletedResponseDTO selectOrderById(long id) {
+        Order order = orderRepository.findByOrderId(id);
+        log.info("order::::::::::::: " + order);
+        //orderDTO에 orderItem이 없다.
+        OrderDTO orderDTO = getModelMapper.map(order, OrderDTO.class);
+        log.info("OrderDTO::::::::::: " + orderDTO);
+        HashSet<SellerDTO> sellers = new HashSet<>();
+        List<OrderItem> orderItems = order.getOrderProducts();
+        orderDTO.setOrderItems(orderItems.stream().map((element) -> getModelMapper.map(element, OrderItemDTO.class)).collect(Collectors.toList()));
 
-       List<OrderItemDTO> orderItemDtos  = new ArrayList<>();
-       for(OrderItem orderItem : orderItems) {
-           OrderItemDTO orderItemDTO = getModelMapper.map(orderItem,OrderItemDTO.class);
-           String sellerid= orderItem.getProduct().getSellerId();
+        List<OrderItemDTO> orderItemDtos = new ArrayList<>();
+        for (OrderItem orderItem : orderItems) {
+            OrderItemDTO orderItemDTO = getModelMapper.map(orderItem, OrderItemDTO.class);
+            String sellerid = orderItem.getProduct().getSellerId();
 
-           if(orderItem.getOptionId()!=0){
-              Optional<ProductOptionCombination> opt= productOptionCombinationRepository.findById(orderItem.getOptionId());
-              if(opt.isPresent()) {
-                  ProductOptionCombination optionCombination = opt.get();
-                  orderItemDTO.setCombination(optionCombination.getCombination());
-                  orderItemDTO.setCombinationId(optionCombination.getCombinationId());
-                  orderItemDTO.setOrderItemId(orderItem.getOrderItemId());
+            if (orderItem.getOptionId() != 0) {
+                Optional<ProductOptionCombination> opt = productOptionCombinationRepository.findById(orderItem.getOptionId());
+                if (opt.isPresent()) {
+                    ProductOptionCombination optionCombination = opt.get();
+                    orderItemDTO.setCombination(optionCombination.getCombination());
+                    orderItemDTO.setCombinationId(optionCombination.getCombinationId());
+                    orderItemDTO.setOrderItemId(orderItem.getOrderItemId());
 
-              }
-           }
+                }
+            }
 
-           orderItemDtos.add(orderItemDTO);
+            orderItemDtos.add(orderItemDTO);
 
-           SellerDTO seller = sellerService.getSeller(sellerid);
-           seller.setUid(sellerid);
-           sellers.add(seller);
-       }
-       orderDTO.setOrderItems(orderItemDtos);
+            SellerDTO seller = sellerService.getSeller(sellerid);
+            seller.setUid(sellerid);
+            sellers.add(seller);
+        }
+        orderDTO.setOrderItems(orderItemDtos);
 
-       log.info("sellereeeeeee:"+sellers);
+        log.info("sellereeeeeee:" + sellers);
 
 
-        return new OrderCompletedResponseDTO(orderDTO,sellers);
+        return new OrderCompletedResponseDTO(orderDTO, sellers);
     }
 
     //seller별 orderItem 찾기
-    public void selectOrderItemsBySeller(){}
+    public List<OrderDTO> selectOrderItemsBySeller() {
+        return null;
+    }
 
+}
 
     //update Order
 
@@ -166,4 +168,4 @@ public class OrderService {
 
 
 
-}
+

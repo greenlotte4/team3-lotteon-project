@@ -1,6 +1,7 @@
 package com.lotteon.entity.order;
 
 
+import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
@@ -58,6 +59,34 @@ public class Order {
     // OrderProduct와의 OneToMany 관계 설정
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderProducts;
+
+
+    public OrderDTO toDTO(Order order) {
+        return OrderDTO.builder()
+                .orderId(order.getOrderId())
+                .uid(order.getUid())
+                .totalOriginalPrice(order.getTotalOriginalPrice())
+                .totalPrice(order.getTotalPrice())
+                .totalQuantity(order.getTotalQuantity())
+                .totalDiscount(order.getTotalDiscount())
+                .totalShipping(order.getTotalShipping())
+                .expectedPoint(order.getExpectedPoint())
+                .receiver(order.getReceiver())
+                .hp(order.getHp())
+                .postcode(order.getPostcode())
+                .shippingInfo(order.getShippingInfo())
+                .usedPoint(order.getUsedPoint())
+                .orderDate(order.getOrderDate())
+                .orderStatus(order.getOrderStatus())
+                .pay(order.getPay())
+                .memberHp(order.getMemberHp())
+                .memberName(order.getMemberName())
+                .couponId(order.getCouponId())
+                .usedCoupon(order.getUsedCoupon())
+                .addr1(order.getAddr1())
+                .addr2(order.getAddr2())
+                .build();
+    }
 
 
 }
