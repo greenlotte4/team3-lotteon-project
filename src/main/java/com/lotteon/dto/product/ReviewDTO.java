@@ -22,7 +22,7 @@ public class ReviewDTO {
     private LocalDateTime rdate;
     private String title;
     private String content;
-    private String rating;  //상품평점
+    private double rating;  //상품평점
     private List<ReviewFile> savedReviewFiles;
     private List<ReviewFileDTO> reviewFileDTOS;
     private Long productId;

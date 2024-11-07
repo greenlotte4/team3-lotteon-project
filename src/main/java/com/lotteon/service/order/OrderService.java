@@ -15,7 +15,6 @@ import com.lotteon.entity.order.OrderItem;
 import com.lotteon.entity.product.Option;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.ProductOptionCombination;
-import com.lotteon.entity.product.QOption;
 import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.repository.order.OrderRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
@@ -32,6 +31,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -156,7 +158,7 @@ public class OrderService {
         return null;
     }
 
-}
+
 
     //update Order
 
@@ -166,6 +168,46 @@ public class OrderService {
 
     //환불요청
 
+    public long getSalesCountBySeller(String sellerUid) {
+        return orderItemRepository.countBySellerUid(sellerUid);
+    }
+
+    public long getTotalSalesAmountBySeller(String sellerUid) {
+        return orderItemRepository.findTotalOrderPriceBySellerUid(sellerUid);
+    }
+    // 모든 판매자의 총 판매 수량을 반환
+    public long getTotalSalesCountForAllSellers() {
+        return orderItemRepository.findTotalOrderCountForAllSellers();
+    }
+
+    // 모든 판매자의 총 판매 금액을 반환
+    public long getTotalSalesAmountForAllSellers() {
+        return orderItemRepository.findTotalOrderPriceForAllSellers();
+    }
+
+    // 특정 판매자의 날짜 범위에 따른 주문 건수
+    public long getSalesCountBySellerAndDateRange(String sellerUid, LocalDateTime start, LocalDateTime end) {
+        return orderItemRepository.countOrdersBySellerAndDateRange(sellerUid, start, end);
+    }
+
+    // 특정 판매자의 날짜 범위에 따른 총 판매 금액
+    public long getTotalSalesAmountBySellerAndDateRange(String sellerUid, LocalDateTime start, LocalDateTime end) {
+        Long amount = orderItemRepository.sumSalesAmountBySellerAndDateRange(sellerUid, start, end);
+        return amount != null ? amount : 0; // 금액이 null일 경우 0으로 처리
+    }
+
+    // 모든 판매자의 날짜 범위에 따른 주문 건수
+    public long getTotalSalesCountForAllSellersByDateRange(LocalDateTime start, LocalDateTime end) {
+        return orderItemRepository.countOrdersByDateRange(start, end);
+    }
+
+    // 모든 판매자의 날짜 범위에 따른 총 판매 금액
+    public long getTotalSalesAmountForAllSellersByDateRange(LocalDateTime start, LocalDateTime end) {
+        Long amount = orderItemRepository.sumSalesAmountByDateRange(start, end);
+        return amount != null ? amount : 0;
+    }
 
 
 
+
+}

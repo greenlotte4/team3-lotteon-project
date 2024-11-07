@@ -5,17 +5,22 @@ package com.lotteon.controller;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.entity.Banner;
-import com.lotteon.service.AdminService;
-import com.lotteon.service.FileService;
-import com.lotteon.service.FooterInfoService;
-import com.lotteon.service.VersionService;
+import com.lotteon.security.MyUserDetails;
+import com.lotteon.service.*;
+import com.lotteon.service.order.OrderService;
+import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -28,12 +33,102 @@ public class AdminController {
 
     private final AdminService adminService;
     private final FileService fileService;
-    private final FooterInfoService footerInfoService;
-    private final VersionService versionService;
+    private final OrderService orderService;
+    private final UserService userService;
+    private final VisitorCountService visitorCountService;
 
 
     @GetMapping("/main")
-    public String adminMain( Model model) {
+    public String adminMain(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime yesterdayTime = currentTime.minusHours(24);
+
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_SELLER"))) {
+            String sellerUid = userDetails.getUser().getUid();
+
+            long yesterdaySalesCount = orderService.getSalesCountBySellerAndDateRange(sellerUid, yesterdayTime.minusHours(24), yesterdayTime);
+            long todaySalesCount = orderService.getSalesCountBySellerAndDateRange(sellerUid, yesterdayTime, currentTime);
+
+            long yesterdayTotalSalesAmount = orderService.getTotalSalesAmountBySellerAndDateRange(sellerUid, yesterdayTime.minusHours(24), yesterdayTime);
+            long todayTotalSalesAmount = orderService.getTotalSalesAmountBySellerAndDateRange(sellerUid, yesterdayTime, currentTime);
+
+            long salesCount = orderService.getSalesCountBySeller(sellerUid);
+            long totalSalesAmount = orderService.getTotalSalesAmountBySeller(sellerUid);
+
+            String formattedSalesAmount = String.format("%,d", totalSalesAmount);
+
+            model.addAttribute("salesCount", salesCount);
+            model.addAttribute("totalSalesAmount", formattedSalesAmount);
+
+            String formattedYesterdayTotalSalesAmount = String.format("%,d", yesterdayTotalSalesAmount);
+            String formattedTodayTotalSalesAmount = String.format("%,d", todayTotalSalesAmount);
+
+
+            model.addAttribute("yesterdayNewUserCount", "?");
+            model.addAttribute("todayNewUserCount", "?");
+
+            long visitorCount = visitorCountService.getVisitorCount(); // 방문자 수 가져오기
+            model.addAttribute("visitorCount", visitorCount);
+
+            long yesterdayVisitorCount = visitorCountService.getYesterdayVisitorCount(); // 어제 방문자 수
+            long todayVisitorCount = visitorCountService.getTodayVisitorCount(); // 오늘 방문자 수
+
+            model.addAttribute("yesterdayVisitorCount", yesterdayVisitorCount);
+            model.addAttribute("todayVisitorCount", todayVisitorCount);
+
+            model.addAttribute("yesterdaySalesCount", yesterdaySalesCount);
+            model.addAttribute("todaySalesCount", todaySalesCount);
+            model.addAttribute("yesterdayTotalSalesAmount", formattedYesterdayTotalSalesAmount);
+            model.addAttribute("todayTotalSalesAmount", formattedTodayTotalSalesAmount);
+
+            // 회원가입 수는 '?'로 표시
+            model.addAttribute("totalUserCount", "?");
+
+        } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            long totalSalesCount = orderService.getTotalSalesCountForAllSellers();
+            long totalSalesAmountForAll = orderService.getTotalSalesAmountForAllSellers();
+
+            long yesterdayTotalSalesCount = orderService.getTotalSalesCountForAllSellersByDateRange(yesterdayTime.minusHours(24), yesterdayTime);
+            long todayTotalSalesCount = orderService.getTotalSalesCountForAllSellersByDateRange(yesterdayTime, currentTime);
+
+            long yesterdayTotalSalesAmountForAll = orderService.getTotalSalesAmountForAllSellersByDateRange(yesterdayTime.minusHours(24), yesterdayTime);
+            long todayTotalSalesAmountForAll = orderService.getTotalSalesAmountForAllSellersByDateRange(yesterdayTime, currentTime);
+
+            String formattedYesterdayTotalSalesAmount = String.format("%,d", yesterdayTotalSalesAmountForAll);
+            String formattedTodayTotalSalesAmount = String.format("%,d", todayTotalSalesAmountForAll);
+
+            String formattedTotalSalesAmount = String.format("%,d", totalSalesAmountForAll);
+
+            long totalUserCount = userService.getTotalUserCount();
+
+            long yesterdayNewUserCount = userService.getYesterdayNewUserCount();
+            long todayNewUserCount = userService.getTodayNewUserCount();
+            long visitorCount = visitorCountService.getVisitorCount(); // 방문자 수 가져오기
+            model.addAttribute("visitorCount", visitorCount);
+            model.addAttribute("yesterdayNewUserCount", yesterdayNewUserCount);
+            model.addAttribute("todayNewUserCount", todayNewUserCount);
+
+
+            long yesterdayVisitorCount = visitorCountService.getYesterdayVisitorCount(); // 어제 방문자 수
+            long todayVisitorCount = visitorCountService.getTodayVisitorCount(); // 오늘 방문자 수
+
+            model.addAttribute("yesterdayVisitorCount", yesterdayVisitorCount);
+            model.addAttribute("todayVisitorCount", todayVisitorCount);
+
+
+            model.addAttribute("salesCount", totalSalesCount);
+            model.addAttribute("totalSalesAmount", formattedTotalSalesAmount);
+            model.addAttribute("yesterdaySalesCount", yesterdayTotalSalesCount);
+            model.addAttribute("todaySalesCount", todayTotalSalesCount);
+            model.addAttribute("yesterdayTotalSalesAmount", formattedYesterdayTotalSalesAmount);
+            model.addAttribute("todayTotalSalesAmount", formattedTodayTotalSalesAmount);
+            model.addAttribute("totalUserCount", totalUserCount); // 회원가입 수 추가
+
+
+        } else {
+            return "error/unauthorized";
+        }
 
         return "content/admin/admin_index";
     }
