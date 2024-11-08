@@ -795,15 +795,16 @@ select::-ms-expand {
 }
 
 #moreReviewsBtn, #moreQnaBtn {
+    box-sizing: content-box;
     margin-top: 15px;
     padding: 10px 15px;
     background-color: #fff;
     color: #343b4d;
-    border: 1px solid #343b4d;;
+    border: 1px solid #343b4d;
     border-radius: 6px;
     cursor: pointer;
     position: absolute;
-    right: -80px;
+    right: 0;
 }
 
 /* Pagination hidden by default */
@@ -822,6 +823,7 @@ select::-ms-expand {
     margin: 0 5px;
     cursor: pointer;
     color: #ef2a23;
+    border-radius: 5px;
 }
 
 .page-link.active {
@@ -1017,6 +1019,7 @@ select::-ms-expand {
     display: inline-block;
     padding: 5px 10px;
     border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 .current {
@@ -1024,6 +1027,7 @@ select::-ms-expand {
     padding: 5px 10px;
     margin: 0 5px;
     border: 1px solid #ddd;
+    border-radius: 5px;
     cursor: pointer;
     background-color: #ef2a23;
     font-weight: bold;
@@ -1280,4 +1284,5 @@ select::-ms-expand {
     text-indent: 0;
     border: 1px solid #f37233;
     color: #f37233;
+    margin-right: 5px;
 }

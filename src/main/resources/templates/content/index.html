@@ -30,173 +30,37 @@
                     <div class="hit-products-slider">
                         <button class="prev-hit">❮</button>
                         <div class="hit-products-wrapper">
-                            <div class="hit-product-item">
-                                <div class="hit-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1"></div>
-                                <div class="product-container">
-                                    <div class="product-details">
-                                        <span class="product-name">상품명</span>
-                                        <div class="price-info">
-                                            <span class="original-price">30,000원</span>
-                                            <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                            <div class="product-icons">
-                                                <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                     class="cart-icon">
-                                                <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                     class="heart-icon">
-                                            </div>
+                            <div class="hit-product-item" th:each="product: ${hitProduct}">
+                                <a th:href="@{'/market/view/'+${product.categoryId}+'/'+${product.getProductId()}}">
+                                    <th:block th:if="${product.savedPath==null}">
+                                        <div class="hit-pimg"><img th:src="'/uploads/productImg/'+${product.file230}" th:alt="${product.productName}"></div>
+                                    </th:block>
+                                    <th:block th:unless="${product.savedPath==null}">
+                                        <div class="hit-pimg"><img th:src="'/uploads/'+${product.savedPath}+${product.file230}" alt="상품1"></div>
+                                    </th:block>
+                                    <div class="product-container">
+                                        <div class="product-details">
+                                            <section>
+                                                <span class="product-name">[[${product.productName}]]</span>
+
+                                            </section>
+                                            <section>
+                                                <div class="price-info">
+                                                    <span class="original-price">[[${product.price}]]원</span>
+                                                    <span class="discount">[[${product.discount}]]% <span
+                                                            class="discount-arrow">↓</span></span>
+                                                </div>
+                                                <span class="final-price">[[${product.finalPrice}]]원</span>
+                                                <button th:if="${product.shippingFee >0 }" class="shippingnolabel">배송비[[${product.shippingFee}]] </button>
+                                                <button th:unless="${product.shippingFee >0 }" class="shipping-label">무료배송</button>
+                                            </section>
+
                                         </div>
-                                        <span class="final-price">27,000원</span>
-                                        <button class="shipping-label">무료배송</button>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             <!-- 추가 상품들 -->
-                            <div class="hit-product-item">
-                                <div class="hit-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1"></div>
-                                <div class="product-container">
-                                    <div class="product-details">
-                                        <span class="product-name">상품명</span>
-                                        <div class="price-info">
-                                            <span class="original-price">30,000원</span>
-                                            <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                            <div class="product-icons">
-                                                <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                     class="cart-icon">
-                                                <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                     class="heart-icon">
-                                            </div>
-                                        </div>
-                                        <span class="final-price">27,000원</span>
-                                        <button class="shipping-label">무료배송</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 추가 상품들 -->
-                            <div class="hit-product-item">
-                                <div class="hit-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1"></div>
-                                <div class="product-container">
-                                    <div class="product-details">
-                                        <span class="product-name">상품명</span>
-                                        <div class="price-info">
-                                            <span class="original-price">30,000원</span>
-                                            <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                            <div class="product-icons">
-                                                <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                     class="cart-icon">
-                                                <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                     class="heart-icon">
-                                            </div>
-                                        </div>
-                                        <span class="final-price">27,000원</span>
-                                        <button class="shipping-label">무료배송</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 추가 상품들 -->
-                            <div class="hit-product-item">
-                                <div class="hit-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1"></div>
-                                <div class="product-container">
-                                    <div class="product-details">
-                                        <span class="product-name">상품명</span>
-                                        <div class="price-info">
-                                            <span class="original-price">30,000원</span>
-                                            <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                            <div class="product-icons">
-                                                <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                     class="cart-icon">
-                                                <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                     class="heart-icon">
-                                            </div>
-                                        </div>
-                                        <span class="final-price">27,000원</span>
-                                        <button class="shipping-label">무료배송</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 추가 상품들 -->
-                            <div class="hit-product-item">
-                                <div class="hit-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1"></div>
-                                <div class="product-container">
-                                    <div class="product-details">
-                                        <span class="product-name">상품명</span>
-                                        <div class="price-info">
-                                            <span class="original-price">30,000원</span>
-                                            <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                            <div class="product-icons">
-                                                <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                     class="cart-icon">
-                                                <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                     class="heart-icon">
-                                            </div>
-                                        </div>
-                                        <span class="final-price">27,000원</span>
-                                        <button class="shipping-label">무료배송</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 추가 상품들 -->
-                            <div class="hit-product-item">
-                                <div class="hit-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1"></div>
-                                <div class="product-container">
-                                    <div class="product-details">
-                                        <span class="product-name">상품명</span>
-                                        <div class="price-info">
-                                            <span class="original-price">30,000원</span>
-                                            <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                            <div class="product-icons">
-                                                <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                     class="cart-icon">
-                                                <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                     class="heart-icon">
-                                            </div>
-                                        </div>
-                                        <span class="final-price">27,000원</span>
-                                        <button class="shipping-label">무료배송</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 추가 상품들 -->
-                            <div class="hit-product-item">
-                                <div class="hit-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1"></div>
-                                <div class="product-container">
-                                    <div class="product-details">
-                                        <span class="product-name">상품명</span>
-                                        <div class="price-info">
-                                            <span class="original-price">30,000원</span>
-                                            <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                            <div class="product-icons">
-                                                <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                     class="cart-icon">
-                                                <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                     class="heart-icon">
-                                            </div>
-                                        </div>
-                                        <span class="final-price">27,000원</span>
-                                        <button class="shipping-label">무료배송</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 추가 상품들 -->
-                            <div class="hit-product-item">
-                                <div class="hit-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1"></div>
-                                <div class="product-container">
-                                    <div class="product-details">
-                                        <span class="product-name">상품명</span>
-                                        <div class="price-info">
-                                            <span class="original-price">30,000원</span>
-                                            <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                            <div class="product-icons">
-                                                <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                     class="cart-icon">
-                                                <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                     class="heart-icon">
-                                            </div>
-                                        </div>
-                                        <span class="final-price">27,000원</span>
-                                        <button class="shipping-label">무료배송</button>
-                                    </div>
-                                </div>
-                            </div>
+
                             <!-- ...8개까지 추가 -->
                         </div>
                         <button class="next-hit">❯</button>
@@ -205,173 +69,34 @@
                 <section class="recommended-products" id="recommended-products">
                     <h2>추천상품</h2>
                     <div class="products-wrapper">
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
+                        <div class="product-item" th:each="product: ${ratingProduct}" >
+                            <a th:href="@{'/market/view/'+${product.categoryId}+'/'+${product.getProductId()}}">
+                                <th:block th:if="${product.savedPath==null}">
+                                    <div class="pimg"><img th:src="'/uploads/productImg/'+${product.file230}" th:alt="${product.productName}"></div>
+                                </th:block>
+                                <th:block th:unless="${product.savedPath==null}">
+                                    <div class="pimg"><img th:src="'/uploads/'+${product.savedPath}+${product.file230}" alt="상품1"></div>
+                                </th:block>
+                                <div class="product-container">
+                                    <div class="product-details">
+                                        <section>
+                                            <span class="product-name">[[${product.productName}]]</span>
+
+                                        </section>
+                                        <section>
+                                            <div class="price-info">
+                                                <span class="original-price">[[${product.price}]]원</span>
+                                                <span class="discount">[[${product.discount}]]% <span
+                                                        class="discount-arrow">↓</span></span>
+                                            </div>
+                                            <span class="final-price">[[${product.finalPrice}]]원</span>
+                                            <button th:if="${product.shippingFee >0 }" class="shippingnolabel">배송비[[${product.shippingFee}]] </button>
+                                            <button th:unless="${product.shippingFee >0 }" class="shipping-label">무료배송</button>
+                                        </section>
+
                                     </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
+                            </a>
                         </div>
                         <!-- 7 more products with the same structure -->
                         <!-- 상품이 8개여서 위와 같은 구조를 반복 -->
@@ -381,173 +106,34 @@
                 <section class="latest-products" id="latest-products">
                     <h2>최신상품</h2>
                     <div class="products-wrapper">
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
+                        <div class="product-item" th:each="product: ${rDateProduct}">
+                            <a th:href="@{'/market/view/'+${product.categoryId}+'/'+${product.getProductId()}}">
+                                <th:block th:if="${product.savedPath==null}">
+                                    <div class="pimg"><img th:src="'/uploads/productImg/'+${product.file230}" th:alt="${product.productName}"></div>
+                                </th:block>
+                                <th:block th:unless="${product.savedPath==null}">
+                                    <div class="pimg"><img th:src="'/uploads/'+${product.savedPath}+${product.file230}" alt="상품1"></div>
+                                </th:block>
+                                <div class="product-container">
+                                    <div class="product-details">
+                                        <section>
+                                            <span class="product-name">[[${product.productName}]]</span>
+
+                                        </section>
+                                        <section>
+                                            <div class="price-info">
+                                                <span class="original-price">[[${product.price}]]원</span>
+                                                <span class="discount">[[${product.discount}]]% <span
+                                                        class="discount-arrow">↓</span></span>
+                                            </div>
+                                            <span class="final-price">[[${product.finalPrice}]]원</span>
+                                            <button th:if="${product.shippingFee >0 }" class="shippingnolabel">배송비[[${product.shippingFee}]] </button>
+                                            <button th:unless="${product.shippingFee >0 }" class="shipping-label">무료배송</button>
+                                        </section>
+
                                     </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-item">
-                            <div class="product-item-pimg"><img src="/images/sample/81769150908.jpg" alt="상품1">
-                            </div>
-                            <div class="product-container">
-                                <div class="product-details">
-                                    <span class="product-name">상품명</span>
-                                    <div class="price-info">
-                                        <span class="original-price">30,000원</span>
-                                        <span class="discount">10% <span class="discount-arrow">↓</span></span>
-                                        <div class="product-icons">
-                                            <img src="/images/common/icon_cart_black.svg" alt="카트"
-                                                 class="cart-icon">
-                                            <img src="/images/common/ico_heart_black.svg" alt="찜"
-                                                 class="heart-icon">
-                                        </div>
-                                    </div>
-                                    <span class="final-price">27,000원</span>
-                                    <button class="shipping-label">무료배송</button>
-                                </div>
-                            </div>
+                            </a>
                         </div>
 
 
@@ -556,6 +142,74 @@
                     </div>
                 </section>
 
+                <section class="sold-products" id="sold-products">
+                    <h2>인기상품</h2>
+                    <div class="products-wrapper">
+                        <div class="product-item" th:each="product: ${soldProduct}">
+                            <a th:href="@{'/market/view/'+${product.categoryId}+'/'+${product.getProductId()}}">
+                                <th:block th:if="${product.savedPath==null}">
+                                    <div class="pimg"><img th:src="'/uploads/productImg/'+${product.file230}" th:alt="${product.productName}"></div>
+                                </th:block>
+                                <th:block th:unless="${product.savedPath==null}">
+                                    <div class="pimg"><img th:src="'/uploads/'+${product.savedPath}+${product.file230}" alt="상품1"></div>
+                                </th:block>
+                                <div class="product-container">
+                                    <div class="product-details">
+                                        <section>
+                                            <span class="product-name">[[${product.productName}]]</span>
+
+                                        </section>
+                                        <section>
+                                            <div class="price-info">
+                                                <span class="original-price">[[${product.price}]]원</span>
+                                                <span class="discount">[[${product.discount}]]% <span
+                                                        class="discount-arrow">↓</span></span>
+                                            </div>
+                                            <span class="final-price">[[${product.finalPrice}]]원</span>
+                                            <button th:if="${product.shippingFee >0 }" class="shippingnolabel">배송비[[${product.shippingFee}]] </button>
+                                            <button th:unless="${product.shippingFee >0 }" class="shipping-label">무료배송</button>
+                                        </section>
+
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                <section class="discount-products" id="discount-products">
+                    <h2>할인상품</h2>
+                    <div class="products-wrapper">
+                        <div class="product-item" th:each="product: ${discountProduct}">
+                            <a th:href="@{'/market/view/'+${product.categoryId}+'/'+${product.getProductId()}}">
+                                <th:block th:if="${product.savedPath==null}">
+                                    <div class="pimg"><img th:src="'/uploads/productImg/'+${product.file230}" th:alt="${product.productName}"></div>
+                                </th:block>
+                                <th:block th:unless="${product.savedPath==null}">
+                                    <div class="pimg"><img th:src="'/uploads/'+${product.savedPath}+${product.file230}" alt="상품1"></div>
+                                </th:block>
+                                <div class="product-container">
+                                    <div class="product-details">
+                                        <section>
+                                            <span class="product-name">[[${product.productName}]]</span>
+
+                                        </section>
+                                        <section>
+                                            <div class="price-info">
+                                                <span class="original-price">[[${product.price}]]원</span>
+                                                <span class="discount">[[${product.discount}]]% <span
+                                                        class="discount-arrow">↓</span></span>
+                                            </div>
+                                            <span class="final-price">[[${product.finalPrice}]]원</span>
+                                            <button th:if="${product.shippingFee >0 }" class="shippingnolabel">배송비[[${product.shippingFee}]] </button>
+                                            <button th:unless="${product.shippingFee >0 }" class="shipping-label">무료배송</button>
+                                        </section>
+
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
 
             </div><!--sectionWrapper-->
         </section>

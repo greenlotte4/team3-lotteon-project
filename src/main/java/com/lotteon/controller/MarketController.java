@@ -40,6 +40,9 @@ import com.lotteon.service.user.CouponDetailsService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -76,12 +79,30 @@ public class MarketController {
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
-        List<ProductCategoryDTO> categoryDTOs =  productCategoryService.getAllParentCategoryDTOs(category);
+        ProductCategoryDTO productCategoryDTO =  productCategoryService.getCategoryName(category);
+        String name= productCategoryDTO.getName();
+        log.info("ddddddddddddddd231:"+name);
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
-        log.info(categoryDTOs);
+        log.info(name);
 
-        model.addAttribute("categoryDTOs",categoryDTOs);
+
+        List<ProductDTO> hitProduct =  productService.selectMainList(category,"hit");
+        log.info("hitProduct!!!:"+hitProduct);
+        List<ProductDTO> soldProduct =  productService.selectMainList(category,"sold");
+        List<ProductDTO> rDateProduct =  productService.selectMainList(category,"rdate");
+        List<ProductDTO> discountProduct =  productService.selectMainList(category,"discount");
+        List<ProductDTO> ratingProduct =  productService.selectMainList(category,"rating");
+
+
+        model.addAttribute("hitProduct",hitProduct);
+        model.addAttribute("soldProduct",soldProduct);
+        model.addAttribute("rDateProduct",rDateProduct);
+        model.addAttribute("discountProduct",discountProduct);
+        model.addAttribute("ratingProduct",ratingProduct);
+
+
+        model.addAttribute("categoryName",name);
         model.addAttribute("active",category);
 
         model.addAttribute("content", "main");
@@ -130,13 +151,8 @@ public class MarketController {
     }
 
     @GetMapping("/view/{categoryId}/{productId}")
-    public String marketView (
-        @PathVariable Long productId,
-        @PathVariable Long categoryId,
-        Model model,
-        Authentication authentication,
-        com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
-
+    public String marketView (@PathVariable Long productId, @PathVariable Long categoryId,
+        Model model, Authentication authentication, com.lotteon.dto.admin.PageRequestDTO pageRequestDTO) {
         log.info(productId);
         log.info(categoryId);
 
@@ -153,17 +169,12 @@ public class MarketController {
         log.info("productVIew Controller:::::"+productdto);
         List<Review> allReviews = reviewService.getAllReviewsByProductId(productId);
 
-
         // 리뷰 정보 추가
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewsss(pageRequestDTO, productId);
         List<Review> ReviewImgs = reviewService.getAllReviews();
 
         // 현재 사용자 아이디로 Q&A 데이터 필터링
         List<adminQnaDTO> userQnaList = qnaService.getQnaByWriterAndProductId(productId);
-
-        // 로그인된 사용자의 ID를 가져와 모델에 추가
-        String loggedInUserId = authentication.getName();
-        model.addAttribute("loggedInUserId", loggedInUserId);
 
         // 모델에 필요한 데이터 추가
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);

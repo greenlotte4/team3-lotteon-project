@@ -64,48 +64,59 @@
                     </div>
 
                     <table class="inquiry-table">
-                        <th:block>
-                            <input type="hidden" name="uid" id="uid" th:value="${#authentication.getName()}">
-                        </th:block>
+                        <input type="hidden" name="uid" id="uid" th:value="${#authentication.getName()}">
 
-                        <tbody>
-                        <tr class="font">
-                            <th>번호</th>
-                            <th>문의채널</th>
-                            <th>문의유형</th>
-                            <th>제목</th>
-                            <th>작성일</th>
-                            <th>상태</th>
-                        </tr>
+                        <thead>
+                            <tr class="font">
+                                <th>번호</th>
+                                <th>문의채널</th>
+                                <th>문의유형</th>
+                                <th>제목</th>
+                                <th>작성일</th>
+                                <th>상태</th>
+                            </tr>
+                        </thead>
 
-                        <tr class="tr3" th:each="qna : ${qnaPage.content}">
-                            <td>
-                                <span th:text="${qna.qna_id}"></span>
-                            </td>
-                            <td>
-                                <th:block th:if="${qna.qna_type1== '1'}"><span>회원</span></th:block>
-                                <th:block th:if="${qna.qna_type1== '2'}"><span>쿠폰/이벤트</span></th:block>
-                                <th:block th:if="${qna.qna_type1== '3'}"><span>주문/결제</span></th:block>
-                                <th:block th:if="${qna.qna_type1== '4'}"><span>배송</span></th:block>
-                                <th:block th:if="${qna.qna_type1== '5'}"><span>취소/반품/교환</span></th:block>
-                                <th:block th:if="${qna.qna_type1== '6'}"><span>여행/숙박/항공</span></th:block>
-                                <th:block th:if="${qna.qna_type1== '7'}"><span>안전거래</span></th:block>
-                            </td>
-                            <td>
-                                <span th:text="${qna.qna_type2}"></span>
-                            </td>
-                            <td class="titles">
-                                <a th:href="@{/cs/qna/detail?id={id}(id=${qna.qna_id})}">
-                                    <span th:text="${qna.qna_title}"></span>
-                                </a>
-                            </td>
-                            <td>
-                                <span th:text="${#strings.substring(qna.rdate,0,10)}"></span>
-                            </td>
-                            <td class="status-pending">
-                                <span th:text="${qna.qna_status.name() == 'review' ? '검토중' : '답변완료'}"></span>
-                            </td>
-                        </tr>
+                        <tbody th:if="${!qnaPage.content.isEmpty()}">
+                            <tr class="tr3" th:each="qna : ${qnaPage.content}">
+                                <td>
+                                    <span th:text="${qna.qnaNo}"></span>
+                                </td>
+                                <td>
+                                    <span th:if="${qna.qna_type1 == '1'}">회원</span>
+                                    <span th:if="${qna.qna_type1 == '2'}">쿠폰/이벤트</span>
+                                    <span th:if="${qna.qna_type1 == '3'}">주문/결제</span>
+                                    <span th:if="${qna.qna_type1 == '4'}">배송</span>
+                                    <span th:if="${qna.qna_type1 == '5'}">취소/반품/교환</span>
+                                    <span th:if="${qna.qna_type1 == '6'}">여행/숙박/항공</span>
+                                    <span th:if="${qna.qna_type1 == '7'}">안전거래</span>
+                                </td>
+                                <td>
+                                    <span th:text="${qna.cate.id}"></span>
+                                </td>
+                                <td class="titles">
+                                    <a th:href="@{/cs/qna/detail(id=${qna.qnaNo})}">
+                                        <span th:text="${qna.qnatitle}"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <span th:text="${#strings.substring(qna.date, 0, 10)}"></span>
+                                </td>
+                                <td class="status-pending">
+                                    <span th:text="${qna.qna_status != null ? (qna.qna_status.name() == 'review' ? '검토중' : '답변완료') : '상태 없음'}"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                        <tbody th:unless="${!qnaPage.content.isEmpty()}">
+                            <tr>
+                                <td colspan="6" style="text-align: center;">
+                                    <div class="qna_Lists" style="display: flex; flex-direction: column; align-items: center; padding: 80px; justify-content: center; font-size: 15px;">
+                                        <img src="/images/common/icon_no_result.svg"><br>
+                                        <span>문의내용이 없습니다.</span>
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     <!-- 페이지네이션 -->
