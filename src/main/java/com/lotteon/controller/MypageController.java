@@ -73,7 +73,7 @@ public class MypageController {
             model.addAttribute("IssuedList", issuedCoupons);
 
 
-        model.addAttribute("banners", banners);
+        model.addAttribute("banners", banners2);
         return "content/user/coupondetails"; // Points to "content/user/coupondetails"
     }
 
