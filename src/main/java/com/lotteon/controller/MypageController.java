@@ -154,12 +154,11 @@ public class MypageController {
         return "content/user/pointdetails"; // Points to "content/user/pointdetails"
     }
 
-    @GetMapping("/qnadetails/{uid}")
+    @GetMapping("/qnadetails")
     public String qnaDetails(
-            @PathVariable String uid,
             @RequestParam(value = "cate", required = false) String category,
             Authentication authentication, Model model,
-            @PageableDefault(size = 10, sort = "rdate", direction = Sort.Direction.DESC) Pageable pageable,
+            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable,
             HttpServletRequest request) {
 
         // 배너 데이터 가져오기
@@ -173,10 +172,7 @@ public class MypageController {
 
         String loggedInUserUid = authentication.getName();  // 로그인한 사용자의 ID
         log.info("login!!!!"+loggedInUserUid);
-        if (!uid.equals(loggedInUserUid)) {
-            // 로그인이 다른 사용자의 UID를 요청한 경우 처리 로직 추가
-            throw new AccessDeniedException("You are not authorized to view this page.");
-        }
+
 
         // QnA 조회 로직 설정
         com.lotteon.dto.page.PageRequestDTO pageRequestDTO= com.lotteon.dto.page.PageRequestDTO.builder()
