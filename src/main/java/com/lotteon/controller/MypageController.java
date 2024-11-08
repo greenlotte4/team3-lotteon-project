@@ -1,20 +1,16 @@
 package com.lotteon.controller;
 
-import com.lotteon.dto.QnaDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
-import com.lotteon.dto.order.OrderCompletedResponseDTO;
-import com.lotteon.dto.order.OrderDTO;
-import com.lotteon.dto.order.OrderWithGroupedItemsDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.QnA;
-import com.lotteon.entity.User.Member;
+import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.entity.admin.CouponIssued;
-import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
 import com.lotteon.repository.QnaRepository;
+import com.lotteon.repository.admin.AdminQnaRepository;
 import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
@@ -37,12 +33,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -58,6 +51,7 @@ public class MypageController {
     private final CouponIssuedService couponIssuedService;
     private final QnaRepository qnaRepository;
     private final OrderService orderService;
+    private final AdminQnaRepository adminQnaRepository;
 
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
@@ -173,7 +167,7 @@ public class MypageController {
 
         // QnA 조회 로직 설정
         String requestURI = request.getRequestURI();
-        Page<QnA> qnaPage = getQnaPage(requestURI, category, authentication, pageable);
+        Page<Adminqna> qnaPage = adminService.getQnaPage(requestURI, category, authentication, pageable);
 
         // 모델에 데이터 추가
         model.addAttribute("content", "qnadetails");
@@ -184,19 +178,7 @@ public class MypageController {
         return "content/user/qnadetails";
     }
 
-    private Page<QnA> getQnaPage(String requestURI, String category, Authentication authentication, Pageable pageable) {
-        if ("/mypage/qnadetails".equals(requestURI)) {
-            // 마이페이지에서 접근한 경우, 현재 사용자 게시물만 조회
-            String uid = authentication.getName();
-            return qnaRepository.findByQnaWriter(uid, pageable);
-        } else if (category != null) {
-            // 특정 카테고리 조회
-            return qnaRepository.findByQna_type1(category, pageable);
-        } else {
-            // 전체 조회
-            return qnaRepository.findAll(pageable);
-        }
-    }
+
 
 
     @GetMapping("/reviewdetails")

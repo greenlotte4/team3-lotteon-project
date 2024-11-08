@@ -2,12 +2,17 @@ package com.lotteon.service;
 
 
 import com.lotteon.dto.admin.BannerDTO;
+import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.repository.BannerRepository;
 import com.lotteon.entity.Banner;
+import com.lotteon.repository.admin.AdminQnaRepository;
 import com.lotteon.repository.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,6 +32,7 @@ public class AdminService {
     private final BannerRepository bannerRepository;
     private final ModelMapper modelMapper;
     private final OrderRepository orderRepository;
+    private final AdminQnaRepository adminQnaRepository;
 
     public Banner insertBanner(BannerDTO bannerDTO){
         Banner banner = bannerRepository.save(modelMapper.map(bannerDTO, Banner.class));
@@ -79,6 +85,22 @@ public class AdminService {
     public void deleteCheck(List<Integer> data){
         for (Integer id : data) {
             bannerRepository.deleteById(id);
+        }
+    }
+
+
+
+    public Page<Adminqna> getQnaPage(String requestURI, String category, Authentication authentication, Pageable pageable) {
+        if ("/mypage/qnadetails".equals(requestURI)) {
+            // 마이페이지에서 접근한 경우, 현재 사용자 게시물만 조회
+            String uid = authentication.getName();
+            return adminQnaRepository.findByQnaWriter(uid, pageable);
+        } else if (category != null) {
+            // 특정 카테고리 조회
+            return adminQnaRepository.findByProductId(Long.parseLong(category), pageable);
+        } else {
+            // 전체 조회
+            return adminQnaRepository.findAll(pageable);
         }
     }
 
