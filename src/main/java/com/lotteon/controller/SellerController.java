@@ -187,6 +187,12 @@ public class SellerController {
         return "content/admin/order/admin_Order"; // Points to the "content/sellerDynamic" template for order status
     }
 
+    @ResponseBody
+    @GetMapping
+    public ResponseEntity<?> orderStatusItem(@RequestParam(required = false) Long orderId){
+        return ResponseEntity.ok("ㅣ야얌");
+    }
+
 
     @GetMapping("/login")
     public String sellerLogin(Model model) {
