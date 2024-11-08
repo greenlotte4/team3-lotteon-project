@@ -2,12 +2,16 @@ package com.lotteon.service.user;
 
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Point;
+import com.lotteon.entity.order.Order;
+import com.lotteon.repository.order.OrderRepository;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.repository.user.PointRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -16,8 +20,8 @@ public class PointService {
 
 
     private final PointRepository pointRepository;
-
     private final MemberRepository memberRepository;
+    private final OrderRepository orderRepository;
 
 
     @Transactional
@@ -36,4 +40,23 @@ public class PointService {
 
         return savedPoint;
     }
+
+    @Transactional
+    public void savePoint(Member member, int earnedPoints) {
+        // Point 엔티티 생성
+        Point point = new Point();
+        point.setMember(member);
+        point.setAmount(earnedPoints);
+        point.setDescription("구매 확정 포인트 적립");
+
+        // 포인트 기록 저장
+        pointRepository.save(point);
+
+        // Member의 총 포인트 업데이트
+        BigDecimal updatedPoints = member.getPoint().add(BigDecimal.valueOf(earnedPoints));
+        member.setPoint(updatedPoints);
+
+        memberRepository.save(member);
+    }
+
 }

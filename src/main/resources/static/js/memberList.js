@@ -9,6 +9,11 @@ document.getElementById('deleteSelectedBtn').addEventListener('click', function 
         return;
     }
 
+    if (!confirm('정말로 선택한 항목을 삭제하시겠습니까?')) {
+        alert('삭제가 취소되었습니다.');
+        return; // 삭제 취소 시, API 호출을 하지 않도록 종료
+    }
+
     // 삭제 API 호출
     fetch('/admin/user/deletemembers', { // 적절한 URL로 변경 필요
         method: 'POST',

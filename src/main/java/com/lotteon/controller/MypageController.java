@@ -78,6 +78,12 @@ public class MypageController {
         return "content/user/coupondetails"; // Points to "content/user/coupondetails"
     }
 
+//    @GetMapping("confirmPoint")
+//    public String confirmPoint(Model model) {
+//
+//
+//    }
+
     @GetMapping("/myInfo")
     public String myInfo(Model model) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기

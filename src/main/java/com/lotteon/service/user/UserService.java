@@ -8,6 +8,7 @@ import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.repository.user.SellerRepository;
 import com.lotteon.repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Log4j2
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -78,18 +80,19 @@ public class UserService {
 
     }
 
+    public void registerUserAndMember(User user, Member member) {
+        // 1. User 먼저 저장
+        String encodedPassword = passwordEncoder.encode(user.getPass());
+        user.setPass(encodedPassword);
 
-    public void registerMember(User user, Member member) {
-        user.setRole(User.Role.MEMBER); // 역할 설정
-        userRepository.save(user); // User 저장
+        // 2. User와 연결된 Member 객체 저장
+        member.setUser(user);  // Member 객체에 User 연결
 
-        member.setUser(user); // Member에 User 연결
-        memberRepository.save(member); // Member 저장
-
-        int congratulatoryPoints = 1000; // 지급할 포인트 수량
-        pointService.createPoint(member.getId(), congratulatoryPoints, "회원가입 축하 포인트"); // 포인트 지급
+//        int congratulatoryPoints = 1000; // 지급할 포인트 수량
+//        pointService.createPoint(member.getId(), congratulatoryPoints, "회원가입 축하 포인트"); // 포인트 지급
 
     }
+
 
     public void registerSeller(User user, Seller seller) {
         user.setRole(User.Role.SELLER); // 역할 설정
@@ -108,7 +111,7 @@ public class UserService {
     public MemberDTO getByUsername(String username) {
         log.info("username passed to getByUsername: " + username); // 확인용 로그
         Optional<Member> memberOptional = memberRepository.findByUser_Uid(username);
-        if(memberOptional.isPresent()) {
+        if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             MemberDTO memberDTO = getModelMapper.map(member, MemberDTO.class);
             return memberDTO;
