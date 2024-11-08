@@ -29,7 +29,7 @@ public class Delivery {
     private String entranceCode;          // 공동현관 출입번호
 
     // Member와의 다대일 관계 설정
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
 

@@ -44,7 +44,7 @@ public class Member {
     @Builder.Default
     private double point = 0.0;  // 기본값 설정
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Point> points = new ArrayList<>();
 
