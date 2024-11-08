@@ -83,16 +83,16 @@
                                     <span th:text="${qna.qnaNo}"></span>
                                 </td>
                                 <td>
-                                    <span th:if="${qna.qna_type1 == '1'}">회원</span>
-                                    <span th:if="${qna.qna_type1 == '2'}">쿠폰/이벤트</span>
-                                    <span th:if="${qna.qna_type1 == '3'}">주문/결제</span>
-                                    <span th:if="${qna.qna_type1 == '4'}">배송</span>
-                                    <span th:if="${qna.qna_type1 == '5'}">취소/반품/교환</span>
-                                    <span th:if="${qna.qna_type1 == '6'}">여행/숙박/항공</span>
-                                    <span th:if="${qna.qna_type1 == '7'}">안전거래</span>
+                                    <span th:if="${qna.cate_boardCateId == '1'}">회원</span>
+                                    <span th:if="${qna.cate_boardCateId == '2'}">쿠폰/이벤트</span>
+                                    <span th:if="${qna.cate_boardCateId == '3'}">주문/결제</span>
+                                    <span th:if="${qna.cate_boardCateId == '4'}">배송</span>
+                                    <span th:if="${qna.cate_boardCateId == '5'}">취소/반품/교환</span>
+                                    <span th:if="${qna.cate_boardCateId == '6'}">여행/숙박/항공</span>
+                                    <span th:if="${qna.cate_boardCateId == '7'}">안전거래</span>
                                 </td>
                                 <td>
-                                    <span th:text="${qna.cate.id}"></span>
+                                    <span th:text="${qna.qnaNo}"></span>
                                 </td>
                                 <td class="titles">
                                     <a th:href="@{/cs/qna/detail(id=${qna.qnaNo})}">
