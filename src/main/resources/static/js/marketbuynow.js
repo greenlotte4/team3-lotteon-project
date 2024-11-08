@@ -524,7 +524,7 @@ function fetchCoupons(productId) {
             console.error(err,'요청중 문제 발생함')
         })
 }
-
+/*
 function displayErrorMessage(message) {
     const couponContainer = document.getElementById('discountCouponItems');
     couponContainer.innerHTML = ''; // 이전 내용 제거
@@ -533,7 +533,7 @@ function displayErrorMessage(message) {
     errorDiv.className = 'error-message'; // CSS 클래스를 추가하여 스타일링 가능
     errorDiv.textContent = message;
     couponContainer.appendChild(errorDiv);
-}
+}*/
 
 // 쿠폰 목록 표시하기
 function displayCoupons(coupons) {
@@ -570,13 +570,14 @@ function displayCoupons(coupons) {
 
 
 function applyCoupon(couponId){
-    const uid = sessionStorage.getItem('uid');  // 또는 localStorage.getItem('uid') 사용
-
+    const uid = localStorage.getItem('uid');  // 또는 localStorage.getItem('uid') 사용
+    console.log(localStorage.getItem('uid')); // 'user123'
+/*
     if (!uid) {
         alert('로그인 후 이용해 주세요');
         window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
         return;
-    }
+    }*/
 
     if(!confirm("이 쿠폰을 발급 받으시겠습니까?")){
         return;
@@ -594,7 +595,7 @@ function applyCoupon(couponId){
             }
         })
         .then(data => {
-            alert(`쿠폰이 성공적으로 적용되었습니다.: ${data.message}`);
+            alert(`쿠폰이 성공적으로 적용되었습니다.`);
 
         })
         .catch(err => {
