@@ -51,7 +51,7 @@ public class AdminConfigController {
         List<Terms> termsList = termsService.findAllTerms();
         model.addAttribute("termsList", termsList);
 
-        return "content/admin/config/terms";
+        return "content/admin/config/admin_Terms";
     }
     @PostMapping("/terms")
     public String updateTerms(@ModelAttribute TermsDto termsDto, Model model) {
@@ -62,7 +62,7 @@ public class AdminConfigController {
         // 약관 목록을 다시 가져와서 모델에 추가
         model.addAttribute("termsList", termsService.findAllTerms());
         // 약관 관리 페이지로 리다이렉트
-        return "content/admin/config/terms";
+        return "content/admin/config/admin_Terms";
     }
 
 
