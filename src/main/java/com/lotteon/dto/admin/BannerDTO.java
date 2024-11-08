@@ -27,5 +27,7 @@ public class BannerDTO {
     private String ban_stime;
     private String ban_etime;
 
+    private String ban_color;
+
     private MultipartFile file;
 }

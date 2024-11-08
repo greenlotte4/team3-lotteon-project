@@ -19,6 +19,8 @@ public class QBanner extends EntityPathBase<Banner> {
 
     public static final QBanner banner = new QBanner("banner");
 
+    public final StringPath ban_color = createString("ban_color");
+
     public final StringPath ban_edate = createString("ban_edate");
 
     public final StringPath ban_etime = createString("ban_etime");
