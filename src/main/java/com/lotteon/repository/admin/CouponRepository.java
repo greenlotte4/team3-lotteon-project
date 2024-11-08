@@ -18,4 +18,7 @@ public interface CouponRepository extends JpaRepository<Coupon, String>, CouponR
 
     List<Coupon> findByProductIsNull();
 
+    List<Coupon> findByCouponNameContaining(String couponName);
+
+    List<Coupon> findBySellerCompanyContaining(String sellerCompany);
 }

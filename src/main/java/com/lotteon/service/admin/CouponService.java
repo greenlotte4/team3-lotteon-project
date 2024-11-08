@@ -96,15 +96,6 @@ public class CouponService {
         couponRepository.save(coupon);
     }
 
-    // 쿠폰 상세 조회
-    public CouponDTO selectCoupon(String couponId) {
-        return couponRepository.findById(couponId)
-                .map(coupon -> {
-                    log.info("Coupon selected: " + coupon);
-                    return modelMapper.map(coupon, CouponDTO.class);
-                })
-                .orElse(null);
-    }
 
     public CouponDTO endCoupon(String couponId) {
         Coupon coupon = couponRepository.findById(couponId)
@@ -143,21 +134,6 @@ public class CouponService {
         return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
     }
 
-    //    // 모든 쿠폰 조회 메소드
-//    public Page<CouponPageDTO> selectCouponsPagination(CouponListRequestDTO requestDTO, Pageable pageable) {
-//        return couponRepository.selectCouponByUserIdForList(Seller.getId(), pageable);
-//    }
-//
-//    // 검색 기능을 위한 메소드
-//    public Page<CouponPageDTO> searchCoupons(String uid, Pageable pageable, String searchType, String searchValue) {
-//        return couponRepository.searchCoupons(uid, pageable, searchType, searchValue);
-//    }
-    // 검색 기능
-    public Page<CouponDTO> searchCoupons(long sellerId, String searchType, String searchValue, Pageable pageable) {
-        Page<CouponListResponseDTO> couponPage = couponRepository.searchCoupons(sellerId, pageable, searchType, searchValue);
-        return couponPage.map(coupon -> modelMapper.map(coupon, CouponDTO.class));
-    }
-
     public List<Coupon> selectCouponIssued(Long productId) {
         if (productId == null) {
             // productId가 null인 경우, 모든 상품에 적용 가능한 쿠폰 조회
@@ -188,4 +164,5 @@ public class CouponService {
                 .map(product -> modelMapper.map(product, ProductDTO.class))
                 .collect(Collectors.toList());
     }
-}
+
+    }

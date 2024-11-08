@@ -53,6 +53,12 @@ public class ProductCategoryService {
         }
         return categoryDTO;
     }
+    public ProductCategoryDTO getCategoryName(long categoryId) {
+
+        ProductCategory productCategory =  productCategoryRepository.findById(categoryId).orElseThrow(EntityNotFoundException::new);
+        return modelMapper.map(productCategory, ProductCategoryDTO.class);
+
+    }
 
     // 3차 카테고리로부터 2차, 1차 카테고리를 가져오는 메서드
     @Transactional(readOnly = true)

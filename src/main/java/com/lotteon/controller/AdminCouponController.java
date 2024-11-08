@@ -24,7 +24,9 @@ import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.CouponService;
+import com.lotteon.service.search.SearchService;
 import com.lotteon.service.user.MemberService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -40,10 +42,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -57,6 +57,7 @@ public class AdminCouponController {
     private final CouponIssuedService couponIssuedService;
     private final ModelMapper modelMapper;
     private final MemberRepository memberRepository;
+    private final SearchService searchService;
     ;
 
     @GetMapping("/list")
@@ -166,11 +167,6 @@ public class AdminCouponController {
     }
 
 
-
-
-
-
-
     @GetMapping(value = "/products", produces = "application/json")
     public ResponseEntity<List<Map<String, Object>>> getProductsForCoupons() {
 
@@ -197,11 +193,37 @@ public class AdminCouponController {
 
 
 
+    @GetMapping("/search")
+    public ResponseEntity<List<CouponDTO>> searchCoupons(CouponListRequestDTO requestDTO)  {
 
+        log.info("검색 오청됨");
+        log.info("검색 요청됨 - 카테고리: " + requestDTO.getCategory() + ", 검색어: " + requestDTO.getQuery());
 
+        try {
+            List<CouponDTO> coupons = searchService.executeSearch(requestDTO.getCategory(), requestDTO.getQuery());
+            log.info("검색 결과: {}", coupons); // 검색 결과 확인
+            return ResponseEntity.ok(coupons);
+        } catch (IllegalArgumentException e) {
+            log.error("잘못된 카테고리: {}", requestDTO.getCategory());
+            return ResponseEntity.badRequest().build();  // 400 Bad Request 응답 반환
+        }
+    }
 
+    @GetMapping("/searchIssued")
+    public ResponseEntity<List<CouponIssuedDTO>> searchIssued(CouponListRequestDTO requestDTO)  {
 
+        log.info("검색 오청됨");
+        log.info("검색 요청됨 - 카테고리: " + requestDTO.getCategory() + ", 검색어: " + requestDTO.getQuery());
 
+        try {
+            List<CouponIssuedDTO> Issueds = searchService.executeIssuedSearch(requestDTO.getCategory(), requestDTO.getQuery());
+            log.info("검색 결과: {}", Issueds); // 검색 결과 확인
+            return ResponseEntity.ok(Issueds);
+        } catch (IllegalArgumentException e) {
+            log.error("잘못된 카테고리: {}", requestDTO.getCategory());
+            return ResponseEntity.badRequest().build();  // 400 Bad Request 응답 반환
+        }
+    }
 }
 
 

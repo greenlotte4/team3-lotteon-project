@@ -40,7 +40,9 @@
                 </colgroup>
 
                 <tr>
-                    <th><input type="checkbox" id="checkBoxAll" name="select" ></th>
+                    <th><input type="checkbox" id="checkBoxAll" name="select" >
+                        <input type="hidden" name="skip" id="skip">
+                    </th>
                     <th>상품</th>
                     <th>수량</th>
                     <th>판매가</th>
@@ -53,21 +55,30 @@
 
 
                 <!-- 반복부분 -->
-                <th:block th:unless="${cartItems.size() < 0}" th:data-cart-id="${item.cart.cartId}">
+                <th:block th:if="${cartItems != null and cartItems.size() > 0}" th:data-cart-id="${item.cart.cartId}">
                      <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
                      <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">
                         <tr th:each="item : ${cartItems}"
-                            th:data-cart-item-id="${item.getCartItemId()}" style="border-bottom: 1px solid #dddddd">
-<!--                            th:data-cart-deliveryFee="${item.getDeliveryFee()}"-->
-<!--                            th:data-cart-discount="${item.discount()}"-->
-<!--                            th:data-cart-img="${item.imageUrl}"-->
-<!--                            th:data-cart-productName="${item.productName}"-->
-<!--                            th:data-cart-totalPrice="${item.getTotalPrice()}"-->
-<!--                            th:data-cart-productId="${item.getProduct().getProductId()}"-->
+                            th:data-cartItemId="${item.cartItemId}"
+                            th:data-product-id="${item.getProduct().getProductId()}"
+                            th:data-product-name="${item.getProduct().getProductName()}"
+                            th:data-discount="${item.getDiscount()}"
+                            th:data-original-price="${item.product.getPrice()}"
+                            th:data-final-price="${item.getTotalPrice()}"
+                            th:data-quantity="${item.quantity}"
+                            th:data-file190="${item.getImageUrl()}"
+                            th:data-point="${item.getPoints()}"
+                            th:data-shipping-fee="${item.getDeliveryFee()}"
+                            th:data-shipping-terms="${item.product.shippingTerms}"
+                            style="border-bottom: 1px solid #dddddd">
 
-                            <input type="hidden" th:if="${item.getProductOptionCombination()!=null}" th:value="${item.getProductOptionCombination()}">
                         <td><input type="checkbox" name="select"></td>
                         <td>
+                            <th:block th:if="${item.getProductOptionCombination() != null}">
+                                <input type="hidden" th:class="additionalPrice-Input" th:value="${item.getProductOptionCombination().getAdditionalPrice()}">
+                                <input type="hidden" th:class="combinationString" th:value="${item.getProductOptionCombination().getCombination()}">
+                                <input type="hidden" th:class="combinationId" th:value="${item.getProductOptionCombination().getCombinationId()}">
+                            </th:block>
                             <div>
                                 <img th:src="${'uploads/productImg'+item.getImageUrl()}" alt="">
                             </div>
@@ -79,7 +90,8 @@
                         </td>
                         <td>
                             <div class="qnt">
-                                <input type="number" name="quantity" th:value="${item.quantity}" min="1" readonly>
+                                <input type="number" name="quantity" class="quantity" th:value="${item.quantity}" min="1" readonly>
+
                                 <div class="countModify">
                                     <a class="countModifyBtn" href="#">수정하기</a>
                                     <div class="number-controls" style="display: none;">
@@ -96,16 +108,16 @@
                                 </div>
                             </div>
                         </td>
-                        <td th:text="${item.price}">판매가</td>
-                        <td th:text="${item.discount}">할인</td>
-                        <td th:text="${item.getPoints()}">포인트</td>
-                        <td th:text="${item.getDeliveryFee()}">배송비</td>
-                        <td th:text="${item.getTotalPrice()}">총합</td>
+                        <td class="price" th:text="${item.getProduct().getPrice()}">판매가</td>
+                        <td class="price" th:text="${item.discount}">할인</td>
+                        <td class="price" th:text="${item.getPoints()}">포인트</td>
+                        <td class="price" th:text="${item.getDeliveryFee()}">배송비</td>
+                        <td class="price" th:text="${(item.getProduct().getPrice()- (item.getProduct().getPrice()*item.getProduct().getDiscount()/100)/10*10)*item.getQuantity()}">총합</td>
                     </tr>
 
                 </th:block>
 
-                <th:block th:if="${cartItems.size() < 0}" >
+                <th:block th:unless="${cartItems != null and cartItems.size() > 0}" >
                     <tr>
                         <td colspan="8" style="text-align: center; font-size: 25px">장바구니가 비어있습니다.</td>
                     </tr>

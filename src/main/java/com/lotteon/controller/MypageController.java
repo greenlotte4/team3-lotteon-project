@@ -4,6 +4,9 @@ import com.lotteon.dto.QnaDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
+import com.lotteon.dto.order.OrderCompletedResponseDTO;
+import com.lotteon.dto.order.OrderDTO;
+import com.lotteon.dto.order.OrderWithGroupedItemsDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.QnA;
@@ -17,6 +20,7 @@ import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.admin.CouponIssuedService;
+import com.lotteon.service.order.OrderService;
 import com.lotteon.service.user.CouponDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +57,7 @@ public class MypageController {
     private final CouponDetailsService couponDetailsService;
     private final CouponIssuedService couponIssuedService;
     private final QnaRepository qnaRepository;
+    private final OrderService orderService;
 
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
@@ -85,10 +90,18 @@ public class MypageController {
 //    }
 
     @GetMapping("/myInfo")
-    public String myInfo(Model model) {
+    public String myInfo(Model model,Authentication authentication) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
+
+        Pageable pageable= PageRequest.of(0,3, Sort.by("orderDate").descending());
+        String uid = authentication.getName();
+
+//        List<OrderWithGroupedItemsDTO> groupDTO =  orderService.getOrdersGroupedBySeller(uid);
+//        log.info("여기여기여기!!!!"+groupDTO);
+//
+//        model.addAttribute("groupDTO", groupDTO);
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
         model.addAttribute("banners", banners2);
@@ -158,39 +171,9 @@ public class MypageController {
             pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "rdate"));
         }
 
-        // 현재 경로 확인
+        // QnA 조회 로직 설정
         String requestURI = request.getRequestURI();
-
-        // QnA 조회 로직
-        Page<QnA> qnaPage;
-        if ("/mypage/qnadetails".equals(requestURI)) {
-            // 마이페이지에서 접근했을 경우, 현재 사용자 게시물만 조회
-            String uid = authentication.getName();
-            qnaPage = qnaRepository.findByQnaWriter(uid, pageable);
-        } else if (category != null) {
-            qnaPage = qnaRepository.findByQna_type1(category, pageable);
-        } else {
-            qnaPage = qnaRepository.findAll(pageable);
-        }
-
-        // qna_type1 값을 한글로 변환하는 로직
-        for (QnA qna : qnaPage.getContent()) {
-            // qna_type1 값에 대응하는 한글 매핑
-            Map<Integer, String> typeMapping = new HashMap<>();
-            typeMapping.put(1, "회원");
-            typeMapping.put(2, "쿠폰/이벤트");
-            typeMapping.put(3, "주문/결제");
-            typeMapping.put(4, "배송");
-            typeMapping.put(5, "취소/반품/교환");
-            typeMapping.put(6, "여행/숙박/항공");
-            typeMapping.put(7, "안전거래");
-
-            // qna_type1에 해당하는 한글 값 가져오기
-            String typeName = typeMapping.getOrDefault(qna.getQna_type1(), "기타"); // 기본값 "기타" 설정
-
-            // 한글로 변환된 값을 qna_type1Name에 설정
-            qna.setQna_type1(typeName);
-        }
+        Page<QnA> qnaPage = getQnaPage(requestURI, category, authentication, pageable);
 
         // 모델에 데이터 추가
         model.addAttribute("content", "qnadetails");
@@ -198,8 +181,23 @@ public class MypageController {
         model.addAttribute("qnaPage", qnaPage);
         model.addAttribute("selectedCategory", category);
 
-        return "content/user/qnadetails"; // 템플릿 이름
+        return "content/user/qnadetails";
     }
+
+    private Page<QnA> getQnaPage(String requestURI, String category, Authentication authentication, Pageable pageable) {
+        if ("/mypage/qnadetails".equals(requestURI)) {
+            // 마이페이지에서 접근한 경우, 현재 사용자 게시물만 조회
+            String uid = authentication.getName();
+            return qnaRepository.findByQnaWriter(uid, pageable);
+        } else if (category != null) {
+            // 특정 카테고리 조회
+            return qnaRepository.findByQna_type1(category, pageable);
+        } else {
+            // 전체 조회
+            return qnaRepository.findAll(pageable);
+        }
+    }
+
 
     @GetMapping("/reviewdetails")
     public String reviewDetails(Model model, PageRequestDTO pageRequestDTO) {

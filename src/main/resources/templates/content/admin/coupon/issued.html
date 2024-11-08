@@ -24,11 +24,16 @@
 <!-- 작업 내용 추가 -->
 <div class="coupon-container">
     <div class="coupon-header">
-        <input type="text" placeholder="발급번호" class="search-input">
-        <input type="text" placeholder="검색어입력" class="search-input">
-        <button class="search-btn">검색</button>
+        <select id="searchIssuedCategory">
+            <option value="" disabled selected>선택하세요</option> <!-- 기본 선택 안내 문구 -->
+            <option value="couponType">1.쿠폰종류</option>
+            <option value="sellerCompany">2.발급자</option>
+        </select>
+        <input type="text" id="searchIssuedQuery" placeholder="검색어 입력" class="search-input">
+        <button id="searchBtnIssued" class="search-btn">검색</button>
     </div>
-    <table class="coupon-table">
+
+    <table class="coupon-table" id="issuedTable">
         <thead>
             <tr>
                 <th style="text-align: center;">발급번호</th>
@@ -41,11 +46,8 @@
                 <th style="text-align: center;">관리</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="issuedTbody">
         <!-- 쿠폰 리스트 출력 -->
-        <tr th:if="${#lists.isEmpty(IssuedList)}">
-            <td colspan="8" style="text-align: center;">발급된 쿠폰이 없습니다.</td>
-        </tr>
         <tr th:each="Issued : ${IssuedList}">
             <td>
                 <a href="#" class="issued-order-link"
@@ -60,9 +62,6 @@
             th:data-issued-benefit="${Issued.benefit}"
             th:data-period="${Issued.startDate} + ' ~ ' + ${Issued.endDate}"
             th:data-issued-issuer="${Issued.sellerCompany}"
-
-
-
                 ></a>
             </td>
             <td th:text="${Issued.couponId}"></td>
@@ -74,8 +73,11 @@
             <td>
                 <button class="issued-end-button" th:attr="data-id=${Issued.issuanceNumber}">종료</button>
             </td>
-        </tr>
 
+        </tr>
+        <tr th:if="${#lists.isEmpty(IssuedList)}">
+            <td colspan="8" style="text-align: center;">발급된 쿠폰이 없습니다.</td>
+        </tr>
         </tbody>
     </table>
 

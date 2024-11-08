@@ -421,3 +421,165 @@ document.querySelectorAll('.issued-end-button').forEach(button => {
     }
 
 });
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // 쿠폰 목록 검색 기능
+    const searchBtnCoupon = document.getElementById('searchBtnCoupon');
+    const searchQuery = document.getElementById('searchQuery');
+
+    if (searchBtnCoupon && searchQuery) {
+        searchBtnCoupon.addEventListener('click', searchCoupon);
+        searchQuery.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                searchCoupon();  // 엔터 키가 눌리면 검색 실행
+            }
+        });
+    }
+
+    // 쿠폰발급현황 검색 기능
+    const searchBtnIssued = document.getElementById('searchBtnIssued');
+    const searchIssuedQuery = document.getElementById('searchIssuedQuery');
+
+    if (searchBtnIssued && searchIssuedQuery) {
+        searchBtnIssued.addEventListener('click', searchIssuedCoupon);
+        searchIssuedQuery.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                searchIssuedCoupon();  // 엔터 키가 눌리면 검색 실행
+            }
+        });
+    }
+});
+
+// 쿠폰 목록 검색 기능
+function searchCoupon() {
+    const category = document.getElementById('searchCategory').value;
+    const query = document.getElementById('searchQuery').value;
+    console.log('Request URL:', `/seller/coupon/search?category=${category}&query=${encodeURIComponent(query)}`);
+
+    const url = `/seller/coupon/search?category=${category}&query=${encodeURIComponent(query)}`;
+
+    fetch(url)
+        .then(response => {
+            console.log('Response Status:', response.status); // 응답 상태 코드 확인
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response received:', data);
+            displayCoupons(data);
+        })
+        .catch(error => {
+            console.error('검색 중 오류 발생:', error);
+        });
+}
+
+// 검색 결과를 화면에 표시
+function displayCoupons(data) {
+    const couponTable = document.getElementById('couponTable');
+    const couponContainer = couponTable.querySelector('#couponTbody');
+
+    couponContainer.innerHTML = ''; // 이전 검색 결과를 지움
+
+    if (data && data.length > 0) {
+        data.forEach(coupon => {
+            const couponElement = document.createElement('tr');
+            couponElement.classList.add('coupon-item');
+            couponElement.innerHTML = `
+               <td><a href="#" class="order-link"
+                       data-coupon-id="${coupon.couponId}"
+                       data-issuer="${coupon.sellerCompany}"
+                       data-type="${coupon.couponType}"
+                       data-name="${coupon.couponName}"
+                       data-benefit="${coupon.benefit}"
+                       data-period="${coupon.startDate} ~ ${coupon.endDate}"
+                       data-notes="${coupon.notes}"
+                       >${coupon.couponId}</a></td>
+                <td>${coupon.couponName}</td>
+                <td>${coupon.couponType}</td>
+                <td>${coupon.benefit}</td>
+                <td>
+                    <span>${coupon.startDate}</span> ~
+                    <span>${coupon.endDate}</span>
+                </td>
+                <td>${coupon.sellerCompany}</td>
+                <td>${coupon.issuedCount}</td>
+                <td>${coupon.usedCount}</td>
+                <td class="coupon-status">${coupon.status}</td>
+                <td>${coupon.rdate}</td>
+                <td><button class="end-button">종료</button></td>
+            `;
+            couponContainer.appendChild(couponElement);
+        });
+    } else {
+        couponContainer.innerHTML = '검색 결과가 없습니다.';
+    }
+}
+
+// 쿠폰발급현황 검색 기능
+function searchIssuedCoupon() {
+    const category = document.getElementById('searchIssuedCategory').value;
+    const query = document.getElementById('searchIssuedQuery').value;
+    console.log('Request URL:', `/seller/coupon/searchIssued?category=${category}&query=${encodeURIComponent(query)}`);
+
+    const url = `/seller/coupon/searchIssued?category=${category}&query=${encodeURIComponent(query)}`;
+
+    fetch(url)
+        .then(response => {
+            console.log('Response Status:', response.status); // 응답 상태 코드 확인
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response received:', data);
+            displayIssuedCoupons(data);
+        })
+        .catch(error => {
+            console.error('검색 중 오류 발생:', error);
+        });
+}
+
+// 발급된 쿠폰 결과를 화면에 표시
+function displayIssuedCoupons(data) {
+    const issuedTable = document.getElementById('issuedTable');
+    const issuedContainer = issuedTable.querySelector('#issuedTbody');
+
+    issuedContainer.innerHTML = ''; // 이전 검색 결과를 지움
+
+    if (data && data.length > 0) {
+        data.forEach(issued => {
+            const couponElement = document.createElement('tr');
+            couponElement.classList.add('coupon-item');
+            couponElement.innerHTML = `
+          <td>
+                    <a href="#" class="issued-order-link"
+                       data-issued-couponId="${issued.couponId}"
+                       data-issued-id="${issued.sellerCompany}"
+                       data-issued-couponType="${issued.couponType}"
+                       data-issued-usageStatus="${issued.usageStatus}"
+                       data-issued-memberName="${issued.memberName}"
+                       data-issued-couponName="${issued.couponName}"
+                       data-issued-restrictions="${issued.restrictions}"
+                       data-issued-benefit="${issued.benefit}"
+                       data-period="${issued.startDate} ~ ${issued.endDate}"
+                       data-issued-issuer="${issued.sellerCompany}">
+                    </a>
+                </td>
+                <td>${issued.couponId}</td>
+                <td>${issued.couponType}</td>
+                <td>${issued.couponName}</td>
+                <td>${issued.memberName}</td>
+                <td class="coupon-status">${issued.status}</td>
+                <td>${issued.usageDate ? issued.usageDate : '미사용'}</td>
+                <td>
+                    <button class="issued-end-button" data-id="${issued.issuanceNumber}">종료</button>
+                </td>
+            `;
+            issuedContainer.appendChild(couponElement);
+        });
+    } else {
+        issuedContainer.innerHTML = '<tr><td colspan="8" style="text-align: center;">발급된 쿠폰이 없습니다.</td></tr>';
+    }
+}

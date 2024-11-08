@@ -46,6 +46,11 @@ public class OrderDTO {
     private String memberName;
     private String memberHp;
 
+    //추가필드
+    private List<Long> orderItemIds;
+    private String image;
+    private String path;
+
 
     public Order toEntity() {
         return  Order.builder()
@@ -75,6 +80,8 @@ public class OrderDTO {
                 .addr2(this.addr2)
                 .build();
     }
+
+
 
 
 }

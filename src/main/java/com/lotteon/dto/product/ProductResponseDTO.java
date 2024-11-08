@@ -33,6 +33,8 @@ public class ProductResponseDTO{
     public ProductResponseDTO(ProductRequestDTO productRequest,List<MultipartFile> files) {
         log.info("여기 ");
         this.product = ProductDTO.builder()
+                .categoryFirstId(Long.parseLong(productRequest.getFirstLevelCategory()))
+                .categorySecondId(Long.parseLong(productRequest.getSecondLevelCategory()))
                 .categoryId(Long.parseLong(productRequest.getThirdLevelCategory()))
                 .productName(productRequest.getProductName())
                 .productDesc(productRequest.getProductDesc())

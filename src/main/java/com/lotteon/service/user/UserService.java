@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,4 +142,34 @@ public class UserService {
     public User save(User user) {
         return userRepository.save(user); // 사용자 저장
     }
+
+    // 특정 역할을 가진 전체 회원가입 수를 반환
+    public long getTotalUserCount() {
+        return userRepository.countUsersByRole();
+    }
+
+    // 어제 가입한 멤버와 셀러의 총합
+    public long getYesterdayNewUserCount() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime startOfYesterday = currentTime.minusDays(1).toLocalDate().atStartOfDay(); // 어제 0시
+        LocalDateTime endOfYesterday = startOfYesterday.plusDays(1).minusNanos(1); // 어제 23시 59분 59초
+
+        long newMembersCount = userRepository.countNewMembersByDateRange(startOfYesterday, endOfYesterday);
+        long newSellersCount = userRepository.countNewSellersByDateRange(startOfYesterday, endOfYesterday);
+
+        return newMembersCount + newSellersCount;
+    }
+
+    // 오늘 가입한 멤버와 셀러의 총합
+    public long getTodayNewUserCount() {
+        LocalDateTime startOfToday = LocalDate.now().atStartOfDay(); // 오늘 0시
+        LocalDateTime currentTime = LocalDateTime.now(); // 현재 시간
+
+        long newMembersCount = userRepository.countNewMembersByDateRange(startOfToday, currentTime);
+        long newSellersCount = userRepository.countNewSellersByDateRange(startOfToday, currentTime);
+
+        return newMembersCount + newSellersCount;
+    }
+
+
 }
