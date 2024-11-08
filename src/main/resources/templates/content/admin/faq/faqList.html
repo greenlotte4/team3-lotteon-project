@@ -224,7 +224,7 @@
 
         selectOption2.innerHTML = '<option value="2차 선택" disabled selected>2차 선택</option>';
 
-        fetch(`/admin/faq/subcate/${parentId}`)
+        fetch(`/api/faq/subcate/${parentId}`)
             .then(resp => resp.json())
             .then(data => {
                 console.log(data);
@@ -239,7 +239,7 @@
                 console.log(err);
             });
         //부모 카테고리로 요청
-        fetch(`/admin/faq/list/page?parentId=${parentId}`)
+        fetch(`/api/faq/list/page?parentId=${parentId}`)
             .then(resp => resp.json())
             .then(faqPageResponseDTO => {
                 console.log("야오야오야옹야옹야오양옹야옹야옹ㅇ:", faqPageResponseDTO);
@@ -310,7 +310,7 @@
         const parentId = selectOption1.value;
         const childId = this.value;
         console.log("자식자식자식 : " + childId);
-        fetch(`/admin/faq/list/page?parentId=${parentId}&childId=${childId}`)
+        fetch(`/api/faq/list/page?parentId=${parentId}&childId=${childId}`)
             .then(resp => resp.json())
             .then(faqPageResponseDTO => {
                 console.log("바우오웅와우옹우ㅏ와우오아웅:", faqPageResponseDTO);

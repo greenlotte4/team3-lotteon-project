@@ -21,15 +21,26 @@ public class Point {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int amount; // 지급 포인트
-    private int remainingPoints; // 잔여 포인트
+
+    private double amount; // 지급 포인트
+    private double remainingPoints; // 잔여 포인트
     private String description; // 지급 내용
+    private long orderItemId;
+    private boolean confirm; //
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    private LocalDateTime limitDate;
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false) // member 테이블의 id와 조인
     private Member member; // Member와의 관계
+
+
+    @PostPersist
+    public void setLImitDate(){
+
+        limitDate = LocalDateTime.now().plusYears(1);
+    }
 
 }

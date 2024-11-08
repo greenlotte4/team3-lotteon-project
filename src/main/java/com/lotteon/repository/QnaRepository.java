@@ -1,6 +1,8 @@
 package com.lotteon.repository;
 
+import com.lotteon.dto.adminQnaDTO;
 import com.lotteon.entity.QnA;
+import com.lotteon.entity.admin.QAdminqna;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

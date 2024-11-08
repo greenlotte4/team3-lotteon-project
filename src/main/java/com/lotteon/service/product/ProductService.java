@@ -18,6 +18,7 @@ import com.lotteon.dto.product.request.ProductViewResponseDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.product.*;
 import com.lotteon.repository.ReviewFileRepository;
+import com.lotteon.repository.ReviewRepository;
 import com.lotteon.repository.product.OptionRepository;
 import com.lotteon.repository.product.ProductCategoryRepository;
 import com.lotteon.repository.product.ProductRepository;
@@ -31,6 +32,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,7 @@ public class ProductService {
     private final ProductCategoryService productCategoryService;
     private final ProductCategoryRepository productCategoryRepository;
     private final ReviewService reviewService;
+    private final ReviewRepository reviewRepository;
 
     public void updatehit(Long productId){
        Optional<Product> opt =  productRepository.findByProductId(productId);
@@ -70,6 +73,7 @@ public class ProductService {
 
 
     }
+
 
     @Transactional
     public int deleteProducts(List<Long> productIds) {
@@ -128,11 +132,15 @@ public class ProductService {
             for(ProductFileDTO productFileDTO : fileDTOS) {
                 log.info("produtFileDTO : "+ productFileDTO);
                 ProductFile file = productFileService.insertFile(productFileDTO);
+
                 files.add(file);
+                product.setSavedPath(file.getPath());
+
             }
             log.info("filessssssssssssssssss:"+files);
             product.setFiles(files);
         }
+
 
 
 
@@ -231,12 +239,16 @@ public class ProductService {
         Page<Product> products;
         if(pageRequestDTO.getType()==null || pageRequestDTO.getKeyword()==null){
             products = productRepository.findAll(pageable);
+            long size = products.getTotalElements();
+            log.info("size::::total"+size);
             if(products.isEmpty()) {
                 return ProductListPageResponseDTO.builder()
                         .pageRequestDTO(pageRequestDTO)
-                        .total(0)
+                        .total(size)
                         .build();
             }
+
+
         }else{
             String type=pageRequestDTO.getType();
             String keyword=pageRequestDTO.getKeyword();
@@ -253,11 +265,15 @@ public class ProductService {
                 case "manufacturer":
                     products= productRepository.findByProductDetailsContaining(keyword,pageable);
                     break;
-                default: return  ProductListPageResponseDTO.builder()
+                default:
+
+                    return  ProductListPageResponseDTO.builder()
                         .pageRequestDTO(pageRequestDTO)
                         .total(0)
                         .build();
             }
+
+
         }
 
 
@@ -265,7 +281,7 @@ public class ProductService {
         List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
 
         return ProductListPageResponseDTO.builder()
-                .total(productDTOs.size())
+                .total(products.getTotalElements())
                 .ProductDTOs(productDTOs)
                 .pageRequestDTO(pageRequestDTO)
                 .build();
@@ -330,6 +346,15 @@ public class ProductService {
         }
         try{
             log.info("여기깢!!");
+
+            List<ProductSummaryDTO> productListWithReviews = tuples.getContent().stream()
+                    .map(product -> {
+                        int reviewCount = reviewRepository.countByProduct_ProductId(product.getProductId()); // 리뷰 갯수 조회
+                        product.setReviewCount(reviewCount); // 리뷰 갯수 설정
+                        return product;
+                    })
+                    .collect(Collectors.toList());
+
             ProductListPageResponseDTO list=  ProductListPageResponseDTO.builder()
                     .total((int) tuples.getTotalElements())
                     .productSummaryDTOs(tuples.getContent())
@@ -449,5 +474,94 @@ public class ProductService {
     }
 
 
-        public void isSaleProduct() {}
+    public List<ProductDTO> selectMainList(long categoryId,String sort){
+        List<Product> products = new ArrayList<>();
+        Pageable pageable = null;
+            switch (sort){
+                case "hit":
+                    pageable= PageRequest.of(0,8,Sort.by("hit").descending());
+                    if (categoryId==0){
+                        products= productRepository.findAllByOrderByHitDesc(pageable);
+
+                    }else {
+                        products= productRepository.findByCategoryFirstIdOrderByHitDesc(categoryId,pageable);
+
+                    }
+
+                    break;
+                case "sold":
+                    pageable= PageRequest.of(0,8,Sort.by("sold").descending());
+                    if(categoryId==0){
+                        products= productRepository.findAllByOrderBySoldDesc(pageable);
+
+                    }else{
+                        products= productRepository.findByCategoryFirstIdOrderBySoldDesc(categoryId,pageable);
+
+                    }
+
+                    break;
+                case "rdate":
+                    pageable= PageRequest.of(0,8,Sort.by("rdate").descending());
+                    if(categoryId==0) {
+                        products= productRepository.findAllByOrderByRdateDesc(pageable);
+
+                    }else{
+                        products= productRepository.findByCategoryFirstIdOrderByRdateDesc(categoryId,pageable);
+
+                    }
+                    break;
+                case "discount":
+                    pageable= PageRequest.of(0,8,Sort.by("discount").descending());
+                    if(categoryId==0) {
+                        products= productRepository.findAllByOrderByDiscountDesc(pageable);
+
+                    }else {
+                        products= productRepository.findByCategoryFirstIdOrderByDiscountDesc(categoryId,pageable);
+
+                    }
+
+                    break;
+                case "rating":
+                    pageable= PageRequest.of(0,8,Sort.by("productRating").descending());
+                    if(categoryId==0) {
+                        products= productRepository.findAllByOrderByProductRatingDesc(pageable);
+                    }else {
+                        products= productRepository.findByCategoryFirstIdOrderByProductRating(categoryId,pageable);
+                    }
+                    break;
+                default:
+                    break;
+
+
+            }
+
+
+
+
+        List<ProductDTO> productDTOS= new ArrayList<>();
+            for(Product product : products){
+                long finalPrice = (product.getPrice() * (100-product.getDiscount())/100*10)/10 ;
+                ProductDTO productDTO = ProductDTO.builder()
+                        .productId(product.getProductId())
+                        .productName(product.getProductName())
+                        .categoryId(product.getCategoryId())
+                        .file190(product.getFile190())
+                        .file230(product.getFile230())
+                        .savedPath(product.getSavedPath())
+                        .price(product.getPrice())
+                        .discount(product.getDiscount())
+                        .shippingFee(product.getShippingFee())
+                        .shippingTerms(product.getShippingTerms())
+                        .finalPrice(finalPrice)
+                        .build();
+                productDTOS.add(productDTO);
+            }
+
+        return productDTOS;
+    }
+
+
+
+
+
 }

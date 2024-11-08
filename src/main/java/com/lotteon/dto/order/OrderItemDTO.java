@@ -37,6 +37,9 @@ public class OrderItemDTO {
     @Transient
     private Seller seller;
 
+    private String company;
+    private String image;
+    private String path;
 
 
     //selectOption

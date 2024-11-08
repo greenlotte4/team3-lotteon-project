@@ -59,64 +59,16 @@
                             <th>주문일</th>
                             <th>배송</th>
                         </tr>
-                        <tr>
-                            <td><a class="order-modal-btn">10101212121</a></td>
-                            <td>wlgus5946</td>
-                            <td>챱챱김</td>
-                            <td>초코틴틴</td>
-                            <td>896</td>
-                            <td>9,000</td>
-                            <td>신용카드</td>
-                            <td>결제완료</td>
-                            <td>2024-12-15 12:00:00</td>
-                            <td><button class="openModalBtn">배송하기</button></td>
-                        </tr>
-                        <tr>
-                            <td><a class="order-modal-btn">101012121</a></td>
-                            <td>wlgus5946</td>
-                            <td>챱챱김</td>
-                            <td>신당동 장독대에 빠진 떡볶이</td>
-                            <td>3</td>
-                            <td>9,000</td>
-                            <td>신용카드</td>
-                            <td>결제완료</td>
-                            <td>2024-12-15 12:00:00</td>
-                            <td><button class="openModalBtn">배송하기</button></td>
-                        </tr>
-                        <tr>
-                            <td><a class="order-modal-btn">101012121</a></td>
-                            <td>wlgus5946</td>
-                            <td>챱챱김</td>
-                            <td>초코틴틴</td>
-                            <td>3</td>
-                            <td>9,000</td>
-                            <td>신용카드</td>
-                            <td>결제완료</td>
-                            <td>2024-12-15 12:00:00</td>
-                            <td><button class="openModalBtn">배송하기</button></td>
-                        </tr>
-                        <tr>
-                            <td><a class="order-modal-btn">101012121</a></td>
-                            <td>wlgus5946</td>
-                            <td>챱챱김</td>
-                            <td>초코틴틴</td>
-                            <td>3</td>
-                            <td>9,000</td>
-                            <td>신용카드</td>
-                            <td>결제완료</td>
-                            <td>2024-12-15 12:00:00</td>
-                            <td><button class="openModalBtn">배송하기</button></td>                        
-                        </tr>
-                        <tr>
-                            <td><a class="order-modal-btn">101012121</a></td>
-                            <td>wlgus5946</td>
-                            <td>챱챱김</td>
-                            <td>초코틴틴</td>
-                            <td>3</td>
-                            <td>9,000</td>
-                            <td>신용카드</td>
-                            <td>결제완료</td>
-                            <td>2024-12-15 12:00:00</td>
+                        <tr th:each="order : ${orders}">
+                            <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>
+                            <td th:text="${order.uid}">wlgus5946</td>
+                            <td th:text="${order.memberName}">챱챱김</td>
+                            <td class="productname" th:data-order-id="${order.orderId}">초코틴틴</td>
+                            <td th:text="${order.totalQuantity}">896</td>
+                            <td th:text="${order.totalPrice}">9,000</td>
+                            <td th:text="${order.pay}">신용카드</td>
+                            <td class="orderstatus">결제완료</td>
+                            <td>[[${#strings.substring(order.orderDate,0,10)}]]</td>
                             <td><button class="openModalBtn">배송하기</button></td>
                         </tr>
                     </table>
@@ -125,11 +77,6 @@
                         <button>선택삭제</button>
                         <button>상점등록</button>
                     </div>
-
-
-
-
-
 
             <div id="productModal" class="modal">
                 <div class="modal-content">
@@ -185,135 +132,164 @@
                     </form>
                 </div>
             </div>
-            <div id="modal-section-shipping" class="modal-section-shipping">
-                <div class="order-modal-shipping">
-                    <div class="shipping-info-items">
-                        <span class="shipping-info-close" style="cursor: pointer;">&times;</span>
-                        <h3>배송상세</h3>
-                    </div>
-                    <div class="modal-main">
-                        <div class="product-table">
-                            <div class="product-info-table">
-                                <div class="product-title">
-                                    <h3>상품정보</h3>
-                                </div>
-                                <div class="pro-info-details">
-                                    <div class="pro-img"></div>
-                                    <div class="pro-num">제품번호</div>
-                                    <div class="pro-name">상품명</div>
-                                    <div class="pro-seller">판매자</div>
-                                    <div class="pro-price">가격</div>
-                                    <div class="pro-sell">할인</div>
-                                    <div class="pro-stock">재고</div>
-                                    <div class="pro-ship">배송비</div>
-                                    <div class="total-pay">결제금액</div>
-                                </div>
-                                <div class="details">
-                                    <div class="pro-img-details">
-                                        <img src="../images/sample/화면 캡처 2024-10-17 102744.png" alt="#">
-                                    </div>
-                                    <div class="pro-num-details">123456789</div>
-                                    <div class="pro-name-details">프리미엄 퀄리티 오가닉 코튼 100% 에코백 - 다용도 사용 가능, 강력한
-                                        내구성</div>
-                                    <div class="pro-seller-details">뭐지</div>
-                                    <div class="pro-price-details">뭐지</div>
-                                    <div class="pro-sell-details">뭐지</div>
-                                    <div class="pro-stock-details">뭐지</div>
-                                    <div class="pro-ship-details">5000원</div>
-                                    <div class="total-pay-details">뭐지</div>
-                                </div>
+                    <section class="modal-section">
+                        <div id="order-modal" class="order-modal">
+                            <div class="order-items">
+                                <span class="order-close" style="cursor: pointer;">&times;</span>
+                                <h3>주문상세</h3>
                             </div>
-                            <div class="shipping-info-table">
-                                <div class="shipping-title">
-                                    <h3>배송증보</h3>
-                                </div>
-                                <div class="user-info-list">
-                                    <div class="shipping-order-num">
-                                        <div class="order-info-num">주문번호</div>
-                                        <div>
-                                            <td>123123123</td>
+                            <div class="modal-main">
+                                <div class="order-details">
+                                    <div class="product-info">
+                                        <h3>상품정보</h3>
+                                        <div class="">
+                                            <div class="pro-details">
+                                                <div class="pro-img"></div>
+                                                <div class="pro-num">제품번호</div>
+                                                <div class="pro-name">상품명</div>
+                                                <div class="pro-seller">판매자</div>
+                                                <div class="pro-price">가격</div>
+                                                <div class="pro-sell">할인</div>
+                                                <div class="pro-stock">재고</div>
+                                                <div class="pro-ship">배송비</div>
+                                                <div class="total-pay">결제금액</div>
+                                            </div>
+                                            <div class="details">
+                                                <div class="pro-img-details">
+                                                    <img src="../images/sample/화면 캡처 2024-10-17 102744.png" alt="#">
+                                                </div>
+                                                <div class="pro-num-details">123456789</div>
+                                                <div class="pro-name-details">프리미엄 퀄리티 오가닉 코튼 100% 에코백 - 다용도 사용 가능, 강력한 내구성</div>
+                                                <div class="pro-seller-details">뭐지</div>
+                                                <div class="pro-price-details">뭐지</div>
+                                                <div class="pro-sell-details">뭐지</div>
+                                                <div class="pro-stock-details">뭐지</div>
+                                                <div class="pro-ship-details">5000원</div>
+                                                <div class="total-pay-details">뭐지</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="shipping-user-name">
-                                        <div class="user-info-name">수령인</div>
-                                        <div>
-                                            <td>갑찹찹</td>
-                                        </div>
-                                    </div>
-                                    <div class="shipping-addr-num">
-                                        <div class="addr-info-hp">연락처</div>
-                                        <div>
-                                            <td>31231</td>
-                                        </div>
-                                    </div>
-                                    <div class="shipping-addr1">
-                                        <div class="addr1-info">배송지주소</div>
-                                        <div>
-                                            <td>집가고싶다</td>
-                                        </div>
-                                    </div>
-                                    <div class=".shipping-addr2">
-                                        <div class="addr2-info"></div>
-                                        <div>
+                                        <div class="total-price">
+                                            <div class="pay-title">
+                                                <h3>결제정보</h3>
+                                            </div>
+
+                                            <div class="total-info">
+                                                <div class="total-item">
+                                                    <div>총 상품금액</div>
+                                                    <div class="price">1234원</div>
+                                                </div>
+                                                <div class="total-item">
+                                                    <div>총 할인금액</div>
+                                                    <div class="price">34원</div>
+                                                </div>
+                                                <div class="total-item">
+                                                    <div>배송비</div>
+                                                    <div class="price">1000원</div>
+                                                </div>
+                                                <div class="total-item">
+                                                    <div>총 결제금액</div>
+                                                    <div>20000원</div>
+                                                </div>
+                                            </div>
 
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div class="shipping-info-list">
-                                    <div class="shipping-name">
-                                        <div class="con-info-name">택배사</div>
-                                        <div>
-                                            <td>지구택</td>
+                                    </div>
+
+                                    <div class="pay-info">
+                                        <div class="payment-flex">
+                                            <div class="payment-info">
+                                                <div class="pay-id">주문번호</div>
+                                                <div class="payment">결제방법</div>
+                                                <div class="pay-user">주문자 / 연락처</div>
+                                                <div class="pay-total">결제상태</div>
+                                            </div>
+                                            <div class="payment-details">
+                                                <div class="pay-id-details">주문번호</div>
+                                                <div class="pay-details">결제방법</div>
+                                                <div class="pay-user-details">주문자 / 연락처</div>
+                                                <div class="pay-total-details">결제완료
+                                                    <span class="total-amount">총 결제금액</span>
+                                                    <span class="price">200000000원</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="shipping-num">
-                                        <div class="num-info">운송장번호</div>
-                                        <div>
-                                            <td>12312312</td>
-                                        </div>
-                                    </div>
-                                    <div class="shipping-exc">
-                                        <div class="etc-info">기타</div>
-                                        <div>
-                                            <td>뭔가 하나가 생기겠지</td>
+                                    <div class="shipping">
+                                        <h3>배송정보</h3>
+                                        <div class="shipping-flex">
+                                            <div class="user-info">
+                                                <div class="user">수취인</div>
+                                                <div class="user-hp">연락처</div>
+                                                <div class="user-addr">배송지 주소</div>
+                                            </div>
+                                            <div class="user-details">
+                                                <div class="user-name-details">수취인수취인수취인</div>
+                                                <div class="user-hp-details">연락처수취인수취인</div>
+                                                <div class="user-addr-details">배송지 주소수취인수취인</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-                    <script th:src="@{/js/delivery.js}"></script>
+                    </section>
+<!--                    <script th:src="@{/js/delivery.js}"></script>-->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const orderitemId = document.querySelectorAll(".productname");
 
-<!--                    <script>-->
-<!--                        document.addEventListener('DOMContentLoaded', function () {-->
-<!--                            const modal = document.querySelector('.modal-section-shipping');-->
-<!--                            const orderModal = document.querySelector('.order-modal-shipping');-->
-<!--                            const modalClose = document.querySelector('.shipping-info-close');-->
+        orderitemId.forEach(orderItems => {
+            const orderitem = orderItems.dataset.orderId;
+            const orderstatuses = document.querySelectorAll(".orderstatus");
 
-<!--                            function openModal() {-->
-<!--                                modal.style.display = 'flex'; // 모달을 flex로 표시-->
-<!--                                orderModal.style.display = 'block'; // 내부 모달도 표시-->
-<!--                            }-->
+            fetch(`/seller/order/status/orderItem?orderId=${orderitem}`)
+                .then(resp => resp.json())
+                .then(orderItemDTO => {
+                    console.log("야...옹 :", orderItemDTO);
+                    console.log("메멩ㅇ..옹..:" + orderItemDTO.product.productName);
+                    orderItems.textContent = orderItemDTO.product.productName;
 
-<!--                            function closeModal() {-->
-<!--                                modal.style.display = 'none'; // 모달을 숨김-->
-<!--                                orderModal.style.display = 'none'; // 내부 모달도 숨김-->
-<!--                            }-->
 
-<!--                            document.querySelectorAll('.shipping-info-btn').forEach(button => {-->
-<!--                                button.addEventListener('click', openModal);-->
-<!--                            });-->
+                    orderstatuses.forEach(orderstatus => {
+                        orderstatus.textContent = orderItemDTO.status;
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        })
 
-<!--                            modalClose.addEventListener('click', closeModal);-->
+    })
 
-<!--                            window.addEventListener('click', function (event) {-->
-<!--                                if (event.target === modal) {-->
-<!--                                    closeModal();-->
-<!--                                }-->
-<!--                            });-->
-<!--                        });-->
-<!--                    </script>-->
+</script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const modal = document.querySelector('.modal-section');
+                            const orderModal = document.querySelector('.order-items');
+                            const modalClose = document.querySelector('.order-close');
+
+                            function openModal() {
+                                modal.style.display = 'flex'; // 모달을 flex로 표시
+                                orderModal.style.display = 'block'; // 내부 모달도 표시
+                            }
+
+                            function closeModal() {
+                                modal.style.display = 'none'; // 모달을 숨김
+                                orderModal.style.display = 'none'; // 내부 모달도 숨김
+                            }
+
+                            document.querySelectorAll('.order-modal-btn').forEach(button => {
+                                button.addEventListener('click', openModal);
+                            });
+
+                            modalClose.addEventListener('click', closeModal);
+
+                            window.addEventListener('click', function (event) {
+                                if (event.target === modal) {
+                                    closeModal();
+                                }
+                            });
+                        });
+                    </script>
 </th:block>

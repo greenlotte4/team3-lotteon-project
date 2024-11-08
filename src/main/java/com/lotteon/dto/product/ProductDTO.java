@@ -19,7 +19,8 @@ import java.util.Set;
 public class ProductDTO{
 
     private Long productId;
-
+    private Long categoryFirstId;
+    private Long categorySecondId;
     private Long categoryId;
     private Long sellerNo;
     private String productName;
@@ -61,6 +62,10 @@ public class ProductDTO{
     private List<ReviewDTO> reviewDTOs;
 
     private Set<ProductOptionCombinationDTO> optionCombinations;
+    private String savedPath;
+
+    //추가필드
+    private long finalPrice;
 
 
     public void addFileDescriptions(List<String> files) {

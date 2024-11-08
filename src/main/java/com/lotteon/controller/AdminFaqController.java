@@ -44,27 +44,27 @@ public class AdminFaqController {
 
         return "content/admin/faq/faqList";
     }
-    @ResponseBody
-    @GetMapping("/list/page")
-    public ResponseEntity<?> adminFaqListPage( @RequestParam(required = false) Long childId, @RequestParam(required = false) Long parentId, PageRequestDTO pageRequestDTO) {
-        pageRequestDTO.setParentId(parentId);
-        log.info("이거먼데!!!!" + pageRequestDTO);
-        pageRequestDTO.setChildId(childId);
-        log.info("이건또먼데!!!!!" + pageRequestDTO);
-
-        FaqPageResponseDTO faqPageResponseDTO = faqService.selectfaqListAll(pageRequestDTO);
-        log.info("진짜루 여기 확인해!!!! : " + faqPageResponseDTO);
-
-        return ResponseEntity.ok(faqPageResponseDTO);
-    }
-
-
-    @GetMapping("/subcate/{parentId}")
-    @ResponseBody
-    public List<BoardCateDTO> adminFaqOption(@PathVariable Long parentId){
-        List<BoardCateDTO> boardsubCate = boardService.selectBoardSubCate(parentId);
-        return boardsubCate;
-    }
+//    @ResponseBody
+//    @GetMapping("/list/page")
+//    public ResponseEntity<?> adminFaqListPage( @RequestParam(required = false) Long childId, @RequestParam(required = false) Long parentId, PageRequestDTO pageRequestDTO) {
+//        pageRequestDTO.setParentId(parentId);
+//        log.info("이거먼데!!!!" + pageRequestDTO);
+//        pageRequestDTO.setChildId(childId);
+//        log.info("이건또먼데!!!!!" + pageRequestDTO);
+//
+//        FaqPageResponseDTO faqPageResponseDTO = faqService.selectfaqListAll(pageRequestDTO);
+//        log.info("asdfasdf!!!! : " + faqPageResponseDTO);
+//
+//        return ResponseEntity.ok(faqPageResponseDTO);
+//    }
+//
+//
+//    @GetMapping("/subcate/{parentId}")
+//    @ResponseBody
+//    public List<BoardCateDTO> adminFaqOption(@PathVariable Long parentId){
+//        List<BoardCateDTO> boardsubCate = boardService.selectBoardSubCate(parentId);
+//        return boardsubCate;
+//    }
 
     @GetMapping("/modify")
     public String adminFaqModify(Model model, int no) {
@@ -119,6 +119,7 @@ public class AdminFaqController {
         faqService.deleteCheck(data);
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/delete")
     public String adminFaqDelete(int no , RedirectAttributes redirectAttributes){
         faqService.deletefaq(no);

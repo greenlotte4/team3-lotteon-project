@@ -42,7 +42,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath name = createString("name");
 
-    public final NumberPath<java.math.BigDecimal> point = createNumber("point", java.math.BigDecimal.class);
+    public final NumberPath<Double> point = createNumber("point", Double.class);
 
     public final ListPath<Point, QPoint> points = this.<Point, QPoint>createList("points", Point.class, QPoint.class, PathInits.DIRECT2);
 
