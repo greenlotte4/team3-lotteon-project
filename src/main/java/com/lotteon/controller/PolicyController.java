@@ -46,10 +46,9 @@ public class PolicyController {
 
         // 약관 내용을 HTML로 변환
         for (Terms term : buyerTerms) {
-            term.setContent(convertContentToHtml(term.getContent()));
+            String htmlContent = convertContentToHtml(term.getContent()); // 변환된 HTML을 가져옴
+            term.setHtmlContent(htmlContent); // 변환된 HTML로 설정 (새로운 필드에 저장)
         }
-
-        log.info(buyerTerms);
 
         model.addAttribute("termsList", buyerTerms); // 필터링된 termsList 추가
         model.addAttribute("content", "buyer");
@@ -67,7 +66,8 @@ public class PolicyController {
                 .collect(Collectors.toList());
 
         for (Terms term : sellerTerms) {
-            term.setContent(convertContentToHtml(term.getContent()));
+            String htmlContent = convertContentToHtml(term.getContent()); // 변환된 HTML을 가져옴
+            term.setHtmlContent(htmlContent); // 변환된 HTML로 설정 (새로운 필드에 저장)
         }
 
         model.addAttribute("termsList", sellerTerms);
@@ -86,7 +86,8 @@ public class PolicyController {
                 .collect(Collectors.toList());
 
         for (Terms term : locationTerms) {
-            term.setContent(convertContentToHtml(term.getContent()));
+            String htmlContent = convertContentToHtml(term.getContent()); // 변환된 HTML을 가져옴
+            term.setHtmlContent(htmlContent); // 변환된 HTML로 설정 (새로운 필드에 저장)
         }
 
         model.addAttribute("termsList", locationTerms);
@@ -105,8 +106,10 @@ public class PolicyController {
                 .collect(Collectors.toList());
 
         for (Terms term : privacyTerms) {
-            term.setContent(convertContentToHtml(term.getContent()));
+            String htmlContent = convertContentToHtml(term.getContent()); // 변환된 HTML을 가져옴
+            term.setHtmlContent(htmlContent); // 변환된 HTML로 설정 (새로운 필드에 저장)
         }
+
         model.addAttribute("termsList", privacyTerms);
         model.addAttribute("content", "privacy");
 
@@ -123,7 +126,8 @@ public class PolicyController {
                 .collect(Collectors.toList());
 
         for (Terms term : financeTerms) {
-            term.setContent(convertContentToHtml(term.getContent()));
+            String htmlContent = convertContentToHtml(term.getContent()); // 변환된 HTML을 가져옴
+            term.setHtmlContent(htmlContent); // 변환된 HTML로 설정 (새로운 필드에 저장)
         }
 
         model.addAttribute("termsList", financeTerms);

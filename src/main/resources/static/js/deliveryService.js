@@ -75,6 +75,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const member = data.member;  // 기본 주소
                 const deliveries = data.deliveries;  // 나머지 배송지 목록
 
+                console.log(JSON.stringify(deliveries, null, 2));
+
                 addressListDiv.innerHTML = '';  // 배송지 목록을 지우고 새로 추가
 
                 // 기본 주소 추가
@@ -98,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     addressListDiv.appendChild(defaultAddress);
                 }
 
-                console.log(deliveries);
+
                 // 나머지 배송지 목록 추가
                 deliveries.forEach((delivery, index) => {
                     const addressItem = document.createElement("div");
