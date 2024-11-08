@@ -67,7 +67,7 @@
                             <td th:text="${order.totalQuantity}">896</td>
                             <td th:text="${order.totalPrice}">9,000</td>
                             <td th:text="${order.pay}">신용카드</td>
-                            <td>결제완료</td>
+                            <td class="orderstatus">결제완료</td>
                             <td>[[${#strings.substring(order.orderDate,0,10)}]]</td>
                             <td><button class="openModalBtn">배송하기</button></td>
                         </tr>
@@ -238,13 +238,26 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const orderitemId = document.querySelectorAll(".productname");
+
         orderitemId.forEach(orderItems => {
             const orderitem = orderItems.dataset.orderId;
+            const orderstatuses = document.querySelectorAll(".orderstatus");
 
-            fetch()
-                .then()
-                .then()
-                .catch();
+            fetch(`/seller/order/status/orderItem?orderId=${orderitem}`)
+                .then(resp => resp.json())
+                .then(orderItemDTO => {
+                    console.log("야...옹 :", orderItemDTO);
+                    console.log("메멩ㅇ..옹..:" + orderItemDTO.product.productName);
+                    orderItems.textContent = orderItemDTO.product.productName;
+
+
+                    orderstatuses.forEach(orderstatus => {
+                        orderstatus.textContent = orderItemDTO.status;
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         })
 
     })

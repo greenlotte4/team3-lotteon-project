@@ -77,7 +77,7 @@
                                         <td>
                                             <input type="checkbox" class="product-checkbox"  th:data-product-id="${product.productId}">
                                         </td>
-                                        <td th:if="${product.getSavedPath()==null}"><img th:src="@{'/' + ${product.file190}}"></td>
+                                        <td th:if="${product.getSavedPath()==null}"><img th:src="@{'/uploads/productImg/' + ${product.file190}}"></td>
                                         <td th:unless="${product.getSavedPath()==null}"><img th:src="@{'/uploads/'+${product.savedPath+product.file190}}"></td>
                                         <td><a th:href="@{'/market/view/'+${product.categoryId}+'/'+${product.productId}}">[[${product.productCode}]]</a></td>
                                         <td>[[${product.productName}]]</td>

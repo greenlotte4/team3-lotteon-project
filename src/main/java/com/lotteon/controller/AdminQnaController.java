@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -103,6 +104,16 @@ public class AdminQnaController {
 
         log.info("와랄 : " + adminqna);
         return ResponseEntity.ok().body(adminqna);
+    }
+
+
+
+    @GetMapping("/delete")
+    public String adminQnaDelete(@RequestParam(required = false) int no, RedirectAttributes redirectAttributes) {
+        log.info("abababab: " + no);  // 값이 0이 출력되면 파라미터가 전달되지 않음을 의미
+            qnaService.deleteqna(no);
+            redirectAttributes.addFlashAttribute("message", "삭제되었습니다.");
+        return "redirect:/admin/qna/list";
     }
 
 }

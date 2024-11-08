@@ -1,6 +1,7 @@
 package com.lotteon.service.admin;
 
 import com.lotteon.dto.BoardCateDTO;
+import com.lotteon.dto.QnaDTO;
 import com.lotteon.dto.adminQnaDTO;
 import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
@@ -128,6 +129,14 @@ public class QnaService {
             List<adminQnaDTO> adminQnaDTOS = adminqnaList.stream().map(adminqna -> modelMapper.map(adminqna, adminQnaDTO.class)).collect(Collectors.toList());
             return adminQnaDTOS;
 
+    }
+
+    public void deleteqna (int no){
+        Optional<Adminqna> optqna = adminQnaRepository.findById(no);
+        if(optqna.isPresent()){
+            Adminqna qna = optqna.get();
+            adminQnaRepository.delete(qna);
+        }
     }
 
 }

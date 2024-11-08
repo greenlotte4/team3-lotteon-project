@@ -1,27 +1,29 @@
 package com.lotteon.controller;
 
 import com.lotteon.dto.admin.CouponDTO;
+import com.lotteon.dto.admin.CouponIssuedDTO;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.admin.Coupon;
+import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.product.Product;
 import com.lotteon.repository.admin.CouponRepository;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.CouponService;
 import com.lotteon.service.product.ProductCategoryService;
+import com.lotteon.service.user.CouponDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 public class CouponApiController {
 
     private final CouponIssuedService couponIssuedService;
+    private final CouponDetailsService couponDetailsService;
     private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
     private final CouponService couponService;
@@ -96,5 +99,64 @@ public class CouponApiController {
         couponDTO.setCouponType(coupon.getCouponType());
 
         return ResponseEntity.ok(couponDTO);
+    }
+    @GetMapping("/getCouponsForMember")
+    public ResponseEntity<Map<String, Object>> getCouponsForMember(@RequestParam Long productId) {
+        log.info("쿠폰 리스트 요청 - 상품 ID: {}", productId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // 현재 로그인된 사용자의 정보
+        String memberUid = authentication.getName(); //
+        log.info("사용자 UID: {}", memberUid);
+
+        // 쿠폰 조회 서비스 호출 (상품 ID에 해당하는 쿠폰 조회)
+        List<CouponIssued> couponIssuedList = couponDetailsService.memberOrderCouponList(memberUid, productId);
+
+        // 쿠폰이 없을 경우 빈 응답 반환
+        if (couponIssuedList.isEmpty()) {
+            log.info("해당 상품에 대한 쿠폰이 없음");
+            return ResponseEntity.ok(Map.of("result", "failure", "message", "해당 상품에 대한 쿠폰이 없습니다."));
+        }
+
+        // Coupon 엔티티를 CouponDTO로 변환
+        List<CouponDTO> couponDTOs = couponIssuedList.stream()
+                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
+                .collect(Collectors.toList());
+
+        // 결과를 Map 형태로 응답
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", "success");
+        response.put("coupons", couponDTOs);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getCouponsForCart")
+    public ResponseEntity<Map<String, Object>> getCouponsForCart(@RequestParam Long productId) {
+        log.info("쿠폰 리스트 요청 - 상품 ID: {}", productId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // 현재 로그인된 사용자의 정보
+        String memberUid = authentication.getName(); //
+        log.info("사용자 UID: {}", memberUid);
+
+        // 쿠폰 조회 서비스 호출 (상품 ID에 해당하는 쿠폰 조회)
+        List<CouponIssued> couponIssuedList = couponDetailsService.memberOrderCouponList(memberUid, productId);
+
+        // 쿠폰이 없을 경우 빈 응답 반환
+        if (couponIssuedList.isEmpty()) {
+            log.info("해당 상품에 대한 쿠폰이 없음");
+            return ResponseEntity.ok(Map.of("result", "failure", "message", "해당 상품에 대한 쿠폰이 없습니다."));
+        }
+
+        // Coupon 엔티티를 CouponDTO로 변환
+        List<CouponDTO> couponDTOs = couponIssuedList.stream()
+                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
+                .collect(Collectors.toList());
+
+        // 결과를 Map 형태로 응답
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", "success");
+        response.put("coupons", couponDTOs);
+
+        return ResponseEntity.ok(response);
     }
 }
