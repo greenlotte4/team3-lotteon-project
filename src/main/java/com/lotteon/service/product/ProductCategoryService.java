@@ -189,7 +189,7 @@ public class ProductCategoryService {
 
         return categories;
     }
-
+    @Cacheable(value = "categories", key = "'categoryList'")
     public List<ProductCategoryDTO> getCategoriesWithCacheCheck() {
         log.info("Cache miss - Fetching categories from the database");
         return populateCategories();

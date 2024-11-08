@@ -99,7 +99,8 @@ public class OrderService {
                 }
             }
             long saveStock = product.getStock() - orderItemDTO.getStock();
-            productRepository.updateProductQuantity(saveStock, orderItemDTO.getProductId());
+            long saveSold = product.getSold() + orderItemDTO.getStock();
+            productRepository.updateProductQuantity(saveStock, orderItemDTO.getProductId(), saveSold);
             log.info("업데이트 재고 : " + saveStock);
 
 
