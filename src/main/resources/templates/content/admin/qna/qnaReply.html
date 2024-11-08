@@ -57,7 +57,7 @@
                 </table>
             </div>
             <div class="qna_view_button">
-                <a class="admin_qna_delete_a" th:href="@{/admin/qna/delete(no=${qna.qnaNo})}">삭제</a>
+                <a class="admin_qna_delete_a" id="qna_delete_btn" th:href="@{/admin/qna/delete(no=${qna.qnaNo})}">삭제</a>
                 <a class="qna_reply-btn" id="qna_reply_btn" th:href="@{/admin/qna/reply(no=${qna.qnaNo})}">답변등록</a>
                 <a class="qna_list-btn" th:href="@{/admin/qna/list}">목록</a>
             </div>
@@ -65,15 +65,14 @@
         </section>
         <!--삭제스크립트-->
         <script>
-            document.querySelectorAll('.admin_qna_delete_a').forEach(button => {
-                button.addEventListener('click', function (e) {
+            document.getElementById('qna_delete_btn').addEventListener('click', function (e) {
                     e.preventDefault();
                     const url = this.getAttribute('href');
+                    console.log("url이머야:" + url);
                     const deleteconfirm = confirm('정말 삭제하시겠습니까?');
                     if (deleteconfirm) {
                         window.location.href = url;
                     }
-                })
             })
             document.addEventListener('DOMContentLoaded', function() {
                 const messageDiv = document.getElementById('messageDiv');
@@ -110,6 +109,7 @@
                         console.log(data);
                         if(data != null){
                             alert('답변이 등록되었습니다.')
+                            window.location.href = `/admin/qna/reply?no=${qnaNo}`
                         }
                     })
                     .catch(err => {
