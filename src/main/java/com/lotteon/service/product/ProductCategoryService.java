@@ -34,7 +34,7 @@ public class ProductCategoryService {
     private final ProductCategoryRepositoryImpl productCategoryRepositoryImpl;
     private final CacheManager cacheManager;
 
-//    @Cacheable(value = "categoryDTOs", key = "'categoryList'")
+    @Cacheable(value = "categories", key = "'categoryList'")
     public List<ProductCategoryDTO> populateCategories() {
         List<ProductCategory> categories = getCategoryHierarchy();
         List<ProductCategoryDTO> categoryDTOs = new ArrayList<>();

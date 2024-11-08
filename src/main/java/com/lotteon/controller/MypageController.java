@@ -4,6 +4,8 @@ import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.adminQnaDTO;
+import com.lotteon.dto.order.OrderItemDTO;
+import com.lotteon.dto.order.OrderWithGroupedItemsDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
@@ -11,6 +13,7 @@ import com.lotteon.entity.QnA;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.entity.admin.CouponIssued;
+import com.lotteon.entity.order.OrderItem;
 import com.lotteon.entity.product.Review;
 import com.lotteon.repository.QnaRepository;
 import com.lotteon.repository.admin.AdminQnaRepository;
@@ -94,16 +97,21 @@ public class MypageController {
     @GetMapping("/myInfo")
     public String myInfo(Model model, Authentication authentication) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
-        List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
 
         Pageable pageable = PageRequest.of(0, 3, Sort.by("orderDate").descending());
         String uid = authentication.getName();
 
+        List<OrderWithGroupedItemsDTO> groupDTO = orderService.getOrdersGroupedBySellers(uid);
+
+//        Pageable pageable= PageRequest.of(0,3, Sort.by("orderDate").descending());
+//        String uid = authentication.getName();
+
 //        List<OrderWithGroupedItemsDTO> groupDTO =  orderService.getOrdersGroupedBySeller(uid);
 //        log.info("여기여기여기!!!!"+groupDTO);
 //
 //        model.addAttribute("groupDTO", groupDTO);
+        model.addAttribute("groupDTO", groupDTO);
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
         model.addAttribute("banners", banners2);

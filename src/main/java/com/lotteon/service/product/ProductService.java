@@ -474,6 +474,8 @@ public class ProductService {
     }
 
 
+    public void selectByFirstCategory(long categoryId,String sort){
+
     public List<ProductDTO> selectMainList(long categoryId,String sort){
         List<Product> products = new ArrayList<>();
         Pageable pageable = null;
@@ -559,8 +561,6 @@ public class ProductService {
 
         return productDTOS;
     }
-
-
 
 
 

@@ -176,6 +176,7 @@ public class MarketController {
         // 현재 사용자 아이디로 Q&A 데이터 필터링
         List<adminQnaDTO> userQnaList = qnaService.getQnaByWriterAndProductId(productId);
 
+
         // 모델에 필요한 데이터 추가
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
         model.addAttribute("reviewImgs", ReviewImgs);
@@ -246,7 +247,9 @@ public class MarketController {
         response.put("result", 0L);
         log.info("요기!!!!!!!!!!!!!!!!!" + orderRequestDTO);
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO(orderRequestDTO);
+
         if (orderResponseDTO.getCartId() > 0) {
+            log.info("cartId 가 없다?"+orderResponseDTO.getOrder());
             List<Long> cartItems = orderResponseDTO.getCartItems();
             boolean result = cartItemService.deleteCartItems(cartItems, orderResponseDTO.getCartId());
             if (!result) {
