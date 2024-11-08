@@ -82,6 +82,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public void registerUserAndMember(User user, Member member) {
         // 1. User 먼저 저장
         String encodedPassword = passwordEncoder.encode(user.getPass());
@@ -89,9 +90,10 @@ public class UserService {
 
         // 2. User와 연결된 Member 객체 저장
         member.setUser(user);  // Member 객체에 User 연결
-
-//        int congratulatoryPoints = 1000; // 지급할 포인트 수량
-//        pointService.createPoint(member.getId(), congratulatoryPoints, "회원가입 축하 포인트"); // 포인트 지급
+        member.setPoint(1000);
+        memberRepository.save(member);
+        int congratulatoryPoints = 1000; // 지급할 포인트 수량
+        pointService.createPoint(member.getId(), congratulatoryPoints, "회원가입 축하 포인트"); // 포인트 지급
 
     }
 
