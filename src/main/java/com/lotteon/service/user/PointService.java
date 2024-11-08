@@ -34,7 +34,6 @@ public class PointService {
         point.setRemainingPoints(amount); // 초기 잔여 포인트 설정
         point.setDescription(description);
         point.setMember(member); // 포인트와 멤버 연결
-
         Point savedPoint = pointRepository.save(point);
         log.info("Saved point: {}", savedPoint);
 
@@ -42,7 +41,7 @@ public class PointService {
     }
 
     @Transactional
-    public void savePoint(Member member, int earnedPoints) {
+    public void savePoint(Member member, double earnedPoints) {
         // Point 엔티티 생성
         Point point = new Point();
         point.setMember(member);
@@ -50,13 +49,13 @@ public class PointService {
         point.setDescription("구매 확정 포인트 적립");
 
         // 포인트 기록 저장
-        pointRepository.save(point);
+        Point savedpoint = pointRepository.save(point);
 
         // Member의 총 포인트 업데이트
-        BigDecimal updatedPoints = member.getPoint().add(BigDecimal.valueOf(earnedPoints));
-        member.setPoint(updatedPoints);
+//        member.setPoints(savedpoint);
+            member.savePoint(earnedPoints);
 
-        memberRepository.save(member);
+            memberRepository.save(member);
     }
 
 }
