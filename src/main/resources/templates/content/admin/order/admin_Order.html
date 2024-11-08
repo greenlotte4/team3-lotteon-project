@@ -63,7 +63,7 @@
                             <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>
                             <td th:text="${order.uid}">wlgus5946</td>
                             <td th:text="${order.memberName}">챱챱김</td>
-                            <td>초코틴틴</td>
+                            <td class="productname" th:data-order-id="${order.orderId}">초코틴틴</td>
                             <td th:text="${order.totalQuantity}">896</td>
                             <td th:text="${order.totalPrice}">9,000</td>
                             <td th:text="${order.pay}">신용카드</td>
@@ -235,7 +235,21 @@
                         </div>
                     </section>
 <!--                    <script th:src="@{/js/delivery.js}"></script>-->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const orderitemId = document.querySelectorAll(".productname");
+        orderitemId.forEach(orderItems => {
+            const orderitem = orderItems.dataset.orderId;
 
+            fetch()
+                .then()
+                .then()
+                .catch();
+        })
+
+    })
+
+</script>
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
                             const modal = document.querySelector('.modal-section');
