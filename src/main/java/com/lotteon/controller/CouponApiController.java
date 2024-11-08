@@ -6,6 +6,7 @@ import com.lotteon.entity.User.Member;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.product.Product;
+import com.lotteon.repository.admin.CouponIssuedRepository;
 import com.lotteon.repository.admin.CouponRepository;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.service.admin.CouponIssuedService;
@@ -38,6 +39,8 @@ public class CouponApiController {
     private final CouponRepository couponRepository;
     private final CouponService couponService;
     private final ModelMapper modelMapper;
+    private final CouponIssuedRepository couponIssuedRepository;
+
     @GetMapping("/{productId}")
     public ResponseEntity<List<CouponDTO>> getCouponsForProduct(@PathVariable Long productId) {
         log.info("쿠폰 리스트 불러오는거 요청 왔따 : " + productId);
@@ -74,7 +77,7 @@ public class CouponApiController {
     }
     // 쿠폰 발급 여부 확인 API
     @GetMapping("/check/{couponId}")
-    public ResponseEntity<Boolean> checkCouponIssued(@PathVariable Long couponId, Authentication authentication) {
+    public ResponseEntity<Boolean> checkCouponIssued(@PathVariable String couponId, Authentication authentication) {
         try {
             Long memberId = ((Member) authentication.getPrincipal()).getId();  // 로그인된 사용자 ID
             boolean isIssued = couponIssuedRepository.existsByMemberIdAndCouponId(memberId, couponId);
