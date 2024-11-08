@@ -77,22 +77,16 @@
                             </tr>
                         </thead>
 
-                        <tbody th:if="${qnaPage.content.size() > 0  && !qnaPage.content.isEmpty()}">
-                            <tr class="tr3" th:each="qna : ${qnaPage.content}">
+                        <tbody th:if="${qnaPage.qnadtoList.size() > 0  && !qnaPage.qnadtoList.isEmpty()}">
+                            <tr class="tr3" th:each="qna : ${qnaPage.qnadtoList}">
                                 <td>
                                     <span th:text="${qna.qnaNo}"></span>
                                 </td>
                                 <td>
-                                    <span th:if="${qna.category.boardCateId == '1'}">회원</span>
-                                    <span th:if="${qna.category.boardCateId == '2'}">쿠폰/이벤트</span>
-                                    <span th:if="${qna.category.boardCateId == '3'}">주문/결제</span>
-                                    <span th:if="${qna.category.boardCateId == '4'}">배송</span>
-                                    <span th:if="${qna.category.boardCateId == '5'}">취소/반품/교환</span>
-                                    <span th:if="${qna.category.boardCateId == '6'}">여행/숙박/항공</span>
-                                    <span th:if="${qna.category.boardCateId == '7'}">안전거래</span>
+                                    <span th:text="${qna.category.parent.name}"></span>
                                 </td>
                                 <td>
-                                    <span th:text="${qna.qnaNo}"></span>
+                                    <span th:text="${qna.category.name}"></span>
                                 </td>
                                 <td class="titles">
                                     <a th:href="@{/cs/qna/detail(id=${qna.qnaNo})}">
@@ -109,7 +103,7 @@
                             </tr>
                         </tbody>
 
-                        <tbody th:unless="${qnaPage.content.size() > 0  && !qnaPage.content.isEmpty()}">
+                        <tbody th:unless="${qnaPage.qnadtoList.size() > 0  && !qnaPage.qnadtoList.isEmpty()}">
                             <tr>
                                 <td colspan="6" style="text-align: center;">
                                     <div class="qna_Lists" style="display: flex; flex-direction: column; align-items: center; padding: 80px; justify-content: center; font-size: 15px;">
