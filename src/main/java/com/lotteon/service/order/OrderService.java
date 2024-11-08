@@ -231,11 +231,13 @@ public class OrderService {
 //환불요청
 
     public long getSalesCountBySeller(String sellerUid) {
-        return orderItemRepository.countBySellerUid(sellerUid);
+        long salesCount = orderItemRepository.countBySellerUid(sellerUid);
+        return (salesCount < 0) ? 0 : salesCount;  // 음수일 경우 0 반환
     }
 
     public long getTotalSalesAmountBySeller(String sellerUid) {
-        return orderItemRepository.findTotalOrderPriceBySellerUid(sellerUid);
+        Long totalSalesAmount = orderItemRepository.findTotalOrderPriceBySellerUid(sellerUid);
+        return (totalSalesAmount == null || totalSalesAmount < 0) ? 0 : totalSalesAmount;  // null 또는 음수일 경우 0 반환
     }
 
     // 모든 판매자의 총 판매 수량을 반환
@@ -250,7 +252,9 @@ public class OrderService {
 
     // 특정 판매자의 날짜 범위에 따른 주문 건수
     public long getSalesCountBySellerAndDateRange(String sellerUid, LocalDateTime start, LocalDateTime end) {
-        return orderItemRepository.countOrdersBySellerAndDateRange(sellerUid, start, end);
+        // countOrdersBySellerAndDateRange가 0보다 작은 값을 반환할 경우 0으로 설정
+        long count = orderItemRepository.countOrdersBySellerAndDateRange(sellerUid, start, end);
+        return (count < 0) ? 0 : count;  // 음수일 경우 0 반환
     }
 
     // 특정 판매자의 날짜 범위에 따른 총 판매 금액
