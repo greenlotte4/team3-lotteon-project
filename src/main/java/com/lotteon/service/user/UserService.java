@@ -87,6 +87,7 @@ public class UserService {
         // 1. User 먼저 저장
         String encodedPassword = passwordEncoder.encode(user.getPass());
         user.setPass(encodedPassword);
+        user.setRole(User.Role.MEMBER);
 
         // 2. User와 연결된 Member 객체 저장
         member.setUser(user);  // Member 객체에 User 연결
