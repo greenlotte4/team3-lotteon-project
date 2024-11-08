@@ -776,6 +776,12 @@ document.addEventListener("DOMContentLoaded", function () {
             option.setAttribute("data-product-id", coupon.productId);
             couponSelect.appendChild(option);
         });
+        // 디폴트 선택 칸 추가 (첫 번째 옵션)
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";  // 선택되지 않도록 빈 값으로 설정
+        defaultOption.textContent = "쿠폰을 선택하세요";  // 기본 텍스트
+        defaultOption.selected = true;  // 기본적으로 선택되도록 설정
+        couponSelect.insertBefore(defaultOption, couponSelect.firstChild);  // 첫 번째 자리에 추가
     }
 
     // 쿠폰 목록을 받아와서 업데이트

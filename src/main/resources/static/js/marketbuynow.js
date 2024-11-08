@@ -566,9 +566,6 @@ function displayCoupons(coupons) {
     }
 }
 
-
-
-
 function applyCoupon(couponId){
     const uid = localStorage.getItem('uid');  // 또는 localStorage.getItem('uid') 사용
     console.log(localStorage.getItem('uid')); // 'user123'
@@ -595,6 +592,11 @@ function applyCoupon(couponId){
             }
         })
         .then(data => {
+            const button = document.querySelector(`button[onclick="applyCoupon('${couponId}')"]`);
+            if (button) {
+                button.textContent = '발급완료'; // 버튼 텍스트 변경
+                button.disabled = true; // 버튼 비활성화
+            }
             alert(`쿠폰이 성공적으로 적용되었습니다.`);
 
         })
@@ -602,6 +604,30 @@ function applyCoupon(couponId){
             console.error(err)
         })
 
+
+}
+function updateCouponButtonState() {
+    const buttons = document.querySelectorAll('button[onclick^="applyCoupon"]');
+
+    buttons.forEach(button => {
+        const couponId = button.getAttribute('onclick').match(/'(\d+)'/)[1]; // 쿠폰 ID 추출
+
+        // 서버로 쿠폰 발급 여부 확인
+        fetch(`/api/coupon/check/${couponId}`, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        })
+            .then(resp => resp.json())
+            .then(isIssued => {
+                if (isIssued) {
+                    button.textContent = '발급완료'; // 발급 완료 버튼 텍스트로 변경
+                    button.disabled = true; // 비활성화
+                }
+            })
+            .catch(err => console.error("쿠폰 발급 여부 확인 실패:", err));
+    });
 }
 
+// 모달이 열릴 때마다 호출되는 함수
+updateCouponButtonState();
 
