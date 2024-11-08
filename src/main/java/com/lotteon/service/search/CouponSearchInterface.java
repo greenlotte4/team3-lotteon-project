@@ -12,7 +12,8 @@ public interface CouponSearchInterface {
     List<CouponDTO> searchBySellerCompany(String query);
 //    List<CouponDTO> searchByCouponId(String query);
 
-    List<CouponIssuedDTO> IssuedSearchByCouponCompany(String query);
-    List<CouponIssuedDTO> IssuedSearchByCouponType(String query);
+    List<CouponIssuedDTO> issuedSearchByCouponCompany(String query);
+    List<CouponIssuedDTO> issuedSearchByCouponType(String query);
+    List<CouponIssuedDTO> issuedSearchByCouponName(String query);
 
 }

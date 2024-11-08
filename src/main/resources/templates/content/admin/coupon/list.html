@@ -32,51 +32,54 @@
         <input type="text" id="searchQuery" placeholder="검색어 입력" class="search-input">
         <button id="searchBtnCoupon" class="search-btn">검색</button>
     </div>
-    <table class="coupon-table" id="couponTable">
-        <thead>
-            <tr>
-                <th style="text-align: center;">쿠폰번호</th>
-                <th style="text-align: center;">쿠폰종류</th>
-                <th style="text-align: center;">쿠폰명</th>
-                <th style="text-align: center;">혜택</th>
-                <th style="text-align: center;">사용기간</th>
-                <th style="text-align: center;">발급자</th>
-                <th style="text-align: center;">발급수</th>
-                <th style="text-align: center;">사용수</th>
-                <th style="text-align: center;">상태</th>
-                <th style="text-align: center;">발급일</th>
-                <th style="text-align: center;">관리</th>
+    <div class="div-table-overflow-x">
+        <table class="coupon-table" id="couponTable">
+            <thead>
+                <tr>
+                    <th style="text-align: center;">쿠폰번호</th>
+                    <th style="text-align: center;">쿠폰종류</th>
+                    <th style="text-align: center;">쿠폰명</th>
+                    <th style="text-align: center;">혜택</th>
+                    <th style="text-align: center;">사용기간</th>
+                    <th style="text-align: center;">발급자</th>
+                    <th style="text-align: center;">발급수</th>
+                    <th style="text-align: center;">사용수</th>
+                    <th style="text-align: center;">상태</th>
+                    <th style="text-align: center;">발급일</th>
+                    <th style="text-align: center;">관리</th>
+                </tr>
+            </thead>
+            <tbody id="couponTbody">
+            <tr th:each="coupon : ${couponList}" id="couponList">
+                <td><a href="#" class="order-link"
+                       th:data-coupon-id="${coupon.couponId}"
+                       th:data-issuer="${coupon.sellerCompany}"
+                       th:data-type="${coupon.couponType}"
+                       th:data-name="${coupon.couponName}"
+                       th:data-benefit="${coupon.benefit}"
+                       th:data-period="${coupon.startDate} + ' ~ ' + ${coupon.endDate}"
+                       th:data-notes="${coupon.notes}"
+                       th:text="${coupon.couponId}"></a>
+                </td>
+                <td th:text="${coupon.couponName}"></td>
+                <td th:text="${coupon.couponType}"></td>
+                <td th:text="${coupon.benefit}"></td>
+                <td>
+                    <span th:text="${coupon.startDate}"></span> ~
+                    <span th:text="${coupon.endDate}"></span>
+                </td>
+                <td th:text="${coupon.sellerCompany}"></td>
+                <td th:text="${coupon.issuedCount}"></td>
+                <td th:text="${coupon.usedCount}"></td>
+                <td class="coupon-status" th:text="${coupon.status}"></td>
+                <td th:text="${coupon.rdate}"></td>
+                <td><button class="end-button">종료</button></td>
             </tr>
-        </thead>
-        <tbody id="couponTbody">
-        <tr th:each="coupon : ${couponList}" id="couponList">
-            <td><a href="#" class="order-link"
-                   th:data-coupon-id="${coupon.couponId}"
-                   th:data-issuer="${coupon.sellerCompany}"
-                   th:data-type="${coupon.couponType}"
-                   th:data-name="${coupon.couponName}"
-                   th:data-benefit="${coupon.benefit}"
-                   th:data-period="${coupon.startDate} + ' ~ ' + ${coupon.endDate}"
-                   th:data-notes="${coupon.notes}"
-                   th:text="${coupon.couponId}"></a>
-            </td>
-            <td th:text="${coupon.couponName}"></td>
-            <td th:text="${coupon.couponType}"></td>
-            <td th:text="${coupon.benefit}"></td>
-            <td>
-                <span th:text="${coupon.startDate}"></span> ~
-                <span th:text="${coupon.endDate}"></span>
-            </td>
-            <td th:text="${coupon.sellerCompany}"></td>
-            <td th:text="${coupon.issuedCount}"></td>
-            <td th:text="${coupon.usedCount}"></td>
-            <td class="coupon-status" th:text="${coupon.status}"></td>
-            <td th:text="${coupon.rdate}"></td>
-            <td><button class="end-button">종료</button></td>
-        </tr>
-        </tbody>
+            </tbody>
 
-    </table>
+        </table>
+    </div>
+
     <button class="add-coupon-btn">쿠폰등록</button>
 
     <div class="pagination">
