@@ -5,6 +5,7 @@ package com.lotteon.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotteon.dto.order.OrderDTO;
+import com.lotteon.dto.order.OrderItemDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.product.Product;
@@ -188,9 +189,11 @@ public class SellerController {
     }
 
     @ResponseBody
-    @GetMapping
+    @GetMapping("/order/status/orderItem")
     public ResponseEntity<?> orderStatusItem(@RequestParam(required = false) Long orderId){
-        return ResponseEntity.ok("ㅣ야얌");
+
+        OrderItemDTO orderItemDTO = adminOrderService.selectOrderItemById(orderId);
+        return ResponseEntity.ok(orderItemDTO);
     }
 
 

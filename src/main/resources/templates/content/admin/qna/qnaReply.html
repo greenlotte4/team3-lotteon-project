@@ -89,6 +89,11 @@
                 e.preventDefault();
 
                 const replyContent = document.querySelector('textarea[name="qnareply"]').value;
+                if(!replyContent){
+                    alert('답변이 작성되지않았습니다.')
+                    return;
+                }
+
                 const qnaNo = document.getElementById('qnaNo').value;
 
                 fetch(`/admin/qna/reply?no=${qnaNo}`, {
