@@ -161,37 +161,47 @@ public class OrderService {
         return null;
     }
 
-    public List<OrderWithGroupedItemsDTO> getOrdersGroupedBySeller(String uid) {
-        List<Object[]> results = orderRepository.findOrderAndOrderItemsByUid(uid);
-        Map<Long, OrderWithGroupedItemsDTO> orderMap = new HashMap<>();
+//    public List<OrderWithGroupedItemsDTO> getOrdersGroupedBySeller(String uid) {
+//        List<Object[]> results = orderRepository.findOrderAndOrderItemsByUid(uid);
+//        Map<Long, OrderWithGroupedItemsDTO> orderMap = new HashMap<>();
+//
+//        for (Object[] row : results) {
+//            Order order = (Order) row[0];
+//            OrderItem orderItem = (OrderItem) row[1];
+//            String sellerUid = orderItem.getSellerUid();
+//
+//            // OrderWithGroupedItemsDTO가 없으면 생성하여 추가
+//            OrderWithGroupedItemsDTO orderDTO = orderMap.computeIfAbsent(order.getOrderId(), id ->
+//                    new OrderWithGroupedItemsDTO(order.getOrderId(), order.getUid(), order.getOrderDate(), new ArrayList<>())
+//            );
+//
+//            String company=null;
+//            // SellerOrderItemDTO를 찾거나 생성하여 추가
+//            SellerOrderItemDTO sellerOrderItemDTO = orderDTO.getGroupedOrderItems().stream()
+//                    .filter(s -> s.getSellerUid().equals(sellerUid))
+//                    .findFirst()
+//                    .orElseGet(() -> {
+//                        String companyIn = sellerService.findCompanyByuid(sellerUid);
+//                        SellerOrderItemDTO newSellerDTO = new SellerOrderItemDTO(sellerUid,companyIn, new ArrayList<>());
+//                        orderDTO.getGroupedOrderItems().add(newSellerDTO);
+//                        return newSellerDTO;
+//                    });
+//
+//            // OrderItem을 해당 SellerOrderItemDTO에 추가
+//            sellerOrderItemDTO.getOrderItems().add(orderItem);
+//        }
+//
+//        return new ArrayList<>(orderMap.values());
+//    }
 
-        for (Object[] row : results) {
-            Order order = (Order) row[0];
-            OrderItem orderItem = (OrderItem) row[1];
-            String sellerUid = orderItem.getSellerUid();
+    public List<OrderWithGroupedItemsDTO> getOrdersGroupedBySellers(String userId) {
+        // 사용자 ID로 주문을 조회하고 주문 날짜 순으로 정렬
+        List<Order> orders = orderRepository.findByUidOrderByOrderDateDesc(userId);
 
-            // OrderWithGroupedItemsDTO가 없으면 생성하여 추가
-            OrderWithGroupedItemsDTO orderDTO = orderMap.computeIfAbsent(order.getOrderId(), id ->
-                    new OrderWithGroupedItemsDTO(order.getOrderId(), order.getUid(), order.getOrderDate(), new ArrayList<>())
-            );
-
-            String company=null;
-            // SellerOrderItemDTO를 찾거나 생성하여 추가
-            SellerOrderItemDTO sellerOrderItemDTO = orderDTO.getGroupedOrderItems().stream()
-                    .filter(s -> s.getSellerUid().equals(sellerUid))
-                    .findFirst()
-                    .orElseGet(() -> {
-                        String companyIn = sellerService.findCompanyByuid(sellerUid);
-                        SellerOrderItemDTO newSellerDTO = new SellerOrderItemDTO(sellerUid,companyIn, new ArrayList<>());
-                        orderDTO.getGroupedOrderItems().add(newSellerDTO);
-                        return newSellerDTO;
-                    });
-
-            // OrderItem을 해당 SellerOrderItemDTO에 추가
-            sellerOrderItemDTO.getOrderItems().add(orderItem);
-        }
-
-        return new ArrayList<>(orderMap.values());
+        // Order 객체를 OrderWithGroupedItemsDTO로 변환
+        return orders.stream()
+                .map(order -> new OrderWithGroupedItemsDTO(order)) // DTO로 변환
+                .collect(Collectors.toList());
     }
 
 

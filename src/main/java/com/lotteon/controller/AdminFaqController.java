@@ -119,6 +119,7 @@ public class AdminFaqController {
         faqService.deleteCheck(data);
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/delete")
     public String adminFaqDelete(int no , RedirectAttributes redirectAttributes){
         faqService.deletefaq(no);

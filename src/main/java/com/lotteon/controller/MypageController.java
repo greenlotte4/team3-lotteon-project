@@ -3,11 +3,16 @@ package com.lotteon.controller;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
+import com.lotteon.dto.adminQnaDTO;
+import com.lotteon.dto.order.OrderItemDTO;
+import com.lotteon.dto.order.OrderWithGroupedItemsDTO;
+import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.QnA;
 import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.entity.admin.CouponIssued;
+import com.lotteon.entity.order.OrderItem;
 import com.lotteon.entity.product.Review;
 import com.lotteon.repository.QnaRepository;
 import com.lotteon.repository.admin.AdminQnaRepository;
@@ -16,6 +21,7 @@ import com.lotteon.service.AdminService;
 import com.lotteon.service.FileService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.admin.CouponIssuedService;
+import com.lotteon.service.admin.QnaService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.user.CouponDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +34,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -52,6 +59,7 @@ public class MypageController {
     private final QnaRepository qnaRepository;
     private final OrderService orderService;
     private final AdminQnaRepository adminQnaRepository;
+    private final QnaService qnaService;
 
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
@@ -86,16 +94,20 @@ public class MypageController {
     @GetMapping("/myInfo")
     public String myInfo(Model model,Authentication authentication) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
-        List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
 
-        Pageable pageable= PageRequest.of(0,3, Sort.by("orderDate").descending());
         String uid = authentication.getName();
+
+        List<OrderWithGroupedItemsDTO> groupDTO = orderService.getOrdersGroupedBySellers(uid);
+
+//        Pageable pageable= PageRequest.of(0,3, Sort.by("orderDate").descending());
+//        String uid = authentication.getName();
 
 //        List<OrderWithGroupedItemsDTO> groupDTO =  orderService.getOrdersGroupedBySeller(uid);
 //        log.info("여기여기여기!!!!"+groupDTO);
 //
 //        model.addAttribute("groupDTO", groupDTO);
+        model.addAttribute("groupDTO", groupDTO);
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
         model.addAttribute("banners", banners2);
@@ -153,7 +165,7 @@ public class MypageController {
     public String qnaDetails(
             @RequestParam(value = "cate", required = false) String category,
             Authentication authentication, Model model,
-            @PageableDefault(size = 10, sort = "rdate", direction = Sort.Direction.DESC) Pageable pageable,
+            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable,
             HttpServletRequest request) {
 
         // 배너 데이터 가져오기
@@ -162,17 +174,28 @@ public class MypageController {
 
         // 페이지가 첫 번째 페이지일 경우 1페이지로 리다이렉트
         if (pageable.getPageNumber() == 0) {
-            pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "rdate"));
+            pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "date"));
         }
 
-        // QnA 조회 로직 설정
-        String requestURI = request.getRequestURI();
-        Page<Adminqna> qnaPage = adminService.getQnaPage(requestURI, category, authentication, pageable);
+        String loggedInUserUid = authentication.getName();  // 로그인한 사용자의 ID
+        log.info("login!!!!"+loggedInUserUid);
 
+
+        // QnA 조회 로직 설정
+        com.lotteon.dto.page.PageRequestDTO pageRequestDTO= com.lotteon.dto.page.PageRequestDTO.builder()
+                .qnawriter(loggedInUserUid)
+                .build();
+
+        QnaPageResponseDTO qnaPageResponseDTO = qnaService.selectQnaListAll(pageRequestDTO);
+
+//        String requestURI = request.getRequestURI();
+//        Page<adminQnaDTO> qnaPage = adminService.getQnaPage(requestURI, category, authentication, pageable);
+
+        log.info("여기!!!!!!!!!?"+qnaPageResponseDTO);
         // 모델에 데이터 추가
         model.addAttribute("content", "qnadetails");
         model.addAttribute("banners", banners2);
-        model.addAttribute("qnaPage", qnaPage);
+        model.addAttribute("qnaPage", qnaPageResponseDTO);
         model.addAttribute("selectedCategory", category);
 
         return "content/user/qnadetails";

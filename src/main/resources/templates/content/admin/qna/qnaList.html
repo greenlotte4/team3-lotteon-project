@@ -196,7 +196,7 @@
 
             selectOption2.innerHTML = '<option value="2차 선택" disabled selected>2차 선택</option>';
 
-            fetch(`/admin/qna/subcate/${parentId}`)
+            fetch(`/api/faq/subcate/${parentId}`)
                 .then(resp => resp.json())
                 .then(data => {
                     console.log(data);
@@ -212,7 +212,7 @@
                 })
             
         //부모 카테고리로 요청
-        fetch(`/admin/qna/list/page?parentId=${parentId}`)
+        fetch(`/api/qna/list/page?parentId=${parentId}`)
             .then(resp => resp.json())
             .then(qnaPageResponseDTO => {
                 console.log("야오야오야옹야옹야오양옹야옹야옹ㅇ:", qnaPageResponseDTO);
@@ -283,7 +283,7 @@
             const parentId = selectOption1.value;
             const childId = this.value;
             console.log("자식자식자식 : " + childId);
-            fetch(`/admin/qna/list/page?parentId=${parentId}&childId=${childId}`)
+            fetch(`/api/qna/list/page?parentId=${parentId}&childId=${childId}`)
                 .then(resp => resp.json())
                 .then(qnaPageResponseDTO => {
                     console.log("바우오웅와우옹우ㅏ와우오아웅:", qnaPageResponseDTO);

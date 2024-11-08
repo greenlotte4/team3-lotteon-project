@@ -43,6 +43,7 @@ public class BoardAPIController {
         return ResponseEntity.ok(qnaPageResponseDTO);
 
     }
+
     // 아이디 마스킹 메소드
     public String maskUsername(String username) {
         if (username.length() <= 3) {
