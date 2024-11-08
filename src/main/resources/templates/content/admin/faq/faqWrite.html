@@ -101,7 +101,7 @@
 
       selectOption2.innerHTML = '<option value="2차 선택" disabled selected>2차 선택</option>';
 
-      fetch(`/admin/faq/subcate/${parentId}`)
+      fetch(`/api/faq/subcate/${parentId}`)
           .then(resp => resp.json())
           .then(data => {
               console.log(data);

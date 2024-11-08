@@ -28,6 +28,13 @@
                 </td>
             </tr>
             <tr>
+                <td>배경색</td>
+                <td>
+                    <button id="colorPicker">색상 선택</button>
+                    <input type="text" placeholder="배경색" class="banner_color" id="bannercolor">
+                </td>
+            </tr>
+            <tr>
                 <td>배너링크</td>
                 <td>
                     <input type="text" placeholder="배너링크 입력" class="banner_link">
@@ -65,6 +72,7 @@
     </div>
 </div>
 <script>
+
     document.addEventListener("DOMContentLoaded", function() {
         const startDateInput = document.querySelector('.start_date');
         const endDateInput = document.querySelector('.end_date');
@@ -73,6 +81,48 @@
         const bannerImageInput = document.querySelector('.banner_image'); // 파일 입력 요소
         const bannerSizeInput = document.querySelector('.banner_size');
         const bannerPositionSelect = document.querySelector('.banner_position');
+        const color = document.getElementById('colorPicker');
+        const bannerColor = document.getElementById('bannercolor');
+
+
+
+        const pickr = Pickr.create({
+            el: '#colorPicker',
+            theme: 'classic', // 테마 설정: 'classic', 'monolith', 'nano' 등
+            default: '#dddddd', // 기본 색상
+            components: {
+                preview: true,
+                opacity: true,
+                hue: true,
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: true,
+                    input: true,
+                    clear: true,
+                    save: true
+                }
+            }
+        });
+
+        // 버튼 클릭 시 색상 선택기 토글
+        color.addEventListener("click", () => {
+            pickr.show();
+        });
+
+
+        pickr.on('save', (color) => {
+            const selectedColor = color.toHEXA().toString(); // 색상 값 가져오기
+            if (selectedColor) {
+                bannerColor.value = selectedColor; // input에 선택된 색상 입력
+                bannerColor.textContent = selectedColor;
+            }
+            pickr.hide(); // 색상 선택기 숨기기
+        });
+
+
+
+
 
         // 배너 크기 정의
         const bannerSizes = {
@@ -151,9 +201,10 @@
             const endDate = document.querySelector('.end_date').value;
             const startTime = document.querySelector('.start_time').value;
             const endTime = document.querySelector('.end_time').value;
+            const bannercolor = document.querySelector('.banner_color').value;
 
             // 필수 입력값 체크
-            if (!bannerName || !bannerSize || !bannerImage || !bannerLink || !bannerLocation || !startDate || !endDate || !startTime || !endTime) {
+            if (!bannerName || !bannerSize || !bannerImage || !bannerLink || !bannerLocation || !startDate || !endDate || !startTime || !endTime || !bannercolor) {
                 alert('모든 필드를 입력해주세요.');
                 return; // 함수 종료
             }
@@ -167,6 +218,7 @@
             formData.append('ban_edate', document.querySelector('.end_date').value);
             formData.append('ban_stime', document.querySelector('.start_time').value);
             formData.append('ban_etime', document.querySelector('.end_time').value);
+            formData.append('ban_color', document.querySelector('.banner_color').value);
             formData.append('ban_type', 'banner');
 
 

@@ -10,6 +10,7 @@ import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.QnA;
+import com.lotteon.entity.User.Member;
 import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.order.OrderItem;
@@ -24,6 +25,7 @@ import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.QnaService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.user.CouponDetailsService;
+import com.lotteon.service.user.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -59,6 +61,7 @@ public class MypageController {
     private final QnaRepository qnaRepository;
     private final OrderService orderService;
     private final AdminQnaRepository adminQnaRepository;
+    private final MemberService memberService;
     private final QnaService qnaService;
 
     @GetMapping("/coupondetails")
@@ -71,14 +74,14 @@ public class MypageController {
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
         String memberId = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
 
-        log.info("멤버 아이디다"+memberId);
+        log.info("멤버 아이디다" + memberId);
 
         // 해당 멤버의 발급된 쿠폰 목록 조회
 
-            List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
-            log.info("발급받은 쿠폰: {}", issuedCoupons);
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
+        log.info("발급받은 쿠폰: {}", issuedCoupons);
 
-            model.addAttribute("IssuedList", issuedCoupons);
+        model.addAttribute("IssuedList", issuedCoupons);
 
 
         model.addAttribute("banners", banners2);
@@ -92,10 +95,11 @@ public class MypageController {
 //    }
 
     @GetMapping("/myInfo")
-    public String myInfo(Model model,Authentication authentication) {
+    public String myInfo(Model model, Authentication authentication) {
         List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
         List<BannerDTO> banners2 = adminService.getActiveBanners();
 
+        Pageable pageable = PageRequest.of(0, 3, Sort.by("orderDate").descending());
         String uid = authentication.getName();
 
         List<OrderWithGroupedItemsDTO> groupDTO = orderService.getOrdersGroupedBySellers(uid);
@@ -136,10 +140,16 @@ public class MypageController {
 
     @GetMapping("/mysettings")
     public String mySettings(Model model) {
-        List<BannerDTO> banners = adminService.selectAllbanner();
-        List<BannerDTO> banners2 = adminService.getActiveBanners();
-        model.addAttribute("content", "mysettings");
-        model.addAttribute("banners", banners2);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        String uid = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
+
+        Member member = memberService.findByUserId(uid)
+                .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
+
+        model.addAttribute("member", member);
+
         return "content/user/mysettings"; // Points to "content/user/mysettings"
     }
 
@@ -200,8 +210,6 @@ public class MypageController {
 
         return "content/user/qnadetails";
     }
-
-
 
 
     @GetMapping("/reviewdetails")
