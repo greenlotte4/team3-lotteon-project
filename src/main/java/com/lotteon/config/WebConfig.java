@@ -63,7 +63,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(categoryInterceptor)
                 .addPathPatterns("/**");
         registry.addInterceptor(visitorInterceptor)
-                .addPathPatterns("/**");
+                .addPathPatterns("/");
 
     }
 
