@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const addr2 = addressElement.getAttribute("data-addr2");
     // Log or use the values as needed
     console.log("Postcode:", postcode);
+
     console.log("Address Line 1:", addr);
     console.log("Address Line 2:", addr2);
 
@@ -205,6 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
         dataArray.forEach(data => {
             const productId = data.productId;
             const finalPrice = data.finalPrice * data.quantity;
+            console.log("productId1:", productId);
 
             // Initialize or accumulate total price for the product group
             if (!groupedShippingFees[productId]) {
@@ -710,5 +712,77 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    // 로컬 스토리지에서 두 가지 상품 데이터를 가져옵니다.
+    const productDataArray = JSON.parse(localStorage.getItem("productDataArray")) || [];
+
+    // 배열이 비어있으면 경고 메시지 표시
+    if (productDataArray.length === 0) {
+        alert('구매할 상품이 없습니다.');
+        return;
+    }
+
+    // 첫 번째 상품 ID만 사용 (단일 값으로 변경)
+    const productId = productDataArray[0].productId;
+    console.log("보낼 상품 아이디:", productId);  // 서버로 전송할 상품 ID 확인
+
+    // 각 상품에 대해 쿠폰 목록을 받아오는 함수
+    function fetchCoupons(productId) {
+        return fetch(`/api/coupon/getCouponsForMember?productId=${productId}`, {  // 주어진 엔드포인트 유지
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(resp => {
+                console.log("응답 상태:", resp.status);  // 응답 상태 코드 확인
+                return resp.text();  // 응답을 텍스트로 반환
+            })
+            .then(text => {
+                console.log("서버 응답:", text);  // 서버 응답 내용 확인
+                try {
+                    const data = JSON.parse(text);  // 텍스트를 JSON으로 파싱 시도
+                    if (data.result === "success") {
+                        return data.coupons;  // 쿠폰 목록 반환
+                    } else {
+                        console.error("쿠폰 목록을 불러오는 데 실패했습니다.");
+                        return [];  // 실패 시 빈 배열 반환
+                    }
+                } catch (error) {
+                    console.error("JSON 파싱 오류:", error);  // JSON 파싱 오류
+                    return [];  // 오류 발생 시 빈 배열 반환
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching coupons:", error);  // fetch 에러
+                return [];  // fetch 오류 발생 시 빈 배열 반환
+            });
+    }
+
+    // DOM에 쿠폰 목록을 업데이트하는 함수
+    function updateCouponSelect(coupons) {
+        const couponSelect = document.getElementById("couponSelect");
+
+        // 기존 옵션을 지우고 새로 추가
+        couponSelect.innerHTML = ""; // 기존 옵션들 제거
+
+        coupons.forEach(coupon => {
+            const option = document.createElement("option");
+            option.value = coupon.couponId;
+            option.textContent = coupon.couponName;
+            option.setAttribute("data-coupon-type", coupon.couponType);
+            option.setAttribute("data-coupon-value", coupon.benefit);
+            option.setAttribute("data-product-id", coupon.productId);
+            couponSelect.appendChild(option);
+        });
+    }
+
+    // 쿠폰 목록을 받아와서 업데이트
+    fetchCoupons(productId).then(coupons => {
+        updateCouponSelect(coupons);
+    });
+});
+
 
 

@@ -172,14 +172,10 @@
                         <div class="coupon_Info">
                             <div class="coupon">
                                 <span>사용가능 쿠폰</span>
-                                <select name="coupons" id="">
+                                <select name="coupons" id="couponSelect">
                                     <option value="" style="color: #dddddd">사용하실 쿠폰을 선택하세요</option>
-                                    <!-- 쿠폰 목록을 출력 -->
-                                    <option th:each="coupon : ${issuedList}"
-                                            th:value="${coupon.couponId}"
-                                            th:text="${coupon.couponName}"
-                                            th:data-coupon-type="${coupon.couponType}"
-                                            th:data-discount-value="${coupon.benefit}"></option>
+                                    <!-- 쿠폰 목록을 동적으로 출력 -->
+
                                 </select>
                             </div>
                         </div>

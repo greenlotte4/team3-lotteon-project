@@ -175,18 +175,7 @@ public class MarketController {
         log.info("uid ::::::::::"+uid);
         MemberDTO memberDTO = userService.getByUsername(uid);
 
-
-
         log.info("멤버 아이디다"+memberUid);
-
-        // 해당 멤버의 발급된 쿠폰 목록 조회
-
-        List<CouponIssued> issuedCoupons = couponDetailsService.memberOrderCouponList(memberUid, productId); // 서비스에서 발급된 쿠폰 조회
-        log.info("발급받은 쿠폰: {}", issuedCoupons);
-
-        model.addAttribute("issuedList", issuedCoupons);
-
-
 
         log.info(memberDTO);
         model.addAttribute("memberDTO",memberDTO);
@@ -195,7 +184,6 @@ public class MarketController {
         List<DeliveryDTO> deliveryDTOList = deliveryService.getByMemberId(memberId);; // memberId로 DeliveryDTO 가져옴
         log.info("deliveryDTO ::::::::::" + deliveryDTOList);
         model.addAttribute("deliveryDTO", deliveryDTOList);
-
         model.addAttribute("productId", productId);
 
         return "content/market/marketorder"; // Points to the "content/market/marketorder" template

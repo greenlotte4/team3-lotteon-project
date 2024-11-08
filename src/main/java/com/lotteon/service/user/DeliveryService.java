@@ -34,6 +34,7 @@ public class DeliveryService {
     }
 
     // 특정 회원의 배송지 조회
+
     // memberId에 해당하는 모든 배송 정보를 DeliveryDTO 리스트로 반환
     public List<DeliveryDTO> getByMemberId(Long memberId) {
         // Delivery 엔티티에서 memberId로 모든 배송지 정보 조회
