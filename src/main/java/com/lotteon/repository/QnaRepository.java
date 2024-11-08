@@ -33,9 +33,4 @@ public interface QnaRepository extends JpaRepository<QnA, Integer> {
     @Query("SELECT q FROM  QnA q WHERE q.qna_type1 = :type1")
     Page<QnA> findByQna_type1(String type1, Pageable pageable);
 
-    // 특정 productId로 QnA 조회
-
-
-
-
 }

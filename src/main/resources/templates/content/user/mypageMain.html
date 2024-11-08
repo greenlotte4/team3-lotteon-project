@@ -70,21 +70,34 @@
                     <th>상태</th>
                     <th>확인/신청</th>
                 </tr>
-                <tr class="tr1">
+                <tr class="tr1" th:each="orderItem : ${groupDTO}">
+                    <!-- 주문 날짜 -->
                     <td>
-                        <data value="">2023-01-01</data>
+                        <data th:value="${orderItem.orderDate}" th:text="${#strings.substring(orderItem.orderDate,0,10)}">2023-01-01</data>
                     </td>
+
+                    <!-- 상품 정보 -->
                     <td>
                         <div style="display: flex; align-items: center;">
                             <div class="eximg">
-                                <img src="./img/ch.png" alt="상품 이미지">
+                                <!-- 상품 이미지 URL -->
+                                <!--<img th:src="@{${orderItem.product.imageUrl}}" alt="상품 이미지">-->
                             </div>
                             <div class="Pinf">
-                                <a href="" class="order-number">주문번호: 123456</a>
-                                <a href=""  class="seller-number" >회사명: ABC 회사</a>
-                                <a href="" class="productName">치킨</a>
-                                <p>수량: 2</p>
-                                <p>가격: 20,000원</p>
+                                <!-- 주문 번호 -->
+                                <a href="#" class="order-number">주문번호: <span th:text="${orderItem.getOrderId()}"></span></a>
+
+                                <!-- 회사명 (Seller Uid) -->
+                                <a href="#" class="seller-number">회사명: <span th:text="${orderItem.getOrderId()}"></span></a>
+
+                                <!-- 상품명 -->
+                                <a href="#" class="productName">상품명:<!--<span th:text="${orderItem.product.productName}"></span>--></a>
+
+                                <!-- 수량 -->
+                                <p>수량:<!-- <span th:text="${orderItem.stock}">0</span>--></p>
+
+                                <!-- 가격 -->
+                                <p>가격:<!--<span th:text="${#numbers.formatInteger(orderItem.orderPrice, locale)}">0</span>원--></p>
                             </div>
                         </div>
                     </td>
@@ -180,15 +193,15 @@
 
                                 <div class="product-info">
                                     <div>
-                                        <p>상품번호</p><br>
+                                        <p>상품번호:</p>
                                         <span class="truncate" th:text="${review.product.productId}">123456</span>
                                     </div>
                                     <div>
-                                        <p>상품명</p><br>
+                                        <p>상품명:</p>
                                         <span class="truncate" th:text="${review.product.productName}">치킨</span>
                                     </div>
                                     <div>
-                                        <p>리뷰</p><br>
+                                        <p>리뷰:</p>
                                         <span class="truncate" th:text="${review.content}">배송이 빠릅니다. 잘 사용하겠습니다.</span>
                                     </div>
                                 </div>

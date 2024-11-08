@@ -64,7 +64,7 @@
                         <tr>
                             <th><label for="uid">사용자ID</label></th>
                             <td>
-                                <span id="uid" >"${maskedUid}"</span>
+                                <span id="uid" >[[${member.user.uid}]]</span>
                             </td>
                         </tr>
                         <tr>
@@ -76,28 +76,27 @@
                         <tr>
                             <th><label for="name">이름</label></th>
                             <td>
-                                <span id="name" >"${maskedName}"</span>
+                                <input id="name" th:value="${member.name}"></input>
                             </td>
                         </tr>
                         <tr>
                             <th><label for="birth">생년월일</label></th>
                             <td>
-                                <span id="birth" >1999년 99월 999일</span>
+                                <span id="birth" >1990년 04 20일</span>
                             </td>
                         </tr>
                         <tr>
                             <th><label for="email">Email</label></th>
                             <td>
                                 <!-- 현재 이메일 입력 필드 -->
-                                <input type="text" id="email-id" placeholder="이메일 아이디"
-                                        required readonly>
+                                <input type="text" id="email" placeholder="이메일 아이디" th:value="${member.email}" />
 
                                 <!-- @ 기호 -->
                                 <span>@</span>
 
                                 <!-- 이메일 도메인 직접 입력 필드 -->
                                 <input type="text" id="email-domain" placeholder="도메인 입력"
-                                        required readonly>
+                                        required >
 
                                 <!-- 이메일 도메인 선택 -->
                                 <select id="domain-select" onchange="updateDomain()" disabled>
@@ -119,9 +118,7 @@
                         <tr>
                             <th><label for="phone">휴대폰</label></th>
                             <td>
-                                <input type="text" id="phone-part1" maxlength="3" required readonly oninput="moveToNext(this, 'phone-part2')"> -
-                                <input type="text" id="phone-part2"  maxlength="4" required readonly oninput="moveToNext(this, 'phone-part3')"> -
-                                <input type="text" id="phone-part3"  maxlength="4" required readonly>
+                                <input id="phone" th:value="${member.hp}" />
 
                                 <!-- 수정하기 버튼 -->
                                 <button id="edit-phone-btn" type="button" onclick="editPhone()">수정하기</button>
@@ -133,10 +130,10 @@
                         <tr>
                             <th class="address"><label for="zipcode">주소</label></th>
                             <td>
-                                <input type="text" id="zipcode" placeholder="우편번호" required style="margin-bottom: 10px;">
+                                <input type="text" id="zipcode" placeholder="우편번호"  th:value="${member.postcode}" style="margin-bottom: 10px;">
                                 <button type="button" class="btnZip" onclick="postcode()">주소검색</button><br>
-                                <input type="text" id="address1" placeholder="기본주소검색" required style="margin-bottom: 10px;"><br>
-                                <input type="text" id="address2" placeholder="상세주소입력" required style="margin-bottom: 10px;">
+                                <input type="text" id="address1" placeholder="기본주소검색" th:value="${member.addr}" style="margin-bottom: 10px;"><br>
+                                <input type="text" id="address2" placeholder="상세주소입력" th:value="${member.addr2}" style="margin-bottom: 10px;">
                             </td>
                         </tr>
                         <tr>

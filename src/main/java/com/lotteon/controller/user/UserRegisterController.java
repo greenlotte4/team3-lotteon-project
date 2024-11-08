@@ -39,12 +39,11 @@ public class UserRegisterController {
     @PostMapping("/memberregister")
     public String registerMember(@ModelAttribute User user, @ModelAttribute Member member) {
         // 비밀번호 인코딩
-        String encodedPassword = passwordEncoder.encode(user.getPass());
-        user.setPass(encodedPassword);  // 인코딩된 비밀번호 설정
+        // 인코딩된 비밀번호 설정
 
-        log.info("Encoded Password: " + encodedPassword);
 
-        userService.registerMember(user, member);
+        userService.registerUserAndMember(user, member);
+
         log.info("user: " + user + " member: " + member);
         return "redirect:/user/login";
     }

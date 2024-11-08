@@ -28,11 +28,12 @@
             <option value="" disabled selected>선택하세요</option> <!-- 기본 선택 안내 문구 -->
             <option value="couponType">1.쿠폰종류</option>
             <option value="sellerCompany">2.발급자</option>
+            <option value="sellerName">3.쿠폰명</option>
         </select>
         <input type="text" id="searchIssuedQuery" placeholder="검색어 입력" class="search-input">
         <button id="searchBtnIssued" class="search-btn">검색</button>
     </div>
-
+    <div class="div-table-overflow-x">
     <table class="coupon-table" id="issuedTable">
         <thead>
             <tr>
@@ -80,7 +81,7 @@
         </tr>
         </tbody>
     </table>
-
+    </div>
     <div class="pagination">
         <!-- 이전 페이지 버튼 -->
         <span class="page-btn" th:if="${currentPage > 1}" th:href="@{'/seller/coupon/issued?page=' + ${currentPage - 1}}">◀</span>

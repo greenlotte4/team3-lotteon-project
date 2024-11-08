@@ -64,6 +64,9 @@ public class ProductDTO{
     private Set<ProductOptionCombinationDTO> optionCombinations;
     private String savedPath;
 
+    //추가필드
+    private long finalPrice;
+
 
     public void addFileDescriptions(List<String> files) {
         if (files != null && !files.isEmpty()) {

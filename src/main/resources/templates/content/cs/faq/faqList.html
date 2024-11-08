@@ -2,7 +2,7 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/adminLayout.html}">
+      layout:decorate="~{layouts/csLayout.html}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,9 +20,7 @@
             <p id="titlecontent"></p>
         </div>
         <div id="faq_container" class="faq_container"></div>
-
     </div>
-
     </div>
     <script>
         let currentParentId = null;
@@ -53,13 +51,13 @@
             faqcontainer.innerHTML = ''; // 기존 내용을 초기화
 
                 // 서브 카테고리 로드
-                fetch(`/admin/faq/subcate/${parentId}`)
+                fetch(`/api/faq/subcate/${parentId}`)
                     .then(resp => resp.json())
                     .then(boardsubCate => {
                         // 모든 서브 카테고리의 FAQ를 동시에 로드
                         const faqPromises = boardsubCate.map(subCate => {
                             const childId = subCate.boardCateId;
-                            return fetch(`/admin/faq/list/page?parentId=${parentId}&childId=${childId}`)
+                            return fetch(`/api/faq/list/page?parentId=${parentId}&childId=${childId}`)
                                 .then(resp => resp.json());
                         });
 

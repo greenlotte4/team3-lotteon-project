@@ -5,6 +5,7 @@ package com.lotteon.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotteon.dto.order.OrderDTO;
+import com.lotteon.dto.order.OrderItemDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.product.Product;
@@ -185,6 +186,14 @@ public class SellerController {
           log.info("허웅우ㅜ우ㅜㅜ :" + orders);
         model.addAttribute("orders", orders);
         return "content/admin/order/admin_Order"; // Points to the "content/sellerDynamic" template for order status
+    }
+
+    @ResponseBody
+    @GetMapping("/order/status/orderItem")
+    public ResponseEntity<?> orderStatusItem(@RequestParam(required = false) Long orderId){
+
+        OrderItemDTO orderItemDTO = adminOrderService.selectOrderItemById(orderId);
+        return ResponseEntity.ok(orderItemDTO);
     }
 
 

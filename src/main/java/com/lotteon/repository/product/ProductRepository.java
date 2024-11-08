@@ -41,6 +41,17 @@ public interface ProductRepository extends JpaRepository<Product, Long> , Produc
     Page<Product> findByProductDetailsContainingAndSellerId(String keyword,String sellerUid,Pageable pageable);
 
 
+    List<Product> findByCategoryFirstIdOrderByHitDesc(long category,Pageable pageable);
+    List<Product> findByCategoryFirstIdOrderBySoldDesc(long category,Pageable pageable);
+    List<Product> findByCategoryFirstIdOrderByDiscountDesc(long category,Pageable pageable);
+    List<Product> findByCategoryFirstIdOrderByRdateDesc(long category,Pageable pageable);
+    List<Product> findByCategoryFirstIdOrderByProductRating(long category,Pageable pageable);
+    List<Product> findAllByOrderByHitDesc(Pageable pageable);
+    List<Product> findAllByOrderBySoldDesc(Pageable pageable);
+    List<Product> findAllByOrderByDiscountDesc(Pageable pageable);
+    List<Product> findAllByOrderByRdateDesc(Pageable pageable);
+    List<Product> findAllByOrderByProductRatingDesc(Pageable pageable);
+
     @Query("SELECT p FROM Product p JOIN ProductCategory c " +
             "WHERE c = :category OR " +
             "c.parent = :category OR " +

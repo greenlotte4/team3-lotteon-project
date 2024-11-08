@@ -3,20 +3,16 @@ package com.lotteon.entity.User;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lotteon.dto.User.Grade;
-import com.lotteon.dto.User.MemberDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Builder
 @Getter
@@ -28,7 +24,7 @@ import java.util.List;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // 자동 증가 설정
     private long id;
 
     private String name;
@@ -45,15 +41,16 @@ public class Member {
 
     private String addr2;
 
-    private BigDecimal point = BigDecimal.ZERO;
+    @Builder.Default
+    private double point = 0.0;  // 기본값 설정
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @JsonIgnore // 이 필드는 JSON 직렬화에서 제외됨
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Point> points = new ArrayList<>();
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    private Grade grade= Grade.FAMILY;
+    private Grade grade = Grade.FAMILY;  // 기본값 설정
 
     private String userinfocol;
 
@@ -64,7 +61,8 @@ public class Member {
     private LocalDateTime lastDate;
 
     @Enumerated(EnumType.STRING)
-    private MemberStatus status = MemberStatus.ACTIVE;
+    @Builder.Default
+    private MemberStatus status = MemberStatus.ACTIVE;  // 기본값 설정
 
     public enum MemberStatus {
         ACTIVE("정상"),
@@ -81,15 +79,12 @@ public class Member {
         public String getDisplayName() {
             return displayName;
         }
-
-        //'VVIP','VIP','GOLD','SILVER','FAMILY'
     }
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_uid") // 외래 키
     @JsonBackReference
     private User user; // User와의 관계
-
 
     private long totalOrder;
 
@@ -98,7 +93,7 @@ public class Member {
     }
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @JsonIgnore // 이 필드는 JSON 직렬화에서 제외됨
+    @JsonIgnore
     private List<Delivery> deliveryList = new ArrayList<>();
 
     public void addDelivery(Delivery delivery) {
@@ -106,4 +101,8 @@ public class Member {
         delivery.setMember(this);  // 연관 관계 설정
     }
 
+    public void savePoint(double point) {
+        this.point += point;
+    }
 }
+

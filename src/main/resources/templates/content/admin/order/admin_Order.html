@@ -63,11 +63,11 @@
                             <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>
                             <td th:text="${order.uid}">wlgus5946</td>
                             <td th:text="${order.memberName}">챱챱김</td>
-                            <td>초코틴틴</td>
+                            <td class="productname" th:data-order-id="${order.orderId}">초코틴틴</td>
                             <td th:text="${order.totalQuantity}">896</td>
                             <td th:text="${order.totalPrice}">9,000</td>
                             <td th:text="${order.pay}">신용카드</td>
-                            <td>결제완료</td>
+                            <td class="orderstatus">결제완료</td>
                             <td>[[${#strings.substring(order.orderDate,0,10)}]]</td>
                             <td><button class="openModalBtn">배송하기</button></td>
                         </tr>
@@ -235,7 +235,34 @@
                         </div>
                     </section>
 <!--                    <script th:src="@{/js/delivery.js}"></script>-->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const orderitemId = document.querySelectorAll(".productname");
 
+        orderitemId.forEach(orderItems => {
+            const orderitem = orderItems.dataset.orderId;
+            const orderstatuses = document.querySelectorAll(".orderstatus");
+
+            fetch(`/seller/order/status/orderItem?orderId=${orderitem}`)
+                .then(resp => resp.json())
+                .then(orderItemDTO => {
+                    console.log("야...옹 :", orderItemDTO);
+                    console.log("메멩ㅇ..옹..:" + orderItemDTO.product.productName);
+                    orderItems.textContent = orderItemDTO.product.productName;
+
+
+                    orderstatuses.forEach(orderstatus => {
+                        orderstatus.textContent = orderItemDTO.status;
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        })
+
+    })
+
+</script>
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
                             const modal = document.querySelector('.modal-section');

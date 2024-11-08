@@ -37,6 +37,14 @@ public class SellerService {
         return userRepository.findByUid(uid); // 아이디로 사용자 검색
     }
 
+    public String findCompanyByuid(String uid) {
+        Optional<Seller> opt= sellerRepository.findByUserUid(uid);
+        if(opt.isPresent()) {
+            return opt.get().getCompany();
+        }
+        return null;
+    }
+
 
     public List<Seller> getAllSellers() {
         return sellerRepository.findAll();

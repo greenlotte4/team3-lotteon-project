@@ -47,14 +47,34 @@ public class AdminController {
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_SELLER"))) {
             String sellerUid = userDetails.getUser().getUid();
 
-            long yesterdaySalesCount = orderService.getSalesCountBySellerAndDateRange(sellerUid, yesterdayTime.minusHours(24), yesterdayTime);
-            long todaySalesCount = orderService.getSalesCountBySellerAndDateRange(sellerUid, yesterdayTime, currentTime);
+            Long yesterdaySalesCount = orderService.getSalesCountBySellerAndDateRange(sellerUid, yesterdayTime.minusHours(24), yesterdayTime);
+            Long todaySalesCount = orderService.getSalesCountBySellerAndDateRange(sellerUid, yesterdayTime, currentTime);
 
-            long yesterdayTotalSalesAmount = orderService.getTotalSalesAmountBySellerAndDateRange(sellerUid, yesterdayTime.minusHours(24), yesterdayTime);
-            long todayTotalSalesAmount = orderService.getTotalSalesAmountBySellerAndDateRange(sellerUid, yesterdayTime, currentTime);
+            System.out.println("어제: " + yesterdaySalesCount);
+            System.out.println("오늘: " + todaySalesCount);
 
-            long salesCount = orderService.getSalesCountBySeller(sellerUid);
-            long totalSalesAmount = orderService.getTotalSalesAmountBySeller(sellerUid);
+            Long yesterdayTotalSalesAmount = orderService.getTotalSalesAmountBySellerAndDateRange(sellerUid, yesterdayTime.minusHours(24), yesterdayTime);
+            Long todayTotalSalesAmount = orderService.getTotalSalesAmountBySellerAndDateRange(sellerUid, yesterdayTime, currentTime);
+
+            System.out.println("어제판매량: " + yesterdayTotalSalesAmount);
+            System.out.println("오늘판매량: " + todayTotalSalesAmount);
+
+            // null이거나 음수일 경우 0으로 설정
+            yesterdaySalesCount = (yesterdaySalesCount == null || yesterdaySalesCount < 0) ? 0 : yesterdaySalesCount;
+            todaySalesCount = (todaySalesCount == null || todaySalesCount < 0) ? 0 : todaySalesCount;
+
+            yesterdayTotalSalesAmount = (yesterdayTotalSalesAmount == null || yesterdayTotalSalesAmount < 0) ? 0 : yesterdayTotalSalesAmount;
+            todayTotalSalesAmount = (todayTotalSalesAmount == null || todayTotalSalesAmount < 0) ? 0 : todayTotalSalesAmount;
+
+            Long salesCount = orderService.getSalesCountBySeller(sellerUid);
+            Long totalSalesAmount = orderService.getTotalSalesAmountBySeller(sellerUid);
+
+            System.out.println("총 판매건수: " + salesCount);
+            System.out.println("총 판매금액: " + totalSalesAmount);
+
+            salesCount = (salesCount == null || salesCount < 0) ? 0 : salesCount;
+            totalSalesAmount = (totalSalesAmount == null || totalSalesAmount < 0) ? 0 : totalSalesAmount;
+
 
             String formattedSalesAmount = String.format("%,d", totalSalesAmount);
 

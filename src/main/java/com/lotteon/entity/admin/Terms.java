@@ -19,15 +19,18 @@ public class Terms {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String title;  // 약관 제목
 
-    @Setter
     @Lob
-    @Column(columnDefinition = "LONGTEXT", nullable = false )
+    @Column(columnDefinition = "LONGTEXT")
     private String content;  // 약관 내용
 
-    @Column(nullable = false, length = 50)
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String htmlContent; // 변환된 HTML 내용
+
+    @Column(length = 50)
     private String type;  // 약관 종류 필드
 
     @Column(name = "created_at", updatable = false)
@@ -54,6 +57,7 @@ public class Terms {
         dto.setId(terms.getId());
         dto.setTitle(terms.getTitle());
         dto.setContent(terms.getContent());
+        dto.setHtmlContent(terms.getHtmlContent());
         dto.setType(terms.getType());
         return dto;
     }

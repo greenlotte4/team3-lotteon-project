@@ -4,7 +4,6 @@
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-x: auto;
 }
 
 .coupon-header {
@@ -52,10 +51,12 @@
     width: 100%;
     border-collapse: collapse;
     border-radius: 10px;
-    overflow-x: auto;
     /*display: block;*/
 }
+.div-table-overflow-x{
+    overflow-x: auto;
 
+}
 .coupon-table th,
 .coupon-table td {
     padding: 20px 23px;

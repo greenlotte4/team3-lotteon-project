@@ -1,6 +1,7 @@
 package com.lotteon.service.admin;
 
 import com.lotteon.dto.BoardCateDTO;
+import com.lotteon.dto.QnaDTO;
 import com.lotteon.dto.adminQnaDTO;
 import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
@@ -16,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -108,7 +111,9 @@ public class QnaService {
 
     // productId에 따른 Q&A 목록 조회
     public List<adminQnaDTO> getQnaByProductId(long productId) {
-        List<Adminqna> qnaList = adminQnaRepository.findByProductId(productId);
+
+        Pageable pageable = PageRequest.of(0,10,Sort.by("date").descending());
+        Page<Adminqna> qnaList = adminQnaRepository.findByProductId(productId,pageable);
 
         // QnA 엔티티를 QnaDTO로 변환하여 반환
         return qnaList.stream()
@@ -117,11 +122,21 @@ public class QnaService {
     }
 
     public List<adminQnaDTO> getQnaByWriterAndProductId(long productId) {
-        List<Adminqna> adminqnaList = adminQnaRepository.findByProductId(productId);
+        Pageable pageable = PageRequest.of(0,10,Sort.by("date").descending());
+
+        Page<Adminqna> adminqnaList = adminQnaRepository.findByProductId(productId,pageable);
 
             List<adminQnaDTO> adminQnaDTOS = adminqnaList.stream().map(adminqna -> modelMapper.map(adminqna, adminQnaDTO.class)).collect(Collectors.toList());
             return adminQnaDTOS;
 
+    }
+
+    public void deleteqna (int no){
+        Optional<Adminqna> optqna = adminQnaRepository.findById(no);
+        if(optqna.isPresent()){
+            Adminqna qna = optqna.get();
+            adminQnaRepository.delete(qna);
+        }
     }
 
 }

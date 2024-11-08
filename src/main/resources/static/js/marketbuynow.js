@@ -524,7 +524,7 @@ function fetchCoupons(productId) {
             console.error(err,'요청중 문제 발생함')
         })
 }
-
+/*
 function displayErrorMessage(message) {
     const couponContainer = document.getElementById('discountCouponItems');
     couponContainer.innerHTML = ''; // 이전 내용 제거
@@ -533,7 +533,7 @@ function displayErrorMessage(message) {
     errorDiv.className = 'error-message'; // CSS 클래스를 추가하여 스타일링 가능
     errorDiv.textContent = message;
     couponContainer.appendChild(errorDiv);
-}
+}*/
 
 // 쿠폰 목록 표시하기
 function displayCoupons(coupons) {
@@ -566,17 +566,15 @@ function displayCoupons(coupons) {
     }
 }
 
-
-
-
 function applyCoupon(couponId){
-    const uid = sessionStorage.getItem('uid');  // 또는 localStorage.getItem('uid') 사용
-
+    const uid = localStorage.getItem('uid');  // 또는 localStorage.getItem('uid') 사용
+    console.log(localStorage.getItem('uid')); // 'user123'
+/*
     if (!uid) {
         alert('로그인 후 이용해 주세요');
         window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
         return;
-    }
+    }*/
 
     if(!confirm("이 쿠폰을 발급 받으시겠습니까?")){
         return;
@@ -594,11 +592,42 @@ function applyCoupon(couponId){
             }
         })
         .then(data => {
-            alert(`쿠폰이 성공적으로 적용되었습니다.: ${data.message}`);
+            const button = document.querySelector(`button[onclick="applyCoupon('${couponId}')"]`);
+            if (button) {
+                button.textContent = '발급완료'; // 버튼 텍스트 변경
+                button.disabled = true; // 버튼 비활성화
+            }
+            alert(`쿠폰이 성공적으로 적용되었습니다.`);
 
         })
         .catch(err => {
             console.error(err)
         })
 
+
 }
+function updateCouponButtonState() {
+    const buttons = document.querySelectorAll('button[onclick^="applyCoupon"]');
+
+    buttons.forEach(button => {
+        const couponId = button.getAttribute('onclick').match(/'(\d+)'/)[1]; // 쿠폰 ID 추출
+
+        // 서버로 쿠폰 발급 여부 확인
+        fetch(`/api/coupon/check/${couponId}`, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        })
+            .then(resp => resp.json())
+            .then(isIssued => {
+                if (isIssued) {
+                    button.textContent = '발급완료'; // 발급 완료 버튼 텍스트로 변경
+                    button.disabled = true; // 비활성화
+                }
+            })
+            .catch(err => console.error("쿠폰 발급 여부 확인 실패:", err));
+    });
+}
+
+// 모달이 열릴 때마다 호출되는 함수
+updateCouponButtonState();
+

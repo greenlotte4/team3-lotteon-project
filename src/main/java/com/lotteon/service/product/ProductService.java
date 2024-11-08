@@ -32,6 +32,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -475,35 +476,91 @@ public class ProductService {
 
     public void selectByFirstCategory(long categoryId,String sort){
 
-        if(categoryId ==0L){
-
-        }else{
+    public List<ProductDTO> selectMainList(long categoryId,String sort){
+        List<Product> products = new ArrayList<>();
+        Pageable pageable = null;
             switch (sort){
                 case "hit":
+                    pageable= PageRequest.of(0,8,Sort.by("hit").descending());
+                    if (categoryId==0){
+                        products= productRepository.findAllByOrderByHitDesc(pageable);
+
+                    }else {
+                        products= productRepository.findByCategoryFirstIdOrderByHitDesc(categoryId,pageable);
+
+                    }
+
                     break;
-                case "2":
+                case "sold":
+                    pageable= PageRequest.of(0,8,Sort.by("sold").descending());
+                    if(categoryId==0){
+                        products= productRepository.findAllByOrderBySoldDesc(pageable);
+
+                    }else{
+                        products= productRepository.findByCategoryFirstIdOrderBySoldDesc(categoryId,pageable);
+
+                    }
+
                     break;
-                case "3":
+                case "rdate":
+                    pageable= PageRequest.of(0,8,Sort.by("rdate").descending());
+                    if(categoryId==0) {
+                        products= productRepository.findAllByOrderByRdateDesc(pageable);
+
+                    }else{
+                        products= productRepository.findByCategoryFirstIdOrderByRdateDesc(categoryId,pageable);
+
+                    }
                     break;
-                case "4":
+                case "discount":
+                    pageable= PageRequest.of(0,8,Sort.by("discount").descending());
+                    if(categoryId==0) {
+                        products= productRepository.findAllByOrderByDiscountDesc(pageable);
+
+                    }else {
+                        products= productRepository.findByCategoryFirstIdOrderByDiscountDesc(categoryId,pageable);
+
+                    }
+
                     break;
-                case "5":
+                case "rating":
+                    pageable= PageRequest.of(0,8,Sort.by("productRating").descending());
+                    if(categoryId==0) {
+                        products= productRepository.findAllByOrderByProductRatingDesc(pageable);
+                    }else {
+                        products= productRepository.findByCategoryFirstIdOrderByProductRating(categoryId,pageable);
+                    }
                     break;
                 default:
-        }
+                    break;
+
+
+            }
 
 
 
-        }
 
+        List<ProductDTO> productDTOS= new ArrayList<>();
+            for(Product product : products){
+                long finalPrice = (product.getPrice() * (100-product.getDiscount())/100*10)/10 ;
+                ProductDTO productDTO = ProductDTO.builder()
+                        .productId(product.getProductId())
+                        .productName(product.getProductName())
+                        .categoryId(product.getCategoryId())
+                        .file190(product.getFile190())
+                        .file230(product.getFile230())
+                        .savedPath(product.getSavedPath())
+                        .price(product.getPrice())
+                        .discount(product.getDiscount())
+                        .shippingFee(product.getShippingFee())
+                        .shippingTerms(product.getShippingTerms())
+                        .finalPrice(finalPrice)
+                        .build();
+                productDTOS.add(productDTO);
+            }
 
-
-
+        return productDTOS;
     }
-
-
-
-
 
 
 
