@@ -38,8 +38,9 @@ public class SearchService  implements CouponSearchInterface {
         // 초기화 시점에 searchService 객체가 완전히 준비되었는지 확인
         log.info("init 맵 초기화됨");
         searchIssuedMethods = Map.of(
-                "couponType", this::IssuedSearchByCouponType,  // 쿠폰명으로 검색
-                "sellerCompany", this::IssuedSearchByCouponCompany  // 발급자(판매자명)으로 검색
+                "couponType", this::issuedSearchByCouponType,  // 쿠폰명으로 검색
+                "sellerCompany", this::issuedSearchByCouponCompany,  // 발급자(판매자명)으로 검색
+                "sellerName", this::issuedSearchByCouponName  // 발급자(판매자명)으로 검색
         );
     }
 
@@ -62,7 +63,7 @@ public class SearchService  implements CouponSearchInterface {
     }
 
     @Override
-    public List<CouponIssuedDTO> IssuedSearchByCouponCompany(String query) {
+    public List<CouponIssuedDTO> issuedSearchByCouponCompany(String query) {
         log.info("회사이름 으로 검색");
         return couponIssuedRepository.findBySellerCompanyContaining(query)
                 .stream()
@@ -71,9 +72,18 @@ public class SearchService  implements CouponSearchInterface {
     }
 
     @Override
-    public List<CouponIssuedDTO> IssuedSearchByCouponType(String query) {
+    public List<CouponIssuedDTO> issuedSearchByCouponType(String query) {
         log.info("쿠폰타입 으로 검색");
         return couponIssuedRepository.findByCouponTypeContaining(query)
+                .stream()
+                .map(CouponIssuedDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CouponIssuedDTO> issuedSearchByCouponName(String query) {
+        log.info("쿠폰명 으로 검색");
+        return couponIssuedRepository.findByCouponNameContaining(query)
                 .stream()
                 .map(CouponIssuedDTO::new)
                 .collect(Collectors.toList());
