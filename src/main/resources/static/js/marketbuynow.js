@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (confirm("로그인이 필요합니다. 로그인 하시겠습니까?")) {
                             window.location.href = `/user/login?redirect=${encodeURIComponent(window.location.href)}`;
                         } else {
-                            location.reload();
+                            window.reload();
                         }
                     } else if (data.result === "auth") {
                         alert("구매 권한이 없는 계정입니다. 관리자 또는 판매자는 구매할 수 없습니다.");
@@ -289,6 +289,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const productDataArray = [];
 
                 if (optionSelectElements.length > 0 && selectedOptions.every(opt => opt)) {
+
+
+
                     // Include options in the data if options are selected
                     productDataArray.push({
                         productId: productId,
@@ -342,8 +345,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             if(Isconfirm) {
                                 window.location.href = `/market/cart`;
-                            }else{
-                                window.reload();
                             }
 
                         } else if (data.status === 401) {

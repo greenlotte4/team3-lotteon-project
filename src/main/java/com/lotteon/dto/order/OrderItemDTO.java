@@ -40,7 +40,8 @@ public class OrderItemDTO {
     private String company;
     private String image;
     private String path;
-
+    private String customerId;  //  구매자
+    private String customerName; //구매자이름
 
     //selectOption
     private OptionDTO selectOption;
