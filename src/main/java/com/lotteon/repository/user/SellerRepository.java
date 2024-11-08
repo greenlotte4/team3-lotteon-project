@@ -14,5 +14,6 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
     Optional<Seller> findByUserUid(String userUid); // UserUid로 조회
 
     void deleteAllByIdIn(List<Long> sellerIds);
+
 }
 

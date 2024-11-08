@@ -80,7 +80,7 @@
                                 <input type="hidden" th:class="combinationId" th:value="${item.getProductOptionCombination().getCombinationId()}">
                             </th:block>
                             <div>
-                                <img th:src="${'uploads/productImg'+item.getImageUrl()}" alt="">
+                                <img th:src="${'/uploads/productImg/'+item.getImageUrl()}" alt="">
                             </div>
                             <div>
                                 <span th:text="${item.getProduct().productName}">상품명</span>

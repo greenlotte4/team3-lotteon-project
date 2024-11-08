@@ -24,7 +24,7 @@ public class Terms {
 
     @Setter
     @Lob
-    @Column(columnDefinition = "LONGTEXT", nullable = false )
+    @Column(columnDefinition = "LONGTEXT")
     private String content;  // 약관 내용
 
     @Column(nullable = false, length = 50)

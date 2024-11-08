@@ -4,6 +4,8 @@ package com.lotteon.repository.product;
 
 */
 import com.lotteon.entity.product.Product;
+import com.lotteon.entity.product.ProductCategory;
+import com.lotteon.entity.product.QProductCategory;
 import com.lotteon.repository.custom.ProductRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> , ProductRepositoryCustom {
+//    QProductCategory productCategory = QProductCategory.productCategory;
+
 
     Page<Product> findBySellerId(String sellerId, Pageable pageable);
 
@@ -34,6 +38,25 @@ public interface ProductRepository extends JpaRepository<Product, Long> , Produc
     Page<Product> findBySellerIdContainingAndSellerId(String keyword,String sellerUid,Pageable pageable);
     Page<Product> findByProductDetailsContaining(String keyword,Pageable pageable);
     Page<Product> findByProductDetailsContainingAndSellerId(String keyword,String sellerUid,Pageable pageable);
+
+
+    List<Product> findByCategoryFirstIdOrderByHitDesc(long category,Pageable pageable);
+    List<Product> findByCategoryFirstIdOrderBySoldDesc(long category,Pageable pageable);
+    List<Product> findByCategoryFirstIdOrderByDiscountDesc(long category,Pageable pageable);
+    List<Product> findByCategoryFirstIdOrderByRdateDesc(long category,Pageable pageable);
+    List<Product> findByCategoryFirstIdOrderByProductRating(long category,Pageable pageable);
+    List<Product> findAllByOrderByHitDesc(Pageable pageable);
+    List<Product> findAllByOrderBySoldDesc(Pageable pageable);
+    List<Product> findAllByOrderByDiscountDesc(Pageable pageable);
+    List<Product> findAllByOrderByRdateDesc(Pageable pageable);
+    List<Product> findAllByOrderByProductRatingDesc(Pageable pageable);
+
+    @Query("SELECT p FROM Product p JOIN ProductCategory c " +
+            "WHERE c = :category OR " +
+            "c.parent = :category OR " +
+            "c.parent.parent = :category")
+    List<Product> findAllProductsByCategoryOrParents(@Param("category") ProductCategory category);
+
 
     @Modifying
     @Query("UPDATE Product p SET p.stock = :stock WHERE p.productId = :productId")

@@ -32,7 +32,7 @@ public class OrderCompletedResponseDTO {
 
 
     @Builder
-    public OrderCompletedResponseDTO(OrderDTO order, Set<SellerDTO> sellerDTOs) {
+    public OrderCompletedResponseDTO(OrderDTO order, Set<SellerDTO> sellerDTOs,List<OrderDTO> orderDTOSs) {
         List<OrderItemDTO> orderItems = order.getOrderItems() != null ? order.getOrderItems() : new ArrayList<>();
         this.order = order;
         this.sellers = new ArrayList<>();

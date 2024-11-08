@@ -4,8 +4,13 @@ package com.lotteon.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lotteon.dto.order.OrderDTO;
+import com.lotteon.dto.order.OrderItemDTO;
 import com.lotteon.dto.product.*;
+import com.lotteon.entity.order.Order;
 import com.lotteon.entity.product.Product;
+import com.lotteon.service.admin.AdminOrderService;
+import com.lotteon.service.order.OrderService;
 import com.lotteon.service.user.UserService;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +40,7 @@ import java.util.Map;
 @RequestMapping("/seller")
 public class SellerController {
 
-
+    private final AdminOrderService adminOrderService;
     private final ProductService productService;
     private final AuthenticationManager authenticationManager; // AuthenticationManager로 수정
     private final PasswordEncoder passwordEncoder;
@@ -46,14 +51,15 @@ public class SellerController {
 
     @GetMapping("/product/list")
     public String productList(Model model, PageRequestDTO pageRequestDTO, Authentication authentication,
-                              @RequestParam(value="page",required=false,defaultValue = "1") int page,
+                              @RequestParam(value="pg",required=false,defaultValue = "1") int pg,
                               @RequestParam(value = "type",required = false) String type,
                               @RequestParam(value = "keyword",required = false) String keyword) {
         log.info("일단 여기!!!");
         String user = authentication.getName();
         String role = authentication.getAuthorities().toString();
+        log.info("rolE!!!!!!!!!"+role);
         log.info("type, keyword : "+type+keyword);
-        pageRequestDTO.setPage(page);
+        pageRequestDTO.setPage(pg);
         pageRequestDTO.setType(type);
         pageRequestDTO.setKeyword(keyword);
 
@@ -61,20 +67,24 @@ public class SellerController {
         if(role.contains("ROLE_ADMIN")) {
 
                 productPageResponseDTO = productService.selectProductAll(pageRequestDTO);
+            log.info("확인!!!!!!!!!!!!!!!!!!ADMIN"+productPageResponseDTO);
 
 
             log.info("ROLE!!!! : "+productPageResponseDTO);
         }else if(role.contains("ROLE_SELLER")){
             productPageResponseDTO = productService.selectProductBySellerId(user, pageRequestDTO);
             log.info("ROLE_SELLER!!!! : "+productPageResponseDTO);
+            log.info("확인!!!!!!!!!!!!!!!!!!"+productPageResponseDTO.getKeyword());
 
         }
-         
+
         model.addAttribute("productPageResponseDTO", productPageResponseDTO);
         model.addAttribute("productList", "productList");
 
         return "content/admin/product/admin_productlist"; // Points to the "content/sellerDynamic" template for product listing
     }
+
+
 
 
     @GetMapping("/product/search")
@@ -172,8 +182,18 @@ public class SellerController {
 
     @GetMapping("/order/status")
     public String orderStatus(Model model) {
-        model.addAttribute("content", "status");
+          List<OrderDTO> orders = adminOrderService.selectOrdersAll();
+          log.info("허웅우ㅜ우ㅜㅜ :" + orders);
+        model.addAttribute("orders", orders);
         return "content/admin/order/admin_Order"; // Points to the "content/sellerDynamic" template for order status
+    }
+
+    @ResponseBody
+    @GetMapping("/order/status/orderItem")
+    public ResponseEntity<?> orderStatusItem(@RequestParam(required = false) Long orderId){
+
+        OrderItemDTO orderItemDTO = adminOrderService.selectOrderItemById(orderId);
+        return ResponseEntity.ok(orderItemDTO);
     }
 
 

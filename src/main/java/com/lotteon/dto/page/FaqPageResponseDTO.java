@@ -33,7 +33,6 @@ public class FaqPageResponseDTO {
     public FaqPageResponseDTO(PageRequestDTO pageRequestDTO, List<FaqDTO> faqdtoList, int total) {
         this.pg = pageRequestDTO.getPg();
         this.size = pageRequestDTO.getSize();
-        this.total = total;
         this.faqdtoList = faqdtoList;
         this.childId = pageRequestDTO.getChildId();
         this.parentId = pageRequestDTO.getParentId();

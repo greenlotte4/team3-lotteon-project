@@ -1,8 +1,11 @@
 package com.lotteon.controller.user;
 
+import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.User.User;
+import com.lotteon.service.user.DeliveryService;
+import com.lotteon.service.user.MemberService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @Log4j2
@@ -23,6 +27,8 @@ public class UserRegisterController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final DeliveryService deliveryService;
+    private final MemberService memberService;
 
     @GetMapping("/memberregister")
     public String memberRegister(Model model) {
@@ -33,15 +39,44 @@ public class UserRegisterController {
     @PostMapping("/memberregister")
     public String registerMember(@ModelAttribute User user, @ModelAttribute Member member) {
         // 비밀번호 인코딩
-        String encodedPassword = passwordEncoder.encode(user.getPass());
-        user.setPass(encodedPassword);  // 인코딩된 비밀번호 설정
+        // 인코딩된 비밀번호 설정
 
-        log.info("Encoded Password: " + encodedPassword);
 
-        userService.registerMember(user, member);
+        userService.registerUserAndMember(user, member);
+
         log.info("user: " + user + " member: " + member);
         return "redirect:/user/login";
     }
+
+
+//    @PostMapping("/memberregister")
+//    public String registerMember(@ModelAttribute User user, @ModelAttribute Member member) {
+//        // 비밀번호 인코딩
+//        String encodedPassword = passwordEncoder.encode(user.getPass());
+//        user.setPass(encodedPassword);  // 인코딩된 비밀번호 설정
+//
+//        log.info("Encoded Password: " + encodedPassword);
+//
+//        Member savedmember= userService.registerMember(user, member);
+////        log.info("user: " + user + " member: " + member);
+//
+//        return "redirect:/user/delivery/save/"+savedmember.getUid();
+//    }
+//
+//    @GetMapping("/user/delivery/save/{uid}")
+//    public String saveTOdelivery(@PathVariable String uid, Model model) {
+//                Optional<Member> opt = memberService.findByUserId(uid);
+//                if(opt.isPresent()) {
+//                    Member member = opt.get();
+//                    deliveryService.saveDefaultDelivery(member);
+//                    return "redirect:/user/login?success=true";
+//
+//                }
+//
+//        return "redirect:/user/login?success=false";
+//
+//
+//    }
 
     @GetMapping("/sellerregister")
     public String sellerRegister(Model model) {

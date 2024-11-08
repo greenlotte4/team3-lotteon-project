@@ -82,6 +82,7 @@ public class SecurityConfig {
         // 권한 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/").permitAll()
+                .requestMatchers("/user/**").permitAll()
                 .requestMatchers("/user/login", "/login/oauth2/**").permitAll() // 로그인 페이지 및 OAuth2 로그인 요청 허용
                 .requestMatchers("/seller/login").permitAll()
                 .requestMatchers("/admin/qna/**").hasAnyRole("ADMIN", "SELLER")
@@ -98,7 +99,10 @@ public class SecurityConfig {
                 .requestMatchers("/policy/**").permitAll()
                 .requestMatchers("/cs/**").permitAll()
                 .requestMatchers("/cart").authenticated()
+                .requestMatchers("/mypage/**").authenticated()
                 .requestMatchers(HttpMethod.POST,"/market/cart").authenticated()
+                .requestMatchers("/market/order").authenticated()
+                .requestMatchers("/market/completed/").authenticated()
                 .requestMatchers("/article/delete/**").authenticated()
                 .anyRequest().permitAll()
         );

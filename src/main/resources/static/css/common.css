@@ -107,7 +107,7 @@ body{}
 }
 #header{width: 100%; height: auto;}
 #header > .headerIn{
-    width: 1200px;
+    width: auto;
     margin:0 auto;
     position: relative;
 }
@@ -334,15 +334,17 @@ input[type=search] {
 }
 
 .headerslide{
-    width: 1200px;
+    width: auto;
     height: 80px;
     box-sizing: border-box;
+    background: linear-gradient(to right, #550ABF, #D95F8C); /* 왼쪽: 연한 파란색, 오른쪽: 연한 회색 */
 }
 
 .headerslide img{
-    width: 100%; /* 슬라이드 너비에 맞춰 이미지가 늘어남 */
+    width: 1200px; /* 슬라이드 너비에 맞춰 이미지가 늘어남 */
     height: 80px; /* 세로 크기는 자동으로 조정하여 비율 유지 */
     display: block; /* 이미지가 블록 요소로 처리되어 아래 여백이 생기지 않음 */
+    margin: auto;
 }
 
 /* nav */
