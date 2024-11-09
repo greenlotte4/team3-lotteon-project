@@ -14,6 +14,7 @@ import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.order.*;
 import com.lotteon.dto.product.OptionDTO;
 import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.dto.product.ProductRedisDTO;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Point;
 import com.lotteon.entity.User.Seller;
@@ -29,6 +30,7 @@ import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.repository.user.PointRepository;
 import com.lotteon.repository.user.SellerRepository;
+import com.lotteon.service.product.BestProductService;
 import com.lotteon.service.product.OptionService;
 import com.lotteon.service.product.ProductService;
 import com.lotteon.service.user.MemberService;
@@ -70,6 +72,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final PointService pointService;
     private final PointRepository pointRepository;
+    private final BestProductService bestProductService;
 
 
     @Transactional
@@ -117,6 +120,7 @@ public class OrderService {
             orderItemDTO.setCustomerName(savedOrder.getMemberName());
             orderItemDTO.setOrder(getModelMapper.map(savedOrder, OrderDTO.class));
 
+
             ProductDTO product = productService.selectProduct(orderItemDTO.getProductId());
 
 
@@ -146,6 +150,15 @@ public class OrderService {
             //각각의 오더아이템 저장
             OrderItem OrderItem = getModelMapper.map(orderItemDTO, OrderItem.class);
             OrderItem savedOrderItem = orderItemRepository.save(OrderItem);
+            ProductRedisDTO productRedisDTO = ProductRedisDTO.builder()
+                    .productId(savedOrderItem.getProduct().getProductId())
+                    .productName(savedOrderItem.getProduct().getProductName())
+                    .categoryId(savedOrderItem.getProduct().getCategoryId())
+                    .discount(savedOrderItem.getProduct().getDiscount())
+                    .file230(savedOrderItem.getProduct().getFile230())
+                    .savedPath(savedOrderItem.getProduct().getSavedPath())
+                    .build();
+            bestProductService.updateSellingInRedis(productRedisDTO, savedOrderItem.getStock());
 
         }
 

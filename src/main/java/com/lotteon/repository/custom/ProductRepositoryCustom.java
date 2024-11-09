@@ -15,6 +15,7 @@ import com.lotteon.dto.product.ProductListDTO;
 import com.lotteon.dto.product.ProductSummaryDTO;
 import com.lotteon.dto.product.request.ProductViewResponseDTO;
 import com.lotteon.entity.product.Product;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,11 @@ public interface ProductRepositoryCustom {
     //main list
     public Page<Tuple> selectProductForList( PageRequestDTO pageRequest,Pageable pageable );
     public Page<ProductSummaryDTO> selectProductByCategory(PageRequestDTO pageRequest, Pageable pageable,String sort);
+    public Page<ProductSummaryDTO> getSearchByProductNameOrderBySort(PageRequestDTO pageRequest,String sort);
+    public Page<ProductSummaryDTO> searchWithConditions(PageRequestDTO pageRequest, BooleanBuilder conditions,String sort);
     public ProductViewResponseDTO selectByProductId(Long productId);
+
+
 
 
     //main view

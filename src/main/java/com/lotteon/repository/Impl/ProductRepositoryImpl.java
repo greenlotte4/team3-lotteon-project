@@ -16,6 +16,7 @@ import com.lotteon.entity.User.QUser;
 import com.lotteon.entity.product.*;
 import com.lotteon.repository.custom.ProductRepositoryCustom;
 import com.lotteon.repository.user.SellerRepository;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryFactory;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.annotations.QueryProjection;
@@ -94,30 +95,20 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         NumberExpression<Long> finalPrice = qProduct.price.subtract(qProduct.price.multiply(qProduct.discount).divide(100));
 
         // 정렬 조건 추가
-        OrderSpecifier<?> orderSpecifier;
-        switch (sort) {
-            case "lowPrice":
-                orderSpecifier = finalPrice.asc();
-                break;
-            case "highPrice":
-                orderSpecifier = finalPrice.desc();
-                break;
-            case "rating":
+        OrderSpecifier<?> orderSpecifier = switch (sort) {
+            case "lowPrice" -> finalPrice.asc();
+            case "highPrice" -> finalPrice.desc();
+            case "rating" -> {
                 NumberExpression<Double> avgRating = Expressions.numberTemplate(Double.class, "CAST({0} AS DOUBLE)", qReview.rating).avg();
-                orderSpecifier = avgRating.desc();
-                break;
-            case "reviews":
-                orderSpecifier = qReview.count().desc(); // 리뷰 개수 내림차순
-                break;
-            case "recent":
-                orderSpecifier = qProduct.rdate.desc();
-                break;
-            default: // 판매많은순 (popularity)
-                orderSpecifier = qProduct.sold.desc(); // 판매량 내림차순
-                break;
-        }
+                yield avgRating.desc();
+            }
+            case "reviews" -> qReview.count().desc(); // 리뷰 개수 내림차순
+            case "recent" -> qProduct.rdate.desc();
+            default -> // 판매많은순 (popularity)
+                    qProduct.sold.desc(); // 판매량 내림차순
+        };
 
-      List<ProductSummaryDTO> products =  queryFactory.select(
+        List<ProductSummaryDTO> products =  queryFactory.select(
                       new QProductSummaryDTO(
                               qProduct.categoryId,
                               qProduct.productId,
@@ -167,6 +158,195 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return new PageImpl<>(products, pageable,total);
 
+    }
+
+    @Override
+    public Page<ProductSummaryDTO> getSearchByProductNameOrderBySort(PageRequestDTO pageRequest,String sort) {
+
+        Pageable pageable = pageRequest.getPageable(sort,10);
+        log.info("pageable!!!!"+pageable);
+        String keyword= pageRequest.getKeyword();
+        log.info("검색어!!!!!1"+keyword+sort);
+        // Split keyword by spaces to get multiple keywords
+        String[] keywords = keyword.split("\\s+");
+
+        // Create a dynamic predicate for product name search
+        BooleanBuilder keywordCondition = new BooleanBuilder();
+        for (String key : keywords) {
+            keywordCondition.or(qProduct.productName.containsIgnoreCase(key));
+        }
+
+        NumberExpression<Long> finalPrice =  qProduct.price.subtract(
+                qProduct.price.multiply(qProduct.discount)
+                        .divide(100)
+                        .divide(10)
+                        .multiply(10)
+        );
+        // 정렬 조건 추가
+
+        // 정렬 조건 추가
+        OrderSpecifier<?> orderSpecifier = switch (sort) {
+            case "lowPrice" -> finalPrice.asc();
+            case "highPrice" -> finalPrice.desc();
+            case "rating" -> {
+                NumberExpression<Double> avgRating = Expressions.numberTemplate(Double.class, "CAST({0} AS DOUBLE)", qReview.rating).avg();
+                yield avgRating.desc();
+            }
+            case "reviews" -> qReview.count().desc(); // 리뷰 개수 내림차순
+            case "recent" -> qProduct.rdate.desc();
+            default -> // 판매많은순 (popularity)
+                    qProduct.sold.desc(); // 판매량 내림차순
+        };
+
+        List<ProductSummaryDTO> products =  queryFactory.select(
+                        new QProductSummaryDTO(
+                                qProduct.categoryId,
+                                qProduct.productId,
+                                qProduct.productName,
+                                qProduct.price,
+                                qProduct.discount,
+                                qProduct.shippingFee,
+                                qProduct.shippingTerms,
+                                qProduct.productDesc,
+                                qProduct.file230,
+                                qProduct.file190,
+                                qSeller.id,
+                                qSeller.user.uid,
+                                qSeller.company
+                        ))
+                .from(qProduct)
+                .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId))
+                .leftJoin(qProduct.reviews, qReview)
+                .where(keywordCondition)  // Apply the dynamic keyword condition
+                .groupBy(qProduct.productId, qSeller.user.uid)
+                .orderBy(orderSpecifier) // 정렬 조건 적용
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // 2. 각 상품에 대해 리뷰 리스트를 별도로 조회하여 DTO에 추가
+        for (ProductSummaryDTO product : products) {
+            List<Double> ratings = queryFactory.select(qReview.rating)
+                    .from(qReview)
+                    .where(qReview.product.productId.eq(product.getProductId()))
+                    .fetch();
+
+            // 필요한 경우 Double을 String으로 변환하여 설정
+            product.setRating(ratings.stream()
+                    .map(String::valueOf)  // Double을 String으로 변환
+                    .collect(Collectors.toList()));  // List<String> 형태로 변환
+        }
+
+
+        log.info("did=dosidjflskdjfls : "+products);
+        long total = queryFactory.select(qProduct.count())
+                .from(qProduct)
+                .where(keywordCondition)  // Apply the dynamic keyword condition
+                .fetchOne().longValue();
+
+        log.info("totalllllllllllll:"+total);
+
+        return new PageImpl<>(products, pageable,total);
+    }
+
+    @Override
+    public Page<ProductSummaryDTO> searchWithConditions(PageRequestDTO pageRequest, BooleanBuilder conditions,String sort) {
+        Pageable pageable = pageRequest.getPageable(sort, 10);
+        String keyword = pageRequest.getKeyword();
+
+        // Split keyword by spaces to get multiple keywords
+        String[] keywords = keyword.split("\\s+");
+
+        // Create a dynamic predicate for product name search
+        BooleanBuilder keywordCondition = new BooleanBuilder();
+        for (String key : keywords) {
+            keywordCondition.or(qProduct.productName.containsIgnoreCase(key));
+        }
+        String searchMode =pageRequest.getSearchMode();
+        switch (searchMode) {
+            case "exact":
+                keywordCondition.and(qProduct.productName.eq(keyword));
+                break;
+            case "all":
+                for (String key : keywords) {
+                    keywordCondition.and(qProduct.productName.containsIgnoreCase(key));
+                }
+                break;
+            case "any":
+                for (String key : keywords) {
+                    keywordCondition.or(qProduct.productName.containsIgnoreCase(key));
+                }
+                break;
+        }
+
+        conditions.and(keywordCondition);
+
+        NumberExpression<Long> finalPrice = qProduct.price.subtract(
+                qProduct.price.multiply(qProduct.discount)
+                        .divide(100)
+                        .divide(10)
+                        .multiply(10)
+        );
+
+        // 정렬 조건 추가
+        OrderSpecifier<?> orderSpecifier = switch (sort) {
+            case "lowPrice" -> finalPrice.asc();
+            case "highPrice" -> finalPrice.desc();
+            case "rating" -> {
+                NumberExpression<Double> avgRating = Expressions.numberTemplate(Double.class, "CAST({0} AS DOUBLE)", qReview.rating).avg();
+                yield avgRating.desc();
+            }
+            case "reviews" -> qReview.count().desc();
+            case "recent" -> qProduct.rdate.desc();
+            default -> qProduct.sold.desc();
+        };
+
+        List<ProductSummaryDTO> products = queryFactory.select(
+                        new QProductSummaryDTO(
+                                qProduct.categoryId,
+                                qProduct.productId,
+                                qProduct.productName,
+                                qProduct.price,
+                                qProduct.discount,
+                                qProduct.shippingFee,
+                                qProduct.shippingTerms,
+                                qProduct.productDesc,
+                                qProduct.file230,
+                                qProduct.file190,
+                                qSeller.id,
+                                qSeller.user.uid,
+                                qSeller.company
+                        ))
+                .from(qProduct)
+                .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId))
+                .leftJoin(qProduct.reviews, qReview)
+                .where(conditions)
+                .groupBy(qProduct.productId, qSeller.user.uid)
+                .orderBy(orderSpecifier)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // 각 상품에 대해 리뷰 리스트를 별도로 조회하여 DTO에 추가
+        for (ProductSummaryDTO product : products) {
+            List<Double> ratings = queryFactory.select(qReview.rating)
+                    .from(qReview)
+                    .where(qReview.product.productId.eq(product.getProductId()))
+                    .fetch();
+
+            // Double을 String으로 변환하여 설정
+            product.setRating(ratings.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.toList()));
+        }
+
+        // 총 데이터 개수 조회
+        long total = queryFactory.select(qProduct.count())
+                .from(qProduct)
+                .where(keywordCondition)
+                .fetchOne();
+
+        return new PageImpl<>(products, pageable, total);
     }
 
     @Override

@@ -29,6 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    const searchInput = document.getElementById('headerSearchId');
+    searchInput.addEventListener('keyup', function (event) {
+        if (event.key === 'Enter') { // Enter 키 확인
+            performSearch();
+        }
+    });
 
 
 
@@ -83,47 +89,47 @@ function performSearch() {
 // }
 
 
-function updateProductList(productDTOs, query, total) {
-    const productList = document.getElementById('productList');
-    productList.innerHTML = ''; // Clear existing content
-
-    // Update the keyword and total count
-    document.getElementById('searchKeyword').textContent = query;
-    document.getElementById('totalResults').textContent = total;
-
-    // Iterate over the productDTOs and create product items
-    productDTOs.forEach(product => {
-        const productItem = document.createElement('div');
-        productItem.className = 'product-item';
-
-        productItem.innerHTML = `
-            <div class="product-image">
-                <img src="/uploads/${product.file190}" alt="상품 이미지">
-            </div>
-            <div class="product-details">
-                <h4 class="product-name">${product.productName}</h4>
-                <p class="product-description">${product.productDesc}</p>
-            </div>
-            <div class="price-seller-info">
-                <div class="product-price">
-                    <span class="final-price">${product.price.toLocaleString()}원</span>
-                    <span class="original-price">${(product.price / (1 - product.discount / 100)).toLocaleString()}원</span>
-                    <span class="discount">${product.discount}% ↓</span>
-                </div>
-                <div class="shipping-info">
-                    <span class="shipping-label">${product.shippingFee === 0 ? '무료배송' : `${product.shippingFee.toLocaleString()}원`}</span>
-                </div>
-            </div>
-            <div class="product-seller">
-                <span class="seller-name">${product.sellerId}</span>
-                <span class="seller-rating">고객만족우수</span>
-                <span class="seller-rank">⭐⭐⭐⭐⭐</span>
-            </div>
-        `;
-
-        productList.appendChild(productItem);
-    });
-}
+// function updateProductList(productDTOs, query, total) {
+//     const productList = document.getElementById('productList');
+//     productList.innerHTML = ''; // Clear existing content
+//
+//     // Update the keyword and total count
+//     document.getElementById('searchKeyword').textContent = query;
+//     document.getElementById('totalResults').textContent = total;
+//
+//     // Iterate over the productDTOs and create product items
+//     productDTOs.forEach(product => {
+//         const productItem = document.createElement('div');
+//         productItem.className = 'product-item';
+//
+//         productItem.innerHTML = `
+//             <div class="product-image">
+//                 <img src="/uploads/${product.file190}" alt="상품 이미지">
+//             </div>
+//             <div class="product-details">
+//                 <h4 class="product-name">${product.productName}</h4>
+//                 <p class="product-description">${product.productDesc}</p>
+//             </div>
+//             <div class="price-seller-info">
+//                 <div class="product-price">
+//                     <span class="final-price">${product.price.toLocaleString()}원</span>
+//                     <span class="original-price">${(product.price / (1 - product.discount / 100)).toLocaleString()}원</span>
+//                     <span class="discount">${product.discount}% ↓</span>
+//                 </div>
+//                 <div class="shipping-info">
+//                     <span class="shipping-label">${product.shippingFee === 0 ? '무료배송' : `${product.shippingFee.toLocaleString()}원`}</span>
+//                 </div>
+//             </div>
+//             <div class="product-seller">
+//                 <span class="seller-name">${product.sellerId}</span>
+//                 <span class="seller-rating">고객만족우수</span>
+//                 <span class="seller-rank">⭐⭐⭐⭐⭐</span>
+//             </div>
+//         `;
+//
+//         productList.appendChild(productItem);
+//     });
+// }
 // 하위 메뉴 보이기 함수
 function showSubmenu(element) {
     const submenu = element.querySelector('ul');

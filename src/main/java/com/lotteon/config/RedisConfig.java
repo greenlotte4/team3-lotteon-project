@@ -1,6 +1,7 @@
 package com.lotteon.config;
 
 
+import com.lotteon.dto.product.ProductSummaryDTO;
 import com.querydsl.core.annotations.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,12 +9,16 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+import java.util.List;
 
 @Configuration
 public class RedisConfig {
@@ -22,12 +27,17 @@ public class RedisConfig {
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-
-        // Use Jackson2JsonRedisSerializer for values
-//        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
-//        template.setValueSerializer(serializer);
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer()); // 모든 Object에 대한 Serializer
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, List<ProductSummaryDTO>> productSummaryRedisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, List<ProductSummaryDTO>> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());  // List를 지원하는 직렬화
         return template;
     }
 
@@ -43,4 +53,19 @@ public class RedisConfig {
                 .cacheDefaults(cacheConfig)
                 .build();
     }
+
+
+    @Bean
+    public RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, new ChannelTopic("bestProductsUpdates"));
+        return container;
+    }
+
+    @Bean
+    public MessageListenerAdapter listenerAdapter(BestProductsListener listener) {
+        return new MessageListenerAdapter(listener, "receiveMessage");
+    }
+
 }
