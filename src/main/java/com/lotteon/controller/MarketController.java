@@ -136,11 +136,7 @@ public class MarketController {
         return "content/market/marketList"; // Points to the "content/market/marketList" template
     }
 
-    @GetMapping("/search")
-    public String marketSearch(Model model) {
-        model.addAttribute("content", "search");
-        return "content/market/marketSearch"; // Points to the "content/market/marketSearch" template
-    }
+
 
     @GetMapping("/view")
     public String marketView(Model model) {

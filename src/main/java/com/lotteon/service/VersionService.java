@@ -79,7 +79,8 @@ public class VersionService {
         Version version = versionRepository.findTopByOrderByVerIdDesc().orElse(null);
         if (version != null) {
             log.info("Fetched Version from database and caching it.");
-            return modelMapper.map(version, VersionDTO.class);
+            VersionDTO Version = modelMapper.map(version, VersionDTO.class);
+            return Version;
         } else {
             log.info("No Version found in database.");
             return null;

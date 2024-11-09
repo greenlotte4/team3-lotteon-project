@@ -234,6 +234,20 @@ public class ProductService {
                 .build();
     }
 
+    //헤더 상단 검색시 서비스
+    public ProductListPageResponseDTO SearchProductAll(PageRequestDTO pageRequestDTO,String query){
+        Pageable pageable = pageRequestDTO.getPageable("hit",10);
+        Page<Product> products;
+        products= productRepository.findByProductNameContaining(query,pageable);
+        List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+
+        return  ProductListPageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .ProductDTOs(productDTOs)
+                .total(0)
+                .build();
+    }
+
     public ProductListPageResponseDTO selectProductAll(PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("hit",10);
         Page<Product> products;
@@ -324,7 +338,7 @@ public class ProductService {
 
 
     //main list
-//    @Cacheable(value = "productListCache", key = "#pageRequestDTO.categoryId + '-' + #sort + '-' + #pageRequestDTO.page")
+    @Cacheable(value = "productListCache", key = "#pageRequestDTO.categoryId + '-' + #sort + '-' + #pageRequestDTO.page")
     public ProductListPageResponseDTO getSortProductList(PageRequestDTO pageRequestDTO,String sort ) {
        log.info("일단 들어와"+pageRequestDTO);
         Pageable pageable = pageRequestDTO.getPageable(sort,10);
@@ -474,7 +488,6 @@ public class ProductService {
     }
 
 
-    public void selectByFirstCategory(long categoryId,String sort){
 
     public List<ProductDTO> selectMainList(long categoryId,String sort){
         List<Product> products = new ArrayList<>();

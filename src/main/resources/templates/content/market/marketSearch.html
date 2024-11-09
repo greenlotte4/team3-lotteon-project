@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[[${headerInfo.hd_title}]]:[[${headerInfo.hd_subtitle}]]</title>
     <link rel="stylesheet" th:href="@{/css/market/marketList.css}">
-    <link   rel="stylesheet" th:href="@{/css//market/marketsearch.css}">
+    <link   rel="stylesheet" th:href="@{/css/market/marketsearch.css}">
     <link rel="stylesheet" th:href="@{/css/market/marketAside.css}">
 
 
@@ -28,8 +28,10 @@
                         </div>
                         <div class="search-Area">
                             <div class="search-text">
-                                <span>셔츠</span>검색결과<p>(총 : 20건)</p>
+                                <span id="searchKeyword">[[${query}]]</span> 검색결과
+                                <p>(총 : <span id="totalResults" th:text="${products.getProductDTOs().size()}"></span>건)</p>
                             </div>
+
                             <div class="searchBar-Wrap">
                                 <div class="search-input">
                                     <input type="text" placeholder="검색어를 입력하세요">
@@ -61,6 +63,24 @@
                                 <!-- 여기에 하위 카테고리 리스트가 동적으로 추가될 예정 -->
                             </ul>
                         </div>
+                        <section class="product-list" id="productList">
+                            <!-- This is where the product items will be dynamically loaded -->
+                            <div th:each="product : ${products.productDTOs}">
+                                <div class="product-item">
+                                    <div class="product-image">
+                                        <img th:src="@{/uploads/productImg/{file190}(file190=${product.file190})}" alt="상품 이미지">
+                                    </div>
+
+                                    <div class="product-details">
+                                        <h4 class="product-name" th:text="${product.productName}">Product Name</h4>
+                                        <p class="product-description" th:text="${product.productDesc}">Description</p>
+                                    </div>
+                                    <div class="price-seller-info">
+                                        <span class="final-price" th:text="${product.price} + '원'">Price</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                         <article class="product-list">
                             <div class="product-item">
                                 <div class="product-image">

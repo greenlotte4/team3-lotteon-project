@@ -199,6 +199,127 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // 배송비 계산
+    // function calculateShippingFee(dataArray) {
+    //     const groupedShippingFees = {};
+    //
+    //     // Group products by productId and calculate the total final price for each group
+    //     dataArray.forEach(data => {
+    //         const productId = data.productId;
+    //         const finalPrice = data.finalPrice;
+    //         console.log("productId1:", productId);
+    //
+    //         // Initialize or accumulate total price for the product group
+    //         if (!groupedShippingFees[productId]) {
+    //             groupedShippingFees[productId] = {
+    //                 totalFinalPrice: 0,
+    //                 shippingFee: parseInt(data.shippingFee || 0),
+    //                 shippingTerms: parseInt(data.shippingTerms || 0),
+    //             };
+    //         }
+    //
+    //         groupedShippingFees[productId].totalFinalPrice += finalPrice;
+    //     });
+    //
+    //     // Set shipping fee to 0 if total price exceeds shipping terms
+    //     for (const productId in groupedShippingFees) {
+    //         const productGroup = groupedShippingFees[productId];
+    //         if (productGroup.totalFinalPrice >= productGroup.shippingTerms) {
+    //             productGroup.shippingFee = 0;
+    //         }
+    //     }
+    //
+    //     return groupedShippingFees;
+    // }
+
+    // function calculateShippingFee(data) {
+    //     const finalPrice = data.finalPrice;
+    //     const shippingTerms = parseInt(data.shippingTerms || 0);
+    //     const shippingFee = parseInt(data.shippingFee || 0);
+    //
+    //     // 개별 상품의 finalPrice가 shippingTerms를 초과하면 배송비를 0으로 설정
+    //     return finalPrice >= shippingTerms ? 0 : shippingFee;
+    // }
+    //
+    // let t_expectPoint =0;
+    //
+    // // Function to create a new product row in the table
+    // function createProductRow(data) {
+    //     // Get grouped shipping fees for all products
+    //     const shippingFee = calculateShippingFee(data);
+    //
+    //     console.log("data.finalPrice",data.finalPrice );
+    //     console.log("data.originalPrice",data.originalPrice);
+    //
+    //     let Original = data.originalPrice;
+    //     let discountAmount =( data.originalPrice * data.discount /100)/10*10
+    //     let Quantity  = data.quantity;
+    //     let final = (Original-discountAmount)*Quantity;
+    //     let expectPoint= Math.floor(data.originalPrice*pointPercentage/100/10)*10;
+    //
+    //
+    //     if (data.options && data.options.length > 0) {
+    //         const totalAdditionalPrice = data.options[0].additionalPrice;
+    //         const calcPrice= Original + totalAdditionalPrice;
+    //         discountAmount = (calcPrice * data.discount/100)/10 *10 ;
+    //         final = (calcPrice - discountAmount)*Quantity;
+    //         expectPoint =Math.floor( calcPrice*pointPercentage/100/10 )*10;
+    //         totalExpectedPoint += expectPoint;
+    //
+    //         // const shippingFee = final > data.shippingTerms? 0:shippingFee;
+    //
+    //         console.log("data.calcPrice",shippingFee );
+    //         return `
+    //     <tr class="order-row">
+    //         <td>
+    //             <div><img src="/uploads/${data.file190}" alt="${data.productName}"></div>
+    //             <div>
+    //                 <span>${data.productName}</span>
+    //                 <p class="product_option"> [ 옵션 : ${data.options[0].combinationString} ]</p>
+    //             </div>
+    //         </td>
+    //         <td>
+    //             <div class="qnt">
+    //                 <input type="number" class="T_quantity" value="${data.quantity}" readonly>
+    //             </div>
+    //         </td>
+    //         <td><span class="T_originalPrice price" data-original="${calcPrice}" data-additional="${calcPrice}">${calcPrice.toLocaleString()}</span></td>
+    //         <td><span class="T_discount">${data.discount}</span>%</td>
+    //         <td><span class="T_point">${expectPoint}</span></td>
+    //         <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
+    //         <td><span class="T_finalPrice price">${final}</span></td>
+    //         <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
+    //     </tr>
+    // `;
+    //     }else{
+    //         totalExpectedPoint += expectPoint;
+    //
+    //         return `
+    //     <tr class="order-row">
+    //         <td>
+    //             <div><img src="/uploads/productImg/${data.file190}" alt="${data.productName}"></div>
+    //             <div>
+    //                 <span>${data.productName}</span>
+    //
+    //             </div>
+    //         </td>
+    //         <td>
+    //             <div class="qnt">
+    //                 <input type="number" class="T_quantity" value="${data.quantity}" readonly>
+    //             </div>
+    //         </td>
+    //         <td><span class="T_originalPrice price" data-original="${Original}">${Original}</span></td>
+    //         <td><span class="T_discount">${data.discount}</span>%</td>
+    //         <td><span class="T_point">${expectPoint}</span></td>
+    //         <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
+    //         <td><span class="T_finalPrice price">${final}</span></td>
+    //         <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
+    //     </tr>
+    // `;
+    //     }
+    //
+    // }
+
+    // 배송비 계산
     function calculateShippingFee(dataArray) {
         const groupedShippingFees = {};
 
@@ -300,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <td><span class="T_originalPrice price" data-original="${Original}">${Original}</span></td>
             <td><span class="T_discount">${data.discount}</span>%</td>
             <td><span class="T_point">${expectPoint}</span></td>
-            <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
+            <td><span class="T_shippingFee" data-ship="${shippingFee}">${final>data.shippingTerms ? 0: shippingFee.toLocaleString()}</span></td>
             <td><span class="T_finalPrice price">${final}</span></td>
             <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
         </tr>
@@ -308,8 +429,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
     }
-
-
 
 // Calculate and display discount results based on used points and coupons
     const pointuseBtn = document.getElementById("pointuseBtn");

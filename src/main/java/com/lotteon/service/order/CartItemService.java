@@ -21,19 +21,19 @@ public class CartItemService {
     private final MarketCartService marketCartService;
     private final CartRepository cartRepository;
 
-    public boolean deleteCartItems(List<Long> cartItemIds, Long cartId){
+    public boolean deleteCartItems(List<Long> cartItemIds,long cartID){
 
         int result=0;
         boolean response=false;
+
         int size= cartItemIds.size();
+        long cartId=cartID;
         for (Long cartItemId : cartItemIds) {
             // 카트 아이템을 먼저 조회하여 카트 ID를 저장
             CartItem cartItem = cartItemRepository.findById(cartItemId)
                     .orElseThrow(() -> new RuntimeException("장바구니에 해당 상품이 읍다"));
             // 카트 ID 저장
-            if (cartId == null) {
-                cartId = cartItem.getCart().getCartId();
-            }
+            cartId = cartItem.getCart().getCartId();
 
             cartItemRepository.delete(cartItem);
             result++;

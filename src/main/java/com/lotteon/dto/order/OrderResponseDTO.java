@@ -52,6 +52,7 @@ public class OrderResponseDTO {
 
             long originalQuantity = buyNowRequestDTO.getQuantity();
             if(cartid>0){
+                this.cartId = cartid;
                 cartItemIds.add(buyNowRequestDTO.getCartItemId());
             }
             List<OptionItemDTO> optionItemDTOS = buyNowRequestDTO.getOptions();

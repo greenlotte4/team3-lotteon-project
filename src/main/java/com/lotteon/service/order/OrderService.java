@@ -1,11 +1,21 @@
 package com.lotteon.service.order;
 
+//
+/*
+        날짜: 2024.11.01
+        이름 : 하진희
+        내용 : orderService
+
+        2024.11.08 주문시 포인트사용 적용
+ */
 
 import com.lotteon.controller.SellerController;
 import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.order.*;
 import com.lotteon.dto.product.OptionDTO;
 import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.entity.User.Member;
+import com.lotteon.entity.User.Point;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
@@ -16,9 +26,13 @@ import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.repository.order.OrderRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.repository.product.ProductRepository;
+import com.lotteon.repository.user.MemberRepository;
+import com.lotteon.repository.user.PointRepository;
 import com.lotteon.repository.user.SellerRepository;
 import com.lotteon.service.product.OptionService;
 import com.lotteon.service.product.ProductService;
+import com.lotteon.service.user.MemberService;
+import com.lotteon.service.user.PointService;
 import com.lotteon.service.user.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -53,12 +67,17 @@ public class OrderService {
     private final SellerController sellerController;
     private final ProductOptionCombinationRepository productOptionCombinationRepository;
     private final ProductRepository productRepository;
+    private final MemberRepository memberRepository;
+    private final PointService pointService;
+    private final PointRepository pointRepository;
 
 
     @Transactional
     public long saveOrder(OrderResponseDTO orderResponseDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String uid = authentication.getName();
+
+
         log.info("구매중 uid : " + uid);
         long result = 0;
         OrderDTO orderDTO = orderResponseDTO.getOrder();
@@ -71,11 +90,31 @@ public class OrderService {
         log.info("productDicount!!! " + savedOrder.getProductDiscount());
 
         result = savedOrder.getOrderId();
+        Optional<Member> member= memberRepository.findByUser_Uid(uid);
+        if(member.isPresent()) {
+            Member currentMember = member.get();
+            long usedPoint = orderResponseDTO.getUsePoint();
+            if(usedPoint>0){
+                currentMember.usedPoint(usedPoint);
+                memberRepository.save(currentMember);
+                Point savePoint = Point.builder()
+                        .orderId(result)
+                        .createdAt(LocalDateTime.now())
+                        .usedPoint(usedPoint)
+                        .description("상품구매시 포인트 사용")
+                        .member(currentMember)
+                        .remainingPoints(currentMember.getPoint())
+                        .build();
 
+                pointRepository.save(savePoint);
+            }
+        }
 
         List<OrderItemDTO> orderItems = orderResponseDTO.getOrderItems();
         for (OrderItemDTO orderItemDTO : orderItems) {
             orderItemDTO.setOrderId(savedOrder.getOrderId());
+            orderItemDTO.setCustomerId(uid);
+            orderItemDTO.setCustomerName(savedOrder.getMemberName());
             orderItemDTO.setOrder(getModelMapper.map(savedOrder, OrderDTO.class));
 
             ProductDTO product = productService.selectProduct(orderItemDTO.getProductId());

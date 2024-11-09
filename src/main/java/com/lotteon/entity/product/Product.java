@@ -127,6 +127,7 @@ public class Product {
                 this.fileDescs = new ArrayList<>();
             }
             for (ProductFile file : files) {
+                this.savedPath = file.getPath();
                 switch (file.getType()) {
                     case "190" -> this.file190 = file.getSName();
                     case "230" -> this.file230 = file.getSName();

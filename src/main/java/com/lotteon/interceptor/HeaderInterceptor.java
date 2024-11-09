@@ -8,6 +8,7 @@ import com.lotteon.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -39,12 +40,13 @@ public class HeaderInterceptor implements HandlerInterceptor {
             String uid= authentication.getName();
             String role= authentication.getAuthorities().toString();
             if(role.contains("ROLE_ADMIN") || role.contains("ROLE_SELLER")){
-                SellerDTO seller=sellerService.getSeller(uid);
-                memberName= seller.getCompany();
+
+                memberName = fetchSellerName(uid);
+
 
             }else if(role.contains("ROLE_MEMBER")){
 
-                memberName= userService.getMemberNameByUsername(uid);
+                memberName = fetchMemberName(uid);
                 log.info("userInterceptor!!!!!!"+memberName);
             }
 
@@ -63,4 +65,17 @@ public class HeaderInterceptor implements HandlerInterceptor {
             modelAndView.addObject("footerlogoImagePath", imagePath2);
         }
     }
+
+
+    @Cacheable(value = "memberNameCache", key = "#uid")
+    public String fetchSellerName(String uid) {
+        SellerDTO seller = sellerService.getSeller(uid);
+        return seller.getCompany();
+    }
+
+    @Cacheable(value = "memberNameCache", key = "#uid")
+    public String fetchMemberName(String uid) {
+        return userService.getMemberNameByUsername(uid);
+    }
+
 }

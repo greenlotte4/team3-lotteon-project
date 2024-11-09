@@ -104,5 +104,6 @@ public class Member {
     public void savePoint(double point) {
         this.point += point;
     }
+    public void usedPoint(double point){this.point-= point;}
 }
 
