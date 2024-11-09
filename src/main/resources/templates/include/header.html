@@ -48,8 +48,8 @@
                     <label for="headerSearchId" class="blind">검색어</label>
                     <input type="search" title="검색어 입력" id="headerSearchId" autocomplete="off" aria-label=""
                            placeholder="검색어를 입력하세요" class="TXT">
-                    <button type="button" data-cmpnt-typ="header_main" data-cmpnt-name="srch_srchbtn"
-                            data-cmpnt-stts="" class="btnSearchInner">
+                    <button type="submit" data-cmpnt-typ="header_main" data-cmpnt-name="srch_srchbtn"
+                            data-cmpnt-stts="" class="btnSearchInner" onclick="performSearch()"  onsubmit="performSearch()">
                         <span class="blind">검색</span>
                     </button>
                 </div>

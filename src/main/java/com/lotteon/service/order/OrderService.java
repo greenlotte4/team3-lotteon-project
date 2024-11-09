@@ -1,5 +1,13 @@
 package com.lotteon.service.order;
 
+//
+/*
+        날짜: 2024.11.01
+        이름 : 하진희
+        내용 : orderService
+
+        2024.11.08 주문시 포인트사용 적용
+ */
 
 import com.lotteon.controller.SellerController;
 import com.lotteon.dto.User.SellerDTO;
