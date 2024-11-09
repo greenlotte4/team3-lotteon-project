@@ -36,7 +36,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public final StringPath title = createString("title");
 
-    public final StringPath writer = createString("writer");
+    public final com.lotteon.entity.User.QUser writer;
 
     public QReview(String variable) {
         this(Review.class, forVariable(variable), INITS);
@@ -57,6 +57,7 @@ public class QReview extends EntityPathBase<Review> {
     public QReview(Class<? extends Review> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.product = inits.isInitialized("product") ? new QProduct(forProperty("product"), inits.get("product")) : null;
+        this.writer = inits.isInitialized("writer") ? new com.lotteon.entity.User.QUser(forProperty("writer"), inits.get("writer")) : null;
     }
 
 }

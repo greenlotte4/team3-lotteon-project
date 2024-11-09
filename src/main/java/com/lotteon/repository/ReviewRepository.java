@@ -10,7 +10,10 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> , ReviewRepositoryCustom {
 
-    List<Review> findTop3ByOrderByRdateDesc();
+    List<Review> findTop3ByWriter_UidOrderByRdateDesc(String uid);
     int countByProduct_ProductId(Long productId);
     List<Review> findAllByProduct_ProductId(Long productId);
+
+    Page<Review> findByWriter_Uid(String uid, Pageable pageable);
+
 }

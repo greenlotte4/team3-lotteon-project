@@ -5,14 +5,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewFileDTO;
+import com.lotteon.entity.User.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +27,11 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reviewId;
-    private String writer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer") // User 엔티티와 연결
+    private User writer; // User 객체로 변경
+
     private LocalDateTime rdate;
     private String title;
     private String content;
@@ -60,7 +62,7 @@ public class Review {
 
         return ReviewDTO.builder()
                 .reviewId(review.getReviewId())
-                .writer(review.getWriter())
+                .writer(String.valueOf(review.getWriter()))
                 .rdate(review.getRdate())
                 .content(review.getContent())
                 .rating(Double.parseDouble(String.valueOf(review.getRating())))
