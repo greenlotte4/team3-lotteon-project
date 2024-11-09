@@ -2,6 +2,7 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.admin.CouponDTO;
 import com.lotteon.dto.admin.CouponIssuedDTO;
+import com.lotteon.dto.admin.CouponIssuedRequestDTO;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.entity.admin.CouponIssued;
@@ -136,14 +137,15 @@ public class CouponApiController {
         }
 
         // Coupon 엔티티를 CouponDTO로 변환
-        List<CouponDTO> couponDTOs = couponIssuedList.stream()
-                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
+        List<CouponIssuedDTO> couponIssuedDTOList = couponIssuedList.stream()
+                .map(CouponIssued::toDTO)
                 .collect(Collectors.toList());
 
         // 결과를 Map 형태로 응답
         Map<String, Object> response = new HashMap<>();
         response.put("result", "success");
-        response.put("coupons", couponDTOs);
+        response.put("coupons", couponIssuedDTOList);
+        log.info("발급 반환 데이터 3" + couponIssuedDTOList);
 
         return ResponseEntity.ok(response);
     }
@@ -153,7 +155,7 @@ public class CouponApiController {
         log.info("쿠폰 리스트 요청 - 상품 ID: {}", productId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // 현재 로그인된 사용자의 정보
-        String memberUid = authentication.getName(); //
+        String memberUid = authentication.getName();
         log.info("사용자 UID: {}", memberUid);
 
         // 쿠폰 조회 서비스 호출 (상품 ID에 해당하는 쿠폰 조회)
@@ -164,17 +166,42 @@ public class CouponApiController {
             log.info("해당 상품에 대한 쿠폰이 없음");
             return ResponseEntity.ok(Map.of("result", "failure", "message", "해당 상품에 대한 쿠폰이 없습니다."));
         }
+        log.info("발급 반환 데이터 1" + couponIssuedList);
 
-        // Coupon 엔티티를 CouponDTO로 변환
-        List<CouponDTO> couponDTOs = couponIssuedList.stream()
-                .map(coupon -> modelMapper.map(coupon, CouponDTO.class))
+        // CouponIssued 목록을 DTO로 변환
+        List<CouponIssuedDTO> couponIssuedDTOList = couponIssuedList.stream()
+                .map(CouponIssued::toDTO)
                 .collect(Collectors.toList());
+        log.info("발급 반환 데이터 2" + couponIssuedDTOList);
 
         // 결과를 Map 형태로 응답
         Map<String, Object> response = new HashMap<>();
         response.put("result", "success");
-        response.put("coupons", couponDTOs);
-
+        response.put("coupons", couponIssuedDTOList);
+        log.info("발급 반환 데이터 3" + couponIssuedDTOList);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/updateStatus")
+    public ResponseEntity<?> updateCouponIssuanceStatus(@RequestBody CouponIssuedRequestDTO request) {
+        log.info("주문 후 쿠폰 변경 요청 들어옴");
+
+        boolean result = couponIssuedService.updateCouponStatus(
+                request.getIssuanceCouponId(),
+                request.getUsageStatus(),
+                request.getStatus()
+        );
+
+        // 응답을 JSON 형식으로 반환
+        Map<String, Object> response = new HashMap<>();
+        if (result) {
+            response.put("result", 1);  // 성공 시 result 값
+            response.put("message", "쿠폰 상태가 성공적으로 업데이트되었습니다.");
+            return ResponseEntity.ok(response);  // JSON 반환
+        } else {
+            response.put("result", 0);  // 실패 시 result 값
+            response.put("message", "쿠폰을 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);  // JSON 반환
+        }
     }
 }

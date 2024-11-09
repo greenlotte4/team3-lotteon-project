@@ -3,6 +3,7 @@ package com.lotteon.entity.admin;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lotteon.dto.admin.CouponIssuedDTO;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.User;
 import com.lotteon.entity.product.Product;
@@ -83,6 +84,23 @@ public class CouponIssued {
         // usedDate가 있으면 포맷된 날짜를 반환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월dd일");
         return this.usedDate.format(formatter);
+    }
+    public CouponIssuedDTO toDTO() {
+        return CouponIssuedDTO.builder()
+                .issuanceNumber(this.issuanceNumber)
+                .couponId(this.couponId)
+                .couponType(this.couponType)
+                .couponName(this.couponName)
+                .memberName(this.memberName)
+                .productName(this.productName)
+                .productId(this.productId)
+                .restrictions(this.restrictions)
+                .benefit(this.benefit)
+                .sellerCompany(this.sellerCompany)
+                .usageStatus(this.usageStatus)
+                .usageDate(this.usageDate)
+                .status(this.status)
+                .build();
     }
 
 

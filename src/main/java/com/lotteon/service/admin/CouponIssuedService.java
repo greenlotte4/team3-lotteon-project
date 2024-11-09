@@ -173,6 +173,7 @@ public class CouponIssuedService {
 
         return couponIssuedList;
     }
+
     // 페이징 기능 추가
     public Page<CouponIssued> selectIssuedCouponsPagination(CouponListRequestDTO request, String sellerCompany, Pageable pageable) {
 
@@ -198,7 +199,25 @@ public class CouponIssuedService {
         return couponPage.map(couponIssued -> modelMapper.map(couponIssued, CouponIssued.class));
     }
 
+    public boolean updateCouponStatus(String couponId, String usageStatus, String status) {
+        // 쿠폰을 찾기
+        Optional<CouponIssued> couponOptional = couponIssuedRepository.findById(couponId);
 
+        if (couponOptional.isPresent()) {
+            CouponIssued coupon = couponOptional.get();
+
+            // 사용 상태와 전체 상태 업데이트
+            coupon.setUsageStatus(usageStatus);
+            coupon.setStatus(status);
+
+            // 상태 변경 후 저장
+            couponIssuedRepository.save(coupon);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 
