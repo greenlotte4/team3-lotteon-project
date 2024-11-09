@@ -9,6 +9,26 @@ document.addEventListener('DOMContentLoaded', function () {
     //     header.classList.toggle('menuVisible');
     // });
 
+    // 서버에서 설정된 activeSubChildId와 로컬 저장소의 값을 비교
+    // const activeId = document.querySelector('.cate_aside').getAttribute('data-active-id');
+    // const storedActiveId = localStorage.getItem('activeSubChildId');
+    //
+    // if (storedActiveId && storedActiveId !== activeId) {
+    //     const activeLink = document.querySelector(`.lnb-sub-menu a[href='/market/list/${storedActiveId}']`);
+    //     if (activeLink) {
+    //         activeLink.classList.add('cateactive');
+    //         let parentItem = activeLink.closest('.lnb-item');
+    //         while (parentItem) {
+    //             parentItem.classList.add('open');
+    //             const subMenu = parentItem.querySelector('.lnb-sub-menu');
+    //             if (subMenu) {
+    //                 subMenu.classList.remove('hidden');
+    //             }
+    //             parentItem = parentItem.parentElement.closest('.lnb-item');
+    //         }
+    //     }
+    // }
+
 
     document.querySelectorAll('.shipping-fee').forEach(function(feeElement) {
 
@@ -178,11 +198,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
 
+
     const lnbItems = document.querySelectorAll('.lnb-item > a');
     const subCategoryLinks = document.querySelectorAll('.lnb-sub-menu a');
 
-    // 로컬 스토리지에서 activeSubChildId를 가져와서 해당 항목 열기
+    // 로컬 스토리지에서 activeSubChildId와 activeParentChildId 가져오기
     const activeSubChildId = localStorage.getItem('activeSubChildId');
+    const activeParentChildId = localStorage.getItem('activeParentChildId');
+
+    // activeSubChildId가 있을 경우 해당 링크를 활성화
     if (activeSubChildId) {
         const activeLink = document.querySelector(`.lnb-sub-menu a[href='/market/list/${activeSubChildId}']`);
         if (activeLink) {
@@ -195,6 +219,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     subMenu.classList.remove('hidden');
                 }
                 parentItem = parentItem.parentElement.closest('.lnb-item');
+            }
+        }
+    }
+
+    // activeParentChildId가 있을 경우 상위 메뉴를 활성화
+    if (activeParentChildId) {
+        const parentLink = document.querySelector(`.lnb1 > a[href='/market/main/${activeParentChildId}']`);
+        if (parentLink) {
+            parentLink.classList.add('cateactive');
+            const parentItem = parentLink.closest('.lnb1');
+            parentItem.classList.add('open');
+            const subMenu = parentItem.querySelector('.lnb-sub-menu');
+            if (subMenu) {
+                subMenu.classList.remove('hidden');
             }
         }
     }
@@ -212,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (subMenu) {
                     subMenu.classList.add('hidden');
                 }
-                item.classList.remove('active');
+                item.classList.remove('cateactive');
             });
 
             // 현재 항목 열기 및 active로 설정
@@ -223,9 +261,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 subMenu.classList.toggle('hidden');
             }
 
-            // 클릭된 서브카테고리의 ID를 로컬 스토리지에 저장
+            // 클릭된 서브카테고리 및 부모 카테고리의 ID를 로컬 스토리지에 저장
             const subChildId = this.getAttribute('href').split('/').pop();
+            const parentChildId = parentItem.querySelector('a').getAttribute('href').split('/').pop(); // 부모 카테고리의 ID 가져오기
+
             localStorage.setItem('activeSubChildId', subChildId);
+            localStorage.setItem('activeParentChildId', parentChildId);
 
             // 클릭한 항목에 cateactive 클래스 추가
             this.classList.add('cateactive');
@@ -240,6 +281,78 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('activeSubChildId', this.getAttribute('href').split('/').pop());
         });
     });
+
+
+    // const lnbItems = document.querySelectorAll('.lnb-item > a');
+    // const subCategoryLinks = document.querySelectorAll('.lnb-sub-menu a');
+    //
+    // // 로컬 스토리지에서 activeSubChildId를 가져와서 해당 항목 열기
+    // const activeSubChildId = localStorage.getItem('activeSubChildId');
+    // if (activeSubChildId) {
+    //     const activeLink = document.querySelector(`.lnb-sub-menu a[href='/market/list/${activeSubChildId}']`);
+    //     if (activeLink) {
+    //         activeLink.classList.add('cateactive');
+    //         let parentItem = activeLink.closest('.lnb-item');
+    //         while (parentItem) {
+    //             parentItem.classList.add('open');
+    //             const subMenu = parentItem.querySelector('.lnb-sub-menu');
+    //             if (subMenu) {
+    //                 subMenu.classList.remove('hidden');
+    //             }
+    //             parentItem = parentItem.parentElement.closest('.lnb-item');
+    //         }
+    //     }
+    // }
+    //
+    // // 메뉴 항목 클릭 시 상태 저장 및 토글
+    // lnbItems.forEach(function (lnbItem) {
+    //     lnbItem.addEventListener('click', function (e) {
+    //         e.preventDefault();
+    //         const href = e.currentTarget.getAttribute('href');
+    //         if (href) {
+    //             const subChildId = href.split('/').pop();
+    //             localStorage.setItem('activeSubChildId', subChildId);
+    //             console.log("Saved activeSubChildId:", subChildId); // 디버깅용
+    //         } else {
+    //             console.warn("No href attribute found on this element:", e.currentTarget);
+    //         }
+    //
+    //         // 모든 메뉴 항목의 open, active 초기화
+    //         lnbItems.forEach(item => {
+    //             const parent = item.parentElement;
+    //             const subMenu = parent.querySelector('.lnb-sub-menu');
+    //             parent.classList.remove('open');
+    //             if (subMenu) {
+    //                 subMenu.classList.add('hidden');
+    //             }
+    //             item.classList.remove('active');
+    //         });
+    //
+    //         // 현재 항목 열기 및 active로 설정
+    //         const parentItem = this.parentElement;
+    //         const subMenu = parentItem.querySelector('.lnb-sub-menu');
+    //         parentItem.classList.toggle('open');
+    //         if (subMenu) {
+    //             subMenu.classList.toggle('hidden');
+    //         }
+    //
+    //         // 클릭된 서브카테고리의 ID를 로컬 스토리지에 저장
+    //         const subChildId = this.getAttribute('href').split('/').pop();
+    //         localStorage.setItem('activeSubChildId', subChildId);
+    //
+    //         // 클릭한 항목에 cateactive 클래스 추가
+    //         this.classList.add('cateactive');
+    //     });
+    // });
+    //
+    // // 서브카테고리 클릭 시 cateactive 상태 업데이트
+    // subCategoryLinks.forEach(function (link) {
+    //     link.addEventListener('click', function () {
+    //         subCategoryLinks.forEach(el => el.classList.remove('cateactive'));
+    //         this.classList.add('cateactive');
+    //         localStorage.setItem('activeSubChildId', this.getAttribute('href').split('/').pop());
+    //     });
+    // });
     //
     // // Submenu functionality for lnb-items
     // const lnbItems = document.querySelectorAll('.lnb-item > a');

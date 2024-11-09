@@ -1,9 +1,9 @@
 #mainArea .aside.market{
     height: auto;
-    width: 220px;
+    width: 200px;
     box-sizing: border-box;
     margin-top: 10px ;
-    flex: 0 0 220px;
+    flex: 0 0 200px;
     margin-right: 10px;
     flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
   }
@@ -270,7 +270,7 @@
 
 /* Best product container */
 .aside.market .bestProduct {
-    width: 210px;
+    width: 200px;
     height: auto;
     border: 1px solid #f8f7f798;
     background-color: #f8f7f798;
@@ -301,6 +301,7 @@
     height: auto;
     margin: 0 auto;
     margin-top: 5px;
+    margin-bottom: 15px;
 }
 
 .aside.market .bestProduct .products.first .productimg.first {
@@ -322,9 +323,15 @@
 }
 
 .aside.market .bestProduct .products.first .product-name {
-    font-size: 18px;
+    font-size: 15px;
     height: 20px;
     line-height: 20px;
+
+}
+
+.aside.market .bestProduct .products.first .productInfo{
+    width: 180px;
+    margin: 0 auto;
 
 }
 
@@ -343,7 +350,6 @@
     font-size: 25px;
     display: flex;
     margin-top: 0px;
-    margin-bottom: 5px;
 }
 
 .aside.market .bestProduct .products.first .discounted-price p {
@@ -367,10 +373,10 @@
 /* Other products (smaller items) */
 .aside.market .bestProduct .products {
     display: flex;
-    width: 280px;
+    width: 200px;
     height: 100px;
     margin-top: 5px;
-    margin-left: 15px;
+    margin-left: 5px;
 }
 
 .aside.market .bestProduct .products .productimg {
@@ -399,12 +405,14 @@
     font-size: 20px;
     display: flex;
     flex-direction: column;
-    margin-top: 8px;
 
 }
 
 .aside.market .bestProduct .products .product-name {
-    font-size: 15px;
+    font-size: 12px;
+    overflow: hidden;
+    white-space: pre-line;
+    text-overflow: ellipsis;
     margin-bottom: 2px;
 }
 

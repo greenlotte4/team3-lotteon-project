@@ -26,6 +26,8 @@ public class PageRequestDTO {
     //검색
     private String type;
     private String keyword;
+    private String sort="sold";
+    private String searchMode;
 
     //
     private String uid;
@@ -33,7 +35,34 @@ public class PageRequestDTO {
 
     public Pageable getPageable(String sort, int size) {
         this.size=size;
-            return PageRequest.of(this.page-1,this.size, Sort.by("rdate").descending());
+            return PageRequest.of(this.page-1,this.size, Sort.by(sort).descending());
+
+    }
+    public Pageable getSortPageable(int size) {
+        this.size=size;
+        if(sort.equals("lowPrice")){
+            this.sort="price";
+            return PageRequest.of(this.page-1,this.size, Sort.by(this.sort).ascending());
+
+        }else if(sort.equals("highPrice")){
+            this.sort="price";
+            return PageRequest.of(this.page-1,this.size, Sort.by(this.sort).descending());
+
+        }else if(sort.equals("rating")){
+            this.sort="rating";
+
+        }else if(sort.equals("reviewCount")){
+            this.sort = "reviewCount";
+        }else if(sort.equals("recent")){
+            this.sort="rdate";
+        }else if(sort.equals("popular")){
+            this.sort="hit";
+        }else{
+            this.sort="sold";
+        }
+
+
+        return PageRequest.of(this.page-1,this.size, Sort.by(this.sort).descending());
 
     }
 

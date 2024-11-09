@@ -1,11 +1,15 @@
 package com.lotteon.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.lotteon.entity.product.Review;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import net.minidev.json.annotate.JsonIgnore;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -16,9 +20,10 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @Log4j2
-
+@JsonIgnoreProperties({"reviews"})  // reviews나 순환참조가 생길 수 있는 필드를 명시
 public class ProductSummaryDTO implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private Long categoryId;
@@ -34,7 +39,8 @@ public class ProductSummaryDTO implements Serializable {
     private Long sellerId;
     private String sellerName;
     private String company;
-    @JsonIgnore
+
+    @JsonIgnore // Redis 직렬화 시 reviews 필드를 무시합니다.
     private List<Review> reviews;
     private Double rating = 0.0; // rating이 null일 경우 기본값 설정
     private long discountPrice;
