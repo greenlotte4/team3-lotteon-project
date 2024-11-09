@@ -80,24 +80,31 @@
                     <td>
                         <div style="display: flex; align-items: center;">
                             <div class="eximg">
-                                <!-- 상품 이미지 URL -->
-                                <!--<img th:src="@{${orderItem.product.imageUrl}}" alt="상품 이미지">-->
-                            </div>
-                            <div class="Pinf">
-                                <!-- 주문 번호 -->
+                                <div th:each="item : ${orderItem.groupedOrderItems}">
+                                    <img th:src="@{'/uploads/productImg/' + ${item.image}}" alt="상품 이미지">
+                                </div>
+
+                             </div>
+                             <div class="Pinf">
+                                 <!-- 주문 번호 -->
                                 <a href="#" class="order-number">주문번호: <span th:text="${orderItem.getOrderId()}"></span></a>
 
                                 <!-- 회사명 (Seller Uid) -->
-                                <a href="#" class="seller-number">회사명: <span th:text="${orderItem.getOrderId()}"></span></a>
+                                <a href="#" class="seller-number">회사명: <span th:each="item : ${orderItem.groupedOrderItems}" th:text="${item.seller.company}"></span></a>
 
                                 <!-- 상품명 -->
-                                <a href="#" class="productName">상품명:<!--<span th:text="${orderItem.product.productName}"></span>--></a>
+                                 <a th:each="item : ${orderItem.groupedOrderItems}"
+                                    th:href="@{'/market/view/' + ${item.categoryId} + '/' + ${item.productId}}"
+                                    class="productName">상품명:
+                                     <span th:text="${item.productName}"></span>
+                                 </a>
+
 
                                 <!-- 수량 -->
-                                <p>수량:<!-- <span th:text="${orderItem.stock}">0</span>--></p>
+                                <p>수량: <span th:each="item : ${orderItem.groupedOrderItems}" th:text="${item.stock}">0</span></p>
 
                                 <!-- 가격 -->
-                                <p>가격:<!--<span th:text="${#numbers.formatInteger(orderItem.orderPrice, locale)}">0</span>원--></p>
+                                <p>가격:<span th:each="item : ${orderItem.groupedOrderItems}" th:text="${item.formattedPrice}">0</span>원</p>
                             </div>
                         </div>
                     </td>
@@ -107,11 +114,13 @@
                     <td>
                         <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
                             <button class="receipt-btn custom-button" >수취확인</button>
-                            <button class="pReview-btn custom-button"
-                                    data-product-no="5"
-                                    data-product-name="치킨">
-                                상품평쓰기
-                            </button>
+                            <div th:each="item : ${orderItem.groupedOrderItems}">
+                                <button class="pReview-btn custom-button"
+                                        th:attr="data-product-no=${item.productId},
+                                                 data-product-name=${item.productName}">
+                                    상품평쓰기
+                                </button>
+                            </div>
                             <button>반품신청</button>
                             <button>교환신청</button>
                         </div>

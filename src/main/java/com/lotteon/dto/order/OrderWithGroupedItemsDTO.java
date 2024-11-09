@@ -1,6 +1,8 @@
 package com.lotteon.dto.order;
 
+import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.order.Order;
+import com.lotteon.repository.user.SellerRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,13 +17,19 @@ public class OrderWithGroupedItemsDTO {
     private long orderId;
     private String uid;
     private LocalDateTime orderDate;
+    private String productName;
     private List<OrderItemDTO> groupedOrderItems;
 
-    public OrderWithGroupedItemsDTO(Order order) {
+    public OrderWithGroupedItemsDTO(Order order, SellerRepository sellerRepository) {
         this.orderId = order.getOrderId();
         this.orderDate = order.getOrderDate();
+
         this.groupedOrderItems = order.getOrderProducts().stream()
-                .map(item -> new OrderItemDTO(item))
+                .map(item -> {
+                    Seller seller = sellerRepository.findByUserUid(item.getSellerUid())
+                            .orElse(null);
+                    return new OrderItemDTO(item, seller);  // 포맷된 가격을 넘겨줌
+                })
                 .collect(Collectors.toList());
     }
 }

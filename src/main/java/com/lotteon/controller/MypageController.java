@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.User.UserDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
@@ -38,6 +39,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -96,21 +98,15 @@ public class MypageController {
 
     @GetMapping("/myInfo")
     public String myInfo(Model model, Authentication authentication) {
-        List<Review> recentReviews = reviewService.getRecentReviews(); // 최신 3개의 리뷰 가져오기
+        String uid = authentication.getName();
+        List<Review> recentReviews = reviewService.getRecentReviewsByUser(uid);// 최신 3개의 리뷰 가져오기
         List<BannerDTO> banners2 = adminService.getActiveBanners();
 
         Pageable pageable = PageRequest.of(0, 3, Sort.by("orderDate").descending());
-        String uid = authentication.getName();
+
 
         List<OrderWithGroupedItemsDTO> groupDTO = orderService.getOrdersGroupedBySellers(uid);
 
-//        Pageable pageable= PageRequest.of(0,3, Sort.by("orderDate").descending());
-//        String uid = authentication.getName();
-
-//        List<OrderWithGroupedItemsDTO> groupDTO =  orderService.getOrdersGroupedBySeller(uid);
-//        log.info("여기여기여기!!!!"+groupDTO);
-//
-//        model.addAttribute("groupDTO", groupDTO);
         model.addAttribute("groupDTO", groupDTO);
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
@@ -213,15 +209,16 @@ public class MypageController {
 
 
     @GetMapping("/reviewdetails")
-    public String reviewDetails(Model model, PageRequestDTO pageRequestDTO) {
+    public String reviewDetails(Model model, PageRequestDTO pageRequestDTO, Authentication authentication) {
+        String uid = authentication.getName();
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
-        PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getAllReviewss(pageRequestDTO);
-        log.info("aaaaaaa{}", pageResponseReviewDTO);
-        model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
 
-        List<Review> recentReviews = reviewService.getAllReviews();
-        model.addAttribute("recentReviews", recentReviews);
+        // 로그인한 유저의 리뷰만 가져오기
+        PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getReviewsByUser(pageRequestDTO, uid);
+        log.info("aaaaaaa{}", pageResponseReviewDTO);
+
+        model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
         model.addAttribute("content", "reviewdetails");
         model.addAttribute("banners", banners2);
         return "content/user/reviewdetails"; // Points to "content/user/reviewdetails"

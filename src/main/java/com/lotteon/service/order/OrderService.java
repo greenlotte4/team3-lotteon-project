@@ -53,6 +53,7 @@ public class OrderService {
     private final SellerController sellerController;
     private final ProductOptionCombinationRepository productOptionCombinationRepository;
     private final ProductRepository productRepository;
+    private final SellerRepository sellerRepository;
 
 
     @Transactional
@@ -198,9 +199,9 @@ public class OrderService {
         // 사용자 ID로 주문을 조회하고 주문 날짜 순으로 정렬
         List<Order> orders = orderRepository.findByUidOrderByOrderDateDesc(userId);
 
-        // Order 객체를 OrderWithGroupedItemsDTO로 변환
+        // Order 객체를 OrderWithGroupedItemsDTO로 변환, SellerRepository를 전달
         return orders.stream()
-                .map(order -> new OrderWithGroupedItemsDTO(order)) // DTO로 변환
+                .map(order -> new OrderWithGroupedItemsDTO(order, sellerRepository))  // SellerRepository를 넘겨줌
                 .collect(Collectors.toList());
     }
 
