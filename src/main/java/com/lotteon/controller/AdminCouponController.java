@@ -9,16 +9,14 @@ package com.lotteon.controller;
    10.26  하진희 - 추가작업내역 작성
  */
 
-import com.lotteon.dto.admin.CouponDTO;
-import com.lotteon.dto.admin.CouponIssuedDTO;
-import com.lotteon.dto.admin.CouponListRequestDTO;
-import com.lotteon.dto.admin.CouponListResponseDTO;
+import com.lotteon.dto.admin.*;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.product.Product;
+import com.lotteon.repository.admin.CouponIssuedRepository;
 import com.lotteon.repository.admin.CouponRepository;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.security.MyUserDetails;
@@ -42,6 +40,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -58,6 +57,7 @@ public class AdminCouponController {
     private final ModelMapper modelMapper;
     private final MemberRepository memberRepository;
     private final SearchService searchService;
+    private final CouponIssuedRepository couponIssuedRepository;
     ;
 
     @GetMapping("/list")
@@ -224,6 +224,9 @@ public class AdminCouponController {
             return ResponseEntity.badRequest().build();  // 400 Bad Request 응답 반환
         }
     }
+
+
+
 }
 
 

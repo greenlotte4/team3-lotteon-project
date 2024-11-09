@@ -294,10 +294,10 @@ function updateOrderSummary() {
 
             // 수량, 가격, 할인, 배송비, 포인트 가져오기
             totalQuantity += parseInt(row.querySelector('input[name="quantity"]').value);
-            totalPrice += parseInt(row.querySelector('td:nth-child(4)').innerText.replace(/,/g, ''));
-            totalDiscount += parseInt(row.querySelector('td:nth-child(5)').innerText.replace(/,/g, ''));
-            totalDelivery += parseInt(row.querySelector('td:nth-child(7)').innerText.replace(/,/g, ''));
-            totalPoints += parseInt(row.querySelector('td:nth-child(6)').innerText.replace(/,/g, ''));
+            totalPrice += parseInt(row.querySelector('td:nth-child(4)').innerText.replace(/,/g, '')) ||0;
+            totalDiscount += parseInt(row.querySelector('td:nth-child(5)').innerText.replace(/,/g, '')) ||0;
+            totalDelivery += parseInt(row.querySelector('td:nth-child(7)').innerText.replace(/,/g, '')) ||0;
+            totalPoints += parseInt(row.querySelector('td:nth-child(6)').innerText.replace(/,/g, '')) ||0;
         });
 
         // 전체 주문 금액 계산
