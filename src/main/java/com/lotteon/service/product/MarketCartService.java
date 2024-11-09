@@ -122,6 +122,7 @@ public class MarketCartService {
             existingItem = cartItemRepository.findByCart_CartIdAndProduct_ProductIdAndOptionCombination_CombinationId(
                     cart.getCartId(), product.getProductId(), optionCombination.getCombinationId()
             );
+
         } else {
             existingItem = cartItemRepository.findByCart_CartIdAndProduct_ProductId(cart.getCartId(), product.getProductId());
         }
@@ -131,13 +132,12 @@ public class MarketCartService {
         if (existingItem.isPresent()) {
             // 아이템이 이미 존재하는 경우 수량 업데이트
             SaveItem = existingItem.get();
-            long finalprice = parseLongOrDefault(cartRequestDTO.getFinalPrice(),0);
+
             long quantity =cartRequestDTO.getQuantity();
             int newQuantity = SaveItem.getQuantity() + cartRequestDTO.getQuantity();
-            long newTotalPrice = SaveItem.getTotalPrice() + (finalprice * quantity);
+            SaveItem.getTotalPrice();
 
             SaveItem.setQuantity(newQuantity); // 수량 업데이트
-            SaveItem.setTotalPrice(newTotalPrice); // 총 가격 업데이트
             cartItemRepository.save(SaveItem);
 
             log.info("기존 아이템 업데이트: {}, 새로운 수량: {}", SaveItem.getProduct().getProductName(), newQuantity);
@@ -160,6 +160,7 @@ public class MarketCartService {
                     .imageUrl(cartRequestDTO.getFile190())
                     .build();
 
+            newCartItem.getTotalPrice();
             // Conditionally add option combination if available
             if (optionCombination != null && optionCombination.getCombinationId() != null) {
                 newCartItem.setProductOptionCombination(optionCombination);
@@ -235,6 +236,7 @@ public class MarketCartService {
     }
 
     public CartSummary calculateSelectedCartSummary(List<CartItem> selectedItems) {
+
         int totalQuantity = selectedItems.stream().mapToInt(CartItem::getQuantity).sum();
         long totalPrice = selectedItems.stream()
                 .mapToLong(item -> (long) item.getPrice() * item.getQuantity()).sum();

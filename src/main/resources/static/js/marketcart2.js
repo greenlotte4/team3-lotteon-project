@@ -96,6 +96,8 @@ document.addEventListener('DOMContentLoaded', function () {
 //     document.querySelector('.orderTotalPrice .price').innerText = totalOrderPrice;
 //     document.querySelector('.orderPoint .price').innerText = totalPoints;
 // }
+
+
 const cartItems = [];
 
 
@@ -372,57 +374,58 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        checkedItems.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+
+            // Skip rows that contain the 'skip' ID input
+            if (row.querySelector('#skip')) {
+                return; // Skip this iteration if 'skip' element is found
+            }
+
+            // Get the quantity and handle undefined/null cases
+            const quantityInput = row.querySelector('.quantity');
+            if (!quantityInput || quantityInput.value === "") {
+                return; // Exit this iteration if quantity is null or empty
+            }
+
+            let additionalPrice = 0;
+            let combinationId = 0;
+            let combinationString = "";
+            const additionalPriceInput = row.querySelector('.additionalPrice-Input');
+            const combinationIdInput = row.querySelector('.combinationId');
+            const combinationStringInput = row.querySelector('.combinationString');
+
+            if (additionalPriceInput) {
+                combinationId = parseInt(combinationIdInput.value, 10) || 0;
+                additionalPrice = parseFloat(additionalPriceInput.value) || 0;
+                combinationString = combinationStringInput.value || "";
+            }
+
+            const productData = {
+                cartItemId: parseInt(row.getAttribute('data-cartItemId')) || 0,
+                cartId: cartId,
+                productId: row.getAttribute('data-product-id'),
+                productName: row.getAttribute('data-product-name'),
+                discount: row.getAttribute('data-discount'),
+                originalPrice: row.getAttribute('data-original-price'),
+                finalPrice: row.getAttribute('data-final-price'),
+                quantity: parseInt(quantityInput.value) || 1,
+                file190: row.getAttribute('data-file190'),
+                point: row.getAttribute('data-point'),
+                shippingFee: row.getAttribute('data-shipping-fee'),
+                ShippingTerms: row.getAttribute('data-shipping-terms'),
+                expectedPoint: row.getAttribute('data-expected-point'),
+                additionalPrice: additionalPrice,
+                combinationId: combinationId,
+                combinationString: combinationString
+
+            };
+
+            productDataArray.push(productData);
+        });
         const isConfirmed = confirm("주문하시겠습니까?");
+
         if (isConfirmed) {
-            checkedItems.forEach(checkbox => {
-                const row = checkbox.closest('tr');
-
-                // Skip rows that contain the 'skip' ID input
-                if (row.querySelector('#skip')) {
-                    return; // Skip this iteration if 'skip' element is found
-                }
-
-                // Get the quantity and handle undefined/null cases
-                const quantityInput = row.querySelector('.quantity');
-                if (!quantityInput || quantityInput.value === "") {
-                    return; // Exit this iteration if quantity is null or empty
-                }
-
-                let additionalPrice = 0;
-                let combinationId = 0;
-                let combinationString = "";
-                const additionalPriceInput = row.querySelector('.additionalPrice-Input');
-                const combinationIdInput = row.querySelector('.combinationId');
-                const combinationStringInput = row.querySelector('.combinationString');
-
-                if (additionalPriceInput) {
-                    combinationId = parseInt(combinationIdInput.value, 10) || 0;
-                    additionalPrice = parseFloat(additionalPriceInput.value) || 0;
-                    combinationString = combinationStringInput.value || "";
-                }
-
-                const productData = {
-                    cartItemId: parseInt(row.getAttribute('data-cartItemId')) || 0,
-                    cartId: cartId,
-                    productId: row.getAttribute('data-product-id'),
-                    productName: row.getAttribute('data-product-name'),
-                    discount: row.getAttribute('data-discount'),
-                    originalPrice: row.getAttribute('data-original-price'),
-                    finalPrice: row.getAttribute('data-final-price'),
-                    quantity: parseInt(quantityInput.value) || 1,
-                    file190: row.getAttribute('data-file190'),
-                    point: row.getAttribute('data-point'),
-                    shippingFee: row.getAttribute('data-shipping-fee'),
-                    ShippingTerms: row.getAttribute('data-shipping-terms'),
-                    expectedPoint: row.getAttribute('data-expected-point'),
-                    additionalPrice: additionalPrice,
-                    combinationId: combinationId,
-                    combinationString: combinationString
-
-                };
-
-                productDataArray.push(productData);
-            });
 
             console.log("Selected items:", productDataArray);
             // Save selected items to localStorage

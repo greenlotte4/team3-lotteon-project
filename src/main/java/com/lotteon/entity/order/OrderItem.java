@@ -45,6 +45,10 @@ public class OrderItem {
     private String traceNumber;  // 배송넘버
     private long shippingFees;
 
+    private String customerId;  //  구매자
+    private String customerName; //구매자이름
+
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status = DeliveryStatus.PREPARING;  // 배송상태

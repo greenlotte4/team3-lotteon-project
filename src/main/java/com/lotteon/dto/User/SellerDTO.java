@@ -45,7 +45,8 @@ public class SellerDTO {
     //추가필드
     private List<OrderItemDTO> orderItems;
     private String uid;
-    private long totalPrice;
+    private long totalOriginalPrice;
+    private long totalFinalPrice;
     private long totalDiscount;
     private long totalShipping;
 

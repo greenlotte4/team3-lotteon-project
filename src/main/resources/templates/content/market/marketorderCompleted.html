@@ -30,7 +30,7 @@
                                 <p>즐거운 쇼핑이 되셨나요? 항상 고객님을 위한 <strong>롯데ON</strong>이 되겠습니다.</p>
                             </div>
                         <section class="orderCompany">
-                            <div class="order-groupbyCom" th:each="seller:${orderDTO.getSellers()}">
+                            <div class="order-groupbyCom" th:each="seller,iterStat :${orderDTO.getSellers()}">
                                 <h4 th:text="${seller.getCompany()}"></h4>
                                 <table class="order-items" >
                                     <colgroup>
@@ -44,7 +44,8 @@
                                             <div><img th:src="@{'uploads/productImg'+${orderItem.getProduct().getFile190()}}" alt=""></div>
                                             <div>
                                                 <span th:text="${orderItem.getProduct().getProductName()}">상품명</span>
-                                                <p id="product_option" th:if="${orderItem.getCombination()>0}"> [ 옵션 :[[${orderItem.getSelectOption().optionDesc}]]]</p>
+
+                                                <p id="product_option" th:if="${orderItem.combination != null}"> [ 옵션 :[[${orderItem.combination}]]]</p>
                                             </div>
                                         </td>
                                         <td >
@@ -56,17 +57,17 @@
 
                                         <td >
                                             <p>상품금액 :<span class="price" th:text="${orderItem.getProduct().getPrice()*orderItem.getStock()}"></span></p>
-                                            <p>할인금액 : <span class="price" th:text="${((orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount())/100)*orderItem.getStock()}">-1350</span></p>
-                                            <p>결제금액 : <span class="price" th:text="${orderItem.getProduct().getPrice()*orderItem.getStock()-(((orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount())/100)*orderItem.getStock())}">28500</span></p>
+                                            <p>할인금액 : <span class="price" th:text="${((orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount()/100)*10/10)*orderItem.getStock()}">-1350</span></p>
+                                            <p>결제금액 : <span class="price" th:text="${orderItem.getProduct().getPrice()*orderItem.getStock()-(((orderItem.getProduct().getPrice()*orderItem.getProduct().getDiscount()/100)*10/10)*orderItem.getStock())}">28500</span></p>
                                         </td>   
                                     </tr>
-                                  
-                                    <tr class="totalArea">
+
+                                    <tr class="totalArea" >
                                         <td >
-                                            <span class="price" th:text="${seller.getTotalPrice()}" >30000</span>
+                                            <span class="price" th:text="${seller.getTotalOriginalPrice()}" >30000</span>
                                             <p class="plus">배송비</p> <span class="price" th:text="${seller.getTotalShipping()}">0</span>
                                             <p class="minus">상품 할인</p> <span class="price dis" th:text="${seller.getTotalDiscount()}">500</span>
-                                            <p class="equal">=</p><span class="price" th:text="${seller.getTotalPrice()+seller.getTotalShipping()-seller.getTotalDiscount()}">29500</span>
+                                            <p class="equal">=</p><span class="price" th:text="${seller.getTotalFinalPrice()}">29500</span>
                                         </td>
                                 
                                     </tr>
@@ -99,7 +100,7 @@
                                     </div>
                                     <div class="totalPrice">
                                         <span>총 결제비용</span>
-                                        <p class="price red" th:text="${orderDTO.getFinalPaymentAmount()}" >65500</p>
+                                        <p class="price red" th:text="${orderDTO.getFinalPaymentAmount()-orderDTO.getOrder().getUsedPoint()}" >65500</p>
                                     </div>
 
                                 </div>

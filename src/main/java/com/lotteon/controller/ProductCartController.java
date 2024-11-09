@@ -7,6 +7,7 @@ import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.entity.cart.CartItem;
 import com.lotteon.repository.cart.CartRepository;
 import com.lotteon.repository.product.ProductRepository;
+import com.lotteon.service.order.CartItemService;
 import com.lotteon.service.product.MarketCartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,6 +32,7 @@ public class ProductCartController {
     private final MarketCartService marketCartService;
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
+    private final CartItemService cartItemService;
 
 
     @GetMapping("/list")
@@ -100,13 +102,12 @@ public class ProductCartController {
         }
     }
 
-    @DeleteMapping("/delete/{cartItemId}")
-    public ResponseEntity<Map<String, String>> deleteCartItem(@PathVariable List<Long> cartItemId) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<Map<String, String>> deleteCartItem(@RequestBody List<Long> cartItemIds) {
         log.info("삭제 요청 들어왓따ㅣ");
 
-
         try {
-            marketCartService.deleteCartItem(cartItemId);
+            cartItemService.deleteCartItems(cartItemIds,0); // 서비스 메서드에서 ID 목록을 처리
 
             // 성공 응답
             Map<String, String> response = new HashMap<>();
