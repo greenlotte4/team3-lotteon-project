@@ -1,6 +1,7 @@
 package com.lotteon.dto.page;
 
 import com.lotteon.dto.FaqDTO;
+import com.lotteon.dto.admin.AdminOrderDTO;
 import com.lotteon.dto.order.OrderDTO;
 import lombok.*;
 
@@ -13,8 +14,7 @@ import java.util.List;
 @Setter
 public class AdminOrderPageResponseDTO {
 
-    private List<OrderDTO> orderdtoList;
-
+    private List<AdminOrderDTO> adminorderdtoList;
     private int pg;
     private int size;
     private int total;
@@ -23,7 +23,7 @@ public class AdminOrderPageResponseDTO {
     private boolean prev, next;
 
     @Builder
-    public AdminOrderPageResponseDTO(PageRequestDTO pageRequestDTO, List<OrderDTO> orderdtoList, int total) {
+    public AdminOrderPageResponseDTO(PageRequestDTO pageRequestDTO, List<AdminOrderDTO> adminorderdtoList, int total) {
         this.pg = pageRequestDTO.getPg();
         this.size = pageRequestDTO.getSize();
         this.startNo = total - ((pg - 1) * size); //첫번째 글 번호
@@ -35,6 +35,6 @@ public class AdminOrderPageResponseDTO {
         this.prev = this.start > 1; // 1보다 크면 이전버튼
         this.next = total > this.end * this.size; //마지막 페이지번호보다 글갯수가 더 클때 다음 버튼
 
-        this.orderdtoList = orderdtoList;
+        this.adminorderdtoList = adminorderdtoList;
     }
 }

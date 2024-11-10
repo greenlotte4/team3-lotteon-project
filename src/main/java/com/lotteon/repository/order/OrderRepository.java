@@ -1,6 +1,8 @@
 package com.lotteon.repository.order;
 
+import com.lotteon.dto.admin.AdminOrderDTO;
 import com.lotteon.entity.order.Order;
+import com.lotteon.repository.custom.OrderRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -11,10 +13,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long> , OrderRepositoryCustom {
     public Order findByOrderId(Long orderId);
+
+    @Query("SELECT o.orderId, o.uid, o.memberName, o.totalPrice, o.orderDate, o.totalQuantity, o.pay, o.memberHp, o.addr1, o.addr2, o.receiver, o.hp, o.totalDiscount, o.totalOriginalPrice, o.totalShipping FROM Order o WHERE o.orderId = :id")
+    AdminOrderDTO findOrderSummaryById(@Param("id") Long id);
 
     public List<Order> findByUid(String uid, Pageable pageable);
 
