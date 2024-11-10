@@ -144,3 +144,334 @@ function loginredirect(url){
         return;
     }
 }
+
+
+
+
+// Function to enable editing of options
+function enableOptionEditing() {
+    document.querySelectorAll('#option-container input[readonly]').forEach(input => input.removeAttribute('readonly'));
+}
+
+// Add a new option group row
+function addOptionGroup() {
+    const optionGroupTable = document.getElementById("optionGroupTable");
+
+    // Create the new group row
+    const newGroupRow = document.createElement("tr");
+    newGroupRow.innerHTML = `
+        <td>
+            <label>옵션 그룹명</label>
+            <input type="checkbox">
+        </td>
+        <td>
+            <div>
+                <input type="text" name="optionGroupName[]" placeholder="옵션 그룹명">
+                <button type="button" onclick="removeOptionGroup(this)">삭제</button>
+                <button type="button" onclick="addOptionItem(this)">옵션 항목 추가</button>
+            </div>
+        </td>
+    `;
+    optionGroupTable.appendChild(newGroupRow);
+
+    // Create the item row for the new group
+    const newItemRow = document.createElement("tr");
+    newItemRow.classList.add("optionItem");
+    newItemRow.innerHTML = `
+        <td>옵션 항목</td>
+        <td class="itemContainer">
+            <div class="option-items">
+                <div>
+                    <input type="text" name="optionItems" placeholder="옵션 항목">
+                    <button type="button" onclick="removeOptionItem(this)">삭제</button>
+                </div>
+            </div>
+        </td>
+    `;
+    optionGroupTable.appendChild(newItemRow);
+
+}
+
+// Add a new option item within an option group
+function addOptionItem(button) {
+    // Find the closest .itemContainer element following the current row
+    const itemContainer = button.closest("tr").nextElementSibling.querySelector(".itemContainer");
+
+    // Find or create the .option-items div within itemContainer
+    let optionItemsDiv = itemContainer.querySelector(".option-items");
+    if (!optionItemsDiv) {
+        optionItemsDiv = document.createElement("div");
+        optionItemsDiv.className = "option-items";
+        itemContainer.appendChild(optionItemsDiv); // Append it directly under itemContainer
+    }
+
+    // Create the new option item HTML structure
+    const newOptionItem = document.createElement("div");
+    newOptionItem.innerHTML = `
+        <input type="text" name="optionItems" placeholder="옵션 항목">
+        <button type="button" onclick="removeOptionItem(this)">삭제</button>
+    `;
+
+    // Append the new option item to the option-items div
+    itemContainer.appendChild(newOptionItem);
+}
+
+// Remove an option group row
+function removeOptionGroup(button) {
+    const row = button.closest("tr");
+    row.remove();
+}
+
+// Remove an option item within an option group
+function removeOptionItem(button) {
+    const item = button.closest("div");
+    item.remove();
+}
+
+function generateCombinations() {
+    const selectedOptions = collectSelectedOptions();
+    fetch('/generateCombinations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(selectedOptions),
+    })
+        .then(response => response.json())
+        .then(data => displayCombinations(data))
+        .catch(error => console.error('Error:', error));
+}
+function collectSelectedOptions() {
+    const selectedOptions = [];
+    const optionGroupTable = document.getElementById("optionGroupTable");
+
+    // Iterate over each row in the option group table
+    optionGroupTable.querySelectorAll("tr").forEach((row) => {
+        const checkbox = row.querySelector(`input[type="checkbox"]`);
+        const groupNameInput = row.querySelector(`input[type="text"][name*="optionGroupName[]"]`);
+
+        // Process only if checkbox is checked and group name input exists
+        if (checkbox && checkbox.checked && groupNameInput) {
+            const groupName = groupNameInput.value.trim();
+
+            // Find the next row (which contains option items for the group)
+            const nextRow = row.nextElementSibling;
+
+            if (nextRow && nextRow.classList.contains("itemContainer")) {
+                // Collect all option items for the selected group
+                const optionItems = Array.from(
+                    nextRow.querySelectorAll(".option-items input[type='text']")
+                ).map(input => input.value.trim())
+                    .filter(value => value); // Ignore empty values
+
+                // Only add groups that have at least one item
+                if (groupName && optionItems.length > 0) {
+                    selectedOptions.push({
+                        groupName: groupName,
+                        items: optionItems
+                    });
+                }
+            }
+        }
+    });
+    console.log(selectedOptions);
+    return selectedOptions;
+}
+//
+// function generateCombinations() {
+//     const stockInputArea = document.getElementById("stock-input-area");
+//     stockInputArea.innerHTML = ""; // Clear previous content
+//     const codeArea = document.getElementById("codeArea");
+//     codeArea.classList.remove("hidden");
+//
+//     // Initialize an object to hold the selected option groups and their items
+//     const optionGroups = {};
+//     const optionGroupTable = document.getElementById("optionGroupTable");
+//
+//     // Select all option group rows (with checkboxes)
+//     const groupRows = optionGroupTable.querySelectorAll("tr");
+//
+//     // Iterate through the rows to collect checked groups and items
+//     groupRows.forEach((row, index) => {
+//         const checkbox = row.querySelector(`input[type="checkbox"]`);
+//         const groupNameInput = row.querySelector(`input[type="text"][name*="groupName"]`);
+//
+//         // Debugging output
+//         console.log(`Row ${index}: Checkbox ${checkbox ? "found" : "not found"}, GroupName ${groupNameInput ? groupNameInput.value : "not found"}`);
+//
+//         // Process only if checkbox is checked and group name input exists
+//         if (checkbox && checkbox.checked && groupNameInput) {
+//             const groupName = groupNameInput.value.trim();
+//             const nextRow = row.nextElementSibling;
+//
+//             // Ensure the next row contains items for this group
+//             if (groupName && nextRow && nextRow.classList.contains("itemContainer")) {
+//                 const optionItems = Array.from(nextRow.querySelectorAll(".option-items input[type='text']"))
+//                     .map(input => input.value.trim())
+//                     .filter(value => value);
+//
+//                 // Debugging output for items found
+//                 console.log(`Option Group: ${groupName}, Items: ${optionItems}`);
+//
+//                 // Only add groups that have valid items
+//                 if (optionItems.length > 0) {
+//                     optionGroups[groupName] = optionItems;
+//                 }
+//             }
+//         }
+//     });
+//
+//     // Debugging output to check the structure of optionGroups
+//     console.log("Collected optionGroups:", optionGroups);
+//
+//     // Check if there are any groups and items selected
+//     if (Object.keys(optionGroups).length === 0) {
+//         alert("No valid option combinations found. Please select option groups and add items.");
+//         return;
+//     }
+//
+//     // Generate all possible combinations of selected option groups and items
+//     let combinations = [[]];
+//     Object.keys(optionGroups).forEach(groupName => {
+//         const values = optionGroups[groupName];
+//         combinations = combinations.flatMap(combo =>
+//             values.map(value => [...combo, `${groupName}: ${value}`])
+//         );
+//     });
+//
+//     // Check if combinations were generated
+//     if (combinations.length === 0) {
+//         alert("Unable to generate option combinations. Please check selected groups and items.");
+//         return;
+//     }
+//
+//     // Create a table to display the combinations
+//     const table = document.createElement("table");
+//     table.className = "option-stock-table";
+//     table.innerHTML = `
+//         <thead>
+//             <tr>
+//                 <th>Option Combination</th>
+//                 <th>Product Code</th>
+//                 <th>Additional Price</th>
+//                 <th>Stock Quantity</th>
+//             </tr>
+//         </thead>
+//     `;
+//
+//     // Populate the table with each combination
+//     const tbody = document.createElement("tbody");
+//     combinations.forEach(combo => {
+//         const row = document.createElement("tr");
+//         const comboText = combo.join(" / ");
+//         row.innerHTML = `
+//             <td>${comboText}</td>
+//             <td><input type="text" name="optionCodeMap[${comboText}]" placeholder="Product Code"></td>
+//             <td><input type="number" name="additionalPriceMap[${comboText}]" placeholder="Additional Price" min="0" value="0"></td>
+//             <td><input type="number" name="stockMap[${comboText}]" placeholder="Stock Quantity" min="0"></td>
+//         `;
+//         tbody.appendChild(row);
+//     });
+//
+//     table.appendChild(tbody);
+//     stockInputArea.appendChild(table);
+// }
+
+
+
+
+//
+// function generateCombinations() {
+//     const stockInputArea = document.getElementById("stock-input-area");
+//     stockInputArea.innerHTML = ""; // Clear previous content
+//     const codeArea = document.getElementById("codeArea");
+//     codeArea.classList.remove("hidden");
+//
+//     // Collect selected option groups and their items
+//     const optionGroups = {};
+//     const optionGroupTable = document.getElementById("optionGroupTable");
+//
+//     // Select all option group rows (with checkboxes)
+//     const groupRows = optionGroupTable.querySelectorAll("tr");
+//
+//     // Iterate through the rows to collect checked groups and items
+//     groupRows.forEach((row, index) => {
+//         const checkbox = row.querySelector(`input[type="checkbox"]`);
+//         const groupNameInput = row.querySelector(`input[type="text"][name*="groupName"]`);
+//
+//         // Debugging output
+//         console.log(`Row ${index}: Checkbox ${checkbox ? "found" : "not found"}, GroupName ${groupNameInput ? groupNameInput.value : "not found"}`);
+//
+//         // Process only if checkbox is checked and group name input exists
+//         if (checkbox && checkbox.checked && groupNameInput) {
+//             const groupName = groupNameInput.value.trim();
+//             const nextRow = row.nextElementSibling;
+//
+//             // Ensure the next row contains items for this group
+//             if (groupName && nextRow && nextRow.classList.contains("itemContainer")) {
+//                 const optionItems = Array.from(nextRow.querySelectorAll(".option-items input[type='text']"))
+//                     .map(input => input.value.trim())
+//                     .filter(value => value);
+//
+//                 console.log(`Option Group: ${groupName}, Items: ${optionItems}`);
+//
+//                 // Only add groups that have valid items
+//                 if (optionItems.length > 0) {
+//                     optionGroups[groupName] = optionItems;
+//                 }
+//             }
+//         }
+//     });
+//
+//     // Check if there are any groups and items selected
+//     if (Object.keys(optionGroups).length === 0) {
+//         alert("No valid option combinations found. Please select option groups and add items.");
+//         return;
+//     }
+//
+//     // Generate all possible combinations of selected option groups and items
+//     let combinations = [[]];
+//     Object.keys(optionGroups).forEach(groupName => {
+//         const values = optionGroups[groupName];
+//         combinations = combinations.flatMap(combo =>
+//             values.map(value => [...combo, `${groupName}: ${value}`])
+//         );
+//     });
+//
+//     // Check if combinations were generated
+//     if (combinations.length === 0) {
+//         alert("Unable to generate option combinations. Please check selected groups and items.");
+//         return;
+//     }
+//
+//     // Create a table to display the combinations
+//     const table = document.createElement("table");
+//     table.className = "option-stock-table";
+//     table.innerHTML = `
+//         <thead>
+//             <tr>
+//                 <th>Option Combination</th>
+//                 <th>Product Code</th>
+//                 <th>Additional Price</th>
+//                 <th>Stock Quantity</th>
+//             </tr>
+//         </thead>
+//     `;
+//
+//     // Populate the table with each combination
+//     const tbody = document.createElement("tbody");
+//     combinations.forEach(combo => {
+//         const row = document.createElement("tr");
+//         const comboText = combo.join(" / ");
+//         row.innerHTML = `
+//             <td>${comboText}</td>
+//             <td><input type="text" name="optionCodeMap[${comboText}]" placeholder="Product Code"></td>
+//             <td><input type="number" name="additionalPriceMap[${comboText}]" placeholder="Additional Price" min="0" value="0"></td>
+//             <td><input type="number" name="stockMap[${comboText}]" placeholder="Stock Quantity" min="0"></td>
+//         `;
+//         tbody.appendChild(row);
+//     });
+//
+//     table.appendChild(tbody);
+//     stockInputArea.appendChild(table);
+// }

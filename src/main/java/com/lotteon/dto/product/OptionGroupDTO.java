@@ -26,6 +26,7 @@ public class OptionGroupDTO {
 //    private ProductDTO product;
 
     private String groupName;
+    private boolean isDeleted;
 
     // JSON 데이터의 문자열 배열을 OptionDTO로 변환하기 위한 필드
     private List<String> items;
