@@ -79,15 +79,16 @@ public class CouponApiController {
     // 쿠폰 발급 여부 확인 API
     @GetMapping("/check/{couponId}")
     public ResponseEntity<Boolean> checkCouponIssued(@PathVariable String couponId, Authentication authentication) {
+       log.info("쿠폰 발급 여부 확인");
         try {
             Long memberId = ((Member) authentication.getPrincipal()).getId();  // 로그인된 사용자 ID
             boolean isIssued = couponIssuedRepository.existsByMemberIdAndCouponId(memberId, couponId);
             return ResponseEntity.ok(isIssued);
         } catch (ClassCastException e) {
-            // 인증된 사용자가 예상한 타입이 아닌 경우 예외 처리
+            log.error("예상된 사용자 타입이 아님: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(false);
         } catch (Exception e) {
-            // 다른 예외 처리
+            log.error("예외 발생: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }

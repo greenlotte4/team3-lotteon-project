@@ -468,6 +468,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
+
+
+
 // 모달 엘리먼트와 버튼, 닫기 버튼 가져오기
     const modal = document.getElementById("discountModal");
     const btn = document.getElementById("openDiscountModalBtn");
@@ -481,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const productId = document.getElementById('productId').value;
         fetchCoupons(productId);
 
-
+        setTimeout(updateCouponButtonState, 100);  // 버튼 상태 업데이트
     }
 
 // 닫기 버튼을 클릭하면 모달 숨기기
@@ -609,26 +613,35 @@ function applyCoupon(couponId){
 }
 function updateCouponButtonState() {
     const buttons = document.querySelectorAll('button[onclick^="applyCoupon"]');
-
+    console.log("요청들어옴")
+    if (buttons.length === 0) {
+        console.log("적합한 버튼이 없습니다!");
+    }
     buttons.forEach(button => {
-        const couponId = button.getAttribute('onclick').match(/'(\d+)'/)[1]; // 쿠폰 ID 추출
+        const onclickValue = button.getAttribute('onclick');
+        console.log(onclickValue);  // 버튼의 onclick 속성 값 출력
 
-        // 서버로 쿠폰 발급 여부 확인
-        fetch(`/api/coupon/check/${couponId}`, {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-        })
-            .then(resp => resp.json())
-            .then(isIssued => {
-                if (isIssued) {
-                    button.textContent = '발급완료'; // 발급 완료 버튼 텍스트로 변경
-                    button.disabled = true; // 비활성화
-                }
+        const couponIdMatch = onclickValue.match(/'([^']+)'/);
+        if (couponIdMatch) {
+            const couponId = couponIdMatch[1];
+            console.log(`Coupon ID: ${couponId}`);  // 쿠폰 ID 확인
+
+            // 서버로 쿠폰 발급 여부 확인
+            fetch(`/api/coupon/check/${couponId}`, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
             })
-            .catch(err => console.error("쿠폰 발급 여부 확인 실패:", err));
+                .then(resp => resp.json())
+                .then(isIssued => {
+                    console.log(`Is coupon issued: ${isIssued}`);  // 발급 여부 확인
+                    if (isIssued) {
+                        button.textContent = '발급완료'; // 발급 완료 버튼 텍스트로 변경
+                        button.disabled = true; // 비활성화
+                    }
+                })
+                .catch(err => console.error("쿠폰 발급 여부 확인 실패:", err));
+        } else {
+            console.error("쿠폰 ID 추출 실패");
+        }
     });
 }
-
-// 모달이 열릴 때마다 호출되는 함수
-updateCouponButtonState();
-

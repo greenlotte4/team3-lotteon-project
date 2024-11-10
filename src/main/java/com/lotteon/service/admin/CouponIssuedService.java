@@ -90,11 +90,12 @@ public class CouponIssuedService {
 
     public void insertCouponIssued(Member member, Coupon coupon, Product product) {
 
-       /* Optional<CouponIssued> existingCouponIssued = couponIssuedRepository.findByMemberAndCoupon(member, coupon);
+        Optional<CouponIssued> existingCouponIssued = couponIssuedRepository.findByMemberAndCoupon(member, coupon);
 
         if (existingCouponIssued.isPresent()) {
             log.info("이미 발급된 쿠폰입니다. 발급을 중단합니다.");
-        }*/
+            throw new IllegalStateException("이미 발급된 쿠폰입니다.");  // 예외 처리로 발급 중단
+        }
         log.info("쿠폰 서비스까진 들어왓따");
         String couponName = coupon.getCouponName();
         if (product == null || coupon.getProduct() == null) {
