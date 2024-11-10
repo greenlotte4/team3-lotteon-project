@@ -320,6 +320,11 @@
 
                                 fetch(`/api/order/status/page?type=${type}&keyword=${keyword}`)
                                     .then(resp => resp.json())
+
+
+
+
+
                                     .then(adminOrderPageResponseDTO => {
                                         console.log("야옹 : "+ adminOrderPageResponseDTO);
                                         const ordertbody = document.querySelector('.admin_order_table tbody');
