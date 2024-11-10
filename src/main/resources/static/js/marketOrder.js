@@ -504,211 +504,211 @@ document.addEventListener('DOMContentLoaded', function () {
         // 업데이트: 쿠폰이 선택되지 않은 경우에도 쿠폰 할인금액이 0으로 표시
         usedCouponResult.textContent = couponDiscount.toLocaleString();
 
-            // Calculate the initial total before applying points
-            const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
+        // Calculate the initial total before applying points
+        const initialTotalOrderAmount = totalProductPrice() - couponDiscount + totalShippingFee();
         console.log("초기 무문 금액 (배송비 포함) : " , initialTotalOrderAmount);
 
-            // Apply the points but limit them to the total order amount
-             const limitedUsedPoint = Math.min(usedPoint, totalProductPrice() - couponDiscount + totalShippingFee());
+        // Apply the points but limit them to the total order amount
+        const limitedUsedPoint = Math.min(usedPoint, totalProductPrice() - couponDiscount + totalShippingFee());
 
-            usedPointResult.textContent = isNaN(limitedUsedPoint) ? 0 : limitedUsedPoint;
-            usedPointResultspan.innerText = isNaN(limitedUsedPoint) ? 0 : limitedUsedPoint;
+        usedPointResult.textContent = isNaN(limitedUsedPoint) ? 0 : limitedUsedPoint;
+        usedPointResultspan.innerText = isNaN(limitedUsedPoint) ? 0 : limitedUsedPoint;
 
 
         // Update each discount and display the final results
-            usedPointResult.textContent = limitedUsedPoint;
-            usedPointResultspan.innerText = limitedUsedPoint;
-            usedCouponResult.textContent = couponDiscount;
+        usedPointResult.textContent = limitedUsedPoint;
+        usedPointResultspan.innerText = limitedUsedPoint;
+        usedCouponResult.textContent = couponDiscount;
 
 
-            // Total discount including product discounts, coupon, and used points
-            totalDiscount = totalProductDiscount();   // 상품 할인금액
-            totalDiscountPandC = limitedUsedPoint + couponDiscount;   // 쿠폰 및 포인트 사용금액
-            discountResult.textContent = totalDiscountPandC;
-            finalDiscountResult.textContent = totalDiscountPandC;
+        // Total discount including product discounts, coupon, and used points
+        totalDiscount = totalProductDiscount();   // 상품 할인금액
+        totalDiscountPandC = limitedUsedPoint + couponDiscount;   // 쿠폰 및 포인트 사용금액
+        discountResult.textContent = totalDiscountPandC;
+        finalDiscountResult.textContent = totalDiscountPandC;
 
-            // Update final order information
-            finalOrderQuantity.textContent = totalQuantity();
-            finalOrderProductPrice.textContent = totalProductPrice().toLocaleString();
+        // Update final order information
+        finalOrderQuantity.textContent = totalQuantity();
+        finalOrderProductPrice.textContent = totalProductPrice().toLocaleString();
         finalOrderDiscount.textContent = totalDiscount.toLocaleString();
-            finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
+        finalOrderDeliveryFee.textContent = totalShippingFee().toLocaleString();
 
-            orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
-             finalOrderTotal.textContent = (totalProductPrice() - totalDiscountPandC + totalShippingFee()).toLocaleString();
-
-
-            console.log("결과 값", couponDiscount);
-            let pointsEarned = 0;
-            if (couponDiscount === 0) {
-                pointsEarned = Math.floor(((orderTotal - totalShippingFee()) * pointPercentage) / 100);
+        orderTotal = totalProductPrice() - totalDiscountPandC - totalDiscount + totalShippingFee();
+        finalOrderTotal.textContent = (totalProductPrice() - totalDiscountPandC + totalShippingFee()).toLocaleString();
 
 
-                finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
-                finalOrderTotal.textContent = orderTotal.toLocaleString();
-                // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
-            }
+        console.log("결과 값", couponDiscount);
+        let pointsEarned = 0;
+        if (couponDiscount === 0) {
+            pointsEarned = Math.floor(((orderTotal - totalShippingFee()) * pointPercentage) / 100);
 
-            console.log(pointsEarned);
-            finalOrderPoint.textContent = totalExpectedPoint; // Display with thousands separator
+
+            finalOrderPoint.textContent = pointsEarned.toLocaleString(); // Display with thousands separator
             finalOrderTotal.textContent = orderTotal.toLocaleString();
             // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
+        }
+
+        console.log(pointsEarned);
+        finalOrderPoint.textContent = totalExpectedPoint; // Display with thousands separator
+        finalOrderTotal.textContent = orderTotal.toLocaleString();
+        // finalOrderPoint.textContent = Math.floor(orderTotal * 0.01).toLocaleString();
     }
 
 
 
 
-        calculateTotals();
+    calculateTotals();
 
-        // Calculate the total values based on all selected options
-        function totalQuantity() {
-            return Array.from(document.querySelectorAll('.T_quantity'))
-                .reduce((total, elem) => total + parseInt(elem.value || 0), 0);
+    // Calculate the total values based on all selected options
+    function totalQuantity() {
+        return Array.from(document.querySelectorAll('.T_quantity'))
+            .reduce((total, elem) => total + parseInt(elem.value || 0), 0);
+    }
+
+
+    function totalProductPrice() {
+        return Array.from(document.querySelectorAll('.T_originalPrice'))
+            .reduce((total, elem) => {
+                const originalPrice = parseInt(elem.dataset.original || 0);
+                const additionalPrice = elem.dataset.additional ? parseInt(elem.dataset.additional) : 0; // Check if additional price exists
+                const quantity = parseInt(elem.closest('.order-row').querySelector('.T_quantity').value || 1); // Get the quantity
+
+                // Sum total based on original price and any additional price if options exist
+                return total + (originalPrice + additionalPrice) * quantity;
+            }, 0);
+    }
+
+    function totalShippingFee() {
+        return Array.from(document.querySelectorAll('.T_shippingFee'))
+            .reduce((total, elem) => total + parseInt(elem.dataset.ship || 0), 0);
+    }
+
+    function calculateTotals() {
+        // Total quantity, product price, and shipping fee calculation
+        const totalQuantity = Array.from(document.querySelectorAll('.T_quantity')).reduce((total, elem) => total + parseInt(elem.value || 0), 0);
+        const totalProductPrice = Array.from(document.querySelectorAll('.T_originalPrice')).reduce((total, elem) => total + parseInt(elem.dataset.original || 0), 0);
+        const totalShippingFee = Array.from(document.querySelectorAll('.T_shippingFee')).reduce((total, elem) => total + parseInt(elem.dataset.ship || 0), 0);
+
+        const totalDiscountAmount = totalProductDiscount();
+
+        // Update final result display
+        finalOrderQuantity.textContent = totalQuantity;
+        finalOrderProductPrice.textContent = totalProductPrice.toLocaleString();
+        console.log(totalProductPrice);
+
+        finalOrderDiscount.textContent = (totalDiscountAmount + totalDiscount).toLocaleString();
+        console.log((totalDiscountAmount + totalDiscount));
+
+        finalOrderDeliveryFee.textContent = totalShippingFee.toLocaleString();
+
+
+    }
+
+    // Call updateDiscountResult on page load to initialize totals
+    updateDiscountResult();
+
+    // Get the select element
+    const shippingInfoSelect = document.getElementById("shippingInfo");
+
+    const InfoInput = document.getElementById("InfoInput");
+    shippingInfoSelect.addEventListener('change', () => {
+        console.log("선택됨", shippingInfoSelect.value)
+        if (shippingInfoSelect.value === '6') {
+            InfoInput.type = 'text';
+        } else {
+            InfoInput.type = 'hidden';
         }
-
-
-        function totalProductPrice() {
-            return Array.from(document.querySelectorAll('.T_originalPrice'))
-                .reduce((total, elem) => {
-                    const originalPrice = parseInt(elem.dataset.original || 0);
-                    const additionalPrice = elem.dataset.additional ? parseInt(elem.dataset.additional) : 0; // Check if additional price exists
-                    const quantity = parseInt(elem.closest('.order-row').querySelector('.T_quantity').value || 1); // Get the quantity
-
-                    // Sum total based on original price and any additional price if options exist
-                    return total + (originalPrice + additionalPrice) * quantity;
-                }, 0);
-        }
-
-        function totalShippingFee() {
-            return Array.from(document.querySelectorAll('.T_shippingFee'))
-                .reduce((total, elem) => total + parseInt(elem.dataset.ship || 0), 0);
-        }
-
-        function calculateTotals() {
-            // Total quantity, product price, and shipping fee calculation
-            const totalQuantity = Array.from(document.querySelectorAll('.T_quantity')).reduce((total, elem) => total + parseInt(elem.value || 0), 0);
-            const totalProductPrice = Array.from(document.querySelectorAll('.T_originalPrice')).reduce((total, elem) => total + parseInt(elem.dataset.original || 0), 0);
-            const totalShippingFee = Array.from(document.querySelectorAll('.T_shippingFee')).reduce((total, elem) => total + parseInt(elem.dataset.ship || 0), 0);
-
-            const totalDiscountAmount = totalProductDiscount();
-
-            // Update final result display
-            finalOrderQuantity.textContent = totalQuantity;
-            finalOrderProductPrice.textContent = totalProductPrice.toLocaleString();
-            console.log(totalProductPrice);
-
-            finalOrderDiscount.textContent = (totalDiscountAmount + totalDiscount).toLocaleString();
-            console.log((totalDiscountAmount + totalDiscount));
-
-            finalOrderDeliveryFee.textContent = totalShippingFee.toLocaleString();
-
-
-        }
-
-        // Call updateDiscountResult on page load to initialize totals
-        updateDiscountResult();
-
-        // Get the select element
-        const shippingInfoSelect = document.getElementById("shippingInfo");
-
-        const InfoInput = document.getElementById("InfoInput");
-        shippingInfoSelect.addEventListener('change', () => {
-            console.log("선택됨", shippingInfoSelect.value)
-            if (shippingInfoSelect.value === '6') {
-                InfoInput.type = 'text';
-            } else {
-                InfoInput.type = 'hidden';
-            }
-        });
+    });
 
 // Function to get the selected value
-        function getSelectedShippingInfo() {
-            const selectedValue = shippingInfoSelect.value;
-            if (selectedValue === '6') {
-                console.log(InfoInput.value);
-                return InfoInput.value;
-            }
-            console.log("Selected shipping info:", selectedValue);
-            return selectedValue;
+    function getSelectedShippingInfo() {
+        const selectedValue = shippingInfoSelect.value;
+        if (selectedValue === '6') {
+            console.log(InfoInput.value);
+            return InfoInput.value;
         }
+        console.log("Selected shipping info:", selectedValue);
+        return selectedValue;
+    }
 
 // Example: Call this function on a button click or when the selection changes
-        shippingInfoSelect.addEventListener("change", getSelectedShippingInfo);
+    shippingInfoSelect.addEventListener("change", getSelectedShippingInfo);
 
-        const paymentOptions = document.getElementsByName('payment');
-        let selectedPayment = null;
-        paymentOptions.forEach(option => {
-            option.addEventListener('change', () => {
-                selectedPayment = document.querySelector('input[name="payment"]:checked').value;
-                console.log("선택된 결제 방식:", selectedPayment);
-            });
-        })
-        let couponValue = "";
-        let couponText = 0;
-        couponSelect.addEventListener('change', () => {
-            const selectedOption = couponSelect.options[couponSelect.selectedIndex];
-            couponValue = selectedOption.value || 1;
-            couponText = selectedOption.text || 1;
-
-            /*console.log("쿠폰 값 (value):", couponValue);
-            console.log("쿠폰 사용 금액 (text):", couponText);*/
+    const paymentOptions = document.getElementsByName('payment');
+    let selectedPayment = null;
+    paymentOptions.forEach(option => {
+        option.addEventListener('change', () => {
+            selectedPayment = document.querySelector('input[name="payment"]:checked').value;
+            console.log("선택된 결제 방식:", selectedPayment);
         });
+    })
+    let couponValue = "";
+    let couponText = 0;
+    couponSelect.addEventListener('change', () => {
+        const selectedOption = couponSelect.options[couponSelect.selectedIndex];
+        couponValue = selectedOption.value || 1;
+        couponText = selectedOption.text || 1;
+
+        /*console.log("쿠폰 값 (value):", couponValue);
+        console.log("쿠폰 사용 금액 (text):", couponText);*/
+    });
 
 
 
-        function updateOrderItem() {
-            orderItem = {
-                productDataArray: productDataArray,            // List<BuyNowRequestDTO>로 매핑
-                receiver: receiver,                            // 일치
-                hp: hp,                                        // 일치
-                postcode: postcode,                            // 일치
-                addr1: addr,                                   // 일치
-                addr2: addr2,                                  // 일치
-                TotalDiscount: finalOrderDiscount.textContent,   //총 할인금액
-                productDiscount: finalOrderDiscount.textContent,
-                totalPointandCoupon: totalDiscountPandC,
-                usedPointResult: Number(usedPointResult.textContent),  // 일치
-                usedCouponResult: Number(couponDiscount),         // usedCoupon -> usedCouponResult로 매핑
-                usedCouponName: couponText,
-                totalOrderQuantity: finalOrderQuantity.textContent,
-                totalOriginalPrice: finalOrderProductPrice.textContent,
-                totalShippingFee: finalOrderDeliveryFee.textContent,                           // 기본값 설정 필요
-                totalFinalPrice: finalOrderTotal.textContent,                            // 기본값 설정 필요
-                credit: selectedPayment,                       // 일치
-                couponId: couponValue,            // couponValue를 couponId로 매핑 (확인 필요) => issuedNumber
-                shippingInfo: getSelectedShippingInfo(),
-                finalOrderPoint: finalOrderPoint.textContent,
-                gradePercentage: pointPercentage,
-                memberName: memberName,
-                memberHp: memberHp
-            };
-        }
+    function updateOrderItem() {
+        orderItem = {
+            productDataArray: productDataArray,            // List<BuyNowRequestDTO>로 매핑
+            receiver: receiver,                            // 일치
+            hp: hp,                                        // 일치
+            postcode: postcode,                            // 일치
+            addr1: addr,                                   // 일치
+            addr2: addr2,                                  // 일치
+            TotalDiscount: finalOrderDiscount.textContent,   //총 할인금액
+            productDiscount: finalOrderDiscount.textContent,
+            totalPointandCoupon: totalDiscountPandC,
+            usedPointResult: Number(usedPointResult.textContent),  // 일치
+            usedCouponResult: Number(couponDiscount),         // usedCoupon -> usedCouponResult로 매핑
+            usedCouponName: couponText,
+            totalOrderQuantity: finalOrderQuantity.textContent,
+            totalOriginalPrice: finalOrderProductPrice.textContent,
+            totalShippingFee: finalOrderDeliveryFee.textContent,                           // 기본값 설정 필요
+            totalFinalPrice: finalOrderTotal.textContent,                            // 기본값 설정 필요
+            credit: selectedPayment,                       // 일치
+            couponId: couponValue,            // couponValue를 couponId로 매핑 (확인 필요) => issuedNumber
+            shippingInfo: getSelectedShippingInfo(),
+            finalOrderPoint: finalOrderPoint.textContent,
+            gradePercentage: pointPercentage,
+            memberName: memberName,
+            memberHp: memberHp
+        };
+    }
 
-        console.log("Product Data Array Before Order Submission:", productDataArray);
+    console.log("Product Data Array Before Order Submission:", productDataArray);
 
 
-        const orderBtn = document.querySelector('.order-Btn');
-        const receiverInput = document.getElementById('receiver');
-        const hpInput = document.getElementById('hp');
+    const orderBtn = document.querySelector('.order-Btn');
+    const receiverInput = document.getElementById('receiver');
+    const hpInput = document.getElementById('hp');
 
 // Function to validate all required fields
-        function validateOrderForm() {
-            const address = addressElement.getAttribute("data-addr") || '';
-            const shippingInfo = getSelectedShippingInfo();
-            const paymentSelected = Array.from(paymentOptions).some(option => option.checked);
-            const receiver = receiverInput.value.trim();
-            const hp = hpInput.value.trim();
-            const postcode = postcodeElement.getAttribute("data-postcode") || '';
+    function validateOrderForm() {
+        const address = addressElement.getAttribute("data-addr") || '';
+        const shippingInfo = getSelectedShippingInfo();
+        const paymentSelected = Array.from(paymentOptions).some(option => option.checked);
+        const receiver = receiverInput.value.trim();
+        const hp = hpInput.value.trim();
+        const postcode = postcodeElement.getAttribute("data-postcode") || '';
 
-            // Check if any required fields are empty
-            if (!address || !shippingInfo || !paymentSelected || !receiver || !hp || !postcode) {
-                return false;
-            }
-
-            return true;
+        // Check if any required fields are empty
+        if (!address || !shippingInfo || !paymentSelected || !receiver || !hp || !postcode) {
+            return false;
         }
 
+        return true;
+    }
 
-        updateOrderItem();
+
+    updateOrderItem();
     console.log(orderItem);
     document.querySelector('.order-Btn').addEventListener('click', function (event) {
         event.preventDefault();  // 기본 제출 동작 방지
@@ -734,11 +734,16 @@ document.addEventListener('DOMContentLoaded', function () {
                             // window.location.href = '/market/completed/' + data.result; // 완료 후 페이지 이동
                             // 쿠폰 상태 업데이트
                             const usedCoupons = getUsedCoupon();
-                            console.log('사용된 쿠폰 목록:', usedCoupons); // 사용된 쿠폰 목록 로그 찍기
-                            usedCoupons.forEach(issuanceNumber => {  // couponId -> issuanceNumber로 변경
-                                console.log('쿠폰 상태 업데이트 요청:', issuanceNumber); // 쿠폰 업데이트 요청 로그
-                                updateCouponStatus(issuanceNumber);  // 각 쿠폰에 대해 상태 업데이트
-                            });
+                            if (usedCoupons === null || usedCoupons === undefined) {
+                                console.log('사용된 쿠폰 목록: 없음');
+                            } else {
+                                console.log('사용된 쿠폰 목록:', usedCoupons);
+                            }
+                            // 서버로 쿠폰 상태 업데이트 요청
+                            Promise.all(usedCoupons.map(couponId => {
+                                console.log('쿠폰 상태 업데이트 요청:', couponId); // 쿠폰 업데이트 요청 로그
+                                return updateCouponStatus(couponId);  // 각 쿠폰에 대해 상태 업데이트
+                            }));
 
                         } else {
                             alert('주문 처리 중 오류가 발생했습니다.');
@@ -767,8 +772,8 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("orderItem.coupons 상태 확인:", orderItem.coupons);
 
             orderItem.coupons.forEach(coupon => {
-                if (coupon.status === '사용가능') {  // 'statis' 대신 'status'로 변경 (오타 확인)
-                    usedCoupons.push(coupon.issuanceNumber); // 발급번호 확인
+                if (coupon.status === '사용가능') {  // 'status' 필드 확인
+                    usedCoupons.push(coupon.couponId); // 쿠폰 ID로 변경
                 }
             });
         } else {
@@ -780,24 +785,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // 쿠폰 상태를 '사용완료'로 변경하는 함수
-    function  updateCouponStatus(issuanceNumber) {
+    function  updateCouponStatus(couponId) {
         fetch('/api/coupon/updateStatus',{
             method: 'PUT',
             headers: {
                 'Content-Type' : 'application/json'
             },
             body: JSON.stringify({
-                issuanceNumber: issuanceNumber,
+                issuanceNumber: couponId,
                 usageStatus: '사용완료',  // 사용 상태
                 status: '사용완료',       // 전체 상태
             }),
         })
-            .then(resp => resp.json())
+            .then(resp => {
+                if (!resp.ok) {
+                    throw new Error('서버 응답 실패');
+                }
+                return resp.json();
+            })
             .then(data => {
-                if (data.result > 0){
-                    console.log('쿠폰 상태를 성공적으로 변경 완료:', issuanceNumber)
+                console.log('서버 응답:', data);
+                if (data.result > 0) {
+                    console.log('쿠폰 상태를 성공적으로 변경 완료:', couponId);
                 } else {
-                    console.log('쿠폰 상태 업데이트 실패:', issuanceNumber)
+                    console.log('쿠폰 상태 업데이트 실패:', couponId);
                 }
             })
             .catch(err => {

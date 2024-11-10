@@ -89,7 +89,7 @@
                                         <td>[[${product.hit}]]</td>
                                         <td>
                                             <a th:href="@{/seller/product/delete(id=${product.productId})}" class="delete">[삭제]</a><br>
-                                            <a th:href="@{/seller/product/modify(id=${product.productId})}" class="edit">[수정]</a>
+                                            <a th:href="@{'/seller/product/modify/'+${product.productId}}" class="edit">[수정]</a>
                                         </td>
                                     </tr>
                                 </th:block>

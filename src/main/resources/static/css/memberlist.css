@@ -72,3 +72,19 @@ input[type="text"]{
 .member_status_stop{
     color: #ff0000;
 }
+
+.active {
+    color: green;  /* 정상: 초록 */
+}
+
+.suspended {
+    color: orange;  /* 중지: 주황 */
+}
+
+.dormant {
+    color: gray;  /* 휴면: 회색 */
+}
+
+.withdrawn {
+    color: red;  /* 탈퇴: 빨강 */
+}

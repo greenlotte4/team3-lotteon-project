@@ -441,7 +441,9 @@ public class ProductService {
         productDTO.setOptions(optionDTOS);
 
 
-        List<OptionGroupDTO> optionGroupDTOS = product.getOptionGroups().stream().map(
+        List<OptionGroupDTO> optionGroupDTOS = product.getOptionGroups().stream()
+                .filter(optionGroup -> !optionGroup.isDeleted()) // isDeleted = false인 OptionGroup만 선택
+                .map(
                 optionGroup -> {
                     List<OptionItem> optionItems =  optionGroup.getOptionItems();
 
@@ -455,17 +457,22 @@ public class ProductService {
 
         // Map Product Option Combinations
         Set<ProductOptionCombination> productOptionCombinations =product.getOptionCombinations();
-        Set<ProductOptionCombinationDTO> productOptionCombinationDTOS = new HashSet<>();
-        for (ProductOptionCombination productOptionCombination : productOptionCombinations) {
-            ProductOptionCombinationDTO productOptionCombinationDTO = productOptionCombination.toDTO();
-            productOptionCombinationDTOS.add(productOptionCombinationDTO);
-        }
+        Set<ProductOptionCombinationDTO> productOptionCombinationDTOS = product.getOptionCombinations().stream()
+                .filter(productOptionCombination -> !productOptionCombination.isDeleted()) // isDeleted = false인 OptionCombination만 선택
+                .map(ProductOptionCombination::toDTO)
+                .collect(Collectors.toSet());
+//        Set<ProductOptionCombinationDTO> productOptionCombinationDTOS = new HashSet<>();
+//        for (ProductOptionCombination productOptionCombination : productOptionCombinations) {
+//            ProductOptionCombinationDTO productOptionCombinationDTO = productOptionCombination.toDTO();
+//            productOptionCombinationDTOS.add(productOptionCombinationDTO);
+//        }
         log.info("여기4!!"+productOptionCombinationDTOS);
 
         productDTO.setOptionCombinations(productOptionCombinationDTOS);
         // Map Product Files
         List<ProductFileDTO> productFileDTOs = product.getFiles().stream()
                 .map(file -> modelMapper.map(file, ProductFileDTO.class))
+                .sorted(Comparator.comparing(ProductFileDTO::getP_fno)) // Sort by id
                 .collect(Collectors.toList());
         productDTO.setProductFiles(productFileDTOs);
         log.info("여기5!!"+productOptionCombinationDTOS);
@@ -497,6 +504,89 @@ public class ProductService {
 
         return productDTO;
     }
+
+
+
+    public ProductDTO getProductModify(Long ProductID) {
+
+        Optional<Product> opt = productRepository.findByProductId(ProductID);
+        Product product = null;
+        if (opt.isPresent()) {
+            product = opt.get();
+        }
+
+        log.info("여기!!!1");
+        if (product == null) {
+            throw new ProductNotFoundException("Product with ID " + ProductID + " not found");
+        }
+        log.info("여기!!!2");
+
+        ProductDTO productDTO = product.toDTO(product);
+        log.info("여기!!!333"+productDTO);
+        List<Option> options = product.getOptions();
+        log.info("option!!!!!!:"+options);
+        List<OptionDTO> optionDTOS = new ArrayList<>();
+        if(!options.isEmpty() || options != null){
+            optionDTOS = product.getOptions().stream().map(option -> modelMapper.map(option, OptionDTO.class)).collect(Collectors.toList());
+        }
+        productDTO.setOptions(optionDTOS);
+
+
+        List<OptionGroupDTO> optionGroupDTOS = product.getOptionGroups().stream()
+                .map(
+                        optionGroup -> {
+                            List<OptionItem> optionItems =  optionGroup.getOptionItems();
+
+                            OptionGroupDTO optionGroupDTO = modelMapper.map(optionGroup,OptionGroupDTO.class);
+                            optionGroupDTO.setOptionItems(optionItems.stream().map(t-> modelMapper.map(t,OptionItemDTO.class)).collect(Collectors.toList()));
+                            return optionGroupDTO;
+                        }).sorted(Comparator.comparing(OptionGroupDTO::getOptionGroupId))
+                .collect(Collectors.toList());
+        productDTO.setOptionGroups(optionGroupDTOS);
+        log.info("여기3!!"+optionGroupDTOS);
+
+        // Map Product Option Combinations
+        Set<ProductOptionCombination> productOptionCombinations =product.getOptionCombinations();
+        Set<ProductOptionCombinationDTO> productOptionCombinationDTOS = product.getOptionCombinations().stream()
+                .map(ProductOptionCombination::toDTO)
+                .collect(Collectors.toSet());
+//        Set<ProductOptionCombinationDTO> productOptionCombinationDTOS = new HashSet<>();
+//        for (ProductOptionCombination productOptionCombination : productOptionCombinations) {
+//            ProductOptionCombinationDTO productOptionCombinationDTO = productOptionCombination.toDTO();
+//            productOptionCombinationDTOS.add(productOptionCombinationDTO);
+//        }
+        log.info("여기4!!"+productOptionCombinationDTOS);
+
+        productDTO.setOptionCombinations(productOptionCombinationDTOS);
+        // Map Product Files
+        List<ProductFileDTO> productFileDTOs = product.getFiles().stream()
+                .map(file -> modelMapper.map(file, ProductFileDTO.class))
+                .sorted(Comparator.comparing(ProductFileDTO::getP_fno)) // Sort by id
+                .collect(Collectors.toList());
+        productDTO.setProductFiles(productFileDTOs);
+        log.info("여기5!!"+productOptionCombinationDTOS);
+
+
+
+        // Filter Specific File Descriptions
+        List<String> filedesc = productFileDTOs.stream()
+                .filter(file -> "940".equals(file.getType()))
+                .map(ProductFileDTO::getSName)
+                .collect(Collectors.toList());
+        productDTO.setFiledesc(filedesc);
+
+
+
+        // Set Seller Information
+        SellerDTO sellerDTO = sellerService.getSeller(product.getSellerId());
+        productDTO.setSeller(sellerDTO);
+
+        log.info("view!!!!!!!!!!!!!!!!!!1; "+productDTO);
+
+
+        return productDTO;
+    }
+
 
 
 

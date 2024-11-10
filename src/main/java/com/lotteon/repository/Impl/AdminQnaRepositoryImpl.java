@@ -31,6 +31,7 @@ public class AdminQnaRepositoryImpl implements AdminQnaRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .orderBy(adminqna.qnaNo.desc())
                 .fetch();
+
         long total = queryFactory
                 .select(adminqna.count())
                 .from(adminqna)

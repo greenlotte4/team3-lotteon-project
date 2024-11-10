@@ -23,6 +23,9 @@ public class PageRequestDTO {
     @Builder.Default
     private int size = 10;
 
+    private String type;
+    private String keyword;
+
     private String noticeType;
 
     private Long parentId;

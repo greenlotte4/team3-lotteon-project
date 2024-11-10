@@ -6,11 +6,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderItemDTO;
+import com.lotteon.dto.page.AdminOrderPageResponseDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.product.Product;
 import com.lotteon.service.admin.AdminOrderService;
 import com.lotteon.service.order.OrderService;
+import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.user.UserService;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +48,7 @@ public class SellerController {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final ObjectMapper objectMapper = new ObjectMapper();
-
+    private final ProductCategoryService productCategoryService;
 
 
     @GetMapping("/product/list")
@@ -139,7 +141,17 @@ public class SellerController {
 
     }
 
+    @GetMapping("/product/modify/{productId}")
+    public String productModify(@PathVariable Long productId, Model model) {
 
+        ProductDTO productdto = productService.getProductModify(productId);
+
+        List<ProductCategoryDTO> categoryDTOs = productCategoryService.selectCategory(productdto.getCategoryId());
+
+        model.addAttribute("categoryDTOs",categoryDTOs);
+        model.addAttribute("product", productdto);
+        return "content/admin/product/admin_productModify"; // Points to the "content/sellerDynamic" template for product registration
+    }
 
     @GetMapping("/product/delete")
     public String productDelete(@RequestParam("id") long id, Model model, Authentication authentication) {
@@ -180,13 +192,20 @@ public class SellerController {
         return "content/admin/order/admin_Delivery"; // Points to the "content/sellerDynamic" template for delivery orders
     }
 
+    // admin order 조회
     @GetMapping("/order/status")
-    public String orderStatus(Model model) {
-          List<OrderDTO> orders = adminOrderService.selectOrdersAll();
-          log.info("허웅우ㅜ우ㅜㅜ :" + orders);
-        model.addAttribute("orders", orders);
+    public String orderStatus(Model model, com.lotteon.dto.page.PageRequestDTO pageRequestDTO) {
+
+        AdminOrderPageResponseDTO adminOrderPageResponseDTO = adminOrderService.selectOrderListAll(pageRequestDTO);
+        log.info("aaaaaaaaaaaaaaaaaaa : " + adminOrderPageResponseDTO);
+        model.addAttribute(adminOrderPageResponseDTO);
+//        List<OrderDTO> orders = adminOrderService.selectOrdersAll();
+//          log.info("허웅우ㅜ우ㅜㅜ :" + orders);
+//        model.addAttribute("orders", orders);
         return "content/admin/order/admin_Order"; // Points to the "content/sellerDynamic" template for order status
     }
+
+
 
     @ResponseBody
     @GetMapping("/order/status/orderItem")

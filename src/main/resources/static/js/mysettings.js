@@ -1,75 +1,42 @@
-function showEmailInput() {
-    // 입력 필드를 활성화
-    document.getElementById('email-id').removeAttribute('readonly');
-    document.getElementById('email-domain').removeAttribute('readonly');
-    document.getElementById('domain-select').removeAttribute('disabled');
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('modify').addEventListener('click', function () {
+        // 사용자 정보 가져오기
+        var memberData = {
+            uid: document.getElementById('uid').textContent.trim(),
+            name: document.getElementById('name').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            hp: document.getElementById('phone').value.trim(),
+            postcode: document.getElementById('zipcode').value.trim(),
+            addr: document.getElementById('address1').value.trim(),
+            addr2: document.getElementById('address2').value.trim()
+        };
 
-    // 수정 버튼 숨기기
-    document.getElementById('edit-email-btn').style.display = 'none';
-    // 저장 버튼 보이기
-    document.getElementById('save-email-btn').style.display = 'inline';
-}
+        // 유효성 검사 (예시)
+        if (!memberData.name || !memberData.email || !memberData.hp || !memberData.addr) {
+            alert("모든 필드를 입력해주세요.");
+            return;
+        }
 
-function updateDomain() {
-    var selectedDomain = document.getElementById("domain-select").value;
-    var emailDomainInput = document.getElementById("email-domain");
-
-    // 선택된 도메인이 "직접 입력"일 경우 도메인 입력 필드를 활성화
-    if (selectedDomain === "직접 입력") {
-        emailDomainInput.value = ""; // 입력 필드 비우기
-        emailDomainInput.disabled = false; // 입력 필드 활성화
-    } else {
-        emailDomainInput.value = selectedDomain; // 입력 필드에 도메인 채우기
-        emailDomainInput.disabled = false; // 입력 필드 비활성화
-    }
-
-    updateOutputEmail(); // 이메일 출력 업데이트
-}
-function saveEmail() {
-    // 저장 로직을 추가하세요
-    // 예: 이메일 저장 후 다시 readonly로 설정
-    document.getElementById('email-id').setAttribute('readonly', true);
-    document.getElementById('email-domain').setAttribute('readonly', true);
-    document.getElementById('domain-select').setAttribute('disabled', true);
-
-    // 수정 버튼 다시 보이기
-    document.getElementById('edit-email-btn').style.display = 'inline';
-    // 저장 버튼 숨기기
-    document.getElementById('save-email-btn').style.display = 'none';
-
-    // 이메일 출력 부분 업데이트
-    const emailId = document.getElementById('email-id').value;
-    const emailDomain = document.getElementById('email-domain').value;
-    document.getElementById('output-email').textContent = emailId + '@' + emailDomain;
-}
-
-function moveToNext(current, nextFieldId) {
-    if (current.value.length >= current.maxLength) {
-        document.getElementById(nextFieldId).focus();
-    }
-}
-
-function editPhone() {
-    // 입력 필드를 활성화
-    document.getElementById('phone-part1').removeAttribute('readonly');
-    document.getElementById('phone-part2').removeAttribute('readonly');
-    document.getElementById('phone-part3').removeAttribute('readonly');
-
-    // 수정 버튼 숨기기
-    document.getElementById('edit-phone-btn').style.display = 'none';
-    // 저장 버튼 보이기
-    document.getElementById('save-phone-btn').style.display = 'inline';
-}
-
-function savePhone() {
-    // 저장 로직을 추가하세요
-    // 예: 전화번호 저장 후 다시 readonly로 설정
-    document.getElementById('phone-part1').setAttribute('readonly', true);
-    document.getElementById('phone-part2').setAttribute('readonly', true);
-    document.getElementById('phone-part3').setAttribute('readonly', true);
-
-    // 수정 버튼 다시 보이기
-    document.getElementById('edit-phone-btn').style.display = 'inline';
-    // 저장 버튼 숨기기
-    document.getElementById('save-phone-btn').style.display = 'none';
-}
+        // 서버로 데이터 보내기 (Ajax)
+        fetch('/mysettings/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(memberData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message); // 성공 메시지
+                    window.location.reload(); // 페이지 새로고침
+                } else {
+                    alert("회원 정보 업데이트에 실패했습니다.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("오류가 발생했습니다.");
+            });
+    });
+});

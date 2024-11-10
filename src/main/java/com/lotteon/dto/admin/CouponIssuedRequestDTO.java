@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 public class CouponIssuedRequestDTO {
 
-    private String issuanceCouponId;
+    private String issuedNumber;
     private String usageStatus;
     private String status;
 
