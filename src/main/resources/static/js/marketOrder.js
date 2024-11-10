@@ -642,7 +642,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("선택된 결제 방식:", selectedPayment);
             });
         })
-        let couponValue = 0;
+        let couponValue = "";
         let couponText = 0;
         couponSelect.addEventListener('change', () => {
             const selectedOption = couponSelect.options[couponSelect.selectedIndex];
@@ -674,7 +674,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 totalShippingFee: finalOrderDeliveryFee.textContent,                           // 기본값 설정 필요
                 totalFinalPrice: finalOrderTotal.textContent,                            // 기본값 설정 필요
                 credit: selectedPayment,                       // 일치
-                couponId: Number(couponValue),            // couponValue를 couponId로 매핑 (확인 필요)
+                couponId: couponValue,            // couponValue를 couponId로 매핑 (확인 필요) => issuedNumber
                 shippingInfo: getSelectedShippingInfo(),
                 finalOrderPoint: finalOrderPoint.textContent,
                 gradePercentage: pointPercentage,
@@ -870,7 +870,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const option = document.createElement("option");
 
-            option.value = couponIssued.couponId;  // couponId로 설정
+            option.value = couponIssued.issuanceNumber;  // couponId로 설정
 
             let displayText = `${couponIssued.couponName}`;  // 쿠폰 이름
             if (couponIssued.benefit) {

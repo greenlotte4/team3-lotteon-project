@@ -24,7 +24,7 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final StringPath addr2 = createString("addr2");
 
-    public final NumberPath<Long> couponId = createNumber("couponId", Long.class);
+    public final StringPath couponId = createString("couponId");
 
     public final NumberPath<Long> expectedPoint = createNumber("expectedPoint", Long.class);
 

@@ -153,6 +153,8 @@ public class OrderService {
             //각각의 오더아이템 저장
             OrderItem OrderItem = getModelMapper.map(orderItemDTO, OrderItem.class);
             OrderItem savedOrderItem = orderItemRepository.save(OrderItem);
+
+
             ProductRedisDTO productRedisDTO = ProductRedisDTO.builder()
                     .productId(savedOrderItem.getProduct().getProductId())
                     .productName(savedOrderItem.getProduct().getProductName())

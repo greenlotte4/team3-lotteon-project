@@ -53,7 +53,7 @@ public class Order {
     private String pay;
     //쿠폰 사용유무
     private boolean isCoupon;
-    private long couponId;
+    private String couponId;
 
 
     // OrderProduct와의 OneToMany 관계 설정

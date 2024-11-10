@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.security.core.Authentication;
@@ -102,7 +103,9 @@ public class ProductApiController {
         return bestProductService.getBestProductOrderBySelling();
         // Fetch best products from Redis cache or DB
     }
-    @GetMapping("/sse/best-products")
+
+
+    @GetMapping(value = "/sse/best-products", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamBestProducts() {
         SseEmitter emitter = new SseEmitter(0L); // Timeout을 무제한으로 설정
         try {
