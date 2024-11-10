@@ -33,32 +33,6 @@ public class DeliveryService {
         return deliveryRepository.save(delivery);
     }
 
-
-    public void saveDefaultDelivery(Member member){
-        String postcode = member.getPostcode();
-        String addr = member.getAddr();
-        String addr2 = member.getAddr2();
-
-        if (postcode != null && addr != null && addr2 != null) {
-            // 배송지 정보를 사용하여 기본 배송지 설정 수행
-
-            // 배송지 정보 설정
-            Delivery defaultDelivery = new Delivery();
-            defaultDelivery.setMember(member);
-            defaultDelivery.setPostcode(member.getPostcode());
-            defaultDelivery.setAddr(member.getAddr());
-            defaultDelivery.setAddr2(member.getAddr2());
-            defaultDelivery.setDefault(true); // 기본 배송지로 설정
-
-            deliveryRepository.save(defaultDelivery);
-            log.info("Default address set for user: " + member.getUid());
-        } else {
-            log.warn("Incomplete address information, default address not set.");
-        }
-    }
-
-    // 특정 회원의 배송지 조회
-
     // memberId에 해당하는 모든 배송 정보를 DeliveryDTO 리스트로 반환
     public List<DeliveryDTO> getByMemberId(Long memberId) {
         // Delivery 엔티티에서 memberId로 모든 배송지 정보 조회
@@ -72,6 +46,7 @@ public class DeliveryService {
         // Delivery 엔티티 리스트를 DeliveryDTO 리스트로 변환
         return deliveries.stream()
                 .map(delivery -> DeliveryDTO.builder()
+                        .id(delivery.getId())
                         .name(delivery.getName())
                         .hp(delivery.getHp())
                         .postcode(delivery.getPostcode())
@@ -93,6 +68,50 @@ public class DeliveryService {
             return false; // 배송지 없으면 삭제 실패
         }
     }
+
+    // memberId와 deliveryId에 해당하는 배송 정보를 DeliveryDTO로 반환
+    public DeliveryDTO getDeliveryById(Long memberId, Long deliveryId) {
+        // Delivery 엔티티에서 memberId와 deliveryId로 특정 배송지 정보 조회
+        Delivery delivery = (Delivery) deliveryRepository.findByIdAndMemberId(deliveryId, memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 배송지 정보를 찾을 수 없습니다."));
+
+        // Delivery 엔티티를 DeliveryDTO로 변환하여 반환
+        return DeliveryDTO.builder()
+                .id(delivery.getId())
+                .name(delivery.getName())
+                .hp(delivery.getHp())
+                .postcode(delivery.getPostcode())
+                .addr(delivery.getAddr())
+                .addr2(delivery.getAddr2())
+                .isDefault(delivery.isDefault())
+                .deliveryMessage(delivery.getDeliveryMessage())
+                .entranceCode(delivery.getEntranceCode())
+                .build();
+    }
+
+    public Delivery updateDelivery(Long memberId, Long deliveryId, Delivery deliveryData) {
+        // memberId를 기준으로 해당 회원을 조회
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+
+        // deliveryId를 기준으로 배송지 정보 조회
+        Delivery delivery = (Delivery) deliveryRepository.findByIdAndMemberId(deliveryId, memberId)
+                .orElseThrow(() -> new IllegalArgumentException("배송지가 존재하지 않습니다."));
+
+        // 배송지 수정
+        delivery.setName(deliveryData.getName());
+        delivery.setHp(deliveryData.getHp());
+        delivery.setPostcode(deliveryData.getPostcode());
+        delivery.setAddr(deliveryData.getAddr());
+        delivery.setAddr2(deliveryData.getAddr2());
+        delivery.setDeliveryMessage(deliveryData.getDeliveryMessage());
+
+        // 변경된 배송지 저장
+        return deliveryRepository.save(delivery);
+    }
+
+
 
 //    public void setDefaultAddressForMember(String uid, Member member) {
 //        String postcode = member.getPostcode();
