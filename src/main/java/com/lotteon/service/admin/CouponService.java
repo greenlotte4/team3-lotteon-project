@@ -6,7 +6,9 @@ import com.lotteon.dto.admin.CouponListResponseDTO;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.admin.Coupon;
+import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.product.Product;
+import com.lotteon.repository.admin.CouponIssuedRepository;
 import com.lotteon.repository.admin.CouponRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.repository.user.SellerRepository;
@@ -34,6 +36,7 @@ public class CouponService {
     private final SellerRepository sellerRepository;
     private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
+    private final CouponIssuedRepository couponIssuedRepository;
 
     public String randomCouponId() {
 
@@ -105,6 +108,16 @@ public class CouponService {
             coupon.setStatus("종료됨");
             couponRepository.save(coupon);
             log.info("Coupon ended: " + coupon);
+
+            List<CouponIssued> issuedCoupons = couponIssuedRepository.findByCouponId(couponId);
+            if (!issuedCoupons.isEmpty()) {
+                for (CouponIssued issuedCoupon : issuedCoupons) {
+                    issuedCoupon.setStatus("종료됨");  // 각 발급된 쿠폰의 상태를 '종료됨'으로 변경
+                }
+                couponIssuedRepository.saveAll(issuedCoupons);  // 발급된 쿠폰 모두 저장
+            }
+
+            couponIssuedRepository.saveAll(issuedCoupons);
             return modelMapper.map(coupon, CouponDTO.class);
         } else {
             throw new RuntimeException("궁시렁궁시렁 오류남");

@@ -32,4 +32,6 @@ public interface CouponIssuedRepository extends JpaRepository<CouponIssued, Stri
 
     List<CouponIssued> findBySellerCompanyContaining(String sellerCompany);
     List<CouponIssued> findByCouponNameContaining(String sellerCompany);
+
+    List<CouponIssued> findByCouponId(String couponId);
 }
