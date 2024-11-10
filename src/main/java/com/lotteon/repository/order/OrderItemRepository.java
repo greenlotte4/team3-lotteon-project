@@ -3,6 +3,8 @@ package com.lotteon.repository.order;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
 import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     long countBySellerUid(String sellerUid);
+
+    Page<OrderItem> findByOrder_Uid(String uid, Pageable pageable);
 
     List<OrderItem> findByOrder_OrderId(Long orderId);
   

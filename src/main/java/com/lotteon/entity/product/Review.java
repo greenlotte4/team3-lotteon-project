@@ -51,6 +51,7 @@ public class Review {
         if (review.getProduct() != null) {
             productDTO = ProductDTO.builder()
                     .productId(review.getProduct().getProductId())
+                    .categoryId(review.getProduct().getCategoryId())  // categoryId가 null이 아닌지 확인
                     .productName(review.getProduct().getProductName())
                     .build();
         }

@@ -50,7 +50,11 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final NumberPath<Long> productDiscount = createNumber("productDiscount", Long.class);
 
+    public final StringPath productName = createString("productName");
+
     public final StringPath receiver = createString("receiver");
+
+    public final StringPath sellerCompany = createString("sellerCompany");
 
     public final StringPath shippingInfo = createString("shippingInfo");
 

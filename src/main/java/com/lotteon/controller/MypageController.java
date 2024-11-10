@@ -6,8 +6,10 @@ import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.adminQnaDTO;
+import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderItemDTO;
 import com.lotteon.dto.order.OrderWithGroupedItemsDTO;
+import com.lotteon.dto.page.OrderPageResponseDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
@@ -183,9 +185,12 @@ public class MypageController {
 
 
     @GetMapping("/orderdetails")
-    public String orderDetails(Model model) {
-        List<BannerDTO> banners = adminService.selectAllbanner();
+    public String orderDetails(Model model, PageRequestDTO pageRequestDTO, Authentication authentication) {
+        String uid = authentication.getName();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
+        OrderPageResponseDTO<OrderDTO> pageResponseOrderDTO = orderService.getOrderByUser(pageRequestDTO, uid);
+
+        model.addAttribute("pageResponseOrderDTO", pageResponseOrderDTO);
         model.addAttribute("content", "orderdetails");
         model.addAttribute("banners", banners2);
         return "content/user/orderdetails"; // Points to "content/user/orderdetails"
