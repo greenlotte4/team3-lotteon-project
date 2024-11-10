@@ -16,10 +16,12 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUidOrderByOrderDateDesc(String userId);
 
+    Page<Order> findByUid(String uid, Pageable pageable);
+
 
     public Order findByOrderId(Long orderId);
 
-    public List<Order> findByUid(String uid, Pageable pageable);
+   // public List<Order> findByUid(String uid, Pageable pageable);
 
     @Query("SELECT o, oi " +
             "FROM Order o " +

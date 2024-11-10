@@ -24,11 +24,14 @@ public class OrderWithGroupedItemsDTO {
         this.orderId = order.getOrderId();
         this.orderDate = order.getOrderDate();
 
+        // OrderDTO 객체를 생성하여 넘겨줌
+        OrderDTO orderDTO = new OrderDTO(order);  // 필요한 필드를 OrderDTO에 추가하세요
+
         this.groupedOrderItems = order.getOrderProducts().stream()
                 .map(item -> {
                     Seller seller = sellerRepository.findByUserUid(item.getSellerUid())
                             .orElse(null);
-                    return new OrderItemDTO(item, seller);  // 포맷된 가격을 넘겨줌
+                    return new OrderItemDTO(item, seller, orderDTO);  // OrderDTO를 넘겨줌
                 })
                 .collect(Collectors.toList());
     }
