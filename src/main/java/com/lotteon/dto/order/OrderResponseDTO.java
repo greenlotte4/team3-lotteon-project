@@ -69,11 +69,11 @@ public class OrderResponseDTO {
 
             long originalPrice = parseLongOrDefault(buyNowRequestDTO.getOriginalPrice(), 0)+additionalPrice;
             long finalPrice = Long.parseLong(buyNowRequestDTO.getFinalPrice()) + additionalPrice;
-            if(orderRequestDTO.getCouponId()==0){
+            if(!orderRequestDTO.getCouponId().isEmpty() && orderRequestDTO.getCouponId() != null){
                 point = finalPrice* (orderRequestDTO.getGradePercentage());
             }
             long discount= Long.parseLong(buyNowRequestDTO.getDiscount());
-            long savedDiscount =(discount * originalPrice)*originalQuantity ;
+            long savedDiscount =((discount * originalPrice)/100/10*10)*originalQuantity ;
             OrderItemDTO orderItemDTO = OrderItemDTO.builder()
                     .price(originalPrice+additionalPrice)
                     .productId(parseLongOrDefault(buyNowRequestDTO.getProductId(), 0))
@@ -101,7 +101,7 @@ public class OrderResponseDTO {
                 .memberHp(orderRequestDTO.getMemberHp())
                 .memberName(orderRequestDTO.getMemberName())
                 .couponId(orderRequestDTO.getCouponId())
-                .isCoupon(orderRequestDTO.getCouponId() > 0)
+                .isCoupon(orderRequestDTO.getCouponId().isEmpty() && orderRequestDTO.getCouponId() !=null )
                 .expectedPoint(parseLongOrDefault(orderRequestDTO.getFinalOrderPoint(), 0))
                 .postcode(orderRequestDTO.getPostcode())
                 .receiver(orderRequestDTO.getReceiver())

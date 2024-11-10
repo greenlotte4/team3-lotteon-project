@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error receiving SSE:', error);
             eventSource.close();
 
+        setTimeout(() => {
+            // Reconnect after 5 seconds
+            new EventSource('http://127.0.0.1:8085/sse/best-products');
+        }, 5000);
 
     };
 

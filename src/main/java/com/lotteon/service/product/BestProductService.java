@@ -77,7 +77,11 @@ public class BestProductService {
             redisTemplate.opsForHash().put(key,"file230",product.getFile230());
             redisTemplate.opsForHash().put(key,"savedPath",product.getSavedPath());
 
-            Integer currentSold = (Integer) redisTemplate.opsForHash().get(key,"sold");
+            Long currentSold = (Long) redisTemplate.opsForHash().get(key,"sold");
+
+            if (currentSold == null) {
+                currentSold = 0L; // 기본 값을 0으로 설정
+            }
             redisTemplate.opsForHash().put(key,"sold",currentSold+quantity);
             Integer changedSold = (Integer) redisTemplate.opsForHash().get(key,"sold");
             redisTemplate.opsForZSet().add("best_selling_products", key, changedSold);
