@@ -565,6 +565,7 @@ function displayIssuedCoupons(data) {
                        data-issued-benefit="${issued.benefit}"
                        data-period="${issued.startDate} ~ ${issued.endDate}"
                        data-issued-issuer="${issued.sellerCompany}">
+                       ${issued.issuanceNumber}
                     </a>
                 </td>
                 <td>${issued.couponId}</td>

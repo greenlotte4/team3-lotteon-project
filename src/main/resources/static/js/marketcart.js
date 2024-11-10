@@ -197,27 +197,27 @@ applyButtons.forEach(button => {
 
 
 });
-
-// + - 버튼 클릭 시 숫자 조정 함수
-function adjustQuantity(button, delta) {
-    const inputField = delta < 0 ? button.nextElementSibling : button.previousElementSibling;
-    let currentValue = parseInt(inputField.value) || 1;
-    inputField.value = Math.max(1, currentValue + delta); // 최소값 1로 설정
-}
-
-// - 버튼 이벤트 핸들러
-document.querySelectorAll('.qnt-decrease').forEach(button => {
-    button.addEventListener('click', function () {
-        adjustQuantity(this, -1);
-    });
-});
-
-// + 버튼 이벤트 핸들러
-document.querySelectorAll('.qnt-increase').forEach(button => {
-    button.addEventListener('click', function () {
-        adjustQuantity(this, 1);
-    });
-});
+//
+// // + - 버튼 클릭 시 숫자 조정 함수
+// function adjustQuantity(button, delta) {
+//     const inputField = delta < 0 ? button.nextElementSibling : button.previousElementSibling;
+//     let currentValue = parseInt(inputField.value) || 1;
+//     inputField.value = Math.max(1, currentValue + delta); // 최소값 1로 설정
+// }
+//
+// // - 버튼 이벤트 핸들러
+// document.querySelectorAll('.qnt-decrease').forEach(button => {
+//     button.addEventListener('click', function () {
+//         adjustQuantity(this, -1);
+//     });
+// });
+//
+// // + 버튼 이벤트 핸들러
+// document.querySelectorAll('.qnt-increase').forEach(button => {
+//     button.addEventListener('click', function () {
+//         adjustQuantity(this, 1);
+//     });
+// });
 
 
 // 선택삭제 버튼 이벤트
@@ -230,44 +230,39 @@ document.querySelector('.selected-delete').addEventListener('click', function() 
         return
     }
 
-
         const cartItemIds = [];
 
         selectedItems.forEach(function (checkbox){
             const cartItemRow = checkbox.closest('tr');
-            const cartItemId = cartItemRow.getAttribute('data-cart-item-id'); // 카트 아이템 ID 가져오기
+            const cartItemId = cartItemRow.getAttribute('data-cartItemId'); // 카트 아이템 ID 가져오기
             cartItemIds.push(cartItemId)
         })
 
-        if (confirm(`정말로 삭제 하시겠습니까?`)) {
-            const deletionPromises = cartItemIds.map(cartItemId => {
-                return fetch(`/api/delete/${cartItemId}`, { // cartItemId를 URL에 추가
-                    method: `DELETE`
-                })
-                    .then(resp => {
-                        if (resp.ok) {
-                            console.log(`아이템 ${cartItemId} 삭제 성공`);
-                            // 삭제 후 해당 행 제거
-                            const cartItemRow = document.querySelector(`tr[data-cart-item-id="${cartItemId}"]`);
-                            if (cartItemRow) {
-                                cartItemRow.remove();
-                            }
-                        } else {
-                            console.log(`아이템 ${cartItemId} 삭제 실패`);
-                        }
-                    })
-                    .catch(error => {
-                        console.log('오류 발새ㅑㅇ', error)
+    if (confirm(`정말로 삭제하시겠습니까?`)) {
+        fetch('/api/delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(cartItemIds) // cartItemIds 배열을 JSON으로 변환하여 전송
+        })
+            .then(resp => {
+                if (resp.ok) {
+                    console.log('선택된 아이템들 삭제 성공');
+                    selectedItems.forEach(function(checkbox) {
+                        const cartItemRow = checkbox.closest('tr');
+                        cartItemRow.remove(); // 삭제 후 해당 행 제거
                     });
-
+                } else {
+                    console.log('선택된 아이템들 삭제 실패');
+                }
+            })
+            .catch(error => {
+                console.log('오류 발생', error);
             });
-                Promise.all(deletionPromises).then(() => {
-                    console.log('모든 삭제 요청 완료');
-                    window.location.reload(); // 페이지 새로고침
-                });
-        } else {
-            console.log('삭제 취소');
-        }
+    } else {
+        console.log('삭제 취소');
+    }
 });
 
 
@@ -299,10 +294,10 @@ function updateOrderSummary() {
 
             // 수량, 가격, 할인, 배송비, 포인트 가져오기
             totalQuantity += parseInt(row.querySelector('input[name="quantity"]').value);
-            totalPrice += parseInt(row.querySelector('td:nth-child(4)').innerText.replace(/,/g, ''));
-            totalDiscount += parseInt(row.querySelector('td:nth-child(5)').innerText.replace(/,/g, ''));
-            totalDelivery += parseInt(row.querySelector('td:nth-child(7)').innerText.replace(/,/g, ''));
-            totalPoints += parseInt(row.querySelector('td:nth-child(6)').innerText.replace(/,/g, ''));
+            totalPrice += parseInt(row.querySelector('td:nth-child(4)').innerText.replace(/,/g, '')) ||0;
+            totalDiscount += parseInt(row.querySelector('td:nth-child(5)').innerText.replace(/,/g, '')) ||0;
+            totalDelivery += parseInt(row.querySelector('td:nth-child(7)').innerText.replace(/,/g, '')) ||0;
+            totalPoints += parseInt(row.querySelector('td:nth-child(6)').innerText.replace(/,/g, '')) ||0;
         });
 
         // 전체 주문 금액 계산

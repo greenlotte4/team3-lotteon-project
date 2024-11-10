@@ -1,11 +1,22 @@
 package com.lotteon.service.order;
 
+//
+/*
+        날짜: 2024.11.01
+        이름 : 하진희
+        내용 : orderService
+
+        2024.11.08 주문시 포인트사용 적용
+ */
 
 import com.lotteon.controller.SellerController;
 import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.order.*;
 import com.lotteon.dto.product.OptionDTO;
 import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.dto.product.ProductRedisDTO;
+import com.lotteon.entity.User.Member;
+import com.lotteon.entity.User.Point;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
@@ -16,9 +27,14 @@ import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.repository.order.OrderRepository;
 import com.lotteon.repository.product.ProductOptionCombinationRepository;
 import com.lotteon.repository.product.ProductRepository;
+import com.lotteon.repository.user.MemberRepository;
+import com.lotteon.repository.user.PointRepository;
 import com.lotteon.repository.user.SellerRepository;
+import com.lotteon.service.product.BestProductService;
 import com.lotteon.service.product.OptionService;
 import com.lotteon.service.product.ProductService;
+import com.lotteon.service.user.MemberService;
+import com.lotteon.service.user.PointService;
 import com.lotteon.service.user.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -54,11 +70,20 @@ public class OrderService {
     private final ProductOptionCombinationRepository productOptionCombinationRepository;
     private final ProductRepository productRepository;
 
+    private final SellerRepository sellerRepository;
+
+    private final MemberRepository memberRepository;
+    private final PointService pointService;
+    private final PointRepository pointRepository;
+    private final BestProductService bestProductService;
+
 
     @Transactional
     public long saveOrder(OrderResponseDTO orderResponseDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String uid = authentication.getName();
+
+
         log.info("구매중 uid : " + uid);
         long result = 0;
         OrderDTO orderDTO = orderResponseDTO.getOrder();
@@ -71,12 +96,33 @@ public class OrderService {
         log.info("productDicount!!! " + savedOrder.getProductDiscount());
 
         result = savedOrder.getOrderId();
+        Optional<Member> member= memberRepository.findByUser_Uid(uid);
+        if(member.isPresent()) {
+            Member currentMember = member.get();
+            long usedPoint = orderResponseDTO.getUsePoint();
+            if(usedPoint>0){
+                currentMember.usedPoint(usedPoint);
+                memberRepository.save(currentMember);
+                Point savePoint = Point.builder()
+                        .orderId(result)
+                        .createdAt(LocalDateTime.now())
+                        .usedPoint(usedPoint)
+                        .description("상품구매시 포인트 사용")
+                        .member(currentMember)
+                        .remainingPoints(currentMember.getPoint())
+                        .build();
 
+                pointRepository.save(savePoint);
+            }
+        }
 
         List<OrderItemDTO> orderItems = orderResponseDTO.getOrderItems();
         for (OrderItemDTO orderItemDTO : orderItems) {
             orderItemDTO.setOrderId(savedOrder.getOrderId());
+            orderItemDTO.setCustomerId(uid);
+            orderItemDTO.setCustomerName(savedOrder.getMemberName());
             orderItemDTO.setOrder(getModelMapper.map(savedOrder, OrderDTO.class));
+
 
             ProductDTO product = productService.selectProduct(orderItemDTO.getProductId());
 
@@ -99,13 +145,25 @@ public class OrderService {
                 }
             }
             long saveStock = product.getStock() - orderItemDTO.getStock();
-            productRepository.updateProductQuantity(saveStock, orderItemDTO.getProductId());
+            long saveSold = product.getSold() + orderItemDTO.getStock();
+            productRepository.updateProductQuantity(saveStock, orderItemDTO.getProductId(), saveSold);
             log.info("업데이트 재고 : " + saveStock);
 
 
             //각각의 오더아이템 저장
             OrderItem OrderItem = getModelMapper.map(orderItemDTO, OrderItem.class);
             OrderItem savedOrderItem = orderItemRepository.save(OrderItem);
+
+
+            ProductRedisDTO productRedisDTO = ProductRedisDTO.builder()
+                    .productId(savedOrderItem.getProduct().getProductId())
+                    .productName(savedOrderItem.getProduct().getProductName())
+                    .categoryId(savedOrderItem.getProduct().getCategoryId())
+                    .discount(savedOrderItem.getProduct().getDiscount())
+                    .file230(savedOrderItem.getProduct().getFile230())
+                    .savedPath(savedOrderItem.getProduct().getSavedPath())
+                    .build();
+            bestProductService.updateSellingInRedis(productRedisDTO, savedOrderItem.getStock());
 
         }
 
@@ -161,37 +219,47 @@ public class OrderService {
         return null;
     }
 
-    public List<OrderWithGroupedItemsDTO> getOrdersGroupedBySeller(String uid) {
-        List<Object[]> results = orderRepository.findOrderAndOrderItemsByUid(uid);
-        Map<Long, OrderWithGroupedItemsDTO> orderMap = new HashMap<>();
+//    public List<OrderWithGroupedItemsDTO> getOrdersGroupedBySeller(String uid) {
+//        List<Object[]> results = orderRepository.findOrderAndOrderItemsByUid(uid);
+//        Map<Long, OrderWithGroupedItemsDTO> orderMap = new HashMap<>();
+//
+//        for (Object[] row : results) {
+//            Order order = (Order) row[0];
+//            OrderItem orderItem = (OrderItem) row[1];
+//            String sellerUid = orderItem.getSellerUid();
+//
+//            // OrderWithGroupedItemsDTO가 없으면 생성하여 추가
+//            OrderWithGroupedItemsDTO orderDTO = orderMap.computeIfAbsent(order.getOrderId(), id ->
+//                    new OrderWithGroupedItemsDTO(order.getOrderId(), order.getUid(), order.getOrderDate(), new ArrayList<>())
+//            );
+//
+//            String company=null;
+//            // SellerOrderItemDTO를 찾거나 생성하여 추가
+//            SellerOrderItemDTO sellerOrderItemDTO = orderDTO.getGroupedOrderItems().stream()
+//                    .filter(s -> s.getSellerUid().equals(sellerUid))
+//                    .findFirst()
+//                    .orElseGet(() -> {
+//                        String companyIn = sellerService.findCompanyByuid(sellerUid);
+//                        SellerOrderItemDTO newSellerDTO = new SellerOrderItemDTO(sellerUid,companyIn, new ArrayList<>());
+//                        orderDTO.getGroupedOrderItems().add(newSellerDTO);
+//                        return newSellerDTO;
+//                    });
+//
+//            // OrderItem을 해당 SellerOrderItemDTO에 추가
+//            sellerOrderItemDTO.getOrderItems().add(orderItem);
+//        }
+//
+//        return new ArrayList<>(orderMap.values());
+//    }
 
-        for (Object[] row : results) {
-            Order order = (Order) row[0];
-            OrderItem orderItem = (OrderItem) row[1];
-            String sellerUid = orderItem.getSellerUid();
+    public List<OrderWithGroupedItemsDTO> getOrdersGroupedBySellers(String userId) {
+        // 사용자 ID로 주문을 조회하고 주문 날짜 순으로 정렬
+        List<Order> orders = orderRepository.findByUidOrderByOrderDateDesc(userId);
 
-            // OrderWithGroupedItemsDTO가 없으면 생성하여 추가
-            OrderWithGroupedItemsDTO orderDTO = orderMap.computeIfAbsent(order.getOrderId(), id ->
-                    new OrderWithGroupedItemsDTO(order.getOrderId(), order.getUid(), order.getOrderDate(), new ArrayList<>())
-            );
-
-            String company=null;
-            // SellerOrderItemDTO를 찾거나 생성하여 추가
-            SellerOrderItemDTO sellerOrderItemDTO = orderDTO.getGroupedOrderItems().stream()
-                    .filter(s -> s.getSellerUid().equals(sellerUid))
-                    .findFirst()
-                    .orElseGet(() -> {
-                        String companyIn = sellerService.findCompanyByuid(sellerUid);
-                        SellerOrderItemDTO newSellerDTO = new SellerOrderItemDTO(sellerUid,companyIn, new ArrayList<>());
-                        orderDTO.getGroupedOrderItems().add(newSellerDTO);
-                        return newSellerDTO;
-                    });
-
-            // OrderItem을 해당 SellerOrderItemDTO에 추가
-            sellerOrderItemDTO.getOrderItems().add(orderItem);
-        }
-
-        return new ArrayList<>(orderMap.values());
+        // Order 객체를 OrderWithGroupedItemsDTO로 변환, SellerRepository를 전달
+        return orders.stream()
+                .map(order -> new OrderWithGroupedItemsDTO(order, sellerRepository))  // SellerRepository를 넘겨줌
+                .collect(Collectors.toList());
     }
 
 
@@ -231,11 +299,13 @@ public class OrderService {
 //환불요청
 
     public long getSalesCountBySeller(String sellerUid) {
-        return orderItemRepository.countBySellerUid(sellerUid);
+        long salesCount = orderItemRepository.countBySellerUid(sellerUid);
+        return (salesCount < 0) ? 0 : salesCount;  // 음수일 경우 0 반환
     }
 
     public long getTotalSalesAmountBySeller(String sellerUid) {
-        return orderItemRepository.findTotalOrderPriceBySellerUid(sellerUid);
+        Long totalSalesAmount = orderItemRepository.findTotalOrderPriceBySellerUid(sellerUid);
+        return (totalSalesAmount == null || totalSalesAmount < 0) ? 0 : totalSalesAmount;  // null 또는 음수일 경우 0 반환
     }
 
     // 모든 판매자의 총 판매 수량을 반환
@@ -250,7 +320,9 @@ public class OrderService {
 
     // 특정 판매자의 날짜 범위에 따른 주문 건수
     public long getSalesCountBySellerAndDateRange(String sellerUid, LocalDateTime start, LocalDateTime end) {
-        return orderItemRepository.countOrdersBySellerAndDateRange(sellerUid, start, end);
+        // countOrdersBySellerAndDateRange가 0보다 작은 값을 반환할 경우 0으로 설정
+        long count = orderItemRepository.countOrdersBySellerAndDateRange(sellerUid, start, end);
+        return (count < 0) ? 0 : count;  // 음수일 경우 0 반환
     }
 
     // 특정 판매자의 날짜 범위에 따른 총 판매 금액

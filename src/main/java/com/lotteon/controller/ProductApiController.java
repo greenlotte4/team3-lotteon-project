@@ -1,23 +1,31 @@
 package com.lotteon.controller;
 
 
-import com.lotteon.dto.product.PageRequestDTO;
-import com.lotteon.dto.product.ProductCategoryDTO;
-import com.lotteon.dto.product.ProductListPageResponseDTO;
+import com.lotteon.dto.product.*;
 import com.lotteon.entity.product.ProductCategory;
+import com.lotteon.service.product.BestProductService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import reactor.core.publisher.Flux;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.Duration;
 import java.util.List;
 
 @Log4j2
@@ -27,6 +35,8 @@ public class ProductApiController {
 
     private final ProductCategoryService productCategoryService;
     private final ProductService productService;
+    private final RedisTemplate redisTemplate;
+    private final BestProductService bestProductService;
 
     @GetMapping("/api/categories")
     public List<ProductCategory> getCategories() {
@@ -87,7 +97,69 @@ public class ProductApiController {
         return ResponseEntity.ok(productPageResponseDTO);
     }
 
+    @ResponseBody
+    @RequestMapping("/api/best-products")
+    public List<ProductRedisDTO> getBestProducts() {
+        return bestProductService.getBestProductOrderBySelling();
+        // Fetch best products from Redis cache or DB
+    }
 
 
+    @GetMapping(value = "/sse/best-products", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamBestProducts() {
+        SseEmitter emitter = new SseEmitter(0L); // Timeout을 무제한으로 설정
+        try {
+            emitter.send(SseEmitter.event()
+                    .name("best-products-event")
+                    .data(fetchBestProductsFromRedis())); // 예시 메서드로 실제 데이터 가져오기
+
+            emitter.onCompletion(() -> {
+                log.info("SSE connection completed");
+                emitter.complete();
+            });
+
+            emitter.onTimeout(() -> {
+                log.warn("SSE connection timed out");
+                emitter.complete();
+            });
+
+            emitter.onError((ex) -> {
+                log.error("Error in SSE connection", ex);
+                emitter.completeWithError(ex);
+            });
+
+        } catch (IOException e) {
+            log.error("Error sending SSE event", e);
+            emitter.completeWithError(e);
+        }
+        return emitter;
+    }
+
+//    @RequestMapping(value = "/sse/best-products", produces = "text/event-stream")
+//    @ResponseBody
+//    public Flux<ServerSentEvent<List<ProductRedisDTO>>> streamBestProducts() {
+//        return Flux.interval(Duration.ofSeconds(10))
+//                .map(sequence -> ServerSentEvent.<List<ProductRedisDTO>>builder()
+//                        .id(String.valueOf(sequence))
+//                        .event("best-products-event")
+//                        .data(fetchBestProductsFromRedis()) // 캐시에서 가져오되 null일 경우 기본값 설정
+//                        .build())
+//                .onErrorResume(e -> {
+//                    // 에러 발생 시 로그 남기기
+//                    System.err.println("Error fetching best products: " + e.getMessage());
+//                    // 빈 리스트를 전달하여 스트림 유지
+//                    return Flux.just(ServerSentEvent.<List<ProductRedisDTO>>builder()
+//                            .id("error-event")
+//                            .event("best-products-event")
+//                            .data(List.of()) // 에러 시 빈 리스트 전달
+//                            .build());
+//                });
+//    }
+
+    private List<ProductRedisDTO> fetchBestProductsFromRedis() {
+        List<ProductRedisDTO> bestProducts = bestProductService.getBestProductOrderBySelling();
+        // 캐시에서 데이터가 없을 경우 기본 값 설정 (빈 리스트 등)
+        return bestProducts != null ? bestProducts : List.of();
+    }
 
 }

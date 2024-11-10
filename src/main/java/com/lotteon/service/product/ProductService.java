@@ -26,6 +26,8 @@ import com.lotteon.repository.user.SellerRepository;
 import com.lotteon.service.FileService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.user.SellerService;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Query;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -35,6 +37,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +65,8 @@ public class ProductService {
     private final ProductCategoryRepository productCategoryRepository;
     private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
+
+    private final RedisTemplate<String , Object> redisTemplate;
 
     public void updatehit(Long productId){
        Optional<Product> opt =  productRepository.findByProductId(productId);
@@ -231,6 +236,26 @@ public class ProductService {
                 .total(productDTOs.size())
                 .ProductDTOs(productDTOs)
                 .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+    //헤더 상단 검색시 서비스
+    public ProductListPageResponseDTO SearchProductAll(PageRequestDTO pageRequestDTO,String query,String sort){
+        Pageable pageable = pageRequestDTO.getSortPageable(pageRequestDTO.getSize());
+        Page<Product> products;
+
+        if(sort.equals("reviewCount")){
+            products = productRepository.findAllByProductNameOrderByReviewCountDesc(query,pageable);
+        }else{
+            products= productRepository.findByProductNameContaining(query,pageable);
+        }
+
+        List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+
+        return  ProductListPageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .ProductDTOs(productDTOs)
+                .total(productDTOs.size())
                 .build();
     }
 
@@ -474,6 +499,7 @@ public class ProductService {
     }
 
 
+
     public List<ProductDTO> selectMainList(long categoryId,String sort){
         List<Product> products = new ArrayList<>();
         Pageable pageable = null;
@@ -561,6 +587,91 @@ public class ProductService {
     }
 
 
+
+    public ProductListPageResponseDTO getSearchProductBySort(PageRequestDTO pageRequestDTO){
+        String keyword = pageRequestDTO.getKeyword();
+        String sort = pageRequestDTO.getSort();
+        log.info("검색어!!!!!22222222"+keyword+sort);
+
+        Page<ProductSummaryDTO> tuples =  productRepository.getSearchByProductNameOrderBySort(pageRequestDTO,sort);
+
+        if(tuples.isEmpty()) {
+            log.info("여기는아니잖아");
+            return ProductListPageResponseDTO.builder()
+                    .productSummaryDTOs(tuples.getContent())
+                    .pageRequestDTO(pageRequestDTO)
+                    .total(0)
+                    .build();
+        }
+        try{
+            log.info("여기깢!!");
+
+            List<ProductSummaryDTO> productListWithReviews = tuples.getContent().stream()
+                    .map(product -> {
+                        int reviewCount = reviewRepository.countByProduct_ProductId(product.getProductId()); // 리뷰 갯수 조회
+                        product.setReviewCount(reviewCount); // 리뷰 갯수 설정
+                        return product;
+                    })
+                    .collect(Collectors.toList());
+
+            ProductListPageResponseDTO list=  ProductListPageResponseDTO.builder()
+                    .total((int) tuples.getTotalElements())
+                    .productSummaryDTOs(tuples.getContent())
+                    .pageRequestDTO(pageRequestDTO)
+                    .build();
+
+            log.info("List!!!!"+list);
+            return list;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    public ProductListPageResponseDTO getFilteredSearchProducts(PageRequestDTO pageRequestDTO,
+                                                                boolean searchByName, boolean searchByDescription, boolean searchByPrice, Integer minPrice, Long maxPrice) {
+        String sort = pageRequestDTO.getSort();
+        String searchMode = pageRequestDTO.getSearchMode();
+         QProduct qProduct= QProduct.product;
+        // 키워드 조건 생성
+        BooleanBuilder conditions = new BooleanBuilder();
+
+        String keyword = pageRequestDTO.getKeyword();
+        String query = pageRequestDTO.getKeyword();
+        String[] keywords = query.split("\\s+");
+
+
+        if (searchByName) {
+            conditions.or(qProduct.productName.containsIgnoreCase(keyword));
+        }
+        if (searchByDescription) {
+            conditions.or(qProduct.productDesc.containsIgnoreCase(keyword));
+        }
+        if (searchByPrice) {
+            conditions.or(qProduct.price.between(minPrice != null ? minPrice : 0, maxPrice != null ? maxPrice : Long.MAX_VALUE));
+        }
+
+        // 쿼리 생성
+        Page<ProductSummaryDTO> products = productRepository.searchWithConditions(pageRequestDTO, conditions,sort);
+
+
+//        return new ProductListPageResponseDTO(products.getContent(), pageRequestDTO, (int) products.getTotalElements());
+        return ProductListPageResponseDTO.builder()
+                .total(products.getTotalElements())
+                .productSummaryDTOs(products.getContent())
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+    }
+
+    public void updateBestProducts(List<ProductDTO> bestProducts) {
+
+
+
+        redisTemplate.opsForValue().set("bestProducts", bestProducts);
+    }
 
 
 

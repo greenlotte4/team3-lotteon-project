@@ -52,13 +52,17 @@ public class CouponIssuedService {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
     }
+    public boolean isCouponIssuedToMember(Long memberId, String couponId) {
+        // 쿠폰 발급 여부 확인 (회원이 해당 쿠폰을 발급받았는지)
+        return couponIssuedRepository.existsByMemberIdAndCouponId(memberId, couponId);
+    }
+
     public void useCoupon(String issuanceNumber){
+
         Optional<CouponIssued> couponIssuedOpt = couponIssuedRepository.findById(issuanceNumber);
 
         if(couponIssuedOpt.isPresent()){
             CouponIssued couponIssued = couponIssuedOpt.get();
-
-
             // 이미 사용된 쿠폰인지 체크 (중복 사용 방지)
             if ("사용됨".equals(couponIssued.getUsageStatus())) {
                 log.warn("이미 사용된 쿠폰입니다. 쿠폰번호: {}", issuanceNumber);
@@ -86,6 +90,11 @@ public class CouponIssuedService {
 
     public void insertCouponIssued(Member member, Coupon coupon, Product product) {
 
+       /* Optional<CouponIssued> existingCouponIssued = couponIssuedRepository.findByMemberAndCoupon(member, coupon);
+
+        if (existingCouponIssued.isPresent()) {
+            log.info("이미 발급된 쿠폰입니다. 발급을 중단합니다.");
+        }*/
         log.info("쿠폰 서비스까진 들어왓따");
         String couponName = coupon.getCouponName();
         if (product == null || coupon.getProduct() == null) {
@@ -103,15 +112,15 @@ public class CouponIssuedService {
                     .memberName(member.getName())
                     .sellerCompany(coupon.getSellerCompany())
                     .member(member)
-                    .productId(-1L) // "전체상품"을 나타내는 값
+                    .productId(null) // "전체상품"을 나타내는 값
                     .build();
-        log.info("널인 쿠폰 저장되는 값들" + couponIssued);
-        couponIssuedRepository.save(couponIssued); // 엔티티 저장
-        coupon.setIssuedCount(coupon.getIssuedCount() + 1);
-        couponRepository.save(coupon);
-    } else{
-            // 특정 상품에 대한 쿠폰 처리
-            CouponIssued couponIssued = CouponIssued.builder()
+            log.info("널인 쿠폰 저장되는 값들" + couponIssued);
+            couponIssuedRepository.save(couponIssued); // 엔티티 저장
+            coupon.setIssuedCount(coupon.getIssuedCount() + 1);
+            couponRepository.save(coupon);
+        } else{
+                // 특정 상품에 대한 쿠폰 처리
+                CouponIssued couponIssued = CouponIssued.builder()
                     .issuanceNumber(rendomIssuedId())
                     .couponId(coupon.getCouponId())
                     .couponName(coupon.getCouponName())
@@ -164,6 +173,7 @@ public class CouponIssuedService {
 
         return couponIssuedList;
     }
+
     // 페이징 기능 추가
     public Page<CouponIssued> selectIssuedCouponsPagination(CouponListRequestDTO request, String sellerCompany, Pageable pageable) {
 
@@ -189,7 +199,25 @@ public class CouponIssuedService {
         return couponPage.map(couponIssued -> modelMapper.map(couponIssued, CouponIssued.class));
     }
 
+    public boolean updateCouponStatus(String couponId, String usageStatus, String status) {
+        // 쿠폰을 찾기
+        Optional<CouponIssued> couponOptional = couponIssuedRepository.findById(couponId);
 
+        if (couponOptional.isPresent()) {
+            CouponIssued coupon = couponOptional.get();
+
+            // 사용 상태와 전체 상태 업데이트
+            coupon.setUsageStatus(usageStatus);
+            coupon.setStatus(status);
+
+            // 상태 변경 후 저장
+            couponIssuedRepository.save(coupon);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 

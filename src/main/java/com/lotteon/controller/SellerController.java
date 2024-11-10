@@ -184,13 +184,17 @@ public class SellerController {
     // admin order 조회
     @GetMapping("/order/status")
     public String orderStatus(Model model, com.lotteon.dto.page.PageRequestDTO pageRequestDTO) {
+
         AdminOrderPageResponseDTO adminOrderPageResponseDTO = adminOrderService.selectOrderListAll(pageRequestDTO);
-        log.info("우우우 야옹오오옹ㅇ : " + adminOrderPageResponseDTO);
+        log.info("aaaaaaaaaaaaaaaaaaa : " + adminOrderPageResponseDTO);
+        model.addAttribute(adminOrderPageResponseDTO);
 //        List<OrderDTO> orders = adminOrderService.selectOrdersAll();
 //          log.info("허웅우ㅜ우ㅜㅜ :" + orders);
 //        model.addAttribute("orders", orders);
         return "content/admin/order/admin_Order"; // Points to the "content/sellerDynamic" template for order status
     }
+
+
 
     @ResponseBody
     @GetMapping("/order/status/orderItem")

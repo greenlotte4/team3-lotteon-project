@@ -22,10 +22,19 @@ public class AdminOrderPageResponseDTO {
     private int start, end;
     private boolean prev, next;
 
+    private String type;
+    private String keyword;
+
     @Builder
     public AdminOrderPageResponseDTO(PageRequestDTO pageRequestDTO, List<AdminOrderDTO> adminorderdtoList, int total) {
         this.pg = pageRequestDTO.getPg();
         this.size = pageRequestDTO.getSize();
+        this.total = total;
+        this.adminorderdtoList = adminorderdtoList;
+
+        this.type = pageRequestDTO.getType();
+        this.keyword = pageRequestDTO.getKeyword();
+
         this.startNo = total - ((pg - 1) * size); //첫번째 글 번호
         this.end = (int) (Math.ceil(this.pg / 10.0))* 10; //마지막 페이지 번호
         this.start = this.end - 9; //첫번째 페이지 번호
@@ -35,6 +44,5 @@ public class AdminOrderPageResponseDTO {
         this.prev = this.start > 1; // 1보다 크면 이전버튼
         this.next = total > this.end * this.size; //마지막 페이지번호보다 글갯수가 더 클때 다음 버튼
 
-        this.adminorderdtoList = adminorderdtoList;
     }
 }

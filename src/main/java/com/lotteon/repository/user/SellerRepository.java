@@ -15,5 +15,8 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
 
     void deleteAllByIdIn(List<Long> sellerIds);
 
+
+
+
 }
 

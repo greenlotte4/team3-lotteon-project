@@ -74,18 +74,19 @@
 
                         <td><input type="checkbox" name="select"></td>
                         <td>
-                            <th:block th:if="${item.getProductOptionCombination() != null}">
-                                <input type="hidden" th:class="additionalPrice-Input" th:value="${item.getProductOptionCombination().getAdditionalPrice()}">
+                            <th:block th:if="${item.getOptionGroupId()>0 }">
+                                <input type="text" th:class="additionalPrice-Input" th:value="${item.getProductOptionCombination().getAdditionalPrice()}">
                                 <input type="hidden" th:class="combinationString" th:value="${item.getProductOptionCombination().getCombination()}">
                                 <input type="hidden" th:class="combinationId" th:value="${item.getProductOptionCombination().getCombinationId()}">
                             </th:block>
                             <div>
-                                <img th:src="${'uploads/productImg'+item.getImageUrl()}" alt="">
+                                <img th:src="${'/uploads/productImg/'+item.getImageUrl()}" th:alt="${item.getProduct().productName}">
                             </div>
                             <div>
+                                <a th:href="@{'/market/view/'+${item.product.categoryId}+'/'+${item.product.productId}}">
                                 <span th:text="${item.getProduct().productName}">상품명</span>
-                                <p class="product_option" th:if="${item.getOptionGroupId()>0}" th:text="${item.getOption().getOptionName()}">[ 옵션 ]</p>
-
+                                <p class="product_option" th:if="${item.productOptionCombination != null}" th:text="${item.getProductOptionCombination().combination}">[ 옵션 ] [[${item.productOptionCombination.combination}]]</p>
+                            </a>
                             </div>
                         </td>
                         <td>
@@ -108,7 +109,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="price" th:text="${item.getProduct().getPrice()}">판매가</td>
+                        <td class="price"  th:text="${item.getProduct().getOptionGroups().isEmpty()? item.getProduct().price : item.getProduct().price + item.getProductOptionCombination().getAdditionalPrice()}">판매가</td>
                         <td class="price" th:text="${item.discount}">할인</td>
                         <td class="price" th:text="${item.getPoints()}">포인트</td>
                         <td class="price" th:text="${item.getDeliveryFee()}">배송비</td>

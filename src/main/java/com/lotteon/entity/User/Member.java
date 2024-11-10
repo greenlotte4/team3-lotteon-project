@@ -3,15 +3,12 @@ package com.lotteon.entity.User;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lotteon.dto.User.Grade;
-import com.lotteon.dto.User.MemberDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +42,9 @@ public class Member {
     private String addr2;
 
     @Builder.Default
-    private BigDecimal point = BigDecimal.ZERO;  // 기본값 설정
+    private double point = 0.0;  // 기본값 설정
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Point> points = new ArrayList<>();
 
@@ -103,5 +100,10 @@ public class Member {
         deliveryList.add(delivery);
         delivery.setMember(this);  // 연관 관계 설정
     }
+
+    public void savePoint(double point) {
+        this.point += point;
+    }
+    public void usedPoint(double point){this.point-= point;}
 }
 

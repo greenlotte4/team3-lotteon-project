@@ -29,6 +29,7 @@ public class AdminOrderDTO {
     private String addr1;
     private String addr2;
     private String memberHp;
+    private String orderStatus;
 
 
     private List<OrderItemDTO> orderItems;

@@ -24,7 +24,15 @@
                      </section>
               
                 <article id="admin_order_main">
-                
+                    <div>
+                        <select id="ordersearch"  name="type">
+                            <option value="orderNumber">주문번호</option>
+                            <option value="orderUid">주문자</option>
+                            <option value="orderName">주문자명</option>
+                        </select>
+                        <input id="search" type="text" name="keyword" placeholder="검색어 입력">
+                        <button id="searchBtn" type="button">검색</button>
+                    </div>
                     <table class="admin_order_table">
                         <colgroup>
                             <col style="width: 14%">
@@ -38,15 +46,7 @@
                             <col style="width: 17%">
                             <col style="width: 9%">
                         </colgroup>
-                        <div>
-                        <select id="ordersearch" >
-                            <option value="">주문번호</option>
-                            <option value="">주문자</option>
-                            <option value="">주문자명</option>
-                        </select>
-                        <input id="search" type="text" placeholder="검색어 입력">
-                        <button id="serachbtn" type="button">검색</button>
-                        </div>
+                        <thead>
                         <tr>
                             <th>주문번호</th>
                             <th>주문자</th>
@@ -59,23 +59,37 @@
                             <th>주문일</th>
                             <th>배송</th>
                         </tr>
-                        <tr th:each="order : ${orders}">
+                        </thead>
+                        <tbody>
+                        <tr th:each="order, i:${adminOrderPageResponseDTO.getAdminorderdtoList()}">
                             <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>
                             <td th:text="${order.uid}">wlgus5946</td>
                             <td th:text="${order.memberName}">챱챱김</td>
-                            <td class="productname" th:data-order-id="${order.orderId}">초코틴틴</td>
+                            <td class="productname" th:text="${order.orderItems[0].product.productName + '(외)'}">초코틴틴</td>
                             <td th:text="${order.totalQuantity}">896</td>
                             <td th:text="${order.totalPrice}">9,000</td>
                             <td th:text="${order.pay}">신용카드</td>
-                            <td class="orderstatus">결제완료</td>
-                            <td>[[${#strings.substring(order.orderDate,0,10)}]]</td>
+                            <td class="orderstatus" th:text="${order.orderStatus}">결제완료</td>
+                            <td th:text="${#strings.substring(order.orderDate,0,10)}"></td>
                             <td><button class="openModalBtn">배송하기</button></td>
                         </tr>
+                        </tbody>
                     </table>
                 </article>
-                    <div class="list_button">
-                        <button>선택삭제</button>
-                        <button>상점등록</button>
+                    <!-- 페이지네이션 컨테이너 -->
+                    <div class="pagination">
+                        <th:block th:if="${adminOrderPageResponseDTO.prev}">
+                            <a th:href="@{/seller/order/status(pg=${adminOrderPageResponseDTO.start - 1})}" class="prev">이전</a>
+                        </th:block>
+
+                        <th:block th:each="num : ${#numbers.sequence(adminOrderPageResponseDTO.start, adminOrderPageResponseDTO.end)}">
+                            <a th:href="@{/seller/order/status(pg=${num})}"
+                               th:class="${num == adminOrderPageResponseDTO.pg} ? 'qnacurrent' : 'qnanum'">[[${num}]]</a>
+                        </th:block>
+
+                        <th:block th:if="${adminOrderPageResponseDTO.next}">
+                            <a th:href="@{/seller/order/status(pg=${adminOrderPageResponseDTO.end + 1})}" class="next">다음</a>
+                        </th:block>
                     </div>
 
             <div id="productModal" class="modal">
@@ -235,34 +249,35 @@
                         </div>
                     </section>
 <!--                    <script th:src="@{/js/delivery.js}"></script>-->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const orderitemId = document.querySelectorAll(".productname");
+<!--<script>-->
+<!--    // document.addEventListener("DOMContentLoaded", function() {-->
+<!--    //     const orderitemId = document.querySelectorAll(".productname");-->
+<!--    //-->
+<!--    //     orderitemId.forEach(orderItems => {-->
+<!--    //         const orderitem = orderItems.dataset.orderId;-->
+<!--    //         const orderstatuses = document.querySelectorAll(".orderstatus");-->
+<!--    //-->
+<!--    //         fetch(`/seller/order/status/orderItem?orderId=${orderitem}`)-->
+<!--    //             .then(resp => resp.json())-->
+<!--    //             .then(orderItemDTO => {-->
+<!--    //                 console.log("야...옹 :", orderItemDTO);-->
+<!--    //                 console.log("메멩ㅇ..옹..:" + orderItemDTO.product.productName);-->
+<!--    //                 orderItems.textContent = orderItemDTO.product.productName;-->
+<!--    //-->
+<!--    //-->
+<!--    //                 orderstatuses.forEach(orderstatus => {-->
+<!--    //                     orderstatus.textContent = orderItemDTO.status;-->
+<!--    //                 });-->
+<!--    //             })-->
+<!--    //             .catch(err => {-->
+<!--    //                 console.log(err);-->
+<!--    //             });-->
+<!--    //     })-->
+<!--    //-->
+<!--    // })-->
 
-        orderitemId.forEach(orderItems => {
-            const orderitem = orderItems.dataset.orderId;
-            const orderstatuses = document.querySelectorAll(".orderstatus");
+<!--</script>-->
 
-            fetch(`/seller/order/status/orderItem?orderId=${orderitem}`)
-                .then(resp => resp.json())
-                .then(orderItemDTO => {
-                    console.log("야...옹 :", orderItemDTO);
-                    console.log("메멩ㅇ..옹..:" + orderItemDTO.product.productName);
-                    orderItems.textContent = orderItemDTO.product.productName;
-
-
-                    orderstatuses.forEach(orderstatus => {
-                        orderstatus.textContent = orderItemDTO.status;
-                    });
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        })
-
-    })
-
-</script>
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
                             const modal = document.querySelector('.modal-section');
@@ -290,6 +305,45 @@
                                     closeModal();
                                 }
                             });
+
+
+
+
+                            document.getElementById('searchBtn').addEventListener('click', function (e) {
+                                e.preventDefault();
+                                const type = document.getElementById('ordersearch').value;
+                                const keyword = document.getElementById('search').value;
+
+                                // 콘솔에 type과 keyword 값 출력
+                                console.log('검색 기준 type:', type);
+                                console.log('검색어 keyword:', keyword);
+
+                                fetch(`/api/order/status/page?type=${type}&keyword=${keyword}`)
+                                    .then(resp => resp.json())
+                                    .then(adminOrderPageResponseDTO => {
+                                        console.log("야옹 : "+ adminOrderPageResponseDTO);
+                                        const ordertbody = document.querySelector('.admin_order_table tbody');
+                                        ordertbody.innerHTML = '';
+                                        adminOrderPageResponseDTO.adminorderdtoList.forEach(order => {
+                                            const row = `
+                                                <tr>
+                                                    <td><a class="order-modal-btn" href="#">${order.orderId}</a></td>
+                                                    <td>${order.uid}</td>
+                                                    <td>${order.memberName}</td>
+                                                    <td class="productname">${order.orderItems[0].product.productName} (외)</td>
+                                                    <td>${order.totalQuantity}</td>
+                                                    <td>${order.totalPrice}</td>
+                                                    <td>${order.pay}</td>
+                                                    <td class="orderstatus">${order.orderStatus}</td>
+                                                    <td>${order.orderDate.substring(0, 10)}</td>
+                                                    <td><button class="openModalBtn">배송하기</button></td>
+                                                </tr>`;
+                                            ordertbody.innerHTML += row;
+                                        });
+                                    })
+                                    .catch(err => console.log(err));
+                            });
+
                         });
                     </script>
 </th:block>

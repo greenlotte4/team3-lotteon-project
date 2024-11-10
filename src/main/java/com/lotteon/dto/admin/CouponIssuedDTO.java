@@ -3,7 +3,9 @@ package com.lotteon.dto.admin;
 import com.lotteon.entity.admin.CouponIssued;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -25,8 +27,14 @@ public class CouponIssuedDTO {
     private String status;
     private Long productId; // 등록된 상품 아이디
     private String restrictions;
-
+    private String benefit;
     private List<CouponDTO> couponDTO;
+    private String sellerCompany;
+    private String startDate; // 시작 날짜
+    private String endDate; // 종료 날짜
+
+
+
 
     public CouponIssuedDTO(CouponIssued couponIssued) {
         this.issuanceNumber = couponIssued.getIssuanceNumber();
@@ -40,6 +48,7 @@ public class CouponIssuedDTO {
         this.status = couponIssued.getStatus();
         this.productId = couponIssued.getProductId();
         this.restrictions = couponIssued.getRestrictions();
-
+        this.benefit = couponIssued.getBenefit();
+        this.sellerCompany = couponIssued.getSellerCompany();
     }
 }

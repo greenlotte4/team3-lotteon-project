@@ -146,9 +146,9 @@
                         <article class="product-list" th:if="${!responseDTO.getProductSummaryDTOs().isEmpty()}">
                             <div class="product-item" th:each="product:${responseDTO.getProductSummaryDTOs()}">
                                 <a th:href="@{/market/view/{category}/{id}(category=${product.getCategoryId()},id=${product.productId})}">
-                                <div class="product-image">
-                                    <img th:src="@{'/uploads/'+${product.getFile230()}}" alt="상품 이미지">
-                                </div>
+                                    <div class="product-image">
+                                        <img th:src="@{'/uploads/productImg/'+${product.getFile230()}}" alt="상품 이미지">
+                                    </div>
                                 <div class="product-details">
                                     <h4 class="product-name">[[${product.productName}]]</h4>
                                     <p class="product-description">[[${product.productDesc}]]</p>
@@ -185,5 +185,6 @@
 
 
 
+    <script th:src="@{/js/marketAside.js}"></script>
 
 </th:block>

@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +52,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> , Produc
     List<Product> findAllByOrderByRdateDesc(Pageable pageable);
     List<Product> findAllByOrderByProductRatingDesc(Pageable pageable);
 
+    @Query("SELECT p FROM Product p LEFT JOIN p.reviews r WHERE p.productName LIKE %:productName% GROUP BY p ORDER BY COUNT(r) DESC")
+    Page<Product> findAllByProductNameOrderByReviewCountDesc(@Param("productName") String productName, Pageable pageable);
+
+
+
     @Query("SELECT p FROM Product p JOIN ProductCategory c " +
             "WHERE c = :category OR " +
             "c.parent = :category OR " +
@@ -58,9 +64,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> , Produc
     List<Product> findAllProductsByCategoryOrParents(@Param("category") ProductCategory category);
 
 
+    @Transactional
     @Modifying
-    @Query("UPDATE Product p SET p.stock = :stock WHERE p.productId = :productId")
-    void updateProductQuantity(@Param("stock") long stock, @Param("productId") long productId);
+    @Query("UPDATE Product p SET p.stock = :stock , p.sold=:sold WHERE p.productId = :productId")
+    void updateProductQuantity(@Param("stock") long stock, @Param("productId") long productId,@Param("sold") long sold);
 
 //    @EntityGraph(attributePaths = {
 //            "productDetails",

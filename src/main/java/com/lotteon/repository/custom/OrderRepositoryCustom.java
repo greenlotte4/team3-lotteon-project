@@ -8,4 +8,5 @@ import org.springframework.data.domain.Pageable;
 public interface OrderRepositoryCustom {
 
     public Page<Tuple> selectOrderAllForList(PageRequestDTO pageRequestDTO, Pageable pageable);
+    public Page<Tuple> selectOrderSearchForList(PageRequestDTO pageRequestDTO, Pageable pageable);
 }

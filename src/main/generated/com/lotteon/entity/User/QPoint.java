@@ -22,7 +22,9 @@ public class QPoint extends EntityPathBase<Point> {
 
     public static final QPoint point = new QPoint("point");
 
-    public final NumberPath<Integer> amount = createNumber("amount", Integer.class);
+    public final NumberPath<Double> amount = createNumber("amount", Double.class);
+
+    public final BooleanPath confirm = createBoolean("confirm");
 
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
@@ -30,9 +32,17 @@ public class QPoint extends EntityPathBase<Point> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final DateTimePath<java.time.LocalDateTime> limitDate = createDateTime("limitDate", java.time.LocalDateTime.class);
+
     public final QMember member;
 
-    public final NumberPath<Integer> remainingPoints = createNumber("remainingPoints", Integer.class);
+    public final NumberPath<Long> orderId = createNumber("orderId", Long.class);
+
+    public final NumberPath<Long> orderItemId = createNumber("orderItemId", Long.class);
+
+    public final NumberPath<Double> remainingPoints = createNumber("remainingPoints", Double.class);
+
+    public final NumberPath<Double> usedPoint = createNumber("usedPoint", Double.class);
 
     public QPoint(String variable) {
         this(Point.class, forVariable(variable), INITS);

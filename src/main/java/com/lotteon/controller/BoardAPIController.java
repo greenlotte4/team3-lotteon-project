@@ -1,10 +1,13 @@
 package com.lotteon.controller;
 import com.lotteon.dto.BoardCateDTO;
 import com.lotteon.dto.adminQnaDTO;
+import com.lotteon.dto.page.AdminOrderPageResponseDTO;
 import com.lotteon.dto.page.FaqPageResponseDTO;
 import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
+import com.lotteon.service.AdminService;
 import com.lotteon.service.BoardService;
+import com.lotteon.service.admin.AdminOrderService;
 import com.lotteon.service.admin.FaqService;
 import com.lotteon.service.admin.QnaService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class BoardAPIController {
     private final QnaService qnaService;
     private final FaqService faqService;
     private final BoardService boardService;
+    private final AdminOrderService adminOrderService;
 
     @ResponseBody
     @GetMapping("/qna/list/page")
@@ -73,6 +77,19 @@ public class BoardAPIController {
     public List<BoardCateDTO> adminFaqOption(@PathVariable Long parentId){
         List<BoardCateDTO> boardsubCate = boardService.selectBoardSubCate(parentId);
         return boardsubCate;
+    }
+
+
+    @ResponseBody
+    @GetMapping("/order/status/page")
+    public ResponseEntity<?> orderStatusKeyword(@RequestParam(required = false) String type, @RequestParam(required = false) String keyword, com.lotteon.dto.page.PageRequestDTO pageRequestDTO){
+        log.info("ckckckckckck : " + type);
+        log.info("cjcjcjcjcjcjcj : " + keyword);
+        pageRequestDTO.setType(type);
+        pageRequestDTO.setKeyword(keyword);
+        AdminOrderPageResponseDTO adminOrderPageResponseDTO = adminOrderService.selectOrderListAll(pageRequestDTO);
+        log.info("qiqiqiqiqiqi: " + adminOrderPageResponseDTO);
+        return ResponseEntity.ok(adminOrderPageResponseDTO);
     }
 
 }

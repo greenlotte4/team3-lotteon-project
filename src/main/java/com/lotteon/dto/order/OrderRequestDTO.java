@@ -32,7 +32,7 @@ public class OrderRequestDTO {
   private String totalFinalPrice;           // Final total price of the order
   private String totalOriginalPrice;           // Final total price of the order
   private String credit;                    // Payment method
-  private int couponId;                     // ID of the coupon used
+  private String couponId;                     // ID of the coupon used
   private String shippingInfo;              // Shipping information or notes
   private String finalOrderPoint;
   private long point;   // totalpoint(적립예정금액)

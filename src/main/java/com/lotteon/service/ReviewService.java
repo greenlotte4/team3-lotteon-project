@@ -1,14 +1,17 @@
 package com.lotteon.service;
 
+import com.lotteon.dto.User.UserDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
+import com.lotteon.entity.User.User;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
 import com.lotteon.entity.product.ReviewFile;
 import com.lotteon.repository.ReviewRepository;
 import com.lotteon.repository.product.ProductRepository;
+import com.lotteon.repository.user.UserRepository;
 import groovy.util.logging.Log4j2;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +40,7 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final FileService fileService;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
     @PostConstruct
     public void init() {
@@ -55,22 +59,24 @@ public class ReviewService {
         Product product = productRepository.findById(productId).orElse(null);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
+        String currentUsername = authentication.getName(); // 현재 로그인된 사용자 이름
+
+        // 사용자 정보 가져오기
+        User currentUser = userRepository.findById(currentUsername).orElse(null);
 
 
-        if (product == null) {
-            return false; // Product가 없을 경우 저장 중단
+        if (product == null || currentUser == null) {
+            return false; // Product가 없거나 User가 없을 경우 저장 중단
         }
 
         Review review = new Review();
         review.setProduct(product);
         review.setRating(Double.parseDouble(reviewDTO.getRating())); // DTO에서 rating 가져오기
         review.setContent(reviewDTO.getContent()); // DTO에서 content 가져오기
-        review.setWriter(currentUsername);
+        review.setWriter(currentUser); // User 객체를 writer에 설정
         review.setRdate(LocalDateTime.now());
 
         // 파일 업로드 로직 호출
-        // fileService의 uploadReviewFiles 메서드 호출하여 파일 업로드
         ReviewRequestDTO uploadedReviewDTO = fileService.uploadReviewFiles(reviewDTO);
 
         // 업로드된 파일 정보를 Review 엔티티에 설정
@@ -87,9 +93,8 @@ public class ReviewService {
 
         return true;
     }
-
-    public List<Review> getRecentReviews() {
-        return reviewRepository.findTop3ByOrderByRdateDesc();
+    public List<Review> getRecentReviewsByUser(String uid) {
+        return reviewRepository. findTop3ByWriter_UidOrderByRdateDesc(uid);
     }
 
 
@@ -97,15 +102,19 @@ public class ReviewService {
         return reviewRepository.findAll(Sort.by(Sort.Direction.DESC, "rdate")); // 최신 순으로 정렬
     }
 
-    public PageResponseDTO<ReviewDTO> getAllReviewss(PageRequestDTO pageRequestDTO) {
-        Pageable pageable = pageRequestDTO.getPageable("no");
-        Page<Review> pageReview = reviewRepository.selectReviewAllForList(pageRequestDTO, pageable);
+    public PageResponseDTO<ReviewDTO> getReviewsByUser(PageRequestDTO pageRequestDTO, String uid) {
+        Pageable pageable = pageRequestDTO.getPageable("reviewId");
+
+        Page<Review> pageReview = reviewRepository.findByWriter_Uid(uid, pageable);
+        if (pageReview.getContent().isEmpty()) {
+            // 리뷰가 없다면 적절한 처리 (예: "리뷰 없음" 메시지)
+        }
 
         List<ReviewDTO> reviewList = pageReview.stream()
                 .map(review -> {
                     ReviewDTO reviewDTO = review.ToDTO(review); // DTO 변환
                     reviewDTO.setWriter(reviewDTO.getMaskedWriter()); // 마스킹된 아이디 설정
-                    return reviewDTO; // 마스킹된 아이디가 포함된 DTO 반환
+                    return reviewDTO;
                 })
                 .collect(Collectors.toList());
 

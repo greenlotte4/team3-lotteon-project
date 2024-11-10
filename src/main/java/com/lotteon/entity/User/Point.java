@@ -1,10 +1,7 @@
 package com.lotteon.entity.User;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "point")
 public class Point {
 
@@ -21,15 +19,27 @@ public class Point {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int amount; // 지급 포인트
-    private int remainingPoints; // 잔여 포인트
+    private double usedPoint; //사용포인트
+    private double amount; // 지급 포인트
+    private double remainingPoints; // 잔여 포인트
     private String description; // 지급 내용
+    private long orderItemId;
+    private boolean confirm; //
+    private long orderId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    private LocalDateTime limitDate;
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false) // member 테이블의 id와 조인
     private Member member; // Member와의 관계
+
+
+    @PostPersist
+    public void saveLImitDate(){
+
+        limitDate = LocalDateTime.now().plusYears(1);
+    }
 
 }

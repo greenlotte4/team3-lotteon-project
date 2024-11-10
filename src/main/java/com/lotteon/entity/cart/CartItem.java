@@ -70,10 +70,30 @@ public class CartItem {
     private int discount;
     private long deliveryFee;
     private String imageUrl;
+    private long calcShippingCost;
+
 
 
     public void totalPrice(){
-        long discountAmount = (price * discount) / 100;
-        this.totalPrice = (price - discountAmount) * quantity + deliveryFee;
+        long shippingTerms = product.getShippingTerms();
+        this.calcShippingCost = product.getShippingFee();
+
+
+        if(optionGroupId != 0){
+            long additional = productOptionCombination.getAdditionalPrice();
+            this.price = this.price + additional;
+            long discountAmount = ((this.price*discount/100)/10)*10;  //10원단위 절삭
+            this.totalPrice = (this.price + discountAmount)*quantity;
+        }else{
+            long discountAmount = ((price * discount/ 100)/10)*10 ;
+            this.totalPrice = (price - discountAmount) * quantity;
+        }
+
+        if(shippingTerms < totalPrice){
+            this.totalPrice = this.price + product.getShippingFee();
+            this.calcShippingCost=0;
+        }
+
+
     }
 }

@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // const header = document.querySelector('.category.on');
 
 
-
     // 재귀적으로 카테고리 계층 구조를 DOM에 추가하는 함수
     function buildCategoryTree(container, categories) {
         categories.forEach(category => {
@@ -24,21 +23,117 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
-
     document.addEventListener('click', function (event) {
         if (event.target.tagName === 'LI' && event.target.querySelector('ul')) {
             event.target.classList.toggle('expanded');
         }
     });
 
+    const searchInput = document.getElementById('headerSearchId');
+    searchInput.addEventListener('keyup', function (event) {
+        if (event.key === 'Enter') { // Enter 키 확인
+            performSearch();
+        }
+    });
+
+
+
 });
 
+function performSearch() {
+    const query = document.getElementById('headerSearchId').value;
+    if (query) {
+        window.location.href =`/market/search?query=${encodeURIComponent(query)}`
+            // Fetch product list via AJAX
+        // fetch(`/market/search?query=${encodeURIComponent(query)}`)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         updateProductList(data.products); // assuming `products` is the list in `ProductListPageResponseDTO`
+        //     })
+        //     .catch(error => console.error('Error:', error));
+    } else {
+        alert('검색어를 입력하세요');
+    }
+}
 
+
+// function updateProductList(products, query, totalCount) {
+//     const productList = document.getElementById('productList');
+//     productList.innerHTML = ''; // Clear existing content
+//
+//     // Update keyword and total count
+//     document.getElementById('searchKeyword').textContent = query;
+//     document.getElementById('totalResults').textContent = totalCount;
+//
+//     products.forEach(product => {
+//         const productItem = document.createElement('div');
+//         productItem.className = 'product-item';
+//
+//         productItem.innerHTML = `
+//             <div class="product-image">
+//                 <img src="/path/to/image.jpg" alt="상품 이미지">
+//             </div>
+//             <div class="product-details">
+//                 <h4 class="product-name">${product.productName}</h4>
+//                 <p class="product-description">${product.description}</p>
+//             </div>
+//             <div class="price-seller-info">
+//                 <div class="product-price">
+//                     <span class="final-price">${product.price}원</span>
+//                 </div>
+//             </div>
+//         `;
+//
+//         productList.appendChild(productItem);
+//     });
+// }
+
+
+// function updateProductList(productDTOs, query, total) {
+//     const productList = document.getElementById('productList');
+//     productList.innerHTML = ''; // Clear existing content
+//
+//     // Update the keyword and total count
+//     document.getElementById('searchKeyword').textContent = query;
+//     document.getElementById('totalResults').textContent = total;
+//
+//     // Iterate over the productDTOs and create product items
+//     productDTOs.forEach(product => {
+//         const productItem = document.createElement('div');
+//         productItem.className = 'product-item';
+//
+//         productItem.innerHTML = `
+//             <div class="product-image">
+//                 <img src="/uploads/${product.file190}" alt="상품 이미지">
+//             </div>
+//             <div class="product-details">
+//                 <h4 class="product-name">${product.productName}</h4>
+//                 <p class="product-description">${product.productDesc}</p>
+//             </div>
+//             <div class="price-seller-info">
+//                 <div class="product-price">
+//                     <span class="final-price">${product.price.toLocaleString()}원</span>
+//                     <span class="original-price">${(product.price / (1 - product.discount / 100)).toLocaleString()}원</span>
+//                     <span class="discount">${product.discount}% ↓</span>
+//                 </div>
+//                 <div class="shipping-info">
+//                     <span class="shipping-label">${product.shippingFee === 0 ? '무료배송' : `${product.shippingFee.toLocaleString()}원`}</span>
+//                 </div>
+//             </div>
+//             <div class="product-seller">
+//                 <span class="seller-name">${product.sellerId}</span>
+//                 <span class="seller-rating">고객만족우수</span>
+//                 <span class="seller-rank">⭐⭐⭐⭐⭐</span>
+//             </div>
+//         `;
+//
+//         productList.appendChild(productItem);
+//     });
+// }
 // 하위 메뉴 보이기 함수
 function showSubmenu(element) {
     const submenu = element.querySelector('ul');
-    console.log('submenu : '+submenu);
+    console.log('submenu : ' + submenu);
     if (submenu) {
         submenu.style.display = 'block';
         adjustHeightAndPosition();

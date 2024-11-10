@@ -38,7 +38,7 @@ public class OrderDTO {
     private String pay;
     //쿠폰 사용유무
     private boolean isCoupon;
-    private long couponId;
+    private String couponId;
     private long couponDiscount;
     private SellerDTO seller;
     private List<OrderItemDTO> orderItems;

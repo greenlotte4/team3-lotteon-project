@@ -42,8 +42,14 @@ public class OrderItem {
     private long combinationId; //
     private long stock;
     private long price;
-    private String traceNumber;  // 배송넘버
+
+    @Builder.Default
+    private String traceNumber="";  // 배송넘버
     private long shippingFees;
+
+    private String customerId;  //  구매자
+    private String customerName; //구매자이름
+
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
