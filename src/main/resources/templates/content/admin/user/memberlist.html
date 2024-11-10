@@ -10,13 +10,21 @@
     <link rel="stylesheet" th:href="@{/css/memberlist.css}">
     <link rel="stylesheet" th:href="@{/css/memberlistmodal.css}">
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script th:src="@{/js/validation.js}"></script>
+    <!--    <script th:src="@{/js/validation.js}"></script>-->
     <script th:src="@{/js/postcode.js}"></script>
     <script th:src="@{/js/memberlistmodal.js}"></script>
     <!--        <script th:src="@{/js/util.js}"></script>-->
     <script th:src="@{/js/memberList.js}"></script>
     <script th:src="@{/js/confirmGradeChange.js}"></script>
     <script th:src="@{/js/confirmStatusChange.js}"></script>
+    <script>
+        // DOMContentLoaded를 사용하여 DOM이 완전히 로드된 후에 함수 설정
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById('btnPostCode').onclick = function () {
+                postcode(); // postcode 함수 호출
+            };
+        });
+    </script>
 
 
 </head>
@@ -99,13 +107,19 @@
                             <td th:text="${member.hp}"></td>       <!-- 휴대폰 -->
                             <td th:text="${member.regDate}"></td> <!-- r -->
                             <!--                            <td th:text="${member.regDate != null ? #dates.format(member.regDate, 'yyyy-MM-dd') : ''}"></td>-->
-                            <td th:text="${member.statusDisplayName}"></td> <!-- 상태 이름 출력 -->
+                            <td th:text="${member.statusDisplayName}"
+                                th:class="${ member.status.name() == 'ACTIVE' ? 'active' :
+                                            (member.status.name() == 'SUSPENDED' ? 'suspended' :
+                                            (member.status.name() == 'DORMANT' ? 'dormant' :
+                                            (member.status.name() == 'WITHDRAWN' ? 'withdrawn' : '')))}">
+                            </td> <!-- 상태 이름 출력 -->
                             <td>
                                 <a href="#" class="openModalBtn2" th:data-id="${member.user.uid}">
                                     [수정]
                                 </a><br>
 
-                                <select id="memberStatus" th:value="${member.statusDisplayName}" onchange="confirmStatusChange(this)">
+                                <select id="memberStatus" th:value="${member.statusDisplayName}"
+                                        onchange="confirmStatusChange(this)">
                                     <option value="ACTIVE" th:selected="${member.status.name() == 'ACTIVE'}">정상</option>
                                     <option value="SUSPENDED" th:selected="${member.status.name() == 'SUSPENDED'}">중지
                                     </option>
@@ -190,16 +204,16 @@
                             </td>
                         </tr>
                         <tr>
-                            <th><label for="Joindate" id="Joindate">가입일</label></th>
-                            <td><span>0000-00-00 00:00:00</span><br></td>
+                            <th><label for="Joindate">회원가입일</label></th>
+                            <td>
+                                <input type="text" id="Joindate" name="regDate" readonly>
+                            </td>
                         </tr>
                         <tr>
-                            <th><label for="Lastlogindate" id="Lastlogindate">최근로그인날짜</label></th>
-                            <td><span>0000-00-00 00:00:00</span><br></td>
-                        </tr>
-                        <tr>
-                            <th><label for="etc">기타</label></th>
-                            <td><textarea name="etc" id="etc"></textarea><br></td>
+                            <th><label for="Lastlogindate">최근 로그인날짜</label></th>
+                            <td>
+                                <input type="text" id="Lastlogindate" name="lastDate" readonly>
+                            </td>
                         </tr>
                     </table>
                     <button type="submit">수정하기</button>
@@ -209,11 +223,4 @@
         </div>
 
 </th:block>
-<script>
-    // DOMContentLoaded를 사용하여 DOM이 완전히 로드된 후에 함수 설정
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById('btnPostCode').onclick = function () {
-            postcode(); // postcode 함수 호출
-        };
-    });
-</script>
+

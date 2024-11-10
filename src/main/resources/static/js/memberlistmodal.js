@@ -47,31 +47,29 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     return response.json();
                 })
+                // AJAX로 데이터를 받아와서 입력 필드에 값 할당
                 .then(data => {
-                    // 모달에 사용자 정보 채우기
-                    console.log(data); // 데이터가 잘 받아졌는지 확인
-                    uidInputDisplay.value = data.uid || ''; // 기본값으로 빈 문자열 설정
-                    uidInput.value = data.uid|| ''; // 기본값으로 빈 문자열 설정
-                    console.log(uidInput.value);
-                    nameInput.value = data.name || ''; // 기본값으로 빈 문자열 설정
-                    console.log(nameInput.value);
-                    emailInput.value = data.email || ''; // 기본값으로 빈 문자열 설정
-                    hpInput.value = data.hp || ''; // 기본값으로 빈 문자열 설정
-                    gradeInput.value = data.grade || '';
-                    zipcodeInput.value = data.postcode || ''; // 기본값으로 빈 문자열 설정
-                    address1Input.value = data.addr || ''; // 기본값으로 빈 문자열 설정
-                    address2Input.value = data.addr2 || ''; // 기본값으로 빈 문자열 설정
-                    regdateInput.value = data.regDate || '';
-                    lastdateInput.value = data.lastDate || '';
+                    console.log(data); // 데이터를 확인
+                    uidInputDisplay.value = data.uid || ''; // 아이디
+                    uidInput.value = data.uid || ''; // 아이디
+                    nameInput.value = data.name || ''; // 이름
+                    emailInput.value = data.email || ''; // 이메일
+                    hpInput.value = data.hp || ''; // 전화번호
+                    gradeInput.value = data.grade || ''; // 등급
+                    zipcodeInput.value = data.postcode || ''; // 우편번호
+                    address1Input.value = data.addr || ''; // 기본 주소
+                    address2Input.value = data.addr2 || ''; // 상세 주소
+                    regdateInput.value = data.regDate || ''; // 가입일 (수정된 부분)
+                    lastdateInput.value = data.lastDate || ''; // 최근 로그인 날짜 (수정된 부분)
 
-                    // 성별 체크박스 처리
+                    // 성별 선택
                     genderInputs.forEach(genderInput => {
                         genderInput.checked = (genderInput.value === data.gender);
-
                     });
 
-                    modal.style.display = "block"; // 모달 표시
+                    modal.style.display = "block"; // 모달 열기
                 })
+
                 .catch(error => console.error("Error fetching user data:", error));
         });
     });
