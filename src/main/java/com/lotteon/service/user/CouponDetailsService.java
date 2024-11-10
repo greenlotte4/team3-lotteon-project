@@ -63,4 +63,19 @@ public class CouponDetailsService {
         log.info("불러온 상품 리스트: " + products);
         return validCoupons;
     }
+
+    public List<CouponIssued> couponIssuedList(String uid) {
+
+        Optional<Member> memberOpt = memberRepository.findByUid(uid);
+
+        if (memberOpt.isEmpty()) {
+            throw new RuntimeException("Member not found for uid: " + uid);
+        }
+        Member member = memberOpt.get();
+
+        return couponIssuedRepository.findByMemberId(member.getId());
+    }
+
+
+
 }

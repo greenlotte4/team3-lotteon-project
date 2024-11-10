@@ -200,9 +200,9 @@ public class CouponIssuedService {
         return couponPage.map(couponIssued -> modelMapper.map(couponIssued, CouponIssued.class));
     }
 
-    public boolean updateCouponStatus(String couponId, String usageStatus, String status) {
+    public boolean updateCouponStatus(String issuanceNumber, String usageStatus, String status) {
         // 쿠폰을 찾기
-        Optional<CouponIssued> couponOptional = couponIssuedRepository.findById(couponId);
+        Optional<CouponIssued> couponOptional = couponIssuedRepository.findById(issuanceNumber);
 
         if (couponOptional.isPresent()) {
             CouponIssued coupon = couponOptional.get();
@@ -213,9 +213,11 @@ public class CouponIssuedService {
 
             // 상태 변경 후 저장
             couponIssuedRepository.save(coupon);
+            log.info("쿠폰 상태 업데이트 성공 - 발급번호: {},  사용 상태: {}, 전체 상태: {}", issuanceNumber, usageStatus, status);
 
             return true;
         } else {
+            log.warn("쿠폰을 찾을 수 없거나", issuanceNumber);
             return false;
         }
     }

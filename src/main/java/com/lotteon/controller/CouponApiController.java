@@ -10,6 +10,7 @@ import com.lotteon.entity.product.Product;
 import com.lotteon.repository.admin.CouponIssuedRepository;
 import com.lotteon.repository.admin.CouponRepository;
 import com.lotteon.repository.user.MemberRepository;
+import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.CouponService;
 import com.lotteon.service.product.ProductCategoryService;
@@ -81,12 +82,19 @@ public class CouponApiController {
     public ResponseEntity<Boolean> checkCouponIssued(@PathVariable String couponId, Authentication authentication) {
        log.info("쿠폰 발급 여부 확인");
         try {
-            Long memberId = ((Member) authentication.getPrincipal()).getId();  // 로그인된 사용자 ID
-            boolean isIssued = couponIssuedRepository.existsByMemberIdAndCouponId(memberId, couponId);
+            // 현재 로그인된 사용자의 정보
+            String memberUid = authentication.getName(); //
+
+            List<CouponIssued> issuedCoupons = couponDetailsService.couponIssuedList(memberUid);
+
+            // 발급된 쿠폰 리스트에서 couponId가 있는지 확인
+            boolean isIssued = issuedCoupons.stream()
+                    .anyMatch(coupon -> coupon.getCouponId().equals(couponId));
+
+            log.info("발급현황"+ isIssued);
             return ResponseEntity.ok(isIssued);
-        } catch (ClassCastException e) {
-            log.error("예상된 사용자 타입이 아님: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(false);
+
+
         } catch (Exception e) {
             log.error("예외 발생: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
@@ -188,7 +196,7 @@ public class CouponApiController {
         log.info("주문 후 쿠폰 변경 요청 들어옴");
 
         boolean result = couponIssuedService.updateCouponStatus(
-                request.getIssuanceCouponId(),
+                request.getIssuedNumber(),
                 request.getUsageStatus(),
                 request.getStatus()
         );
