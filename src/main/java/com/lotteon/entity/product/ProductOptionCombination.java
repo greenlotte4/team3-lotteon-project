@@ -31,6 +31,10 @@ public class ProductOptionCombination {
     @JsonIgnore
     private Product product;
 
+    // Soft delete 플래그 추가
+    @Builder.Default
+    private boolean isDeleted = false;
+
 
     public ProductOptionCombinationDTO toDTO() {
         System.out.println("여기바로 그지점");

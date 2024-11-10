@@ -24,6 +24,8 @@ public class QOptionGroup extends EntityPathBase<OptionGroup> {
 
     public final StringPath groupName = createString("groupName");
 
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
+
     public final BooleanPath isRequired = createBoolean("isRequired");
 
     public final StringPath name = createString("name");

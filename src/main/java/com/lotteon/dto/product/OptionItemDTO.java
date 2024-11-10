@@ -15,6 +15,7 @@ public class OptionItemDTO {
     private String optionName;   // 예: 빨강 파랑 과 연결
     private Long additionalPrice;   //추가금액
     private String itemName;
+    private boolean isDeleted;
 
     //추가필드
     private  String combinationString;
