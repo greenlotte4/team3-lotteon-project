@@ -154,16 +154,32 @@ label {
 }
 
 
-#uid, #change-password-btn, #name, #birth, #email-id, #email-domain, #phone-part1,#phone-part2,#phone-part3,#zipcode, #btnZip, #address1 ,#address2, #cancel{
+#uid, #name, #birth, #email-id, #email-domain, #phone-part1,#phone-part2,#phone-part3,#zipcode, #btnZip, #address1 ,#address2, #cancel{
 
     position: relative;
     margin: 0 5px;
 }
 
-#change-password-btn{
-    width: 119px;
+#change-password-btn {
+    display: contents; /* td와 같은 레벨로 배치되도록 */
+    width: 100px;
     height: 30px;
+    line-height: 30px; /* 텍스트 수직 중앙 정렬 */
+    background-color: #007bff; /* 파란색 배경 */
+    color: white; /* 흰색 텍스트 */
+    text-decoration: none; /* 링크 스타일 제거 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 14px; /* 텍스트 크기 */
+    font-weight: 500; /* 글씨 두께 */
+    cursor: pointer; /* 클릭할 수 있도록 */
+    transition: background-color 0.3s ease; /* 호버 시 배경 색상 변화 */
 }
+
+#change-password-btn:hover {
+    background-color: #0056b3; /* 호버 시 배경 색상 변경 */
+}
+
 #edit-email-btn , #save-email-btn, #edit-phone-btn, #save-phone-btn, .btnZip, #cancel{
     width: 85px;
     height: 30px;

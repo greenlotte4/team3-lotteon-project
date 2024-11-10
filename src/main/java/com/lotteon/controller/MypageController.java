@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.User.UserDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
@@ -45,8 +46,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -148,6 +148,39 @@ public class MypageController {
 
         return "content/user/mysettings"; // Points to "content/user/mysettings"
     }
+
+    @PostMapping("/mysettings/update")
+    public ResponseEntity<Map<String, String>> updateMember(
+            @RequestBody MemberDTO memberData) {
+
+        Optional<Member> existingMemberOpt = memberService.findByUserId(memberData.getUid());
+
+        if (existingMemberOpt.isPresent()) {
+            Member existingMember = existingMemberOpt.get();
+
+            // 업데이트된 값을 기존 Member 객체에 반영
+            existingMember.setName(memberData.getName());
+            existingMember.setEmail(memberData.getEmail());
+            existingMember.setHp(memberData.getHp());
+            existingMember.setPostcode(memberData.getPostcode());
+            existingMember.setAddr(memberData.getAddr());
+            existingMember.setAddr2(memberData.getAddr2());
+
+            // 업데이트 메서드 호출
+            memberService.updateMember(existingMember.getId(), existingMember);
+
+            // 성공 메시지 반환
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "회원 정보가 성공적으로 업데이트되었습니다.");
+            return ResponseEntity.ok(response);
+        } else {
+            // 사용자가 존재하지 않는 경우
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+
 
     @GetMapping("/orderdetails")
     public String orderDetails(Model model) {
