@@ -12,6 +12,12 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script th:src="@{/js/validation.js}"></script>
     <script th:src="@{/js/postcode.js}"></script>
+    <script th:src="@{/js/memberlistmodal.js}"></script>
+    <!--        <script th:src="@{/js/util.js}"></script>-->
+    <script th:src="@{/js/memberList.js}"></script>
+    <script th:src="@{/js/confirmGradeChange.js}"></script>
+    <script th:src="@{/js/confirmStatusChange.js}"></script>
+
 
 </head>
 <body>
@@ -77,30 +83,36 @@
                             <td th:text="${member.gender}"></td>    <!-- 성별 -->
                             <td>
                                 <select id="grade" th:value="${member.grade}" onchange="confirmGradeChange(this)">
-                                    <option value="VVIP" th:selected="${member.grade == 'T(com.lotteon.dto.User.Grade).VVIP'}">VVIP</option>
-                                    <option value="VIP" th:selected="${member.grade == 'T(com.lotteon.dto.User.Grade).VIP'}">VIP</option>
-                                    <option value="GOLD" th:selected="${member.grade == 'T(com.lotteon.dto.User.Grade).GOLD'}">GOLD</option>
-                                    <option value="SILVER" th:selected="${member.grade == 'T(com.lotteon.dto.User.Grade).SILVER'}">SILVER</option>
-                                    <option value="FAMILY" th:selected="${member.grade == 'T(com.lotteon.dto.User.Grade).FAMILY'}">FAMILY</option>
+                                    <option value="VVIP" th:selected="${member.grade.name() == 'VVIP'}">VVIP</option>
+                                    <option value="VIP" th:selected="${member.grade.name() == 'VIP'}">VIP</option>
+                                    <option value="GOLD" th:selected="${member.grade.name() == 'GOLD'}">GOLD</option>
+                                    <option value="SILVER" th:selected="${member.grade.name() == 'SILVER'}">SILVER
+                                    </option>
+                                    <option value="FAMILY" th:selected="${member.grade.name() == 'FAMILY'}">FAMILY
+                                    </option>
                                 </select>
                                 <input type="hidden" value="${member.user.uid}" class="member-uid">
                             </td>
                             <td th:text="${member.point}"></td>    <!-- 포인트 -->
+                            <!--                            <td th:text="${member.point == 0.0 ? '0' : #numbers.formatDecimal(member.point, 0, 'COMMA')}"></td>-->
                             <td th:text="${member.email}"></td>    <!-- 이메일 -->
                             <td th:text="${member.hp}"></td>       <!-- 휴대폰 -->
                             <td th:text="${member.regDate}"></td> <!-- r -->
-
-                            <td th:text="${member.status}"></td>
+                            <!--                            <td th:text="${member.regDate != null ? #dates.format(member.regDate, 'yyyy-MM-dd') : ''}"></td>-->
+                            <td th:text="${member.statusDisplayName}"></td> <!-- 상태 이름 출력 -->
                             <td>
                                 <a href="#" class="openModalBtn2" th:data-id="${member.user.uid}">
                                     [수정]
                                 </a><br>
 
-                                <select id="memberStatus" onchange="confirmStatusChange(this)">
-                                    <option value="ACTIVE" th:selected="${member.status == 'ACTIVE'}">정상</option>
-                                    <option value="SUSPENDED" th:selected="${member.status == 'SUSPENDED'}">중지</option>
-                                    <option value="DORMANT" th:selected="${member.status == 'DORMANT'}">휴면</option>
-                                    <option value="WITHDRAWN" th:selected="${member.status == 'WITHDRAWN'}">탈퇴</option>
+                                <select id="memberStatus" th:value="${member.statusDisplayName}" onchange="confirmStatusChange(this)">
+                                    <option value="ACTIVE" th:selected="${member.status.name() == 'ACTIVE'}">정상</option>
+                                    <option value="SUSPENDED" th:selected="${member.status.name() == 'SUSPENDED'}">중지
+                                    </option>
+                                    <option value="DORMANT" th:selected="${member.status.name() == 'DORMANT'}">휴면
+                                    </option>
+                                    <option value="WITHDRAWN" th:selected="${member.status.name() == 'WITHDRAWN'}">탈퇴
+                                    </option>
                                 </select>
                             </td>
                         </tr>
@@ -197,10 +209,6 @@
         </div>
 
 </th:block>
-
-<script th:src="@{/js/memberlistmodal.js}"></script>
-<!--        <script th:src="@{/js/util.js}"></script>-->
-
 <script>
     // DOMContentLoaded를 사용하여 DOM이 완전히 로드된 후에 함수 설정
     document.addEventListener("DOMContentLoaded", function () {
@@ -209,82 +217,3 @@
         };
     });
 </script>
-
-<script>
-    function confirmGradeChange(selectElement) {
-        const selectedGrade = selectElement.value; // 선택된 등급
-        const row = selectElement.closest('tr'); // select 요소가 속한 tr 찾기
-        const memberUid = row.cells[2].innerText; // 세 번째 td에서 UID 가져오기
-
-        const confirmChange = confirm(`해당 등급으로 변경하시겠습니까? (${selectedGrade})`);
-        if (confirmChange) {
-            const updatedData = {
-                uid: memberUid, // uid를 포함
-                grade: selectedGrade // 새 등급
-            };
-
-            console.log("updatedData:", updatedData); // updatedData 값 확인
-
-            fetch('/admin/user/member/updateGrade', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedData)
-            })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('네트워크 응답이 좋지 않습니다.');
-                    }
-                })
-                .then(data => {
-                    console.log(data.message); // 성공 메시지 출력
-                })
-                .catch(error => {
-                    console.error('업데이트 오류:', error);
-                });
-        }
-    }
-</script>
-
-<script>
-    function confirmStatusChange(selectElement) {
-        const selectedStatus = selectElement.value; // 선택된 등급
-        const row = selectElement.closest('tr'); // select 요소가 속한 tr 찾기
-        const memberUid = row.cells[2].innerText; // 세 번째 td에서 UID 가져오기
-
-        const confirmChange = confirm(`해당 상태로 변경하시겠습니까? (${selectedStatus})`);
-        if (confirmChange) {
-            const updatedData = {
-                uid: memberUid, // uid를 포함
-                status: selectedStatus // 새 등급
-            };
-
-            console.log("updatedData:", updatedData); // updatedData 값 확인
-
-            fetch('/admin/user/member/updateStatus', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedData)
-            })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('네트워크 응답이 좋지 않습니다.');
-                    }
-                })
-                .then(data => {
-                    console.log(data.message); // 성공 메시지 출력
-                })
-                .catch(error => {
-                    console.error('업데이트 오류:', error);
-                });
-        }
-    }
-</script>
-<script th:src="@{/js/memberList.js}"></script>

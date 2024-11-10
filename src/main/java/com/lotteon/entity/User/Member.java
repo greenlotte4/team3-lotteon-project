@@ -64,23 +64,6 @@ public class Member {
     @Builder.Default
     private MemberStatus status = MemberStatus.ACTIVE;  // 기본값 설정
 
-    public enum MemberStatus {
-        ACTIVE("정상"),
-        SUSPENDED("중지"),
-        DORMANT("휴면"),
-        WITHDRAWN("탈퇴");
-
-        private final String displayName;
-
-        MemberStatus(String displayName) {
-            this.displayName = displayName;
-        }
-
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_uid") // 외래 키
     @JsonBackReference
@@ -105,5 +88,9 @@ public class Member {
         this.point += point;
     }
     public void usedPoint(double point){this.point-= point;}
+
+    public String getStatusDisplayName() {
+        return status != null ? status.getDisplayName() : null;
+    }
 }
 
