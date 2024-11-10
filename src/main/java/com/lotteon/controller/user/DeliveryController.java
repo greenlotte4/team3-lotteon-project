@@ -80,4 +80,22 @@ public class DeliveryController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/delivery/{deliveryId}/update")
+    public ResponseEntity<Delivery> updateDelivery(
+            @PathVariable Long memberId,
+            @PathVariable Long deliveryId,
+            @RequestBody Delivery deliveryData) {
+
+        // 배송지 수정 처리
+        Delivery updatedDelivery = deliveryService.updateDelivery(memberId, deliveryId, deliveryData);
+
+        System.out.println("Updated Delivery: " + updatedDelivery);
+
+        if (updatedDelivery == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.ok(updatedDelivery);  // 수정된 배송지 정보 반환
+    }
 }
