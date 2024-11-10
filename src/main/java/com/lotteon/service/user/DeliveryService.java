@@ -72,6 +72,7 @@ public class DeliveryService {
         // Delivery 엔티티 리스트를 DeliveryDTO 리스트로 변환
         return deliveries.stream()
                 .map(delivery -> DeliveryDTO.builder()
+                        .id(delivery.getId())
                         .name(delivery.getName())
                         .hp(delivery.getHp())
                         .postcode(delivery.getPostcode())
@@ -92,6 +93,26 @@ public class DeliveryService {
         } else {
             return false; // 배송지 없으면 삭제 실패
         }
+    }
+
+    // memberId와 deliveryId에 해당하는 배송 정보를 DeliveryDTO로 반환
+    public DeliveryDTO getDeliveryById(Long memberId, Long deliveryId) {
+        // Delivery 엔티티에서 memberId와 deliveryId로 특정 배송지 정보 조회
+        Delivery delivery = (Delivery) deliveryRepository.findByIdAndMemberId(deliveryId, memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 배송지 정보를 찾을 수 없습니다."));
+
+        // Delivery 엔티티를 DeliveryDTO로 변환하여 반환
+        return DeliveryDTO.builder()
+                .id(delivery.getId())
+                .name(delivery.getName())
+                .hp(delivery.getHp())
+                .postcode(delivery.getPostcode())
+                .addr(delivery.getAddr())
+                .addr2(delivery.getAddr2())
+                .isDefault(delivery.isDefault())
+                .deliveryMessage(delivery.getDeliveryMessage())
+                .entranceCode(delivery.getEntranceCode())
+                .build();
     }
 
 //    public void setDefaultAddressForMember(String uid, Member member) {

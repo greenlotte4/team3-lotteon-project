@@ -56,6 +56,13 @@ function renderAddressList(deliveryDTOList) {
         deleteButton.textContent = '삭제';
         addressBtnDiv.appendChild(deleteButton);
 
+        const closeModalButton = document.querySelector("#closeUpdateModalButton");
+        if (closeModalButton) {
+            closeModalButton.addEventListener("click", () => {
+                addressUpdateModal.style.display = "none";  // 수정 모달 닫기
+            });
+        }
+
         // 주소 항목을 리스트에 추가
         addressListDiv.appendChild(addressItemDiv);
     });
@@ -63,8 +70,9 @@ function renderAddressList(deliveryDTOList) {
 
 document.addEventListener("DOMContentLoaded", function () {
     const memberId = "${memberId}";
-    console.log(memberId);  // 확인용
+    console.log("memberId: " +memberId);  // 확인용
     const addressSelectModal = document.getElementById("addressSelectModal");
+    const addressUpdateModal = document.getElementById("addressUpdateModal");  // 배송지 수정 모달
     const addressListDiv = document.querySelector(".address-list");
 
     // 배송지 목록 불러오기
@@ -146,8 +154,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         const deliveryId = event.target.getAttribute("data-delivery-id");
                         const memberId = event.target.getAttribute("data-member-id");
 
-                        console.log("수정 버튼 클릭:", deliveryId, memberId);  // deliveryId가 정상적으로 가져와지는지 확인
-                        editDelivery(deliveryId, memberId);  // editDelivery 함수에 deliveryId와 memberId를 전달
+                        console.log("수정 버튼 클릭:", deliveryId, memberId);  // deliveryId와 memberId를 확인
+
+                        editDelivery(memberId, deliveryId);  // editDelivery 함수에 memberId와 deliveryId를 전달
+
                     });
 
                 });
@@ -159,6 +169,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // 새 배송지 추가
     document.getElementById("addressForm").addEventListener("submit", function (event) {
         event.preventDefault();
+
+        const memberId = document.getElementById('memberId').value;
 
         const deliveryData = {
             name: document.getElementById("name").value,
@@ -192,6 +204,35 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     loadDeliveries();
+
+    document.getElementById("addressForm2").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        function editDelivery(memberId, deliveryId) {
+            fetch(`/api/member/${memberId}/delivery/${deliveryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);  // 데이터 확인용
+
+                    // 배송 정보 데이터를 가져온 후 각 필드에 값을 넣음
+                    document.getElementById("name2").value = data.name;
+                    document.getElementById("phoneNumber2").value = data.hp;
+                    document.getElementById("postalCode2").value = data.postcode;
+                    document.getElementById("addressLine12").value = data.addr;
+                    document.getElementById("addressLine22").value = data.addr2;
+                    document.getElementById("deliveryMessage2").value = data.deliveryMessage;
+
+                    // 모달을 화면에 표시
+                    closeModal();
+
+                    const modal = document.getElementById("addressUpdateModal");
+                    if (modal) {
+                        modal.style.display = "block";  // 모달을 보임
+                    }
+                })
+                .catch(error => console.error("배송지 정보를 가져오는 중 오류 발생:", error));
+        }
+    });
 });
 
 
@@ -223,9 +264,10 @@ function confirmAddressSelection() {
     }
 }
 
+
 function deleteDelivery(deliveryId, memberId) {
     const confirmation = confirm("정말로 이 배송지를 삭제하시겠습니까?");
-    console.log("de: " +deliveryId)
+    console.log("de: " + deliveryId)
     if (confirmation) {
         fetch(`/api/member/${memberId}/delivery/${deliveryId}`, {
             method: "DELETE"
@@ -255,6 +297,10 @@ function closeModal() {
         modal.style.display = "none"; // 모달을 숨김
     }
 }
+
+document.querySelector(".close").addEventListener("click", function () {
+    document.getElementById("addressUpdateModal").style.display = "none";
+});
 
 function openModal(modalElement) {
     modalElement.style.display = "block"; // 모달을 보임

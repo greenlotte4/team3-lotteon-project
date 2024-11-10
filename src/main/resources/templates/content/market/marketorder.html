@@ -313,6 +313,7 @@
             <span class="close">&times;</span>
             <h2>배송지 등록</h2>
             <form id="addressForm">
+                <input type="hidden" id="memberId" th:value="${memberDTO.getId()}">
                 <table>
                     <tr>
                         <th><label for="name">배송지 이름</label></th>
@@ -350,6 +351,64 @@
                     <tr>
                         <td><label for="deliveryMessage">배송 메시지</label></td>
                         <td><input type="text" id="deliveryMessage" placeholder="배송 메시지를 입력하세요"></td>
+                    </tr>
+
+                </table>
+
+                <div class=" checkbox-group">
+                    <label><input type="checkbox" checked> (필수) 개인정보 수집 및 이용 동의(수취인정보)</label><br>
+                    <label><input type="checkbox"> (선택) 개인정보 수집 및 이용 동의(공동현관 출입정보)</label><br>
+                </div>
+
+                <button type="submit" class="save-btn">저장</button>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- 배송지 수정 모달 -->
+    <div id="addressUpdateModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>배송지 수정</h2>
+            <form id="addressForm2">
+                <table>
+                    <tr>
+                        <th><label for="name">배송지 이름</label></th>
+                        <td><input type="text" id="name2" placeholder="배송지 이름을 입력하세요"></td>
+                    </tr>
+
+                    <tr>
+                        <th><label for="phoneNumber">휴대폰 번호</label></th>
+                        <td><input type="text" id="phoneNumber2" placeholder="휴대폰 번호를 입력하세요"></td>
+                    </tr>
+
+                    <tr>
+                        <th><label for="postalCode">주소</label></th>
+                        <td>
+                            <div class="address-input">
+                                <input type="text" id="postalCode2" placeholder="우편번호">
+                                <button type="button" id="btnPostCode2">우편번호 찾기</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="text" id="addressLine12" placeholder="기본주소"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="text" id="addressLine22" placeholder="상세주소"></td>
+                    </tr>
+
+                    <!--                    <tr>-->
+                    <!--                        <td><label for="entranceCode">(선택) 공동현관 출입번호</label></td>-->
+                    <!--                        <td><input type="text" id="entranceCode" placeholder="예: #1234"></td>-->
+                    <!--                    </tr>-->
+
+                    <tr>
+                        <td><label for="deliveryMessage">배송 메시지</label></td>
+                        <td><input type="text" id="deliveryMessage2" placeholder="배송 메시지를 입력하세요"></td>
                     </tr>
 
                 </table>

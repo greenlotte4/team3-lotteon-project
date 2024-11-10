@@ -65,6 +65,12 @@ public class DeliveryController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/delivery/{deliveryId}")
+    public ResponseEntity<DeliveryDTO> getDelivery(@PathVariable Long memberId, @PathVariable Long deliveryId) {
+        DeliveryDTO delivery = deliveryService.getDeliveryById(memberId, deliveryId);
+        return ResponseEntity.ok(delivery);
+    }
+
     @DeleteMapping("/delivery/{deliveryId}")
     public ResponseEntity<Void> deleteDelivery(@PathVariable Long memberId, @PathVariable Long deliveryId) {
         log.info("deleteDelivery: " + deliveryId);
