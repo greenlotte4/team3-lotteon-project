@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderItemDTO;
+import com.lotteon.dto.page.AdminOrderPageResponseDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.product.Product;
@@ -191,13 +192,20 @@ public class SellerController {
         return "content/admin/order/admin_Delivery"; // Points to the "content/sellerDynamic" template for delivery orders
     }
 
+    // admin order 조회
     @GetMapping("/order/status")
-    public String orderStatus(Model model) {
-          List<OrderDTO> orders = adminOrderService.selectOrdersAll();
-          log.info("허웅우ㅜ우ㅜㅜ :" + orders);
-        model.addAttribute("orders", orders);
+    public String orderStatus(Model model, com.lotteon.dto.page.PageRequestDTO pageRequestDTO) {
+
+        AdminOrderPageResponseDTO adminOrderPageResponseDTO = adminOrderService.selectOrderListAll(pageRequestDTO);
+        log.info("aaaaaaaaaaaaaaaaaaa : " + adminOrderPageResponseDTO);
+        model.addAttribute(adminOrderPageResponseDTO);
+//        List<OrderDTO> orders = adminOrderService.selectOrdersAll();
+//          log.info("허웅우ㅜ우ㅜㅜ :" + orders);
+//        model.addAttribute("orders", orders);
         return "content/admin/order/admin_Order"; // Points to the "content/sellerDynamic" template for order status
     }
+
+
 
     @ResponseBody
     @GetMapping("/order/status/orderItem")
