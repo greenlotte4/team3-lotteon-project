@@ -15,8 +15,7 @@
 </head>
 <body>
 <th:block layout:fragment="content">
-            <div id="admin_service">
-                <section>
+    <div id="admin_service">
                     <th:block th:replace="~{content/admin/admin_gate}"></th:block>
                     <section id="admin_navi">
                         <p>주문현황</p>
@@ -61,42 +60,42 @@
                         </tr>
                         </thead>
                         <tbody>
-<!--                        <tr th:each="order, i:${adminOrderPageResponseDTO.getAdminorderdtoList()}">-->
-<!--                            <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>-->
-<!--                            <td th:text="${order.uid}">wlgus5946</td>-->
-<!--                            <td th:text="${order.memberName}">챱챱김</td>-->
-<!--                            <td class="productname" th:text="${order.orderItems[0].productName + '(외)'}">초코틴틴</td>-->
-<!--                            <td th:text="${order.totalQuantity}">896</td>-->
-<!--                            <td th:text="${order.totalPrice}">9,000</td>-->
-<!--                            <td th:text="${order.pay}">신용카드</td>-->
-<!--                            <td class="orderstatus" th:text="${order.orderStatus}">결제완료</td>-->
-<!--                            <td th:text="${#strings.substring(order.orderDate,0,10)}"></td>-->
-<!--                            <td><button class="openModalBtn">배송하기</button></td>-->
-<!--                        </tr>-->
+                        <tr th:each="order, i:${adminOrderPageResponseDTO.getAdminorderdtoList()}">
+                            <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>
+                            <td th:text="${order.uid}">wlgus5946</td>
+                            <td th:text="${order.memberName}">챱챱김</td>
+                            <td class="productname" th:text="${order.orderItems[0].productName + '(외)'}">초코틴틴</td>
+                            <td th:text="${order.totalQuantity}">896</td>
+                            <td th:text="${order.totalPrice}">9,000</td>
+                            <td th:text="${order.pay}">신용카드</td>
+                            <td class="orderstatus" th:text="${order.orderStatus}">결제완료</td>
+                            <td th:text="${#strings.substring(order.orderDate,0,10)}"></td>
+                            <td><button class="openModalBtn">배송하기</button></td>
+                        </tr>
                         </tbody>
                     </table>
                 </article>
                     <!-- 페이지네이션 컨테이너 -->
                     <div class="pagination">
-<!--                        <th:block th:if="${adminOrderPageResponseDTO.prev}">-->
-<!--                            <a th:href="@{/seller/order/status(pg=${adminOrderPageResponseDTO.start - 1})}" class="prev">이전</a>-->
-<!--                        </th:block>-->
+                        <th:block th:if="${adminOrderPageResponseDTO.prev}">
+                            <a href="#" class="prev">이전</a>
+                        </th:block>
 
-<!--                        <th:block th:each="num : ${#numbers.sequence(adminOrderPageResponseDTO.start, adminOrderPageResponseDTO.end)}">-->
-<!--                            <a th:href="@{/seller/order/status(pg=${num})}"-->
-<!--                               th:class="${num == adminOrderPageResponseDTO.pg} ? 'qnacurrent' : 'qnanum'">[[${num}]]</a>-->
-<!--                        </th:block>-->
+                        <th:block th:each="num : ${#numbers.sequence(adminOrderPageResponseDTO.start, adminOrderPageResponseDTO.end)}">
+                            <a href="#"
+                               th:class="${num == adminOrderPageResponseDTO.pg} ? 'qnacurrent' : 'qnanum'">[[${num}]]</a>
+                        </th:block>
 
-<!--                        <th:block th:if="${adminOrderPageResponseDTO.next}">-->
-<!--                            <a th:href="@{/seller/order/status(pg=${adminOrderPageResponseDTO.end + 1})}" class="next">다음</a>-->
-<!--                        </th:block>-->
+                        <th:block th:if="${adminOrderPageResponseDTO.next}">
+                            <a href="#" class="next">다음</a>
+                        </th:block>
                     </div>
 
-            <div id="productModal" class="modal">
-                <div class="modal-content">
-                    <div class="header">
-                    <span class="close">&times;</span>
-                    <h3>배송입력</h3>
+        <section class="shipping-section">
+            <div id="shipping-modal" class="shipping-modal">
+                    <div class="shipping-modal">
+                        <span class="shipping-close" style="cursor: pointer;">&times;</span>
+                        <h3>배송입력</h3>
                     </div>
                     <form>
                         <table class="modaltable">
@@ -145,7 +144,7 @@
                         <button type="submit">등록하기</button>
                     </form>
                 </div>
-            </div>
+            </section>
                     <section class="modal-section">
                         <div id="order-modal" class="order-modal">
                             <div class="order-items">
@@ -310,6 +309,10 @@
                                     e.preventDefault();
                                     const order = JSON.parse(e.target.getAttribute('data-order'))
                                     openModal(order);
+                                }else if (e.target.classList.contains('delivery-modal-btn')){
+                                    e.preventDefault();
+                                    const order = JSON.parse(e.target.getAttribute('data-order'))
+                                    openModal2(order);
                                 }
                             });
 
@@ -318,8 +321,34 @@
                             window.addEventListener('click', function (event) {
                                 if (event.target === modal) {
                                     closeModal();
+                                }else if (event.target === productModal2){
+                                    closeModal2();
                                 }
                             });
+
+///////////////////////////////////////
+                            const productModal2 = document.querySelector('.shipping-section');
+                            const modalcontent2 = document.querySelector('.shipping-modal');
+                            const modalClose2 = document.querySelector('.shipping-close');
+
+
+                            function openModal2 (order) {
+                                productModal2.style.display = 'flex'; // 모달을 flex로 표시
+                                modalcontent2.style.display = 'block'; // 내부 모달도 표시
+                            }
+                            function closeModal2() {
+                                productModal2.style.display = 'none'; // 모달을 숨김
+                                modalcontent2.style.display = 'none'; // 내부 모달도 숨김
+                            }
+
+                            modalClose2.addEventListener('click', closeModal2);
+
+
+
+
+
+
+
 
 
 
@@ -404,7 +433,7 @@
                                                     <td>${order.pay}</td>
                                                     <td class="orderstatus">${order.orderStatus}</td>
                                                     <td>${order.orderDate.substring(0, 10)}</td>
-                                                    <td><button class="openModalBtn">배송하기</button></td>
+                                                    <td><button class="delivery-modal-btn" data-order='${JSON.stringify(order)}'>배송하기</button></td>
                                                 </tr>`;
                                         ordertbody.innerHTML += row;
                                     })
