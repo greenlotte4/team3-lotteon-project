@@ -1,6 +1,8 @@
 package com.lotteon.dto.product;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.entity.product.ProductDetails;
 import com.lotteon.entity.product.Review;
@@ -16,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Builder
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "productId")
 public class ProductDTO{
 
     private Long productId;

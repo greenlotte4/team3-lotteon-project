@@ -1,6 +1,9 @@
 package com.lotteon.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.lotteon.dto.product.ProductSummaryDTO;
 import com.querydsl.core.annotations.Config;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +32,14 @@ public class RedisConfig {
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer()); // 모든 Object에 대한 Serializer
+
+
+        // 커스텀 ObjectMapper 설정
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_SELF_REFERENCES, false);
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
         return template;
     }
 

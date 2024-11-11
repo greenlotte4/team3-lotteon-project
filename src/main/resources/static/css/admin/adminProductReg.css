@@ -213,7 +213,6 @@
         /*.option_table {width: 900px; margin: 0 auto; padding: 3px;}*/
         #combination-container> div:nth-of-type(3) {margin-bottom: 40px; padding: 3px;}
 
-
        #admin_logo div {width: 900px; margin: 3px auto;  padding: 3px;}
        .admin_logo_table {width: 900px; margin: 0 auto;  padding: 3px;}
        #admin_logo div:nth-of-type(3) {margin-bottom: 40px; padding: 3px;}
@@ -238,6 +237,70 @@
        .top1 {font-weight: bold; font-size: 14px;}
        .top2 {width: auto; padding: 3px; background: linear-gradient(to top, #cdd8e6 50%, transparent 50%);}
 
+
+
+        article#admin_option {
+            width: 900px;
+            margin: 3px auto;
+            padding: 1px;
+            position: relative;
+        }
+
+#admin_option div#option-container {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    background-image: linear-gradient(to right, rgb(226, 232, 238) 150px, #ffffff 150px);
+    margin-top: 6px;
+
+}
+
+
+#admin_option .option-group > div{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start
+}
+#admin_option .option-group label{
+    width: 150px;
+    text-indent: 6px;
+    height: 34px;
+    box-sizing: border-box;
+}
+
+#admin_option button{
+    padding: 5px;
+    border: 1px solid #ddd;
+    background-color: #8eb4e3;
+    border-radius: 5px;
+    margin: 5px;
+    color: #FFFFFF;
+
+}
+
+#admin_option .groupAdd{
+    margin-top: 0px;
+}
+
+#admin_option div#optionBtnArea {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+#admin_option #option-container> div:nth-of-type(3) {
+    margin-bottom: 0px;
+}
+
+#admin_option #stock-input-area thead{
+    margin: 10px;
+    padding: 5px;
+    background-color: #8EB4E3;
+}
 
        .admin_version_table,
        .admin_site_table,
