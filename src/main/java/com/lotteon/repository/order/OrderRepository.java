@@ -50,7 +50,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> , OrderRepos
     @Query("SELECT o.orderId, o.uid, o.memberName, o.totalPrice, o.orderDate, o.totalQuantity, o.pay, o.memberHp, o.addr1, o.addr2, o.receiver, o.hp, o.totalDiscount, o.totalOriginalPrice, o.totalShipping FROM Order o WHERE o.orderId = :id")
     AdminOrderDTO findOrderSummaryById(@Param("id") Long id);
 
-    public List<Order> findByUid(String uid, Pageable pageable);
+//    public List<Order> findByUid(String uid, Pageable pageable);
 
 
     @Query("SELECT o, oi " +
