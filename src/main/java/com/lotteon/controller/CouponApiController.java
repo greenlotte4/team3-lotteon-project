@@ -191,26 +191,5 @@ public class CouponApiController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateStatus")
-    public ResponseEntity<?> updateCouponIssuanceStatus(@RequestBody CouponIssuedRequestDTO request) {
-        log.info("주문 후 쿠폰 변경 요청 들어옴");
 
-        boolean result = couponIssuedService.updateCouponStatus(
-                request.getIssuedNumber(),
-                request.getUsageStatus(),
-                request.getStatus()
-        );
-
-        // 응답을 JSON 형식으로 반환
-        Map<String, Object> response = new HashMap<>();
-        if (result) {
-            response.put("result", 1);  // 성공 시 result 값
-            response.put("message", "쿠폰 상태가 성공적으로 업데이트되었습니다.");
-            return ResponseEntity.ok(response);  // JSON 반환
-        } else {
-            response.put("result", 0);  // 실패 시 result 값
-            response.put("message", "쿠폰을 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);  // JSON 반환
-        }
-    }
 }

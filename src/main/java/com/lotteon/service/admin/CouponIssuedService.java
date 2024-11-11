@@ -201,6 +201,7 @@ public class CouponIssuedService {
     }
 
     public boolean updateCouponStatus(String issuanceNumber, String usageStatus, String status) {
+        log.info("쿠폰 변경 요청 들어옴");
         // 쿠폰을 찾기
         Optional<CouponIssued> couponOptional = couponIssuedRepository.findById(issuanceNumber);
 

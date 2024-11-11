@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/css/common.css">
 
 
-<header id="header">
+<header id="header" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <div class="headerIn">
         <div class="headerBanner">
             <div class="headerslide" th:each="banner : ${banners}" th:if="${banner.ban_location} == '메인 상단 배너'">
@@ -55,35 +55,40 @@
                 </div>
             </div>
 
-            <div class="buttonArea">
+            <div class="buttonArea user" sec:authorize="hasAnyAuthority('ROLE_MEMBER', 'ROLE_ANONYMOUS')">
                 <ul>
                     <li>
                         <a th:href="@{/cs/qna/list}" data-cmpnt-typ="header_main" data-cmpnt-name="chat" class="chat">
                             문의
                         </a>
                     </li>
-<!--                    <li>-->
-<!--                        <a th:href="@{/mypage/myInfo}" data-cmpnt-typ="header_main"-->
-<!--                           data-cmpnt-name="wishlist" class="heart">-->
-<!--                            나의 찜-->
-<!--                        </a>-->
-<!--                    </li>-->
                     <li>
-                        <a th:href="@{/mypage/myInfo}" data-cmpnt-typ="header_main"
-                           data-cmpnt-name="mylotte" class="my">
+                        <a th:href="@{/mypage/myInfo}" data-cmpnt-typ="header_main" onclick="" data-cmpnt-name="mylotte" class="my" >
                             마이롯데
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{/market/cart}" data-cmpnt-typ="header_main"
-                           data-cmpnt-name="cart" class="cart">
+                        <a th:href="@{/market/cart}" data-cmpnt-typ="header_main" data-cmpnt-name="cart" class="cart" >
                             장바구니
-                            <!---->
                         </a>
                     </li>
                 </ul>
-            </div><!--buttonArea end  챗봇 , 나의찜, 마이롯데-->
+            </div>
 
+            <div class="buttonArea admin"  sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_SELLER')">
+                <ul>
+                    <li>
+                        <a th:href="@{/admin/qna/list}" data-cmpnt-typ="header_main" data-cmpnt-name="chat" class="chat">
+                            문의관리
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/main}" data-cmpnt-typ="header_main" data-cmpnt-name="mylotte" class="my">
+                            관리자
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
         </div><!--maininner end-->
 

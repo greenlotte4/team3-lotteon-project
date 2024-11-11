@@ -326,7 +326,7 @@ document.querySelectorAll('.end-button').forEach(button => {
 
         if (confirm("정말로 이 쿠폰을 종료하시겠습니까?")) {
 
-            const couponIsuuedId = this.closest('tr').querySelector('.order-link').getAttribute('data-coupon-id');
+            const couponId = this.closest('tr').querySelector('.order-link').getAttribute('data-coupon-id');
             const couponRow = this.closest('tr');
             const statusElement = couponRow.querySelector('.coupon-status');
             const currentStatus = statusElement.innerText.trim(); // 상태 가져오기

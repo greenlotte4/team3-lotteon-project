@@ -32,5 +32,5 @@ public class AdminOrderDTO {
     private String orderStatus;
 
 
-    private List<OrderItemDTO> orderItems;
+    private List<AdminOrderItemDTO> orderItems;
 }

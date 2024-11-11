@@ -26,7 +26,7 @@
             </div>
             <div class="summary-item">
                 <span>포인트</span><br>
-                <span class="summary-value">1,000</span>
+                <span class="summary-value" th:text="${totalPoints}">1,000</span> <!-- 최종 포인트 값 출력 -->
             </div>
             <div class="summary-item">
                 <span>문의</span><br>
@@ -87,214 +87,42 @@
                 <table class="points-table">
                     <tbody>
                     <tr class="font">
-                        <th>날짜</th>
+                        <th >날짜</th>
                         <th>구분</th>
+                        <th>포인트(사용/적립)</th>
                         <th>주문번호</th>
                         <th>적립번호</th>
                         <th>비고</th>
                         <th>유효기간</th>
 
                     </tr>
-                    <tr class="tr2">
+                    <tr class="tr2" th:each="point : ${pointList}" id="pointList">
                         <td>
-                            <data value="">2022-12-13</data>
+                            <data value="" th:text="${#strings.substring(point.createdAt,0,10)}">2022-12-13</data>
                         </td>
                         <td>
-                            <data value="">적립</data>
+                            <data th:if="${point.amount >0}" value="" >적립</data>
+                            <data th:if="${point.usedPoint >0}" value="">사용</data>
                         </td>
                         <td>
-                            <data value="">2022121001</data>
+                            <data th:if="${point.usedPoint >0}" value="" th:text="${point.usedPoint}"></data>
+                            <data th:if="${point.amount >0}" value="" th:text="${point.amount}"></data>
                         </td>
                         <td>
-                            <data value="">340</data>
+                            <data th:if="${point.orderItemId >0}" value="" th:text="${point.orderItemId}"></data>
+                            <data th:if="${point.orderId >0}" value="" th:text="${point.orderId}"></data>
                         </td>
                         <td>
-                            <data value="">상품 구매확정</data>
+                            <data value="" th:text="${point.id}">340</data>
                         </td>
                         <td>
-                            <data value="">2024-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            <data value="">2022-12-13</data>
+                            <data value="" th:text="${point.description}"></data>
                         </td>
                         <td>
-                            <data value="">적립</data>
-                        </td>
-                        <td>
-                            <data value="">2022121001</data>
-                        </td>
-                        <td>
-                            <data value="">120</data>
-                        </td>
-                        <td>
-                            <data value="">상품 구매확정</data>
-                        </td>
-                        <td>
-                            <data value="">2024-12-10</data>
+                            <data value="" th:text="${#strings.substring(point.limitDate,0,10)}"></data>
                         </td>
                     </tr>
-                    <tr class="tr2">
-                        <td>
-                            <data value="">2022-12-13</data>
-                        </td>
-                        <td>
-                            <data value="">적립</data>
-                        </td>
-                        <td>
-                            <data value="">2022121001</data>
-                        </td>
-                        <td>
-                            <data value="">500</data>
-                        </td>
-                        <td>
-                            <data value="">상품 구매확정</data>
-                        </td>
-                        <td>
-                            <data value="">2024-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            <data value="">2022-12-13</data>
-                        </td>
-                        <td>
-                            <data value="">적립</data>
-                        </td>
-                        <td>
-                            <data value="">2022121001</data>
-                        </td>
-                        <td>
-                            <data value="">50</data>
-                        </td>
-                        <td>
-                            <data value="">상품 구매확정</data>
-                        </td>
-                        <td>
-                            <data value="">2024-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            <data value="">2022-12-13</data>
-                        </td>
-                        <td>
-                            <data value="">적립</data>
-                        </td>
-                        <td>
-                            <data value="">2022121001</data>
-                        </td>
-                        <td>
-                            <data value="">100</data>
-                        </td>
-                        <td>
-                            <data value="">상품 구매확정</data>
-                        </td>
-                        <td>
-                            <data value="">2024-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            <data value="">2022-12-13</data>
-                        </td>
-                        <td>
-                            <data value="">적립</data>
-                        </td>
-                        <td>
-                            <data value="">2022121001</data>
-                        </td>
-                        <td>
-                            <data value="">340</data>
-                        </td>
-                        <td>
-                            <data value="">상품 구매확정</data>
-                        </td>
-                        <td>
-                            <data value="">2024-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            <data value="">2022-12-13</data>
-                        </td>
-                        <td>
-                            <data value="">적립</data>
-                        </td>
-                        <td>
-                            <data value="">2022121001</data>
-                        </td>
-                        <td>
-                            <data value="">120</data>
-                        </td>
-                        <td>
-                            <data value="">상품 구매확정</data>
-                        </td>
-                        <td>
-                            <data value="">2024-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            <data value="">2022-12-13</data>
-                        </td>
-                        <td>
-                            <data value="">적립</data>
-                        </td>
-                        <td>
-                            <data value="">2022121001</data>
-                        </td>
-                        <td>
-                            <data value="">500</data>
-                        </td>
-                        <td>
-                            <data value="">상품 구매확정</data>
-                        </td>
-                        <td>
-                            <data value="">2024-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            <data value="">2022-12-13</data>
-                        </td>
-                        <td>
-                            <data value="">적립</data>
-                        </td>
-                        <td>
-                            <data value="">2022121001</data>
-                        </td>
-                        <td>
-                            <data value="">50</data>
-                        </td>
-                        <td>
-                            <data value="">상품 구매확정</data>
-                        </td>
-                        <td>
-                            <data value="">2024-12-10</data>
-                        </td>
-                    </tr>
-                    <tr class="tr2">
-                        <td>
-                            <data value="">2022-12-13</data>
-                        </td>
-                        <td>
-                            <data value="">적립</data>
-                        </td>
-                        <td>
-                            <data value="">2022121001</data>
-                        </td>
-                        <td>
-                            <data value="">100</data>
-                        </td>
-                        <td>
-                            <data value="">상품 구매확정</data>
-                        </td>
-                        <td>
-                            <data value="">2024-12-10</data>
-                        </td>
-                    </tr>
+
 
                     </tbody>
                 </table>
