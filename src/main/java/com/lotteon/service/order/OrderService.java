@@ -225,12 +225,15 @@ public class OrderService {
         return null;
     }
 
+
     public OrderPageResponseDTO<OrderDTO> getOrderByUser(PageRequestDTO pageRequestDTO, String uid) {
         Pageable pageable = pageRequestDTO.getPageable("orderId");
 
         Page<Order> pageOrder = orderRepository.findByUid(uid, pageable);
+
+        // OrderService의 toDTO 메서드를 통해 변환
         List<OrderDTO> orderList = pageOrder.stream()
-                .map(order -> order.toDTO(order))  // 수정된 부분
+                .map(order -> new OrderDTO(order, sellerRepository))  // OrderService의 toDTO 메서드를 사용
                 .collect(Collectors.toList());
 
         int total = (int) pageOrder.getTotalElements();
@@ -279,8 +282,12 @@ public class OrderService {
         // 사용자 ID로 주문을 조회하고 주문 날짜 순으로 정렬
         List<Order> orders = orderRepository.findByUidOrderByOrderDateDesc(userId);
 
-        // Order 객체를 OrderWithGroupedItemsDTO로 변환, SellerRepository를 전달
+        // 현재 날짜 기준으로 3일 전 날짜 계산
+        LocalDate threeDaysAgo = LocalDate.now().minusDays(3);
+
+        // 3일 이내의 주문만 필터링하고, Order 객체를 OrderWithGroupedItemsDTO로 변환
         return orders.stream()
+                .filter(order -> order.getOrderDate().toLocalDate().isAfter(threeDaysAgo))  // 3일 이내의 주문만 필터링
                 .map(order -> new OrderWithGroupedItemsDTO(order, sellerRepository))  // SellerRepository를 넘겨줌
                 .collect(Collectors.toList());
     }

@@ -108,10 +108,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = order.getAttribute("data-email");
             const bno = order.getAttribute("data-bno");
             const address = order.getAttribute("data-address");
-            const grade = order.getAttribute("data-grade");
 
             // 모달 내용에 해당 데이터 반영
-            document.querySelector("#sellerModal td[data-field='grade']").textContent = grade;
             document.querySelector("#sellerModal td[data-field='company']").textContent = company;
             document.querySelector("#sellerModal td[data-field='ceo']").textContent = ceo;
             document.querySelector("#sellerModal td[data-field='phone']").textContent = phone;

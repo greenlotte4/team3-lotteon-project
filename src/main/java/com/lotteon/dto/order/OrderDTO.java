@@ -2,11 +2,14 @@ package com.lotteon.dto.order;
 
 
 import com.lotteon.dto.User.SellerDTO;
+import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.order.Order;
+import com.lotteon.repository.user.SellerRepository;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -67,6 +70,22 @@ public class OrderDTO {
         this.memberHp = order.getMemberHp();
         this.productName = order.getProductName();
 
+    }
+
+    public OrderDTO(Order order, SellerRepository sellerRepository) {
+
+        this.orderId = order.getOrderId();
+        this.orderDate = order.getOrderDate();
+        
+        OrderDTO orderDTO = new OrderDTO(order);  // 필요한 필드를 OrderDTO에 추가하세요
+
+        this.orderItems = order.getOrderProducts().stream()
+                .map(item -> {
+                    Seller seller = sellerRepository.findByUserUid(item.getSellerUid())
+                            .orElse(null);
+                    return new OrderItemDTO(item, seller, orderDTO);  // OrderDTO를 넘겨줌
+                })
+                .collect(Collectors.toList());
     }
 
 

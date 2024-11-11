@@ -70,46 +70,46 @@ public class Order {
     private String sellerCompany; // 대표 회사명
 
 
-    public OrderDTO toDTO(Order order) {
-        List<OrderItemDTO> orderItemDTOs = order.getOrderProducts().stream()
-                .map(orderItem -> new OrderItemDTO(orderItem))
-                .collect(Collectors.toList());
-
-//        String company = order.getOrderProducts().isEmpty() ? ""
-//                : Optional.ofNullable(order.getOrderProducts().get(0).getProduct())
-//                .map(Product::getSeller)
-//                .map(Seller::getCompany)
-//                .orElse("");
-        String productName = order.getOrderProducts().isEmpty() ? "" : order.getOrderProducts().get(0).getProduct().getProductName();
-
-        return OrderDTO.builder()
-                .orderId(order.getOrderId())
-                .uid(order.getUid())
-                .totalOriginalPrice(order.getTotalOriginalPrice())
-                .totalPrice(order.getTotalPrice())
-                .totalQuantity(order.getTotalQuantity())
-                .totalDiscount(order.getTotalDiscount())
-                .totalShipping(order.getTotalShipping())
-                .expectedPoint(order.getExpectedPoint())
-                .receiver(order.getReceiver())
-                .hp(order.getHp())
-                .postcode(order.getPostcode())
-                .shippingInfo(order.getShippingInfo())
-                .usedPoint(order.getUsedPoint())
-                .orderDate(order.getOrderDate())
-                .orderStatus(order.getOrderStatus())
-                .pay(order.getPay())
-                .memberHp(order.getMemberHp())
-                .memberName(order.getMemberName())
-                .couponId(order.getCouponId())
-                .usedCoupon(order.getUsedCoupon())
-                .addr1(order.getAddr1())
-                .addr2(order.getAddr2())
-                .orderItems(orderItemDTOs)
-                .productName(productName) // 추가된 부분
-               // .company(company)
-                .build();
-    }
+//    public OrderDTO toDTO(Order order) {
+//        // Order의 모든 OrderItem을 OrderItemDTO로 변환하고, 각 OrderItem의 Seller를 가져와 전달합니다.
+//        List<OrderItemDTO> orderItemDTOs = order.getOrderProducts().stream()
+//                .map(orderItem -> {
+//                    Seller seller = Optional.ofNullable(orderItem.getProduct())
+//                            .map(Product::getSeller)
+//                            .orElse(null); // Seller가 없을 경우 null로 설정
+//                    return new OrderItemDTO(orderItem, seller, null); // OrderDTO는 이후에 설정됨
+//                })
+//                .collect(Collectors.toList());
+//
+//        String productName = order.getOrderProducts().isEmpty() ? "" : order.getOrderProducts().get(0).getProduct().getProductName();
+//
+//        return OrderDTO.builder()
+//                .orderId(order.getOrderId())
+//                .uid(order.getUid())
+//                .totalOriginalPrice(order.getTotalOriginalPrice())
+//                .totalPrice(order.getTotalPrice())
+//                .totalQuantity(order.getTotalQuantity())
+//                .totalDiscount(order.getTotalDiscount())
+//                .totalShipping(order.getTotalShipping())
+//                .expectedPoint(order.getExpectedPoint())
+//                .receiver(order.getReceiver())
+//                .hp(order.getHp())
+//                .postcode(order.getPostcode())
+//                .shippingInfo(order.getShippingInfo())
+//                .usedPoint(order.getUsedPoint())
+//                .orderDate(order.getOrderDate())
+//                .orderStatus(order.getOrderStatus())
+//                .pay(order.getPay())
+//                .memberHp(order.getMemberHp())
+//                .memberName(order.getMemberName())
+//                .couponId(order.getCouponId())
+//                .usedCoupon(order.getUsedCoupon())
+//                .addr1(order.getAddr1())
+//                .addr2(order.getAddr2())
+//                .orderItems(orderItemDTOs)
+//                .productName(productName)
+//                .build();
+//    }
 
 
 
