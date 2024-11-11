@@ -59,7 +59,7 @@
 
             <div class="details">
                 <p>최근주문내역</p>
-                <a href="">더보기 ></a>
+                <a th:href="@{/mypage/orderdetails}">더보기 ></a>
             </div>
 
             <table>
@@ -70,7 +70,14 @@
                     <th>상태</th>
                     <th>확인/신청</th>
                 </tr>
-                <tr class="tr1" th:each="orderItem : ${groupDTO}">
+
+                <!-- 최근 3일 이내 주문이 없을 때 메시지 표시 -->
+                <tr th:if="${#lists.isEmpty(groupDTO)}">
+                    <td colspan="4" style="text-align: center; color: #a9a9a9;">최근 주문 내역이 없습니다.</td>
+                </tr>
+
+                <!-- 최근 3일 이내 주문 내역이 있을 때 -->
+                <tr th:each="orderItem : ${groupDTO}">
                     <!-- 주문 날짜 -->
                     <td>
                         <data th:value="${orderItem.orderDate}" th:text="${#strings.substring(orderItem.orderDate,0,10)}">2023-01-01</data>
@@ -82,13 +89,12 @@
                             <div class="eximg">
                                 <div th:each="item : ${orderItem.groupedOrderItems}">
                                     <a th:href="@{'/market/view/' + ${item.categoryId} + '/' + ${item.productId}}">
-                                        <img th:src="@{'/uploads/productImg/' + ${item.image}}" alt="상품 이미지">
+                                        <img th:src="@{'/uploads/productImg/' + ${item.image}}" class="eximg1-1" alt="상품 이미지">
                                     </a>
                                 </div>
-
-                             </div>
-                             <div class="Pinf">
-                                 <!-- 주문 번호 -->
+                            </div>
+                            <div class="Pinf">
+                                <!-- 주문 번호 -->
                                 <a href="#"
                                    class="order-number"
                                    th:each="item : ${orderItem.groupedOrderItems}"
@@ -107,41 +113,37 @@
                                    th:data-delivery-requests="${item.order.shippingInfo}"
                                    th:data-product-image="${item.image}"
                                    onclick="openOrderModal(this)">
-
-                                    주문번호: <span th:text="${orderItem.getOrderId()}">
-                                </span>
+                                    주문번호: <span th:text="${orderItem.getOrderId()}"></span>
                                 </a>
 
                                 <!-- 회사명 (Seller Uid) -->
-                                 <a href="#"
-                                    class="seller-number"
-                                    th:each="item : ${orderItem.groupedOrderItems}"
-                                    th:data-company="${item.seller.company}"
-                                     th:data-ceo="${item.seller.ceo}"
-                                     th:data-phone="${item.seller.hp}"
-                                     th:data-fax="${item.seller.fax}"
-                                     th:data-email="${item.seller.mo}"
-                                     th:data-bno="${item.seller.bno}"
-                                     th:data-address="${item.seller.addr + ' ' + item.seller.addr2}"
-                                     th:data-grade="${item.seller.grade}"
-                                     onclick="openModal(this)">
-                                 회사명: <span th:text="${item.seller.company}"></span>
-                                 </a>
+                                <a href="#"
+                                   class="seller-number"
+                                   th:each="item : ${orderItem.groupedOrderItems}"
+                                   th:data-company="${item.seller.company}"
+                                   th:data-ceo="${item.seller.ceo}"
+                                   th:data-phone="${item.seller.hp}"
+                                   th:data-fax="${item.seller.fax}"
+                                   th:data-email="${item.seller.mo}"
+                                   th:data-bno="${item.seller.bno}"
+                                   th:data-address="${item.seller.addr + ' ' + item.seller.addr2}"
+                                   th:data-grade="${item.seller.grade}"
+                                   onclick="openModal(this)">
+                                    회사명: <span th:text="${item.seller.company}"></span>
+                                </a>
 
                                 <!-- 상품명 -->
-                                 <a th:each="item : ${orderItem.groupedOrderItems}"
-                                    th:href="@{'/market/view/' + ${item.categoryId} + '/' + ${item.productId}}"
-                                    class="productName">상품명:
-                                     <span th:text="${item.productName}"></span>
-                                 </a>
-
+                                <a th:each="item : ${orderItem.groupedOrderItems}"
+                                   th:href="@{'/market/view/' + ${item.categoryId} + '/' + ${item.productId}}"
+                                   class="productName">상품명:
+                                    <span th:text="${item.productName}"></span>
+                                </a>
 
                                 <!-- 수량 -->
                                 <p>수량: <span th:each="item : ${orderItem.groupedOrderItems}" th:text="${item.stock}">0</span></p>
 
                                 <!-- 가격 -->
                                 <p>가격:<span th:each="item : ${orderItem.groupedOrderItems}" th:text="${item.formattedPrice}">0</span>원</p>
-
                             </div>
                         </div>
                     </td>
@@ -149,12 +151,13 @@
                         <data value="">배송완료</data>
                     </td>
                     <td>
-                        <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                            <button class="receipt-btn custom-button" >수취확인</button>
+                        <div class="button" style="display: flex; flex-direction: column; gap: 3px;">
+                            <button class="receipt-btn custom-button">수취확인</button>
                             <div th:each="item : ${orderItem.groupedOrderItems}">
                                 <button class="pReview-btn custom-button"
-                                        th:attr="data-product-no=${item.productId},
-                                                 data-product-name=${item.productName}">
+                                        th:attr="data-product-no=${item.productId}, data-product-name=${item.productName}"
+                                        th:disabled="${item.reviewContent != null}"
+                                        th:text="${item.reviewContent != null ? '상품평쓰기 완료' : '상품평쓰기'}">
                                     상품평쓰기
                                 </button>
                             </div>
@@ -163,7 +166,6 @@
                         </div>
                     </td>
                 </tr>
-
                 </tbody>
             </table>
 

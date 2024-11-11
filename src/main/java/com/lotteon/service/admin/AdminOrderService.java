@@ -1,6 +1,10 @@
 package com.lotteon.service.admin;
 
+
 import com.lotteon.controller.AdminOrderItemPageResponseDTO;
+
+import com.lotteon.dto.User.SellerDTO;
+
 import com.lotteon.dto.admin.AdminOrderDTO;
 import com.lotteon.dto.admin.AdminOrderItemDTO;
 import com.lotteon.dto.order.OrderDTO;
@@ -64,12 +68,20 @@ public class AdminOrderService {
                     OrderItemDTO orderItemDTO = getModelMapper.map(orderItem, OrderItemDTO.class);
                     // OrderDTO 생성 및 설정
                     OrderDTO orderDTO = new OrderDTO();
+
                     // OrderItem의 필드를 OrderDTO에 매핑
                     orderItemDTO.setOrderId(orderItem.getOrder().getOrderId());
                     orderItemDTO.setCustomerId(orderItem.getOrder().getUid());
                     orderItemDTO.setCustomerName(orderItem.getOrder().getMemberName());
+
                     orderDTO.setTotalPrice(orderItem.getOrder().getTotalPrice());
                     orderDTO.setOrderDate(orderItem.getOrder().getOrderDate());
+
+
+                    orderDTO.setTotalPrice(orderItem.getOrder().getTotalPrice());
+                    orderDTO.setOrderDate(orderItem.getOrder().getOrderDate());
+
+
                     // Product 설정 (Product -> ProductDTO 변환 예시)
                     Product product = orderItem.getProduct();
                     if (product != null) {
@@ -78,15 +90,25 @@ public class AdminOrderService {
                         productDTO.setProductName(product.getProductName());
                         productDTO.setPrice(product.getPrice());
                         orderItemDTO.setProduct(productDTO);
+
                         // 필요한 필드 추가 설정
                     }
                     String sellerUid= product.getSellerId();
+
+
+                        // 필요한 필드 추가 설정
+                    }
+
+                    String sellerUid= product.getSellerId();
+
+
                     Optional<Seller> seller = sellerRepository.findByUserUid(sellerUid);
                     if (seller.isPresent()) {
                         Seller sel = seller.get();
                         orderItemDTO.setSeller(sel);
                     }
                     // 다른 필요한 필드 매핑
+
                     return orderItemDTO;
                 })
                 .collect(Collectors.toList());
@@ -127,9 +149,12 @@ public class AdminOrderService {
                 .build();
     }
 
+                    return orderItemDTO;
+                })
+                .collect(Collectors.toList());
 
-
-
+        return new PageImpl<>(orderItemDTOS, pageable, orderItems.getTotalElements());
+    }
 
 
     public AdminOrderPageResponseDTO selectOrderListAll(PageRequestDTO pageRequestDTO){
