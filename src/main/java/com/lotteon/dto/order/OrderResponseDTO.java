@@ -70,7 +70,7 @@ public class OrderResponseDTO {
             long originalPrice = parseLongOrDefault(buyNowRequestDTO.getOriginalPrice(), 0)+additionalPrice;
             long finalPrice = Long.parseLong(buyNowRequestDTO.getFinalPrice()) + additionalPrice;
             if(!orderRequestDTO.getCouponId().isEmpty() && orderRequestDTO.getCouponId() != null){
-                point = finalPrice* (orderRequestDTO.getGradePercentage());
+                point = (finalPrice* (orderRequestDTO.getGradePercentage())/1000)*10;
             }
             long discount= Long.parseLong(buyNowRequestDTO.getDiscount());
             long savedDiscount =((discount * originalPrice)/100/10*10)*originalQuantity ;

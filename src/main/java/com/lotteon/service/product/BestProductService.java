@@ -83,7 +83,7 @@ public class BestProductService {
                 currentSold = 0L; // 기본 값을 0으로 설정
             }
             redisTemplate.opsForHash().put(key,"sold",currentSold+quantity);
-            Integer changedSold = (Integer) redisTemplate.opsForHash().get(key,"sold");
+            Long changedSold = (Long) redisTemplate.opsForHash().get(key,"sold");
             redisTemplate.opsForZSet().add("best_selling_products", key, changedSold);
 
         }else{

@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 import com.lotteon.dto.BoardCateDTO;
+import com.lotteon.dto.admin.BannerStatusRequest;
 import com.lotteon.dto.adminQnaDTO;
 import com.lotteon.dto.page.AdminOrderPageResponseDTO;
 import com.lotteon.dto.page.FaqPageResponseDTO;
@@ -15,6 +16,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -28,6 +30,7 @@ public class BoardAPIController {
     private final FaqService faqService;
     private final BoardService boardService;
     private final AdminOrderService adminOrderService;
+    private final AdminService adminService;
 
     @ResponseBody
     @GetMapping("/qna/list/page")
@@ -91,5 +94,34 @@ public class BoardAPIController {
         log.info("qiqiqiqiqiqi: " + adminOrderPageResponseDTO);
         return ResponseEntity.ok(adminOrderPageResponseDTO);
     }
+
+
+    @ResponseBody
+    @GetMapping("/admin/banner/updateStatus")
+    public ResponseEntity<?> updateStatus(@RequestParam int id, @RequestParam String status) {
+        HashMap<String,String> response = new HashMap<>();
+        try {
+
+            int result=adminService.updateBannerStatus(id, status);
+            if(result>0){
+                response.put("status","success");
+
+            }else{
+                response.put("status","fail");
+            }
+            log.info("response"+response);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("status","fail");
+            return ResponseEntity.ok(response);
+        }
+
+    }
+
+
+
+
 
 }

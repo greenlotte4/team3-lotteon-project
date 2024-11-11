@@ -61,35 +61,35 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="order, i:${adminOrderPageResponseDTO.getAdminorderdtoList()}">
-                            <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>
-                            <td th:text="${order.uid}">wlgus5946</td>
-                            <td th:text="${order.memberName}">챱챱김</td>
-                            <td class="productname" th:text="${order.orderItems[0].product.productName + '(외)'}">초코틴틴</td>
-                            <td th:text="${order.totalQuantity}">896</td>
-                            <td th:text="${order.totalPrice}">9,000</td>
-                            <td th:text="${order.pay}">신용카드</td>
-                            <td class="orderstatus" th:text="${order.orderStatus}">결제완료</td>
-                            <td th:text="${#strings.substring(order.orderDate,0,10)}"></td>
-                            <td><button class="openModalBtn">배송하기</button></td>
-                        </tr>
+<!--                        <tr th:each="order, i:${adminOrderPageResponseDTO.getAdminorderdtoList()}">-->
+<!--                            <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>-->
+<!--                            <td th:text="${order.uid}">wlgus5946</td>-->
+<!--                            <td th:text="${order.memberName}">챱챱김</td>-->
+<!--                            <td class="productname" th:text="${order.orderItems[0].productName + '(외)'}">초코틴틴</td>-->
+<!--                            <td th:text="${order.totalQuantity}">896</td>-->
+<!--                            <td th:text="${order.totalPrice}">9,000</td>-->
+<!--                            <td th:text="${order.pay}">신용카드</td>-->
+<!--                            <td class="orderstatus" th:text="${order.orderStatus}">결제완료</td>-->
+<!--                            <td th:text="${#strings.substring(order.orderDate,0,10)}"></td>-->
+<!--                            <td><button class="openModalBtn">배송하기</button></td>-->
+<!--                        </tr>-->
                         </tbody>
                     </table>
                 </article>
                     <!-- 페이지네이션 컨테이너 -->
                     <div class="pagination">
-                        <th:block th:if="${adminOrderPageResponseDTO.prev}">
-                            <a th:href="@{/seller/order/status(pg=${adminOrderPageResponseDTO.start - 1})}" class="prev">이전</a>
-                        </th:block>
+<!--                        <th:block th:if="${adminOrderPageResponseDTO.prev}">-->
+<!--                            <a th:href="@{/seller/order/status(pg=${adminOrderPageResponseDTO.start - 1})}" class="prev">이전</a>-->
+<!--                        </th:block>-->
 
-                        <th:block th:each="num : ${#numbers.sequence(adminOrderPageResponseDTO.start, adminOrderPageResponseDTO.end)}">
-                            <a th:href="@{/seller/order/status(pg=${num})}"
-                               th:class="${num == adminOrderPageResponseDTO.pg} ? 'qnacurrent' : 'qnanum'">[[${num}]]</a>
-                        </th:block>
+<!--                        <th:block th:each="num : ${#numbers.sequence(adminOrderPageResponseDTO.start, adminOrderPageResponseDTO.end)}">-->
+<!--                            <a th:href="@{/seller/order/status(pg=${num})}"-->
+<!--                               th:class="${num == adminOrderPageResponseDTO.pg} ? 'qnacurrent' : 'qnanum'">[[${num}]]</a>-->
+<!--                        </th:block>-->
 
-                        <th:block th:if="${adminOrderPageResponseDTO.next}">
-                            <a th:href="@{/seller/order/status(pg=${adminOrderPageResponseDTO.end + 1})}" class="next">다음</a>
-                        </th:block>
+<!--                        <th:block th:if="${adminOrderPageResponseDTO.next}">-->
+<!--                            <a th:href="@{/seller/order/status(pg=${adminOrderPageResponseDTO.end + 1})}" class="next">다음</a>-->
+<!--                        </th:block>-->
                     </div>
 
             <div id="productModal" class="modal">
@@ -159,7 +159,7 @@
                                         <div class="">
                                             <div class="pro-details">
                                                 <div class="pro-img"></div>
-                                                <div class="pro-num">제품번호</div>
+                                                <div class="pro-num" >제품번호</div>
                                                 <div class="pro-name">상품명</div>
                                                 <div class="pro-seller">판매자</div>
                                                 <div class="pro-price">가격</div>
@@ -168,11 +168,11 @@
                                                 <div class="pro-ship">배송비</div>
                                                 <div class="total-pay">결제금액</div>
                                             </div>
-                                            <div class="details">
+                                            <div class="details" id="orderDetails">
                                                 <div class="pro-img-details">
                                                     <img src="../images/sample/화면 캡처 2024-10-17 102744.png" alt="#">
                                                 </div>
-                                                <div class="pro-num-details">123456789</div>
+                                                <div class="pro_num_details">123456789</div>
                                                 <div class="pro-name-details">프리미엄 퀄리티 오가닉 코튼 100% 에코백 - 다용도 사용 가능, 강력한 내구성</div>
                                                 <div class="pro-seller-details">뭐지</div>
                                                 <div class="pro-price-details">뭐지</div>
@@ -190,19 +190,19 @@
                                             <div class="total-info">
                                                 <div class="total-item">
                                                     <div>총 상품금액</div>
-                                                    <div class="price">1234원</div>
+                                                    <div class="price" id="OrderTotalProductPrice">1234원</div>
                                                 </div>
                                                 <div class="total-item">
                                                     <div>총 할인금액</div>
-                                                    <div class="price">34원</div>
+                                                    <div class="price" id="OrderSavePrice">34원</div>
                                                 </div>
                                                 <div class="total-item">
                                                     <div>배송비</div>
-                                                    <div class="price">1000원</div>
+                                                    <div class="price" id="OrderTotalFee">1000원</div>
                                                 </div>
                                                 <div class="total-item">
                                                     <div>총 결제금액</div>
-                                                    <div>20000원</div>
+                                                    <div id="OrderTotalPrice">20000원</div>
                                                 </div>
                                             </div>
 
@@ -219,13 +219,12 @@
                                                 <div class="pay-total">결제상태</div>
                                             </div>
                                             <div class="payment-details">
-                                                <div class="pay-id-details">주문번호</div>
-                                                <div class="pay-details">결제방법</div>
-                                                <div class="pay-user-details">주문자 / 연락처</div>
-                                                <div class="pay-total-details">결제완료
-                                                    <span class="total-amount">총 결제금액</span>
-                                                    <span class="price">200000000원</span>
-                                                </div>
+                                                <div class="pay-id-details" id="OrderNumber">주문번호</div>
+                                                <div class="pay-details" id="OrderProcess">결제방법</div>
+                                                <div class="pay-user-details" Id="OrderHp">주문자 / 연락처</div>
+                                                <div class="pay-total-details" id="OrderState">결제완료</div>
+                                                <span class="total-amount">총 결제금액</span>
+                                                <span class="price" id="OrderTotalPrices">200000000원</span>
                                             </div>
                                         </div>
                                     </div>
@@ -238,9 +237,9 @@
                                                 <div class="user-addr">배송지 주소</div>
                                             </div>
                                             <div class="user-details">
-                                                <div class="user-name-details">수취인수취인수취인</div>
-                                                <div class="user-hp-details">연락처수취인수취인</div>
-                                                <div class="user-addr-details">배송지 주소수취인수취인</div>
+                                                <div class="user-name-details" id="OrderReceiver">수취인수취인수취인</div>
+                                                <div class="user-hp-details" id="OrderReceiverHp">연락처수취인수취인</div>
+                                                <div class="user-addr-details" id="OrderAddr">배송지 주소수취인수취인</div>
                                             </div>
                                         </div>
                                     </div>
@@ -248,45 +247,56 @@
                             </div>
                         </div>
                     </section>
-<!--                    <script th:src="@{/js/delivery.js}"></script>-->
-<!--<script>-->
-<!--    // document.addEventListener("DOMContentLoaded", function() {-->
-<!--    //     const orderitemId = document.querySelectorAll(".productname");-->
-<!--    //-->
-<!--    //     orderitemId.forEach(orderItems => {-->
-<!--    //         const orderitem = orderItems.dataset.orderId;-->
-<!--    //         const orderstatuses = document.querySelectorAll(".orderstatus");-->
-<!--    //-->
-<!--    //         fetch(`/seller/order/status/orderItem?orderId=${orderitem}`)-->
-<!--    //             .then(resp => resp.json())-->
-<!--    //             .then(orderItemDTO => {-->
-<!--    //                 console.log("야...옹 :", orderItemDTO);-->
-<!--    //                 console.log("메멩ㅇ..옹..:" + orderItemDTO.product.productName);-->
-<!--    //                 orderItems.textContent = orderItemDTO.product.productName;-->
-<!--    //-->
-<!--    //-->
-<!--    //                 orderstatuses.forEach(orderstatus => {-->
-<!--    //                     orderstatus.textContent = orderItemDTO.status;-->
-<!--    //                 });-->
-<!--    //             })-->
-<!--    //             .catch(err => {-->
-<!--    //                 console.log(err);-->
-<!--    //             });-->
-<!--    //     })-->
-<!--    //-->
-<!--    // })-->
+<script th:src="@{/js/delivery.js}"></script>
 
-<!--</script>-->
 
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
+
                             const modal = document.querySelector('.modal-section');
                             const orderModal = document.querySelector('.order-items');
                             const modalClose = document.querySelector('.order-close');
 
-                            function openModal() {
+
+                            function openModal(order) {
+                                const image = "/uploads/productImg/"
+
+                                const orderDetail = document.getElementById('orderDetails');
+                                orderDetail.innerHTML = '';
+                                order.orderItems.forEach(item => {
+                                    const row = `
+                                                <div class="pro-img-details">
+                                                    <img src="${image + item.file190}" alt="#">
+                                                </div>
+                                                <div class="pro_num_details">${item.orderItemId}</div>
+                                                <div class="pro-name-details">${item.productName}</div>
+                                                <div class="pro-seller-details">${item.orderItemId}</div>
+                                                <div class="pro-price-details">${item.savedPrice}</div>
+                                                <div class="pro-sell-details">${item.savedDiscount}</div>
+                                                <div class="pro-stock-details">${item.stock}</div>
+                                                <div class="pro-ship-details">${item.shippingFees}</div>
+                                                <div class="total-pay-details">${item.orderPrice}</div>
+                                    `;
+                                    orderDetail.innerHTML += row;
+                                })
+
+                                document.getElementById('OrderTotalProductPrice').textContent = order.totalOriginalPrice;
+                                document.getElementById('OrderSavePrice').textContent =order.totalDiscount;
+                                document.getElementById('OrderTotalFee').textContent = order.totalShipping;
+                                document.getElementById('OrderTotalPrice').textContent = order.totalPrice;
+                                document.getElementById('OrderNumber').textContent = order.orderId;
+                                document.getElementById('OrderProcess').textContent = order.pay;
+                                document.getElementById('OrderHp').textContent = order.memberName +"/"+ order.memberHp;
+                                document.getElementById('OrderState').textContent = order.orderStatus;
+                                document.getElementById('OrderTotalPrices').textContent = order.totalPrice;
+                                document.getElementById('OrderReceiver').textContent = order.receiver;
+                                document.getElementById('OrderReceiverHp').textContent = order.hp;
+                                document.getElementById('OrderAddr').textContent = order.addr1;
+
                                 modal.style.display = 'flex'; // 모달을 flex로 표시
                                 orderModal.style.display = 'block'; // 내부 모달도 표시
+
+
                             }
 
                             function closeModal() {
@@ -294,8 +304,13 @@
                                 orderModal.style.display = 'none'; // 내부 모달도 숨김
                             }
 
-                            document.querySelectorAll('.order-modal-btn').forEach(button => {
-                                button.addEventListener('click', openModal);
+                            // document에 이벤트 위임 설정
+                            document.addEventListener('click', function (e) {
+                                if (e.target.classList.contains('order-modal-btn')) {
+                                    e.preventDefault();
+                                    const order = JSON.parse(e.target.getAttribute('data-order'))
+                                    openModal(order);
+                                }
                             });
 
                             modalClose.addEventListener('click', closeModal);
@@ -309,33 +324,81 @@
 
 
 
+                            // 전체페이지로드
+                            loadPageOrPages(1, null, null);
+
+                            //처음 버튼을 눌렀을 때 type, keyword만 보냄
                             document.getElementById('searchBtn').addEventListener('click', function (e) {
                                 e.preventDefault();
                                 const type = document.getElementById('ordersearch').value;
                                 const keyword = document.getElementById('search').value;
 
-                                // 콘솔에 type과 keyword 값 출력
-                                console.log('검색 기준 type:', type);
-                                console.log('검색어 keyword:', keyword);
+                                if (!type || !keyword) {
+                                    alert('검색어를 입력하세요');
+                                    return;
+                                } else {
+                                    // 콘솔에 type과 keyword 값 출력
+                                    console.log('검색 기준 type:', type);
+                                    console.log('검색어 keyword:', keyword);
 
-                                fetch(`/api/order/status/page?type=${type}&keyword=${keyword}`)
-                                    .then(resp => resp.json())
+                                    fetch(`/api/order/status/page?type=${type}&keyword=${keyword}`)
+                                        .then(resp => resp.json())
+                                        .then(adminOrderPageResponseDTO => {
+                                            console.log("야옹 : ", adminOrderPageResponseDTO);
+                                            const ordertbody = document.querySelector('.admin_order_table tbody');
+                                            ordertbody.innerHTML = '';
+
+                                            updateTable(adminOrderPageResponseDTO.adminorderdtoList);
+                                            updatePagination(adminOrderPageResponseDTO, type, keyword)
+
+                                        })
+                                        .catch(err => console.log(err));
+                                }
+                            });
+
+                            // 컨트롤러에서 값을 받아와서 페이징 함수 처리 하는곳
+                            function loadPageOrPages(page, type, keyword) {
+                                let url = '';
+                                if(type && keyword) {
+                                    url = `/api/order/status/page?pg=${page}&type=${type}&keyword=${keyword}`
+                                } else if(!type && !keyword){
+                                    url = `/api/order/status/page?pg=${page}`
+                                }
+                                    fetch(url)
+                                        .then(resp => resp.json())
+                                        .then(adminOrderPageResponseDTO => {
+                                            console.log("야옹 : ", adminOrderPageResponseDTO);
+                                            const ordertbody = document.querySelector('.admin_order_table tbody');
+                                            ordertbody.innerHTML = '';
+
+                                            updateTable(adminOrderPageResponseDTO.adminorderdtoList);
+                                            updatePagination(adminOrderPageResponseDTO, type, keyword)
+
+                                        })
+                                        .catch(err => console.log(err));
 
 
+                            }
 
+                            //테이블 내용 업데이트 함수
+                            function updateTable(adminorderdtoList) {
 
-
-                                    .then(adminOrderPageResponseDTO => {
-                                        console.log("야옹 : "+ adminOrderPageResponseDTO);
-                                        const ordertbody = document.querySelector('.admin_order_table tbody');
-                                        ordertbody.innerHTML = '';
-                                        adminOrderPageResponseDTO.adminorderdtoList.forEach(order => {
-                                            const row = `
+                                const ordertbody = document.querySelector('.admin_order_table tbody');
+                                if (adminorderdtoList.length === 0) {
+                                    const row = `
+                                <tr>
+                                    <td>등록된 글이 없습니다.</td>
+                                </tr>
+                                `;
+                                    ordertbody.innerHTML += row;
+                                } else {
+                                    adminorderdtoList.forEach(order => {
+                                        const row = `
                                                 <tr>
-                                                    <td><a class="order-modal-btn" href="#">${order.orderId}</a></td>
+                                                    <td><a class="order-modal-btn" href="#" data-order-id="${order.orderId}" data-order='${JSON.stringify(order)}'>${order.orderId}</a></td>
                                                     <td>${order.uid}</td>
                                                     <td>${order.memberName}</td>
-                                                    <td class="productname">${order.orderItems[0].product.productName} (외)</td>
+                                                    <td class="productname">${order.orderItems[0].productName} (외)</td>
                                                     <td>${order.totalQuantity}</td>
                                                     <td>${order.totalPrice}</td>
                                                     <td>${order.pay}</td>
@@ -343,12 +406,47 @@
                                                     <td>${order.orderDate.substring(0, 10)}</td>
                                                     <td><button class="openModalBtn">배송하기</button></td>
                                                 </tr>`;
-                                            ordertbody.innerHTML += row;
-                                        });
+                                        ordertbody.innerHTML += row;
                                     })
-                                    .catch(err => console.log(err));
-                            });
+                                }
+                            }
 
-                        });
+                            //페이지 업데이트 함수
+                            function updatePagination(adminOrderPageResponseDTO, type, keyword) {
+                                const paginationElement = document.querySelector('.pagination');
+                                paginationElement.innerHTML = '';
+
+                                if (adminOrderPageResponseDTO.prev) {
+                                    const prevLink = `<a href="#" data-page="${adminOrderPageResponseDTO.start - 1}" class="prev">이전</a>`;
+                                    paginationElement.innerHTML += prevLink;
+                                }
+
+                                for (let num = adminOrderPageResponseDTO.start; num <= adminOrderPageResponseDTO.end; num++) {
+                                    const pageLink = `<a href="#" data-page="${num}" class="${num === adminOrderPageResponseDTO.pg ? 'qnacurrent' : 'qnanum'}">${num}</a>`;
+                                    paginationElement.innerHTML += pageLink;
+                                }
+
+                                if (adminOrderPageResponseDTO.next) {
+                                    const nextLink = `<a href="#" data-page="${adminOrderPageResponseDTO.end + 1}" class="next">다음</a>`;
+                                    paginationElement.innerHTML += nextLink;
+                                }
+
+                                document.querySelectorAll('.pagination a').forEach(link => {
+                                    link.addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        const page = this.getAttribute('data-page');
+                                        if(type !== null && keyword !== null){
+                                            loadPageOrPages(page, type, keyword);
+                                        }else if (!type && !keyword){
+                                            loadPageOrPages(page, null, null);
+                                        }
+
+
+
+                                    })
+                                })
+                            }
+                        })
+
                     </script>
 </th:block>

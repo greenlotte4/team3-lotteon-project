@@ -26,6 +26,8 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public final NumberPath<Long> combinationId = createNumber("combinationId", Long.class);
 
+    public final StringPath company = createString("company");
+
     public final StringPath customerId = createString("customerId");
 
     public final StringPath customerName = createString("customerName");

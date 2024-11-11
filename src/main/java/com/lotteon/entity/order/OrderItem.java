@@ -36,6 +36,7 @@ public class OrderItem {
     private long point;
     private String sellerUid;
 
+
     private String optionDesc;
     private long optionId;
     private String combination; // 콤비네이션 내용
@@ -49,6 +50,8 @@ public class OrderItem {
 
     private String customerId;  //  구매자
     private String customerName; //구매자이름
+
+    private String company;
 
 
     @Builder.Default

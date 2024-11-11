@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -52,6 +49,24 @@ public class AdminService {
         return bannerDTOs;
     }
 
+
+    public int updateBannerStatus(int id,String status){
+        Optional<Banner> banner= bannerRepository.findById(id);
+        int result=0;
+        int savedstatus=0;
+        if(banner.isPresent()){
+            Banner updatebanner = banner.get();
+            if(status.equals("ACTIVE")){
+                savedstatus =0;
+            }else if(status.equals("INACTIVE")){
+                savedstatus =1;
+            }
+            updatebanner.setStatus(savedstatus);
+            bannerRepository.save(updatebanner);
+            result=1;
+        }
+        return result;
+    }
     public List<BannerDTO> getActiveBanners() {
         LocalDateTime now = LocalDateTime.now();
 
@@ -61,6 +76,11 @@ public class AdminService {
                     if (banner.getBan_sdate() == null || banner.getBan_edate() == null ||
                             banner.getBan_stime() == null || banner.getBan_etime() == null) {
                         return false; // 하나라도 null이면 필터링
+                    }
+
+                    // banner.status가 0인지 확인
+                    if (banner.getStatus() != 0) {
+                        return false; // status가 0이 아니면 필터링
                     }
 
                     // 배너가 표시될 날짜 범위를 설정

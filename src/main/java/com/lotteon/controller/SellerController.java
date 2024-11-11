@@ -81,7 +81,8 @@ public class SellerController {
         }
 
         model.addAttribute("productPageResponseDTO", productPageResponseDTO);
-        model.addAttribute("productList", "productList");
+        model.addAttribute("asideProduct", "asideProduct");
+        model.addAttribute("asideProductList","asideProductList");
 
         return "content/admin/product/admin_productlist"; // Points to the "content/sellerDynamic" template for product listing
     }
@@ -100,6 +101,9 @@ public class SellerController {
 
     @GetMapping("/product/register")
     public String productRegister(Model model) {
+
+        model.addAttribute("product", "product");
+        model.addAttribute("register","register");
         return "content/admin/product/admin_productReg"; // Points to the "content/sellerDynamic" template for product registration
     }
 
@@ -150,6 +154,7 @@ public class SellerController {
 
         model.addAttribute("categoryDTOs",categoryDTOs);
         model.addAttribute("product", productdto);
+        model.addAttribute("register","register");
         return "content/admin/product/admin_productModify"; // Points to the "content/sellerDynamic" template for product registration
     }
 

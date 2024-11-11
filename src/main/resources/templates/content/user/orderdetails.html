@@ -165,8 +165,19 @@
                                 </div>
                             </td>
                         </tr>
-                        </th:block>
 
+                        </th:block>
+                    </tbody>
+                    <!-- 주문 내역이 없을 때 표시할 내용 -->
+                    <tbody th:unless="${pageResponseOrderDTO.getDtoList().size() > 0}">
+                    <tr>
+                        <td colspan="4" style="text-align: center;">
+                            <div class="order-empty" style="display: flex; flex-direction: column; align-items: center; padding: 80px; justify-content: center; font-size: 15px;">
+                                <img src="/images/common/icon_no_result.svg" alt="No orders"><br>
+                                <span>주문 내역이 없습니다.</span>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
