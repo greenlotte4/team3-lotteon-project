@@ -23,8 +23,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     List<AdminOrderItemDTO> findByOrder_OrderId(Long orderId);
     Page<OrderItem> findByOrder_Uid(String uid, Pageable pageable);
 
- 
-  
+    Page<OrderItem> findBySellerUid(String uid, Pageable pageable);
+//    Page<OrderItem> findAll(Pageable pageable);
+
     @Query("SELECT SUM(o.orderPrice) FROM OrderItem o WHERE o.sellerUid = :sellerUid")
     Long findTotalOrderPriceBySellerUid(@Param("sellerUid") String sellerUid);
 

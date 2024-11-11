@@ -43,6 +43,8 @@
         private long shippingTerms;
         private long shippingFees;
         private long point;
+
+
         private DeliveryStatus status;
         @Transient
         private Seller seller;
