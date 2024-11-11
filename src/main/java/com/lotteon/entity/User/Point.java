@@ -20,7 +20,7 @@ public class Point {
     private Long id;
 
     private double usedPoint; //사용포인트
-    private double amount; // 지급 포인트
+    private double amount; // 지급 or 사용 포인트
     private double remainingPoints; // 잔여 포인트
     private String description; // 지급 내용
     private long orderItemId;
