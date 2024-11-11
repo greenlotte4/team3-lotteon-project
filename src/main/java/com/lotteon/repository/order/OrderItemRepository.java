@@ -19,7 +19,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     long countBySellerUid(String sellerUid);
 
-    @Query("SELECT new com.lotteon.dto.admin.AdminOrderItemDTO( oi.orderItemId, oi.product.productName, oi.order.orderId, oi.status, oi.price, oi.savedPrice, oi.orderPrice, oi.savedDiscount, oi.shippingFees, oi.stock) FROM OrderItem oi WHERE oi.order.orderId = :orderId")
+    @Query("SELECT new com.lotteon.dto.admin.AdminOrderItemDTO(oi.orderItemId, oi.product.productName, oi.order.orderId, oi.status, oi.price, oi.savedPrice, oi.orderPrice, oi.savedDiscount, oi.shippingFees, oi.stock, oi.product.productId, oi.product.file190) FROM OrderItem oi WHERE oi.order.orderId = :orderId")
     List<AdminOrderItemDTO> findByOrder_OrderId(Long orderId);
     Page<OrderItem> findByOrder_Uid(String uid, Pageable pageable);
 

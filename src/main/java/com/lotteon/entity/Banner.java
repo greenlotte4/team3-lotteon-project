@@ -35,6 +35,7 @@ public class Banner {
 
     private String ban_color;
 
+    //status가 0이면 활성화 1이면 비활성화
     private int status;
 
 
