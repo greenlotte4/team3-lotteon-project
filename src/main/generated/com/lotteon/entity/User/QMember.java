@@ -50,7 +50,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
 
-    public final EnumPath<Member.MemberStatus> status = createEnum("status", Member.MemberStatus.class);
+    public final EnumPath<MemberStatus> status = createEnum("status", MemberStatus.class);
 
     public final NumberPath<Long> totalOrder = createNumber("totalOrder", Long.class);
 

@@ -3,6 +3,7 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.dto.VersionDTO;
+import com.lotteon.dto.admin.BannerStatusRequest;
 import com.lotteon.dto.admin.HeaderInfoDTO;
 import com.lotteon.dto.admin.TermsDto;
 import com.lotteon.entity.FooterInfo;
@@ -19,7 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -178,6 +181,8 @@ public class AdminConfigController {
 
         return ResponseEntity.ok().build();
     }
+
+
 
 
 }

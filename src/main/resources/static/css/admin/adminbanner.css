@@ -22,6 +22,8 @@
     justify-content: center;
 }
 
+
+
 .banner_menu li:hover {
     color: #ddd;
 }
@@ -44,7 +46,18 @@
 .admin_banner_table td:last-child {border-right: none;}
 .admin_banner_table tr {border-top: 1px solid rgba(172, 172, 172, 0.5);}
 .admin_banner_table img {width: 70px; height: 70px;}
+#admin_banner_main .admin_banner_table .status p:hover{
+    cursor: pointer;
+}
+.active {
+    color: green;
+    font-weight: bold;
+}
 
+.inactive {
+    color: red;
+    font-weight: normal;
+}
 
 
 .banner_button {width: 900px; margin: 40px auto; display: flex;}
