@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString(exclude = "member")  // member 필드를 toString에서 제외
 @NoArgsConstructor
 @Builder
 @Table(name = "point")

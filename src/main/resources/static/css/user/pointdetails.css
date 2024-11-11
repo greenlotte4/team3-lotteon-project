@@ -116,6 +116,7 @@ aside > ul > li:nth-child(2){
     width: 880px;
     height: 20px;
     margin: 0 48px;
+    overflow-x: hidden;  /* 가로 넘치는 값을 숨깁니다. */
 
 }
 
@@ -210,12 +211,13 @@ th {
     height: 42.5px;
 }
 
-.points-table th:nth-child(1) {width: 16.67%}
-.points-table th:nth-child(2) {width: 16.67%}
-.points-table th:nth-child(3) {width: 16.67%}
-.points-table th:nth-child(4) {width: 16.67%}
-.points-table th:nth-child(5) {width: 16.67%}
+.points-table th:nth-child(1) {width: 16.67%;}
+.points-table th:nth-child(2) {width: 10.67%;}
+.points-table th:nth-child(3) {width: 13.67%;}
+.points-table th:nth-child(4) {width: 11.67%;}
+.points-table th:nth-child(5) {width: 11.67%}
 .points-table th:nth-child(6) {width: 16.67%}
+.points-table th:nth-child(7) {width: 16.67%}
 
 .font{
     color: white;
@@ -227,6 +229,8 @@ td {
     text-align: center;
 }
 
-.tr2{
+.tr2 {
     border-bottom: 1px solid #b4b0b0;
+    overflow-x: auto; /* 수평 스크롤 추가 */
+    white-space: nowrap; /* 텍스트가 한 줄로 계속 가도록 설정 */
 }
