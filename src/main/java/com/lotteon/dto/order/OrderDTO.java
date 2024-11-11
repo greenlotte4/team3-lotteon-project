@@ -4,6 +4,7 @@ package com.lotteon.dto.order;
 import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.order.Order;
+import com.lotteon.entity.product.Product;
 import com.lotteon.repository.user.SellerRepository;
 import lombok.*;
 
@@ -55,6 +56,8 @@ public class OrderDTO {
     private String path;
     private String productName;
     private String company;
+
+    private Product product;
 
     public OrderDTO(Order order) {
 
