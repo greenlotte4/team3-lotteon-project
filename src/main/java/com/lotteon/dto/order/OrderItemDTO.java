@@ -1,5 +1,6 @@
     package com.lotteon.dto.order;
 
+    import com.lotteon.dto.User.SellerDTO;
     import com.lotteon.dto.product.OptionDTO;
     import com.lotteon.dto.product.ProductDTO;
     import com.lotteon.entity.User.Seller;
@@ -89,6 +90,7 @@
 
             // Seller와 관련된 정보
             if (seller != null) {
+
                 this.seller = seller;  // Seller 객체 설정
                 this.company = seller.getCompany();  // 회사명 가져오기
             }
