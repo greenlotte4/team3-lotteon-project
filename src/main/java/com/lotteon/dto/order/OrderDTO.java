@@ -3,6 +3,7 @@ package com.lotteon.dto.order;
 
 import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.entity.order.Order;
+import com.lotteon.entity.product.Product;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -52,6 +53,9 @@ public class OrderDTO {
     private String path;
     private String productName;
     private String company;
+
+
+    private Product product;
 
     public OrderDTO(Order order) {
 

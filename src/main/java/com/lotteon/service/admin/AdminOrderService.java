@@ -1,5 +1,6 @@
 package com.lotteon.service.admin;
 
+import com.lotteon.controller.AdminOrderItemPageResponseDTO;
 import com.lotteon.dto.admin.AdminOrderDTO;
 import com.lotteon.dto.admin.AdminOrderItemDTO;
 import com.lotteon.dto.order.OrderDTO;
@@ -7,16 +8,19 @@ import com.lotteon.dto.order.OrderItemDTO;
 import com.lotteon.dto.page.AdminOrderPageResponseDTO;
 import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
 import com.lotteon.entity.product.Product;
 import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.repository.order.OrderRepository;
+import com.lotteon.repository.user.SellerRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +37,7 @@ public class AdminOrderService {
     private final OrderItemRepository orderItemRepository;
     private final ModelMapper modelMapper;
     private final ModelMapper getModelMapper;
+    private final SellerRepository sellerRepository;
 
     public List<OrderDTO> selectOrdersAll() {
         List<Order> orders = orderRepository.findAll();
@@ -53,9 +58,84 @@ public class AdminOrderService {
         return orderItemDTO;
     }
 
+    public Page<OrderItemDTO> convertOrderItemsToOrderDTOs(Page<OrderItem> orderItems, Pageable pageable) {
+        List<OrderItemDTO> orderItemDTOS = orderItems.getContent().stream()
+                .map(orderItem -> {
+                    OrderItemDTO orderItemDTO = getModelMapper.map(orderItem, OrderItemDTO.class);
+                    // OrderDTO 생성 및 설정
+                    OrderDTO orderDTO = new OrderDTO();
+                    // OrderItem의 필드를 OrderDTO에 매핑
+                    orderItemDTO.setOrderId(orderItem.getOrder().getOrderId());
+                    orderItemDTO.setCustomerId(orderItem.getOrder().getUid());
+                    orderItemDTO.setCustomerName(orderItem.getOrder().getMemberName());
+                    orderDTO.setTotalPrice(orderItem.getOrder().getTotalPrice());
+                    orderDTO.setOrderDate(orderItem.getOrder().getOrderDate());
+                    // Product 설정 (Product -> ProductDTO 변환 예시)
+                    Product product = orderItem.getProduct();
+                    if (product != null) {
+                        ProductDTO productDTO = new ProductDTO();
+                        productDTO.setProductId(product.getProductId());
+                        productDTO.setProductName(product.getProductName());
+                        productDTO.setPrice(product.getPrice());
+                        orderItemDTO.setProduct(productDTO);
+                        // 필요한 필드 추가 설정
+                    }
+                    String sellerUid= product.getSellerId();
+                    Optional<Seller> seller = sellerRepository.findByUserUid(sellerUid);
+                    if (seller.isPresent()) {
+                        Seller sel = seller.get();
+                        orderItemDTO.setSeller(sel);
+                    }
+                    // 다른 필요한 필드 매핑
+                    return orderItemDTO;
+                })
+                .collect(Collectors.toList());
+        return new PageImpl<>(orderItemDTOS, pageable, orderItems.getTotalElements());
+    }
+
+
+
+    public AdminOrderItemPageResponseDTO selectOrderItemListAll(PageRequestDTO pageRequestDTO) {
+        //지니가 지현이에게
+        Pageable pageable2 = pageRequestDTO.getPageable("orderItemId");
+        Page<OrderItem> orderItems = null;
+        log.info("pppppp : " + pageRequestDTO.getKeyword());
+        log.info("llllll : " + pageRequestDTO.getType());
+
+        if(pageRequestDTO.getKeyword() == null){
+            orderItems = orderItemRepository.findAll(pageable2);
+        }else {
+            orderItems = orderItemRepository.selectOrderSearchForList(pageRequestDTO,pageable2);
+        }
+        Page<OrderItemDTO> getOrderItems = convertOrderItemsToOrderDTOs(orderItems, pageable2);
+        log.info("orderITems!!!!!"+orderItems.getContent());
+        log.info("qqqqqqqqqqqqqqqqqqqq:" + getOrderItems.getContent());
+        log.info("cccccccccccccccccccc:" + getOrderItems.getPageable());
+
+
+        List<OrderItemDTO> orderItemList = getOrderItems.getContent().stream().map(tuple -> {
+            OrderItemDTO orderItemDTO = getModelMapper.map(tuple, OrderItemDTO.class);
+            return orderItemDTO;
+        }).toList();
+        int total2 = (int) getOrderItems.getTotalElements();
+        log.info("uuuuuuuuuuuu:" + getOrderItems);
+
+        return AdminOrderItemPageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .adminorderitemdtoList(orderItemList)
+                .total(total2)
+                .build();
+    }
+
+
+
+
+
+
     public AdminOrderPageResponseDTO selectOrderListAll(PageRequestDTO pageRequestDTO){
         Pageable pageable = pageRequestDTO.getPageable("no");
         Page<Tuple> pageAdminOrder = null;
+
 
         log.info("abababababab:"+ pageRequestDTO.getKeyword());
         if(pageRequestDTO.getKeyword() == null){

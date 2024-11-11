@@ -60,16 +60,16 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="order, i:${adminOrderPageResponseDTO.getAdminorderdtoList()}">
-                            <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>
-                            <td th:text="${order.uid}">wlgus5946</td>
-                            <td th:text="${order.memberName}">챱챱김</td>
-                            <td class="productname" th:text="${order.orderItems[0].productName + '(외)'}">초코틴틴</td>
-                            <td th:text="${order.totalQuantity}">896</td>
-                            <td th:text="${order.totalPrice}">9,000</td>
-                            <td th:text="${order.pay}">신용카드</td>
-                            <td class="orderstatus" th:text="${order.orderStatus}">결제완료</td>
-                            <td th:text="${#strings.substring(order.orderDate,0,10)}"></td>
+                        <tr th:each="order, i:${adminOrderItemPageResponseDTO.getAdminorderitemdtoList()}">
+                            <td><a class="order-modal-btn" th:text="${order.orderItemId}">10101212121</a></td>
+                            <td th:text="${order.order.uid}">wlgus5946</td>
+                            <td th:text="${order.order.memberName}">챱챱김</td>
+                            <td class="productname" th:text="${order.product.productName}">초코틴틴</td>
+                            <td th:text="${order.stock}">896</td>
+                            <td th:text="${order.savedPrice}">9,000</td>
+                            <td th:text="${order.order.pay}">신용카드</td>
+                            <td class="orderstatus" th:text="${order.status}">결제완료</td>
+                            <td th:text="${#strings.substring(order.order.orderDate,0,10)}"></td>
                             <td><button class="openModalBtn">배송하기</button></td>
                         </tr>
                         </tbody>
@@ -77,16 +77,16 @@
                 </article>
                     <!-- 페이지네이션 컨테이너 -->
                     <div class="pagination">
-                        <th:block th:if="${adminOrderPageResponseDTO.prev}">
+                        <th:block th:if="${adminOrderItemPageResponseDTO.prev}">
                             <a href="#" class="prev">이전</a>
                         </th:block>
 
-                        <th:block th:each="num : ${#numbers.sequence(adminOrderPageResponseDTO.start, adminOrderPageResponseDTO.end)}">
+                        <th:block th:each="num : ${#numbers.sequence(adminOrderItemPageResponseDTO.start, adminOrderItemPageResponseDTO.end)}">
                             <a href="#"
-                               th:class="${num == adminOrderPageResponseDTO.pg} ? 'qnacurrent' : 'qnanum'">[[${num}]]</a>
+                               th:class="${num == adminOrderItemPageResponseDTO.pg} ? 'qnacurrent' : 'qnanum'">[[${num}]]</a>
                         </th:block>
 
-                        <th:block th:if="${adminOrderPageResponseDTO.next}">
+                        <th:block th:if="${adminOrderItemPageResponseDTO.next}">
                             <a href="#" class="next">다음</a>
                         </th:block>
                     </div>
@@ -246,11 +246,12 @@
                             </div>
                         </div>
                     </section>
-<script th:src="@{/js/delivery.js}"></script>
+<!--<script th:src="@{/js/delivery.js}"></script>-->
 
 
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
+
 
                             const modal = document.querySelector('.modal-section');
                             const orderModal = document.querySelector('.order-items');
@@ -345,14 +346,6 @@
 
 
 
-
-
-
-
-
-
-
-
                             // 전체페이지로드
                             loadPageOrPages(1, null, null);
 
@@ -372,13 +365,13 @@
 
                                     fetch(`/api/order/status/page?type=${type}&keyword=${keyword}`)
                                         .then(resp => resp.json())
-                                        .then(adminOrderPageResponseDTO => {
-                                            console.log("야옹 : ", adminOrderPageResponseDTO);
+                                        .then(adminOrderItemPageResponseDTO => {
+                                            console.log("야옹 : ", adminOrderItemPageResponseDTO);
                                             const ordertbody = document.querySelector('.admin_order_table tbody');
                                             ordertbody.innerHTML = '';
 
-                                            updateTable(adminOrderPageResponseDTO.adminorderdtoList);
-                                            updatePagination(adminOrderPageResponseDTO, type, keyword)
+                                            updateTable(adminOrderItemPageResponseDTO.adminorderitemdtoList);
+                                            updatePagination(adminOrderItemPageResponseDTO, type, keyword)
 
                                         })
                                         .catch(err => console.log(err));
@@ -395,13 +388,13 @@
                                 }
                                     fetch(url)
                                         .then(resp => resp.json())
-                                        .then(adminOrderPageResponseDTO => {
-                                            console.log("야옹 : ", adminOrderPageResponseDTO);
+                                        .then(adminOrderItemPageResponseDTO => {
+                                            console.log("야옹 : ", adminOrderItemPageResponseDTO);
                                             const ordertbody = document.querySelector('.admin_order_table tbody');
                                             ordertbody.innerHTML = '';
 
-                                            updateTable(adminOrderPageResponseDTO.adminorderdtoList);
-                                            updatePagination(adminOrderPageResponseDTO, type, keyword)
+                                            updateTable(adminOrderItemPageResponseDTO.adminorderitemdtoList);
+                                            updatePagination(adminOrderItemPageResponseDTO, type, keyword)
 
                                         })
                                         .catch(err => console.log(err));
@@ -410,10 +403,10 @@
                             }
 
                             //테이블 내용 업데이트 함수
-                            function updateTable(adminorderdtoList) {
-
+                            function updateTable(adminorderitemdtoList) {
+                                console.log("먀옹..? : " , adminorderitemdtoList)
                                 const ordertbody = document.querySelector('.admin_order_table tbody');
-                                if (adminorderdtoList.length === 0) {
+                                if (adminorderitemdtoList.length === 0) {
                                     const row = `
                                 <tr>
                                     <td>등록된 글이 없습니다.</td>
@@ -421,18 +414,18 @@
                                 `;
                                     ordertbody.innerHTML += row;
                                 } else {
-                                    adminorderdtoList.forEach(order => {
+                                    adminorderitemdtoList.forEach(order => {
                                         const row = `
                                                 <tr>
-                                                    <td><a class="order-modal-btn" href="#" data-order-id="${order.orderId}" data-order='${JSON.stringify(order)}'>${order.orderId}</a></td>
-                                                    <td>${order.uid}</td>
-                                                    <td>${order.memberName}</td>
-                                                    <td class="productname">${order.orderItems[0].productName} (외)</td>
-                                                    <td>${order.totalQuantity}</td>
-                                                    <td>${order.totalPrice}</td>
-                                                    <td>${order.pay}</td>
-                                                    <td class="orderstatus">${order.orderStatus}</td>
-                                                    <td>${order.orderDate.substring(0, 10)}</td>
+                                                    <td><a class="order-modal-btn" href="#" data-order-id="${order.orderItemId}" data-order='${JSON.stringify(order)}'>${order.orderItemId}</a></td>
+                                                    <td>${order.order.uid}</td>
+                                                    <td>${order.order.memberName}</td>
+                                                    <td class="productname">${order.product.productName}</td>
+                                                    <td>${order.order.stock}</td>
+                                                    <td>${order.savedPrice}</td>
+                                                    <td>${order.order.pay}</td>
+                                                    <td class="orderstatus">${order.status}</td>
+                                                    <td>${order.order.orderDate.substring(0, 10)}</td>
                                                     <td><button class="delivery-modal-btn" data-order='${JSON.stringify(order)}'>배송하기</button></td>
                                                 </tr>`;
                                         ordertbody.innerHTML += row;
@@ -441,22 +434,22 @@
                             }
 
                             //페이지 업데이트 함수
-                            function updatePagination(adminOrderPageResponseDTO, type, keyword) {
+                            function updatePagination(adminOrderItemPageResponseDTO, type, keyword) {
                                 const paginationElement = document.querySelector('.pagination');
                                 paginationElement.innerHTML = '';
 
-                                if (adminOrderPageResponseDTO.prev) {
-                                    const prevLink = `<a href="#" data-page="${adminOrderPageResponseDTO.start - 1}" class="prev">이전</a>`;
+                                if (adminOrderItemPageResponseDTO.prev) {
+                                    const prevLink = `<a href="#" data-page="${adminOrderItemPageResponseDTO.start - 1}" class="prev">이전</a>`;
                                     paginationElement.innerHTML += prevLink;
                                 }
 
-                                for (let num = adminOrderPageResponseDTO.start; num <= adminOrderPageResponseDTO.end; num++) {
-                                    const pageLink = `<a href="#" data-page="${num}" class="${num === adminOrderPageResponseDTO.pg ? 'qnacurrent' : 'qnanum'}">${num}</a>`;
+                                for (let num = adminOrderItemPageResponseDTO.start; num <= adminOrderItemPageResponseDTO.end; num++) {
+                                    const pageLink = `<a href="#" data-page="${num}" class="${num === adminOrderItemPageResponseDTO.pg ? 'qnacurrent' : 'qnanum'}">${num}</a>`;
                                     paginationElement.innerHTML += pageLink;
                                 }
 
-                                if (adminOrderPageResponseDTO.next) {
-                                    const nextLink = `<a href="#" data-page="${adminOrderPageResponseDTO.end + 1}" class="next">다음</a>`;
+                                if (adminOrderItemPageResponseDTO.next) {
+                                    const nextLink = `<a href="#" data-page="${adminOrderItemPageResponseDTO.end + 1}" class="next">다음</a>`;
                                     paginationElement.innerHTML += nextLink;
                                 }
 
