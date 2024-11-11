@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.BoardCateDTO;
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.User.UserDTO;
 import com.lotteon.dto.admin.BannerDTO;
@@ -23,6 +24,7 @@ import com.lotteon.repository.QnaRepository;
 import com.lotteon.repository.admin.AdminQnaRepository;
 import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.AdminService;
+import com.lotteon.service.BoardService;
 import com.lotteon.service.FileService;
 import com.lotteon.service.ReviewService;
 import com.lotteon.service.admin.CouponIssuedService;
@@ -49,6 +51,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -67,6 +70,7 @@ public class MypageController {
     private final AdminQnaRepository adminQnaRepository;
     private final MemberService memberService;
     private final QnaService qnaService;
+    private final BoardService boardService;
 
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
@@ -190,6 +194,15 @@ public class MypageController {
         List<BannerDTO> banners2 = adminService.getActiveBanners();
         OrderPageResponseDTO<OrderDTO> pageResponseOrderDTO = orderService.getOrderByUser(pageRequestDTO, uid);
 
+        List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
+
+        // 필터링: 원하는 name 값만 선택
+        List<String> targetNames = Arrays.asList("주문/결제", "배송", "여행/숙박/항공");
+        List<BoardCateDTO> filteredBoardCateDTOS = boardCateDTOS.stream()
+                .filter(cate -> targetNames.contains(cate.getName()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("boardCate", filteredBoardCateDTOS);
         model.addAttribute("pageResponseOrderDTO", pageResponseOrderDTO);
         model.addAttribute("content", "orderdetails");
         model.addAttribute("banners", banners2);

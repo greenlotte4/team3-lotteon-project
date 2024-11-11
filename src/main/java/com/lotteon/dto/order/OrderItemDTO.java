@@ -4,6 +4,7 @@
     import com.lotteon.dto.product.ProductDTO;
     import com.lotteon.entity.User.Seller;
     import com.lotteon.entity.order.OrderItem;
+    import com.lotteon.entity.product.Review;
     import jakarta.persistence.Transient;
     import lombok.*;
 
@@ -28,6 +29,7 @@
         private long savedPrice;
         private long savedDiscount;
         private long orderPrice;
+        private List<Review> reviewContent;
         private long orderId;
         private long optionId;
         private String optionDesc;
@@ -57,7 +59,6 @@
 
 
 
-
         public OrderItemDTO(OrderItem item, Seller seller, OrderDTO order) {
             this.orderItemId = item.getOrderItemId();
             this.savedPrice = item.getSavedPrice();
@@ -83,6 +84,7 @@
                 this.productName = item.getProduct().getProductName();
                 this.categoryId = item.getProduct().getCategoryId();
                 this.image = item.getProduct().getFile190(); // 이미지 URL 설정
+                this.reviewContent = item.getProduct().getReviews();
             }
 
             // Seller와 관련된 정보
@@ -97,41 +99,41 @@
 
         }
 
-        public OrderItemDTO(OrderItem item) {
-            this.orderItemId = item.getOrderItemId();
-            this.savedPrice = item.getSavedPrice();
-            this.orderPrice = item.getOrderPrice();
-            this.savedDiscount = item.getSavedDiscount();
-            this.point = item.getPoint();
-            this.sellerUid = item.getSellerUid();
-            this.optionDesc = item.getOptionDesc();
-            this.optionId = item.getOptionId();
-            this.combination = item.getCombination();
-            this.combinationId = item.getCombinationId();
-            this.stock = item.getStock();
-            this.price = item.getPrice();
-            this.traceNumber = item.getTraceNumber();
-            this.shippingFees = item.getShippingFees();
-            this.status = item.getStatus();
-            DecimalFormat df = new DecimalFormat("###,###");
-            this.formattedPrice = df.format(item.getOrderPrice());
-
-            // Product 엔티티의 정보
-            if (item.getProduct() != null) {
-                this.productId = item.getProduct().getProductId();
-                this.productName = item.getProduct().getProductName();
-                this.categoryId = item.getProduct().getCategoryId();
-                this.image = item.getProduct().getFile190(); // 이미지 URL 설정
-            }
-
-            // Seller와 관련된 정보
-            if (seller != null) {
-                this.seller = seller;  // Seller 객체 설정
-                this.company = seller.getCompany();  // 회사명 가져오기
-            }
-            if (order != null) {
-                this.order = order;  // OrderDTO 객체 설정
-                this.orderId = order.getOrderId();  // orderId 설정
-            }
-        }
+//        public OrderItemDTO(OrderItem item ,Seller seller, OrderDTO order) {
+//            this.orderItemId = item.getOrderItemId();
+//            this.savedPrice = item.getSavedPrice();
+//            this.orderPrice = item.getOrderPrice();
+//            this.savedDiscount = item.getSavedDiscount();
+//            this.point = item.getPoint();
+//            this.sellerUid = item.getSellerUid();
+//            this.optionDesc = item.getOptionDesc();
+//            this.optionId = item.getOptionId();
+//            this.combination = item.getCombination();
+//            this.combinationId = item.getCombinationId();
+//            this.stock = item.getStock();
+//            this.price = item.getPrice();
+//            this.traceNumber = item.getTraceNumber();
+//            this.shippingFees = item.getShippingFees();
+//            this.status = item.getStatus();
+//            DecimalFormat df = new DecimalFormat("###,###");
+//            this.formattedPrice = df.format(item.getOrderPrice());
+//
+//            // Product 엔티티의 정보
+//            if (item.getProduct() != null) {
+//                this.productId = item.getProduct().getProductId();
+//                this.productName = item.getProduct().getProductName();
+//                this.categoryId = item.getProduct().getCategoryId();
+//                this.image = item.getProduct().getFile190(); // 이미지 URL 설정
+//            }
+//
+//            // Seller와 관련된 정보
+//            if (seller != null) {
+//                this.seller = seller;  // Seller 객체 설정
+//                this.company = seller.getCompany();  // 회사명 가져오기
+//            }
+//            if (order != null) {
+//                this.order = order;  // OrderDTO 객체 설정
+//                this.orderId = order.getOrderId();  // orderId 설정
+//            }
+//        }
     }

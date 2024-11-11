@@ -95,23 +95,71 @@
                             <td th:text="${#strings.substring(order.orderDate,0,10)}"><data th:value="${order.orderDate}">2023-01-01</data></td>
                             <td>
                                 <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
+                                    <div class="eximg" th:each="order : ${order.orderItems}">
+                                        <a th:href="@{'/market/view/' + ${order.categoryId} + '/' + ${order.productId}}">
+                                            <img th:src="@{'/uploads/productImg/' + ${order.image}}" class="eximg1-1"  alt="상품 이미지">
+                                        </a>
                                     </div>
                                     <div class="Pinf">
-                                        <a href="">주문번호:<span th:text="${order.getOrderId()}"></span></a>
-                                       <!-- <a href=""><span th:text="${order.seller.company}"></span>회사명: ABC 회사</a> -->
-                                        <a href="">상품명:<span th:text="${order.productName}"></span></a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
+                                        <a href=""  class="order-number"
+                                           th:each="item : ${order.orderItems}"
+                                           th:data-order-id="${item.getOrderId()}"
+                                           th:data-order-date="${#temporals.format(item.order.orderDate, 'yyyy-MM-dd')}"
+                                           th:data-company="${item.company}"
+                                           th:data-product-name="${item.productName}"
+                                           th:data-quantity="${item.stock}"
+                                           th:data-price="${item.order.totalOriginalPrice}"
+                                           th:data-discount="${item.order.totalDiscount}"
+                                           th:data-total-price="${item.formattedPrice}"
+                                           th:data-status="${item.status}"
+                                           th:data-customer-name="${item.order.memberName}"
+                                           th:data-customer-phone="${item.order.memberHp}"
+                                           th:data-customer-address="${item.order.addr1 + ' ' + item.order.addr2}"
+                                           th:data-delivery-requests="${item.order.shippingInfo}"
+                                           th:data-product-image="${item.image}"
+
+                                           onclick="openOrderModal(this)">
+
+                                            주문번호:
+                                            <span th:text="${order.getOrderId()}"></span>
+                                        </a>
+                                       <a href="" class="seller-number"
+                                          th:each="item : ${order.orderItems}"
+                                          th:data-company="${item.seller.company}"
+                                          th:data-ceo="${item.seller.ceo}"
+                                          th:data-phone="${item.seller.hp}"
+                                          th:data-fax="${item.seller.fax}"
+                                          th:data-email="${item.seller.mo}"
+                                          th:data-bno="${item.seller.bno}"
+                                          th:data-address="${item.seller.addr + ' ' + item.seller.addr2}"
+                                          th:data-grade="${item.seller.grade}">
+                                           회사명:
+                                           <span th:text="${item.seller.company}"></span>
+
+                                       </a>
+                                        <a  th:each="order : ${order.orderItems}"
+                                           th:href="@{'/market/view/' + ${order.categoryId} + '/' + ${order.productId}}"
+                                            class="productName" >상품명:
+                                            <span th:text="${order.productName}"></span>
+                                        </a>
+                                        <p>수량: <span th:each="item : ${order.orderItems}" th:text="${item.stock}"></span></p>
+                                        <p>가격: <span th:each="item : ${order.orderItems}" th:text="${item.formattedPrice}"></span>원</p>
                                     </div>
                                 </div>
                             </td>
                             <td><data value="">배송완료</data></td>
                             <td>
                                 <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
+                                    <button class="receipt-btn custom-button">수취확인</button>
+                                    <div th:each="item : ${order.orderItems}">
+                                        <button class="pReview-btn custom-button"
+                                                th:attr="data-product-no=${item.productId},
+                                                        data-product-name=${item.productName}"
+                                            th:disabled="${item.reviewContent != null}"
+                                            th:text="${item.reviewContent != null ? '상품평쓰기 완료' : '상품평쓰기'}">
+                                            상품평쓰기
+                                        </button>
+                                    </div>
                                     <button>반품신청</button>
                                     <button>교환신청</button>
                                 </div>
@@ -139,6 +187,9 @@
             </div>
         </div>
         </main>
-    <script  th:src="@{js/orderdetails.js}"></script>
+
+    <th:block th:replace="~{content/user/orderdetailsModal}"></th:block>
+    <script  th:src="@{/js/orderdetails.js}"></script>
+
 
 </th:block>

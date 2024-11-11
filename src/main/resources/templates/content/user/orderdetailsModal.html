@@ -114,16 +114,12 @@
       </colgroup>
       <tr>
         <th>문의유형</th>
-        <td><input type="radio" id="product" name="inquiry-type" value="상품">
-          <label for="product">상품</label>
-          <input type="radio" id="shipping" name="inquiry-type" value="배송">
-          <label for="shipping">배송</label>
-          <input type="radio" id="return" name="inquiry-type" value="반품/취소">
-          <label for="return">반품/취소</label>
-          <input type="radio" id="exchange" name="inquiry-type" value="교환">
-          <label for="exchange">교환</label>
-          <input type="radio" id="other" name="inquiry-type" value="기타">
-          <label for="other">기타</label>
+        <td>
+          <th:block th:each="cate : ${boardCate}">
+          <input type="radio" th:id="'inquiry-' + ${cate.boardCateId}"
+                 th:name="inquiry-type" th:value="${cate.name}" />
+          <label th:for="'inquiry-' + ${cate.boardCateId}" th:text="${cate.name}"></label>
+        </th:block>
         </td>
       </tr>
       <tr>
