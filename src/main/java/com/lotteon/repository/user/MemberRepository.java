@@ -20,7 +20,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByHp(String hp);
 
-    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.points")
+    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.points order by m.point desc")
     List<Member> findAllWithPoints();
 
     @Query("SELECT m FROM Member m WHERE m.user.uid = :uid")

@@ -98,6 +98,7 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
         log.info("productDicount!!! " + savedOrder.getProductDiscount());
 
+
         result = savedOrder.getOrderId();
         Optional<Member> member= memberRepository.findByUser_Uid(uid);
         if(member.isPresent()) {
@@ -128,6 +129,8 @@ public class OrderService {
 
 
             ProductDTO product = productService.selectProduct(orderItemDTO.getProductId());
+            orderItemDTO.setSeller(getModelMapper.map(product.getSeller(), Seller.class));
+            orderItemDTO.setCompany(product.getSeller().getCompany());
 
 
             log.info("sellerUid가 안들어와???" + product.getSeller());
