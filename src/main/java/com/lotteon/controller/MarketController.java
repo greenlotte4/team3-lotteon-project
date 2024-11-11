@@ -76,6 +76,7 @@ public class MarketController {
     private final CartItemService cartItemService;
     private final QnaService qnaService;
     private final ReviewRepository reviewRepository;
+    private final CouponIssuedService couponIssuedService;
 
     @GetMapping("/main/{category}")
     public String marketMain(Model model,@PathVariable long category) {
@@ -243,7 +244,6 @@ public class MarketController {
         response.put("result", 0L);
         log.info("요기!!!!!!!!!!!!!!!!!" + orderRequestDTO);
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO(orderRequestDTO);
-
         if (orderResponseDTO.getCartId() > 0) {
             log.info("cartId 가 없다?"+orderResponseDTO.getOrder());
             List<Long> cartItems = orderResponseDTO.getCartItems();
@@ -254,6 +254,9 @@ public class MarketController {
             }
         }
         long orderId = orderService.saveOrder(orderResponseDTO);
+        log.info("구매 처리 완료");
+        log.info("쿠폰 변경 요청함");
+        couponIssuedService.updateCouponStatus(orderRequestDTO.getCouponId(),"사용완료","사용완료");
 
 
         if (orderId > 0) {

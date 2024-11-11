@@ -1,17 +1,21 @@
 package com.lotteon.controller;
 
+import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.User.UserDTO;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
 import com.lotteon.dto.adminQnaDTO;
+import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderItemDTO;
 import com.lotteon.dto.order.OrderWithGroupedItemsDTO;
+import com.lotteon.dto.page.OrderPageResponseDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.QnA;
 import com.lotteon.entity.User.Member;
+import com.lotteon.entity.User.Point;
 import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.order.OrderItem;
@@ -27,6 +31,7 @@ import com.lotteon.service.admin.QnaService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.user.CouponDetailsService;
 import com.lotteon.service.user.MemberService;
+import com.lotteon.service.user.PointService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -45,8 +50,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -65,6 +69,7 @@ public class MypageController {
     private final AdminQnaRepository adminQnaRepository;
     private final MemberService memberService;
     private final QnaService qnaService;
+    private final PointService pointService;
 
     @GetMapping("/coupondetails")
     public String couponDetails(Model model) {
@@ -149,10 +154,46 @@ public class MypageController {
         return "content/user/mysettings"; // Points to "content/user/mysettings"
     }
 
+    @PostMapping("/mysettings/update")
+    public ResponseEntity<Map<String, String>> updateMember(
+            @RequestBody MemberDTO memberData) {
+
+        Optional<Member> existingMemberOpt = memberService.findByUserId(memberData.getUid());
+
+        if (existingMemberOpt.isPresent()) {
+            Member existingMember = existingMemberOpt.get();
+
+            // 업데이트된 값을 기존 Member 객체에 반영
+            existingMember.setName(memberData.getName());
+            existingMember.setEmail(memberData.getEmail());
+            existingMember.setHp(memberData.getHp());
+            existingMember.setPostcode(memberData.getPostcode());
+            existingMember.setAddr(memberData.getAddr());
+            existingMember.setAddr2(memberData.getAddr2());
+
+            // 업데이트 메서드 호출
+            memberService.updateMember(existingMember.getId(), existingMember);
+
+            // 성공 메시지 반환
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "회원 정보가 성공적으로 업데이트되었습니다.");
+            return ResponseEntity.ok(response);
+        } else {
+            // 사용자가 존재하지 않는 경우
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+
+
     @GetMapping("/orderdetails")
-    public String orderDetails(Model model) {
-        List<BannerDTO> banners = adminService.selectAllbanner();
+    public String orderDetails(Model model, PageRequestDTO pageRequestDTO, Authentication authentication) {
+        String uid = authentication.getName();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
+        OrderPageResponseDTO<OrderDTO> pageResponseOrderDTO = orderService.getOrderByUser(pageRequestDTO, uid);
+
+        model.addAttribute("pageResponseOrderDTO", pageResponseOrderDTO);
         model.addAttribute("content", "orderdetails");
         model.addAttribute("banners", banners2);
         return "content/user/orderdetails"; // Points to "content/user/orderdetails"
@@ -164,6 +205,20 @@ public class MypageController {
         List<BannerDTO> banners2 = adminService.getActiveBanners();
         model.addAttribute("content", "pointdetails");
         model.addAttribute("banners", banners2);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        String memberId = (userDetails.getId());
+
+        List<Point> point = pointService.myPoints(memberId);
+
+        double totalPoints = pointService.getTotalPoints(memberId);
+
+        model.addAttribute("pointList", point);
+        model.addAttribute("totalPoints", totalPoints);
+        log.info("나온 결과 맴버 포인트" + point);
+
+
         return "content/user/pointdetails"; // Points to "content/user/pointdetails"
     }
 

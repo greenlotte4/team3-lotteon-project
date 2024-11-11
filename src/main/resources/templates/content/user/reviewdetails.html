@@ -67,34 +67,44 @@
                     <tr class="font">
                         <th>번호</th>
                         <th>상품명</th>
-                        <th>내용</th>
                         <th>평점</th>
                         <th>작성일</th>
 
                     </tr>
-                    <th:block th:each="review : ${pageResponseReviewDTO.getDtoList()}">
-                    <tr class="tr3">
+                    <th:block th:if="${pageResponseReviewDTO.getDtoList().size() > 0}">
+                    <tr class="tr3" th:each="review : ${pageResponseReviewDTO.getDtoList()}">
                         <td th:text="${review.reviewId}"><data value="">1</data></td>
                         <td>
 
                             <data value="">
                                 <div class="product-container">
                                     <div class="eximg2">
+                                        <a th:href="@{'/market/view/' + ${review.product.categoryId}+ '/' + ${review.product.productId}}">
                                         <img th:if="${review.reviewFileDTOS.size() > 0}"
                                              th:src="@{'/uploads/ReviewImg/' + ${review.reviewFileDTOS[0].sname}}"
                                              alt="상품 이미지">
+                                        </a>
+                                        <span th:if="${review.reviewFileDTOS.size() == 0}" class="no-image-text">이미지 없음</span>
                                     </div>
 
-                                <div class="Pinf2">
-                                    <p>상품번호<br> <span th:text="${review.productId}">123456</span></p>
-                                    <p>상품명<br> <span th:text="${review.product.productName}">치킨</span></p>
-                                </div>
+                                    <div class="product-info">
+                                        <div>
+                                            <p>상품번호:</p>
+                                            <span class="truncate" th:text="${review.product.productId}">123456</span>
+                                        </div>
+                                        <div>
+                                            <p>상품명:</p>
+                                            <span class="truncate" th:text="${review.product.productName}">치킨</span>
+                                        </div>
+                                        <div>
+                                            <p>리뷰:</p>
+                                            <span class="truncate" th:text="${review.content}">배송이 빠릅니다. 잘 사용하겠습니다.</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </data>
 
                         </td>
-
-                        <td><data th:text="${review.content}">배송이 빠릅니다. 잘 사용하겠습니다.</data></td>
                         <td>
                             <data class="rating-display" th:text="${review.rating}">평점</data>
                         </td>
@@ -102,6 +112,18 @@
                     </tr>
                     </th:block>
 
+                    </tbody>
+
+                    <!-- 리뷰가 없을 때 표시할 내용 -->
+                    <tbody th:unless="${pageResponseReviewDTO.getDtoList().size() > 0}">
+                    <tr>
+                        <td colspan="4" style="text-align: center;">
+                            <div class="review-empty" style="display: flex; flex-direction: column; align-items: center; padding: 80px; justify-content: center; font-size: 15px;">
+                                <img src="/images/common/icon_no_result.svg" alt="No reviews"><br>
+                                <span>리뷰 내용이 없습니다.</span>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
 
                 </table>

@@ -135,11 +135,10 @@ th {
     height: 42.5px;
 }
 
-.Review-table th:nth-child(1) {width: 9.41%}
-.Review-table th:nth-child(2) {width: 24.71%}
-.Review-table th:nth-child(3) {width: 35.29%}
-.Review-table th:nth-child(4) {width: 15.29%}
-.Review-table th:nth-child(5) {width: 15.29%}
+.Review-table th:nth-child(1) {width: 10%;}   /* 80px / 850px */
+.Review-table th:nth-child(2) {width: 60%;}  /* 210px / 850px */
+.Review-table th:nth-child(4) {width: 15%;}  /* 130px / 850px */
+.Review-table th:nth-child(5) {width: 15%;}  /* 130px / 850px */
 
 
 .font{
@@ -159,21 +158,29 @@ td {
 
 
 }
+
+.product-info {
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+    margin-top: 10px;
+}
+
 .product-container {
     display: flex;            /* eximg2와 Pinf2를 가로로 배치 */
     align-items: center;      /* 세로 중앙 정렬 */
 }
 
 .eximg2 {
-    width: 100px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;        /* 이미지와 상품 정보 사이 간격 */
+    width: 100px; /* 이미지 박스 너비 */
+    height: 100px; /* 이미지 박스 높이 */
+    display: flex; /* flex 사용 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-right: 10px; /* 상품 정보와의 간격 */
+    background-color: #f0f0f0; /* 선택 사항: 배경색 */
 }
 
-.eximg2 > img {
+.eximg2 > a> img {
     width: 110px;
     height: 100px;
 }
@@ -223,4 +230,26 @@ td {
 }
 
 .reviewpage {width: 500px; height: 30px; margin: 20px auto; text-align: center}
+
+.product-info > div {
+    margin-bottom: 10px; /* 각 항목 간의 여백 */
+}
+
+.product-info p {
+    margin-left: 5px;
+    margin-right: 8px; /* p 태그의 기본 마진 제거 */
+    font-weight: bold; /* 제목 강조 */
+}
+
+.product-info span {
+    display: block; /* span을 블록으로 만들어 줄바꿈되게 함 */
+    margin-top: 1px; /* 상단 여백 추가 */
+    text-align: left; /* 왼쪽 정렬 */
+}
+
+.truncate {
+    display: inline-block;
+    overflow: hidden;    /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 넘칠 때 생략 부호(...) 표시 */
+}
 

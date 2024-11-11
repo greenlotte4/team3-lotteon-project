@@ -24,6 +24,8 @@ public class QOptionItem extends EntityPathBase<OptionItem> {
 
     public final NumberPath<Long> additionalPrice = createNumber("additionalPrice", Long.class);
 
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
+
     public final NumberPath<Long> item_id = createNumber("item_id", Long.class);
 
     public final QOptionGroup optionGroup;

@@ -1,7 +1,11 @@
 package com.lotteon.entity.order;
 
 
+import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.order.OrderDTO;
+import com.lotteon.dto.order.OrderItemDTO;
+import com.lotteon.dto.product.ProductDTO;
+import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,6 +13,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -60,8 +66,22 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderProducts;
 
+    private String productName; // 대표 상품명
+    private String sellerCompany; // 대표 회사명
+
 
     public OrderDTO toDTO(Order order) {
+        List<OrderItemDTO> orderItemDTOs = order.getOrderProducts().stream()
+                .map(orderItem -> new OrderItemDTO(orderItem))
+                .collect(Collectors.toList());
+
+//        String company = order.getOrderProducts().isEmpty() ? ""
+//                : Optional.ofNullable(order.getOrderProducts().get(0).getProduct())
+//                .map(Product::getSeller)
+//                .map(Seller::getCompany)
+//                .orElse("");
+        String productName = order.getOrderProducts().isEmpty() ? "" : order.getOrderProducts().get(0).getProduct().getProductName();
+
         return OrderDTO.builder()
                 .orderId(order.getOrderId())
                 .uid(order.getUid())
@@ -85,8 +105,12 @@ public class Order {
                 .usedCoupon(order.getUsedCoupon())
                 .addr1(order.getAddr1())
                 .addr2(order.getAddr2())
+                .orderItems(orderItemDTOs)
+                .productName(productName) // 추가된 부분
+               // .company(company)
                 .build();
     }
+
 
 
 }

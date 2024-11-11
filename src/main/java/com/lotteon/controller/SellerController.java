@@ -12,6 +12,7 @@ import com.lotteon.entity.order.Order;
 import com.lotteon.entity.product.Product;
 import com.lotteon.service.admin.AdminOrderService;
 import com.lotteon.service.order.OrderService;
+import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.user.UserService;
 import com.lotteon.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class SellerController {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final ObjectMapper objectMapper = new ObjectMapper();
-
+    private final ProductCategoryService productCategoryService;
 
 
     @GetMapping("/product/list")
@@ -80,7 +81,8 @@ public class SellerController {
         }
 
         model.addAttribute("productPageResponseDTO", productPageResponseDTO);
-        model.addAttribute("productList", "productList");
+        model.addAttribute("asideProduct", "asideProduct");
+        model.addAttribute("asideProductList","asideProductList");
 
         return "content/admin/product/admin_productlist"; // Points to the "content/sellerDynamic" template for product listing
     }
@@ -99,6 +101,9 @@ public class SellerController {
 
     @GetMapping("/product/register")
     public String productRegister(Model model) {
+
+        model.addAttribute("product", "product");
+        model.addAttribute("register","register");
         return "content/admin/product/admin_productReg"; // Points to the "content/sellerDynamic" template for product registration
     }
 
@@ -140,7 +145,18 @@ public class SellerController {
 
     }
 
+    @GetMapping("/product/modify/{productId}")
+    public String productModify(@PathVariable Long productId, Model model) {
 
+        ProductDTO productdto = productService.getProductModify(productId);
+
+        List<ProductCategoryDTO> categoryDTOs = productCategoryService.selectCategory(productdto.getCategoryId());
+
+        model.addAttribute("categoryDTOs",categoryDTOs);
+        model.addAttribute("product", productdto);
+        model.addAttribute("register","register");
+        return "content/admin/product/admin_productModify"; // Points to the "content/sellerDynamic" template for product registration
+    }
 
     @GetMapping("/product/delete")
     public String productDelete(@RequestParam("id") long id, Model model, Authentication authentication) {

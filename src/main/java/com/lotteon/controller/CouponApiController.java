@@ -10,6 +10,7 @@ import com.lotteon.entity.product.Product;
 import com.lotteon.repository.admin.CouponIssuedRepository;
 import com.lotteon.repository.admin.CouponRepository;
 import com.lotteon.repository.user.MemberRepository;
+import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.CouponService;
 import com.lotteon.service.product.ProductCategoryService;
@@ -79,15 +80,23 @@ public class CouponApiController {
     // 쿠폰 발급 여부 확인 API
     @GetMapping("/check/{couponId}")
     public ResponseEntity<Boolean> checkCouponIssued(@PathVariable String couponId, Authentication authentication) {
+       log.info("쿠폰 발급 여부 확인");
         try {
-            Long memberId = ((Member) authentication.getPrincipal()).getId();  // 로그인된 사용자 ID
-            boolean isIssued = couponIssuedRepository.existsByMemberIdAndCouponId(memberId, couponId);
+            // 현재 로그인된 사용자의 정보
+            String memberUid = authentication.getName(); //
+
+            List<CouponIssued> issuedCoupons = couponDetailsService.couponIssuedList(memberUid);
+
+            // 발급된 쿠폰 리스트에서 couponId가 있는지 확인
+            boolean isIssued = issuedCoupons.stream()
+                    .anyMatch(coupon -> coupon.getCouponId().equals(couponId));
+
+            log.info("발급현황"+ isIssued);
             return ResponseEntity.ok(isIssued);
-        } catch (ClassCastException e) {
-            // 인증된 사용자가 예상한 타입이 아닌 경우 예외 처리
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(false);
+
+
         } catch (Exception e) {
-            // 다른 예외 처리
+            log.error("예외 발생: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }
@@ -182,26 +191,5 @@ public class CouponApiController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateStatus")
-    public ResponseEntity<?> updateCouponIssuanceStatus(@RequestBody CouponIssuedRequestDTO request) {
-        log.info("주문 후 쿠폰 변경 요청 들어옴");
 
-        boolean result = couponIssuedService.updateCouponStatus(
-                request.getIssuanceCouponId(),
-                request.getUsageStatus(),
-                request.getStatus()
-        );
-
-        // 응답을 JSON 형식으로 반환
-        Map<String, Object> response = new HashMap<>();
-        if (result) {
-            response.put("result", 1);  // 성공 시 result 값
-            response.put("message", "쿠폰 상태가 성공적으로 업데이트되었습니다.");
-            return ResponseEntity.ok(response);  // JSON 반환
-        } else {
-            response.put("result", 0);  // 실패 시 result 값
-            response.put("message", "쿠폰을 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);  // JSON 반환
-        }
-    }
 }

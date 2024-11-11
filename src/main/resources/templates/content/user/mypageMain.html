@@ -81,16 +81,52 @@
                         <div style="display: flex; align-items: center;">
                             <div class="eximg">
                                 <div th:each="item : ${orderItem.groupedOrderItems}">
-                                    <img th:src="@{'/uploads/productImg/' + ${item.image}}" alt="상품 이미지">
+                                    <a th:href="@{'/market/view/' + ${item.categoryId} + '/' + ${item.productId}}">
+                                        <img th:src="@{'/uploads/productImg/' + ${item.image}}" alt="상품 이미지">
+                                    </a>
                                 </div>
 
                              </div>
                              <div class="Pinf">
                                  <!-- 주문 번호 -->
-                                <a href="#" class="order-number">주문번호: <span th:text="${orderItem.getOrderId()}"></span></a>
+                                <a href="#"
+                                   class="order-number"
+                                   th:each="item : ${orderItem.groupedOrderItems}"
+                                   th:data-order-id="${item.order.orderId}"
+                                   th:data-order-date="${#temporals.format(item.order.orderDate, 'yyyy-MM-dd')}"
+                                   th:data-company="${item.company}"
+                                   th:data-product-name="${item.productName}"
+                                   th:data-quantity="${item.stock}"
+                                   th:data-price="${item.order.totalOriginalPrice}"
+                                   th:data-discount="${item.order.totalDiscount}"
+                                   th:data-total-price="${item.formattedPrice}"
+                                   th:data-status="${item.status}"
+                                   th:data-customer-name="${item.order.memberName}"
+                                   th:data-customer-phone="${item.order.memberHp}"
+                                   th:data-customer-address="${item.order.addr1 + ' ' + item.order.addr2}"
+                                   th:data-delivery-requests="${item.order.shippingInfo}"
+                                   th:data-product-image="${item.image}"
+                                   onclick="openOrderModal(this)">
+
+                                    주문번호: <span th:text="${orderItem.getOrderId()}">
+                                </span>
+                                </a>
 
                                 <!-- 회사명 (Seller Uid) -->
-                                <a href="#" class="seller-number">회사명: <span th:each="item : ${orderItem.groupedOrderItems}" th:text="${item.seller.company}"></span></a>
+                                 <a href="#"
+                                    class="seller-number"
+                                    th:each="item : ${orderItem.groupedOrderItems}"
+                                    th:data-company="${item.seller.company}"
+                                     th:data-ceo="${item.seller.ceo}"
+                                     th:data-phone="${item.seller.hp}"
+                                     th:data-fax="${item.seller.fax}"
+                                     th:data-email="${item.seller.mo}"
+                                     th:data-bno="${item.seller.bno}"
+                                     th:data-address="${item.seller.addr + ' ' + item.seller.addr2}"
+                                     th:data-grade="${item.seller.grade}"
+                                     onclick="openModal(this)">
+                                 회사명: <span th:text="${item.seller.company}"></span>
+                                 </a>
 
                                 <!-- 상품명 -->
                                  <a th:each="item : ${orderItem.groupedOrderItems}"
@@ -105,6 +141,7 @@
 
                                 <!-- 가격 -->
                                 <p>가격:<span th:each="item : ${orderItem.groupedOrderItems}" th:text="${item.formattedPrice}">0</span>원</p>
+
                             </div>
                         </div>
                     </td>
@@ -192,12 +229,14 @@
                         <td>
                             <div class="product-container">
                                 <div class="eximg2">
-                                    <!-- 첫 번째 ReviewFile의 sname을 사용하여 이미지 표시 -->
+                                    <a th:href="@{'/market/view/' + ${review.product.categoryId}+ '/' + ${review.product.productId}}">
                                     <img th:if="${review.getPReviewFiles().size() > 0}"
                                          th:src="@{'/uploads/ReviewImg/' + ${review.getPReviewFiles()[0].sname}}"
                                          alt="상품 이미지">
+                                    </a>
                                     <!-- 이미지가 없는 경우 "이미지 없음" 텍스트 표시 -->
                                     <span th:if="${review.getPReviewFiles().size() == 0}" class="no-image-text">이미지 없음</span>
+
                                 </div>
 
                                 <div class="product-info">

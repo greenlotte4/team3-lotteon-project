@@ -90,273 +90,62 @@
                             <th>상태</th>  
                             <th>확인/신청</th>
                         </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
+                        <th:block th:if="${pageResponseOrderDTO.getDtoList().size() > 0}">
+                            <tr class="tr1" th:each="order : ${pageResponseOrderDTO.getDtoList()}">
+                                <td th:text="${#strings.substring(order.orderDate,0,10)}"><data th:value="${order.orderDate}">2023-01-01</data></td>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        <div class="eximg">
+                                            <img src="./img/ch.png" alt="상품 이미지">
+                                        </div>
+                                        <div class="Pinf">
+                                            <a href="">주문번호:<span th:text="${order.getOrderId()}"></span></a>
+                                           <!-- <a href=""><span th:text="${order.seller.company}"></span>회사명: ABC 회사</a> -->
+                                            <a href="">상품명:<span th:text="${order.productName}"></span></a>
+                                            <p>수량: 2</p>
+                                            <p>가격: 20,000원</p>
+                                        </div>
                                     </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
+                                </td>
+                                <td><data value="">배송완료</data></td>
+                                <td>
+                                    <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
+                                        <button class="custom-button">수취확인</button>
+                                        <button class="custom-button">상품평쓰기</button>
+                                        <button>반품신청</button>
+                                        <button>교환신청</button>
                                     </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
-                                    </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
-                                    </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
-                                    </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
-                                    </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
-                                    </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
-                                    </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
-                                    </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
-                                    </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-                        <tr class="tr1">
-                            <td><data value="">2023-01-01</data></td>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-                                    <div class="eximg">
-                                        <img src="./img/ch.png" alt="상품 이미지">
-                                    </div>
-                                    <div class="Pinf">
-                                        <a href="">주문번호: 123456</a>
-                                        <a href="">회사명: ABC 회사</a>
-                                        <a href="">상품명</a>
-                                        <p>수량: 2</p>
-                                        <p>가격: 20,000원</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><data value="">배송완료</data></td>
-                            <td>
-                                <div class="button" style="display: flex; flex-direction: column; gap: 3px; ">
-                                    <button class="custom-button">수취확인</button>
-                                    <button class="custom-button">상품평쓰기</button>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
-                                </div>
-                            </td>      
-                        </tr>
-
-                        
+                                </td>
+                            </tr>
+                        </th:block>
+                    </tbody>
+                    <!-- 주문 내역이 없을 때 표시할 내용 -->
+                    <tbody th:unless="${pageResponseOrderDTO.getDtoList().size() > 0}">
+                    <tr>
+                        <td colspan="4" style="text-align: center;">
+                            <div class="order-empty" style="display: flex; flex-direction: column; align-items: center; padding: 80px; justify-content: center; font-size: 15px;">
+                                <img src="/images/common/icon_no_result.svg" alt="No orders"><br>
+                                <span>주문 내역이 없습니다.</span>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="orderpage">
+                <th:block th:if="${pageResponseOrderDTO.prev}">
+                    <a th:href="@{/market/orderdetails(pg=${pageResponseOrderDTO.start - 1})}" class="prev">이전</a>
+                </th:block>
 
+                <th:block th:each="num : ${#numbers.sequence(pageResponseOrderDTO.start, pageResponseOrderDTO.end)}">
+                    <a th:href="@{/mypage/orderdetails(pg=${num})}"
+                       th:class="${num == pageResponseOrderDTO.pg} ? 'current' : 'num'" class="num">[[${num}]]</a>
+                </th:block>
 
-              
+                <th:block th:if="${pageResponseOrderDTO.next}">
+                    <a th:href="@{/mypage/orderdetails(pg=${pageResponseOrderDTO.end + 1})}" class="next">다음</a>
+                </th:block>
+
             </div>
         </div>
         </main>

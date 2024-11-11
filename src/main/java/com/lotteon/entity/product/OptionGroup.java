@@ -35,6 +35,10 @@ public class OptionGroup {
     private String name;
     private boolean isRequired;
 
+    // Soft delete 플래그 추가
+    @Builder.Default
+    private boolean isDeleted = false;
+
     @ToString.Exclude
     @JsonManagedReference // 순환 참조 방지를 위해 사용
     @OneToMany(mappedBy = "optionGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

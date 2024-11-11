@@ -18,13 +18,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import reactor.core.scheduler.Scheduler;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +42,7 @@ public class CouponService {
     private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
     private final CouponIssuedRepository couponIssuedRepository;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public String randomCouponId() {
 
@@ -104,7 +110,7 @@ public class CouponService {
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new RuntimeException("Coupon could not be found for id: " + couponId));
 
-        if ("발급 중".equals(coupon.getStatus()) || "발급 가능".equals(coupon.getStatus())) {
+        if ("발급 중".equals(coupon.getStatus()) || "사용완료".equals(coupon.getStatus())) {
             coupon.setStatus("종료됨");
             couponRepository.save(coupon);
             log.info("Coupon ended: " + coupon);
@@ -113,17 +119,27 @@ public class CouponService {
             if (!issuedCoupons.isEmpty()) {
                 for (CouponIssued issuedCoupon : issuedCoupons) {
                     issuedCoupon.setStatus("종료됨");  // 각 발급된 쿠폰의 상태를 '종료됨'으로 변경
+                    issuedCoupon.setUsageStatus("사용불가"); // 종료 버튼을 누르면 issued 쪽에서 사용 불가 로 변환
                 }
                 couponIssuedRepository.saveAll(issuedCoupons);  // 발급된 쿠폰 모두 저장
+                log.info("삭제요청");
+                // 발급된 쿠폰은 30일 후 자동 삭제
+                scheduler.schedule(() -> deleteCouponById(couponId), 30, TimeUnit.DAYS);
+            } else {
+                // 일반 쿠폰은 14일 후 자동 삭제
+                scheduler.schedule(() -> deleteCouponById(couponId), 14, TimeUnit.DAYS);
             }
-
             couponIssuedRepository.saveAll(issuedCoupons);
             return modelMapper.map(coupon, CouponDTO.class);
         } else {
             throw new RuntimeException("궁시렁궁시렁 오류남");
         }
     }
-
+    private void deleteCouponById(String couponId) {
+        couponRepository.deleteById(couponId);
+        couponIssuedRepository.deleteByCouponId(couponId);  // 발급된 쿠폰들도 삭제
+        log.info("Coupon and issued coupons deleted after delay: " + couponId);
+    }
     // 페이징 기능 추가
     public Page<CouponDTO> selectCouponsPagination(CouponListRequestDTO request, long sellerId, Pageable pageable) {
 

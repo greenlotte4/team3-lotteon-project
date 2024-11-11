@@ -11,7 +11,9 @@ package com.lotteon.service.order;
 
 import com.lotteon.controller.SellerController;
 import com.lotteon.dto.User.SellerDTO;
+import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.order.*;
+import com.lotteon.dto.page.OrderPageResponseDTO;
 import com.lotteon.dto.product.OptionDTO;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.dto.product.ProductRedisDTO;
@@ -40,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.internal.bytebuddy.description.annotation.AnnotationValue;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -95,6 +98,7 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
         log.info("productDicount!!! " + savedOrder.getProductDiscount());
 
+
         result = savedOrder.getOrderId();
         Optional<Member> member= memberRepository.findByUser_Uid(uid);
         if(member.isPresent()) {
@@ -125,6 +129,8 @@ public class OrderService {
 
 
             ProductDTO product = productService.selectProduct(orderItemDTO.getProductId());
+            orderItemDTO.setSeller(getModelMapper.map(product.getSeller(), Seller.class));
+            orderItemDTO.setCompany(product.getSeller().getCompany());
 
 
             log.info("sellerUid가 안들어와???" + product.getSeller());
@@ -217,6 +223,23 @@ public class OrderService {
     //seller별 orderItem 찾기
     public List<OrderDTO> selectOrderItemsBySeller() {
         return null;
+    }
+
+    public OrderPageResponseDTO<OrderDTO> getOrderByUser(PageRequestDTO pageRequestDTO, String uid) {
+        Pageable pageable = pageRequestDTO.getPageable("orderId");
+
+        Page<Order> pageOrder = orderRepository.findByUid(uid, pageable);
+        List<OrderDTO> orderList = pageOrder.stream()
+                .map(order -> order.toDTO(order))  // 수정된 부분
+                .collect(Collectors.toList());
+
+        int total = (int) pageOrder.getTotalElements();
+
+        return OrderPageResponseDTO.<OrderDTO>builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(orderList)
+                .total(total)
+                .build();
     }
 
 //    public List<OrderWithGroupedItemsDTO> getOrdersGroupedBySeller(String uid) {
