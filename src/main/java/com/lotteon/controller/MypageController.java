@@ -202,6 +202,9 @@ public class MypageController {
                 .filter(cate -> targetNames.contains(cate.getName()))
                 .collect(Collectors.toList());
 
+        // 로그로 필터링된 결과 확인
+        log.info("filteredBoardCateDTOS: " + filteredBoardCateDTOS);
+
         model.addAttribute("boardCate", filteredBoardCateDTOS);
         model.addAttribute("pageResponseOrderDTO", pageResponseOrderDTO);
         model.addAttribute("content", "orderdetails");
