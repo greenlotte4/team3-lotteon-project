@@ -86,7 +86,7 @@ public class OrderDTO {
                 .map(item -> {
                     Seller seller = sellerRepository.findByUserUid(item.getSellerUid())
                             .orElse(null);
-                    return new OrderItemDTO(item, seller, orderDTO);  // OrderDTO를 넘겨줌
+                    return new OrderItemDTO(item, seller, order);  // OrderDTO를 넘겨줌
                 })
                 .collect(Collectors.toList());
     }
