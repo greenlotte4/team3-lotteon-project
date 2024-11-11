@@ -1,5 +1,6 @@
 package com.lotteon.repository.order;
 
+import com.lotteon.dto.admin.AdminOrderItemDTO;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -13,9 +14,11 @@ import java.time.LocalDateTime;
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
+
     long countBySellerUid(String sellerUid);
 
-    List<OrderItem> findByOrder_OrderId(Long orderId);
+    @Query("SELECT new com.lotteon.dto.admin.AdminOrderItemDTO( oi.orderItemId, oi.product.productName, oi.order.orderId, oi.status, oi.price, oi.savedPrice, oi.orderPrice, oi.savedDiscount, oi.shippingFees, oi.stock) FROM OrderItem oi WHERE oi.order.orderId = :orderId")
+    List<AdminOrderItemDTO> findByOrder_OrderId(Long orderId);
   
     @Query("SELECT SUM(o.orderPrice) FROM OrderItem o WHERE o.sellerUid = :sellerUid")
     Long findTotalOrderPriceBySellerUid(@Param("sellerUid") String sellerUid);
