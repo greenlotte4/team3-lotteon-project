@@ -65,7 +65,7 @@
                             <td><a class="order-modal-btn" th:text="${order.orderId}">10101212121</a></td>
                             <td th:text="${order.uid}">wlgus5946</td>
                             <td th:text="${order.memberName}">챱챱김</td>
-                            <td class="productname" th:text="${order.orderItems[0].product.productName + '(외)'}">초코틴틴</td>
+                            <td class="productname" th:text="${order.orderItems[0].productName + '(외)'}">초코틴틴</td>
                             <td th:text="${order.totalQuantity}">896</td>
                             <td th:text="${order.totalPrice}">9,000</td>
                             <td th:text="${order.pay}">신용카드</td>
@@ -294,8 +294,11 @@
                                 orderModal.style.display = 'none'; // 내부 모달도 숨김
                             }
 
-                            document.querySelectorAll('.order-modal-btn').forEach(button => {
-                                button.addEventListener('click', openModal);
+                            // document에 이벤트 위임 설정
+                            document.addEventListener('click', function (event) {
+                                if (event.target.classList.contains('order-modal-btn')) {
+                                    openModal();
+                                }
                             });
 
                             modalClose.addEventListener('click', closeModal);
@@ -307,35 +310,70 @@
                             });
 
 
-
-
                             document.getElementById('searchBtn').addEventListener('click', function (e) {
                                 e.preventDefault();
                                 const type = document.getElementById('ordersearch').value;
                                 const keyword = document.getElementById('search').value;
 
-                                // 콘솔에 type과 keyword 값 출력
-                                console.log('검색 기준 type:', type);
-                                console.log('검색어 keyword:', keyword);
+                                if (!type || !keyword) {
+                                    alert('검색어를 입력하세요');
+                                    return;
+                                } else {
+                                    // 콘솔에 type과 keyword 값 출력
+                                    console.log('검색 기준 type:', type);
+                                    console.log('검색어 keyword:', keyword);
 
-                                fetch(`/api/order/status/page?type=${type}&keyword=${keyword}`)
-                                    .then(resp => resp.json())
+                                    fetch(`/api/order/status/page?type=${type}&keyword=${keyword}`)
+                                        .then(resp => resp.json())
+                                        .then(adminOrderPageResponseDTO => {
+                                            console.log("야옹 : ", adminOrderPageResponseDTO);
+                                            const ordertbody = document.querySelector('.admin_order_table tbody');
+                                            ordertbody.innerHTML = '';
 
+                                            updateTable(adminOrderPageResponseDTO.adminorderdtoList);
+                                            updatePagination(adminOrderPageResponseDTO, type, keyword)
 
+                                        })
+                                        .catch(err => console.log(err));
+                                }
+                            });
 
+                            function loadPageOrPages(page, type, keyword) {
+                                if (type && keyword) {
+                                    fetch(`/api/order/status/page?pg=${page}&type=${type}&keyword=${keyword}`)
+                                        .then(resp => resp.json())
+                                        .then(adminOrderPageResponseDTO => {
+                                            console.log("야옹 : ", adminOrderPageResponseDTO);
+                                            const ordertbody = document.querySelector('.admin_order_table tbody');
+                                            ordertbody.innerHTML = '';
 
+                                            updateTable(adminOrderPageResponseDTO.adminorderdtoList);
+                                            updatePagination(adminOrderPageResponseDTO, type, keyword)
 
-                                    .then(adminOrderPageResponseDTO => {
-                                        console.log("야옹 : "+ adminOrderPageResponseDTO);
-                                        const ordertbody = document.querySelector('.admin_order_table tbody');
-                                        ordertbody.innerHTML = '';
-                                        adminOrderPageResponseDTO.adminorderdtoList.forEach(order => {
-                                            const row = `
+                                        })
+                                        .catch(err => console.log(err));
+                                }
+
+                            }
+
+                            function updateTable(adminorderdtoList) {
+
+                                const ordertbody = document.querySelector('.admin_order_table tbody');
+                                if (adminorderdtoList.length === 0) {
+                                    const row = `
+                                <tr>
+                                    <td>등록된 글이 없습니다.</td>
+                                </tr>
+                                `;
+                                    ordertbody.innerHTML += row;
+                                } else {
+                                    adminorderdtoList.forEach(order => {
+                                        const row = `
                                                 <tr>
                                                     <td><a class="order-modal-btn" href="#">${order.orderId}</a></td>
                                                     <td>${order.uid}</td>
                                                     <td>${order.memberName}</td>
-                                                    <td class="productname">${order.orderItems[0].product.productName} (외)</td>
+                                                    <td class="productname">${order.orderItems[0].productName} (외)</td>
                                                     <td>${order.totalQuantity}</td>
                                                     <td>${order.totalPrice}</td>
                                                     <td>${order.pay}</td>
@@ -343,12 +381,41 @@
                                                     <td>${order.orderDate.substring(0, 10)}</td>
                                                     <td><button class="openModalBtn">배송하기</button></td>
                                                 </tr>`;
-                                            ordertbody.innerHTML += row;
-                                        });
+                                        ordertbody.innerHTML += row;
                                     })
-                                    .catch(err => console.log(err));
-                            });
+                                }
+                            }
 
-                        });
+                            function updatePagination(adminOrderPageResponseDTO, type, keyword) {
+                                const paginationElement = document.querySelector('.pagination');
+                                paginationElement.innerHTML = '';
+
+                                if (adminOrderPageResponseDTO.prev) {
+                                    const prevLink = `<a href="#" data-page="${adminOrderPageResponseDTO.start - 1}" class="prev">이전</a>`;
+                                    paginationElement.innerHTML += prevLink;
+                                }
+
+                                for (let num = adminOrderPageResponseDTO.start; num <= adminOrderPageResponseDTO.end; num++) {
+                                    const pageLink = `<a href="#" data-page="${num}" class="${num === adminOrderPageResponseDTO.pg ? 'qnacurrent' : 'qnanum'}">${num}</a>`;
+                                    paginationElement.innerHTML += pageLink;
+                                }
+
+                                if (adminOrderPageResponseDTO.next) {
+                                    const nextLink = `<a href="#" data-page="${adminOrderPageResponseDTO.end + 1}" class="next">다음</a>`;
+                                    paginationElement.innerHTML += nextLink;
+                                }
+
+                                document.querySelectorAll('.pagination a').forEach(link => {
+                                    link.addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        const page = this.getAttribute('data-page');
+                                            loadPageOrPages(page, type, keyword);
+
+
+                                    })
+                                })
+                            }
+                        })
+
                     </script>
 </th:block>

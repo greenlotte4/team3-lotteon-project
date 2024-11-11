@@ -56,6 +56,7 @@ public class AdminOrderService {
     public AdminOrderPageResponseDTO selectOrderListAll(PageRequestDTO pageRequestDTO){
         Pageable pageable = pageRequestDTO.getPageable("no");
         Page<Tuple> pageAdminOrder = null;
+
         log.info("abababababab:"+ pageRequestDTO.getKeyword());
         if(pageRequestDTO.getKeyword() == null){
             pageAdminOrder = orderRepository.selectOrderAllForList(pageRequestDTO, pageable);
@@ -71,21 +72,22 @@ public class AdminOrderService {
             Order orders = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Faq not found with ID: " + id));; //조건주고 조회하기
             log.info("이게 order!! 머야?:"+ orders);
 
-            List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(id);
-            log.info("아니 orderItems가 계속 조회가 안됨: " + orderItems);
+//            List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(id);
+            List<AdminOrderItemDTO> orderItemdtos = orderItemRepository.findByOrder_OrderId(id);
+            log.info("아니 orderItems가 계속 조회가 안됨: " + orderItemdtos);
 
             AdminOrderDTO adminOrderDTO = getModelMapper.map(orders, AdminOrderDTO.class);
             // OrderItem들을 OrderItemDTO로 변환
 
 
-            List<OrderItemDTO> orderItemDTOs = orderItems.stream()
-                    .map(orderItem -> modelMapper.map(orderItem, OrderItemDTO.class))
-                    .collect(Collectors.toList());
+//            List<OrderItemDTO> orderItemDTOs = orderItems.stream()
+//                    .map(orderItem -> modelMapper.map(orderItem, OrderItemDTO.class))
+//                    .collect(Collectors.toList());
 
-            log.info("아니 orderItemDTO를 변환해야돼 : " + orderItemDTOs);
+            log.info("아니 orderItemDTO를 변환해야돼 : " + orderItemdtos);
 
 
-            adminOrderDTO.setOrderItems(orderItemDTOs);
+            adminOrderDTO.setOrderItems(orderItemdtos);
             log.info("야옹하고울어요!: " + adminOrderDTO);
             return adminOrderDTO;
 

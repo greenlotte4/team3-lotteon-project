@@ -14,7 +14,7 @@ import lombok.*;
 public class AdminOrderItemDTO {
 
     private long orderItemId;
-    private ProductDTO product;
+    private String productName;
     private long orderId;
     private DeliveryStatus status;
     private long price;
