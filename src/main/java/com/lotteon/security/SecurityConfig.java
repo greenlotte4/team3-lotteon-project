@@ -1,5 +1,6 @@
 package com.lotteon.security;
 
+import com.lotteon.oauth2.MyOauth2UserService;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.service.user.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +27,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
-//    private final CustomOAuth2UserService userService;
+    private final MyOauth2UserService myOauth2UserService;
+    private final MyUserDetailsService myUserDetailsService;
 
     @Bean
 
@@ -58,7 +60,7 @@ public class SecurityConfig {
                 .and()
                 .oauth2Login(login -> login
                         .loginPage("/user/login")
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
+                        .userInfoEndpoint(userInfo -> userInfo.userService(myOauth2UserService))
                         .defaultSuccessUrl("/",true)
                         .failureUrl("/user/login?error=true")
                 );
@@ -133,8 +135,4 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    public CustomOAuth2UserService customOAuth2UserService() {
-        return new CustomOAuth2UserService();
-    }
 }
