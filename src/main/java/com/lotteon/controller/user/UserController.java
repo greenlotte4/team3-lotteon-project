@@ -1,6 +1,7 @@
 package com.lotteon.controller.user;
 
 import com.lotteon.dto.admin.BannerDTO;
+import com.lotteon.security.InactiveUserException;
 import com.lotteon.service.AdminService;
 import com.lotteon.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,8 +44,8 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String userLogin(Model model,HttpServletRequest request,@RequestParam(value = "redirect", required = false) String redirectUrl) {
-        if(redirectUrl != null) {
+    public String userLogin(Model model, HttpServletRequest request, @RequestParam(value = "redirect", required = false) String redirectUrl) {
+        if (redirectUrl != null) {
             request.getSession().setAttribute("redirectUrl", redirectUrl);
 
         }
@@ -84,14 +86,13 @@ public class UserController {
     }
 
 
-
     @PostMapping("/login")
     public String login(@RequestParam("inId") String username,
                         @RequestParam("password") String password, HttpServletRequest request
-            ,Model model) {
+            , Model model) {
 
         try {
-            if(userService.login(username, password)) {
+            if (userService.login(username, password)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(username, password);
                 Authentication authentication = authenticationManager.authenticate(authToken);
@@ -103,7 +104,7 @@ public class UserController {
 
                 // 로그인 성공 시 Member의 name 값을 가져와 모델에 추가
                 String memberName = userService.getMemberNameByUsername(username);
-                log.info("login성공!!!!!!"+memberName);
+                log.info("login성공!!!!!!" + memberName);
                 model.addAttribute("memberName", memberName);
 
 
@@ -114,18 +115,19 @@ public class UserController {
                 }
 
                 return "redirect:/?success=100"; // 로그인 성공 후 이동할 페이지
-            }else{
+            } else {
 
                 return "redirect:/user/login?error";
             }
 
-        } catch (Exception e) {
-            log.error("로그인 실패: ", e);
-            model.addAttribute("error", "로그인 실패: 아이디 또는 비밀번호가 잘못되었습니다."); // 오류 메시지 추가
-            return "content/user/login"; // 로그인 페이지로 돌아가기
+        } catch (InactiveUserException e) {
+            // InactiveUserException 발생 시 경고 메시지를 모델에 추가하여 alert 표시
+            model.addAttribute("errorMessage", e.getMessage());
+            return "user/login";  // 로그인 페이지로 이동하며 메시지 표시
+        } catch (BadCredentialsException e) {
+            return "redirect:/user/login?error";
         }
     }
-
 
 }
 

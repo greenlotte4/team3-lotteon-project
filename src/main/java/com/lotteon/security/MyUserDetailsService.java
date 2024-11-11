@@ -30,7 +30,7 @@ public class MyUserDetailsService implements UserDetailsService {
             log.info("log user getRole :"+user.getRole());
             log.info("Retrieved user1: {}", user);
             log.info("Seller associated with user1: {}", user.getSeller());
-            if(!user.getRole().equals("BLACK") && !user.getRole().equals("LEAVE")){
+            if(!user.getRole().equals("BLACK") && !user.getRole().equals("LEAVE") && !user.getRole().equals("DORMANT")){
                 MyUserDetails myUserDetails = MyUserDetails.builder()
                         .user(user)
                         .seller(user.getSeller())
@@ -41,7 +41,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
             }
             else{
-                throw new UsernameNotFoundException("User does not have the required role.");
+                throw new InactiveUserException("Your account status is: " + user.getRole());
             }
         }
 
