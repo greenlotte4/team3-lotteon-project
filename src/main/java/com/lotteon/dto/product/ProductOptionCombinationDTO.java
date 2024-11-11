@@ -27,6 +27,8 @@ public class ProductOptionCombinationDTO {
     private Long additionalPrice;
     private Long stock;
     private Long  product;
+    private boolean isDeleted;
+
 
     public String getCombinationAfterColon() {
         String[] parts = combination.split(":");

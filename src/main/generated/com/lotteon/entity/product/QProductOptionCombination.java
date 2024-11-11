@@ -28,6 +28,8 @@ public class QProductOptionCombination extends EntityPathBase<ProductOptionCombi
 
     public final NumberPath<Long> combinationId = createNumber("combinationId", Long.class);
 
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
+
     public final StringPath optionCode = createString("optionCode");
 
     public final QProduct product;

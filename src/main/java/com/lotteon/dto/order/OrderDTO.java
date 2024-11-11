@@ -50,6 +50,24 @@ public class OrderDTO {
     private List<Long> orderItemIds;
     private String image;
     private String path;
+    private String productName;
+    private String company;
+
+    public OrderDTO(Order order) {
+
+        this.totalDiscount = order.getTotalDiscount();
+        this.totalPrice = order.getTotalPrice();
+        this.totalOriginalPrice = order.getTotalOriginalPrice();
+        this.orderDate = order.getOrderDate();
+        this.orderId = order.getOrderId();
+        this.memberName = order.getMemberName();
+        this.addr1 = order.getAddr1();
+        this.addr2 = order.getAddr2();
+        this.shippingInfo = order.getShippingInfo();
+        this.memberHp = order.getMemberHp();
+        this.productName = order.getProductName();
+
+    }
 
 
     public Order toEntity() {

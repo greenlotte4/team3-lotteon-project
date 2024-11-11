@@ -46,46 +46,94 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModalBtn = document.querySelector(".modal .close");
     const orderNumbers = document.querySelectorAll(".order-number");
 
-    orderNumbers.forEach(order => {
-        order.addEventListener("click", function(e) {
-            e.preventDefault();
-            modal.style.display = "block"; // Show the modal
-        });
-    });
+    function openOrderModal(orderElement) {
+        // 데이터 속성 값들을 모달에 채우기
+        document.getElementById("orderDate").textContent = orderElement.getAttribute("data-order-date");
+        document.getElementById("orderIdText").textContent = `주문번호: ${orderElement.getAttribute("data-order-id")}`;
+        document.getElementById("companyName").textContent = orderElement.getAttribute("data-company");
+        document.getElementById("productName").textContent = orderElement.getAttribute("data-product-name");
+        document.getElementById("quantityText").textContent = `수량: ${orderElement.getAttribute("data-quantity")}`;
+        document.getElementById("productPrice").textContent = orderElement.getAttribute("data-price");
+        document.getElementById("salePrice").textContent = orderElement.getAttribute("data-price"); // 판매가
+        document.getElementById("discountPrice").textContent = orderElement.getAttribute("data-discount"); // 할인액
+        document.getElementById("totalPrice").textContent = orderElement.getAttribute("data-total-price"); // 결제금액
+        document.getElementById("orderStatus").textContent = orderElement.getAttribute("data-status");
+        document.getElementById("customerName").textContent = orderElement.getAttribute("data-customer-name");
+        document.getElementById("customerPhone").textContent = orderElement.getAttribute("data-customer-phone");
+        document.getElementById("customerAddress").textContent = orderElement.getAttribute("data-customer-address");
+        document.getElementById("deliveryRequests").textContent = orderElement.getAttribute("data-delivery-requests");
 
-    // Close modal when clicking the close button
+        // 이미지 경로 업데이트
+        const imagePath = orderElement.getAttribute("data-product-image");
+        document.getElementById("productImage").src = `/uploads/productImg/${imagePath}`; // 이미지 경로 반영
+
+        modal.style.display = "block"; // Show the modal
+    }
+
+// 모달 닫기 버튼 클릭시
     closeModalBtn.addEventListener("click", function() {
-        modal.style.display = "none"; // Hide the modal
+        modal.style.display = "none"; // 모달 숨기기
     });
 
-    // Close modal when clicking outside the modal content
+// 모달 외부를 클릭하면 모달 닫기
     window.onclick = function(event) {
         if (event.target == modal) {
-            modal.style.display = "none"; // Hide the modal
+            modal.style.display = "none"; // 모달 숨기기
         }
     };
 
-    //판매자정보 모달창
+// 각 주문 항목에 클릭 이벤트 추가
+    orderNumbers.forEach(order => {
+        order.addEventListener("click", function(e) {
+            e.preventDefault();
+            openOrderModal(order); // openOrderModal 함수 호출
+        });
+    });
+
+    // 판매자 정보 모달창
     const sellerModal = document.getElementById("sellerModal");
     const sellerNumbers = document.querySelectorAll(".seller-number");
     const closeModalBtn2 = document.querySelector(".modal.seller .close");
 
+// 각 판매자 정보를 클릭할 때 모달에 데이터를 반영하고 열기
     sellerNumbers.forEach(order => {
         order.addEventListener("click", function(e) {
             e.preventDefault();
-            sellerModal.style.display = "block"; // Show the modal
+
+            // 클릭한 요소의 data- 속성에서 각 데이터 가져오기
+            const company = order.getAttribute("data-company");
+            const ceo = order.getAttribute("data-ceo");
+            const phone = order.getAttribute("data-phone");
+            const fax = order.getAttribute("data-fax");
+            const email = order.getAttribute("data-email");
+            const bno = order.getAttribute("data-bno");
+            const address = order.getAttribute("data-address");
+            const grade = order.getAttribute("data-grade");
+
+            // 모달 내용에 해당 데이터 반영
+            document.querySelector("#sellerModal td[data-field='grade']").textContent = grade;
+            document.querySelector("#sellerModal td[data-field='company']").textContent = company;
+            document.querySelector("#sellerModal td[data-field='ceo']").textContent = ceo;
+            document.querySelector("#sellerModal td[data-field='phone']").textContent = phone;
+            document.querySelector("#sellerModal td[data-field='fax']").textContent = fax;
+            document.querySelector("#sellerModal td[data-field='email']").textContent = email;
+            document.querySelector("#sellerModal td[data-field='bno']").textContent = bno;
+            document.querySelector("#sellerModal td[data-field='address']").textContent = address;
+
+            // 모달 보이기
+            sellerModal.style.display = "block";
         });
     });
 
-    // Close modal when clicking the close button
+// 닫기 버튼 클릭 시 모달 닫기
     closeModalBtn2.addEventListener("click", function() {
-        sellerModal.style.display = "none"; // Hide the modal
+        sellerModal.style.display = "none";
     });
 
-    // Close modal when clicking outside the modal content
+// 모달 외부 클릭 시 모달 닫기
     window.onclick = function(event) {
         if (event.target == sellerModal) {
-            sellerModal.style.display = "none"; // Hide the modal
+            sellerModal.style.display = "none";
         }
     };
 

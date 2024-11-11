@@ -57,10 +57,8 @@ public class MemberService {
             existingMember.setAddr2(updatedMember.getAddr2());
             existingMember.setUserinfocol(updatedMember.getUserinfocol());
 
-
-//            existingMember.setStatus(updatedMember.getStatus());
-//            existingMember.setGrade(updatedMember.getGrade());
-            // 기타 필드 업데이트...
+            existingMember.setStatus(updatedMember.getStatus());
+            existingMember.setGrade(updatedMember.getGrade());
 
             memberRepository.save(existingMember);
         }

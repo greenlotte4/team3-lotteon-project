@@ -468,6 +468,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
+
+
+
 // 모달 엘리먼트와 버튼, 닫기 버튼 가져오기
     const modal = document.getElementById("discountModal");
     const btn = document.getElementById("openDiscountModalBtn");
@@ -481,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const productId = document.getElementById('productId').value;
         fetchCoupons(productId);
 
-
+        setTimeout(updateCouponButtonState, 100);  // 버튼 상태 업데이트
     }
 
 // 닫기 버튼을 클릭하면 모달 숨기기
@@ -525,16 +529,6 @@ function fetchCoupons(productId) {
             console.error(err,'요청중 문제 발생함')
         })
 }
-/*
-function displayErrorMessage(message) {
-    const couponContainer = document.getElementById('discountCouponItems');
-    couponContainer.innerHTML = ''; // 이전 내용 제거
-
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message'; // CSS 클래스를 추가하여 스타일링 가능
-    errorDiv.textContent = message;
-    couponContainer.appendChild(errorDiv);
-}*/
 
 // 쿠폰 목록 표시하기
 function displayCoupons(coupons) {
@@ -565,6 +559,8 @@ function displayCoupons(coupons) {
             couponContainer.appendChild(couponItem);
         });
     }
+    setTimeout(updateCouponButtonState, 100);  // 버튼 상태 업데이트
+
 }
 
 function applyCoupon(couponId){
@@ -593,10 +589,15 @@ function applyCoupon(couponId){
             }
         })
         .then(data => {
+            // 쿠폰 발급 성공 후 버튼 상태 변경
             const button = document.querySelector(`button[onclick="applyCoupon('${couponId}')"]`);
             if (button) {
-                button.textContent = '발급완료'; // 버튼 텍스트 변경
-                button.disabled = true; // 버튼 비활성화
+                button.textContent = '발급완료'; // 발급 완료 버튼 텍스트로 변경
+                button.disabled = true; // 비활성화
+                button.style.backgroundColor = '#28a745'; // 초록색 배경
+                button.style.color = 'white'; // 흰색 텍스트
+                button.style.border = '1px solid #28a745'; // 초록색 테두리
+                button.style.cursor = 'not-allowed'; // 마우스 커서 변경
             }
             alert(`쿠폰이 성공적으로 적용되었습니다.`);
 
@@ -609,26 +610,37 @@ function applyCoupon(couponId){
 }
 function updateCouponButtonState() {
     const buttons = document.querySelectorAll('button[onclick^="applyCoupon"]');
+    console.log("요청들어옴")
 
     buttons.forEach(button => {
-        const couponId = button.getAttribute('onclick').match(/'(\d+)'/)[1]; // 쿠폰 ID 추출
+        const onclickValue = button.getAttribute('onclick');
+        console.log(onclickValue);  // 버튼의 onclick 속성 값 출력
+        const couponIdMatch = onclickValue.match(/'([^']+)'/);
 
-        // 서버로 쿠폰 발급 여부 확인
-        fetch(`/api/coupon/check/${couponId}`, {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-        })
-            .then(resp => resp.json())
-            .then(isIssued => {
-                if (isIssued) {
-                    button.textContent = '발급완료'; // 발급 완료 버튼 텍스트로 변경
-                    button.disabled = true; // 비활성화
-                }
+        if (couponIdMatch) {
+            const couponId = couponIdMatch[1];
+            console.log(`Coupon ID: ${couponId}`);  // 쿠폰 ID 확인
+
+            // 서버로 쿠폰 발급 여부 확인
+            fetch(`/api/coupon/check/${couponId}`, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
             })
-            .catch(err => console.error("쿠폰 발급 여부 확인 실패:", err));
+                .then(resp => resp.json())
+                .then(isIssued => {
+                    console.log(`Is coupon issued: ${isIssued}`);  // 발급 여부 확인
+                    if (isIssued) {
+                        button.textContent = '발급완료'; // 발급 완료 버튼 텍스트로 변경
+                        button.disabled = true; // 비활성화
+                        button.style.backgroundColor = '#28a745'; // 초록색 배경
+                        button.style.color = 'white'; // 흰색 텍스트
+                        button.style.border = '1px solid #28a745'; // 초록색 테두리
+                        button.style.cursor = 'not-allowed'; // 마우스 커서 변경
+                    }
+                })
+                .catch(err => console.error("쿠폰 발급 여부 확인 실패:", err));
+        } else {
+            console.error("쿠폰 ID 추출 실패");
+        }
     });
 }
-
-// 모달이 열릴 때마다 호출되는 함수
-updateCouponButtonState();
-

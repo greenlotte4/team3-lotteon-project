@@ -29,6 +29,11 @@ public class OptionItem {
     private Long additionalPrice=0L;   //추가금액
 
 
+    // Soft delete 플래그 추가
+    @Builder.Default
+    private boolean isDeleted = false;
+
+
     public OptionItemDTO toDTO() {
         return OptionItemDTO.builder()
                 .item_id(this.item_id)

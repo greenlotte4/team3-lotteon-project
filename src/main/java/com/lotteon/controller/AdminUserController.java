@@ -4,10 +4,12 @@ import com.lotteon.dto.User.Grade;
 import com.lotteon.dto.User.MemberDTO;
 import com.lotteon.dto.User.UserDTO;
 import com.lotteon.entity.User.Member;
+import com.lotteon.entity.User.MemberStatus;
 import com.lotteon.entity.User.Point;
 import com.lotteon.entity.User.User;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.repository.user.UserRepository;
+import com.lotteon.entity.User.MemberStatus;
 import com.lotteon.service.user.MemberService;
 import com.lotteon.service.user.PointService;
 import com.lotteon.service.user.UserService;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 
 import static com.lotteon.entity.User.QUser.user;
 
@@ -43,6 +46,15 @@ public class AdminUserController {
         model.addAttribute("content", "list");
 
         List<Member> memberList = memberService.getAllMembers();
+
+        memberList.forEach(member -> {
+            if (member.getGrade() == null) {
+                member.setGrade(Grade.FAMILY); // null 처리하여 기본값 적용
+            }
+        });
+
+        memberList.forEach(member -> log.info("Member ID: {}, Grade: {}", member.getId(), member.getGrade()));
+
 
         log.info("회원 목록: {}", memberList);
         model.addAttribute("memberList", memberList);
@@ -86,7 +98,6 @@ public class AdminUserController {
             existingMember.setPostcode(memberDTO.getPostcode());
             existingMember.setAddr(memberDTO.getAddr());
             existingMember.setAddr2(memberDTO.getAddr2());
-            existingMember.setGrade(memberDTO.getGrade());
             existingMember.setAddr(memberDTO.getAddr());
             existingMember.setAddr2(memberDTO.getAddr2());
             // 추가적인 필드가 있다면 여기서 업데이트
@@ -102,27 +113,24 @@ public class AdminUserController {
         }
     }
 
-    @PostMapping("/member/updateGrade")
+    @PostMapping("/updateGrade")
     public ResponseEntity<Map<String, String>> updateGrade(@RequestBody Map<String, String> request) {
         String uid = request.get("uid"); // UID 가져오기
-        Grade grade = Grade.valueOf(request.get("grade")); // 새 등급 가져오기
+        String grade = request.get("grade"); // 새 등급 가져오기
 
         log.info("uid: " + uid + " grade: " + grade);
-
-
 
         Optional<Member> existingMemberOpt = memberService.findByUserId(uid);
         if (existingMemberOpt.isPresent()) {
             Member existingMember = existingMemberOpt.get();
-            existingMember.setGrade(grade); // 등급 업데이트
+            existingMember.setGrade(Grade.valueOf(grade)); // 등급 업데이트
+            memberService.updateMember(existingMember.getId(), existingMember); // 변경된 멤버 정보 저장
 
-            // 업데이트 메서드 호출
-            memberService.updateMember(existingMember.getId(), existingMember);
-
-            // 메시지를 Map으로 감싸서 JSON 형태로 반환
+            // 성공적인 응답 반환
             Map<String, String> response = new HashMap<>();
-            response.put("message", "회원 등급이 성공적으로 업데이트되었습니다.");
+            response.put("message", "회원 등급이 성공적으로 변경되었습니다.");
             return ResponseEntity.ok(response);
+
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -138,15 +146,14 @@ public class AdminUserController {
         Optional<Member> existingMemberOpt = memberService.findByUserId(uid);
         if (existingMemberOpt.isPresent()) {
             Member existingMember = existingMemberOpt.get();
-            existingMember.setStatus(Member.MemberStatus.valueOf(status)); // 등급 업데이트
+            existingMember.setStatus(MemberStatus.valueOf(status)); // 등급 업데이트
+            memberService.updateMember(existingMember.getId(), existingMember); // 변경된 멤버 정보 저장
 
-            // 업데이트 메서드 호출
-            memberService.updateMember(existingMember.getId(), existingMember);
-
-            // 메시지를 Map으로 감싸서 JSON 형태로 반환
+            // 성공적인 응답 반환
             Map<String, String> response = new HashMap<>();
-            response.put("message", "회원 상태가 성공적으로 업데이트되었습니다.");
+            response.put("message", "회원 상태가 성공적으로 변경되었습니다.");
             return ResponseEntity.ok(response);
+
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -184,7 +191,7 @@ public class AdminUserController {
 
         Point newPoint = pointService.createPoint(memberId, amount, description);
 
-        log.info("newPoint: " +newPoint);
+        log.info("newPoint: " + newPoint);
         System.out.println("newPoint: " + newPoint);
 
         return ResponseEntity.ok(newPoint);
