@@ -2,7 +2,6 @@ package com.lotteon.service.user;
 
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Point;
-import com.lotteon.entity.order.Order;
 import com.lotteon.repository.order.OrderRepository;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.repository.user.PointRepository;
@@ -11,7 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,6 +56,36 @@ public class PointService {
             member.savePoint(earnedPoints);
 
             memberRepository.save(member);
+    }
+    public List<Point> myPoints(String uid) {
+        log.info("내 포인트 조회 요청");
+
+        Optional<Member> memberOpt = memberRepository.findByUid(uid);
+
+        Member member = memberOpt.get();
+        List<Point> points = pointRepository.findByMemberId(member.getId());
+
+        log.info("멤버 아이디" + member.getUid());
+        // 포인트 리스트 각 항목 출력
+        log.info("포인트: " + points);
+        return points;
+
+    }
+
+    public double  getTotalPoints(String uid) {
+        log.info("내 포인트 조회 요청");
+
+        // 회원 조회
+        Optional<Member> memberOpt = memberRepository.findByUid(uid);
+        Member member = memberOpt.orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
+
+        // Member 엔티티에서 totalPoints나 remainingPoints 직접 조회
+        double totalPoints = member.getPoint();  // 또는 getRemainingPoints() 사용할 수 있음
+
+        log.info("멤버 아이디: " + member.getUid());
+        log.info("총 포인트: " + totalPoints);
+
+        return totalPoints;  // 최종 포인트 반환
     }
 
 }
