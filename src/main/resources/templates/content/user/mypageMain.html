@@ -104,7 +104,7 @@
                                    th:data-price="${orderItem.orderPrice}"
                                    th:data-discount="${orderItem.savedDiscount}"
                                    th:data-total-price="${orderItem.formattedPrice}"
-                                   th:data-status="${orderItem.status}"
+                                   th:data-status="${orderItem.status.description}"
                                    th:data-customer-name="${orderItem.customerName}"
                                    th:data-customer-phone="${orderItem.hp}"
                                    th:data-customer-address="${orderItem.addr1 + ' ' + orderItem.addr2}"
@@ -142,7 +142,7 @@
 
                     <!-- 배송 상태 -->
                     <td>
-                        <data class="order-status" th:text="${orderItem.status.description}"></data>
+                        <span class="order-status" th:text="${orderItem.status.description}"></span>
                     </td>
 
                     <!-- 버튼들 -->
@@ -156,8 +156,8 @@
                                     상품평쓰기
                                 </button>
                             </div>
-                            <button>반품신청</button>
-                            <button>교환신청</button>
+                            <button class="return-btn " th:data-order-item-id="${orderItem.orderItemId}">반품신청</button>
+                            <button class="exchange-btn" th:data-order-item-id="${orderItem.orderItemId}">교환신청</button>
                         </div>
 
                     </td>

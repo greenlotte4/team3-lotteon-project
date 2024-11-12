@@ -5,10 +5,12 @@ package com.lotteon.controller;
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.FooterInfoDTO;
 import com.lotteon.dto.adminQnaDTO;
+import com.lotteon.dto.order.DeliveryStatus;
 import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.entity.Banner;
 import com.lotteon.entity.Notice;
+import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.*;
 import com.lotteon.service.admin.NoticeService;
@@ -49,6 +51,7 @@ public class AdminController {
     private final BoardService boardService;
     private final NoticeService noticeService;
     private final QnaService qnaService;
+    private final OrderItemRepository orderItemRepository;
 
 
     @GetMapping("/main")
@@ -61,10 +64,6 @@ public class AdminController {
         Page<Notice> noticePage = noticeService.getNoticesTop5();
         log.info("noticePage!!!!"+noticePage.getContent());
         model.addAttribute("notices", noticePage.getContent());
-
-
-
-
 
 
         Pageable pageable = PageRequest.of(0,5, Sort.by("date").descending());
@@ -120,6 +119,8 @@ public class AdminController {
 
 
 
+
+
             model.addAttribute("yesterdayNewUserCount", "?");
             model.addAttribute("todayNewUserCount", "?");
 
@@ -128,6 +129,13 @@ public class AdminController {
 
             long yesterdayVisitorCount = visitorCountService.getYesterdayVisitorCount(); // 어제 방문자 수
             long todayVisitorCount = visitorCountService.getTodayVisitorCount(); // 오늘 방문자 수
+
+            long readyForShippingCount = orderItemRepository.countReadyForShippingBySellerUid(sellerUid, DeliveryStatus.PREPARING);
+            Long exchangeForShippingCount = orderItemRepository.countReadyForShippingBySellerUid(sellerUid, DeliveryStatus.EXCHANGE_REQUESTED);
+            exchangeForShippingCount = (exchangeForShippingCount != null) ? exchangeForShippingCount : 0;
+
+            model.addAttribute("readyForShippingCount", readyForShippingCount);
+            model.addAttribute("exchangeForShippingCount",  exchangeForShippingCount);
 
             model.addAttribute("yesterdayVisitorCount", yesterdayVisitorCount);
             model.addAttribute("todayVisitorCount", todayVisitorCount);
@@ -182,8 +190,22 @@ public class AdminController {
             long yesterdayVisitorCount = visitorCountService.getYesterdayVisitorCount(); // 어제 방문자 수
             long todayVisitorCount = visitorCountService.getTodayVisitorCount(); // 오늘 방문자 수
 
+            DeliveryStatus readyForShippingStatus = DeliveryStatus.PREPARING;
+            long allReadyForShippingCount = orderItemRepository.countAllReadyForShipping(readyForShippingStatus);
+
+            DeliveryStatus ExchangeForShippingStatus = DeliveryStatus.EXCHANGE_REQUESTED;
+            Long allExchangeForShippingCount = orderItemRepository.countAllReadyForShipping(ExchangeForShippingStatus);
+            allExchangeForShippingCount = (allExchangeForShippingCount != null) ? allExchangeForShippingCount : 0;
+
+
+            model.addAttribute("readyForShippingCount", allReadyForShippingCount);
+            model.addAttribute("exchangeForShippingCount", allExchangeForShippingCount);
+
+
+
             model.addAttribute("yesterdayVisitorCount", yesterdayVisitorCount);
             model.addAttribute("todayVisitorCount", todayVisitorCount);
+
 
 
             model.addAttribute("salesCount", totalSalesCount);

@@ -1,6 +1,7 @@
 package com.lotteon.repository.order;
 
 import com.lotteon.dto.admin.AdminOrderItemDTO;
+import com.lotteon.dto.order.DeliveryStatus;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
 import com.lotteon.repository.custom.OrderItemRepositoryCustom;
@@ -23,6 +24,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> , Or
     @Query("SELECT new com.lotteon.dto.admin.AdminOrderItemDTO(oi.orderItemId, oi.product.productName, oi.order.orderId, oi.status, oi.price, oi.savedPrice, oi.orderPrice, oi.savedDiscount, oi.shippingFees, oi.stock, oi.product.productId, oi.product.file190) FROM OrderItem oi WHERE oi.order.orderId = :orderId")
     List<AdminOrderItemDTO> findByOrder_OrderId(Long orderId);
     Page<OrderItem> findByOrder_UidOrderByOrderItemIdDesc(String uid, Pageable pageable);
+
+
+    long countByStatus(DeliveryStatus status);
 
     Page<OrderItem> findBySellerUid(String uid, Pageable pageable);
 //    Page<OrderItem> findAll(Pageable pageable);
@@ -55,6 +59,11 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> , Or
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.orderDate BETWEEN :start AND :end")
     long sumSalesAmountByDateRange(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
+    @Query("SELECT COUNT(oi) FROM OrderItem oi WHERE oi.sellerUid = :sellerUid AND oi.status = :status")
+    long countReadyForShippingBySellerUid(@Param("sellerUid") String sellerUid, @Param("status") DeliveryStatus status);
+
+    @Query("SELECT COUNT(oi) FROM OrderItem oi WHERE oi.status = :status")
+    long countAllReadyForShipping(@Param("status") DeliveryStatus status);
 }
 
 

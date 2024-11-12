@@ -172,6 +172,83 @@ public class MypageController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+    @PostMapping("/confirmReturn/{orderItemId2}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> confirmReturn(
+            @PathVariable Long orderItemId2,
+            @RequestBody Map<String, String> requestBody) {
+
+        // 상태를 CONFIRMATION으로 변경
+        String status = requestBody.get("status");
+
+        if (status != null && status.equals("RETURN_REQUESTED")) {
+            try {
+                boolean updated = orderService.updateOrderStatusToConfirmation2(orderItemId2);
+
+                Map<String, Object> response = new HashMap<>();
+
+                if (updated) {
+                    response.put("success", true);
+                    return ResponseEntity.ok(response);  // 성공적으로 업데이트되면 true 반환
+                } else {
+                    // 상태가 CONFIRMATION이면 반품이 불가함
+                    response.put("success", false);
+                    response.put("error", "이 주문은 이미 반품이 완료되었거나 반품이 불가능한 상태입니다.");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // 상태 불일치시 실패 반환
+                }
+            } catch (Exception e) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("error", "반품 처리 중 오류가 발생했습니다.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+        } else {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("error", "잘못된 상태 값입니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @PostMapping("/confirmExchange/{orderItemId3}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> confirmExchange(
+            @PathVariable Long orderItemId3,
+            @RequestBody Map<String, String> requestBody) {
+
+        // 상태를 CONFIRMATION으로 변경
+        String status = requestBody.get("status");
+
+        if (status != null && status.equals("EXCHANGE_REQUESTED")) {
+            try {
+                boolean updated = orderService.updateOrderStatusToConfirmation3(orderItemId3);
+
+                Map<String, Object> response = new HashMap<>();
+
+                if (updated) {
+                    response.put("success", true);
+                    return ResponseEntity.ok(response);  // 성공적으로 업데이트되면 true 반환
+                } else {
+                    // 상태가 CONFIRMATION이면 반품이 불가함
+                    response.put("success", false);
+                    response.put("error", "이 주문은 이미 교환이 완료되었거나 교환이 불가능한 상태입니다.");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // 상태 불일치시 실패 반환
+                }
+            } catch (Exception e) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("error", "교환 처리 중 오류가 발생했습니다.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+        } else {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("error", "잘못된 상태 값입니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+
 
     @ResponseBody
     @PostMapping("/myInfo/review")

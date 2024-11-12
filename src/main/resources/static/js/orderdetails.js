@@ -90,30 +90,228 @@ orderNumbers.forEach(order => {
     });
 });
 
-//recipit 모달창
+// 수취확인 모달 관련 코드
 const qreceiptbtn = document.querySelectorAll(".receipt-btn");
-const receiptModel = document.getElementById("receiptModal");
+const receiptModal = document.getElementById("receiptModal");
 const closeModalBtn4 = document.querySelector(".modal.receipt .close.receipt");
-console.log(closeModalBtn4);
+const confirmReceiptBtn = document.getElementById("confirmReceiptBtn");
+const cancelModalBtn = document.getElementById("cancelModalBtn");
+
+// 주문 아이템 ID를 저장할 변수
+let currentOrderItemId = null;
+
+// 수취확인 버튼 클릭 시 모달 열기
 qreceiptbtn.forEach(order => {
     order.addEventListener("click", function(e) {
         e.preventDefault();
-        receiptModel.style.display = "block"; // Show the modal
-
+        currentOrderItemId = order.getAttribute("data-order-item-id");  // 해당 주문 아이템 ID 저장
+        receiptModal.style.display = "block"; // 모달 열기
     });
 });
 
-// Close modal when clicking the close button
+// 모달 닫기 (닫기 버튼 클릭)
 closeModalBtn4.addEventListener("click", function() {
-    receiptModel.style.display = "none"; // Hide the modal
+    receiptModal.style.display = "none"; // 모달 닫기
 });
 
-// Close modal when clicking outside the modal content
+// 모달 닫기 (취소 버튼 클릭)
+cancelModalBtn.addEventListener("click", function() {
+    receiptModal.style.display = "none"; // 모달 닫기
+});
+
+// 모달 외부 클릭 시 닫기
 window.onclick = function(event) {
-    if (event.target == receiptModel) {
-        receiptModel.style.display = "none"; // Hide the modal
+    if (event.target == receiptModal) {
+        receiptModal.style.display = "none"; // 모달 닫기
     }
 };
+
+// 수취 확인 버튼 클릭 시 상태 변경
+confirmReceiptBtn.addEventListener("click", function() {
+    if (currentOrderItemId !== null) {
+        // 서버에 상태 변경 요청
+        fetch(`/mypage/confirmReceipt/${currentOrderItemId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: "CONFIRMATION" })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 성공적으로 상태가 변경되면 페이지 업데이트 (수취확인 상태 표시)
+                    const orderItemStatus = document.querySelector(`[data-order-item-id="${currentOrderItemId}"]`)
+                        .querySelector('.order-status'); // .order-status 클래스를 가진 요소 찾기
+
+                    if (orderItemStatus) {
+                        orderItemStatus.textContent = "CONFIRMATION"; // 상태 텍스트 업데이트
+                    } else {
+                        console.error("Order item status element not found.");
+                    }
+
+                    // 모달 닫기
+                    receiptModal.style.display = "none";
+
+                    // 페이지 새로고침
+                    location.reload();
+                } else {
+                    alert("수취 확인에 실패했습니다.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+});
+
+// 반품 신청 모달 관련 코드
+const returnBtn = document.querySelectorAll(".return-btn");
+const returnModal = document.getElementById("returnModal");
+const closeReturnModalBtn = document.querySelector(".modal.return .close.return");
+const confirmReturnBtn = document.getElementById("confirmReturnBtn");
+const cancelReturnModalBtn = document.getElementById("ReturncancelModalBtn");
+
+// 반품 신청 아이템 ID를 저장할 변수
+let currentOrderItemId2 = null;
+
+// 반품 신청 버튼 클릭 시 모달 열기
+returnBtn.forEach(order => {
+    order.addEventListener("click", function(e) {
+        e.preventDefault();
+        currentOrderItemId2 = order.getAttribute("data-order-item-id");  // 해당 주문 아이템 ID 저장
+        returnModal.style.display = "block"; // 모달 열기
+    });
+});
+
+// 모달 닫기 (닫기 버튼 클릭)
+closeReturnModalBtn.addEventListener("click", function() {
+    returnModal.style.display = "none"; // 모달 닫기
+});
+
+// 모달 닫기 (취소 버튼 클릭)
+cancelReturnModalBtn.addEventListener("click", function() {
+    returnModal.style.display = "none"; // 모달 닫기
+});
+
+// 모달 외부 클릭 시 닫기
+window.onclick = function(event) {
+    if (event.target == returnModal) {
+        returnModal.style.display = "none"; // 모달 닫기
+    }
+};
+
+// 반품 신청 확인 버튼 클릭 시 상태 변경
+confirmReturnBtn.addEventListener("click", function() {
+    if (currentOrderItemId2 !== null) {
+        // 서버에 반품 요청
+        fetch(`/mypage/confirmReturn/${currentOrderItemId2}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: "RETURN_REQUESTED" })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 성공적으로 반품 신청되면 페이지 업데이트
+                    const orderItemStatus = document.querySelector(`[data-order-item-id="${currentOrderItemId2}"]`)
+                        .querySelector('.order-status'); // .order-status 클래스를 가진 요소 찾기
+                    if (orderItemStatus) {
+                        orderItemStatus.textContent = "RETURN_REQUESTED"; // 상태 텍스트 업데이트
+                    } else {
+                        console.error("Order item status element not found.");
+                    }
+
+                    // 모달 닫기
+                    returnModal.style.display = "none";
+
+                    // 페이지 새로고침
+                    location.reload();
+                } else {
+                    alert("구매 확정 상품은 환불이 불가능합니다. 고객센터로 문의주세요.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+});
+
+// 교환 신청 모달 관련 코드
+const exchangeBtn = document.querySelectorAll(".exchange-btn");
+const exchangeModal = document.getElementById("exchangeModal");
+const closeExchangeModalBtn = document.querySelector(".modal.exchange .close.exchange");
+const confirmExchangeBtn = document.getElementById("confirmExchangeBtn");
+const cancelExchangeModalBtn = document.getElementById("ExchangecancelModalBtn");
+
+// 교환 신청 아이템 ID를 저장할 변수
+let currentOrderItemId3 = null;
+
+// 교환 신청 버튼 클릭 시 모달 열기
+exchangeBtn.forEach(order => {
+    order.addEventListener("click", function(e) {
+        e.preventDefault();
+        currentOrderItemId3 = order.getAttribute("data-order-item-id");  // 해당 주문 아이템 ID 저장
+        exchangeModal.style.display = "block"; // 모달 열기
+    });
+});
+
+// 모달 닫기 (닫기 버튼 클릭)
+closeExchangeModalBtn.addEventListener("click", function() {
+    exchangeModal.style.display = "none"; // 모달 닫기
+});
+
+// 모달 닫기 (취소 버튼 클릭)
+cancelExchangeModalBtn.addEventListener("click", function() {
+    exchangeModal.style.display = "none"; // 모달 닫기
+});
+
+// 모달 외부 클릭 시 닫기
+window.onclick = function(event) {
+    if (event.target == exchangeModal) {
+        exchangeModal.style.display = "none"; // 모달 닫기
+    }
+};
+
+// 교환 신청 확인 버튼 클릭 시 상태 변경
+confirmExchangeBtn.addEventListener("click", function() {
+    if (currentOrderItemId3 !== null) {
+        // 서버에 교환 요청
+        fetch(`/mypage/confirmExchange/${currentOrderItemId3}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: "EXCHANGE_REQUESTED" })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 성공적으로 교환 신청되면 페이지 업데이트
+                    const orderItemStatus = document.querySelector(`[data-order-item-id="${currentOrderItemId3}"]`)
+                        .querySelector('.order-status'); // .order-status 클래스를 가진 요소 찾기
+                    if (orderItemStatus) {
+                        orderItemStatus.textContent = "EXCHANGE_REQUESTED"; // 상태 텍스트 업데이트
+                    } else {
+                        console.error("Order item status element not found.");
+                    }
+
+                    // 모달 닫기
+                    exchangeModal.style.display = "none";
+
+                    // 페이지 새로고침
+                    location.reload();
+                } else {
+                    alert("구매 확정 상품은 교환이 불가능합니다. 고객센터로 문의주세요.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+});
 
 // 판매자 정보 모달창
 const sellerModal = document.getElementById("sellerModal");
