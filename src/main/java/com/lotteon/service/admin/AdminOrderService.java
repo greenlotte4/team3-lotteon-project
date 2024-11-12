@@ -1,10 +1,7 @@
 package com.lotteon.service.admin;
 
-
 import com.lotteon.controller.AdminOrderItemPageResponseDTO;
-
 import com.lotteon.dto.User.SellerDTO;
-
 import com.lotteon.dto.admin.AdminOrderDTO;
 import com.lotteon.dto.admin.AdminOrderItemDTO;
 import com.lotteon.dto.order.OrderDTO;
@@ -55,7 +52,7 @@ public class AdminOrderService {
         return orderDTOs;
 
     }
-    public OrderItemDTO selectOrderItemById(Long id) {
+    public OrderItemDTO selectOrderItemById(long id) {
         OrderItem orderItem = orderItemRepository.findById(id).orElse(null);
         log.info("이거 값이 나오냐냐?! : " + orderItem );
         OrderItemDTO orderItemDTO = getModelMapper.map(orderItem, OrderItemDTO.class);
@@ -68,20 +65,12 @@ public class AdminOrderService {
                     OrderItemDTO orderItemDTO = getModelMapper.map(orderItem, OrderItemDTO.class);
                     // OrderDTO 생성 및 설정
                     OrderDTO orderDTO = new OrderDTO();
-
                     // OrderItem의 필드를 OrderDTO에 매핑
                     orderItemDTO.setOrderId(orderItem.getOrder().getOrderId());
                     orderItemDTO.setCustomerId(orderItem.getOrder().getUid());
                     orderItemDTO.setCustomerName(orderItem.getOrder().getMemberName());
-
                     orderDTO.setTotalPrice(orderItem.getOrder().getTotalPrice());
                     orderDTO.setOrderDate(orderItem.getOrder().getOrderDate());
-
-
-                    orderDTO.setTotalPrice(orderItem.getOrder().getTotalPrice());
-                    orderDTO.setOrderDate(orderItem.getOrder().getOrderDate());
-
-
                     // Product 설정 (Product -> ProductDTO 변환 예시)
                     Product product = orderItem.getProduct();
                     if (product != null) {
@@ -90,25 +79,15 @@ public class AdminOrderService {
                         productDTO.setProductName(product.getProductName());
                         productDTO.setPrice(product.getPrice());
                         orderItemDTO.setProduct(productDTO);
-
                         // 필요한 필드 추가 설정
                     }
                     String sellerUid= product.getSellerId();
-
-
-                        // 필요한 필드 추가 설정
-                    }
-
-                    String sellerUid= product.getSellerId();
-
-
                     Optional<Seller> seller = sellerRepository.findByUserUid(sellerUid);
                     if (seller.isPresent()) {
                         Seller sel = seller.get();
                         orderItemDTO.setSeller(sel);
                     }
                     // 다른 필요한 필드 매핑
-
                     return orderItemDTO;
                 })
                 .collect(Collectors.toList());
@@ -123,7 +102,6 @@ public class AdminOrderService {
         Page<OrderItem> orderItems = null;
         log.info("pppppp : " + pageRequestDTO.getKeyword());
         log.info("llllll : " + pageRequestDTO.getType());
-
         if(pageRequestDTO.getKeyword() == null){
             orderItems = orderItemRepository.findAll(pageable2);
         }else {
@@ -133,15 +111,12 @@ public class AdminOrderService {
         log.info("orderITems!!!!!"+orderItems.getContent());
         log.info("qqqqqqqqqqqqqqqqqqqq:" + getOrderItems.getContent());
         log.info("cccccccccccccccccccc:" + getOrderItems.getPageable());
-
-
         List<OrderItemDTO> orderItemList = getOrderItems.getContent().stream().map(tuple -> {
             OrderItemDTO orderItemDTO = getModelMapper.map(tuple, OrderItemDTO.class);
             return orderItemDTO;
         }).toList();
         int total2 = (int) getOrderItems.getTotalElements();
         log.info("uuuuuuuuuuuu:" + getOrderItems);
-
         return AdminOrderItemPageResponseDTO.builder()
                 .pageRequestDTO(pageRequestDTO)
                 .adminorderitemdtoList(orderItemList)
@@ -149,64 +124,62 @@ public class AdminOrderService {
                 .build();
     }
 
-                    return orderItemDTO;
-                })
-                .collect(Collectors.toList());
 
-        return new PageImpl<>(orderItemDTOS, pageable, orderItems.getTotalElements());
+
+
+
+public AdminOrderPageResponseDTO selectOrderListAll(PageRequestDTO pageRequestDTO) {
+    Pageable pageable = pageRequestDTO.getPageable("no");
+    Page<Tuple> pageAdminOrder = null;
+
+    ///////////////
+
+    log.info("abababababab:" + pageRequestDTO.getKeyword());
+    if (pageRequestDTO.getKeyword() == null) {
+        pageAdminOrder = orderRepository.selectOrderAllForList(pageRequestDTO, pageable);
+    } else {
+        pageAdminOrder = orderRepository.selectOrderSearchForList(pageRequestDTO, pageable);
     }
 
 
-    public AdminOrderPageResponseDTO selectOrderListAll(PageRequestDTO pageRequestDTO){
-        Pageable pageable = pageRequestDTO.getPageable("no");
-        Page<Tuple> pageAdminOrder = null;
+    List<AdminOrderDTO> orderList = pageAdminOrder.getContent().stream().map(tuple -> {
+        Long id = tuple.get(0, Long.class);
+        log.info("이거 aaaaaaaid머야 나와?:" + id);
 
-
-        log.info("abababababab:"+ pageRequestDTO.getKeyword());
-        if(pageRequestDTO.getKeyword() == null){
-            pageAdminOrder = orderRepository.selectOrderAllForList(pageRequestDTO, pageable);
-        }else {
-            pageAdminOrder = orderRepository.selectOrderSearchForList(pageRequestDTO, pageable);
-        }
-
-
-        List<AdminOrderDTO> orderList = pageAdminOrder.getContent().stream().map(tuple -> {
-            Long id = tuple.get(0, Long.class);
-            log.info("이거 aaaaaaaid머야 나와?:"+ id);
-
-            Order orders = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Faq not found with ID: " + id));; //조건주고 조회하기
-            log.info("이게 order!! 머야?:"+ orders);
+        Order orders = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Faq not found with ID: " + id));
+        ; //조건주고 조회하기
+        log.info("이게 order!! 머야?:" + orders);
 
 //            List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(id);
-            List<AdminOrderItemDTO> orderItemdtos = orderItemRepository.findByOrder_OrderId(id);
-            log.info("아니 orderItems가 계속 조회가 안됨: " + orderItemdtos);
+        List<AdminOrderItemDTO> orderItemdtos = orderItemRepository.findByOrder_OrderId(id);
+        log.info("아니 orderItems가 계속 조회가 안됨: " + orderItemdtos);
 
-            AdminOrderDTO adminOrderDTO = getModelMapper.map(orders, AdminOrderDTO.class);
-            // OrderItem들을 OrderItemDTO로 변환
+        AdminOrderDTO adminOrderDTO = getModelMapper.map(orders, AdminOrderDTO.class);
+        // OrderItem들을 OrderItemDTO로 변환
 
 
 //            List<OrderItemDTO> orderItemDTOs = orderItems.stream()
 //                    .map(orderItem -> modelMapper.map(orderItem, OrderItemDTO.class))
 //                    .collect(Collectors.toList());
 
-            log.info("아니 orderItemDTO를 변환해야돼 : " + orderItemdtos);
+        log.info("아니 orderItemDTO를 변환해야돼 : " + orderItemdtos);
 
 
-            adminOrderDTO.setOrderItems(orderItemdtos);
-            log.info("야옹하고울어요!: " + adminOrderDTO);
-            return adminOrderDTO;
+        adminOrderDTO.setOrderItems(orderItemdtos);
+        log.info("야옹하고울어요!: " + adminOrderDTO);
+        return adminOrderDTO;
 
 
-        }).toList();
-        int total = (int) pageAdminOrder.getTotalElements();
+    }).toList();
+    int total = (int) pageAdminOrder.getTotalElements();
 
-        return AdminOrderPageResponseDTO.builder()
-                .pageRequestDTO(pageRequestDTO)
-                .adminorderdtoList(orderList)
-                .total(total)
-                .build();
-    }
+    return AdminOrderPageResponseDTO.builder()
+            .pageRequestDTO(pageRequestDTO)
+            .adminorderdtoList(orderList)
+            .total(total)
+            .build();
 
+}
 //    public AdminOrderPageResponseDTO selectOrderListAll(PageRequestDTO pageRequestDTO) {
 //        Pageable pageable = pageRequestDTO.getPageable("no");
 //
@@ -259,6 +232,6 @@ public class AdminOrderService {
 //                .adminorderdtoList(orderList)
 //                .total(total)
 //                .build();
-//    }
-
+//
+//
 }
