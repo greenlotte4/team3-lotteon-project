@@ -3,6 +3,7 @@ package com.lotteon.repository.order;
 import com.lotteon.dto.admin.AdminOrderItemDTO;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
+import com.lotteon.repository.custom.OrderItemRepositoryCustom;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 @Repository
-public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+public interface OrderItemRepository extends JpaRepository<OrderItem, Long> , OrderItemRepositoryCustom {
 
 
     long countBySellerUid(String sellerUid);

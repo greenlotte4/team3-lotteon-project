@@ -4,6 +4,7 @@
     import com.lotteon.dto.product.OptionDTO;
     import com.lotteon.dto.product.ProductDTO;
     import com.lotteon.entity.User.Seller;
+    import com.lotteon.dto.User.SellerDTO;
     import com.lotteon.entity.order.Order;
     import com.lotteon.entity.order.OrderItem;
     import com.lotteon.entity.product.Review;
