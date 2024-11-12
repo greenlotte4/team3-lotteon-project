@@ -228,19 +228,19 @@ function removeOptionItem(button) {
     item.remove();
 }
 
-function generateCombinations() {
-    const selectedOptions = collectSelectedOptions();
-    fetch('/generateCombinations', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(selectedOptions),
-    })
-        .then(response => response.json())
-        .then(data => displayCombinations(data))
-        .catch(error => console.error('Error:', error));
-}
+// function generateCombinations() {
+//     const selectedOptions = collectSelectedOptions();
+//     fetch('/generateCombinations', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(selectedOptions),
+//     })
+//         .then(response => response.json())
+//         .then(data => displayCombinations(data))
+//         .catch(error => console.error('Error:', error));
+// }
 function collectSelectedOptions() {
     const selectedOptions = [];
     const optionGroupTable = document.getElementById("optionGroupTable");
@@ -475,3 +475,96 @@ function collectSelectedOptions() {
 //     table.appendChild(tbody);
 //     stockInputArea.appendChild(table);
 // }
+function generateCombinations() {
+    // 옵션 그룹과 항목 데이터를 저장할 배열
+    const optionGroups = [];
+
+    // optionGroupName이 있는 <tr> 요소들만 선택
+    document.querySelectorAll('#optionGroupTable tr').forEach((groupElem) => {
+        const groupNameElem = groupElem.querySelector('input[name="optionGroupName[]"]');
+
+        // groupNameElem이 있는 경우에만 처리
+        if (groupNameElem) {
+            const groupName = groupNameElem.value;
+            console.log("groupName:", groupName); // 디버깅용으로 콘솔 출력
+
+            // 옵션 항목을 저장할 배열
+            const optionItems = [];
+
+            // 현재 groupElem 바로 다음에 optionItem <tr> 요소가 있는지 확인
+            if (groupElem.nextElementSibling && groupElem.nextElementSibling.classList.contains('optionItem')) {
+                const itemElements = groupElem.nextElementSibling.querySelectorAll('.option-items input[name="optionItems"]');
+
+                itemElements.forEach((itemElem) => {
+                    const itemName = itemElem.value;
+
+                    if (itemName) { // 빈 값 제외
+                        optionItems.push({ optionName: itemName });
+                    }
+                });
+            }
+
+            // 유효한 optionItems가 있는 경우에만 그룹 추가
+            if (optionItems.length > 0) {
+                optionGroups.push({ groupName: groupName, optionItems: optionItems });
+            }
+        } else {
+            console.log("groupNameElem is null for this groupElem"); // 디버깅용 출력
+        }
+    });
+    console.log("optionGroups",optionGroups);
+
+    // 수집된 옵션 그룹과 항목 데이터를 JSON으로 변환 후 AJAX 요청
+    const requestData = { optionGroups: optionGroups };
+
+    fetch('/generate-combinations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(response => {
+            if (!response.ok) { // 응답 상태가 성공(200-299)이 아닌 경우
+                return response.text().then(text => { throw new Error(`Error: ${response.status} - ${text}`); });
+            }
+            return response.text(); // 먼저 텍스트로 응답 확인
+        })
+        .then(text => {
+            console.log("Response Text:", text); // 응답 내용을 로그로 확인
+
+            if (text.trim()) { // 응답이 비어 있지 않다면 JSON 파싱 시도
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    throw new Error("Invalid JSON response");
+                }
+            }
+            throw new Error('Empty response from server'); // 응답이 빈 경우 예외 발생
+        })
+        .then(data => {
+            displayCombinations(data); // 서버에서 받은 조합을 화면에 표시하는 함수 호출
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function displayCombinations(combinations) {
+    const combinationTable = document.querySelector('#combination-container table');
+
+    // 기존의 모든 행을 지우고 새로운 데이터를 추가
+    combinationTable.querySelectorAll('tr.combination-row').forEach(row => row.remove());
+
+    combinations.forEach((combination, index) => {
+        const row = document.createElement('tr');
+        row.classList.add('combination-row');
+        row.innerHTML = `
+            <td><input type="hidden" name="optionCombinations[${index}].combinationId" value="${combination.combinationId}">
+                <input type="text" name="optionCombinations[${index}].combination" value="${combination.combination}">
+            </td>
+            <td><input type="text" name="optionCombinations[${index}].optionCode" value="${combination.optionCode}"></td>
+            <td><input type="text" name="optionCombinations[${index}].additionalPrice" value="${combination.additionalPrice}"></td>
+            <td><input type="text" name="optionCombinations[${index}].stock" value="${combination.stock}"></td>
+        `;
+        combinationTable.appendChild(row);
+    });
+}

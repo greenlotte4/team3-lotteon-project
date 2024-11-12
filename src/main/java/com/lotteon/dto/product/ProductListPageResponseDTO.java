@@ -1,5 +1,8 @@
 package com.lotteon.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -10,9 +13,12 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "pg")
 public class ProductListPageResponseDTO {
 
+    @JsonManagedReference
     private List<ProductDTO> productDTOs;
+    @JsonManagedReference
     private List<ProductSummaryDTO> productSummaryDTOs;
     private int pg;
     private int size;
