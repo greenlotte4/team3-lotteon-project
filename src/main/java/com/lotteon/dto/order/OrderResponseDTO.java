@@ -51,10 +51,7 @@ public class OrderResponseDTO {
         for (BuyNowRequestDTO buyNowRequestDTO : products) {
 
             long originalQuantity = buyNowRequestDTO.getQuantity();
-            if(cartid>0){
-                this.cartId = cartid;
-                cartItemIds.add(buyNowRequestDTO.getCartItemId());
-            }
+
             List<OptionItemDTO> optionItemDTOS = buyNowRequestDTO.getOptions();
             long additionalPrice=0;
             long combinationId=0;
@@ -62,20 +59,31 @@ public class OrderResponseDTO {
             String combinationString=null;
             if(optionItemDTOS !=null){
                combinationId= optionItemDTOS.get(0).getCombinationId();
-               additionalPrice = optionItemDTOS.get(0).getAdditionalPrice()==null?0:optionItemDTOS.get(0).getAdditionalPrice();
+               additionalPrice = optionItemDTOS.get(0).getAdditionalPrice()==null? 0:optionItemDTOS.get(0).getAdditionalPrice();
                OptionName = optionItemDTOS.get(0).getOptionName();
                combinationString = optionItemDTOS.get(0).getCombinationString();
             }
-
             long originalPrice = parseLongOrDefault(buyNowRequestDTO.getOriginalPrice(), 0)+additionalPrice;
-            long finalPrice = Long.parseLong(buyNowRequestDTO.getFinalPrice()) + additionalPrice;
-            if(!orderRequestDTO.getCouponId().isEmpty() && orderRequestDTO.getCouponId() != null){
+
+            if(cartid>0){
+                this.cartId = cartid;
+                cartItemIds.add(buyNowRequestDTO.getCartItemId());
+                additionalPrice = buyNowRequestDTO.getAdditionalPrice();
+                OptionName = buyNowRequestDTO.getOptionName();
+                combinationString=buyNowRequestDTO.getCombinationString();
+                combinationId=buyNowRequestDTO.getCombinationId();
+                originalPrice=originalPrice+additionalPrice;
+            }
+
+            long discount= Long.parseLong(buyNowRequestDTO.getDiscount());
+            long savedDiscount =((discount * originalPrice/100)/10*10)*originalQuantity ;
+            long finalPrice = (originalPrice)*originalQuantity - savedDiscount;
+            if(totaldiscount == 0){
                 point = (finalPrice* (orderRequestDTO.getGradePercentage())/1000)*10;
             }
-            long discount= Long.parseLong(buyNowRequestDTO.getDiscount());
-            long savedDiscount =((discount * originalPrice)/100/10*10)*originalQuantity ;
+
             OrderItemDTO orderItemDTO = OrderItemDTO.builder()
-                    .price(originalPrice+additionalPrice)
+                    .price(parseLongOrDefault(buyNowRequestDTO.getOriginalPrice(),0))
                     .productId(parseLongOrDefault(buyNowRequestDTO.getProductId(), 0))
                     .combinationId(combinationId)
                     .optionDesc(OptionName)
@@ -93,6 +101,10 @@ public class OrderResponseDTO {
             this.orderItems.add(orderItemDTO);
 
         }
+        boolean isCoupon = false;
+        if(parseLongOrDefault(orderRequestDTO.getCouponId(), 0) >0){
+            isCoupon = true;
+        }
 
         this.order = OrderDTO.builder()
                 .addr1(orderRequestDTO.getAddr1())
@@ -101,7 +113,7 @@ public class OrderResponseDTO {
                 .memberHp(orderRequestDTO.getMemberHp())
                 .memberName(orderRequestDTO.getMemberName())
                 .couponId(orderRequestDTO.getCouponId())
-                .isCoupon(orderRequestDTO.getCouponId().isEmpty() && orderRequestDTO.getCouponId() !=null )
+                .isCoupon(isCoupon)
                 .expectedPoint(parseLongOrDefault(orderRequestDTO.getFinalOrderPoint(), 0))
                 .postcode(orderRequestDTO.getPostcode())
                 .receiver(orderRequestDTO.getReceiver())

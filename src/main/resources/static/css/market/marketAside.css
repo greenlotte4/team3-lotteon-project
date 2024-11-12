@@ -307,10 +307,20 @@
 .aside.market .bestProduct .products.first .productimg.first {
     width: 180px;
     height: 150px;
-    border: 1px solid brown;
     margin: 0 auto;
     position: relative;
 }
+.aside.market .bestProduct .products.first .productimg.first>img{
+    object-fit: cover;
+    height: inherit;
+    width: 100%;
+}
+
+/*/*/
+
+
+
+/**/
 
 .aside.market .bestProduct .products.first .productimg.first p {
     position: absolute;
@@ -383,7 +393,6 @@
     position: relative;
     width: 90px;
     height: 90px;
-    border: 1px solid #0a0101;
     margin-top: 5px;
     margin-left: 5px;
     margin-right: 5px;

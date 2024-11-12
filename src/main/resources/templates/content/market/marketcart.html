@@ -55,43 +55,45 @@
 
 
                 <!-- 반복부분 -->
-                <th:block th:if="${cartItems != null and cartItems.size() > 0}" th:data-cart-id="${item.cart.cartId}">
+                <th:block th:if="${cartItemDTOS != null and cartItemDTOS.size() > 0}" th:data-cart-id="${cartItemDTOS.get(0).getCartId()}">
                      <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid" th:value="${#authentication.getName()}"></th:block>
-                     <input type="hidden" th:value="${cartItems.get(0).getCart().getCartId()}" id="cartId">
-                        <tr th:each="item : ${cartItems}"
-                            th:data-cartItemId="${item.cartItemId}"
-                            th:data-product-id="${item.getProduct().getProductId()}"
-                            th:data-product-name="${item.getProduct().getProductName()}"
-                            th:data-discount="${item.getDiscount()}"
-                            th:data-original-price="${item.product.getPrice()}"
-                            th:data-final-price="${item.getTotalPrice()}"
-                            th:data-quantity="${item.quantity}"
-                            th:data-file190="${item.getImageUrl()}"
-                            th:data-point="${item.getPoints()}"
-                            th:data-shipping-fee="${item.getDeliveryFee()}"
-                            th:data-shipping-terms="${item.product.shippingTerms}"
+                     <input type="hidden" th:value="${cartItemDTOS.get(0).getCartId()}" id="cartId">
+                        <tr th:each="itemDto : ${cartItemDTOS}"
+                            th:data-cartItemId="${itemDto.cartItemId}"
+                            th:data-product-id="${itemDto.getProductId()}"
+                            th:data-product-name="${itemDto.productName}"
+                            th:data-discount="${itemDto.getDiscount()}"
+                            th:data-original-price="${itemDto.productDTO.getPrice()}"
+                            th:data-final-price="${itemDto.finalPrice}"
+                            th:data-quantity="${itemDto.quantity}"
+                            th:data-file190="${itemDto.file190}"
+                            th:data-point="${itemDto.getPoints()}"
+                            th:data-shipping-fee="${itemDto.getDeliveryFee()}"
+                            th:data-shipping-terms="${itemDto.ShippingTerms}"
                             style="border-bottom: 1px solid #dddddd">
 
                         <td><input type="checkbox" name="select"></td>
                         <td>
-                            <th:block th:if="${item.getOptionGroupId()>0 }">
-                                <input type="text" th:class="additionalPrice-Input" th:value="${item.getProductOptionCombination().getAdditionalPrice()}">
-                                <input type="hidden" th:class="combinationString" th:value="${item.getProductOptionCombination().getCombination()}">
-                                <input type="hidden" th:class="combinationId" th:value="${item.getProductOptionCombination().getCombinationId()}">
+                            <th:block th:if="${itemDto. combinationDTO !=null }">
+                                <input type="hidden" th:class="additionalPrice-Input" th:value="${itemDto.getAdditionalPrice()}">
+                                <input type="hidden" th:class="combinationString" th:value="${itemDto.combinationDTO.getCombination()}">
+                                <input type="hidden" th:class="combinationId" th:value="${itemDto.combinationDTO.getCombinationId()}">
                             </th:block>
                             <div>
-                                <img th:src="${'/uploads/productImg/'+item.getImageUrl()}" th:alt="${item.getProduct().productName}">
+                                <input type="hidden" id="savedPath" th:value="${itemDto.getProductDTO().getSavedPath()}">
+                                <img th:if="${itemDto.productDTO.getSavedPath()==null}" th:src="@{'/uploads/productImg/'+${itemDto.productDTO.getFile190()}}" alt="">
+                                <img th:unless="${itemDto.productDTO.getSavedPath()==null}" th:src="@{'/uploads/'+${itemDto.productDTO.getSavedPath()}+'/'+${itemDto.productDTO.getFile190()}}" alt="">
                             </div>
                             <div>
-                                <a th:href="@{'/market/view/'+${item.product.categoryId}+'/'+${item.product.productId}}">
-                                <span th:text="${item.getProduct().productName}">상품명</span>
-                                <p class="product_option" th:if="${item.productOptionCombination != null}" th:text="${item.getProductOptionCombination().combination}">[ 옵션 ] [[${item.productOptionCombination.combination}]]</p>
+                                <a th:href="@{'/market/view/'+${itemDto.productDTO.categoryId}+'/'+${itemDto.productDTO.productId}}">
+                                <span th:text="${itemDto.productDTO.productName}">상품명</span>
+                                <p class="product_option" th:if="${itemDto.combinationDTO != null}" th:text="${itemDto.combinationDTO.combination}">[ 옵션 ] [[${item.productOptionCombination.combination}]]</p>
                             </a>
                             </div>
                         </td>
                         <td>
                             <div class="qnt">
-                                <input type="number" name="quantity" class="quantity" th:value="${item.quantity}" min="1" readonly>
+                                <input type="number" name="quantity" class="quantity" th:value="${itemDto.quantity}" min="1" readonly>
 
                                 <div class="countModify">
                                     <a class="countModifyBtn" href="#">수정하기</a>
@@ -109,16 +111,16 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="price"  th:text="${item.getProduct().getOptionGroups().isEmpty()? item.getProduct().price : item.getProduct().price + item.getProductOptionCombination().getAdditionalPrice()}">판매가</td>
-                        <td class="price" th:text="${item.discount}">할인</td>
-                        <td class="price" th:text="${item.getPoints()}">포인트</td>
-                        <td class="price" th:text="${item.getDeliveryFee()}">배송비</td>
-                        <td class="price" th:text="${(item.getProduct().getPrice()- (item.getProduct().getPrice()*item.getProduct().getDiscount()/100)/10*10)*item.getQuantity()}">총합</td>
+                        <td class="price"  th:text="${itemDto.productDTO.price+itemDto.additionalPrice}">판매가</td>
+                        <td class="price" th:text="${itemDto.discount}">할인</td>
+                        <td class="price" th:text="${itemDto.getPoints()}">포인트</td>
+                        <td class="price" th:text="${itemDto.getDeliveryFee()}">배송비</td>
+                        <td class="price" th:text="${itemDto.finalPrice}">총합</td>
                     </tr>
 
                 </th:block>
 
-                <th:block th:unless="${cartItems != null and cartItems.size() > 0}" >
+                <th:block th:unless="${cartItemDTOS != null and cartItemDTOS.size() > 0}" >
                     <tr>
                         <td colspan="8" style="text-align: center; padding: 65px 0; font-size: 16px">장바구니가 비어있습니다.</td>
                     </tr>

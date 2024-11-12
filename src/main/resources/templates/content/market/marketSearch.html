@@ -82,7 +82,12 @@
                                 <a th:href="@{/market/view/{category}/{productId}(category=${product.getCategoryId()},productId=${product.productId})}">
                                 <div class="product-search-item">
                                     <div class="product-image">
-                                        <img th:src="@{/uploads/productImg/{file190}(file190=${product.file190})}" alt="상품 이미지">
+                                        <th:block th:if="${product.savedPath==null}">
+                                            <div class="pimg"><img th:src="'/uploads/productImg/'+${product.file190}" th:alt="${product.productName}"></div>
+                                        </th:block>
+                                        <th:block th:unless="${product.savedPath==null}">
+                                            <div class="pimg"><img th:src="'/uploads/'+${product.savedPath}+'/'+${product.file190}" alt="상품1"></div>
+                                        </th:block>
                                     </div>
 
                                     <div class="product-details">

@@ -52,7 +52,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> , Produc
     List<Product> findAllByOrderByRdateDesc(Pageable pageable);
     List<Product> findAllByOrderByProductRatingDesc(Pageable pageable);
 
-    @Query("SELECT p FROM Product p LEFT JOIN p.reviews r WHERE p.productName LIKE %:productName% GROUP BY p ORDER BY COUNT(r) DESC")
+    @Query("SELECT p FROM Product p LEFT JOIN p.reviews r WHERE p.productName LIKE %:productName% AND p.isDeleted = false GROUP BY p ORDER BY COUNT(r) DESC")
     Page<Product> findAllByProductNameOrderByReviewCountDesc(@Param("productName") String productName, Pageable pageable);
 
 

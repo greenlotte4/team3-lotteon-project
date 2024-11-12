@@ -202,11 +202,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const lnbItems = document.querySelectorAll('.lnb-item > a');
     const subCategoryLinks = document.querySelectorAll('.lnb-sub-menu a');
 
-    // 로컬 스토리지에서 activeSubChildId와 activeParentChildId 가져오기
+// 로컬 스토리지에서 activeSubChildId와 activeParentChildId 가져오기
     const activeSubChildId = localStorage.getItem('activeSubChildId');
     const activeParentChildId = localStorage.getItem('activeParentChildId');
 
-    // activeSubChildId가 있을 경우 해당 링크를 활성화
+// activeSubChildId가 있을 경우 해당 링크를 활성화
     if (activeSubChildId) {
         const activeLink = document.querySelector(`.lnb-sub-menu a[href='/market/list/${activeSubChildId}']`);
         if (activeLink) {
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // activeParentChildId가 있을 경우 상위 메뉴를 활성화
+// activeParentChildId가 있을 경우 상위 메뉴를 활성화
     if (activeParentChildId) {
         const parentLink = document.querySelector(`.lnb1 > a[href='/market/main/${activeParentChildId}']`);
         if (parentLink) {
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 메뉴 항목 클릭 시 상태 저장 및 토글
+// 메뉴 항목 클릭 시 상태 저장 및 토글
     lnbItems.forEach(function (lnbItem) {
         lnbItem.addEventListener('click', function (e) {
             e.preventDefault();
@@ -261,11 +261,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 subMenu.classList.toggle('hidden');
             }
 
-            // 클릭된 서브카테고리 및 부모 카테고리의 ID를 로컬 스토리지에 저장
-            const subChildId = this.getAttribute('href').split('/').pop();
-            const parentChildId = parentItem.querySelector('a').getAttribute('href').split('/').pop(); // 부모 카테고리의 ID 가져오기
+            // 상위 및 최상위 카테고리 클릭 시 activeSubChildId와 activeParentChildId 삭제
+            localStorage.removeItem('activeSubChildId');
+            localStorage.removeItem('activeParentChildId');
 
-            localStorage.setItem('activeSubChildId', subChildId);
+            // 클릭한 항목이 상위 카테고리인 경우만 activeParentChildId 저장
+            const parentChildId = parentItem.querySelector('a').getAttribute('href').split('/').pop();
             localStorage.setItem('activeParentChildId', parentChildId);
 
             // 클릭한 항목에 cateactive 클래스 추가
@@ -273,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 서브카테고리 클릭 시 cateactive 상태 업데이트
+// 서브카테고리 클릭 시 cateactive 상태 업데이트
     subCategoryLinks.forEach(function (link) {
         link.addEventListener('click', function () {
             subCategoryLinks.forEach(el => el.classList.remove('cateactive'));
@@ -281,6 +282,90 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('activeSubChildId', this.getAttribute('href').split('/').pop());
         });
     });
+
+
+    // const lnbItems = document.querySelectorAll('.lnb-item > a');
+    // const subCategoryLinks = document.querySelectorAll('.lnb-sub-menu a');
+    //
+    // // 로컬 스토리지에서 activeSubChildId와 activeParentChildId 가져오기
+    // const activeSubChildId = localStorage.getItem('activeSubChildId');
+    // const activeParentChildId = localStorage.getItem('activeParentChildId');
+    //
+    // // activeSubChildId가 있을 경우 해당 링크를 활성화
+    // if (activeSubChildId) {
+    //     const activeLink = document.querySelector(`.lnb-sub-menu a[href='/market/list/${activeSubChildId}']`);
+    //     if (activeLink) {
+    //         activeLink.classList.add('cateactive');
+    //         let parentItem = activeLink.closest('.lnb-item');
+    //         while (parentItem) {
+    //             parentItem.classList.add('open');
+    //             const subMenu = parentItem.querySelector('.lnb-sub-menu');
+    //             if (subMenu) {
+    //                 subMenu.classList.remove('hidden');
+    //             }
+    //             parentItem = parentItem.parentElement.closest('.lnb-item');
+    //         }
+    //     }
+    // }
+    //
+    // // activeParentChildId가 있을 경우 상위 메뉴를 활성화
+    // if (activeParentChildId) {
+    //     const parentLink = document.querySelector(`.lnb1 > a[href='/market/main/${activeParentChildId}']`);
+    //     if (parentLink) {
+    //         parentLink.classList.add('cateactive');
+    //         const parentItem = parentLink.closest('.lnb1');
+    //         parentItem.classList.add('open');
+    //         const subMenu = parentItem.querySelector('.lnb-sub-menu');
+    //         if (subMenu) {
+    //             subMenu.classList.remove('hidden');
+    //         }
+    //     }
+    // }
+    //
+    // // 메뉴 항목 클릭 시 상태 저장 및 토글
+    // lnbItems.forEach(function (lnbItem) {
+    //     lnbItem.addEventListener('click', function (e) {
+    //         e.preventDefault();
+    //
+    //         // 모든 메뉴 항목의 open, active 초기화
+    //         lnbItems.forEach(item => {
+    //             const parent = item.parentElement;
+    //             const subMenu = parent.querySelector('.lnb-sub-menu');
+    //             parent.classList.remove('open');
+    //             if (subMenu) {
+    //                 subMenu.classList.add('hidden');
+    //             }
+    //             item.classList.remove('cateactive');
+    //         });
+    //
+    //         // 현재 항목 열기 및 active로 설정
+    //         const parentItem = this.parentElement;
+    //         const subMenu = parentItem.querySelector('.lnb-sub-menu');
+    //         parentItem.classList.toggle('open');
+    //         if (subMenu) {
+    //             subMenu.classList.toggle('hidden');
+    //         }
+    //
+    //         // 클릭된 서브카테고리 및 부모 카테고리의 ID를 로컬 스토리지에 저장
+    //         const subChildId = this.getAttribute('href').split('/').pop();
+    //         const parentChildId = parentItem.querySelector('a').getAttribute('href').split('/').pop(); // 부모 카테고리의 ID 가져오기
+    //
+    //         localStorage.setItem('activeSubChildId', subChildId);
+    //         localStorage.setItem('activeParentChildId', parentChildId);
+    //
+    //         // 클릭한 항목에 cateactive 클래스 추가
+    //         this.classList.add('cateactive');
+    //     });
+    // });
+    //
+    // // 서브카테고리 클릭 시 cateactive 상태 업데이트
+    // subCategoryLinks.forEach(function (link) {
+    //     link.addEventListener('click', function () {
+    //         subCategoryLinks.forEach(el => el.classList.remove('cateactive'));
+    //         this.classList.add('cateactive');
+    //         localStorage.setItem('activeSubChildId', this.getAttribute('href').split('/').pop());
+    //     });
+    // });
 
 
     // const lnbItems = document.querySelectorAll('.lnb-item > a');

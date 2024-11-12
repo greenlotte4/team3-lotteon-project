@@ -48,11 +48,13 @@ public class ProductSummaryDTO implements Serializable {
     private long finalPrice;
     private double productRating;
     private Integer reviewCount;
+    private String savedPath;
+
 
 
     @Builder
     @QueryProjection
-    public  ProductSummaryDTO(Long categoryId,Long productId, String productName, Long price, int discount, int shippingFee, int shippingTerms, String productDesc, String file230, String file190, Long sellerId, String sellerName, String company) {
+    public  ProductSummaryDTO(Long categoryId,Long productId, String productName, Long price, int discount, int shippingFee, int shippingTerms, String productDesc, String file230, String file190, Long sellerId, String sellerName, String company,String savedPath) {
         this.categoryId = categoryId;
         this.productId = productId;
         this.productName = productName;
@@ -66,6 +68,7 @@ public class ProductSummaryDTO implements Serializable {
         this.sellerId = sellerId;
         this.sellerName = sellerName;
         this.company = company;
+        this.savedPath= savedPath;
 
         this.discountPrice = Math.round(price * discount / 100.0 / 100) * 100;
         this.finalPrice = price - this.discountPrice;

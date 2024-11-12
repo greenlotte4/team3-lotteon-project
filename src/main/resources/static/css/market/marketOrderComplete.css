@@ -126,7 +126,6 @@
 }
 
 .order-items tr td:nth-child(1) img {
-    border: 1px solid #000000;
     width: 80px;
     margin-right: 10px;
     height: 80px;

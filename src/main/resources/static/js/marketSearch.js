@@ -55,6 +55,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 <span class="discount">${product.discount}%↓</span>
             </section>
         ` : '';
+            const imagePath = product.savedPath
+                ? `/uploads/${product.savedPath}/${product.file190}`
+                : `/uploads/productImg/${product.file190}`;
 
             // Conditionally render the shipping fee if it's available
             const shippingFee = product.shippingFee ? `${product.shippingFee}원` : '무료배송';
@@ -63,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
             productItem.innerHTML = `
              <div class="product-search-item">
                 <div class="product-image">
-                    <img src="/uploads/${product.file190}" alt="상품 이미지">
+                    <img src="${imagePath}" alt="상품 이미지">
                 </div>
                 <div class="product-details">
                     <h4 class="product-name">${product.productName}</h4>

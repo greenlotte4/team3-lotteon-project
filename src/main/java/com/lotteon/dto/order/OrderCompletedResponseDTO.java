@@ -60,9 +60,9 @@ public class OrderCompletedResponseDTO {
 
                 ProductDTO product = orderItem.getProduct();
                 long quantity = orderItem.getStock();
-                long productTotalPrice = product.getPrice() * orderItem.getStock();
-                long productDiscount = (product.getPrice() * product.getDiscount() / 100) / 10 * 10;
-                long productFinalPrice = productTotalPrice-(productDiscount)*quantity;
+                long productTotalPrice = orderItem.getSavedPrice() * quantity;
+                long productDiscount = orderItem.getSavedDiscount();
+                long productFinalPrice = productTotalPrice-(productDiscount);
 
                 // Calculate original price and discount for all items
                 if (orderItem.getCombination() != null) {
@@ -124,7 +124,7 @@ public class OrderCompletedResponseDTO {
             this.sellers.add(seller);
             log.info("Seller Order Items: " + seller.getOrderItems());
         }
-        this.totalDiscount = order.getTotalDiscount();
+
         // Calculate final payment amount
         this.finalPaymentAmount = this.originalTotalPrice - this.totalDiscount + this.totalShippingFee -pointCoupon;
         log.info("Original Total Price: " + originalTotalPrice);

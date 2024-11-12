@@ -110,7 +110,8 @@
                             <td>상품 이미지</td>
                             <td class="productImg">
                                 <div>
-                                    <img th:src="@{'/uploads/'+${product.getProductFiles().get(0).getPath()}}" alt="">
+                                    <img th:if="${product.getSavedPath()==null}" th:src="@{'/uploads/'+${product.getProductFiles().get(0).getPath()}+'/'+${product.getProductFiles().get(0).getSName()}}" alt="">
+                                    <img th:unless="${product.getSavedPath()==null}" th:src="@{'/uploads/productImg/'+${product.getProductFiles().get(0).getSName()}}" alt="">
                                     <div>
                                         <input type="file" class="product_img1" name="files[0]" placeholder="선택된 파일 없음">
                                         <span>크기 190 x 190, 상품 목록에 출력될 이미지입니다.</span> <br>
@@ -118,7 +119,8 @@
 
                                 </div>
                                 <div>
-                                    <img th:src="@{'/uploads/'+${product.getProductFiles().get(1).getPath()}}" alt="">
+                                    <img th:if="${product.getSavedPath()==null}" th:src="@{'/uploads/'+${product.getProductFiles().get(1).getPath()}+'/'+${product.getProductFiles().get(1).getSName()}}" alt="">
+                                    <img th:unless="${product.getSavedPath()==null}" th:src="@{'/uploads/productImg/'+${product.getProductFiles().get(1).getSName()}}" alt="">
                                     <div>
                                         <input type="file" class="product_img2" name="files[1]" placeholder="선택된 파일 없음">
                                         <span>크기 230 x 230, 상품 메인에 출력될 이미지입니다.</span> <br>
@@ -126,7 +128,8 @@
 
                                 </div>
                                 <div>
-                                    <img th:src="@{'/uploads/'+${product.getProductFiles().get(2).getPath()}}" alt="">
+                                    <img th:if="${product.getSavedPath()==null}" th:src="@{'/uploads/'+${product.getProductFiles().get(2).getPath()}+'/'+${product.getProductFiles().get(2).getSName()}}" alt="">
+                                    <img th:unless="${product.getSavedPath()==null}" th:src="@{'/uploads/productImg/'+${product.getProductFiles().get(2).getSName()}}" alt="">
                                     <div>
                                         <input type="file" class="product_img3" name="files[2]" placeholder="선택된 파일 없음">
                                         <span>크기 456 x 456, 상품 상세에 출력될 이미지입니다.</span> <br>
@@ -139,8 +142,8 @@
                             <td>상품 상세이미지</td>
                             <td class="productImg">
                                 <div>
-                                    <img th:src="@{'/uploads/'+${product.getProductFiles().get(3).getPath()}}" alt="">
-                                    <div>
+                                    <img th:if="${product.getSavedPath()==null}" th:src="@{'/uploads/'+${product.getProductFiles().get(3).getPath()}+'/'+${product.getProductFiles().get(3).getSName()}}" alt="">
+                                    <img th:unless="${product.getSavedPath()==null}" th:src="@{'/uploads/productImg/'+${product.getProductFiles().get(3).getSName()}}" alt="">                                 <div>
                                         <input type="file" class="product_img3" name="files[2]" placeholder="선택된 파일 없음">
                                         <span>크기 456 x 456, 상품 상세에 출력될 이미지입니다.</span> <br>
                                     </div>

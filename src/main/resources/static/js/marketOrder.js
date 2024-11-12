@@ -320,13 +320,25 @@ document.addEventListener('DOMContentLoaded', function () {
     // }
 
     // 배송비 계산
+
+    function shippingFeeCalc(productDataArray){
+        if(finalPrice > shippingTerms){
+            return 0;
+        }else{
+            return shippingFee;
+        }
+    }
+
+
     function calculateShippingFee(dataArray) {
         const groupedShippingFees = {};
 
         // Group products by productId and calculate the total final price for each group
         dataArray.forEach(data => {
             const productId = data.productId;
-            const finalPrice = data.finalPrice * data.quantity;
+            const additionalPrice = data;
+
+            const finalPrice = (data.finalPrice + additionalPrice) * data.quantity;
             console.log("productId1:", productId);
 
             // Initialize or accumulate total price for the product group
@@ -365,24 +377,31 @@ document.addEventListener('DOMContentLoaded', function () {
         let discountAmount =( data.originalPrice * data.discount /100)* 10/10
         let Quantity  = data.quantity;
         let final = (Original-discountAmount)*Quantity;
-        let expectPoint= Math.floor(data.originalPrice*pointPercentage/100/10)*10;
+        let expectPoint= Math.floor(final*pointPercentage/100/10)*10;
+
+        const imagePath = data.savedPath
+            ? `/uploads/${data.savedPath}/${data.file190}`
+            : `/uploads/productImg/${data.file190}`;
 
 
-        if (data.options && data.options.length > 0) {
+        if (data.options && data.options.length > 0 ) {
             const totalAdditionalPrice = data.options[0].additionalPrice;
             const calcPrice= Original + totalAdditionalPrice;
             discountAmount = (calcPrice * data.discount/100) *10 /10;
             final = (calcPrice - discountAmount)*Quantity;
-            expectPoint =Math.floor( calcPrice*pointPercentage/100/10 )*10;
+            expectPoint =Math.floor( final*pointPercentage/100/10 )*10 ;
             totalExpectedPoint += expectPoint;
 
-
+            let shipping = data.shippingFee;
+            if(data.shippingTerms <= final){
+                shipping =0;
+            }
 
             console.log("data.calcPrice",calcPrice );
             return `
         <tr class="order-row">
             <td>
-                <div><img src="/uploads/${data.file190}" alt="${data.productName}"></div>
+                <div><img src="${imagePath}" alt="${data.productName}"></div>
                 <div>
                     <span>${data.productName}</span>
                     <p class="product_option"> [ 옵션 : ${data.options[0].combinationString} ]</p>
@@ -396,18 +415,52 @@ document.addEventListener('DOMContentLoaded', function () {
             <td><span class="T_originalPrice price" data-original="${calcPrice}" data-additional="${calcPrice}">${calcPrice.toLocaleString()}</span></td>
             <td><span class="T_discount">${data.discount}</span>%</td>
             <td><span class="T_point">${expectPoint}</span></td>
-            <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
+            <td><span class="T_shippingFee" data-ship="${shipping}">${shipping.toLocaleString()}</span></td>
             <td><span class="T_finalPrice price">${final}</span></td>
             <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
         </tr>
     `;
-        }else{
+        }else if(data.cartId >0){
             totalExpectedPoint += expectPoint;
+
+            console.log("여기!!!!",data);
+            const original = parseInt(data.originalPrice)+parseInt(data.additionalPrice);
+
+            const optionsHTML = data.combinationString
+                ? `<p class="product_option"> [ 옵션 : ${data.combinationString} ]</p>`
+                : '';
 
             return `
         <tr class="order-row">
             <td>
-                <div><img src="/uploads/productImg/${data.file190}" alt="${data.productName}"></div>
+                <div><img src="${imagePath}" alt="${data.productName}"></div>
+                <div>
+                    <span>${data.productName}</span>
+                ${optionsHTML} <!-- Only renders if data.combinationString is present -->
+                </div>
+            </td>
+            <td>
+                <div class="qnt">
+                    <input type="number" class="T_quantity" value="${data.quantity}" readonly>
+                </div>
+            </td>
+            <td><span class="T_originalPrice price" data-original="${original}" data-additional="${data.additionalPrice}">${original}</span></td>
+            <td><span class="T_discount">${data.discount}</span>%</td>
+            <td><span class="T_point">${expectPoint}</span></td>
+            <td><span class="T_shippingFee" data-ship="${shippingFee}">${shippingFee.toLocaleString()}</span></td>
+            <td><span class="T_finalPrice price">${data.finalPrice}</span></td>
+            <td><input type="hidden" class="shippingTerms" value="${data.shippingTerms}"></td>
+        </tr>
+    `;
+
+        } else{
+            totalExpectedPoint += expectPoint;
+
+
+            return `
+        <tr class="order-row">
+            <td>
+                <div><img src="${imagePath}" alt="${data.productName}"></div>
                 <div>
                     <span>${data.productName}</span>
 
@@ -436,11 +489,17 @@ document.addEventListener('DOMContentLoaded', function () {
     pointuseBtn.addEventListener("click", function () {
         const usedPoint = parseInt(usedPointInput.value) || 0;
 
-        if(currentPoint < 5000){
+        if(usedPoint < 5000){
             alert('5000원 이상부터 사용가능합니다.');
+            usedPointInput.value=0;
+            totalExpectedPoint=0;
+            updateDiscountResult();
+
         }else if (usedPoint > currentPoint) {
             alert("사용가능한 포인트가 부족합니다.");
             usedPointInput.value = 0;
+            updateDiscountResult();
+
         } else {
             updateDiscountResult();
         }
@@ -465,11 +524,16 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateDiscountResult() {
         const usedPoint = parseInt(usedPointInput.value) || 0;
 
+        if(usedPoint >=5000){
+            totalExpectedPoint=0;
+        }
+
         // 선택된 쿠폰에 따른 할인 금액 계산
         // const selectedCouponValue = couponSelect.options[couponSelect.selectedIndex]?.value || "0";
         const selectedCoupon = couponSelect.options[couponSelect.selectedIndex];
 
         if (selectedCoupon) {
+            totalExpectedPoint = 0;
             const findCouponType = selectedCoupon.getAttribute('data-coupon-type');
             let findCouponValue = selectedCoupon.getAttribute('data-coupon-value');  // 할인 값을 가져옴
             const issuanceNumber = selectedCoupon.getAttribute('data-issuance-number'); // 발급 번호 가져오기
@@ -571,11 +635,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return Array.from(document.querySelectorAll('.T_originalPrice'))
             .reduce((total, elem) => {
                 const originalPrice = parseInt(elem.dataset.original || 0);
-                const additionalPrice = elem.dataset.additional ? parseInt(elem.dataset.additional) : 0; // Check if additional price exists
                 const quantity = parseInt(elem.closest('.order-row').querySelector('.T_quantity').value || 1); // Get the quantity
 
                 // Sum total based on original price and any additional price if options exist
-                return total + (originalPrice + additionalPrice) * quantity;
+                return total + (originalPrice ) * quantity;
             }, 0);
     }
 

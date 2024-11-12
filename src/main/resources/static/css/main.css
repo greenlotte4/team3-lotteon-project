@@ -149,7 +149,7 @@
 
 /* Single product item */
 .hit-product-item {
-    min-width: 14%;
+    min-width: 23%;
     box-sizing: border-box;
     padding: 10px;
     height: auto;
@@ -168,7 +168,7 @@
 
 
 .hit-product-item img {
-    width: 240px;
+    width: 194px;
     height: 250px;
     object-fit: cover;
 }

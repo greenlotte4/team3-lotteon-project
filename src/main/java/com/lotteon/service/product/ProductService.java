@@ -668,24 +668,25 @@ public class ProductService {
 
 
 
-        List<ProductDTO> productDTOS= new ArrayList<>();
-            for(Product product : products){
-                long finalPrice = (product.getPrice() * (100-product.getDiscount())/100*10)/10 ;
-                ProductDTO productDTO = ProductDTO.builder()
-                        .productId(product.getProductId())
-                        .productName(product.getProductName())
-                        .categoryId(product.getCategoryId())
-                        .file190(product.getFile190())
-                        .file230(product.getFile230())
-                        .savedPath(product.getSavedPath())
-                        .price(product.getPrice())
-                        .discount(product.getDiscount())
-                        .shippingFee(product.getShippingFee())
-                        .shippingTerms(product.getShippingTerms())
-                        .finalPrice(finalPrice)
-                        .build();
-                productDTOS.add(productDTO);
-            }
+        List<ProductDTO> productDTOS = products.stream()
+                .filter(product -> !product.isDeleted()) // isDeleted가 false인 제품만 포함
+                .map(product -> {
+                    long finalPrice = (product.getPrice() * (100 - product.getDiscount()) / 100 * 10) / 10;
+                    return ProductDTO.builder()
+                            .productId(product.getProductId())
+                            .productName(product.getProductName())
+                            .categoryId(product.getCategoryId())
+                            .file190(product.getFile190())
+                            .file230(product.getFile230())
+                            .savedPath(product.getSavedPath())
+                            .price(product.getPrice())
+                            .discount(product.getDiscount())
+                            .shippingFee(product.getShippingFee())
+                            .shippingTerms(product.getShippingTerms())
+                            .finalPrice(finalPrice)
+                            .build();
+                })
+                .collect(Collectors.toList());
 
         return productDTOS;
     }
