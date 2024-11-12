@@ -9,6 +9,8 @@
     <title>Admin::Main</title>
     <link rel="stylesheet" th:href="@{/css/admin/adminindex.css}">
     <script   src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/adminGraph.js}"></script>
+
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -125,6 +127,7 @@
                             </tr>
                         </table>
                     </article>
+
                     <article id="admin_notice_admin_inquire">
                             <table class="admin_notice">
                                 <colgroup>
@@ -135,26 +138,11 @@
                                     <th>공지사항</th>
                                     <th><a href="#">전체보기</a></th>
                                 </tr>
-                                <tr>
-                                    <td><a href="#">[안내] 해외결제사 창 문자주의ddddddddddddddddddddddddddddddddddddddddddddddd</a></td>
-                                    <td>22.10.31</td>
+                                <tr th:each="notice:${notices}">
+                                    <td><a href="#">[ [[${notice.noticetype}]] ] [[${notice.noticetitle}]]</a></td>
+                                    <td>[[${#strings.substring(notice.date,0,10)}]]</td>
                                 </tr>
-                                <tr>
-                                    <td><a href="#">[안내] 해외결제사 창 문자주의ddddddddddddddddddddddddddddddddddddddddddddddd</a></td>
-                                    <td>22.10.31</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[안내] 해외결제사 창 문자주의ddddddddddddddddddddddddddddddddddddddddddddddd</a></td>
-                                    <td>22.10.31</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[안내] 해외결제사 창 문자주의ddddddddddddddddddddddddddddddddddddddddddddddd</a></td>
-                                    <td>22.10.31</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[안내] 해외결제사 창 문자주의ddddddddddddddddddddddddddddddddddddddddddddddd</a></td>
-                                    <td>22.10.31</td>
-                                </tr>
+
                             </table>
                             <table class="admin_inquire">
                                 <colgroup>
@@ -166,33 +154,33 @@
                                     <th>고객문의</th>
                                     <th colspan="2"><a href="#">전체보기</a></th>
                                 </tr>
-                                <tr>
-                                    <td><a href="#">[가입] 가입 문의 내용ddddddddddddddddddddddddddd</a></td>
-                                    <td>wlgus59**</td>
-                                    <td>20.12.11</td>
+                                <th:block th:if="${qnadto.get(0).getQnaNo()>0}">
+                                <tr th:each="qna:${qnadto}">
+                                    <td><a href="#" th:text="${qna.getQnatitle()}"></a></td>
+
+                                    <td>[[${#strings.substring(qna.getQnawriter, 0, 2) + '**'}]]</td>
+                                    <td>[[${#strings.substring(qna.date,0,10)}]]</td>
                                 </tr>
-                                <tr>
-                                    <td><a href="#">[가입] 가입 문의 내용ddddddddddddddddddddddddddd</a></td>
-                                    <td>wlgus59**</td>
-                                    <td>20.12.11</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[가입] 가입 문의 내용ddddddddddddddddddddddddddd</a></td>
-                                    <td>wlgus59**</td>
-                                    <td>20.12.11</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[가입] 가입 문의 내용ddddddddddddddddddddddddddd</a></td>
-                                    <td>wlgus59**</td>
-                                    <td>20.12.11</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">[가입] 가입 문의 내용ddddddddddddddddddddddddddd</a></td>
-                                    <td>wlgus59**</td>
-                                    <td>20.12.11</td>
-                                </tr>
+                                </th:block>
+                                <th:block th:unless="${qnadto.get(0).getQnaNo()>0}">
+                                    <tr>
+                                       <td colspan="3">고객 문의가 없습니다.</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">고객 문의가 없습니다.</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">고객 문의가 없습니다.</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">고객 문의가 없습니다.</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">고객 문의가 없습니다.</td>
+                                    </tr>
+                                </th:block>
+
                             </table>
                     </article>  
                 </section>
-                <script th:src="@{/js/adminGraph.js}"></script>
     </th:block>

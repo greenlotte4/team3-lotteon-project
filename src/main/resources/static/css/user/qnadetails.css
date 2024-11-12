@@ -26,28 +26,37 @@ main {
 }
 
 
+/* 나의 쇼핑정보 영역 */
 .info {
-    width: 1200px;
-    height: 75px;
-    background-color: antiquewhite;
-    display: flex; /* Flexbox 사용 */
-    align-items: center; /* 수직 중앙 정렬 */
-
+    margin: 30px 0;
+    width: 100%;
+    min-width: 1136px;
+    max-width: 1200px;
+    background: var(--m-colors-gray150, #f5f5f5);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 25px 10px 25px 30px;
+    height: 100%;
 }
 
+
+/* 제목 스타일 */
 .info-title {
-    position: relative;
-    width: 101x;
-    height: 22px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
-    left: 100px;
+    color: #333;
+    margin-left: 30px;
+    text-align: left;
 }
+
 
 .summary-table {
     position: relative;
     display: flex;
-    left: 750px;
+    left: 60%;
     justify-content: space-around; /* 항목 간격 조정 */
     width: 300px; /* 전체 폭 사용 */
     padding: 10px 0; /* 위아래 여백 */
@@ -59,7 +68,6 @@ main {
     text-align: center; /* 항목 중앙 정렬 */
     border-right: 1px solid black;
 }
-
 .summary-item:last-child {
     border-right: none; /* 마지막 항목의 오른쪽 검은 줄 제거 */
 }
@@ -69,7 +77,7 @@ main {
     font-weight: bold; /* 값 두껍게 */
 }
 
-#container {
+#container{
     display: flex;
     height: auto;
     flex-wrap: wrap;
@@ -79,9 +87,18 @@ aside {
     float: left;
     width: 200px;
     height: auto;
-    display: flex; /* Flexbox 사용 */
-    justify-content: center; /* 수직 중앙 정렬 */
-    border-right: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    /*border-right: 1px solid #ccc;*/
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    background: #fff;
+    box-sizing: border-box;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 19px;
+    letter-spacing: -0.3px;
+    color: #000;
 }
 
 aside > ul {
@@ -129,13 +146,13 @@ aside > ul > li:nth-child(5) {
     width: 880px;
     height: 20px;
     margin: 0 48px;
-
 }
 
-.center p {
-    font-size: 14px;
-    font-weight: 700;
-    float: left;
+.center p{
+    font-size: 24px;
+    line-height: 34px;
+    letter-spacing: -.029em;
+    margin-top: 20px;
 }
 
 .center a {
@@ -146,7 +163,7 @@ aside > ul > li:nth-child(5) {
 table {
     width: 900px;
     height: 133px;
-    margin: 0 48px;
+    margin: 30px 48px;
     border-top: 2px solid black;
     border-bottom: 1px solid #b4b0b0;
     border-collapse: collapse;
