@@ -108,19 +108,17 @@ public class MypageController {
     @GetMapping("/myInfo")
     public String myInfo(Model model, Authentication authentication) {
         String uid = authentication.getName();
-        List<Review> recentReviews = reviewService.getRecentReviewsByUser(uid);// 최신 3개의 리뷰 가져오기
+        List<Review> recentReviews = reviewService.getRecentReviewsByUser(uid); // 최신 3개의 리뷰 가져오기
         List<BannerDTO> banners2 = adminService.getActiveBanners();
 
-        Pageable pageable = PageRequest.of(0, 3, Sort.by("orderDate").descending());
+        // 주문을 orderId로 그룹화
+        List<OrderItemDTO> groupDTO = orderService.getOrdersGroupedByOrderItemId(uid);
 
-
-        List<OrderWithGroupedItemsDTO> groupDTO = orderService.getOrdersGroupedBySellers(uid);
-
-        model.addAttribute("groupDTO", groupDTO);
+        model.addAttribute("groupDTO", groupDTO); // 그룹화된 데이터 전달
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
         model.addAttribute("banners", banners2);
-        return "content/user/mypageMain"; // Points to "content/user/mypageMain"
+        return "content/user/mypageMain"; // "mypageMain" 뷰로 이동
     }
 
     @ResponseBody
@@ -195,24 +193,24 @@ public class MypageController {
     public String orderDetails(Model model, PageRequestDTO pageRequestDTO, Authentication authentication) {
         String uid = authentication.getName();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
-        OrderPageResponseDTO<OrderDTO> pageResponseOrderDTO = orderService.getOrderByUser(pageRequestDTO, uid);
+
+        // 변경된 메서드 호출
+        OrderPageResponseDTO<OrderItemDTO> pageResponseOrderItemDTO = orderService.getOrderByUserItems(pageRequestDTO, uid);
 
         List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
-
-        // 필터링: 원하는 name 값만 선택
         List<String> targetNames = Arrays.asList("주문/결제", "배송", "여행/숙박/항공");
         List<BoardCateDTO> filteredBoardCateDTOS = boardCateDTOS.stream()
                 .filter(cate -> targetNames.contains(cate.getName()))
                 .collect(Collectors.toList());
 
-        // 로그로 필터링된 결과 확인
-        log.info("filteredBoardCateDTOS: " + filteredBoardCateDTOS);
+        List<OrderItemDTO> groupDTO = orderService.getOrdersGroupedByOrderItemId(uid);
 
+        model.addAttribute("groupDTO", groupDTO);
         model.addAttribute("boardCate", filteredBoardCateDTOS);
-        model.addAttribute("pageResponseOrderDTO", pageResponseOrderDTO);
+        model.addAttribute("pageResponseOrderDTO", pageResponseOrderItemDTO);  // OrderItemDTO로 변경된 DTO 전달
         model.addAttribute("content", "orderdetails");
         model.addAttribute("banners", banners2);
-        return "content/user/orderdetails"; // Points to "content/user/orderdetails"
+        return "content/user/orderdetails";
     }
 
     @GetMapping("/pointdetails")
@@ -288,6 +286,7 @@ public class MypageController {
         // 로그인한 유저의 리뷰만 가져오기
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getReviewsByUser(pageRequestDTO, uid);
         log.info("aaaaaaa{}", pageResponseReviewDTO);
+
 
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
         model.addAttribute("content", "reviewdetails");

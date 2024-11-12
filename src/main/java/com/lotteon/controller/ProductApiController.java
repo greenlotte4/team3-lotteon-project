@@ -2,8 +2,10 @@ package com.lotteon.controller;
 
 
 import com.lotteon.dto.product.*;
+import com.lotteon.dto.product.request.OptionCombinationRequestDTO;
 import com.lotteon.entity.product.ProductCategory;
 import com.lotteon.service.product.BestProductService;
+import com.lotteon.service.product.OptionService;
 import com.lotteon.service.product.ProductCategoryService;
 import com.lotteon.service.product.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +39,7 @@ public class ProductApiController {
     private final ProductService productService;
     private final RedisTemplate redisTemplate;
     private final BestProductService bestProductService;
+    private final OptionService optionService;
 
     @GetMapping("/api/categories")
     public List<ProductCategory> getCategories() {
@@ -161,5 +164,21 @@ public class ProductApiController {
         // 캐시에서 데이터가 없을 경우 기본 값 설정 (빈 리스트 등)
         return bestProducts != null ? bestProducts : List.of();
     }
+
+    @PostMapping("/generate-combinations")
+    @ResponseBody
+    public ResponseEntity<List<String>> generateCombinations(@RequestBody OptionCombinationRequestDTO request) {
+        List<OptionCombinationRequestDTO.OptionGroupDTO> optionGroups = request.getOptionGroups();
+
+        log.info("Received option groups: " + optionGroups);
+
+        // 서비스에서 조합을 생성하고 결과를 응답으로 반환
+        List<String> combinations = optionService.generateCombinations(optionGroups);
+        log.info("combinationsssss " + combinations);
+
+        return ResponseEntity.ok(combinations);
+    }
+
+
 
 }

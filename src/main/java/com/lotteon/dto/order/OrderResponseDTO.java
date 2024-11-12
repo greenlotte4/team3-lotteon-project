@@ -86,7 +86,7 @@ public class OrderResponseDTO {
                     .savedDiscount(savedDiscount)
                     .shippingFees(parseLongOrDefault(buyNowRequestDTO.getShippingFee(),0))
                     .shippingTerms(parseLongOrDefault(buyNowRequestDTO.getShippingTerms(),0))
-                    .stock(originalQuantity)
+                    .stock((int) originalQuantity)
                     .status(DeliveryStatus.PREPARING)
                     .build();
 

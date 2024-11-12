@@ -18,8 +18,8 @@
                     <th:block th:replace="~{content/admin/admin_gate}"></th:block>
 
                     <section id="admin_navi">
-                            <p>관리자 메인</p>
-                            <p><a href="#">HOME</a> > 관리자 메인</p>
+                            <p>상품 등록</p>
+                        <p><a href="#">Home</a> > <span>상품관리</span> > 상품등록</p>
                     </section>
 
                     <form th:action="@{/seller/product/register}" method="post" id="productForm" enctype="multipart/form-data">
@@ -144,7 +144,9 @@
 
                         </article>
 
-                        <article>
+                        <article id="admin_option">
+                            <div class="top1">옵션정보</div>
+                            <div><span class="top2">옵션 그룹 작성 후 옵션조합생성하여 재고 및 추가금액 설정 가능</span></div>
                             <div id="option-container">
                                 <div class="option-group">
                                     <div>
@@ -159,7 +161,7 @@
                                         <button type="button" onclick="addOptionItemField(this)">옵션 항목 추가</button>
                                     </div>
                                 </div>
-                                <button type="button" onclick="addNewOptionGroup()">옵션 그룹 추가</button>
+                                <button type="button" class="groupAdd" onclick="addNewOptionGroup()">옵션 그룹 추가</button>
                             </div>
 
                             <div id="option-stock-container">
