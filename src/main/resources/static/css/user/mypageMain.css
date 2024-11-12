@@ -20,27 +20,37 @@ main {
 }
 
 
-.info{
-    width: 1200px;
-    height: 75px;
-    background-color: #f8f7f7;
-    display: flex; /* Flexbox 사용 */
-    align-items: center; /* 수직 중앙 정렬 */
+/* 나의 쇼핑정보 영역 */
+.info {
+    margin: 30px 0;
+    width: 100%;
+    min-width: 1136px;
+    max-width: 1200px;
+    background: var(--m-colors-gray150, #f5f5f5);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 25px 10px 25px 30px;
+    height: 100%;
+}
 
-}
+
+/* 제목 스타일 */
 .info-title {
-    position: relative;
-    width: 101x;
-    height: 22px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
-    left: 100px;
+    color: #333;
+    margin-left: 30px;
+    text-align: left;
 }
+
 
 .summary-table {
     position: relative;
     display: flex;
-    left: 750px;
+    left: 60%;
     justify-content: space-around; /* 항목 간격 조정 */
     width: 300px; /* 전체 폭 사용 */
     padding: 10px 0; /* 위아래 여백 */
@@ -70,16 +80,26 @@ main {
     justify-content: flex-start;
 }
 
-#container > div:first-of-type{
-    border-left: 1px solid #ddd;
-}
+/*#container > div:first-of-type{*/
+/*    border-left: 1px solid #ddd;*/
+/*}*/
 
 aside {
     float: left;
     width: 200px;
-    height: auto;
-    display: flex; /* Flexbox 사용 */
-    justify-content: center; /* 수직 중앙 정렬 */
+    height: 917px;
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid #ccc;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    background: #fff;
+    box-sizing: border-box;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 19px;
+    letter-spacing: -0.3px;
+    color: #000;
 }
 
 aside > ul {
