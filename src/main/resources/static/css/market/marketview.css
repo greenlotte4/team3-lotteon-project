@@ -1174,13 +1174,14 @@ select::-ms-expand {
 
 /* 버튼 스타일 */
 #openDiscountModalBtn {
+    width: 100%;
     padding: 10px 20px;
-    background-color: #d10000;
-    color: #fff;
-    border: none;
+    background-color: white;
+    border: 1px solid #ed4046;
     border-radius: 5px;
-    font-size: 1em;
+    font-size: 14px;
     cursor: pointer;
+    color: #e50113;
 }
 
 .services {

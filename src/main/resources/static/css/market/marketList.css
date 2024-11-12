@@ -28,7 +28,7 @@
 
 
 #mainArea .section .sectionWrapper{
-    border: 1px solid #eee;
+    /*border: 1px solid #eee;*/
     margin-top: 10px;
     width: 100%;
     padding: 20px;
@@ -91,13 +91,14 @@
 /* Individual product item */
 .product-item > a {
     display: flex;
-    justify-content: space-between; /* Align items horizontally */
-    align-items: center; /* Vertically align items */
+    justify-content: space-between;
+    align-items: center;
     padding: 15px;
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+    border-radius: 4px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
     transition: box-shadow 0.3s ease;
-
 }
 
 /* Product image */
