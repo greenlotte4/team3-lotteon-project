@@ -412,6 +412,19 @@ public class OrderService {
         return count;
     }
 
+    public boolean updateOrderStatusToConfirmation(Long orderItemId) {
+        Optional<OrderItem> orderItemOptional = orderItemRepository.findById(orderItemId);
+
+        if (orderItemOptional.isPresent()) {
+            OrderItem orderItem = orderItemOptional.get();
+            orderItem.setStatus(DeliveryStatus.CONFIRMATION);  // 올바른 열거형 값 할당  // 상태를 CONFIRMATION으로 설정
+            orderItemRepository.save(orderItem);  // 상태 변경된 객체 저장
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 
 

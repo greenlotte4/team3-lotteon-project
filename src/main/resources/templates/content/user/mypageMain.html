@@ -142,13 +142,13 @@
 
                     <!-- 배송 상태 -->
                     <td>
-                        <data th:value="${orderItem.orderS}">배송완료</data>
+                        <data th:text="${orderItem.status.description}"></data>
                     </td>
 
                     <!-- 버튼들 -->
                     <td>
                         <div class="button" style="display: flex; flex-direction: column; gap: 3px;">
-                            <button class="receipt-btn custom-button">수취확인</button>
+                            <button class="receipt-btn custom-button" th:data-order-item-id="${orderItem.orderItemId}">수취확인</button>
                             <div>
                                 <button class="pReview-btn custom-button"
                                         th:attr="data-product-no=${orderItem.productId}, data-product-name=${orderItem.productName}, data-order-item-id=${orderItem.getOrderItemId()}"
