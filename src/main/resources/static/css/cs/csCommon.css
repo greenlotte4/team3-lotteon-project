@@ -29,10 +29,11 @@ main {
 /*어사이드*/
 #aside {
     width: 200px;
+    height: 770.5px;
     border-right: 1px solid rgb(199, 199, 199);
     box-sizing: border-box;
-
 }
+
 #aside h1 {font-size: large; font-weight: bold; text-align: center; margin: 20px 20px 40px;}
 .aside_list ul li {overflow: hidden; padding: 16px 0; border-bottom: 1px solid rgb(194, 194, 194); width:140px; margin-left: 10px;}
 /*.aside_list ul li:nth-of-type(1) a{font-weight: bold; text-decoration: underline;}*/
