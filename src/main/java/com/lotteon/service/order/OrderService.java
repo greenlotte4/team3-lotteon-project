@@ -388,11 +388,16 @@ public class OrderService {
         return amount != null ? amount : 0;
     }
 
+    public List<CategoryOrderCountDTO> getOrderCountGroupedByCategoryFirstId() {
+        List<CategoryOrderCountDTO> newCategoryCount = orderItemRepository.selectCount();
+
+        return newCategoryCount;
 
     public Long getOrderCount(String uid){
         List<Order> orderCount = orderRepository.findByUid(uid); // 여러 개의 주문을 가져옴
 
           return (long) orderCount.size(); // 주문 개수를 반환
+
     }
 
 

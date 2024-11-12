@@ -55,6 +55,8 @@ public class ProductDTO{
     private List<OptionDTO> options;
     private ProductDetailsDTO productDetails;
     private SellerDTO seller;
+    private boolean isDeleted;
+
 
     //main list 판매자회사이름
     private String company;

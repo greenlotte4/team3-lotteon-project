@@ -35,6 +35,8 @@ public class OptionGroup {
     private String name;
     private boolean isRequired;
 
+
+
     // Soft delete 플래그 추가
     @Builder.Default
     private boolean isDeleted = false;

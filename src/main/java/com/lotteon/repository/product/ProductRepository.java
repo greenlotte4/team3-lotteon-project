@@ -22,7 +22,7 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> , ProductRepositoryCustom {
 //    QProductCategory productCategory = QProductCategory.productCategory;
-
+    Page<Product> findByDeletedFalse(boolean deleted, Pageable pageable);
 
     Page<Product> findBySellerId(String sellerId, Pageable pageable);
 

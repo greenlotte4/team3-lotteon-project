@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @ToString
 @Builder
 @Entity
+@Setter
 @Table(name="product")
 public class Product {
 
