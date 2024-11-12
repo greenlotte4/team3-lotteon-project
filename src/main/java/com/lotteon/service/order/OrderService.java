@@ -226,21 +226,26 @@ public class OrderService {
     }
 
 
-    public OrderPageResponseDTO<OrderDTO> getOrderByUser(PageRequestDTO pageRequestDTO, String uid) {
-        Pageable pageable = pageRequestDTO.getPageable("orderId");
+    public OrderPageResponseDTO<OrderItemDTO> getOrderByUserItems(PageRequestDTO pageRequestDTO, String uid) {
+        Pageable pageable = pageRequestDTO.getPageable("orderItemId");  // orderItemId로 정렬
 
-        Page<Order> pageOrder = orderRepository.findByUid(uid, pageable);
+        // 사용자 ID로 OrderItems 페이징 조회
+        Page<OrderItem> pageOrderItems = orderItemRepository.findByOrder_UidOrderByOrderItemIdDesc(uid, pageable);
 
-        // OrderService의 toDTO 메서드를 통해 변환
-        List<OrderDTO> orderList = pageOrder.stream()
-                .map(order -> new OrderDTO(order, sellerRepository))  // OrderService의 toDTO 메서드를 사용
+        // OrderItem을 OrderItemDTO로 변환
+        List<OrderItemDTO> orderItemList = pageOrderItems.stream()
+                .map(orderItem -> {
+                    // 각 OrderItem에 대해 Seller 정보 추가
+                    Seller seller = sellerRepository.findByUserUid(orderItem.getSellerUid()).orElse(null);
+                    return new OrderItemDTO(orderItem, seller, orderItem.getOrder());
+                })
                 .collect(Collectors.toList());
 
-        int total = (int) pageOrder.getTotalElements();
+        int total = (int) pageOrderItems.getTotalElements();
 
-        return OrderPageResponseDTO.<OrderDTO>builder()
+        return OrderPageResponseDTO.<OrderItemDTO>builder()
                 .pageRequestDTO(pageRequestDTO)
-                .dtoList(orderList)
+                .dtoList(orderItemList)
                 .total(total)
                 .build();
     }
@@ -278,19 +283,30 @@ public class OrderService {
 //        return new ArrayList<>(orderMap.values());
 //    }
 
-    public List<OrderWithGroupedItemsDTO> getOrdersGroupedBySellers(String userId) {
-        // 사용자 ID로 주문을 조회하고 주문 날짜 순으로 정렬
+    public List<OrderItemDTO> getOrdersGroupedByOrderItemId(String userId) {
+        // 사용자 ID로 주문을 조회하고 주문 날짜 순으로 정렬 (최근 날짜부터)
         List<Order> orders = orderRepository.findByUidOrderByOrderDateDesc(userId);
 
         // 현재 날짜 기준으로 3일 전 날짜 계산
         LocalDate threeDaysAgo = LocalDate.now().minusDays(3);
 
-        // 3일 이내의 주문만 필터링하고, Order 객체를 OrderWithGroupedItemsDTO로 변환
+        // 3일 이내의 주문만 필터링하고, Order 객체를 OrderItemDTO로 변환
         return orders.stream()
                 .filter(order -> order.getOrderDate().toLocalDate().isAfter(threeDaysAgo))  // 3일 이내의 주문만 필터링
-                .map(order -> new OrderWithGroupedItemsDTO(order, sellerRepository))  // SellerRepository를 넘겨줌
-                .collect(Collectors.toList());
+                .flatMap(order -> order.getOrderProducts().stream()  // 주문 아이템들로 평평하게 만들기
+                        .map(item -> {
+                            // Seller 정보를 추가하여 OrderItemDTO를 반환
+                            Seller seller = sellerRepository.findByUserUid(item.getSellerUid()).orElse(null);
+                            return new OrderItemDTO(item, seller, order);  // order를 전달
+                        })
+                )
+                .collect(Collectors.groupingBy(OrderItemDTO::getOrderItemId))  // orderItemId로 그룹화
+                .entrySet()  // Map.Entry Set으로 변환
+                .stream()  // 스트림으로 변환
+                .flatMap(entry -> entry.getValue().stream())  // 그룹화된 리스트를 스트림으로 변환
+                .collect(Collectors.toList());  // 최종적으로 리스트로 변환
     }
+
 
 
 

@@ -29,7 +29,7 @@ main {
 }
 .info-title {
     position: relative;
-    width: 101x;
+    /*width: 101px;*/
     height: 22px;
     font-size: 18px;
     font-weight: 700;
@@ -118,9 +118,11 @@ aside > ul > li:nth-child(6) {
 
 }
 .center p{
-    font-size: 14px;
-    font-weight: 700;
-    float: left;
+    font-size: 24px;
+    line-height: 34px;
+    letter-spacing: -.029em;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 .center a{
     font-size: 12px;
@@ -128,19 +130,26 @@ aside > ul > li:nth-child(6) {
     float: right;
 }
 table{
+    color: #555;
     width: 800px;
     height: auto;
-    margin: 0 48px;
+    margin: 30px 48px;
     border-top: 1px solid #111;
-    border-bottom: 1px solid #111;
+    border-bottom: none;
     border-collapse: collapse;
 }
+
 th {
     position: relative;
-    width: 153px;
+    /*width: 153px;*/
     height: 60px;
-    background-color: #f2f2f2;
+    /*background-color: #f2f2f2;*/
+    width: 200px;
+    font-size: 14px;
 
+}
+tr {
+    border-bottom: 1px solid #eee;
 }
 .address{
     height: 150px;
@@ -148,42 +157,42 @@ th {
 
 
 label {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 19px;
 }
 
 
 #uid, #name, #birth, #email-id, #email-domain, #phone-part1,#phone-part2,#phone-part3,#zipcode, #btnZip, #address1 ,#address2, #cancel{
-
+    border-radius: 4px;
     position: relative;
     margin: 0 5px;
 }
 
 #change-password-btn {
-    display: contents; /* td와 같은 레벨로 배치되도록 */
-    width: 100px;
+    float: left;
     height: 30px;
-    line-height: 30px; /* 텍스트 수직 중앙 정렬 */
-    background-color: #007bff; /* 파란색 배경 */
-    color: white; /* 흰색 텍스트 */
-    text-decoration: none; /* 링크 스타일 제거 */
-    text-align: center; /* 텍스트 중앙 정렬 */
-    border-radius: 5px; /* 모서리 둥글게 */
-    font-size: 14px; /* 텍스트 크기 */
-    font-weight: 500; /* 글씨 두께 */
-    cursor: pointer; /* 클릭할 수 있도록 */
-    transition: background-color 0.3s ease; /* 호버 시 배경 색상 변화 */
-}
-
-#change-password-btn:hover {
-    background-color: #0056b3; /* 호버 시 배경 색상 변경 */
-}
-
-#edit-email-btn , #save-email-btn, #edit-phone-btn, #save-phone-btn, .btnZip, #cancel{
+    line-height: 30px;
+    color: #333;
+    text-align: center;
+    border: 1px solid #999999;
+    border-radius: 4px;
+    cursor: pointer;
     width: 85px;
+    align-items: center;
+    justify-content: center;
+}
+
+#edit-email-btn, #save-email-btn, #edit-phone-btn, #save-phone-btn, .btnZip, #cancel {
+    width: 85px;
+    color: #333;
+    border: 1px solid #999999;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
     height: 30px;
 }
+
 #email-id{
     width: 120px;
 }
@@ -191,10 +200,11 @@ label {
     width: 96px;
 }
 #cancel{
-    background: #C00000;
-    color: #ffffff;
-    border: none;
-
+    /*background: #C00000;*/
+    color: #333;
+    border: 1px solid #999999;
+    align-items: center;
+    justify-content: center;
 }
 input , select{
     height: 30px;
@@ -218,12 +228,13 @@ button{
 #modify{
     width: 210px;
     height: 40px;
-    margin: 90px 300px;
+    margin: 0 300px;
     font-size: 14px;
     font-weight: 400;
     line-height: 17px;
     background-color: #4f81bd;
     border: none;
+    border-radius: 4px;
     color: white;
 }
 

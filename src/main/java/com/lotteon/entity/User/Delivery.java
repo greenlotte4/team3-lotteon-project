@@ -1,6 +1,7 @@
 package com.lotteon.entity.User;
 
 
+import com.lotteon.entity.order.OrderItem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +29,14 @@ public class Delivery {
     private String deliveryMessage;  // 배송 메시지
     private String entranceCode;          // 공동현관 출입번호
 
+    private String deliveryCompany;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderItemId")
+    private OrderItem orderItem;
+
     // Member와의 다대일 관계 설정
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 

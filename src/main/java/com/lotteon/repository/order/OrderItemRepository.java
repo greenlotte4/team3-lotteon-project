@@ -3,6 +3,7 @@ package com.lotteon.repository.order;
 import com.lotteon.dto.admin.AdminOrderItemDTO;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
+import com.lotteon.repository.custom.OrderItemRepositoryCustom;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,17 +15,18 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 @Repository
-public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+public interface OrderItemRepository extends JpaRepository<OrderItem, Long> , OrderItemRepositoryCustom {
 
 
     long countBySellerUid(String sellerUid);
 
     @Query("SELECT new com.lotteon.dto.admin.AdminOrderItemDTO(oi.orderItemId, oi.product.productName, oi.order.orderId, oi.status, oi.price, oi.savedPrice, oi.orderPrice, oi.savedDiscount, oi.shippingFees, oi.stock, oi.product.productId, oi.product.file190) FROM OrderItem oi WHERE oi.order.orderId = :orderId")
     List<AdminOrderItemDTO> findByOrder_OrderId(Long orderId);
-    Page<OrderItem> findByOrder_Uid(String uid, Pageable pageable);
+    Page<OrderItem> findByOrder_UidOrderByOrderItemIdDesc(String uid, Pageable pageable);
 
- 
-  
+    Page<OrderItem> findBySellerUid(String uid, Pageable pageable);
+//    Page<OrderItem> findAll(Pageable pageable);
+
     @Query("SELECT SUM(o.orderPrice) FROM OrderItem o WHERE o.sellerUid = :sellerUid")
     Long findTotalOrderPriceBySellerUid(@Param("sellerUid") String sellerUid);
 

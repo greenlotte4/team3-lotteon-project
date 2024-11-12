@@ -74,7 +74,7 @@
                         <tr>
                             <th><label for="password">비밀번호</label></th>
                             <td>
-                                <a href="/user/findpass" id="change-password-btn" class="btn">비밀번호 수정</a>
+                                <a href="/user/findpass" id="change-password-btn" class="btn">수정</a>
                             </td>
                         </tr>
                         <tr>
@@ -86,7 +86,7 @@
                         <tr>
                             <th><label for="birth">생년월일</label></th>
                             <td>
-                                <span id="birth" >1990년 04 20일</span>
+                                <span id="birth" >1990년 04월 20일</span>
                             </td>
                         </tr>
                         <tr>
@@ -141,14 +141,14 @@
                                 <input type="text" id="address2" placeholder="상세주소입력" th:value="${member.addr2}" style="margin-bottom: 10px;">
                             </td>
                         </tr>
-                        <tr>
-                            <th><label for="cancel">탈퇴</label></th>
+                        <tr class="exit" style="border-bottom: none">
+                            <th></th>
                             <td>
-                                <button type="button" id="cancel">탈퇴 하기</button>
+                                <button type="button" id="cancel" style="border-radius: 4px; float: right">회원탈퇴</button>
                             </td>
                         </tr>
-
                     </table>
+
                     <div class="modifydiv">
                         <button type="button" id="modify">수정하기</button>
                     </div>

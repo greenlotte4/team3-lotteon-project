@@ -24,28 +24,27 @@ public class MyUserDetailsService implements UserDetailsService {
         // 사용자가 입력한 아이디로 사용자 조회, 비밀번호에 대한 검증은 이전 컴포넌트인 AuthenticationProvider에서 수행
         Optional<User> optUser = userRepository.findById(username);
 
-        if(optUser.isPresent()) {
+        if (optUser.isPresent()) {
             // 시큐리티 사용자 인증객체 생성 후 반환
             User user = optUser.get();
-            log.info("log user getRole :"+user.getRole());
+            log.info("log user getRole :" + user.getRole());
             log.info("Retrieved user1: {}", user);
             log.info("Seller associated with user1: {}", user.getSeller());
-            if(!user.getRole().equals("BLACK") && !user.getRole().equals("LEAVE") && !user.getRole().equals("DORMANT")){
+            if (!user.getRole().equals("BLACK") && !user.getRole().equals("LEAVE") && !user.getRole().equals("DORMANT")) {
                 MyUserDetails myUserDetails = MyUserDetails.builder()
                         .user(user)
-                        .seller(user.getSeller())
+                        .member(user.getMember())
                         .build();
                 return myUserDetails;
-            }else if(user == null){
-                throw new UsernameNotFoundException("User not found with username: " + username);
+            } else if (user == null) {
+                throw new UsernameNotFoundException("없는 ID: " + username);
 
-            }
-            else{
-                throw new InactiveUserException("Your account status is: " + user.getRole());
+            } else {
+                throw new InactiveUserException("User_Role: " + user.getRole());
             }
         }
 
         // 사용자가 입력한 아이디가 없을 경우
-        return null;
+        throw new UsernameNotFoundException("없는 ID: " + username);
     }
 }

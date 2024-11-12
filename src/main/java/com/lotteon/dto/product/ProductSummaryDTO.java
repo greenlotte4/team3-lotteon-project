@@ -20,6 +20,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @Log4j2
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "productId")
 @JsonIgnoreProperties({"reviews"})  // reviews나 순환참조가 생길 수 있는 필드를 명시
 public class ProductSummaryDTO implements Serializable {
 

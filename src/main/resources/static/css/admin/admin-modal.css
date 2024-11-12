@@ -328,7 +328,7 @@ img{
     margin-top: 5px;
 }
 .shipping-section {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     position: fixed; /* 고정 위치 */

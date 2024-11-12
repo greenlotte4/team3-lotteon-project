@@ -90,9 +90,10 @@ public class BoardAPIController {
         log.info("cjcjcjcjcjcjcj : " + keyword);
         pageRequestDTO.setType(type);
         pageRequestDTO.setKeyword(keyword);
-        AdminOrderPageResponseDTO adminOrderPageResponseDTO = adminOrderService.selectOrderListAll(pageRequestDTO);
-        log.info("qiqiqiqiqiqi: " + adminOrderPageResponseDTO);
-        return ResponseEntity.ok(adminOrderPageResponseDTO);
+       // AdminOrderPageResponseDTO adminOrderPageResponseDTO = adminOrderService.selectOrderListAll(pageRequestDTO);
+        AdminOrderItemPageResponseDTO adminOrderItemPageResponseDTO = adminOrderService.selectOrderItemListAll(pageRequestDTO);
+        log.info("qiqiqiqiqiqi: " + adminOrderItemPageResponseDTO);
+        return ResponseEntity.ok(adminOrderItemPageResponseDTO);
     }
 
 

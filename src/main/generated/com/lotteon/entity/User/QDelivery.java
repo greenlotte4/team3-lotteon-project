@@ -26,6 +26,8 @@ public class QDelivery extends EntityPathBase<Delivery> {
 
     public final StringPath addr2 = createString("addr2");
 
+    public final StringPath deliveryCompany = createString("deliveryCompany");
+
     public final StringPath deliveryMessage = createString("deliveryMessage");
 
     public final StringPath entranceCode = createString("entranceCode");
@@ -39,6 +41,8 @@ public class QDelivery extends EntityPathBase<Delivery> {
     public final QMember member;
 
     public final StringPath name = createString("name");
+
+    public final com.lotteon.entity.order.QOrderItem orderItem;
 
     public final StringPath postcode = createString("postcode");
 
@@ -61,6 +65,7 @@ public class QDelivery extends EntityPathBase<Delivery> {
     public QDelivery(Class<? extends Delivery> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.member = inits.isInitialized("member") ? new QMember(forProperty("member"), inits.get("member")) : null;
+        this.orderItem = inits.isInitialized("orderItem") ? new com.lotteon.entity.order.QOrderItem(forProperty("orderItem"), inits.get("orderItem")) : null;
     }
 
 }
