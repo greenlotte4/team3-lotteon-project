@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("customerPhone").textContent = orderElement.getAttribute("data-customer-phone");
         document.getElementById("customerAddress").textContent = orderElement.getAttribute("data-customer-address");
         document.getElementById("deliveryRequests").textContent = orderElement.getAttribute("data-delivery-requests");
-        document.getElementById("orderItemId").textContent = orderElement.getAttribute("data-order-item-id");
 
         // 이미지 경로 업데이트
         const imagePath = orderElement.getAttribute("data-product-image");
@@ -90,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
             openOrderModal(order); // openOrderModal 함수 호출
         });
     });
-
     // 판매자 정보 모달창
     const sellerModal = document.getElementById("sellerModal");
     const sellerNumbers = document.querySelectorAll(".seller-number");
@@ -237,10 +235,159 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // 반품 신청 모달 관련 코드
+    const returnBtn = document.querySelectorAll(".return-btn");
+    const returnModal = document.getElementById("returnModal");
+    const closeReturnModalBtn = document.querySelector(".modal.return .close.return");
+    const confirmReturnBtn = document.getElementById("confirmReturnBtn");
+    const cancelReturnModalBtn = document.getElementById("ReturncancelModalBtn");
+
+// 반품 신청 아이템 ID를 저장할 변수
+    let currentOrderItemId2 = null;
+
+// 반품 신청 버튼 클릭 시 모달 열기
+    returnBtn.forEach(order => {
+        order.addEventListener("click", function(e) {
+            e.preventDefault();
+            currentOrderItemId2 = order.getAttribute("data-order-item-id");  // 해당 주문 아이템 ID 저장
+            returnModal.style.display = "block"; // 모달 열기
+        });
+    });
+
+// 모달 닫기 (닫기 버튼 클릭)
+    closeReturnModalBtn.addEventListener("click", function() {
+        returnModal.style.display = "none"; // 모달 닫기
+    });
+
+// 모달 닫기 (취소 버튼 클릭)
+    cancelReturnModalBtn.addEventListener("click", function() {
+        returnModal.style.display = "none"; // 모달 닫기
+    });
+
+// 모달 외부 클릭 시 닫기
+    window.onclick = function(event) {
+        if (event.target == returnModal) {
+            returnModal.style.display = "none"; // 모달 닫기
+        }
+    };
+
+// 반품 신청 확인 버튼 클릭 시 상태 변경
+    confirmReturnBtn.addEventListener("click", function() {
+        if (currentOrderItemId2 !== null) {
+            // 서버에 반품 요청
+            fetch(`/mypage/confirmReturn/${currentOrderItemId2}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: "RETURN_REQUESTED" })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 성공적으로 반품 신청되면 페이지 업데이트
+                        const orderItemStatus = document.querySelector(`[data-order-item-id="${currentOrderItemId2}"]`)
+                            .querySelector('.order-status'); // .order-status 클래스를 가진 요소 찾기
+                        if (orderItemStatus) {
+                            orderItemStatus.textContent = "RETURN_REQUESTED"; // 상태 텍스트 업데이트
+                        } else {
+                            console.error("Order item status element not found.");
+                        }
+
+                        // 모달 닫기
+                        returnModal.style.display = "none";
+
+                        // 페이지 새로고침
+                        location.reload();
+                    } else {
+                        alert("구매 확정 상품은 환불이 불가능합니다. 고객센터로 문의주세요.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+    });
+
+    // 교환 신청 모달 관련 코드
+    const exchangeBtn = document.querySelectorAll(".exchange-btn");
+    const exchangeModal = document.getElementById("exchangeModal");
+    const closeExchangeModalBtn = document.querySelector(".modal.exchange .close.exchange");
+    const confirmExchangeBtn = document.getElementById("confirmExchangeBtn");
+    const cancelExchangeModalBtn = document.getElementById("ExchangecancelModalBtn");
+
+// 교환 신청 아이템 ID를 저장할 변수
+    let currentOrderItemId3 = null;
+
+// 교환 신청 버튼 클릭 시 모달 열기
+    exchangeBtn.forEach(order => {
+        order.addEventListener("click", function(e) {
+            e.preventDefault();
+            currentOrderItemId3 = order.getAttribute("data-order-item-id");  // 해당 주문 아이템 ID 저장
+            exchangeModal.style.display = "block"; // 모달 열기
+        });
+    });
+
+// 모달 닫기 (닫기 버튼 클릭)
+    closeExchangeModalBtn.addEventListener("click", function() {
+        exchangeModal.style.display = "none"; // 모달 닫기
+    });
+
+// 모달 닫기 (취소 버튼 클릭)
+    cancelExchangeModalBtn.addEventListener("click", function() {
+        exchangeModal.style.display = "none"; // 모달 닫기
+    });
+
+// 모달 외부 클릭 시 닫기
+    window.onclick = function(event) {
+        if (event.target == exchangeModal) {
+            exchangeModal.style.display = "none"; // 모달 닫기
+        }
+    };
+
+// 교환 신청 확인 버튼 클릭 시 상태 변경
+    confirmExchangeBtn.addEventListener("click", function() {
+        if (currentOrderItemId3 !== null) {
+            // 서버에 교환 요청
+            fetch(`/mypage/confirmExchange/${currentOrderItemId3}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: "EXCHANGE_REQUESTED" })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 성공적으로 교환 신청되면 페이지 업데이트
+                        const orderItemStatus = document.querySelector(`[data-order-item-id="${currentOrderItemId3}"]`)
+                            .querySelector('.order-status'); // .order-status 클래스를 가진 요소 찾기
+                        if (orderItemStatus) {
+                            orderItemStatus.textContent = "EXCHANGE_REQUESTED"; // 상태 텍스트 업데이트
+                        } else {
+                            console.error("Order item status element not found.");
+                        }
+
+                        // 모달 닫기
+                        exchangeModal.style.display = "none";
+
+                        // 페이지 새로고침
+                        location.reload();
+                    } else {
+                        alert("구매 확정 상품은 교환이 불가능합니다. 고객센터로 문의주세요.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+    });
+
     //pReview-btn
     const pReviewbtn = document.querySelectorAll(".pReview-btn");
     const pReviewModel = document.getElementById("pReviewModal");
     const closeModalBtn5 = document.querySelector(".modal.pReview .close.pReview");
+    const closeModalReview = document.getElementById("closeReviewModal");
 
     document.querySelectorAll('.pReview-btn').forEach(button => {
         button.onclick = function() {
@@ -325,6 +472,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close modal when clicking the close button
     closeModalBtn5.addEventListener("click", function() {
         pReviewModel.style.display = "none"; // Hide the modal
+    });
+
+    closeModalReview.addEventListener("click", function() {
+        pReviewModel.style.display = "none"; // 모달 닫기
     });
 
     // Close modal when clicking outside the modal content

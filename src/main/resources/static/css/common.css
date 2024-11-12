@@ -366,7 +366,6 @@ input[type=search] {
     width: auto;
     height: 80px;
     box-sizing: border-box;
-    background: linear-gradient(to right, #550ABF, #D95F8C); /* 왼쪽: 연한 파란색, 오른쪽: 연한 회색 */
 }
 
 .headerslide img{

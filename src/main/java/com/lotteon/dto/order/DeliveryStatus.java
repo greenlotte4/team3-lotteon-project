@@ -10,7 +10,10 @@ public enum DeliveryStatus {
     RETURN_PENDING("반품대기중"),
     REFUND_REQUESTED("환불요청중"),
     REFUND_PENDING("환불대기중"),
-    REFUND_COMPLETED("환불완료");
+    REFUND_COMPLETED("환불완료"),
+    EXCHANGE_REQUESTED("교환요청중"),
+    EXCHANGE_PENDING("교환중"),
+    EXCHANGE_COMPLETED("교환완료");
 
     private final String description;
 

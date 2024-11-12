@@ -761,10 +761,28 @@ td button{
     color: #000;
 }
 
+.modal-footer .btn-primary2 {
+    background-color: #e23;
+    color: #fff;
+}
+
+.modal-footer .btn-secondary2 {
+    background-color: #ccc;
+    color: #000;
+}
+
 
 
 
 .modal-content.receipt{
+    width: 500px;
+}
+
+.modal-content.return{
+    width: 500px;
+}
+
+.modal-content.exchange{
     width: 500px;
 }
 .modal-content.qna th{
@@ -777,6 +795,28 @@ td button{
     height: 70px;
 }
 .modal-content.receipt .modalbody p{
+    line-height: 30px;
+    height: 30px;
+    font-size: 20px;
+
+}
+
+.modal-content.return .modalbody{
+    padding: 50px;
+    height: 70px;
+}
+.modal-content.return .modalbody p{
+    line-height: 30px;
+    height: 30px;
+    font-size: 20px;
+
+}
+
+.modal-content.exchange .modalbody{
+    padding: 50px;
+    height: 70px;
+}
+.modal-content.exchange .modalbody p{
     line-height: 30px;
     height: 30px;
     font-size: 20px;

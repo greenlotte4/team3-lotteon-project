@@ -425,7 +425,43 @@ public class OrderService {
         }
     }
 
+    public boolean updateOrderStatusToConfirmation2(Long orderItemId) {
+        Optional<OrderItem> orderItemOptional = orderItemRepository.findById(orderItemId);
 
+        if (orderItemOptional.isPresent()) {
+            OrderItem orderItem = orderItemOptional.get();
+
+            // 이미 상태가 CONFIRMATION이면 반품을 할 수 없음
+            if (orderItem.getStatus() == DeliveryStatus.CONFIRMATION) {
+                return false; // 상태가 CONFIRMATION인 경우 반품 불가
+            }
+
+            orderItem.setStatus(DeliveryStatus.RETURN_REQUESTED);  // 상태를 RETURN_REQUESTED로 설정
+            orderItemRepository.save(orderItem);  // 상태 변경된 객체 저장
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean updateOrderStatusToConfirmation3(Long orderItemId) {
+        Optional<OrderItem> orderItemOptional = orderItemRepository.findById(orderItemId);
+
+        if (orderItemOptional.isPresent()) {
+            OrderItem orderItem = orderItemOptional.get();
+
+            // 이미 상태가 CONFIRMATION이면 반품을 할 수 없음
+            if (orderItem.getStatus() == DeliveryStatus.CONFIRMATION) {
+                return false; // 상태가 CONFIRMATION인 경우 반품 불가
+            }
+
+            orderItem.setStatus(DeliveryStatus.EXCHANGE_REQUESTED);  // 상태를 RETURN_REQUESTED로 설정
+            orderItemRepository.save(orderItem);  // 상태 변경된 객체 저장
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 

@@ -116,7 +116,7 @@
                                            th:data-price="${orderItem.orderPrice}"
                                            th:data-discount="${orderItem.savedDiscount}"
                                            th:data-total-price="${orderItem.formattedPrice}"
-                                           th:data-status="${orderItem.status}"
+                                           th:data-status="${orderItem.status.description}"
                                            th:data-customer-name="${orderItem.customerName}"
                                            th:data-customer-phone="${orderItem.hp}"
                                            th:data-customer-address="${orderItem.addr1 + ' ' + orderItem.addr2}"
@@ -147,20 +147,24 @@
                                         <p>가격: <span  th:text="${orderItem.formattedPrice}">0</span>원</p>
                                     </div>
                                 </div>
+                                <!-- 배송 상태 -->
+                            <td>
+                                <span class="order-status" th:text="${orderItem.status.description}"></span>
                             </td>
-                            <td><data value="">배송완료</data></td>
+
+                            <!-- 버튼들 -->
                             <td>
                                 <div class="button" style="display: flex; flex-direction: column; gap: 3px;">
-                                    <button class="receipt-btn custom-button">수취확인</button>
+                                    <button class="receipt-btn custom-button" th:data-order-item-id="${orderItem.orderItemId}">수취확인</button>
                                     <div>
                                         <button class="pReview-btn custom-button"
-                                                th:attr="data-product-no=${orderItem.productId}, data-product-name=${orderItem.productName}"
+                                                th:attr="data-product-no=${orderItem.productId}, data-product-name=${orderItem.productName}, data-order-item-id=${orderItem.getOrderItemId()}"
                                         >
                                             상품평쓰기
                                         </button>
                                     </div>
-                                    <button>반품신청</button>
-                                    <button>교환신청</button>
+                                    <button class="return-btn " th:data-order-item-id="${orderItem.orderItemId}">반품신청</button>
+                                    <button class="exchange-btn" th:data-order-item-id="${orderItem.orderItemId}">교환신청</button>
                                 </div>
 
                             </td>
