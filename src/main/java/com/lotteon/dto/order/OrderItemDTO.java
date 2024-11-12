@@ -1,5 +1,8 @@
     package com.lotteon.dto.order;
 
+    import com.fasterxml.jackson.annotation.JsonBackReference;
+    import com.fasterxml.jackson.annotation.JsonIgnore;
+    import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
     import com.lotteon.dto.User.SellerDTO;
     import com.lotteon.dto.product.OptionDTO;
     import com.lotteon.dto.product.ProductDTO;
@@ -25,13 +28,16 @@
 
 
         private long orderItemId;
+
         private OrderDTO order;
+        @JsonIgnoreProperties({"reviewContent", "optionCombinations"})
         private ProductDTO product;
         private long productId;
         private long categoryId;
         private long savedPrice;
         private long savedDiscount;
         private long orderPrice;
+        @JsonIgnore
         private List<Review> reviewContent;
         private long orderId;
         private long optionId;
@@ -49,6 +55,7 @@
 
         private DeliveryStatus status;
         @Transient
+        @JsonBackReference
         private Seller seller;
 
         private String company;
