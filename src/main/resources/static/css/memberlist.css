@@ -73,7 +73,7 @@ input[type="text"]{
     color: #ff0000;
 }
 
-.active {
+.activeMember {
     color: green;  /* 정상: 초록 */
 }
 
