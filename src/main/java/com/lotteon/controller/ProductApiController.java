@@ -1,9 +1,12 @@
 package com.lotteon.controller;
 
 
+import com.lotteon.dto.admin.MainDataResponseDTO;
+import com.lotteon.dto.order.CategoryOrderCountDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.dto.product.request.OptionCombinationRequestDTO;
 import com.lotteon.entity.product.ProductCategory;
+import com.lotteon.service.order.OrderService;
 import com.lotteon.service.product.BestProductService;
 import com.lotteon.service.product.OptionService;
 import com.lotteon.service.product.ProductCategoryService;
@@ -28,7 +31,9 @@ import reactor.core.publisher.Flux;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -40,6 +45,7 @@ public class ProductApiController {
     private final RedisTemplate redisTemplate;
     private final BestProductService bestProductService;
     private final OptionService optionService;
+    private final OrderService orderService;
 
     @GetMapping("/api/categories")
     public List<ProductCategory> getCategories() {
@@ -180,5 +186,51 @@ public class ProductApiController {
     }
 
 
+    @ResponseBody
+    @GetMapping("/api/getNewData")
+    public ResponseEntity<MainDataResponseDTO> adminMainNewData(Model model) {
+        List<Long> emptyList=new ArrayList<>();
+        log.info("111111111111");
+        System.out.println("Request received at /api/getNewData");
+
+        try {
+            log.info("222222222");
+
+            // Existing data fetch logic
+            List<ProductCategoryDTO> productCategoryDTOS = productCategoryService.getCategoriesByLevel(1);
+            List<String> categoryNames = productCategoryDTOS.stream()
+                    .map(ProductCategoryDTO::getName)
+                    .collect(Collectors.toList());
+
+            List<CategoryOrderCountDTO> newOrderData = orderService.getOrderCountGroupedByCategoryFirstId();
+            List<CategoryOrderCountDTO> newCancelData = orderService.getCountCanceledGroupedByCategoryFirstId();
+            List<CategoryOrderCountDTO> newPaymentData = orderService.getCountPaymentGroupedByCategoryFirstId();
+
+            List<Long> orderCounts = newOrderData.stream()
+                    .map(CategoryOrderCountDTO::getOrderCount)
+                    .collect(Collectors.toList());
+
+            List<Long> cancelCounts = newCancelData.stream()
+                    .map(CategoryOrderCountDTO::getOrderCount)
+                    .collect(Collectors.toList());
+
+            List<Long> paymentCounts = newPaymentData.stream()
+                    .map(CategoryOrderCountDTO::getOrderCount)
+                    .collect(Collectors.toList());
+
+            System.out.println("newOrderData: " + newOrderData);
+            System.out.println("newCancelData: " + newCancelData);
+            System.out.println("newPaymentData: " + newPaymentData);
+
+            MainDataResponseDTO responseDTO = new MainDataResponseDTO(orderCounts, paymentCounts, cancelCounts, categoryNames);
+            log.info("responseDTO!!!!!!"+responseDTO);
+            return ResponseEntity.ok(responseDTO);
+        } catch (Exception e) {
+            log.error("Error fetching data", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MainDataResponseDTO(emptyList,emptyList,emptyList,List.of()));
+        }
+
+    }
 
 }

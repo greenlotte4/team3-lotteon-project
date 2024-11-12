@@ -9,6 +9,7 @@ package com.lotteon.repository.custom;
     2024.10.26 하진희 - product view query custom
  */
 
+import com.lotteon.dto.order.CategoryOrderCountDTO;
 import com.lotteon.dto.product.PageRequestDTO;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.dto.product.ProductListDTO;
@@ -20,6 +21,7 @@ import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -33,6 +35,7 @@ public interface ProductRepositoryCustom {
     public Page<ProductSummaryDTO> getSearchByProductNameOrderBySort(PageRequestDTO pageRequest,String sort);
     public Page<ProductSummaryDTO> searchWithConditions(PageRequestDTO pageRequest, BooleanBuilder conditions,String sort);
     public ProductViewResponseDTO selectByProductId(Long productId);
+
 
 
 

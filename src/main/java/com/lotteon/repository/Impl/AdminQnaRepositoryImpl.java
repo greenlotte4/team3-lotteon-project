@@ -43,6 +43,28 @@ public class AdminQnaRepositoryImpl implements AdminQnaRepositoryCustom {
     }
 
     @Override
+    public Page<Tuple> selectAdminqnBySellerForList(PageRequestDTO pageRequestDTO, Pageable pageable, int sellerid) {
+        List<Tuple> content = queryFactory
+                .select(adminqna.qnaNo, adminqna.qnatitle, adminqna.qnacontent, adminqna.qnawriter, adminqna.qna_status)
+                .from(adminqna)
+                .where(adminqna.sellerid.eq(sellerid))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(adminqna.qnaNo.desc())
+                .fetch();
+
+        long total = queryFactory
+                .select(adminqna.count())
+                .from(adminqna)
+                .where(adminqna.sellerid.eq(sellerid))
+
+                .fetchOne();
+
+        //페이징 처리를 위해 page 객체 리턴 , 페이지 형태로 데이터를 반환 , 1. 한페이지에 보여지는 리스트,모든 데이터,pg-1,size,no내림차순
+        return new PageImpl<Tuple>(content, pageable, total); //pageable
+    }
+
+    @Override
     public Page<Tuple> selectAdminqnaForOption1(PageRequestDTO pagerequestDTO, Pageable pageable) {
         BooleanExpression condition = adminqna.cate.parent.boardCateId.eq(pagerequestDTO.getParentId());
 

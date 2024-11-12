@@ -21,18 +21,21 @@ main {
 
 /* 나의 쇼핑정보 영역 */
 .info {
+
+    margin: 30px 0;
     width: 100%;
+    min-width: 1136px;
     max-width: 1200px;
-    height: 75px;
-    background-color: antiquewhite;
+    background: var(--m-colors-gray150, #f5f5f5);
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 0 20px;
     box-sizing: border-box;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 25px 10px 25px 30px;
+    height: 100%;
 }
+
 
 /* 제목 스타일 */
 .info-title {
@@ -47,7 +50,7 @@ main {
 .summary-table {
     position: relative;
     display: flex;
-    left: 750px;
+    left: 60%;
     justify-content: space-around; /* 항목 간격 조정 */
     width: 300px; /* 전체 폭 사용 */
     padding: 10px 0; /* 위아래 여백 */
@@ -78,9 +81,18 @@ aside {
     float: left;
     width: 200px;
     height: auto;
-    display: flex; /* Flexbox 사용 */
-    justify-content: center; /* 수직 중앙 정렬 */
-    border-right:1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    /*border-right: 1px solid #ccc;*/
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    background: #fff;
+    box-sizing: border-box;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 19px;
+    letter-spacing: -0.3px;
+    color: #000;
 }
 
 aside > ul {
@@ -124,12 +136,23 @@ aside > ul > li:nth-child(1){
     width: 880px;
     height: 20px;
     margin: 0 48px;
-
 }
+
+/*.details p {*/
+/*    font-size: 24px;*/
+/*    line-height: 34px;*/
+/*    letter-spacing: -.029em;*/
+/*    margin-top: 20px;*/
+/*    margin-bottom: 20px;*/
+/*}*/
 .center p{
-    font-size: 14px;
+    font-size: 24px;
     font-weight: 700;
     float: left;
+    line-height: 34px;
+    letter-spacing: -.029em;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 .center a{
     font-size: 12px;
@@ -139,7 +162,7 @@ aside > ul > li:nth-child(1){
 .dateInquiry{
     width: 900px;
     height: 75px;
-    margin: 0 48px;
+    margin: 30px 48px;
     background-color: #DCE6F2;
 }
 .dateInquiry > div{
@@ -151,10 +174,11 @@ aside > ul > li:nth-child(1){
     width: 600px;
     height: 40px;
 }
-.dateInquiry >div p{
+
+.dateInquiry >div p {
     font-size: 16px;
     font-weight: 400;
-    margin: 28px 30px;
+    margin: 5px 30px;
     line-height: 19.35px;
 }
 
