@@ -162,30 +162,76 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
 
-    //recipit 모달창
+// 수취확인 모달 관련 코드
     const qreceiptbtn = document.querySelectorAll(".receipt-btn");
-    const receiptModel = document.getElementById("receiptModal");
+    const receiptModal = document.getElementById("receiptModal");
     const closeModalBtn4 = document.querySelector(".modal.receipt .close.receipt");
-    console.log(closeModalBtn4);
+    const confirmReceiptBtn = document.getElementById("confirmReceiptBtn");
+    const cancelModalBtn = document.getElementById("cancelModalBtn");
+
+// 주문 아이템 ID를 저장할 변수
+    let currentOrderItemId = null;
+
+// 수취확인 버튼 클릭 시 모달 열기
     qreceiptbtn.forEach(order => {
         order.addEventListener("click", function(e) {
             e.preventDefault();
-            receiptModel.style.display = "block"; // Show the modal
-
+            currentOrderItemId = order.getAttribute("data-order-item-id");  // 해당 주문 아이템 ID 저장
+            receiptModal.style.display = "block"; // 모달 열기
         });
     });
 
-    // Close modal when clicking the close button
+// 모달 닫기 (닫기 버튼 클릭)
     closeModalBtn4.addEventListener("click", function() {
-        receiptModel.style.display = "none"; // Hide the modal
+        receiptModal.style.display = "none"; // 모달 닫기
     });
 
-    // Close modal when clicking outside the modal content
+// 모달 닫기 (취소 버튼 클릭)
+    cancelModalBtn.addEventListener("click", function() {
+        receiptModal.style.display = "none"; // 모달 닫기
+    });
+
+// 모달 외부 클릭 시 닫기
     window.onclick = function(event) {
-        if (event.target == receiptModel) {
-            receiptModel.style.display = "none"; // Hide the modal
+        if (event.target == receiptModal) {
+            receiptModal.style.display = "none"; // 모달 닫기
         }
     };
+
+// 수취 확인 버튼 클릭 시 상태 변경
+    confirmReceiptBtn.addEventListener("click", function() {
+        if (currentOrderItemId !== null) {
+            // 서버에 상태 변경 요청
+            fetch(`/mypage/confirmReceipt/${currentOrderItemId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: "CONFIRMATION" })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 성공적으로 상태가 변경되면 페이지 업데이트 (수취확인 상태 표시)
+                        const orderItemStatus = document.querySelector(`[data-order-item-id="${currentOrderItemId}"]`)
+                            .closest('tr')
+                            .querySelector('[th\\:text="${orderItem.status.description}"]');
+                        orderItemStatus.textContent = "CONFIRMATION"; // 상태 텍스트 업데이트
+
+                        // 모달 닫기
+                        receiptModal.style.display = "none";
+
+                        // 페이지 새로고침
+                        location.reload();
+                    } else {
+                        alert("수취 확인에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+    });
 
     //pReview-btn
     const pReviewbtn = document.querySelectorAll(".pReview-btn");

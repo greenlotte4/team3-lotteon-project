@@ -138,6 +138,41 @@ public class MypageController {
         return "content/user/mypageMain"; // "mypageMain" 뷰로 이동
     }
 
+    @PostMapping("/confirmReceipt/{orderItemId}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> confirmReceipt(
+            @PathVariable Long orderItemId,
+            @RequestBody Map<String, String> requestBody) {
+
+        // 상태를 CONFIRMATION으로 변경
+        String status = requestBody.get("status");
+
+        if (status != null && status.equals("CONFIRMATION")) {
+            try {
+                boolean updated = orderService.updateOrderStatusToConfirmation(orderItemId);
+                Map<String, Object> response = new HashMap<>();
+
+                if (updated) {
+                    response.put("success", true);
+                    return ResponseEntity.ok(response);  // 성공적으로 업데이트되면 true 반환
+                } else {
+                    response.put("success", false);
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+                }
+            } catch (Exception e) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("success", false);
+                response.put("error", "수취 확인을 처리하는 동안 오류가 발생했습니다.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+        } else {
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("error", "잘못된 상태 값입니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
     @ResponseBody
     @PostMapping("/myInfo/review")
     public ResponseEntity<?> submitReview(@ModelAttribute ReviewRequestDTO reviewDTO) {
