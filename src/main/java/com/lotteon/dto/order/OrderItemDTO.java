@@ -76,7 +76,6 @@
         private String shippingInfo;
 
 
-
         public OrderItemDTO(OrderItem item, Seller seller, Order order) {
             this.orderItemId = item.getOrderItemId();
             this.savedPrice = item.getSavedPrice();
@@ -95,6 +94,7 @@
             this.status = item.getStatus();
             this.customerName = item.getCustomerName();
             this.customerId = item.getCustomerId();
+
 
 
             DecimalFormat df = new DecimalFormat("###,###");

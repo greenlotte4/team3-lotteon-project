@@ -3,13 +3,16 @@ package com.lotteon.service;
 import com.lotteon.dto.User.UserDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.admin.PageResponseDTO;
+import com.lotteon.dto.order.OrderItemDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
 import com.lotteon.entity.User.User;
+import com.lotteon.entity.order.OrderItem;
 import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.Review;
 import com.lotteon.entity.product.ReviewFile;
 import com.lotteon.repository.ReviewRepository;
+import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.repository.user.UserRepository;
 import groovy.util.logging.Log4j2;
@@ -41,6 +44,7 @@ public class ReviewService {
     private final FileService fileService;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @PostConstruct
     public void init() {
@@ -55,40 +59,36 @@ public class ReviewService {
     }
 
     public boolean saveReview(ReviewRequestDTO reviewDTO) {
-        Long productId = reviewDTO.getProductId(); // ReviewDTO에서 productId 가져오기
+        Long productId = reviewDTO.getProductId();
         Product product = productRepository.findById(productId).orElse(null);
+        OrderItem orderItem = new OrderItem();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName(); // 현재 로그인된 사용자 이름
-
-        // 사용자 정보 가져오기
+        String currentUsername = authentication.getName();
         User currentUser = userRepository.findById(currentUsername).orElse(null);
 
-
         if (product == null || currentUser == null) {
-            return false; // Product가 없거나 User가 없을 경우 저장 중단
+            return false;
         }
 
+        // Review 객체 생성
         Review review = new Review();
         review.setProduct(product);
-        review.setRating(Double.parseDouble(reviewDTO.getRating())); // DTO에서 rating 가져오기
-        review.setContent(reviewDTO.getContent()); // DTO에서 content 가져오기
-        review.setWriter(currentUser); // User 객체를 writer에 설정
+        review.setRating(Double.parseDouble(reviewDTO.getRating()));
+        review.setContent(reviewDTO.getContent());
+        review.setWriter(currentUser);
         review.setRdate(LocalDateTime.now());
+        review.setOrderItem(orderItem);
 
-        // 파일 업로드 로직 호출
+        // 파일 업로드 처리
         ReviewRequestDTO uploadedReviewDTO = fileService.uploadReviewFiles(reviewDTO);
-
-        // 업로드된 파일 정보를 Review 엔티티에 설정
         List<ReviewFile> reviewFiles = uploadedReviewDTO.getSavedReviewFiles();
-
-        // 리뷰 파일을 Review 객체에 추가
         for (ReviewFile reviewFile : reviewFiles) {
-            reviewFile.setReview(review); // Review와의 관계 설정
+            reviewFile.setReview(review);
         }
-        review.setPReviewFiles(reviewFiles); // 수정: reviewFiles에 올바르게 설정
+        review.setPReviewFiles(reviewFiles);
 
-        // DB에 Review 저장
+        // 리뷰 저장
         reviewRepository.save(review);
 
         return true;

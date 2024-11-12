@@ -21,6 +21,7 @@ import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Point;
 import com.lotteon.entity.admin.Adminqna;
 import com.lotteon.entity.admin.CouponIssued;
+import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
 import com.lotteon.entity.product.Review;
 import com.lotteon.repository.QnaRepository;
@@ -86,6 +87,10 @@ public class MypageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
         String memberId = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
+        Long orderCount = orderService.getOrderCount(memberId);
+
+        double totalPoints = pointService.getTotalPoints(memberId);
+       ;
 
         log.info("멤버 아이디다" + memberId);
 
@@ -93,10 +98,9 @@ public class MypageController {
 
         List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
         log.info("발급받은 쿠폰: {}", issuedCoupons);
-
+        model.addAttribute("orderCount", orderCount);
         model.addAttribute("IssuedList", issuedCoupons);
-
-
+        model.addAttribute("totalPoints", totalPoints);
         model.addAttribute("banners", banners2);
         return "content/user/coupondetails"; // Points to "content/user/coupondetails"
     }
@@ -108,14 +112,25 @@ public class MypageController {
 //    }
 
     @GetMapping("/myInfo")
-    public String myInfo(Model model, Authentication authentication) {
+    public String myInfo(Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        String memberId = userDetails.getId();
+        double totalPoints = pointService.getTotalPoints(memberId);
+        Long orderCount = orderService.getOrderCount(memberId);
+
         String uid = authentication.getName();
         List<Review> recentReviews = reviewService.getRecentReviewsByUser(uid); // 최신 3개의 리뷰 가져오기
         List<BannerDTO> banners2 = adminService.getActiveBanners();
 
         // 주문을 orderId로 그룹화
         List<OrderItemDTO> groupDTO = orderService.getOrdersGroupedByOrderItemId(uid);
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
 
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("totalPoints", totalPoints);
+        model.addAttribute("IssuedList", issuedCoupons);
         model.addAttribute("groupDTO", groupDTO); // 그룹화된 데이터 전달
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("content", "myInfo");
@@ -126,8 +141,16 @@ public class MypageController {
     @ResponseBody
     @PostMapping("/myInfo/review")
     public ResponseEntity<?> submitReview(@ModelAttribute ReviewRequestDTO reviewDTO) {
+
+        // 디버깅 추가
+        if (reviewDTO.getOrderItems() == null) {
+            System.out.println("OrderItems is null!");
+        } else {
+            System.out.println("OrderItems size: " + reviewDTO.getOrderItems().size());
+        }
+
+
         try {
-            // ReviewService의 saveReview 메서드에 reviewDTO를 직접 전달
             boolean isSaved = reviewService.saveReview(reviewDTO);
 
             if (isSaved) {
@@ -137,22 +160,30 @@ public class MypageController {
                         .body(Collections.singletonMap("success", false));
             }
         } catch (Exception e) {
-            e.printStackTrace(); // 오류 메시지 출력
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("success", false));
         }
+
     }
 
     @GetMapping("/mysettings")
     public String mySettings(Model model) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+
+        String memberId = userDetails.getId();
+        double totalPoints = pointService.getTotalPoints(memberId);
+
         String uid = (userDetails.getId());  // 로그인한 사용자의 Member ID (String 타입)
+        Long orderCount = orderService.getOrderCount(memberId);
 
         Member member = memberService.findByUserId(uid)
                 .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
-
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("totalPoints", totalPoints);
+        model.addAttribute("IssuedList", issuedCoupons);
         model.addAttribute("member", member);
 
         return "content/user/mysettings"; // Points to "content/user/mysettings"
@@ -195,10 +226,14 @@ public class MypageController {
     public String orderDetails(Model model, PageRequestDTO pageRequestDTO, Authentication authentication) {
         String uid = authentication.getName();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        String memberId = userDetails.getId();
 
+        double totalPoints = pointService.getTotalPoints(memberId);
         // 변경된 메서드 호출
         OrderPageResponseDTO<OrderItemDTO> pageResponseOrderItemDTO = orderService.getOrderByUserItems(pageRequestDTO, uid);
 
+        Long orderCount = orderService.getOrderCount(memberId);
         List<BoardCateDTO> boardCateDTOS = boardService.selectBoardCate();
         List<String> targetNames = Arrays.asList("주문/결제", "배송", "여행/숙박/항공");
         List<BoardCateDTO> filteredBoardCateDTOS = boardCateDTOS.stream()
@@ -206,7 +241,11 @@ public class MypageController {
                 .collect(Collectors.toList());
 
         List<OrderItemDTO> groupDTO = orderService.getOrdersGroupedByOrderItemId(uid);
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
 
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("totalPoints", totalPoints);
+        model.addAttribute("IssuedList", issuedCoupons);
         model.addAttribute("groupDTO", groupDTO);
         model.addAttribute("boardCate", filteredBoardCateDTOS);
         model.addAttribute("pageResponseOrderDTO", pageResponseOrderItemDTO);  // OrderItemDTO로 변경된 DTO 전달
@@ -216,47 +255,44 @@ public class MypageController {
     }
 
     @GetMapping("/pointdetails")
-    public String pointDetails(Model model, Pageable pageable) {
-        List<BannerDTO> banners = adminService.selectAllbanner();
-        List<BannerDTO> banners2 = adminService.getActiveBanners();
-        model.addAttribute("content", "pointdetails");
-        model.addAttribute("banners", banners2);
+    public String pointDetails(Model model, PointPageRequestDTO pageRequestDTO) {
+        // page 값이 넘어오면 pageRequestDTO에 반영
 
         // 로그인한 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
         String memberId = userDetails.getId();
+        Long orderCount = orderService.getOrderCount(memberId);
 
-        // 포인트 리스트 조회 (페이징 적용)
+        // 페이지 정보 확인
+        log.info("PageRequestDTO: " + pageRequestDTO);  // 페이지 번호가 제대로 전달되는지 확인
+        Pageable pageable = pageRequestDTO.toPageable();  // 페이지 번호와 크기를 기반으로 Pageable 생성
+
+        // 포인트 조회
         Page<Point> pointPage = pointService.myPoints(memberId, pageable);
-
-        // 총 포인트 계산
         double totalPoints = pointService.getTotalPoints(memberId);
 
-        PointPageRequestDTO requestDTO = PointPageRequestDTO.builder()
-                .pg(pageable.getPageNumber() + 1)  // 페이지 번호는 0부터 시작하므로 1을 더함
-                .size(pageable.getPageSize())      // 페이지 크기
-                .build();
 
+        // PointPageResponseDTO 생성 (페이징 정보와 데이터 전달)
         PointPageResponseDTO responseDTO = new PointPageResponseDTO(
-                requestDTO,  // 요청 DTO를 전달
-                pointPage.getContent(),  // 포인트 목록
-                pointPage.getTotalElements(),  // 전체 항목 수 (long 타입)
-                pageable.getPageNumber() + 1,  // 현재 페이지 번호 (1부터 시작하므로 +1)
-                pageable.getPageSize()  // 페이지 사이즈
+                pageRequestDTO,
+                pointPage.getContent(),
+                pointPage.getTotalElements(),
+                pageable.getPageNumber() + 1, // 현재 페이지
+                pointPage.getTotalElements()  // 전체 항목 수
         );
-
-
-        // 모델에 추가
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("IssuedList", issuedCoupons);
         model.addAttribute("pageResponseDTO", responseDTO);
         model.addAttribute("totalPoints", totalPoints);
-        model.addAttribute("pointList", pointPage.getContent());
+        model.addAttribute("pointList", pointPage.getContent());  // 페이지에 맞는 데이터 전달
 
-        log.info("나온 결과 맴버 포인트" + pointPage);
-        log.info("Point List: " + pointPage.getContent());
-        log.info("Page Response DTO: " + responseDTO);
-        return "content/user/pointdetails"; // Points to "content/user/pointdetails"
+        log.info("Point List: " + pointPage.getContent());  // 가져온 데이터 확인
+        return "content/user/pointdetails"; // 뷰 반환
     }
+
+
 
 
     @GetMapping("/qnadetails")
@@ -274,10 +310,14 @@ public class MypageController {
         if (pageable.getPageNumber() == 0) {
             pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "date"));
         }
-
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        String memberId = userDetails.getId();
+        double totalPoints = pointService.getTotalPoints(memberId);
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
         String loggedInUserUid = authentication.getName();  // 로그인한 사용자의 ID
         log.info("login!!!!"+loggedInUserUid);
 
+        Long orderCount = orderService.getOrderCount(memberId);
 
         // QnA 조회 로직 설정
         com.lotteon.dto.page.PageRequestDTO pageRequestDTO= com.lotteon.dto.page.PageRequestDTO.builder()
@@ -291,6 +331,10 @@ public class MypageController {
 
         log.info("여기!!!!!!!!!?"+qnaPageResponseDTO);
         // 모델에 데이터 추가
+
+        model.addAttribute("totalPoints", totalPoints);
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("IssuedList", issuedCoupons);
         model.addAttribute("content", "qnadetails");
         model.addAttribute("banners", banners2);
         model.addAttribute("qnaPage", qnaPageResponseDTO);
@@ -305,12 +349,19 @@ public class MypageController {
         String uid = authentication.getName();
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        String memberId = userDetails.getId();
+        double totalPoints = pointService.getTotalPoints(memberId);
+        List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
+        Long orderCount = orderService.getOrderCount(memberId);
 
         // 로그인한 유저의 리뷰만 가져오기
         PageResponseDTO<ReviewDTO> pageResponseReviewDTO = reviewService.getReviewsByUser(pageRequestDTO, uid);
         log.info("aaaaaaa{}", pageResponseReviewDTO);
 
-
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("totalPoints", totalPoints);
+        model.addAttribute("IssuedList", issuedCoupons);
         model.addAttribute("pageResponseReviewDTO", pageResponseReviewDTO);
         model.addAttribute("content", "reviewdetails");
         model.addAttribute("banners", banners2);

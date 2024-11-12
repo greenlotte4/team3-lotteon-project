@@ -1,5 +1,6 @@
 package com.lotteon.controller;
 import com.lotteon.dto.BoardCateDTO;
+import com.lotteon.dto.admin.AdminOrderDTO;
 import com.lotteon.dto.admin.BannerStatusRequest;
 import com.lotteon.dto.adminQnaDTO;
 import com.lotteon.dto.page.AdminOrderPageResponseDTO;
@@ -95,9 +96,16 @@ public class BoardAPIController {
         log.info("qiqiqiqiqiqi: " + adminOrderItemPageResponseDTO);
         return ResponseEntity.ok(adminOrderItemPageResponseDTO);
     }
-
-
     @ResponseBody
+    @GetMapping("/order/status/modal")
+    public ResponseEntity<?> orderStatusKeyword(@RequestParam(required = false) long id){
+        AdminOrderDTO adminOrderDTO = adminOrderService.selectOrderAll(id);
+        log.info("pqpqpqpqpqpqpqpq:" + adminOrderDTO);
+        return ResponseEntity.ok(adminOrderDTO);
+    }
+
+
+        @ResponseBody
     @GetMapping("/admin/banner/updateStatus")
     public ResponseEntity<?> updateStatus(@RequestParam int id, @RequestParam String status) {
         HashMap<String,String> response = new HashMap<>();

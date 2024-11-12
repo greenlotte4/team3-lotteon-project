@@ -111,7 +111,7 @@ public class OrderResponseDTO {
                 .productDiscount(productDiscount)
                 .usedPoint(orderRequestDTO.getUsedPointResult())
                 .totalQuantity(parseLongOrDefault(orderRequestDTO.getTotalOrderQuantity(), 0))
-                .totalShipping(Long.parseLong(orderRequestDTO.getTotalShippingFee()))
+                .totalShipping(parseLongOrDefault(orderRequestDTO.getTotalShippingFee(),0))
                 .couponDiscount(orderRequestDTO.getUsedCouponResult())
                 .usedCoupon(orderRequestDTO.getUsedCouponResult())
                 .pay(orderRequestDTO.getCredit())
