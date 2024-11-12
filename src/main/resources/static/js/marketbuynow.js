@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            if (confirm("장바구니에 추가 하시겠습니까.")) {
+            if (confirm("해당 상품을 장바구니에 담으시겠습니까?")) {
                 const finalPrice = Math.floor(originalPrice * (100 - discount) / 100);
                 const productDataArray = [];
 
@@ -341,22 +341,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                     .then(data => {
                         if (data.status === 200) {
-                            const Isconfirm = confirm('장바구니에 추가 되었습니다! 장바구니로 이동하시겠습니까?');
+                            const Isconfirm = confirm('장바구니에 추가되었습니다. 장바구니로 이동하시겠습니까?');
 
                             if(Isconfirm) {
                                 window.location.href = `/market/cart`;
                             }
 
                         } else if (data.status === 401) {
-                            alert('로그인 없이 이곳은 접근 금지! 빨리 로그인해 주세요');
+                            alert('로그인 후 이용해 주세요. 로그인하시면 더 많은 혜택을 확인하실 수 있습니다!');
                             window.location.href = '/user/login';
                         } else {
-                            alert('장바구니에 추가하는 데 실패하셨습니다.');
+                            alert('장바구니에 추가하는 데 문제가 발생했습니다. 다시 시도해 주세요.');
                         }
                     })
                     .catch(error => {
                         console.error('장바구니에 추가하는 데 실패함:', error);
-                        alert('장바구니에 추가하는 데 실패하셨습니다.');
+                        alert('장바구니에 추가하는 데 문제가 발생했습니다. 다시 시도해 주세요.');
                     });
             }
         });

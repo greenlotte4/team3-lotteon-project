@@ -145,14 +145,15 @@ aside > ul > li:nth-child(1){
 /*    margin-top: 20px;*/
 /*    margin-bottom: 20px;*/
 /*}*/
+
 .center p{
     font-size: 14px;
     font-weight: 700;
+
     float: left;
     line-height: 34px;
     letter-spacing: -.029em;
     margin-top: 20px;
-    margin-bottom: 20px;
 }
 .center a{
     font-size: 12px;
@@ -162,7 +163,8 @@ aside > ul > li:nth-child(1){
 .dateInquiry{
     width: 900px;
     height: 75px;
-    margin: 30px 48px;
+    margin: 48px;
+    margin-bottom: 0;
     background-color: #DCE6F2;
 }
 .dateInquiry > div{
@@ -175,10 +177,10 @@ aside > ul > li:nth-child(1){
     height: 40px;
 }
 
-.dateInquiry >div p {
+.dateInquiry > div p {
     font-size: 16px;
     font-weight: 400;
-    margin: 5px 30px;
+    margin: 28px 30px;
     line-height: 19.35px;
 }
 

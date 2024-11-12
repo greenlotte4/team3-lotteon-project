@@ -135,28 +135,32 @@ aside > ul > li:nth-child(2){
 .details{
     width: 880px;
     height: 20px;
-    margin: 0 48px;
-    overflow-x: hidden;  /* 가로 넘치는 값을 숨깁니다. */
-
+    margin: 48px;
+    /*overflow-x: hidden;  !* 가로 넘치는 값을 숨깁니다. *!*/
 }
 
-.center p{
-    font-size: 14px;
-    font-weight: 700;
+.center p {
+    font-size: 24px;
     float: left;
+    line-height: 34px;
+    letter-spacing: -.029em;
+    margin-top: 20px;
 }
+
 .center a{
     font-size: 12px;
     font-weight: 400;
     float: right;
 }
 
-.dateInquiry{
+.dateInquiry {
     width: 900px;
     height: 75px;
-    margin: 0 48px;
+    margin: 48px;
+    margin-bottom: 0;
     background-color: #DCE6F2;
 }
+
 .dateInquiry > div{
     width: 140px;
     height: 22px;
@@ -224,6 +228,7 @@ table {
     height: 133px;
     margin: 0 48px;
     border-top: 2px solid black;
+    border-bottom: 1px solid #b4b0b0;
     border-collapse: collapse;
 }
 th {
