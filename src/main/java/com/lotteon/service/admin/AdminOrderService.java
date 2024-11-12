@@ -4,17 +4,21 @@ import com.lotteon.controller.AdminOrderItemPageResponseDTO;
 import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.admin.AdminOrderDTO;
 import com.lotteon.dto.admin.AdminOrderItemDTO;
+import com.lotteon.dto.order.DeliveryStatus;
 import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderItemDTO;
+import com.lotteon.dto.order.ProductDeliveryDTO;
 import com.lotteon.dto.page.AdminOrderPageResponseDTO;
 import com.lotteon.dto.page.PageRequestDTO;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
+import com.lotteon.entity.order.ProductDelivery;
 import com.lotteon.entity.product.Product;
 import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.repository.order.OrderRepository;
+import com.lotteon.repository.order.ProductDeliveryRepository;
 import com.lotteon.repository.user.SellerRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +43,7 @@ public class AdminOrderService {
     private final ModelMapper modelMapper;
     private final ModelMapper getModelMapper;
     private final SellerRepository sellerRepository;
+    private final ProductDeliveryRepository productDeliveryRepository;
 
     public List<OrderDTO> selectOrdersAll() {
         List<Order> orders = orderRepository.findAll();
@@ -111,11 +116,9 @@ public class AdminOrderService {
         log.info("orderITems!!!!!"+orderItems.getContent());
         log.info("qqqqqqqqqqqqqqqqqqqq:" + getOrderItems.getContent());
         log.info("cccccccccccccccccccc:" + getOrderItems.getPageable());
-        List<OrderItemDTO> orderItemList = getOrderItems.getContent().stream().map(tuple -> {
-            OrderItemDTO orderItemDTO = getModelMapper.map(tuple, OrderItemDTO.class);
-            return orderItemDTO;
-        }).toList();
+        List<OrderItemDTO> orderItemList = getOrderItems.getContent();
         int total2 = (int) getOrderItems.getTotalElements();
+        log.info("total:" + total2);
         log.info("uuuuuuuuuuuu:" + getOrderItems);
         return AdminOrderItemPageResponseDTO.builder()
                 .pageRequestDTO(pageRequestDTO)
@@ -124,114 +127,90 @@ public class AdminOrderService {
                 .build();
     }
 
-
-
-
-
-public AdminOrderPageResponseDTO selectOrderListAll(PageRequestDTO pageRequestDTO) {
-    Pageable pageable = pageRequestDTO.getPageable("no");
-    Page<Tuple> pageAdminOrder = null;
-
-    ///////////////
-
-    log.info("abababababab:" + pageRequestDTO.getKeyword());
-    if (pageRequestDTO.getKeyword() == null) {
-        pageAdminOrder = orderRepository.selectOrderAllForList(pageRequestDTO, pageable);
-    } else {
-        pageAdminOrder = orderRepository.selectOrderSearchForList(pageRequestDTO, pageable);
+    public AdminOrderDTO selectOrderAll(long id){
+        Order order = orderRepository.findById(id).orElse(null);
+        AdminOrderDTO adminOrderDTO = getModelMapper.map(order, AdminOrderDTO.class);
+        List<AdminOrderItemDTO> orderItemdtos = orderItemRepository.findByOrder_OrderId(id);
+        adminOrderDTO.setOrderItems(orderItemdtos);
+        return adminOrderDTO;
     }
 
 
-    List<AdminOrderDTO> orderList = pageAdminOrder.getContent().stream().map(tuple -> {
-        Long id = tuple.get(0, Long.class);
-        log.info("이거 aaaaaaaid머야 나와?:" + id);
-
-        Order orders = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Faq not found with ID: " + id));
-        ; //조건주고 조회하기
-        log.info("이게 order!! 머야?:" + orders);
-
-//            List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(id);
-        List<AdminOrderItemDTO> orderItemdtos = orderItemRepository.findByOrder_OrderId(id);
-        log.info("아니 orderItems가 계속 조회가 안됨: " + orderItemdtos);
-
-        AdminOrderDTO adminOrderDTO = getModelMapper.map(orders, AdminOrderDTO.class);
-        // OrderItem들을 OrderItemDTO로 변환
 
 
-//            List<OrderItemDTO> orderItemDTOs = orderItems.stream()
-//                    .map(orderItem -> modelMapper.map(orderItem, OrderItemDTO.class))
-//                    .collect(Collectors.toList());
 
-        log.info("아니 orderItemDTO를 변환해야돼 : " + orderItemdtos);
-
-
-        adminOrderDTO.setOrderItems(orderItemdtos);
-        log.info("야옹하고울어요!: " + adminOrderDTO);
-        return adminOrderDTO;
+    public AdminOrderPageResponseDTO selectOrderListAll(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable("no");
+        Page<Tuple> pageAdminOrder = null;
 
 
-    }).toList();
-    int total = (int) pageAdminOrder.getTotalElements();
+        log.info("abababababab:" + pageRequestDTO.getKeyword());
+        if (pageRequestDTO.getKeyword() == null) {
+            pageAdminOrder = orderRepository.selectOrderAllForList(pageRequestDTO, pageable);
+        } else {
+            pageAdminOrder = orderRepository.selectOrderSearchForList(pageRequestDTO, pageable);
+        }
 
-    return AdminOrderPageResponseDTO.builder()
-            .pageRequestDTO(pageRequestDTO)
-            .adminorderdtoList(orderList)
-            .total(total)
-            .build();
 
-}
-//    public AdminOrderPageResponseDTO selectOrderListAll(PageRequestDTO pageRequestDTO) {
-//        Pageable pageable = pageRequestDTO.getPageable("no");
-//
-//        // OrderId만 페이징하여 가져오기
-//        List<Long> orderIds = orderRepository.findOrderIdsForPage(pageable);
-//
-//        // 선택된 컬럼만 가져오기
-//        List<Tuple> tuples = orderRepository.findSelectedOrdersWithItemsByIds(orderIds);
-//        log.info("aaaaaaaaaaaaaaaaaaaaaaaaa: " + tuples);
-//
-//        // OrderId별로 Grouping하여 DTO 변환
-//        Map<Long, AdminOrderDTO> orderMap = new HashMap<>();
-//
-//        tuples.forEach(tuple -> {
-//            Long orderId = tuple.get(0, Long.class);
-//
-//            // Order 정보가 이미 있는지 확인하고 없으면 AdminOrderDTO 생성
-//            AdminOrderDTO adminOrderDTO = orderMap.computeIfAbsent(orderId, id -> {
-//                AdminOrderDTO dto = new AdminOrderDTO();
-//                dto.setOrderId(id);
-//                dto.setMemberName(tuple.get(1, String.class));
-//                dto.setTotalPrice(tuple.get(2, Long.class));
-//                dto.setOrderDate(tuple.get(3, LocalDateTime.class));
-//                dto.setUid(tuple.get(4, String.class));
-//                dto.setMemberName(tuple.get(5, String.class));
-//                dto.setTotalQuantity(tuple.get(6, Long.class));
-//                dto.setOrderItems(new ArrayList<>());
-//                return dto;
-//            });
-//
-//            // OrderItemDTO 생성 후 추가
-//            AdminOrderItemDTO AdminorderItemDTO = new AdminOrderItemDTO();
-//            AdminorderItemDTO.setProduct(tuple.get(7, ProductDTO.class));
-//            AdminorderItemDTO.setOrderItemId(tuple.get(8, Long.class));
-//            AdminorderItemDTO.setOrderPrice(tuple.get(9, Long.class));
-//            AdminorderItemDTO.setPrice(tuple.get(10, Long.class));
-//            AdminorderItemDTO.setSavedDiscount(tuple.get(11, Long.class));
-//            AdminorderItemDTO.setSavedPrice(tuple.get(12, Long.class));
-//            AdminorderItemDTO.setShippingFees(tuple.get(13, Long.class));
-//            AdminorderItemDTO.setStock(tuple.get(14, Long.class));
-//
-//            adminOrderDTO.getOrderItems().add(AdminorderItemDTO);
-//        });
-//
-//        List<AdminOrderDTO> orderList = new ArrayList<>(orderMap.values());
-//        int total = (int) orderRepository.countTotalOrders();
-//
-//        return AdminOrderPageResponseDTO.builder()
-//                .pageRequestDTO(pageRequestDTO)
-//                .adminorderdtoList(orderList)
-//                .total(total)
-//                .build();
-//
-//
+        List<AdminOrderDTO> orderList = pageAdminOrder.getContent().stream().map(tuple -> {
+            Long id = tuple.get(0, Long.class);
+            log.info("이거 aaaaaaaid머야 나와?:" + id);
+
+            Order orders = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Faq not found with ID: " + id));
+            ; //조건주고 조회하기
+            log.info("이게 order!! 머야?:" + orders);
+
+    //            List<OrderItem> orderItems = orderItemRepository.findByOrder_OrderId(id);
+            List<AdminOrderItemDTO> orderItemdtos = orderItemRepository.findByOrder_OrderId(id);
+            log.info("아니 orderItems가 계속 조회가 안됨: " + orderItemdtos);
+
+            AdminOrderDTO adminOrderDTO = getModelMapper.map(orders, AdminOrderDTO.class);
+            // OrderItem들을 OrderItemDTO로 변환
+
+
+    //            List<OrderItemDTO> orderItemDTOs = orderItems.stream()
+    //                    .map(orderItem -> modelMapper.map(orderItem, OrderItemDTO.class))
+    //                    .collect(Collectors.toList());
+
+            log.info("아니 orderItemDTO를 변환해야돼 : " + orderItemdtos);
+
+
+            adminOrderDTO.setOrderItems(orderItemdtos);
+            log.info("야옹하고울어요!: " + adminOrderDTO);
+            return adminOrderDTO;
+
+
+        }).toList();
+        int total = (int) pageAdminOrder.getTotalElements();
+
+        return AdminOrderPageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .adminorderdtoList(orderList)
+                .total(total)
+                .build();
+
+    }
+    public ProductDelivery insertorderDelivery(long id , ProductDeliveryDTO productDeliveryDTO){
+
+        ProductDelivery productDelivery = ProductDelivery.builder()
+                .deliveryCompany(productDeliveryDTO.getDeliveryCompany())
+                .addr(productDeliveryDTO.getAddr())
+                .deliveryMessage(productDeliveryDTO.getDeliveryMessage())
+                .addr2(productDeliveryDTO.getAddr2())
+                .trackingnumber(productDeliveryDTO.getTrackingnumber())
+                .postcode(productDeliveryDTO.getPostcode())
+                .receiver(productDeliveryDTO.getReceiver())
+                .build();
+
+        OrderItem orderItem = orderItemRepository.findById(id).orElse(null);
+        productDelivery.setOrderItem(orderItem);
+        ProductDelivery delivery = productDeliveryRepository.save(productDelivery);
+
+        orderItem.setDeliveryId(delivery.getProductDeliveryId());
+        orderItem.setStatus(DeliveryStatus.DELIVERED);
+        orderItem.setTraceNumber(delivery.getTrackingnumber());
+        orderItemRepository.save(orderItem);
+
+        return delivery;
+    }
 }

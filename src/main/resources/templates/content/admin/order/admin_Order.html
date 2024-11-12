@@ -100,19 +100,19 @@
                     <form>
                         <table class="modaltable">
                             <tr>
-                                <th><label for="orderNo">주문번호</label></th>
+                                <th>주문번호</th>
                                 <td>
                                     <input type="text" id="orderNo" name="orderNo" placeholder="123456" readonly>
                                 </td>
                             </tr>
                             <tr>
-                                <th><label for="recipient">수령인</label></th>
+                                <th>수령인</th>
                                 <td>
-                                    <input type="recipient" id="recipient" name="recipient" placeholder="홍길동" readonly>
+                                    <input type="text" id="recipient" name="recipient" placeholder="홍길동" readonly>
                                 </td>
                             </tr>
                             <tr>
-                                <th><label for="zipcode">주소</label></th>
+                                <th>주소</th>
                                 <td>
                                     <input type="text" id="zipcode" placeholder="유저우편번호" readonly><br>
                                     <input type="text" id="address1" placeholder="유저기본주소" readonly><br>
@@ -122,26 +122,26 @@
                            
             
                             <tr>
-                                <th><label for="courier">택배사</label></th>
+                                <th>택배사</th>
                                 <td> <select id="classification" >
-                                    <option value="">택배사선택</option>
-                                    <option value="">대한통운</option>
-                                    <option value="">로젠택배</option>
-                                    <option value="">우체국</option>
+                                    <option value="" disabled selected>택배사선택</option>
+                                    <option value="대한통운">대한통운</option>
+                                    <option value="로젠택배">로젠택배</option>
+                                    <option value="우체국">우체국</option>
                                 </select><br>
                                 </td>
                             </tr>
                             <tr>
-                                <th><label for="ownerName">운송장번호</label></th>
-                                <td><input type="text" id="ownerName" name="ownerName" placeholder=""><br></td>
+                                <th>운송장번호</th>
+                                <td><input type="text" id="ownerName" name="ownerName" value="" placeholder=""><br></td>
                             </tr>
                             <tr>
-                                <th><label for="businessNumber">기타</label></th>
+                                <th>기타</th>
                                 <td><textarea name="etc" id="etc" placeholder="유저요청사항" readonly></textarea><br></td>
                             </tr>
                             
                          </table>
-                        <button type="submit">등록하기</button>
+                        <button type="submit" id="order_submit_btn">등록하기</button>
                     </form>
                 </div>
             </section>
@@ -155,32 +155,47 @@
                                 <div class="order-details">
                                     <div class="product-info">
                                         <h3>상품정보</h3>
-                                        <div class="">
-                                            <div class="pro-details">
-                                                <div class="pro-img"></div>
-                                                <div class="pro-num" >제품번호</div>
-                                                <div class="pro-name">상품명</div>
-                                                <div class="pro-seller">판매자</div>
-                                                <div class="pro-price">가격</div>
-                                                <div class="pro-sell">할인</div>
-                                                <div class="pro-stock">재고</div>
-                                                <div class="pro-ship">배송비</div>
-                                                <div class="total-pay">결제금액</div>
-                                            </div>
-                                            <div class="details" id="orderDetails">
-                                                <div class="pro-img-details">
-                                                    <img src="../images/sample/화면 캡처 2024-10-17 102744.png" alt="#">
-                                                </div>
-                                                <div class="pro_num_details">123456789</div>
-                                                <div class="pro-name-details">프리미엄 퀄리티 오가닉 코튼 100% 에코백 - 다용도 사용 가능, 강력한 내구성</div>
-                                                <div class="pro-seller-details">뭐지</div>
-                                                <div class="pro-price-details">뭐지</div>
-                                                <div class="pro-sell-details">뭐지</div>
-                                                <div class="pro-stock-details">뭐지</div>
-                                                <div class="pro-ship-details">5000원</div>
-                                                <div class="total-pay-details">뭐지</div>
-                                            </div>
-                                        </div>
+                                            <table class="product-details" id="product_details">
+                                                <colgroup>
+                                                    <col style="width: 7.5%">
+                                                    <col style="width: 7.5%">
+                                                    <col style="width: 10%">
+                                                    <col style="width: 10%">
+                                                    <col style="width: 10%">
+                                                    <col style="width: 10%">
+                                                    <col style="width: 15%">
+                                                    <col style="width: 10%">
+                                                    <col style="width: 10%">
+                                                </colgroup>
+                                                <thead>
+                                                <tr>
+                                                    <th>이미지</th>
+                                                    <th>제품번호</th>
+                                                    <th>상품명</th>
+                                                    <th>판매자</th>
+                                                    <th>가격</th>
+                                                    <th>할인</th>
+                                                    <th>재고</th>
+                                                    <th>배송비</th>
+                                                    <th>결제금액</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="orderDetails">
+<!--                                                <tr>-->
+<!--                                                    <td class="pro-img-details">-->
+<!--                                                        <img src="../images/sample/화면 캡처 2024-10-17 102744.png" alt="#">-->
+<!--                                                    </td>-->
+<!--                                                    <td class="pro-num-details">123456789</td>-->
+<!--                                                    <td class="pro-name-details">프리미엄 퀄리티 오가닉 코튼 100% 에코백 - 다용도 사용 가능, 강력한 내구성</td>-->
+<!--                                                    <td class="pro-seller-details">뭐지</td>-->
+<!--                                                    <td class="pro-price-details">뭐지</td>-->
+<!--                                                    <td class="pro-sell-details">뭐지</td>-->
+<!--                                                    <td class="pro-stock-details">뭐지</td>-->
+<!--                                                    <td class="pro-ship-details">5000원</td>-->
+<!--                                                    <td class="total-pay-details">뭐지</td>-->
+<!--                                                </tr>-->
+                                                </tbody>
+                                            </table>
                                         <div class="total-price">
                                             <div class="pay-title">
                                                 <h3>결제정보</h3>
@@ -258,40 +273,54 @@
                             const modalClose = document.querySelector('.order-close');
 
 
+
+////////////////////////주문상세보기모달////////////////////////////////////////////
                             function openModal(order) {
                                 const image = "/uploads/productImg/"
 
                                 const orderDetail = document.getElementById('orderDetails');
-                                orderDetail.innerHTML = '';
-                                order.orderItems.forEach(item => {
-                                    const row = `
-                                                <div class="pro-img-details">
-                                                    <img src="${image + item.file190}" alt="#">
-                                                </div>
-                                                <div class="pro_num_details">${item.orderItemId}</div>
-                                                <div class="pro-name-details">${item.productName}</div>
-                                                <div class="pro-seller-details">${item.orderItemId}</div>
-                                                <div class="pro-price-details">${item.savedPrice}</div>
-                                                <div class="pro-sell-details">${item.savedDiscount}</div>
-                                                <div class="pro-stock-details">${item.stock}</div>
-                                                <div class="pro-ship-details">${item.shippingFees}</div>
-                                                <div class="total-pay-details">${item.orderPrice}</div>
-                                    `;
-                                    orderDetail.innerHTML += row;
-                                })
+                                fetch(`/api/order/status/modal?id=${order.order.orderId}`)
+                                    .then(resp => resp.json())
+                                    .then(adminOrderDTO => {
+                                        console.log("웨옹 :" , adminOrderDTO)
+                                        const details = document.querySelector('.product-details tbody');
+                                        details.innerHTML = '';
 
-                                document.getElementById('OrderTotalProductPrice').textContent = order.totalOriginalPrice;
-                                document.getElementById('OrderSavePrice').textContent =order.totalDiscount;
-                                document.getElementById('OrderTotalFee').textContent = order.totalShipping;
-                                document.getElementById('OrderTotalPrice').textContent = order.totalPrice;
-                                document.getElementById('OrderNumber').textContent = order.orderId;
-                                document.getElementById('OrderProcess').textContent = order.pay;
-                                document.getElementById('OrderHp').textContent = order.memberName +"/"+ order.memberHp;
-                                document.getElementById('OrderState').textContent = order.orderStatus;
-                                document.getElementById('OrderTotalPrices').textContent = order.totalPrice;
-                                document.getElementById('OrderReceiver').textContent = order.receiver;
-                                document.getElementById('OrderReceiverHp').textContent = order.hp;
-                                document.getElementById('OrderAddr').textContent = order.addr1;
+                                        adminOrderDTO.orderItems.forEach(item => {
+                                            const row = `
+                                            <tr>
+                                                <td class="pro-img-details">
+                                                    <img src="${image + item.file190}" alt="#">
+                                                </td>
+                                                <td class="pro_num_details">${item.orderItemId}</td>
+                                                <td class="pro-name-details">${item.productName}</td>
+                                                <td class="pro-seller-details">${item.orderItemId}</td>
+                                                <td class="pro-price-details">${item.savedPrice}</td>
+                                                <td class="pro-sell-details">${item.savedDiscount}</td>
+                                                <td class="pro-stock-details">${item.stock}</td>
+                                                <td class="pro-ship-details">${item.shippingFees}</td>
+                                                <td class="total-pay-details">${item.orderPrice}</td>
+                                           </tr>
+                                    `;
+                                            details.innerHTML += row;
+                                        })
+
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                    });
+                                document.getElementById('OrderTotalProductPrice').textContent = order.order.totalOriginalPrice;
+                                document.getElementById('OrderSavePrice').textContent =order.order.totalDiscount;
+                                document.getElementById('OrderTotalFee').textContent = order.order.totalShipping;
+                                document.getElementById('OrderTotalPrice').textContent = order.order.totalPrice;
+                                document.getElementById('OrderNumber').textContent = order.order.orderId;
+                                document.getElementById('OrderProcess').textContent = order.order.pay;
+                                document.getElementById('OrderHp').textContent = order.order.memberName +"/"+ order.order.memberHp;
+                                document.getElementById('OrderState').textContent = order.order.orderStatus;
+                                document.getElementById('OrderTotalPrices').textContent = order.order.totalPrice;
+                                document.getElementById('OrderReceiver').textContent = order.order.receiver;
+                                document.getElementById('OrderReceiverHp').textContent = order.order.hp;
+                                document.getElementById('OrderAddr').textContent = order.order.addr1;
 
                                 modal.style.display = 'flex'; // 모달을 flex로 표시
                                 orderModal.style.display = 'block'; // 내부 모달도 표시
@@ -327,15 +356,90 @@
                                 }
                             });
 
-///////////////////////////////////////
+///////////////////////////////////////배송하기모달///////////////////////////////////////////////////////
                             const productModal2 = document.querySelector('.shipping-section');
                             const modalcontent2 = document.querySelector('.shipping-modal');
                             const modalClose2 = document.querySelector('.shipping-close');
 
 
                             function openModal2 (order) {
+
+                                console.log("먀먀 : ", order);
+
+                                document.getElementById('orderNo').value = order.orderItemId;
+                                document.getElementById('recipient').value = order.order.receiver;
+                                document.getElementById('zipcode').value = order.order.postcode;
+                                document.getElementById('address1').value = order.order.addr1;
+                                document.getElementById('address2').value = order.order.addr2;
+                                document.getElementById('classification').value;
+                                document.getElementById('ownerName').value;
+                                document.getElementById('etc').value = order.order.shippingInfo;
+
+
                                 productModal2.style.display = 'flex'; // 모달을 flex로 표시
                                 modalcontent2.style.display = 'block'; // 내부 모달도 표시
+
+
+
+                                const form = document.getElementsByTagName('form')[0];
+                                form.addEventListener('submit', function (e){
+                                    e.preventDefault();
+                                    const formData = new FormData();
+
+                                    const orderItemId = document.getElementById('orderNo').value;
+                                    const receiver =  document.getElementById('recipient').value;
+                                    const postcode = document.getElementById('zipcode').value;
+                                    const addr = document.getElementById('address1').value;
+                                    const addr2 = document.getElementById('address2').value;
+                                    const deliveryMessage = document.getElementById('etc').value;
+                                    const deliveryCompany = document.getElementById('classification').value;
+                                    const trackingnumber = document.getElementById('ownerName').value;
+
+
+
+                                    console.log("deliveryCompany :" + deliveryCompany)
+                                    console.log("trackingnumber :" + trackingnumber)
+                                    console.log("orderItemId" + orderItemId)
+                                    console.log("receiver" + receiver)
+                                    console.log("postcode" + postcode)
+                                    console.log("addr" + addr)
+                                    console.log("addr2" + addr2)
+                                    console.log("deliveryMessage" + deliveryMessage)
+
+                                    if(!deliveryCompany || !trackingnumber) {
+                                        alert('택배사나 운송장번호를 입력해주세요.');
+                                        return;
+                                    }
+
+                                    formData.append('orderItemId', orderItemId);
+                                    formData.append('receiver', receiver);
+                                    formData.append('postcode', postcode);
+                                    formData.append('addr', addr);
+                                    formData.append('addr2', addr2);
+                                    formData.append('deliveryCompany', deliveryCompany);
+                                    formData.append('trackingnumber', trackingnumber);
+                                    formData.append('deliveryMessage', deliveryMessage);
+
+                                    console.log("formData entries:", Array.from(formData.entries()));
+
+                                    fetch('/seller/order/status/delivery/modal', {
+                                        method: 'post',
+                                        body: formData
+                                    })
+                                        .then(resp => resp.json())
+                                        .then(productDelivery => {
+                                            if(productDelivery) {
+                                                alert('배송등록이 완료되었습니다.')
+                                                closeModal2();
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.log(err);
+                                            alert('안된당')
+                                        });
+
+                                })
+
                             }
                             function closeModal2() {
                                 productModal2.style.display = 'none'; // 모달을 숨김
@@ -346,6 +450,13 @@
 
 
 
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             // 전체페이지로드
                             loadPageOrPages(1, null, null);
 
@@ -421,7 +532,7 @@
                                                     <td>${order.order.uid}</td>
                                                     <td>${order.order.memberName}</td>
                                                     <td class="productname">${order.product.productName}</td>
-                                                    <td>${order.order.stock}</td>
+                                                    <td>${order.stock}</td>
                                                     <td>${order.savedPrice}</td>
                                                     <td>${order.order.pay}</td>
                                                     <td class="orderstatus">${order.status}</td>
