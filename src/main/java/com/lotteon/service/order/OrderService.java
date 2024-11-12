@@ -388,8 +388,6 @@ public class OrderService {
         return amount != null ? amount : 0;
     }
 
-
-
     public List<CategoryOrderCountDTO> getOrderCountGroupedByCategoryFirstId() {
         List<CategoryOrderCountDTO> newCategoryCount = orderItemRepository.selectCount();
 
