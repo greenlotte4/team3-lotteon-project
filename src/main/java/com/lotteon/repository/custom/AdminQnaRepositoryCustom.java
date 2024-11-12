@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface AdminQnaRepositoryCustom {
 
     public Page<Tuple> selectAdminqnaAllForList(PageRequestDTO pageRequestDTO, Pageable pageable);
+    public Page<Tuple> selectAdminqnBySellerForList(PageRequestDTO pageRequestDTO, Pageable pageable,int sellerUid);
 
     public Page<Tuple> selectAdminqnaForOption1(PageRequestDTO pagerequestDTO, Pageable pageable);
 

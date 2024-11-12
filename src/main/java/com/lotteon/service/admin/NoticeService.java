@@ -50,6 +50,13 @@ public class NoticeService {
         return noticeRepository.findAllByOrderByDateDesc(sortedByDateDesc);
     }
 
+    // 전체 공지사항을 페이지 형태로 가져오는 메서드 추가
+    public Page<Notice> getNoticesTop5() {
+        // 정렬된 Pageable 객체를 전달하여 최신순으로 데이터 가져오기
+        Pageable sortedByDateDesc = PageRequest.of(0,5, Sort.by(Sort.Direction.DESC, "date"));
+        return noticeRepository.findAllByOrderByDateDesc(sortedByDateDesc);
+    }
+
     // 최신 공지사항 5개를 가져오는 메서드 추가
     public List<NoticeDTO> getTop5Notices() {
         Pageable topFive = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "date"));
