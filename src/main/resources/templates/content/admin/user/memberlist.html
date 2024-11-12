@@ -108,7 +108,7 @@
                             <td th:text="${member.regDate}"></td> <!-- r -->
                             <!--                            <td th:text="${member.regDate != null ? #dates.format(member.regDate, 'yyyy-MM-dd') : ''}"></td>-->
                             <td th:text="${member.statusDisplayName}"
-                                th:class="${ member.status.name() == 'ACTIVE' ? 'active' :
+                                th:class="${ member.status.name() == 'ACTIVE' ? 'activeMember' :
                                             (member.status.name() == 'SUSPENDED' ? 'suspended' :
                                             (member.status.name() == 'DORMANT' ? 'dormant' :
                                             (member.status.name() == 'WITHDRAWN' ? 'withdrawn' : '')))}">

@@ -206,55 +206,55 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // 새 배송지 추가
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("addressForm").addEventListener("submit", function (event) {
-            event.preventDefault();
 
-            const memberId = document.getElementById('memberId').value;
+    document.getElementById("addressForm").addEventListener("submit", function (event) {
+        event.preventDefault();
 
-            if (!memberId) {
-                console.error("memberId가 없습니다. 회원 ID를 확인하세요.");
-                return;
-            }
+        const memberId = document.getElementById('memberId').value;
 
-            const deliveryData = {
-                name: document.getElementById("name").value,
-                hp: document.getElementById("phoneNumber").value,
-                postcode: document.getElementById("postalCode").value,
-                addr: document.getElementById("addressLine1").value,
-                addr2: document.getElementById("addressLine2").value,
-                deliveryMessage: document.getElementById("deliveryMessage").value,
-            };
+        if (!memberId) {
+            console.error("memberId가 없습니다. 회원 ID를 확인하세요.");
+            return;
+        }
 
-            console.log("Member ID:", memberId);
-            console.log("보내는 JSON 데이터:", JSON.stringify(deliveryData));
+        const deliveryData = {
+            name: document.getElementById("name").value,
+            hp: document.getElementById("phoneNumber").value,
+            postcode: document.getElementById("postalCode").value,
+            addr: document.getElementById("addressLine1").value,
+            addr2: document.getElementById("addressLine2").value,
+            deliveryMessage: document.getElementById("deliveryMessage").value,
+        };
+
+        console.log("Member ID:", memberId);
+        console.log("보내는 JSON 데이터:", JSON.stringify(deliveryData));
 
 
-            fetch(`/api/member/${memberId}/delivery`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(deliveryData)
+        fetch(`/api/member/${memberId}/delivery`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(deliveryData)
+        })
+            .then(response => {
+                // JSON 형식 응답이 아니면 에러 처리
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                return response.json();
             })
-                .then(response => {
-                    // JSON 형식 응답이 아니면 에러 처리
-                    if (!response.ok) {
-                        throw new Error(`Server error: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("배송지 추가 성공:", data);
-                    alert('배송지가 등록되었습니다.');
-                    loadDeliveries();
-                })
-                .catch(error => {
-                    console.error("배송지 추가 실패:", error);
-                    alert("배송지 추가 중 문제가 발생했습니다. 다시 시도해 주세요.");
-                });
-        });
+            .then(data => {
+                console.log("배송지 추가 성공:", data);
+                alert('배송지가 등록되었습니다.');
+                loadDeliveries();
+            })
+            .catch(error => {
+                console.error("배송지 추가 실패:", error);
+                alert("배송지 추가 중 문제가 발생했습니다. 다시 시도해 주세요.");
+            });
     });
+
     loadDeliveries();
 
     // 배송지 수정
