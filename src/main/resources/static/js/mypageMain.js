@@ -214,9 +214,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.success) {
                         // 성공적으로 상태가 변경되면 페이지 업데이트 (수취확인 상태 표시)
                         const orderItemStatus = document.querySelector(`[data-order-item-id="${currentOrderItemId}"]`)
-                            .closest('tr')
-                            .querySelector('[th\\:text="${orderItem.status.description}"]');
-                        orderItemStatus.textContent = "CONFIRMATION"; // 상태 텍스트 업데이트
+                            .querySelector('.order-status'); // .order-status 클래스를 가진 요소 찾기
+
+                        if (orderItemStatus) {
+                            orderItemStatus.textContent = "CONFIRMATION"; // 상태 텍스트 업데이트
+                        } else {
+                            console.error("Order item status element not found.");
+                        }
 
                         // 모달 닫기
                         receiptModal.style.display = "none";
