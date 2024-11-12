@@ -61,6 +61,9 @@ public class Product {
     private String sellerId;
 
     @Builder.Default
+    private boolean isDeleted=false;
+
+    @Builder.Default
     private Long sold=0L; //판매량
     @Builder.Default
     private Long hit=0L; //보는수

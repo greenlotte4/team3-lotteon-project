@@ -4,13 +4,23 @@ package com.lotteon.controller;
 
 import com.lotteon.dto.admin.BannerDTO;
 import com.lotteon.dto.FooterInfoDTO;
+import com.lotteon.dto.adminQnaDTO;
+import com.lotteon.dto.page.PageRequestDTO;
+import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.entity.Banner;
+import com.lotteon.entity.Notice;
 import com.lotteon.security.MyUserDetails;
 import com.lotteon.service.*;
+import com.lotteon.service.admin.NoticeService;
+import com.lotteon.service.admin.QnaService;
 import com.lotteon.service.order.OrderService;
 import com.lotteon.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,6 +46,9 @@ public class AdminController {
     private final OrderService orderService;
     private final UserService userService;
     private final VisitorCountService visitorCountService;
+    private final BoardService boardService;
+    private final NoticeService noticeService;
+    private final QnaService qnaService;
 
 
     @GetMapping("/main")
@@ -43,6 +56,19 @@ public class AdminController {
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime yesterdayTime = currentTime.minusHours(24);
+
+
+        Page<Notice> noticePage = noticeService.getNoticesTop5();
+        log.info("noticePage!!!!"+noticePage.getContent());
+        model.addAttribute("notices", noticePage.getContent());
+
+
+
+
+
+
+        Pageable pageable = PageRequest.of(0,5, Sort.by("date").descending());
+
 
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_SELLER"))) {
             String sellerUid = userDetails.getUser().getUid();
@@ -69,6 +95,7 @@ public class AdminController {
             Long salesCount = orderService.getSalesCountBySeller(sellerUid);
             Long totalSalesAmount = orderService.getTotalSalesAmountBySeller(sellerUid);
 
+
             System.out.println("총 판매건수: " + salesCount);
             System.out.println("총 판매금액: " + totalSalesAmount);
 
@@ -83,6 +110,14 @@ public class AdminController {
 
             String formattedYesterdayTotalSalesAmount = String.format("%,d", yesterdayTotalSalesAmount);
             String formattedTodayTotalSalesAmount = String.format("%,d", todayTotalSalesAmount);
+
+            //고객문의
+            PageRequestDTO pageRequestDTO = new PageRequestDTO();
+            List<adminQnaDTO> qnadto = qnaService.selectQnaListBySeller(pageRequestDTO,sellerUid);
+            model.addAttribute("qnadto", qnadto);
+
+
+
 
 
             model.addAttribute("yesterdayNewUserCount", "?");
@@ -122,12 +157,26 @@ public class AdminController {
 
             long totalUserCount = userService.getTotalUserCount();
 
+            PageRequestDTO pageRequestDTO= PageRequestDTO.builder()
+                    .size(5)
+                    .build();
+            QnaPageResponseDTO responseDTO = qnaService.selectQnaListAll(pageRequestDTO);
+            List<adminQnaDTO> adminQnaDTOS = responseDTO.getQnadtoList();
+            log.info("adminQnaDTOS"+adminQnaDTOS);
+            model.addAttribute("qnadto", adminQnaDTOS);
+
+
             long yesterdayNewUserCount = userService.getYesterdayNewUserCount();
             long todayNewUserCount = userService.getTodayNewUserCount();
             long visitorCount = visitorCountService.getVisitorCount(); // 방문자 수 가져오기
             model.addAttribute("visitorCount", visitorCount);
             model.addAttribute("yesterdayNewUserCount", yesterdayNewUserCount);
             model.addAttribute("todayNewUserCount", todayNewUserCount);
+
+//            PageRequestDTO pageRequestDTO = new PageRequestDTO();
+//            Pageable pageable = PageRequest.of(0,5, Sort.by("date").descending());
+
+//            QnaPageResponseDTO qnadto = qnaService.selectQnaListAll(pageRequestDTO);
 
 
             long yesterdayVisitorCount = visitorCountService.getYesterdayVisitorCount(); // 어제 방문자 수

@@ -390,8 +390,22 @@ public class OrderService {
 
 
 
+    public List<CategoryOrderCountDTO> getOrderCountGroupedByCategoryFirstId() {
+        List<CategoryOrderCountDTO> newCategoryCount = orderItemRepository.selectCount();
 
+        return newCategoryCount;
+    }
 
+    public List<CategoryOrderCountDTO> getCountCanceledGroupedByCategoryFirstId() {
+        List<CategoryOrderCountDTO>  count= orderItemRepository.selectCountByCancelGroupCategory();
+
+        return count;
+    }
+
+    public List<CategoryOrderCountDTO> getCountPaymentGroupedByCategoryFirstId() {
+        List<CategoryOrderCountDTO> count = orderItemRepository.selectCountByCompletedGroupCategory();
+        return count;
+    }
 
 
 
