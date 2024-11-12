@@ -1,11 +1,13 @@
 package com.lotteon.dto.product;
 
 
+import com.lotteon.dto.order.OrderItemDTO;
 import com.lotteon.entity.product.ReviewFile;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,5 +29,8 @@ public class ReviewRequestDTO {
     private List<ReviewFileDTO> reviewFileDTOS;
     private Long productId;
     private ProductDTO product; // Product 정보를 포함
+    private List<OrderItemDTO> orderItems = new ArrayList<>();
+
+
 
 }

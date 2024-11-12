@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("customerPhone").textContent = orderElement.getAttribute("data-customer-phone");
         document.getElementById("customerAddress").textContent = orderElement.getAttribute("data-customer-address");
         document.getElementById("deliveryRequests").textContent = orderElement.getAttribute("data-delivery-requests");
+        document.getElementById("orderItemId").textContent = orderElement.getAttribute("data-order-item-id");
 
         // 이미지 경로 업데이트
         const imagePath = orderElement.getAttribute("data-product-image");
@@ -195,9 +196,15 @@ document.addEventListener('DOMContentLoaded', function() {
         button.onclick = function() {
             const productId = this.dataset.productNo; // 상품 ID 가져오기
             const productName = this.dataset.productName; // 상품 이름 가져오기
+            const orderItemId = this.dataset.orderItemId;
+            console.log("여기야" +productName );
+            console.log("여기야" +orderItemId );
+            console.log("여기야" +productId );
+
 
             // 모달에 상품 이름과 ID 설정
             document.getElementById("modalProductName").textContent = productName;
+            document.getElementById("modalOrderItemId").value = orderItemId;
             document.getElementById("modalProductId").value = productId; // hidden 필드에 상품 ID 설정
 
             // 모달 표시
@@ -208,6 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("submitReviewBtn").onclick = function() {
         console.log("Submitted Rating:", document.getElementById('rating').value);
         const productId = document.getElementById("modalProductId").value;
+        const orderItemId = document.getElementById("modalOrderItemId").value;
         const rating = document.getElementById('rating').value;
         if (!rating) {
             alert("만족도를 선택해주세요.");
@@ -220,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append("productId", productId);
         formData.append("rating", rating);
         formData.append("content", content);
+        formData.append("orderItemId",orderItemId)
 
         // 모든 파일 입력 요소에서 파일을 가져오기
         const fileInputs = document.querySelectorAll('.file-input');

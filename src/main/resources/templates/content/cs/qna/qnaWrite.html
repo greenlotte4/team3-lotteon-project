@@ -30,15 +30,17 @@
                     </colgroup>
                     <tr class="type">
                         <td><label for="selectOption1">문의유형</label></td>
-                        <select class="first_choice" id="selectOption1">
-                            <option value="" disabled selected>1차 선택</option>
-                            <th:block th:each="board : ${boardCate}">
-                                <option th:value="${board.boardCateId}" th:text="${board.name}"></option>
-                            </th:block>
-                        </select>
-                        <select class="second_choice" name="categoryid" id="selectOption2">
-                            <option value="2차 선택" disabled selected>2차 선택</option>
-                        </select>
+                        <td>
+                            <select class="first_choice" id="selectOption1">
+                                <option value="" disabled selected>1차 선택</option>
+                                <th:block th:each="board : ${boardCate}">
+                                    <option th:value="${board.boardCateId}" th:text="${board.name}"></option>
+                                </th:block>
+                            </select>
+                            <select class="second_choice" name="categoryid" id="selectOption2">
+                                <option value="2차 선택" disabled selected>2차 선택</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr class="title">
                         <td><label for="subject">제목</label></td>

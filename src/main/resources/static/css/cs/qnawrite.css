@@ -21,7 +21,6 @@ td {
 select, input[type="text"] {
     width: 90%;
     height: 35px;
-    padding: 5px;
     border: 1px solid #ddd;
     border-radius: 4px;
     outline: none;
