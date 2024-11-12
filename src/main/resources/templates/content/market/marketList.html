@@ -9,7 +9,54 @@
     <title>[[${headerInfo.hd_title}]]:[[${headerInfo.hd_subtitle}]]</title>
     <link rel="stylesheet" th:href="@{/css/market/marketList.css}">
     <link rel="stylesheet" th:href="@{/css/market/marketAside.css}">
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            margin: 0 5px;
+            color: #ef2323;
+            text-decoration: none;
+            border: 1px solid #ef2323;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: #ef2323;
+            color: #fff;
+        }
+
+        .pagination a.disabled {
+            pointer-events: none;
+            color: #ccc;
+            border-color: #ccc;
+        }
+
+        .pagination .page-number {
+            padding: 8px 12px;
+            margin: 0 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .pagination .total-pages {
+            color: #666;
+        }
+
+        .pagination .prev, .pagination .next {
+            font-weight: bold;
+        }
+    </style>
     <script>
+
         document.querySelectorAll('.seller-rating').forEach(function(ratingElement) {
             const rating = parseFloat(ratingElement.getAttribute('data-rating'));
             console.log("Rating:", rating);  // rating 값 확인용 로그
@@ -51,34 +98,7 @@
         let currentPage = 1;
 
         window.onload = function (){
-            const paginationInfo = document.getElementById("paginationInfo");
-            const totalPages = parseInt(paginationInfo.getAttribute("data-total-pages"));
-            const sort = paginationInfo.getAttribute("data-sort"); // sort 조건 가져오기
 
-            window.addEventListener('scroll', function() {
-                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
-                    if (currentPage < totalPages) {
-                        loadMoreProducts(sort);
-                    }
-                }
-            });
-            function loadMoreProducts(sort) {
-                currentPage++;
-
-                // sort 파라미터를 URL에 추가하여 서버로 요청
-                fetch(`/market/list/{{categoryId}}?page=${currentPage}&sort=${sort}`)
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const newProducts = doc.querySelectorAll('.product-item');
-
-                        newProducts.forEach(product => {
-                            document.querySelector('.product-list').appendChild(product);
-                        });
-                    })
-                    .catch(error => console.error('Error loading more products:', error));
-            }
 
             document.addEventListener("DOMContentLoaded", function() {
                 document.querySelectorAll('.shipping-fee').forEach(function() {
@@ -95,6 +115,61 @@
                 });
 
             });
+
+
+
+            // const loadMoreButton = document.getElementById("loadMoreButton");
+            // const productContainer = document.querySelector('.product-list');
+            // const paginationInfo = document.getElementById("totalPages");
+            // const totalPages = parseInt(paginationInfo.getAttribute("data-total-pages"));
+            // const sort = paginationInfo.getAttribute("data-sort");
+            // const categoryId = document.getElementById("categoryId").value;
+            //
+            // loadMoreButton.addEventListener("click", function () {
+            //     if (currentPage < totalPages) {
+            //         currentPage++;
+            //         loadMoreProducts(categoryId, sort);
+            //     } else {
+            //         loadMoreButton.disabled = true;
+            //         loadMoreButton.textContent = "No more products";
+            //     }
+            // });
+            //
+            // function loadMoreProducts() {
+            //     currentPage++;
+            //     fetch(`/market/list/${categoryId}?page=${currentPage}&sort=${sort}`, {
+            //         headers: { 'Accept': 'application/json' }
+            //     })
+            //         .then(response => response.json())
+            //         .then(data => {
+            //             console.log("data!!!",data);
+            //             if (data.productSummaryDTOs && data.productSummaryDTOs.length > 0) {
+            //                 data.productSummaryDTOs.forEach(product => {
+            //                     const productItem = document.createElement('div');
+            //                     productItem.className = 'product-item';
+            //                     productItem.innerHTML = `
+            //         <a href="/market/view/${product.categoryId}/${product.productId}">
+            //             <div class="product-image">
+            //                 <img src="${product.savedPath ? '/uploads/' + product.savedPath + '/' + product.file230 : '/uploads/productImg/' + product.file230}" alt="${product.productName}">
+            //             </div>
+            //             <div class="product-details">
+            //                 <h4 class="product-name">${product.productName}</h4>
+            //                 <p class="product-description">${product.productDesc}</p>
+            //             </div>
+            //             <div class="price-seller-info">
+            //                 <span class="final-price">${product.finalPrice}원</span>
+            //             </div>
+            //         </a>
+            //     `;
+            //                     document.querySelector('.product-list').appendChild(productItem);
+            //                 });
+            //
+            //                 // Hide the "Load More" button if no more products
+            //                 if (!data.hasMorePages) loadMoreButton.style.display = 'none';
+            //             }
+            //         })
+            //         .catch(error => console.error('Error loading more products:', error));
+            // }
         }
     </script>
 
@@ -103,7 +178,9 @@
 <th:block layout:fragment="content">
     <th:block th:replace="~{aside/marketAside}"></th:block>
                 <section class="section list">
+
                     <input type="hidden" id="totalPages" th:data-total-pages="${responseDTO.getTotal()}" th:data-sort="${sort}">
+                    <input type="hidden" id="categoryId" th:value="${categoryDTOs.get(0).getId()}">
 
                     <div class="sectionWrapper">
                         <div class="sub_tit">
@@ -147,7 +224,8 @@
                             <div class="product-item" th:each="product:${responseDTO.getProductSummaryDTOs()}">
                                 <a th:href="@{/market/view/{category}/{id}(category=${product.getCategoryId()},id=${product.productId})}">
                                     <div class="product-image">
-                                        <img th:src="@{'/uploads/productImg/'+${product.getFile230()}}" alt="상품 이미지">
+                                        <img th:if="${product.getSavedPath()==null}" th:src="@{'/uploads/productImg'+${product.file230}}" alt="">
+                                        <img th:unless="${product.getSavedPath()==null}" th:src="@{'/uploads/'+${product.savedPath}+'/'+${product.file230}}" alt="">
                                     </div>
                                 <div class="product-details">
                                     <h4 class="product-name">[[${product.productName}]]</h4>
@@ -179,12 +257,26 @@
 
 
                     </div><!--sectionWrapper-->
+                    <div class="pagination">
+                        <a th:href="@{'/market/list/' + ${categoryDTOs.get(0).getId()}(page=${responseDTO.pg - 1})}"
+                           th:if="${responseDTO.pg > 1}">&laquo; Prev</a>
+
+                        <span th:text="${responseDTO.pg}"></span> / <span th:text="${responseDTO.total}"></span>
+
+                        <a th:href="@{'/market/list/' + ${categoryDTOs.get(0).getId()}(page=${responseDTO.pg + 1})}"
+                           th:if="${responseDTO.pg < responseDTO.total}">Next &raquo;</a>
+                    </div>
                 </section>
 
 
 
 
 
-    <script th:src="@{/js/marketAside.js}"></script>
 
+
+
+    <script th:src="@{/js/marketAside.js}"></script>
+    <script>
+
+    </script>
 </th:block>

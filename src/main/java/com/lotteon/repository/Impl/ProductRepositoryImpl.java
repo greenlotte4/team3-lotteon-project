@@ -17,7 +17,6 @@ import com.lotteon.entity.product.*;
 import com.lotteon.repository.custom.ProductRepositoryCustom;
 import com.lotteon.repository.user.SellerRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.QueryFactory;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.annotations.QueryProjection;
 import com.querydsl.core.types.OrderSpecifier;
@@ -33,7 +32,6 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.dsl.Expressions;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -122,8 +120,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                               qProduct.file190,
                               qSeller.id,
                               qSeller.user.uid,
-                              qSeller.company
-                      ))
+                              qSeller.company,
+                              qProduct.savedPath
+                              ))
               .from(qProduct)
               .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId))
               .leftJoin(qProduct.reviews, qReview)
@@ -215,8 +214,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                                 qProduct.file190,
                                 qSeller.id,
                                 qSeller.user.uid,
-                                qSeller.company
-                        ))
+                                qSeller.company,
+                                qProduct.savedPath))
                 .from(qProduct)
                 .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId))
                 .leftJoin(qProduct.reviews, qReview)
@@ -320,8 +319,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                                 qProduct.file190,
                                 qSeller.id,
                                 qSeller.user.uid,
-                                qSeller.company
-                        ))
+                                qSeller.company,
+                                qProduct.savedPath))
                 .from(qProduct)
                 .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId))
                 .leftJoin(qProduct.reviews, qReview)

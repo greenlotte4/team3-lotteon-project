@@ -200,26 +200,26 @@ applyButtons.forEach(button => {
 
 });
 //
-// // + - 버튼 클릭 시 숫자 조정 함수
-// function adjustQuantity(button, delta) {
-//     const inputField = delta < 0 ? button.nextElementSibling : button.previousElementSibling;
-//     let currentValue = parseInt(inputField.value) || 1;
-//     inputField.value = Math.max(1, currentValue + delta); // 최소값 1로 설정
-// }
-//
-// // - 버튼 이벤트 핸들러
-// document.querySelectorAll('.qnt-decrease').forEach(button => {
-//     button.addEventListener('click', function () {
-//         adjustQuantity(this, -1);
-//     });
-// });
-//
-// // + 버튼 이벤트 핸들러
-// document.querySelectorAll('.qnt-increase').forEach(button => {
-//     button.addEventListener('click', function () {
-//         adjustQuantity(this, 1);
-//     });
-// });
+// + - 버튼 클릭 시 숫자 조정 함수
+function adjustQuantity(button, delta) {
+    const inputField = delta < 0 ? button.nextElementSibling : button.previousElementSibling;
+    let currentValue = parseInt(inputField.value) || 1;
+    inputField.value = Math.max(1, currentValue + delta); // 최소값 1로 설정
+}
+
+// - 버튼 이벤트 핸들러
+document.querySelectorAll('.qnt-decrease').forEach(button => {
+    button.addEventListener('click', function () {
+        adjustQuantity(this, -1);
+    });
+});
+
+// + 버튼 이벤트 핸들러
+document.querySelectorAll('.qnt-increase').forEach(button => {
+    button.addEventListener('click', function () {
+        adjustQuantity(this, 1);
+    });
+});
 
 
 // 선택삭제 버튼 이벤트

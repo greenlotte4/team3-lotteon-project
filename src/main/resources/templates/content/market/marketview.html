@@ -34,8 +34,10 @@
                     <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid"
                                                                                             th:value="${#authentication.getName()}">
                     </th:block>
-                    <img th:src="@{'/uploads/productImg'+${products.file456}}" alt="상품 이미지">
+                    <img th:if="${products.getSavedPath()==null}" th:src="@{'/uploads/productImg'+${products.file456}}" alt="">
+                    <img th:unless="${products.getSavedPath()==null}" th:src="@{'/uploads/'+${products.savedPath}+'/'+${products.file456}}" alt="">
                     <input type="hidden" th:value="${products.file190}" id="file190">
+                    <input type="hidden" th:value="${products.getSavedPath()}" id="savedPath">
                 </div>
 
                 <!-- Product Details -->
@@ -194,7 +196,8 @@
                 <div class="description-image" id="product_info">
                     <span>상품정보</span>
                     <th:block th:each="file:${products.getFiledesc()}">
-                        <img th:src="@{'/uploads/productImg/'+${file}}" alt="상품 설명 이미지">
+                        <img th:if="${products.getSavedPath()==null}" th:src="@{'/uploads/productImg/'+${file}}" alt="">
+                        <img th:unless="${products.getSavedPath()==null}" th:src="@{'/uploads/'+${products.savedPath}+'/'+${file}}" alt="">
                     </th:block>
                 </div>
                 <div class="product_guide" id="public-info">
@@ -520,6 +523,6 @@
     <script th:src="@{/js/marketbuynow.js}"></script>
     <script th:src="@{/js/marketReviewModal.js}"></script>
     <script th:src="@{/js/marketQna.js}"></script>
-    <script th:src="@{/js/marketAside.js}"></script>
+<!--    <script th:src="@{/js/marketAside.js}"></script>-->
 
 </th:block>

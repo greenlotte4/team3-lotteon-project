@@ -210,6 +210,7 @@ public class Product {
                 .productDetails(null)
                 .optionGroups(null)
                 .optionCombinations(null)
+                .savedPath(this.savedPath)
 
                 // 추가: ProductDetails가 null이 아닐 때 DTO로 변환
                 .productDetails(product.getProductDetails() != null ? this.productDetails.toDTO() : null)

@@ -142,6 +142,7 @@ public class BestProductService {
                .originalPrice((Long)productData.get("originalPrice"))
                .discount((Long)productData.get("discount"))
                .finalPrice(finalPrice)
+               .savedPath((String)productData.get("savedPath"))
                .build();
 
     }

@@ -88,7 +88,7 @@ public class Member {
         this.point += point;
     }
     public void usedPoint(double point){this.point-= point;}
-
+    public void saveTotalOrder(long saveOrderPrice){this.totalOrder += saveOrderPrice;}
     public String getStatusDisplayName() {
         return status != null ? status.getDisplayName() : null;
     }

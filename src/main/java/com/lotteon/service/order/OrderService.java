@@ -117,6 +117,8 @@ public class OrderService {
                         .build();
 
                 pointRepository.save(savePoint);
+                currentMember.saveTotalOrder(order.getTotalPrice());
+                memberRepository.save(currentMember);
             }
         }
 
@@ -136,8 +138,6 @@ public class OrderService {
             log.info("sellerUid가 안들어와???" + product.getSeller());
             orderItemDTO.setSellerUid(product.getSellerId());
             orderItemDTO.setProduct(product);
-            orderItemDTO.setSavedPrice(product.getPrice());
-
 
             if (orderItemDTO.getSelectOption() != null) {
                 orderItemDTO.setOptionId(orderItemDTO.getOptionId());

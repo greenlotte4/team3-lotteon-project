@@ -25,6 +25,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = JSON.parse(event.data);
         updateBestProductList(data);  // Define this function to update the DOM
     };
+
+
+
+
+
+
+
+
 });
 
 
@@ -43,10 +51,14 @@ function updateBestProductList(products) {
 
     // Loop over products and append to the bestProductContainer
     products.forEach((product, index) => {
+        const imgSrc = product.savedPath
+            ? `/uploads/${product.savedPath}/${product.file230}`
+            : `/uploads/productImg/${product.file230}`;
+
         const productHTML = `
             <div class="products ${index === 0 ? 'first' : ''}">
                 <div class="productimg ${index === 0 ? 'first' : ''}">
-                    <img src="${product.savedPath}/${product.file230}" alt="${product.productName}">
+                    <img src="${imgSrc}" alt="">
                     <p>${index + 1}</p>
                 </div>
                 <div class="productInfo">

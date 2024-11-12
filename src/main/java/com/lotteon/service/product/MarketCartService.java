@@ -231,21 +231,85 @@ public class MarketCartService {
         }
 
         List<CartItem> cartItems = cart.getCartItems();
+
         log.info("cartItems count!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: " + cartItems.size());
         return cartItems;
     }
 
-    public CartSummary calculateSelectedCartSummary(List<CartItem> selectedItems) {
+    public List<CartItemDTO> convertToCartItemDTO(List<CartItem> cartItems) {
 
-        int totalQuantity = selectedItems.stream().mapToInt(CartItem::getQuantity).sum();
+        List<CartItemDTO> cartItemDTOS = new ArrayList<>();
+        for(CartItem cartItem : cartItems) {
+           long additionalPrice=0;
+            if(cartItem.getProductOptionCombination() != null) {
+                additionalPrice = cartItem.getProductOptionCombination().getAdditionalPrice();
+            }
+            long discount = cartItem.getDiscount();
+            long basePrice = cartItem.getProduct().getPrice() + additionalPrice; // 기본 가격 (원래 가격 + 추가 가격)
+            long discountAmount = Math.round(basePrice * discount / 100.0); // 할인 금액 계산 (반올림 적용)
+            long finalPrice = (basePrice - discountAmount) * cartItem.getQuantity(); // 최종 가격 계산
+
+// 배송비 조건 확인 및 적용
+            long shippingTerm = cartItem.getProduct().getShippingTerms();
+            long deliveryFee = cartItem.getProduct().getShippingFee();
+            if (finalPrice >= shippingTerm) {
+                deliveryFee = 0; // 무료 배송 조건 충족 시 배송비 0
+            }
+
+            // CartItemDTO 생성 및 필드 설정
+            CartItemDTO cartItemDTO = CartItemDTO.builder()
+                    .cartId(cartItem.getCart().getCartId())
+                    .cartItemId(cartItem.getCartItemId())
+                    .productId(String.valueOf(cartItem.getProduct().getProductId()))
+                    .productName(cartItem.getProductName())
+                    .discount(cartItem.getDiscount())
+                    .originalPrice(cartItem.getPrice())
+                    .additionalPrice(additionalPrice)
+                    .finalPrice(finalPrice)
+                    .calcOriginalPrice(basePrice)
+                    .quantity(cartItem.getQuantity())
+                    .file190(cartItem.getProduct().getFile190())
+                    .optionGroupId(cartItem.getOptionGroupId())
+                    .optionName(cartItem.getOptionName())
+                    .point(String.valueOf(cartItem.getPoints()))
+                    .shippingFee(cartItem.getDeliveryFee())
+                    .deliveryFee((int) deliveryFee)
+                    .ShippingTerms(cartItem.getProduct().getShippingTerms())
+                    .expectedPoint(cartItem.getPoints())
+                    .combinationDTO(cartItem.getProductOptionCombination() != null
+                            ? cartItem.getProductOptionCombination().toDTO()
+                            : null) // 변환된 옵션 리스트 추가
+                    .stock(Math.toIntExact(cartItem.getProduct().getStock()))
+                    .price(cartItem.getPrice())
+                    .productDTO(cartItem.getProduct().toDTO(cartItem.getProduct()))
+                    .total(cartItem.getTotalPrice())
+                    .imageUrl(cartItem.getImageUrl())
+                    .points(cartItem.getPoints())
+                    .calcShippingCost(deliveryFee)
+                    .build();
+
+            // 리스트에 추가
+            cartItemDTOS.add(cartItemDTO);
+
+        }
+
+
+
+        return cartItemDTOS;
+    }
+
+
+    public CartSummary calculateSelectedCartSummary(List<CartItemDTO> selectedItems) {
+
+        int totalQuantity = selectedItems.stream().mapToInt(CartItemDTO::getQuantity).sum();
         long totalPrice = selectedItems.stream()
-                .mapToLong(item -> (long) item.getPrice() * item.getQuantity()).sum();
+                .mapToLong(item -> (long) item.getCalcOriginalPrice()*item.getQuantity()).sum();
         long totalDiscount = selectedItems.stream()
-                .mapToLong(CartItem::getDiscount).sum();
+                .mapToLong(item -> (long)Math.round( item.getCalcOriginalPrice() *  item.getDiscount() / 100.0)*item.getQuantity()).sum();
         long totalDeliveryFee = selectedItems.stream()
-                .mapToLong(CartItem::getDeliveryFee).sum();
+                .mapToLong(CartItemDTO::getDeliveryFee).sum();
         long totalOrderPrice = totalPrice - totalDiscount + totalDeliveryFee; // 배송비 더하기
-        long totalPoints = selectedItems.stream().mapToLong(CartItem::getPoints).sum();
+        long totalPoints = selectedItems.stream().mapToLong(CartItemDTO::getPoints).sum();
 
         log.info("totalQuantity :"+totalQuantity);
         log.info("totalPrice :"+totalPrice);

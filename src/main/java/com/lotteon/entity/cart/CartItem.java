@@ -74,24 +74,27 @@ public class CartItem {
 
 
 
-    public void totalPrice(){
-        long shippingTerms = product.getShippingTerms();
-        this.calcShippingCost = product.getShippingFee();
+    public void  totalPrice(){
+        // 기본 가격 계산
+        long basePrice = this.price;
 
-
-        if(optionGroupId != 0){
-            long additional = productOptionCombination.getAdditionalPrice();
-            this.price = this.price + additional;
-            long discountAmount = ((this.price*discount/100)/10)*10;  //10원단위 절삭
-            this.totalPrice = (this.price + discountAmount)*quantity;
-        }else{
-            long discountAmount = ((price * discount/ 100)/10)*10 ;
-            this.totalPrice = (price - discountAmount) * quantity;
+        // 옵션 그룹이 있는 경우 추가 가격 포함
+        if (optionGroupId != 0 && productOptionCombination != null) {
+            basePrice += productOptionCombination.getAdditionalPrice();
+            this.price =basePrice;
         }
 
-        if(shippingTerms < totalPrice){
-            this.totalPrice = this.price + product.getShippingFee();
-            this.calcShippingCost=0;
+        // 할인 금액 계산 (10원 단위 절삭)
+        long discountAmount = ((basePrice * discount / 100) / 10) * 10;
+        this.totalPrice = (basePrice - discountAmount) * quantity;
+
+        // 배송비 조건 확인 및 적용
+        long shippingTerms = product.getShippingTerms();
+        if (shippingTerms < totalPrice) {
+            this.calcShippingCost = 0; // 무료 배송
+        } else {
+            this.calcShippingCost = product.getShippingFee();
+            this.totalPrice += calcShippingCost; // 배송비 추가
         }
 
 

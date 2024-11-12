@@ -10,6 +10,7 @@ import com.lotteon.dto.order.OrderCompletedResponseDTO;
 import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderResponseDTO;
 import com.lotteon.dto.product.*;
+import com.lotteon.dto.product.cart.CartItemDTO;
 import com.lotteon.dto.product.cart.CartSummary;
 import com.lotteon.dto.product.request.BuyNowRequestDTO;
 import com.lotteon.dto.order.OrderRequestDTO;
@@ -120,6 +121,8 @@ public class MarketController {
         pageRequestDTO.setPage(page);
         log.debug("Debugging category: " + category);
 
+        log.info("page"+page);
+
         List<ProductCategoryDTO> categoryDTOs = productCategoryService.getAllParentCategoryDTOs(category);
         log.info("@222222222222222222222" + categoryDTOs);
 
@@ -136,6 +139,10 @@ public class MarketController {
 
         return "content/market/marketList"; // Points to the "content/market/marketList" template
     }
+
+
+
+
 
 
 
@@ -201,12 +208,16 @@ public class MarketController {
 
 
         List<CartItem> cartItems = marketCartService.selectCartAll();
+        log.info("cartItems1111"+cartItems);
 
-        CartSummary cartSummary = marketCartService.calculateSelectedCartSummary(cartItems);
+        List<CartItemDTO> cartItemDTOS = marketCartService.convertToCartItemDTO(cartItems);
+        log.info("cartItems2222"+cartItemDTOS);
 
-        model.addAttribute("cartItems", cartItems);
+        CartSummary cartSummary = marketCartService.calculateSelectedCartSummary(cartItemDTOS);
+
+        model.addAttribute("cartItemDTOS", cartItemDTOS);
         model.addAttribute("cartSummary", cartSummary);
-        log.info("카트 총집합! cart items: {}", cartItems);
+        log.info("카트 총집합! cart items: {}", cartItemDTOS);
 
         return "content/market/marketcart"; // Points to the "content/market/marketcart" template
     }
