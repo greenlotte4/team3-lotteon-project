@@ -392,6 +392,7 @@ public class OrderService {
         List<CategoryOrderCountDTO> newCategoryCount = orderItemRepository.selectCount();
 
         return newCategoryCount;
+    }
 
     public Long getOrderCount(String uid){
         List<Order> orderCount = orderRepository.findByUid(uid); // 여러 개의 주문을 가져옴
@@ -403,6 +404,11 @@ public class OrderService {
 
     public List<CategoryOrderCountDTO> getCountPaymentGroupedByCategoryFirstId() {
         List<CategoryOrderCountDTO> count = orderItemRepository.selectCountByCompletedGroupCategory();
+        return count;
+    }
+
+    public List<CategoryOrderCountDTO> getCountCancelGroupedByCategoryFirstId() {
+        List<CategoryOrderCountDTO> count = orderItemRepository.selectCountByCancelGroupCategory();
         return count;
     }
 

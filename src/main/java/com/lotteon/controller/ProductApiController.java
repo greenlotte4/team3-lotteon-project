@@ -203,7 +203,7 @@ public class ProductApiController {
                     .collect(Collectors.toList());
 
             List<CategoryOrderCountDTO> newOrderData = orderService.getOrderCountGroupedByCategoryFirstId();
-            List<CategoryOrderCountDTO> newCancelData = orderService.getCountCanceledGroupedByCategoryFirstId();
+            List<CategoryOrderCountDTO> newCancelData = orderService.getCountCancelGroupedByCategoryFirstId();
             List<CategoryOrderCountDTO> newPaymentData = orderService.getCountPaymentGroupedByCategoryFirstId();
 
             List<Long> orderCounts = newOrderData.stream()
