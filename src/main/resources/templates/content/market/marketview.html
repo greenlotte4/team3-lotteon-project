@@ -140,7 +140,9 @@
                      </div>-->
 
                     <div class="coupon-area">
-                        <button id="openDiscountModalBtn">할인 쿠폰을 받아보세요</button>
+                        <button id="openDiscountModalBtn">할인 쿠폰을 받아보세요
+                            <img src="/images/common/icon-download-red.svg">
+                        </button>
                     </div>
 
                     <div id="discountModal" class="discount-modal-overlay">
@@ -315,7 +317,10 @@
                     <div class="reviewList" id="reviewContent">
                         <!-- 리뷰가 없는 경우 "리뷰가 없습니다." 메시지를 표시 -->
                         <th:block th:if="${pageResponseReviewDTO.getDtoList().size() == 0}">
-                            <p class="no-reviews-message">리뷰가 없습니다.</p>
+                            <span class="no-reviews-message" style="display: flex; color: #333; margin-top:3px; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; margin-top: 30px;">
+                            아직 작성된 리뷰가 없어요.<br>
+                                <span style="font-weight: 600; font-size: 15px;">구매 후 리뷰를 작성해보세요!</span>
+                            </span>
                         </th:block>
 
                         <!-- 리뷰가 있는 경우에만 리스트와 더보기 버튼을 표시 -->
@@ -446,7 +451,7 @@
                     <div class="qna_Lists"
                          style=" display: flex; flex-direction: column; align-items: center;  padding-top: 30px; justify-content: center; font-size: 15px;">
                         <img src="/images/common/icon_no_result.svg"><br>
-                        <span>문의내용이 없습니다.</span>
+                        <span>아직 Q&A가 없어요!</span>
                     </div>
                 </th:block>
             </div>

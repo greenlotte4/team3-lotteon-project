@@ -71,8 +71,17 @@
                             <th>상태</th>
                             <th>유효기간</th>
                         </tr>
+<!--                        <tr th:if="${#lists.isEmpty(IssuedList)}">-->
+<!--                            <td colspan="6" style="text-align: center;">발급된 쿠폰이 없습니다.</td>-->
+<!--                        </tr>-->
+                        <!-- 쿠폰이 없을 때 표시할 내용 -->
                         <tr th:if="${#lists.isEmpty(IssuedList)}">
-                            <td colspan="6" style="text-align: center;">발급된 쿠폰이 없습니다.</td>
+                            <td colspan="5" style="text-align: center;">
+                                <div class="coupon-empty" style="display: flex; flex-direction: column; align-items: center; padding: 80px; justify-content: center; font-size: 15px;">
+                                    <img src="/images/common/icon_no_result.svg" alt="No coupons"><br>
+                                    <span>발급된 쿠폰이 없습니다.</span>
+                                </div>
+                            </td>
                         </tr>
                         <!-- 발급된 쿠폰이 있을 경우 -->
                         <tr th:each="issued : ${IssuedList}" style="border-bottom: 1px solid #dddddd">
