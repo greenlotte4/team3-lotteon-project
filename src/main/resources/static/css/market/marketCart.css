@@ -7,17 +7,15 @@
 }
 #mainArea .mainWrapper .cart{
     /* Subtract the aside's width and some padding/margin */
-    
     width: calc(100% - 310px); /* Subtract the aside's width and some padding/margin */
     box-sizing: border-box; /* Ensure proper width calculation */
-    margin-top: 10px;
-
+    margin-top: 30px;
 }
 
 #mainArea .section .sectionWrapper{
- 
     width: 100%;
     border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 #mainArea .section.cart .sectionWrapper .sub_tit{
@@ -209,7 +207,6 @@
 .btn-group .selected-delete:hover,.btn-group div .selected-order:hover,.btn-group div .selected-all:hover{
     background-color: #ef2a23;
     border: 1px solid #ef2a23;
-
     color: #ffff;
 }
 
@@ -218,8 +215,9 @@
     width: 290px;
     height: auto;
     /* position: sti; */
-    border: 1px solid #eee;
-    margin-top: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    margin-top: 30px;
     margin-left: 10px;
     box-sizing: border-box;
     position: relative;
@@ -240,7 +238,7 @@
     padding-bottom: 10px;
     border-bottom: 2px solid #494949;
     margin-bottom: 20px;
-    
+
 }
 
 
