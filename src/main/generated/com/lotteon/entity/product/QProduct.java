@@ -42,6 +42,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final BooleanPath isCoupon = createBoolean("isCoupon");
 
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
+
     public final BooleanPath isSaled = createBoolean("isSaled");
 
     public final SetPath<ProductOptionCombination, QProductOptionCombination> optionCombinations = this.<ProductOptionCombination, QProductOptionCombination>createSet("optionCombinations", ProductOptionCombination.class, QProductOptionCombination.class, PathInits.DIRECT2);

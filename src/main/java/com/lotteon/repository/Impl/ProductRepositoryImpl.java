@@ -127,7 +127,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
               .from(qProduct)
               .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId))
               .leftJoin(qProduct.reviews, qReview)
-              .where(qProduct.categoryId.eq(pageRequest.getCategoryId()))
+              .where(qProduct.categoryId.eq(pageRequest.getCategoryId())
+                .and(qProduct.isDeleted.isFalse())) // Add this condition
               .groupBy(qProduct.productId, qSeller.user.uid)
               .orderBy(orderSpecifier) // 정렬 조건 추가
               .offset(pageable.getOffset())
@@ -138,7 +139,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         for (ProductSummaryDTO product : products) {
             List<Double> ratings = queryFactory.select(qReview.rating)
                     .from(qReview)
-                    .where(qReview.product.productId.eq(product.getProductId()))
+                    .where(qReview.product.productId.eq(product.getProductId())
+                            .and(qProduct.isDeleted.isFalse())) // Add this condition
                     .fetch();
 
             // 필요한 경우 Double을 String으로 변환하여 설정
@@ -151,7 +153,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         log.info("did=dosidjflskdjfls : "+products);
         long total = queryFactory.select(qProduct.count())
                 .from(qProduct)
-                .where(qProduct.categoryId.eq(pageRequest.getCategoryId()))
+                .where(qProduct.categoryId.eq(pageRequest.getCategoryId())
+                        .and(qProduct.isDeleted.isFalse())) // Add this condition
                 .fetchOne().longValue();
 
         log.info("totalllllllllllll:"+total);
@@ -217,7 +220,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .from(qProduct)
                 .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId))
                 .leftJoin(qProduct.reviews, qReview)
-                .where(keywordCondition)  // Apply the dynamic keyword condition
+                .where(keywordCondition
+                        .and(qProduct.isDeleted.isFalse())) // Add this condition// Apply the dynamic keyword condition
                 .groupBy(qProduct.productId, qSeller.user.uid)
                 .orderBy(orderSpecifier) // 정렬 조건 적용
                 .offset(pageable.getOffset())
@@ -228,7 +232,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         for (ProductSummaryDTO product : products) {
             List<Double> ratings = queryFactory.select(qReview.rating)
                     .from(qReview)
-                    .where(qReview.product.productId.eq(product.getProductId()))
+                    .where(qReview.product.productId.eq(product.getProductId())
+                            .and(qProduct.isDeleted.isFalse())) // Add this condition
                     .fetch();
 
             // 필요한 경우 Double을 String으로 변환하여 설정
@@ -320,7 +325,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .from(qProduct)
                 .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId))
                 .leftJoin(qProduct.reviews, qReview)
-                .where(conditions)
+                .where(conditions
+                        .and(qProduct.isDeleted.isFalse())) // Add this condition
                 .groupBy(qProduct.productId, qSeller.user.uid)
                 .orderBy(orderSpecifier)
                 .offset(pageable.getOffset())
@@ -331,7 +337,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         for (ProductSummaryDTO product : products) {
             List<Double> ratings = queryFactory.select(qReview.rating)
                     .from(qReview)
-                    .where(qReview.product.productId.eq(product.getProductId()))
+                    .where(qReview.product.productId.eq(product.getProductId())
+                            .and(qProduct.isDeleted.isFalse())) // Add this condition
                     .fetch();
 
             // Double을 String으로 변환하여 설정
@@ -343,7 +350,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         // 총 데이터 개수 조회
         long total = queryFactory.select(qProduct.count())
                 .from(qProduct)
-                .where(keywordCondition)
+                .where(keywordCondition
+                        .and(qProduct.isDeleted.isFalse())) // Add this condition
                 .fetchOne();
 
         return new PageImpl<>(products, pageable, total);
@@ -356,7 +364,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         Product product = queryFactory.selectFrom(qProduct)
                 .leftJoin(qProduct.productDetails, qProductDetails).fetchJoin()
                 .leftJoin(qSeller).on(qSeller.user.uid.eq(qProduct.sellerId)).fetchJoin()
-                .where(qProduct.productId.eq(productId))
+                .where(qProduct.productId.eq(productId)
+                        .and(qProduct.isDeleted.isFalse())) // Add this condition
                 .fetchOne();
 
         if (product == null) {

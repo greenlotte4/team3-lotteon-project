@@ -101,10 +101,13 @@ public class ProductService {
         int result = 0;
         for(Long productId : productIds){
 
-            Optional<Product> product = productRepository.findByProductId(productId);
-            if(product.isPresent()){
-                log.info("product!!!!!"+product);
-                productRepository.deleteById(productId);
+            Optional<Product> opt = productRepository.findByProductId(productId);
+            if(opt.isPresent()){
+                Product product = opt.get();
+                product.setDeleted(true); // Mark the product as deleted
+                product.getOptionGroups().forEach(group -> group.setDeleted(true)); // Mark all option groups as deleted
+                product.getOptionCombinations().forEach(combination -> combination.setDeleted(true)); // Mark combinations as deleted
+                productRepository.save(product); // Save changes
                 result++;
             }
 
@@ -230,7 +233,9 @@ public class ProductService {
                     return null;
             }
         }
-       List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+       List<ProductDTO> productDTOs =  products.stream()
+               .filter(product -> !product.isDeleted())
+               .map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
 
         return ProductListPageResponseDTO.builder()
                 .total(productDTOs.size())
@@ -250,7 +255,9 @@ public class ProductService {
             products= productRepository.findByProductNameContaining(query,pageable);
         }
 
-        List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+        List<ProductDTO> productDTOs =  products.stream()
+                .filter(product -> !product.isDeleted())
+                .map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
 
         return  ProductListPageResponseDTO.builder()
                 .pageRequestDTO(pageRequestDTO)
@@ -303,7 +310,9 @@ public class ProductService {
 
 
 
-        List<ProductDTO> productDTOs =  products.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+        List<ProductDTO> productDTOs =  products.stream()
+                .filter(product -> !product.isDeleted())
+                .map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
 
         return ProductListPageResponseDTO.builder()
                 .total(products.getTotalElements())
@@ -338,9 +347,14 @@ public class ProductService {
     public void updateProduct() {}
     public int deleteProduct(Long ProductID) {
         int result=0;
-        if(productRepository.existsById(ProductID)) {
-            productRepository.deleteById(ProductID);
-            result=1;
+        Optional<Product> opt = productRepository.findByProductId(ProductID);
+        if(opt.isPresent()){
+            Product product = opt.get();
+            product.setDeleted(true); // Mark the product as deleted
+            product.getOptionGroups().forEach(group -> group.setDeleted(true)); // Mark all option groups as deleted
+            product.getOptionCombinations().forEach(combination -> combination.setDeleted(true)); // Mark combinations as deleted
+            productRepository.save(product); // Save changes
+            result++;
         }
         return result;
 
