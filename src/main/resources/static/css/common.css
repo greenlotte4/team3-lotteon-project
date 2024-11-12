@@ -730,6 +730,7 @@ input[type=search] {
     width: 200px;
     box-sizing: border-box;
     border: 1px solid #eee;
+    border-radius: 4px;
     margin-top: 10px ;
     display: flex;
     flex-direction: column;
@@ -824,7 +825,7 @@ input[type=search] {
 #mainArea .section .sectionWrapper .sub_tit {
     box-sizing: border-box;
     position: relative;
-    width: calc(100% - 40px);
+    /*width: calc(100% - 40px);*/
     height: 30px;
     border-bottom: 2px solid #494949;
 }
