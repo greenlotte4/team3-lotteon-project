@@ -25,6 +25,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = JSON.parse(event.data);
         updateBestProductList(data);  // Define this function to update the DOM
     };
+
+
+
+
+
+
+
+
 });
 
 

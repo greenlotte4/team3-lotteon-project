@@ -233,4 +233,33 @@ public class ProductApiController {
 
     }
 
+//    @ResponseBody
+//    @GetMapping("/api/list/{category}")
+//    public ResponseEntity<ProductListPageResponseDTO> marketList(PageRequestDTO pageRequestDTO, @PathVariable long category
+//            , @RequestParam(required = false, defaultValue = "popularity") String sort
+//            , @RequestParam(required = false, defaultValue = "1") int page
+//            , Model model) {
+//        pageRequestDTO.setCategoryId(category);
+//        pageRequestDTO.setPage(page);
+//        log.debug("Debugging category: " + category);
+//
+//        log.info("page"+page);
+//
+//        List<ProductCategoryDTO> categoryDTOs = productCategoryService.getAllParentCategoryDTOs(category);
+//        log.info("@222222222222222222222" + categoryDTOs);
+//
+//        log.info("11111111111111" + pageRequestDTO.getCategoryId());
+//        log.info("category:" + category);
+////        log.info("dsdsdsdsd2222"+pageRequestDTO);
+//        ProductListPageResponseDTO responseDTO = productService.getSortProductList(pageRequestDTO, sort);
+//        log.info("controlllermarket::::" + responseDTO.getProductSummaryDTOs());
+//        model.addAttribute("categoryDTOs", categoryDTOs);
+//        model.addAttribute("responseDTO", responseDTO);
+//        model.addAttribute("sort", sort);
+//
+//
+//
+//        return ResponseEntity<>
+//    }
+
 }

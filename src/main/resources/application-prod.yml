@@ -34,7 +34,7 @@ spring:
         url: jdbc:mysql://43.202.32.28:3306/lotteProject
         username: lotte
         hikari:
-            maximum-pool-size: 20
+            maximum-pool-size: 30
             connection-timeout: 30000
             idle-timeout: 600000
             max-lifetime: 1800000

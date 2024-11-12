@@ -121,6 +121,8 @@ public class MarketController {
         pageRequestDTO.setPage(page);
         log.debug("Debugging category: " + category);
 
+        log.info("page"+page);
+
         List<ProductCategoryDTO> categoryDTOs = productCategoryService.getAllParentCategoryDTOs(category);
         log.info("@222222222222222222222" + categoryDTOs);
 
@@ -137,6 +139,10 @@ public class MarketController {
 
         return "content/market/marketList"; // Points to the "content/market/marketList" template
     }
+
+
+
+
 
 
 
