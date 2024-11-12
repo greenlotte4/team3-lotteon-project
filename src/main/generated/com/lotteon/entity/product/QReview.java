@@ -24,6 +24,8 @@ public class QReview extends EntityPathBase<Review> {
 
     public final StringPath content = createString("content");
 
+    public final com.lotteon.entity.order.QOrderItem orderItem;
+
     public final ListPath<ReviewFile, QReviewFile> pReviewFiles = this.<ReviewFile, QReviewFile>createList("pReviewFiles", ReviewFile.class, QReviewFile.class, PathInits.DIRECT2);
 
     public final QProduct product;
@@ -56,6 +58,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public QReview(Class<? extends Review> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.orderItem = inits.isInitialized("orderItem") ? new com.lotteon.entity.order.QOrderItem(forProperty("orderItem"), inits.get("orderItem")) : null;
         this.product = inits.isInitialized("product") ? new QProduct(forProperty("product"), inits.get("product")) : null;
         this.writer = inits.isInitialized("writer") ? new com.lotteon.entity.User.QUser(forProperty("writer"), inits.get("writer")) : null;
     }

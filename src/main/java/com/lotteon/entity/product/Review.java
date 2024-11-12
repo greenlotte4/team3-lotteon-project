@@ -6,6 +6,7 @@ import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewFileDTO;
 import com.lotteon.entity.User.User;
+import com.lotteon.entity.order.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -45,6 +46,11 @@ public class Review {
     @JoinColumn(name = "product_id")
     @JsonBackReference // 순환 참조 방지를 위해 사용
     private Product product;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderItemId")
+    @JsonBackReference
+    private OrderItem orderItem;
 
     public ReviewDTO ToDTO(Review review) {
         ProductDTO productDTO = null;

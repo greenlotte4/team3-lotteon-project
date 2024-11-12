@@ -142,8 +142,15 @@ public class MypageController {
     @PostMapping("/myInfo/review")
     public ResponseEntity<?> submitReview(@ModelAttribute ReviewRequestDTO reviewDTO) {
 
+        // 디버깅 추가
+        if (reviewDTO.getOrderItems() == null) {
+            System.out.println("OrderItems is null!");
+        } else {
+            System.out.println("OrderItems size: " + reviewDTO.getOrderItems().size());
+        }
+
+
         try {
-            // ReviewService의 saveReview 메서드에 reviewDTO를 직접 전달
             boolean isSaved = reviewService.saveReview(reviewDTO);
 
             if (isSaved) {
@@ -153,7 +160,7 @@ public class MypageController {
                         .body(Collections.singletonMap("success", false));
             }
         } catch (Exception e) {
-            e.printStackTrace(); // 오류 메시지 출력
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("success", false));
         }

@@ -1,9 +1,8 @@
 package com.lotteon.entity.order;
 
 import com.lotteon.dto.order.DeliveryStatus;
-import com.lotteon.dto.product.ProductDTO;
-import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.product.Product;
+import com.lotteon.entity.product.Review;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -57,4 +56,6 @@ public class OrderItem {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status = DeliveryStatus.PREPARING;  // 배송상태
+
+
 }
