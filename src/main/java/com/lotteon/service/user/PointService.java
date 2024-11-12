@@ -8,6 +8,8 @@ import com.lotteon.repository.user.PointRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,13 +59,16 @@ public class PointService {
 
             memberRepository.save(member);
     }
-    public List<Point> myPoints(String uid) {
+    public Page<Point> myPoints(String uid, Pageable pageable) {
         log.info("내 포인트 조회 요청");
 
         Optional<Member> memberOpt = memberRepository.findByUid(uid);
 
         Member member = memberOpt.get();
-        List<Point> points = pointRepository.findByMemberId(member.getId());
+        log.info("포인트 조회 쿼리 실행 중...");
+
+        Page<Point> points = pointRepository.findByMemberId(member.getId(), pageable);
+        log.info("포인트 결과: " + points.getContent());
 
         log.info("멤버 아이디" + member.getUid());
         // 포인트 리스트 각 항목 출력
