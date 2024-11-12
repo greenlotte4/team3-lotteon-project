@@ -41,6 +41,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> , OrderRepos
 
     Page<Order> findByUid(String uid, Pageable pageable);
 
+    List<Order> findByUid(String uid);
+
 
     public Order findByOrderId(Long orderId);
 

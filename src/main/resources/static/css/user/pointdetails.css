@@ -234,3 +234,42 @@ td {
     overflow-x: auto; /* 수평 스크롤 추가 */
     white-space: nowrap; /* 텍스트가 한 줄로 계속 가도록 설정 */
 }
+
+
+
+
+
+/* 페이지네이션 컨테이너 스타일 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 수직 중앙 정렬 */
+    padding: 50px 10px;
+    list-style: none; /* 불릿 스타일 제거 */
+}
+
+/* 페이지 버튼 스타일 */
+.pagination .page-btn {
+    margin: 0 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+/* 페이지 번호 스타일 */
+.pagination .num {
+    text-decoration: none;
+    color: #333;
+}
+
+/* 활성화된 페이지 번호 스타일 */
+.pagination .num.active {
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* 각 li 요소 간의 간격 설정 */
+.pagination li {
+    margin: 0 4px; /* 숫자 및 버튼 간의 간격 조절 */
+}
+
+
