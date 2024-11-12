@@ -51,6 +51,7 @@ public class OrderItem {
     private String customerName; //구매자이름
 
     private String company;
+    private long deliveryId;
 
 
     @Builder.Default

@@ -6,9 +6,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderItemDTO;
+import com.lotteon.dto.order.ProductDeliveryDTO;
 import com.lotteon.dto.page.AdminOrderPageResponseDTO;
 import com.lotteon.dto.product.*;
 import com.lotteon.entity.order.Order;
+import com.lotteon.entity.order.ProductDelivery;
 import com.lotteon.entity.product.Product;
 import com.lotteon.service.admin.AdminOrderService;
 import com.lotteon.service.order.OrderService;
@@ -197,7 +199,7 @@ public class SellerController {
         return "content/admin/order/admin_Delivery"; // Points to the "content/sellerDynamic" template for delivery orders
     }
 
-    // admin order 조회
+    // admin order 조회 화면에 띄워놓는 용도
     @GetMapping("/order/status")
     public String orderStatus(Model model, com.lotteon.dto.page.PageRequestDTO pageRequestDTO) {
 
@@ -211,8 +213,7 @@ public class SellerController {
         return "content/admin/order/admin_Order"; // Points to the "content/sellerDynamic" template for order status
     }
 
-
-
+    // orderItem으로 동적처리 용도
     @ResponseBody
     @GetMapping("/order/status/orderItem")
     public ResponseEntity<?> orderStatusItem(@RequestParam(required = false) Long orderId){
@@ -220,6 +221,15 @@ public class SellerController {
         OrderItemDTO orderItemDTO = adminOrderService.selectOrderItemById(orderId);
         return ResponseEntity.ok(orderItemDTO);
     }
+
+    @ResponseBody
+    @PostMapping("/order/status/delivery/modal")
+    public ResponseEntity<?> orderdeliverymodal(ProductDeliveryDTO productDeliveryDTO){
+        long id =  productDeliveryDTO.getOrderItemId();
+        ProductDelivery productDelivery = adminOrderService.insertorderDelivery(id , productDeliveryDTO);
+        return ResponseEntity.ok(productDelivery);
+    }
+
 
 
     @GetMapping("/login")
