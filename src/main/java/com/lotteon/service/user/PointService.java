@@ -2,6 +2,7 @@ package com.lotteon.service.user;
 
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Point;
+import com.lotteon.entity.order.Order;
 import com.lotteon.repository.order.OrderRepository;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.repository.user.PointRepository;
@@ -65,10 +66,8 @@ public class PointService {
         Optional<Member> memberOpt = memberRepository.findByUid(uid);
 
         Member member = memberOpt.get();
-        log.info("포인트 조회 쿼리 실행 중...");
 
         Page<Point> points = pointRepository.findByMemberId(member.getId(), pageable);
-        log.info("포인트 결과: " + points.getContent());
 
         log.info("멤버 아이디" + member.getUid());
         // 포인트 리스트 각 항목 출력
@@ -92,5 +91,7 @@ public class PointService {
 
         return totalPoints;  // 최종 포인트 반환
     }
+
+
 
 }

@@ -32,8 +32,10 @@ public class PointPageResponseDTO {
         this.total = totalElements;
         this.pointList = pointList;
 
-        // 페이지 시작 번호 및 끝 페이지 번호 계산
-        this.startNo = (int) (totalElements - ((pg - 1) * size)); // 페이지 번호 계산
+        // 시작 번호 계산: (현재 페이지 - 1) * 페이지 크기 + 1
+        this.startNo = (this.pg - 1) * this.size + 1;
+
+        // 페이지 범위 계산 (최소 1, 최대 총 페이지 수)
         this.end = (int) Math.ceil((double) totalElements / size); // 끝 페이지 계산
         this.start = Math.max(1, this.pg - 5); // 시작 페이지 번호 (현재 페이지 - 5, 최소 1)
         this.end = Math.min(this.start + 9, this.end); // 끝 페이지 번호 (시작 + 9, 최대 끝 페이지)
