@@ -75,7 +75,7 @@
                             <td colspan="6" style="text-align: center;">발급된 쿠폰이 없습니다.</td>
                         </tr>
                         <!-- 발급된 쿠폰이 있을 경우 -->
-                        <tr th:each="issued : ${IssuedList}">
+                        <tr th:each="issued : ${IssuedList}" style="border-bottom: 1px solid #dddddd">
                             <td th:text="${issued.couponName}"></td>
                             <td th:text="${issued.benefit}"></td> <!-- 할인금액에 해당하는 필드 -->
                             <td th:text="${issued.restrictions}"></td> <!-- 제한조건에 해당하는 필드 -->

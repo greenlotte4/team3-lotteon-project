@@ -136,6 +136,26 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="pagination">
+                    <!-- 이전 페이지 버튼 -->
+                    <th:block th:if="${pageResponseDTO.pg > 1}">
+                        <a th:href="@{/pointdetails(page=${pageResponseDTO.pg - 1}, size=${pageResponseDTO.size})}" class="page-btn">＜</a>
+                    </th:block>
+
+                    <!-- 페이지 번호들 -->
+                    <th:block th:each="i : ${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                        <a th:href="@{/pointdetails(page=${i}, size=${pageResponseDTO.size})}"
+                           th:class="${i == pageResponseDTO.pg} ? 'active' : ''" class="num">
+                            [[${i}]]
+                        </a>
+                    </th:block>
+
+                    <!-- 다음 페이지 버튼 -->
+                    <th:block th:if="${pageResponseDTO.pg < pageResponseDTO.end}">
+                        <a th:href="@{/pointdetails(page=${pageResponseDTO.pg + 1}, size=${pageResponseDTO.size})}" class="page-btn">＞</a>
+                    </th:block>
+                </div>
+
             </div>
 
         </div>

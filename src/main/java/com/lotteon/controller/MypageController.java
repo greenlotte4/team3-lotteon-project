@@ -11,6 +11,8 @@ import com.lotteon.dto.order.OrderDTO;
 import com.lotteon.dto.order.OrderItemDTO;
 import com.lotteon.dto.order.OrderWithGroupedItemsDTO;
 import com.lotteon.dto.page.OrderPageResponseDTO;
+import com.lotteon.dto.page.PointPageRequestDTO;
+import com.lotteon.dto.page.PointPageResponseDTO;
 import com.lotteon.dto.page.QnaPageResponseDTO;
 import com.lotteon.dto.product.ReviewDTO;
 import com.lotteon.dto.product.ReviewRequestDTO;
@@ -214,27 +216,48 @@ public class MypageController {
     }
 
     @GetMapping("/pointdetails")
-    public String pointDetails(Model model) {
+    public String pointDetails(Model model, Pageable pageable) {
         List<BannerDTO> banners = adminService.selectAllbanner();
         List<BannerDTO> banners2 = adminService.getActiveBanners();
         model.addAttribute("content", "pointdetails");
         model.addAttribute("banners", banners2);
 
+        // 로그인한 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        String memberId = (userDetails.getId());
+        String memberId = userDetails.getId();
 
-        List<Point> point = pointService.myPoints(memberId);
+        // 포인트 리스트 조회 (페이징 적용)
+        Page<Point> pointPage = pointService.myPoints(memberId, pageable);
 
+        // 총 포인트 계산
         double totalPoints = pointService.getTotalPoints(memberId);
 
-        model.addAttribute("pointList", point);
+        PointPageRequestDTO requestDTO = PointPageRequestDTO.builder()
+                .pg(pageable.getPageNumber() + 1)  // 페이지 번호는 0부터 시작하므로 1을 더함
+                .size(pageable.getPageSize())      // 페이지 크기
+                .build();
+
+        PointPageResponseDTO responseDTO = new PointPageResponseDTO(
+                requestDTO,  // 요청 DTO를 전달
+                pointPage.getContent(),  // 포인트 목록
+                pointPage.getTotalElements(),  // 전체 항목 수 (long 타입)
+                pageable.getPageNumber() + 1,  // 현재 페이지 번호 (1부터 시작하므로 +1)
+                pageable.getPageSize()  // 페이지 사이즈
+        );
+
+
+        // 모델에 추가
+        model.addAttribute("pageResponseDTO", responseDTO);
         model.addAttribute("totalPoints", totalPoints);
-        log.info("나온 결과 맴버 포인트" + point);
+        model.addAttribute("pointList", pointPage.getContent());
 
-
+        log.info("나온 결과 맴버 포인트" + pointPage);
+        log.info("Point List: " + pointPage.getContent());
+        log.info("Page Response DTO: " + responseDTO);
         return "content/user/pointdetails"; // Points to "content/user/pointdetails"
     }
+
 
     @GetMapping("/qnadetails")
     public String qnaDetails(
@@ -292,6 +315,15 @@ public class MypageController {
         model.addAttribute("content", "reviewdetails");
         model.addAttribute("banners", banners2);
         return "content/user/reviewdetails"; // Points to "content/user/reviewdetails"
+    }
+
+    @GetMapping("/mypage/primary")
+    public ResponseEntity<String> handlePrimaryAction(@RequestParam("uid") String uid) {
+        log.info("요청 들어왔다 수취확인");
+        // uid를 사용하여 필요한 비즈니스 로직 수행
+
+        // 로직 수행 후 적절한 응답 반환
+        return ResponseEntity.ok("성공적으로 요청을 처리했습니다.");
     }
 
 }
