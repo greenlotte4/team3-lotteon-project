@@ -9,7 +9,6 @@
     <title>Admin::Main</title>
     <link rel="stylesheet" th:href="@{/css/admin/adminindex.css}">
     <script   src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script th:src="@{/js/adminGraph.js}"></script>
 
 </head>
 <body>
@@ -154,14 +153,14 @@
                                     <th>고객문의</th>
                                     <th colspan="2"><a th:href="@{/admin/qna/list}">전체보기</a></th>
                                 </tr>
-                                <th:block th:if="${qnadto.get(0).getQnaNo()>0}">
+                                <th:block th:if="${qnadto != null and !qnadto.isEmpty() and qnadto.get(0).getQnaNo() > 0}">
                                 <tr th:each="qna:${qnadto}">
                                     <td><a th:href="@{/admin/qna/reply(no=${qna.qnaNo})}" th:text="${qna.getQnatitle()}"></a></td>
                                     <td>[[${#strings.substring(qna.getQnawriter, 0, 2) + '**'}]]</td>
                                     <td>[[${#strings.substring(qna.date,0,10)}]]</td>
                                 </tr>
                                 </th:block>
-                                <th:block th:unless="${qnadto.get(0).getQnaNo()>0}">
+                                <th:block th:unless="${qnadto != null and !qnadto.isEmpty() and qnadto.get(0).getQnaNo() > 0}">
                                     <tr>
                                        <td colspan="3">고객 문의가 없습니다.</td>
                                     </tr>
@@ -182,4 +181,6 @@
                             </table>
                     </article>  
                 </section>
-    </th:block>
+                <script th:src="@{/js/adminGraph.js}"></script>
+
+</th:block>

@@ -1,7 +1,6 @@
 let barChart, pieChart;
 
 window.onload = function() {
-
     console.log("window.onload triggered");
 
     fetch('/api/getNewData')
@@ -13,6 +12,13 @@ window.onload = function() {
             return response.json();
         })
         .then(data => {
+            if (data.labels && data.labels.length && data.orderData && data.orderData.length) {
+                // Ensure the data format for pie chart matches expected format
+                updatePieChartData(pieChart, { labels: data.labels, datasets: [{ data: data.orderData }] });
+            } else {
+                console.error("Data format is incorrect for Pie chart update.");
+            }
+
             // Set default empty arrays if data is missing or undefined
             const orderData = data.orderData && data.orderData.length ? data.orderData : [];
             const paymentData = data.paymentData && data.paymentData.length ? data.paymentData : [];
@@ -25,10 +31,12 @@ window.onload = function() {
             console.log("Cancel Data:", cancelData);
             console.log("Labels:", labels);
 
-            // Call your update function with safe data
-            updatePieChartData({ orderData, paymentData, cancelData, labels });
+            // Call your update function with safe data for bar chart
+            updateBarChartData(orderData, paymentData, cancelData, labels);
         })
         .catch(error => console.error('Error fetching data:', error));
+
+    // Initialize bar chart
     const ctxBar = document.getElementById('barChart').getContext('2d');
     barChart = new Chart(ctxBar, {
         type: 'bar',
@@ -57,24 +65,18 @@ window.onload = function() {
         },
         options: {
             scales: {
-                x: {
-                    stacked: false
-                },
-                y: {
-                    beginAtZero: true
-                }
+                x: { stacked: false },
+                y: { beginAtZero: true }
             },
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                },
+                legend: { display: true, position: 'top' }
             }
         }
     });
 
+    // Initialize pie chart
     const ctxPie = document.getElementById('pieChart').getContext('2d');
     pieChart = new Chart(ctxPie, {
         type: 'pie',
@@ -98,13 +100,9 @@ window.onload = function() {
                 borderWidth: 1
             }]
         },
-        options: {
-            maintainAspectRatio: false
-        }
+        options: { maintainAspectRatio: false }
     });
-
-
-}
+};
 
 // Function to update bar chart data
 function updateBarChartData(newOrderData, newPaymentData, newCancelData, newLabels) {
@@ -116,8 +114,8 @@ function updateBarChartData(newOrderData, newPaymentData, newCancelData, newLabe
 }
 
 // Function to update pie chart data
-function updatePieChartData(newPieData, newPieLabels) {
-    pieChart.data.labels = newPieLabels;
-    pieChart.data.datasets[0].data = newPieData;
-    pieChart.update();
+function updatePieChartData(chart, newData) {
+    chart.data.labels = newData.labels || [];  // Default to empty array
+    chart.data.datasets[0].data = newData.datasets[0].data || [];  // Default to empty data array
+    chart.update();
 }
