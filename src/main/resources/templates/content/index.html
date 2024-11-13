@@ -9,7 +9,11 @@
                     <div class="slider-wrapper">
                         <div class="slide" th:each="banner : ${banners}" th:if="${banner.ban_location} == '메인 슬라이더 배너'">
                             <a th:href="${banner.ban_link}" target="_blank">
-                                <img th:src="@{'/uploads/' + ${banner.ban_image}}" alt="">
+                                <div
+                                        th:class="'banner-image-wrapper'"
+                                        th:style="|background-color: ${banner.ban_color}; background-image: url('/uploads/' + ${banner.ban_image} != '' ? '/uploads/' + ${banner.ban_image} : '');|">
+                                    <img th:if="${banner.ban_image != null}" th:src="@{'/uploads/' + ${banner.ban_image}}" alt="배너 이미지">
+                                </div>
                             </a>
                         </div>
                     </div>
