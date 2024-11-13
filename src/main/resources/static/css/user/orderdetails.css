@@ -147,13 +147,12 @@ aside > ul > li:nth-child(1){
 /*}*/
 
 .center p{
-    font-size: 14px;
-    font-weight: 700;
-
     float: left;
+    font-size: 24px;
     line-height: 34px;
     letter-spacing: -.029em;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 .center a{
     font-size: 12px;
@@ -165,7 +164,8 @@ aside > ul > li:nth-child(1){
     height: 75px;
     margin: 48px;
     margin-bottom: 0;
-    background-color: #DCE6F2;
+    /*background-color: #DCE6F2;*/
+    background: var(--m-colors-gray150, #f5f5f5);
 }
 .dateInquiry > div{
     width: 140px;
