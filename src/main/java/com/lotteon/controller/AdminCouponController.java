@@ -9,10 +9,12 @@ package com.lotteon.controller;
    10.26  하진희 - 추가작업내역 작성
  */
 
+import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.admin.*;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.entity.User.Member;
 import com.lotteon.entity.User.Seller;
+import com.lotteon.entity.User.User;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.product.Product;
@@ -24,6 +26,7 @@ import com.lotteon.service.admin.CouponIssuedService;
 import com.lotteon.service.admin.CouponService;
 import com.lotteon.service.search.SearchService;
 import com.lotteon.service.user.MemberService;
+import com.lotteon.service.user.SellerService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -58,25 +61,26 @@ public class AdminCouponController {
     private final MemberRepository memberRepository;
     private final SearchService searchService;
     private final CouponIssuedRepository couponIssuedRepository;
+    private final SellerService sellerService;
     ;
 
     @GetMapping("/list")
     public String adminCouponList(
             @ModelAttribute CouponListRequestDTO requestDTO,
+            Authentication authentication,
             Model model) {
         if (requestDTO.getPage() < 1) {
             requestDTO.setPage(1);
         }
         // 인증된 사용자 정보 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        Seller seller = userDetails.getSeller();
+        String loginUid = authentication.getName();
+        SellerDTO seller = sellerService.getSeller(loginUid);
 
+        log.info("셀러 확인"+ seller);
         List<String> userRoles = couponService.getUserRoles();
 
         Pageable pageable = requestDTO.getPageable(); // 정렬 기준 없이 호출
 
-        model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
 
         Page<CouponDTO> couponPage = couponService.selectCouponsPagination(requestDTO, seller.getId(), pageable);
 
@@ -99,6 +103,7 @@ public class AdminCouponController {
         responseDTO.setPrev(responseDTO.getStart() > 1);
         responseDTO.setNext(responseDTO.getTotal() > responseDTO.getEnd());
 
+        model.addAttribute("seller", seller); // 셀러 정보를 모델에 추가
         model.addAttribute("responseDTO", responseDTO);
         model.addAttribute("userRoles", userRoles);
         model.addAttribute("couponList", couponPage.getContent());
