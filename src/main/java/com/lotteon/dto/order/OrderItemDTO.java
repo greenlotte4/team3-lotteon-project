@@ -100,7 +100,6 @@
             this.sellerUid = (seller != null) ? seller.getUser().getUid() : null;
 
 
-
             DecimalFormat df = new DecimalFormat("###,###");
             this.formattedPrice = df.format(item.getOrderPrice());
 
@@ -111,6 +110,8 @@
                 this.categoryId = item.getProduct().getCategoryId();
                 this.image = item.getProduct().getFile190(); // 이미지 URL 설정
                 this.reviewContent = item.getProduct().getReviews();
+                this.path = item.getProduct().getSavedPath();
+
             }
 
             // Seller와 관련된 정보

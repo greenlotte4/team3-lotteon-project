@@ -32,6 +32,7 @@ import com.lotteon.repository.user.SellerRepository;
 import com.lotteon.service.product.BestProductService;
 import com.lotteon.service.product.OptionService;
 import com.lotteon.service.product.ProductService;
+import com.lotteon.service.user.MemberService;
 import com.lotteon.service.user.PointService;
 import com.lotteon.service.user.SellerService;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,7 @@ public class OrderService {
     private final PointService pointService;
     private final PointRepository pointRepository;
     private final BestProductService bestProductService;
+    private final MemberService memberService;
 
 
     @Transactional
@@ -418,6 +420,25 @@ public class OrderService {
             OrderItem orderItem = orderItemOptional.get();
             orderItem.setStatus(DeliveryStatus.CONFIRMATION);  // 올바른 열거형 값 할당  // 상태를 CONFIRMATION으로 설정
             orderItemRepository.save(orderItem);  // 상태 변경된 객체 저장
+            Optional<Member> opt = memberService.findByUserId(orderItem.getCustomerId());
+            if (opt.isPresent()) {
+                Member member = opt.get();
+                member.setPoint(orderItem.getPoint());
+
+                Point point = Point.builder()
+                        .orderId(orderItemId)
+                        .member(member)
+                        .createdAt(LocalDateTime.now())
+                        .description("상품구매 확정")
+                        .amount(orderItem.getPoint())
+                        .build();
+                pointRepository.save(point);
+                memberRepository.save(member);
+            }
+            long svaedPoint = orderItem.getPoint();
+
+
+
             return true;
         } else {
             return false;

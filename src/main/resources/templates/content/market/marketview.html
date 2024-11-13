@@ -34,7 +34,7 @@
                     <th:block th:if="${#authentication.getName() !='anonymousUser'}"><input type="hidden" id="uid"
                                                                                             th:value="${#authentication.getName()}">
                     </th:block>
-                    <img th:if="${products.getSavedPath()==null}" th:src="@{'/uploads/productImg'+${products.file456}}" alt="">
+                    <img th:if="${products.getSavedPath()==null}" th:src="@{'/uploads/productImg/'+${products.file456}}" alt="">
                     <img th:unless="${products.getSavedPath()==null}" th:src="@{'/uploads/'+${products.savedPath}+'/'+${products.file456}}" alt="">
                     <input type="hidden" th:value="${products.file190}" id="file190">
                     <input type="hidden" th:value="${products.getSavedPath()}" id="savedPath">

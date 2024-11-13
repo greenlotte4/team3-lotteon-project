@@ -100,8 +100,8 @@
                                     <div class="eximg" >
                                         <div>
                                             <a th:href="@{'/market/view/' + ${orderItem.categoryId} + '/' + ${orderItem.productId}}">
-                                                <img th:src="@{'/uploads/productImg/' + ${orderItem.image}}" class="eximg1-1" alt="상품 이미지">
-                                            </a>
+                                                <img th:if="${orderItem.path == null}" th:src="@{'/uploads/productImg/' + ${orderItem.image}}" class="eximg1-1" alt="상품 이미지">
+                                                <img th:unless="${orderItem.path == null}" th:src="@{'/uploads/'+${orderItem.path} +'/'+ ${orderItem.image}}" class="eximg1-1" alt="상품 이미지">                                            </a>
                                         </div>
                                     </div>
                                     <div class="Pinf">

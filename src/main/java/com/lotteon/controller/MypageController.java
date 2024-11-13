@@ -126,6 +126,7 @@ public class MypageController {
 
         // 주문을 orderId로 그룹화
         List<OrderItemDTO> groupDTO = orderService.getOrdersGroupedByOrderItemId(uid);
+        log.info("OrderItemDTO!!!"+groupDTO);
         List<CouponIssued> issuedCoupons = couponDetailsService.memberCouponList(memberId); // 서비스에서 발급된 쿠폰 조회
 
         model.addAttribute("orderCount", orderCount);
