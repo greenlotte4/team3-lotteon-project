@@ -14,7 +14,6 @@ import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.admin.PageRequestDTO;
 import com.lotteon.dto.order.*;
 import com.lotteon.dto.page.OrderPageResponseDTO;
-import com.lotteon.dto.product.OptionDTO;
 import com.lotteon.dto.product.ProductDTO;
 import com.lotteon.dto.product.ProductRedisDTO;
 import com.lotteon.entity.User.Member;
@@ -22,8 +21,6 @@ import com.lotteon.entity.User.Point;
 import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.order.Order;
 import com.lotteon.entity.order.OrderItem;
-import com.lotteon.entity.product.Option;
-import com.lotteon.entity.product.Product;
 import com.lotteon.entity.product.ProductOptionCombination;
 import com.lotteon.repository.order.OrderItemRepository;
 import com.lotteon.repository.order.OrderRepository;
@@ -35,18 +32,13 @@ import com.lotteon.repository.user.SellerRepository;
 import com.lotteon.service.product.BestProductService;
 import com.lotteon.service.product.OptionService;
 import com.lotteon.service.product.ProductService;
-import com.lotteon.service.user.MemberService;
 import com.lotteon.service.user.PointService;
 import com.lotteon.service.user.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.description.annotation.AnnotationValue;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -54,7 +46,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -470,6 +461,16 @@ public class OrderService {
             return false;
         }
     }
+
+    public long getWaitingOrderCount() {
+        return orderRepository.countOrdersByStatus("waiting");  // "waiting" 상태의 주문 개수
+    }
+
+    public List<Object[]> getWaitingDepositOrderCountBySeller(String sellerUid) {
+        // "WAITING_FOR_PAYMENT" 상태의 주문 수를 카운트
+        return orderItemRepository.findSellerUidAndOrderStatusBySellerUidAndOrderStatus(sellerUid, "WAITING");
+    }
+
 
 
 

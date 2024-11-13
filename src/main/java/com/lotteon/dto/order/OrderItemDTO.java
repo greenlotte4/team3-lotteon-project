@@ -78,6 +78,7 @@
         private String pay;
 
 
+
         public OrderItemDTO(OrderItem item, Seller seller, Order order) {
             this.orderItemId = item.getOrderItemId();
             this.savedPrice = item.getSavedPrice();
@@ -96,6 +97,7 @@
             this.status = item.getStatus();
             this.customerName = item.getCustomerName();
             this.customerId = item.getCustomerId();
+            this.sellerUid = (seller != null) ? seller.getUser().getUid() : null;
 
 
 

@@ -88,5 +88,9 @@ public class SellerService {
         return null; // 회원이 존재하지 않는 경우
     }
 
+    public Optional<Seller> findById(long id) {
+        return sellerRepository.findById(id);  // Optional<Seller> 반환
+    }
+
 
 }

@@ -70,4 +70,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> , OrderRepos
             "WHERE o.uid = :uid")
     Page<Object[]> findOrderWithProductImages(@Param("uid") String uid, Pageable pageable);
 
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.orderStatus = :status")
+    long countOrdersByStatus(@Param("status") String orderStatus);
+
+
+
+
 }
