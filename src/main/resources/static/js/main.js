@@ -6,7 +6,7 @@ const dotsContainer = document.querySelector('.slider-pagination');
 
 
 let currentSlide = 0;
-const slidesPerPage = 2; // 한 페이지에 보여줄 슬라이드 개수
+const slidesPerPage = 1; // 한 페이지에 보여줄 슬라이드 개수
 const totalPages = Math.ceil(slides.length / slidesPerPage); // 페이지 수 계산
 
 // 슬라이드 수에 맞게 dot 동적으로 생성
