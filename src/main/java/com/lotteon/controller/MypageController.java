@@ -368,10 +368,11 @@ public class MypageController {
     }
 
     @GetMapping("/pointdetails")
-    public String pointDetails(Model model, PointPageRequestDTO pageRequestDTO) {
+    public String pointDetails(Model model, PointPageRequestDTO pageRequestDTO, @RequestParam(defaultValue = "1") int page, Sort sort) {
         // page 값이 넘어오면 pageRequestDTO에 반영
 
         // 로그인한 사용자 정보 가져오기
+        pageRequestDTO.setPg(page);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
         String memberId = userDetails.getId();
@@ -379,7 +380,7 @@ public class MypageController {
 
         // 페이지 정보 확인
         log.info("PageRequestDTO: " + pageRequestDTO);  // 페이지 번호가 제대로 전달되는지 확인
-        Pageable pageable = pageRequestDTO.toPageable();  // 페이지 번호와 크기를 기반으로 Pageable 생성
+        Pageable pageable = PageRequest.of(page -1, 10, Sort.by("createdAt").descending()); // 페이지 번호와 크기를 기반으로 Pageable 생성
 
         // 포인트 조회
         Page<Point> pointPage = pointService.myPoints(memberId, pageable);

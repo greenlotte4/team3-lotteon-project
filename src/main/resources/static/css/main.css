@@ -59,10 +59,10 @@
     display: flex;
     transition: transform 0.5s ease-in-out;
     width: 1138px;
-    height: 637px;
-    background-size: cover; /* 배경 이미지가 div를 꽉 채우도록 설정 */
-    background-position: center; /* 배경 이미지가 가운데로 정렬되도록 설정 */
-    background-image: url("/images/sample/default.png");
+    height: 500px;
+    background-size: cover;
+    background-position: center;
+    background-image: url(/images/sample/default.png);
     object-fit: cover;
 
 }
@@ -76,7 +76,7 @@
 /* 이미지 스타일 */
 .slide img {
     width: 100%; /* 슬라이드 너비에 맞춰 이미지가 늘어남 */
-    height: auto; /* 세로 크기는 자동으로 조정하여 비율 유지 */
+    height: 500px; /* 세로 크기는 자동으로 조정하여 비율 유지 */
     display: block; /* 이미지가 블록 요소로 처리되어 아래 여백이 생기지 않음 */
 }
 .headerslide{
