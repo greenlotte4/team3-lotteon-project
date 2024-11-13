@@ -134,8 +134,12 @@ public class AdminController {
             Long exchangeForShippingCount = orderItemRepository.countReadyForShippingBySellerUid(sellerUid, DeliveryStatus.EXCHANGE_REQUESTED);
             exchangeForShippingCount = (exchangeForShippingCount != null) ? exchangeForShippingCount : 0;
 
+            Long returnForShippingCount = orderItemRepository.countReadyForShippingBySellerUid(sellerUid, DeliveryStatus.RETURN_REQUESTED);
+            returnForShippingCount = (returnForShippingCount != null) ? returnForShippingCount : 0;
+
             model.addAttribute("readyForShippingCount", readyForShippingCount);
             model.addAttribute("exchangeForShippingCount",  exchangeForShippingCount);
+            model.addAttribute("returnForShippingCount",  returnForShippingCount);
 
             model.addAttribute("yesterdayVisitorCount", yesterdayVisitorCount);
             model.addAttribute("todayVisitorCount", todayVisitorCount);
@@ -197,9 +201,14 @@ public class AdminController {
             Long allExchangeForShippingCount = orderItemRepository.countAllReadyForShipping(ExchangeForShippingStatus);
             allExchangeForShippingCount = (allExchangeForShippingCount != null) ? allExchangeForShippingCount : 0;
 
+            DeliveryStatus ReturnForShippingStatus = DeliveryStatus.RETURN_REQUESTED;
+            Long allReturnForShippingCount = orderItemRepository.countAllReadyForShipping(ReturnForShippingStatus);
+            allReturnForShippingCount = (allReturnForShippingCount != null) ? allReturnForShippingCount : 0;
+
 
             model.addAttribute("readyForShippingCount", allReadyForShippingCount);
             model.addAttribute("exchangeForShippingCount", allExchangeForShippingCount);
+            model.addAttribute("returnForShippingCount", allReturnForShippingCount);
 
 
 
