@@ -18,15 +18,15 @@
         <div class="summary-table">
             <div class="summary-item">
                 <span>주문</span><br>
-                <span class="summary-value">2</span>
+                <span class="summary-value" th:text="${orderCount}">2</span>
             </div>
             <div class="summary-item">
                 <span>쿠폰</span><br>
-                <span class="summary-value">1</span>
+                <span class="summary-value" th:text="${IssuedList.size()}"></span>
             </div>
             <div class="summary-item">
                 <span>포인트</span><br>
-                <span class="summary-value">1,000</span>
+                <span class="summary-value" th:text="${totalPoints}">1,000</span> <!-- 최종 포인트 값 출력 -->
             </div>
             <div class="summary-item">
                 <span>문의</span><br>
@@ -142,7 +142,9 @@
 
                     <!-- 배송 상태 -->
                     <td>
-                        <span class="order-status" th:text="${orderItem.status.description}"></span>
+                      <span class="order-status"
+                            th:text="${orderItem.pay == 'no-bankbook' ? (orderItem.orderStatus == 'waiting' ? '결제 대기' : orderItem.orderStatus) : orderItem.status.description}">
+</span>
                     </td>
 
                     <!-- 버튼들 -->

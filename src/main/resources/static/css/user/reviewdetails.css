@@ -113,11 +113,9 @@ aside > ul > li:nth-child(4){
 }
 
 .center p{
-    font-size: 24px;
-    line-height: 34px;
-    letter-spacing: -.029em;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    float: left;
 }
 
 .center a{
@@ -279,6 +277,8 @@ td {
 
 .truncate {
     display: inline-block;
+    max-width: 300px;    /* 최대 너비 설정 */
+    white-space: nowrap; /* 한 줄로 표시 */
     overflow: hidden;    /* 넘치는 텍스트 숨기기 */
     text-overflow: ellipsis; /* 넘칠 때 생략 부호(...) 표시 */
 }

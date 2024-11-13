@@ -51,6 +51,7 @@
         private long shippingTerms;
         private long shippingFees;
         private long point;
+        private String orderStatus;
 
 
         private DeliveryStatus status;
@@ -74,6 +75,7 @@
         private String addr1;
         private String addr2;
         private String shippingInfo;
+        private String pay;
 
 
         public OrderItemDTO(OrderItem item, Seller seller, Order order) {
@@ -123,6 +125,9 @@
                 this.addr1 = order.getAddr1();
                 this.addr2 = order.getAddr2();
                 this.shippingInfo = order.getShippingInfo();
+
+                this.orderStatus = order.getOrderStatus();
+                this.pay = order.getPay();
 
             }
         }

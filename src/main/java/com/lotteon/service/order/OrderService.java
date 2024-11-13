@@ -100,6 +100,14 @@ public class OrderService {
 
 
         result = savedOrder.getOrderId();
+
+        // 결제 방법에 따라 orderStatus 설정
+        String paymentMethod = orderResponseDTO.getOrder().getPay();
+        if ("no-bankbook".equals(paymentMethod)) {
+            savedOrder.setOrderStatus("waiting");
+            orderRepository.save(savedOrder);
+        }
+
         Optional<Member> member= memberRepository.findByUser_Uid(uid);
         if(member.isPresent()) {
             Member currentMember = member.get();
