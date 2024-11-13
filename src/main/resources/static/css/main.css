@@ -64,6 +64,7 @@
     background-position: center;
     background-image: url(/images/sample/default.png);
     object-fit: cover;
+
 }
 
 /* Slide styles */
@@ -90,6 +91,12 @@
     display: block; /* 이미지가 블록 요소로 처리되어 아래 여백이 생기지 않음 */
 }
 
+.banner-image-wrapper {
+    width: 1138px;
+    height: 637px;
+    background-size: cover; /* 배경 이미지가 div를 꽉 채우도록 설정 */
+    background-position: center; /* 배경 이미지가 가운데로 정렬되도록 설정 */
+}
 /* Navigation buttons */
 .slider-navigation .prev, .slider-navigation .next {
     position: absolute;
