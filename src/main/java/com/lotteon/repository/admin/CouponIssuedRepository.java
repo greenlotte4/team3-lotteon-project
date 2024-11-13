@@ -17,7 +17,6 @@ import java.util.Optional;
 @Repository
 public interface CouponIssuedRepository extends JpaRepository<CouponIssued, String>{
 
-    Page<CouponIssued> findBySellerCompany(String sellerCompany, Pageable pageable);
 
     List<CouponIssued> findByMemberId(Long memberId);
 
@@ -31,7 +30,12 @@ public interface CouponIssuedRepository extends JpaRepository<CouponIssued, Stri
     boolean existsByMemberIdAndCouponId(Long memberId, String couponId);
 
     List<CouponIssued> findBySellerCompanyContaining(String sellerCompany);
+
+    Page<CouponIssued> findBySellerCompanyContaining(String sellerCompany, Pageable pageable);
     List<CouponIssued> findByCouponNameContaining(String sellerCompany);
     List<CouponIssued> deleteByCouponId(String couponId);
     List<CouponIssued> findByCouponId(String couponId);
+
+
+
 }
