@@ -119,12 +119,12 @@
 
         <section class="shipping-section">
             <div id="shipping-modal" class="shipping-modal">
-                    <div class="shipping-modal">
+                    <div class="shipping-modals">
+                        <span>배송입력</span>
                         <span class="shipping-close" style="cursor: pointer;">&times;</span>
-                        <h3>배송입력</h3>
                     </div>
                     <form>
-                        <table class="modaltable">
+                        <table class="modaltable"  id="shippin_d_modal">
                             <tr>
                                 <th>주문번호</th>
                                 <td>
@@ -167,7 +167,9 @@
                             </tr>
                             
                          </table>
+                        <div id="order_submit_btn_div">
                         <button type="submit" id="order_submit_btn">등록하기</button>
+                        </div>
                     </form>
                 </div>
             </section>
@@ -292,7 +294,6 @@
 
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
-
 
                             const modal = document.querySelector('.modal-section');
                             const orderModal = document.querySelector('.order-items');
