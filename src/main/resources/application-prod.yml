@@ -109,8 +109,8 @@ spring:
                         client-name: Kakao
 
                     naver:
-                        client-id: hzcfmimrVKAxW_vhgGlX
-                        client-secret: amsujfvscS
+                        client-id: hnfj6EGOh8O38QYjYbjI
+                        client-secret: dhMEtyQF55
                         scope:
                             - name
                             - email
