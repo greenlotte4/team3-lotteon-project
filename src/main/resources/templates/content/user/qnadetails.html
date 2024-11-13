@@ -118,26 +118,27 @@
                     <div class="pagination">
                         <div class="qna-pagination">
                             <!-- 이전 페이지 링크: 첫 페이지에서는 비활성화 및 숨김 -->
-                            <span th:if="${qnaPage.totalPages > 1 && !qnaPage.first}">
-                                <a th:href="@{/mypage/qnadetails(page=${qnaPage.number - 1})}" class="prev">이전</a>
+                            <span th:if="${qnaPage.prev}">
+                                <a th:href="@{/mypage/qnadetails(page=${qnaPage.start - 1})}" class="prev">이전</a>
                             </span>
-                            <span th:if="${qnaPage.first && qnaPage.totalPages > 1}" class="disabled"
-                                  style="display:none;">이전</span>
+<!--                            <span th:if="${qnaPage.prev && qnaPage.total > 1}" class="disabled"-->
+<!--                                  style="display:none;">이전</span>-->
 
-                            <!-- 페이지 번호 반복 -->
-                            <span th:each="pageNum : ${#numbers.sequence(0, qnaPage.totalPages - 1)}">
-                                <a th:href="@{/mypage/qnadetails(page=${pageNum})}"
-                                   th:classappend="${qnaPage.number == pageNum} ? 'active'">
-                                    <span th:text="${pageNum + 1}"></span>
+                            <span th:each="pageNum : ${#numbers.sequence(qnaPage.start, qnaPage.end)}">
+                                <!-- 페이지 링크 생성 -->
+                                <a th:href="@{/mypage/qnadetails(PageNumber=${pageNum})}"
+                                   th:data-page="${pageNum}"
+                                   th:classappend="${pageNum == qnaPage.pg} ? 'qnacurrent' : 'qnanum'">
+                                    <span th:text="${pageNum}"></span>  <!-- 페이지 번호 -->
                                 </a>
                             </span>
 
                             <!-- 다음 페이지 링크: 마지막 페이지에서는 비활성화 및 숨김 -->
-                            <span th:if="${qnaPage.totalPages > 1 && !qnaPage.last}">
-                                <a th:href="@{/mypage/qnadetails(page=${qnaPage.number + 1})}" class="next">다음</a>
+                            <span th:if="${qnaPage.next}">
+                                <a th:href="@{/mypage/qnadetails(page=${qnaPage.end + 1})}" class="next">다음</a>
                             </span>
-                            <span th:if="${qnaPage.last && qnaPage.totalPages > 1}" class="disabled"
-                                  style="display:none;">다음</span>
+<!--                            <span :if="${qnaPage.next && qnaPage.total > 1}" class="disabled"-->
+<!--                                  style="display:none;">다음</span>-->
                         </div>
                     </div>
                 </div>
