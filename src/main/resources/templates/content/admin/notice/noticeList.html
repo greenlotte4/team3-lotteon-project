@@ -17,7 +17,7 @@
             <th:block th:replace="~{content/admin/admin_gate}"></th:block>
 
             <section id="admin_navi">
-                <p>고객센터</p>
+                <p>공지사항</p>
                 <p>
                     <a href="#">HOME</a>
                     <span>></span>
@@ -79,11 +79,12 @@
                         </tr>
                         </tbody>
                     </table>
+                    <div class="notice_button">
+                        <button class="notice_delete_a" id="notice_delete_btn"> 선택삭제</button>
+                        <a th:href="@{/admin/notice/write}" class="notice_register_a">작성하기</a>
+                    </div>
             </article>
-            <div class="notice_button">
-                <button class="notice_delete_a" id="notice_delete_btn"> 선택삭제</button>
-                <a th:href="@{/admin/notice/write}" class="notice_register_a">작성하기</a>
-            </div>
+
             <div class="noticepage">
                 <th:block th:if="${noticePageResponseDTO.prev}">
                     <a th:if="${noticePageResponseDTO.getNoticeType() == null}" th:href="@{/admin/notice/list(pg=${(noticePageResponseDTO.start)-1})}" class="noticeprev">이전</a>

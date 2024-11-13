@@ -78,12 +78,16 @@ public class AdminOrderService {
                     orderDTO.setOrderDate(orderItem.getOrder().getOrderDate());
                     // Product 설정 (Product -> ProductDTO 변환 예시)
                     Product product = orderItem.getProduct();
+                    orderItemDTO.setPath(product.getSavedPath());
+
                     if (product != null) {
                         ProductDTO productDTO = new ProductDTO();
                         productDTO.setProductId(product.getProductId());
                         productDTO.setProductName(product.getProductName());
                         productDTO.setPrice(product.getPrice());
                         orderItemDTO.setProduct(productDTO);
+                        orderItemDTO.setPath(product.getSavedPath());
+
                         // 필요한 필드 추가 설정
                     }
                     String sellerUid= product.getSellerId();
