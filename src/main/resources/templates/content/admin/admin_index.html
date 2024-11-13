@@ -136,10 +136,10 @@
                                 </colgroup>
                                 <tr>
                                     <th>공지사항</th>
-                                    <th><a href="#">전체보기</a></th>
+                                    <th><a th:href="@{/admin/notice/list}">전체보기</a></th>
                                 </tr>
                                 <tr th:each="notice:${notices}">
-                                    <td><a href="#">[ [[${notice.noticetype}]] ] [[${notice.noticetitle}]]</a></td>
+                                    <td><a th:href="@{/admin/notice/view(no=${notice.noticeNo})}">[ [[${notice.noticetype}]] ] [[${notice.noticetitle}]]</a></td>
                                     <td>[[${#strings.substring(notice.date,0,10)}]]</td>
                                 </tr>
 
@@ -152,12 +152,11 @@
                                 </colgroup>
                                 <tr>
                                     <th>고객문의</th>
-                                    <th colspan="2"><a href="#">전체보기</a></th>
+                                    <th colspan="2"><a th:href="@{/admin/qna/list}">전체보기</a></th>
                                 </tr>
                                 <th:block th:if="${qnadto.get(0).getQnaNo()>0}">
                                 <tr th:each="qna:${qnadto}">
-                                    <td><a href="#" th:text="${qna.getQnatitle()}"></a></td>
-
+                                    <td><a th:href="@{/admin/qna/reply(no=${qna.qnaNo})}" th:text="${qna.getQnatitle()}"></a></td>
                                     <td>[[${#strings.substring(qna.getQnawriter, 0, 2) + '**'}]]</td>
                                     <td>[[${#strings.substring(qna.date,0,10)}]]</td>
                                 </tr>

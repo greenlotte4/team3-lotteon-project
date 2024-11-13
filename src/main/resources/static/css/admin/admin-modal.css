@@ -228,15 +228,15 @@ h3{
     height: auto;
 }
 
-.pro-num { width: 12%; }
-.pro-name { width: 17%; }
-.pro-seller { width: 12%; }
-.pro-price { width: 12%; }
-.pro-sell { width: 9%; }
-.pro-stock { width: 8%; }
-.pro-ship { width: 8%; } /* 배송비 비율 증가 */
-.total-pay { width: 11%; } /* 결제금액 비율 감소 */
-.pro-img { width: 10%; }
+/*.pro-num { width: 12%; }*/
+/*.pro-name { width: 17%; }*/
+/*.pro-seller { width: 12%; }*/
+/*.pro-price { width: 12%; }*/
+/*.pro-sell { width: 9%; }*/
+/*.pro-stock { width: 8%; }*/
+/*.pro-ship { width: 8%; } !* 배송비 비율 증가 *!*/
+/*.total-pay { width: 11%; } !* 결제금액 비율 감소 *!*/
+/*.pro-img { width: 10%; }*/
 
 /*.pro-num-details,*/
 /*.pro-name-details,*/

@@ -38,6 +38,8 @@ public class AdminOrderItemDTO {
     private Long productId;
     //파일이름
     private String file190;
+    //파일경로
+    private String savedPath;
 
 
 }

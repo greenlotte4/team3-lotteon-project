@@ -17,7 +17,7 @@
                         <th:block th:replace="~{content/admin/admin_gate}"></th:block>
 
                         <section id="admin_navi">
-                            <p>고객센터</p>
+                            <p>자주묻는질문</p>
                             <p>
                                 <a href="#">HOME</a>
                                 <span>></span>
@@ -88,11 +88,12 @@
                                 </tbody>
                             </table>
                             <div th:if="${message}" class="hidden" th:text="${message}" id="messageDiv"></div>
+                            <div class="list_button">
+                                <button id="faq_delete_btn">선택삭제</button>
+                                <button><a th:href="@{/admin/faq/write}">작성하기</a></button>
+                            </div>
                         </article>
-                        <div class="list_button">
-                            <button id="faq_delete_btn">선택삭제</button>
-                            <button><a th:href="@{/admin/faq/write}">작성하기</a></button>
-                        </div>
+
 
                         <div class="faqpage">
                             <th:block th:if="${faqPageResponseDTO.prev}">
