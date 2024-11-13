@@ -13,9 +13,20 @@ window.onload = function() {
             return response.json();
         })
         .then(data => {
-            console.log("Data fetched:", data);
-            updateBarChartData(data.orderData, data.paymentData, data.cancelData, data.labels);
-            updatePieChartData(data.pieData, data.pieLabels);
+            // Set default empty arrays if data is missing or undefined
+            const orderData = data.orderData && data.orderData.length ? data.orderData : [];
+            const paymentData = data.paymentData && data.paymentData.length ? data.paymentData : [];
+            const cancelData = data.cancelData && data.cancelData.length ? data.cancelData : [];
+            const labels = data.labels && data.labels.length ? data.labels : ["No Data Available"];
+
+            // Log to confirm values
+            console.log("Order Data:", orderData);
+            console.log("Payment Data:", paymentData);
+            console.log("Cancel Data:", cancelData);
+            console.log("Labels:", labels);
+
+            // Call your update function with safe data
+            updatePieChartData({ orderData, paymentData, cancelData, labels });
         })
         .catch(error => console.error('Error fetching data:', error));
     const ctxBar = document.getElementById('barChart').getContext('2d');
@@ -91,6 +102,8 @@ window.onload = function() {
             maintainAspectRatio: false
         }
     });
+
+
 }
 
 // Function to update bar chart data

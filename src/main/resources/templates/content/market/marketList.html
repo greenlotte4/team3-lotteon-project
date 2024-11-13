@@ -224,7 +224,7 @@
                             <div class="product-item" th:each="product:${responseDTO.getProductSummaryDTOs()}">
                                 <a th:href="@{/market/view/{category}/{id}(category=${product.getCategoryId()},id=${product.productId})}">
                                     <div class="product-image">
-                                        <img th:if="${product.getSavedPath()==null}" th:src="@{'/uploads/productImg'+${product.file230}}" alt="">
+                                        <img th:if="${product.getSavedPath()==null}" th:src="@{'/uploads/productImg/'+${product.file230}}" alt="">
                                         <img th:unless="${product.getSavedPath()==null}" th:src="@{'/uploads/'+${product.savedPath}+'/'+${product.file230}}" alt="">
                                     </div>
                                 <div class="product-details">
