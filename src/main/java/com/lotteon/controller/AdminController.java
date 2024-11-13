@@ -137,6 +137,10 @@ public class AdminController {
             Long returnForShippingCount = orderItemRepository.countReadyForShippingBySellerUid(sellerUid, DeliveryStatus.RETURN_REQUESTED);
             returnForShippingCount = (returnForShippingCount != null) ? returnForShippingCount : 0;
 
+            long waitingCount = orderService.getWaitingOrderCount();
+            model.addAttribute("waitingCount", waitingCount);
+
+
             model.addAttribute("readyForShippingCount", readyForShippingCount);
             model.addAttribute("exchangeForShippingCount",  exchangeForShippingCount);
             model.addAttribute("returnForShippingCount",  returnForShippingCount);
@@ -181,6 +185,10 @@ public class AdminController {
             long yesterdayNewUserCount = userService.getYesterdayNewUserCount();
             long todayNewUserCount = userService.getTodayNewUserCount();
             long visitorCount = visitorCountService.getVisitorCount(); // 방문자 수 가져오기
+
+            long waitingCount = orderService.getWaitingOrderCount();
+            model.addAttribute("waitingCount", waitingCount);
+
             model.addAttribute("visitorCount", visitorCount);
             model.addAttribute("yesterdayNewUserCount", yesterdayNewUserCount);
             model.addAttribute("todayNewUserCount", todayNewUserCount);

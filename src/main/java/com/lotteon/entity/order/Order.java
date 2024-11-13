@@ -69,6 +69,15 @@ public class Order {
     private String productName; // 대표 상품명
     private String sellerCompany; // 대표 회사명
 
+    // 셀러 정보 가져오기
+    public String getSellerUid() {
+        // 첫 번째 OrderItem의 Product에서 Seller 정보를 가져옵니다.
+        if (orderProducts != null && !orderProducts.isEmpty()) {
+            return orderProducts.get(0).getProduct().getSellerId();
+        }
+        return null; // 셀러 정보가 없다면 null 반환
+    }
+
 
 //    public OrderDTO toDTO(Order order) {
 //        // Order의 모든 OrderItem을 OrderItemDTO로 변환하고, 각 OrderItem의 Seller를 가져와 전달합니다.

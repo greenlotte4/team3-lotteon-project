@@ -25,5 +25,6 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
 
 
 
+
 }
 

@@ -2,7 +2,7 @@ package com.lotteon.repository.order;
 
 import com.lotteon.dto.admin.AdminOrderItemDTO;
 import com.lotteon.dto.order.DeliveryStatus;
-import com.lotteon.entity.order.Order;
+import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.order.OrderItem;
 import com.lotteon.repository.custom.OrderItemRepositoryCustom;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import java.time.LocalDate;
+
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -64,6 +64,13 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> , Or
 
     @Query("SELECT COUNT(oi) FROM OrderItem oi WHERE oi.status = :status")
     long countAllReadyForShipping(@Param("status") DeliveryStatus status);
+
+    @Query("SELECT oi.sellerUid, o.orderStatus FROM OrderItem oi JOIN oi.order o WHERE oi.sellerUid = :sellerUid AND o.orderStatus = :orderStatus")
+    List<Object[]> findSellerUidAndOrderStatusBySellerUidAndOrderStatus(@Param("sellerUid") String sellerUid, @Param("orderStatus") String orderStatus);
+
+
+
+
 }
 
 
