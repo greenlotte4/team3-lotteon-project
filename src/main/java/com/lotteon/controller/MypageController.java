@@ -383,6 +383,7 @@ public class MypageController {
         // 포인트 조회
         Page<Point> pointPage = pointService.myPoints(memberId, pageable);
         double totalPoints = pointService.getTotalPoints(memberId);
+        List<BannerDTO> banners2 = adminService.getActiveBanners();
 
 
         // PointPageResponseDTO 생성 (페이징 정보와 데이터 전달)
@@ -399,6 +400,7 @@ public class MypageController {
         model.addAttribute("pageResponseDTO", responseDTO);
         model.addAttribute("totalPoints", totalPoints);
         model.addAttribute("pointList", pointPage.getContent());  // 페이지에 맞는 데이터 전달
+        model.addAttribute("banners", banners2);
 
         log.info("Point List: " + pointPage.getContent());  // 가져온 데이터 확인
         return "content/user/pointdetails"; // 뷰 반환
