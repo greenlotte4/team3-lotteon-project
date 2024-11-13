@@ -23,8 +23,8 @@
                     <tr>
                         <th class="id" name="id">아이디</th>
 
-                        <td id="uid" th:text="${member.uid}"></td> <!-- 동적 데이터 -->
-                        <input type="hidden" name="userId" value="${member.uid}"/> <!-- hidden 필드로 사용자 ID 전송 -->
+                        <td id="uid" th:text="${member.uid}"></td> <!-- 실제 uid 출력 -->
+                        <input type="hidden" name="userId" th:value="${member.uid}"/> <!-- 동적으로 uid 값이 들어가게 설정 -->
 
                     </tr>
                     <tr>
@@ -54,9 +54,11 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const form = document.getElementById('passwordChangeForm');
+                const form = document.getElementById('passwordResetForm'); // ID 수정
                 if (form) {
                     form.addEventListener('submit', function (event) {
+                        event.preventDefault(); // 폼 기본 제출 방지
+
                         const userId = document.querySelector('[name="userId"]').value;
                         const newPassword = document.getElementById('newPassword').value;
                         const confirmPassword = document.getElementById('confirmPassword').value;
@@ -64,23 +66,23 @@
 
                         // 비밀번호가 일치하는지 확인
                         if (newPassword !== confirmPassword) {
-                            resultPass.textContent = '비밀번호가 일치하지 않습니다.'; // 오류 메시지 설정
-                            resultPass.style.color = 'red'; // 오류 메시지 색상 설정
-                            event.preventDefault(); // 폼 제출 방지
+                            resultPass.textContent = '비밀번호가 일치하지 않습니다.';
+                            resultPass.style.color = 'red';
                             return;
                         }
 
-                        // 폼 데이터를 URL 인코딩된 형식으로 설정
+                        // URLSearchParams 사용하여 데이터 직렬화
                         const formData = new URLSearchParams();
                         formData.append("uid", userId);
                         formData.append("password", newPassword);
 
+                        // fetch 요청
                         fetch("/user/changepass", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/x-www-form-urlencoded",
                             },
-                            body: formData,
+                            body: formData.toString(), // 수정된 부분
                         })
                             .then(response => {
                                 if (response.ok) {
@@ -91,17 +93,16 @@
                             })
                             .then(data => {
                                 alert("비밀번호가 성공적으로 변경되었습니다.");
-                                window.location.href = "/password-change-success"; // 성공 후 리다이렉트
+                                window.location.href = "/user/login";
                             })
                             .catch(error => {
                                 console.error("Error:", error);
                                 alert("비밀번호 변경 중 문제가 발생했습니다.");
                             });
-
-                        event.preventDefault(); // 폼 제출을 방지하고 fetch로 데이터를 보내도록 함
                     });
                 }
             });
+
         </script>
 
     </main>
