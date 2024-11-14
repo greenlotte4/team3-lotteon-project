@@ -65,7 +65,16 @@ function openOrderModal(orderElement) {
 
     // 이미지 경로 업데이트
     const imagePath = orderElement.getAttribute("data-product-image");
-    document.getElementById("productImage").src = `/uploads/productImg/${imagePath}`; // 이미지 경로 반영
+    const savedPath = orderElement.getAttribute("data-product-path");
+    console.log("savedPath", savedPath);
+
+    const fullPath = savedPath != null ?
+        `/uploads/${savedPath}/${imagePath}` :
+        `/uploads/productImg/${imagePath}`;
+    console.log("Full Path:", fullPath);
+
+
+    document.getElementById("productImage").src = `${fullPath}`; // 이미지 경로 반영
 
     modal.style.display = "block"; // Show the modal
 }
