@@ -130,7 +130,7 @@
                                 </a>
                                 <!-- 상품명 -->
                                 <a th:href="@{'/market/view/' + ${orderItem.categoryId} + '/' + ${orderItem.productId}}" class="productName">
-                                   상품명:
+                                    <span>상품명 :</span>
                                     <span th:text="${orderItem.productName}"></span>
                                 </a>
                                 <p>수량: <span  th:text="${orderItem.stock}">0</span></p>

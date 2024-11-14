@@ -72,13 +72,13 @@ button.textLight[data-v-5e1c3199] {
 }
 
 .loginContent.withAd .adWrap {
-    width: 350px;
+    width: 270px;
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 350px;
-    flex: 0 0 350px;
-    margin-left: 45px;
-    margin-top: 70px;
-    height: 172px;
+    -ms-flex: 0 0 270px;
+    flex: 0 0 270px;
+    margin-left: 50px;
+    margin-top: 30px;
+    height: 352px;
     overflow: hidden;
     background: #fff;
     border-radius: 6px
@@ -93,13 +93,12 @@ button.textLight[data-v-5e1c3199] {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    height: 470px;
-    margin-top: 46px;
+
 }
 
 .loginContent.withAd .adWrap a img {
     max-width: 100%;
-    height: 470px;
+    height: auto;
     display: block;
     border-radius: 8px;
 }
