@@ -51,9 +51,11 @@ function updateBestProductList(products) {
 
     // Loop over products and append to the bestProductContainer
     products.forEach((product, index) => {
+        console.log(product.file230);
         const imgSrc = product.savedPath
             ? `/uploads/${product.savedPath}/${product.file230}`
             : `/uploads/productImg/${product.file230}`;
+        console.log("imgSrc",imgSrc);
 
         const productHTML = `
             <div class="products ${index === 0 ? 'first' : ''}">

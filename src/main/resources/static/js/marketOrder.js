@@ -379,7 +379,9 @@ document.addEventListener('DOMContentLoaded', function () {
         let final = (Original-discountAmount)*Quantity;
         let expectPoint= Math.floor(final*pointPercentage/100/10)*10;
 
-        const imagePath = `/uploads/${data.file190}`;
+        const imagePath = data.savedPath ==="" || data.savedPath == null ?
+            `/uploads/productImg/${data.file190}` :
+            `/uploads/${data.savedPath}/${data.file190}`;
 
 
         if (data.options && data.options.length > 0 ) {

@@ -609,7 +609,7 @@ public class ProductService {
         Pageable pageable = null;
             switch (sort){
                 case "hit":
-                    pageable= PageRequest.of(0,9,Sort.by("hit").descending());
+                    pageable= PageRequest.of(0,10,Sort.by("hit").descending());
                     if (categoryId==0){
                         products= productRepository.findAllByOrderByHitDesc(pageable);
 
@@ -620,7 +620,7 @@ public class ProductService {
 
                     break;
                 case "sold":
-                    pageable= PageRequest.of(0,9,Sort.by("sold").descending());
+                    pageable= PageRequest.of(0,10,Sort.by("sold").descending());
                     if(categoryId==0){
                         products= productRepository.findAllByOrderBySoldDesc(pageable);
 
