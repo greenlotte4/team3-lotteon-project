@@ -122,6 +122,7 @@
                                            th:data-customer-address="${orderItem.addr1 + ' ' + orderItem.addr2}"
                                            th:data-delivery-requests="${orderItem.shippingInfo}"
                                            th:data-product-image="${orderItem.image}"
+                                           th:data-product-path="${orderItem.path}"
                                            onclick="openOrderModal(this)">
                                             주문번호: <span th:text="${orderItem.orderId}"></span>
                                         </a>
