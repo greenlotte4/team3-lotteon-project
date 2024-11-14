@@ -609,7 +609,7 @@ public class ProductService {
         Pageable pageable = null;
             switch (sort){
                 case "hit":
-                    pageable= PageRequest.of(0,8,Sort.by("hit").descending());
+                    pageable= PageRequest.of(0,9,Sort.by("hit").descending());
                     if (categoryId==0){
                         products= productRepository.findAllByOrderByHitDesc(pageable);
 
@@ -620,7 +620,7 @@ public class ProductService {
 
                     break;
                 case "sold":
-                    pageable= PageRequest.of(0,8,Sort.by("sold").descending());
+                    pageable= PageRequest.of(0,9,Sort.by("sold").descending());
                     if(categoryId==0){
                         products= productRepository.findAllByOrderBySoldDesc(pageable);
 
@@ -641,7 +641,7 @@ public class ProductService {
                     }
                     break;
                 case "discount":
-                    pageable= PageRequest.of(0,8,Sort.by("discount").descending());
+                    pageable= PageRequest.of(0,11,Sort.by("discount").descending());
                     if(categoryId==0) {
                         products= productRepository.findAllByOrderByDiscountDesc(pageable);
 
@@ -652,7 +652,7 @@ public class ProductService {
 
                     break;
                 case "rating":
-                    pageable= PageRequest.of(0,8,Sort.by("productRating").descending());
+                    pageable= PageRequest.of(0,9,Sort.by("productRating").descending());
                     if(categoryId==0) {
                         products= productRepository.findAllByOrderByProductRatingDesc(pageable);
                     }else {
