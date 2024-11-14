@@ -68,16 +68,16 @@ button.textLight[data-v-5e1c3199] {
     width: 420px;
     -webkit-box-flex: 0;
     -ms-flex: 0 0 420px;
-    flex: 0 0 420px;
+    flex: 0 0 360px
 }
 
 .loginContent.withAd .adWrap {
     width: 270px;
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 350px;
+    -ms-flex: 0 0 270px;
     flex: 0 0 270px;
-    margin-left: 45px;
-    margin-top: 70px;
+    margin-left: 50px;
+    margin-top: 30px;
     height: 352px;
     overflow: hidden;
     background: #fff;
@@ -93,7 +93,7 @@ button.textLight[data-v-5e1c3199] {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    height: 100%;
+
 }
 
 .loginContent.withAd .adWrap a img {
