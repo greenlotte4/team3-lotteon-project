@@ -30,6 +30,9 @@ public class MainController {
         List<ProductDTO> hitProduct =  productService.selectMainList(0,"hit");
         log.info("hitProduct!!!:"+hitProduct);
         List<ProductDTO> soldProduct =  productService.selectMainList(0,"sold");
+
+        log.info("soldProduct!!!:"+soldProduct);
+
         List<ProductDTO> rDateProduct =  productService.selectMainList(0,"rdate");
         List<ProductDTO> discountProduct =  productService.selectMainList(0,"discount");
         List<ProductDTO> ratingProduct =  productService.selectMainList(0,"rating");
