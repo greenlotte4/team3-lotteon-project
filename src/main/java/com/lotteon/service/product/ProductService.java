@@ -630,8 +630,9 @@ public class ProductService {
                     }
 
                     break;
+
                 case "rdate":
-                    pageable= PageRequest.of(0,8,Sort.by("rdate").descending());
+                    pageable= PageRequest.of(0,10,Sort.by("rdate").descending());
                     if(categoryId==0) {
                         products= productRepository.findAllByOrderByRdateDesc(pageable);
 
