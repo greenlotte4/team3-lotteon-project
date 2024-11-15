@@ -77,3 +77,4 @@ BE : 쿠폰 등록 및 사용 기능구현, 장바구니 기능구현, 마이페
     - Redis
 
 
+# lotte-project
