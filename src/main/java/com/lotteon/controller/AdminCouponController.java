@@ -145,15 +145,17 @@ public class AdminCouponController {
     }
 
     @GetMapping("/issued")
-    public String adminIssuedModify(CouponListRequestDTO requestDTO, Model model) {
+    public String adminIssuedModify(CouponListRequestDTO requestDTO,Authentication authentication, Model model) {
         log.info("쿠폰 발급 목록을 요청했습니다.");
 
-        String sellerCompany = couponIssuedService.getLoggedInSellerCompany(); // 셀러 회사명을 가져오는 로직 필요
+        String loginUid = authentication.getName();
+        SellerDTO seller = sellerService.getSeller(loginUid);
+        Long sellerId = seller.getId();
+
         Pageable pageable = PageRequest.of(requestDTO.getPage() - 1, requestDTO.getSize());
 
-        Page<CouponIssued> issuedPage = couponIssuedService.selectIssuedCouponsPagination(requestDTO, sellerCompany, pageable);
+        Page<CouponIssued> issuedPage = couponIssuedService.selectIssuedCouponsPagination(requestDTO, pageable);
 
-        // 셀러 이름을 이용해 발급된 쿠폰 목록 조회
         // 셀러 이름을 이용해 발급된 쿠폰 목록 조회 (엔티티를 직접 조회)
         if (issuedPage == null || issuedPage.getContent().isEmpty()) {
             log.info("발급된 쿠폰 목록이 없습니다.");

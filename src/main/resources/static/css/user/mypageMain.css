@@ -259,7 +259,9 @@ td {
 .Pinf >p {
     margin: 5px;
 }
-
+.productName span:nth-of-type(1) {
+    font-weight: bold;
+}
 .Pinf >a{
     font-size: 12px;
     font-weight: 700;

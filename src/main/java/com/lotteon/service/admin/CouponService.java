@@ -190,6 +190,7 @@ public class CouponService {
         List<Product> products = productRepository.findAllBySellerId(loggedInUserId );
 
         return products.stream()
+                .filter(product -> !product.isDeleted()) // isDeleted가 false인 항목만 필터링
                 .map(product -> modelMapper.map(product, ProductDTO.class))
                 .collect(Collectors.toList());
     }

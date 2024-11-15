@@ -228,9 +228,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (isConfirmed) {
             const productDataArray = [];
             let file = file190;
-            if(savedPath != null){
-                file=savedPath+'/'+file190;
-            }
             console.log("file1",file)
 
             if (optionSelectElements.length > 0 && selectedOptions.every(opt => opt)) {
@@ -252,7 +249,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     point: point,
                     discount: discount,
                     shippingFee: shippingFee,
-                    shippingTerms: shippingTerms
+                    shippingTerms: shippingTerms,
+                    savedPath: savedPath
                 });
             } else {
                 // If no options, just send productId and quantity
@@ -265,7 +263,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     discount: discount,
                     quantity: quantity,
                     shippingFee: shippingFee,
-                    shippingTerms: shippingTerms
+                    shippingTerms: shippingTerms,
+                    savedPath: savedPath
+
                 });
             }
             localStorage.setItem("productDataArray", JSON.stringify(productDataArray));
@@ -323,9 +323,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const productDataArray = [];
 
                 let file = file190;
-                if(savedPath != null){
-                    file=savedPath+'/'+file190;
-                }
+
                 console.log("file1",file)
                 if (optionSelectElements.length > 0 && selectedOptions.every(opt => opt)) {
 
@@ -348,7 +346,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         point: point,
                         discount: discount,
                         shippingFee: shippingFee,
-                        shippingTerms: shippingTerms
+                        shippingTerms: shippingTerms,
+                        savedPath: savedPath
                     });
                 } else {
                     // If no options, just send productId and quantity
@@ -360,7 +359,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         discount: discount,
                         quantity: quantity,
                         shippingFee: shippingFee,
-                        shippingTerms: shippingTerms
+                        shippingTerms: shippingTerms,
+                        savedPath: savedPath
                     });
                 }
 

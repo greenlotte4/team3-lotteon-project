@@ -21,6 +21,7 @@ main {
 
 /* 나의 쇼핑정보 영역 */
 .info {
+
     margin: 30px 0;
     width: 100%;
     min-width: 1136px;
@@ -112,7 +113,7 @@ aside > ul > li:nth-child(1){
     height: auto;
 
 }
-.productName span:nth-of-type(1) {font-weight: bold;}
+
 .slider-wrapper {
     overflow: hidden;
     display: flex;
@@ -148,11 +149,8 @@ aside > ul > li:nth-child(1){
 .center p{
     float: left;
     font-size: 12px;
-    line-height: 34px;
-    letter-spacing: -.029em;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-weight: bold;
+    font-weight: 700;
+
 }
 .center a{
     font-size: 12px;
@@ -294,6 +292,9 @@ td {
     text-decoration: underline;
 }
 
+.productName span:nth-of-type(1) {
+    font-weight: bold;
+}
 
 td button{
     position: relative;

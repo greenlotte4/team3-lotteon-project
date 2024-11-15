@@ -15,11 +15,6 @@ logging:
                 sql: debug
         root: info
         org.springframework.web: DEBUG
-        org.hibernate.SQL: WARN
-        org.hibernate.type: WARN
-        org.hibernate.engine: WARN
-        org.springframework.cache: DEBUG
-        com.zaxxer.hikari: DEBUG
 server:
     port: 8085
     servlet:
@@ -35,11 +30,12 @@ spring:
         url: jdbc:mysql://43.202.32.28:3306/lotteProject
         username: lotte
         hikari:
-            maximum-pool-size: 10
+            minimum-idle: 5          # 최소 유휴 커넥션 수 설정
+            maximum-pool-size: 30    # 최대 커넥션 수를 늘려봄 (20 이상 필요 시)
             connection-timeout: 30000
             idle-timeout: 600000
             max-lifetime: 1800000
-            validation-timeout: 3000
+            validation-timeout: 5000
     jpa:
         database: mysql
         hibernate:
@@ -78,7 +74,7 @@ spring:
             host: 43.202.32.28
             port: 6379
             repositories:
-                enabled: false
+                enabled: true
             lettuce:
                 pool:
                     max-wait: 5000ms

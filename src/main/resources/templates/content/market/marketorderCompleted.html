@@ -42,7 +42,7 @@
                                     <tr th:each="orderItem:${seller.getOrderItems()}">
                                         <td>
                                             <div>
-                                                <img th:if="${orderItem.getProduct().getSavedPath()==null}" th:src="@{'/uploads/productImg'+${orderItem.getProduct().getFile190()}}" alt="">
+                                                <img th:if="${orderItem.getProduct().getSavedPath()==null}" th:src="@{'/uploads/productImg/'+${orderItem.getProduct().getFile190()}}" alt="">
                                                 <img th:unless="${orderItem.getProduct().getSavedPath()==null}" th:src="@{'/uploads/'+${orderItem.getProduct().getSavedPath()}+'/'+${orderItem.getProduct().getFile190()}}" alt="">
                                             </div>
                                             <div>

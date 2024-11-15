@@ -1,8 +1,10 @@
 package com.lotteon.service.admin;
 
+import com.lotteon.dto.User.SellerDTO;
 import com.lotteon.dto.admin.CouponIssuedDTO;
 import com.lotteon.dto.admin.CouponListRequestDTO;
 import com.lotteon.entity.User.Member;
+import com.lotteon.entity.User.Seller;
 import com.lotteon.entity.admin.Coupon;
 import com.lotteon.entity.admin.CouponIssued;
 import com.lotteon.entity.product.Product;
@@ -11,6 +13,7 @@ import com.lotteon.repository.admin.CouponRepository;
 import com.lotteon.repository.product.ProductRepository;
 import com.lotteon.repository.user.MemberRepository;
 import com.lotteon.security.MyUserDetails;
+import com.lotteon.service.user.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -33,6 +36,7 @@ public class CouponIssuedService {
     private final CouponRepository couponRepository;
     private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
+    private final SellerService sellerService;
 
     public String rendomIssuedId(){
         String issuedId;
@@ -41,10 +45,18 @@ public class CouponIssuedService {
         }while (couponRepository.existsById(issuedId));
         return issuedId;
     }
-    public String getLoggedInSellerCompany() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        return userDetails.getSeller().getCompany(); // 로그인한 셀러의 회사명을 반환
+    public Long getLoggedInSellerCompany(Authentication authentication) {
+        String loginUid = authentication.getName();
+        SellerDTO seller = sellerService.getSeller(loginUid);
+
+        // 셀러가 null이 아닌지 확인하고 셀러의 회사명이나 다른 정보 반환
+        if (seller != null) {
+            // 셀러의 id를 반환 (셀이 정보를 담고 있음)
+            return seller.getId();  // 여기서 getId()를 호출하여 셀러 ID 반환
+        } else {
+            // 셀러 정보가 없을 경우 적절한 처리
+            throw new IllegalStateException("Seller not found for user: " + loginUid);
+        }
     }
     public List<String> getUserRoles() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -146,11 +158,6 @@ public class CouponIssuedService {
 
     }
 
-
-
-
-
-
     public CouponIssuedDTO endCouponIssued(String issuanceNumber){
         CouponIssued couponIssued = couponIssuedRepository.findById(issuanceNumber)
                 .orElseThrow(() -> new RuntimeException("Coupon could not be found for id: " + issuanceNumber));
@@ -165,18 +172,14 @@ public class CouponIssuedService {
         }
     }
 
-    // 발급된 쿠폰 목록 조회
-    public List<CouponIssued> couponIssuedList() {
-
-        // 전체 발급된 쿠폰 목록 조회
-        List<CouponIssued> couponIssuedList = couponIssuedRepository.findAll();
-        log.info("조회된 쿠폰 목록: {}", couponIssuedList);  // 리스트가 잘 전달되는지 확인
-
-        return couponIssuedList;
-    }
-
     // 페이징 기능 추가
-    public Page<CouponIssued> selectIssuedCouponsPagination(CouponListRequestDTO request, String sellerCompany, Pageable pageable) {
+    public Page<CouponIssued> selectIssuedCouponsPagination(CouponListRequestDTO request, Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loginUid = authentication.getName();
+        SellerDTO seller = sellerService.getSeller(loginUid);
+
+        Long sellerId = seller.getId();
+        String sellerCompany = seller.getCompany();  // 셀러 회사 이름을 가져옵니다
 
         List<String> roles = getUserRoles();
         // 쿠폰 페이지 조회
@@ -187,9 +190,9 @@ public class CouponIssuedService {
 //            log.info("관리자 쿠폰: " + couponPage);
         } else if (roles.contains("ROLE_SELLER")) {
             // 일반 셀러는 자신의 쿠폰만 조회
-            couponPage = couponIssuedRepository.findBySellerCompany(sellerCompany, pageable);
+            couponPage  = couponIssuedRepository.findBySellerCompanyContaining(sellerCompany, pageable);
             log.info("셀러 발급 쿠폰: " + couponPage);
-            log.info("셀러 아이디 : " + sellerCompany );
+            log.info("셀러 아이디 : " + sellerId );
             log.info("셀러 등급 : " + roles );
         }
 
